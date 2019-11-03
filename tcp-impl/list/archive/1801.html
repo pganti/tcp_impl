@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: A proposed extension to the SACK</TITLE>
+<META NAME="Author" CONTENT="Sally Floyd (floyd@aciri.org)">
+<META NAME="Subject" CONTENT="A proposed extension to the SACK Option for TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>A proposed extension to the SACK Option for TCP</H1>
+<!-- received="Mon Sep 13 22:46:56 1999" -->
+<!-- isoreceived="19990914024656" -->
+<!-- sent="Mon, 13 Sep 1999 19:44:30 -0700" -->
+<!-- isosent="19990914024430" -->
+<!-- name="Sally Floyd" -->
+<!-- email="floyd@aciri.org" -->
+<!-- subject="A proposed extension to the SACK Option for TCP" -->
+<!-- id="199909140244.TAA80146@elk.aciri.org" -->
+<STRONG>From:</STRONG> Sally Floyd (<A HREF="mailto:floyd@aciri.org?Subject=Re:%20A%20proposed%20extension%20to%20the%20SACK%20Option%20for%20TCP&In-Reply-To=&lt;199909140244.TAA80146@elk.aciri.org&gt;"><EM>floyd@aciri.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 13 1999 - 22:44:30 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1802.html">Vernon Schryver: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1801">[ date ]</A>
+<A HREF="index.html#1801">[ thread ]</A>
+<A HREF="subject.html#1801">[ subject ]</A>
+<A HREF="author.html#1801">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jamshid Mahdavi, Matt Mathis, Matthew Podolsky, Allyn Romanow and
+<BR>
+I have written an internet-draft about &quot;An Extension to the Selective
+<BR>
+Acknowledgement (SACK) Option for TCP&quot;, and we are sending it to
+<BR>
+the tcp-impl list for a final round of feedback before we submit
+<BR>
+it to the area directors for consideration as an Experimental RFC.
+<BR>
+(The draft has already incorporated feedback from the end2end-interest
+<BR>
+mailing list.) The abstract is appended below, and the internet-draft
+<BR>
+itself is available at
+<BR>
+&quot;<A HREF="http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt">http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt</A>&quot;.
+<BR>
+The main point of the extension is for the TCP data receiver to
+<BR>
+use SACK blocks to give the TCP data sender more information about
+<BR>
+duplicate packets that have been received.
+<BR>
+<P>Our hope is that this proposed draft itself, to add a new type of
+<BR>
+SACK block in the SACK option, will be relatively uncontroversial.
+<BR>
+Our belief is that this extension does not introduce any
+<BR>
+backwards-compatibility issues with existing implementations of
+<BR>
+SACK TCP (RFC 2018, now at Proposed Standard).  I would note that
+<BR>
+all of the co-authors of RFC 2018 are also co-authors of this
+<BR>
+proposed extension.
+<BR>
+<P>My own expectation is that later research and proposals on specific
+<BR>
+algorithms for the TCP data sender to in fact *make use of* this
+<BR>
+SACK option could generate more discussion (and possibly controvery,
+<BR>
+it is hard to say).  I would hope that this proposal would enable
+<BR>
+additional work on algorithms for making TCP more robust to reordered
+<BR>
+packets, ACK loss, packet replication, and/or early retransmit
+<BR>
+timeouts.
+<BR>
+<P>Feedback would be appreciated.
+<BR>
+<P>- Sally
+<BR>
+--------------------------------
+<BR>
+<A HREF="http://www.aciri.org/floyd/">http://www.aciri.org/floyd/</A>
+<BR>
+--------------------------------
+<BR>
+<P>An Extension to the Selective Acknowledgement (SACK) Option for TCP
+<BR>
+<P>by Sally Floyd, Jamshid Mahdavi, Matt Mathis, Matthew Podolsky, and
+<BR>
+Allyn Romanow
+<BR>
+<P>Abstract
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This note defines an extension of the Selective Acknowledgement
+<BR>
+&nbsp;&nbsp;&nbsp;(SACK) Option [RFC 2018] for TCP.  RFC 2018 specified the use of the
+<BR>
+&nbsp;&nbsp;&nbsp;SACK option for acknowledging out-of-sequence data not covered by
+<BR>
+&nbsp;&nbsp;&nbsp;TCP's cumulative acknowledgement field.  This note extends RFC 2018
+<BR>
+&nbsp;&nbsp;&nbsp;by specifying the use of the SACK option for acknowledging duplicate
+<BR>
+&nbsp;&nbsp;&nbsp;packets.  This note suggests that when duplicate packets are
+<BR>
+&nbsp;&nbsp;&nbsp;received, the first block of the SACK option field can be used to
+<BR>
+&nbsp;&nbsp;&nbsp;report the sequence numbers of the packet that triggered the
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledgement.  This extension to the SACK option allows the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;sender to infer the order of packets received at the receiver,
+<BR>
+&nbsp;&nbsp;&nbsp;allowing the sender to infer when it has unnecessarily retransmitted
+<BR>
+&nbsp;&nbsp;&nbsp;a packet.  A TCP sender could then use this information for more
+<BR>
+&nbsp;&nbsp;&nbsp;robust operation in an environment of reordered packets, ACK loss,
+<BR>
+&nbsp;&nbsp;&nbsp;packet replication, and/or early retransmit timeouts.
+<BR>
+<P>URL &quot;<A HREF="http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt">http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt</A>&quot;.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1802.html">Vernon Schryver: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1801">[ date ]</A>
+<A HREF="index.html#1801">[ thread ]</A>
+<A HREF="subject.html#1801">[ subject ]</A>
+<A HREF="author.html#1801">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:53 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;F</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Fri Mar 21 09:28:54 1997" -->
+<!-- isoreceived="19970321142854" -->
+<!-- sent="Fri, 21 Mar 1997 09:22:28 -0800" -->
+<!-- isosent="19970321172228" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703211722.AA06131@ash.isi.edu" -->
+<!-- inreplyto="draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 12:22:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0184.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0182.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#183">[ date ]</A>
+<A HREF="index.html#183">[ thread ]</A>
+<A HREF="subject.html#183">[ subject ]</A>
+<A HREF="author.html#183">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@relay.engr.SGI.COM?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;">owner-tcp-impl@relay.engr.SGI.COM</A> Fri Mar 21 08:02:48 1997
+</EM><BR>
+<EM>&gt; Date: Fri, 21 Mar 1997 07:51:53 -0800
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; To: Francesco Potorti` &lt;<A HREF="mailto:F.Potorti@cnuce.cnr.it?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;">F.Potorti@cnuce.cnr.it</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; Subject: Re: draft description of &quot;Failure to retain above-sequence data&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There are times that applications want to reduce buffering, which, as 
+</EM><BR>
+<EM>&gt; I understand TCP (as a user and implementer of protocols based on TCP, 
+</EM><BR>
+<EM>&gt; rather than implementer of TCP), might result in smaller windows being 
+</EM><BR>
+<EM>&gt; advertized.  A situation where the buffering in TCP is not under my control, 
+</EM><BR>
+<EM>&gt; by the implementation ignoring my advice, is NOT a good situation, in 
+</EM><BR>
+<EM>&gt; my opinion. 
+</EM><BR>
+<EM>&gt; 				- Jim Gettys
+</EM><BR>
+<P>Jim,
+<BR>
+<P>This sounds like a great idea, but it might be outside the 
+<BR>
+scope of tcp-impl, which deals with errors in implementation,
+<BR>
+rather than proposed changes to the specification.
+<BR>
+<P>PS - Since the window size is related to the round-trip time, 
+<BR>
+this won't help the application increase responsiveness,
+<BR>
+it only decreases the application throughput. Can you give an
+<BR>
+example of its benefit?
+<BR>
+<P>It seems like fixing the PSH (push) bit is a more direct fix, which
+<BR>
+too is not specified sufficiently right now. That bit is intended
+<BR>
+to flush buffers out at the sender, and force received data up
+<BR>
+to the application at the receiver. Unfortunately, the API doesn't
+<BR>
+specify a preemptive callback or interrupt at the receiver when PSH
+<BR>
+is received.
+<BR>
+<P>(tcp-impl's - that's my understanding of the status of that bit -
+<BR>
+please emend if necessary)
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211722.AA06131@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0184.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0182.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#183">[ date ]</A>
+<A HREF="index.html#183">[ thread ]</A>
+<A HREF="subject.html#183">[ subject ]</A>
+<A HREF="author.html#183">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

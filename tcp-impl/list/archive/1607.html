@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 18 17:55:49 1999" -->
+<!-- isoreceived="19990218225549" -->
+<!-- sent="Thu, 18 Feb 1999 15:50:03 -0700 (MST)" -->
+<!-- isosent="19990218225003" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902182250.PAA11070@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902182250.PAA11070@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 18 1999 - 17:50:03 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1606.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1642.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1607">[ date ]</A>
+<A HREF="index.html#1607">[ thread ]</A>
+<A HREF="subject.html#1607">[ subject ]</A>
+<A HREF="author.html#1607">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902182250.PAA11070@calcite.rhyolite.com&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; So what are we supposed to do with the standards based non-answer?
+</EM><BR>
+<EM>&gt; &gt; Of course there is no guaranteed correlation between send() and segments,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; We appear to be tuning Nagle based on some very specific
+</EM><BR>
+<EM>&gt; behaviors which are particular to an implementation.
+</EM><BR>
+<P>We are talking about proposed changes to TCP, specifically Minshall's
+<BR>
+proposed change to the Nagle algorithm and alternatives including explicit
+<BR>
+flush and go-slow bits in the application send-request API.  Which is the
+<BR>
+&quot;very specific behavior particular to an implementation,&quot; that which all
+<BR>
+except hypothetical implementations already do, or that which none now do
+<BR>
+and which would require a new state variable that would have to checked
+<BR>
+and updated on most send()'s?
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;   - in RFC 793, 896, &amp; 1122 TCP conformant implementations which allow
+</EM><BR>
+<EM>&gt; &gt;      dynamic switching of the Nagle algorithm, turning off Nagle before
+</EM><BR>
+<EM>&gt; &gt;      a send() request and on afterwards MAY have identical results in
+</EM><BR>
+<EM>&gt; &gt;      segments on the wire as the proposed explicit flush bit.  Moreover,
+</EM><BR>
+<EM>&gt; &gt;      all existing implementations that allow dynamic control of the Nagle
+</EM><BR>
+<EM>&gt; &gt;      algorithm would have such identical results if the flush bit were
+</EM><BR>
+<EM>&gt; &gt;      added to their send() API's.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Now, is that proposition true or false?
+</EM><BR>
+<EM>&gt; &gt; I do not know the answer; if I did, I'd say so.  I do suspect it's true.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is precisely where we differ. While I suspect it may be true
+</EM><BR>
+<EM>&gt; for MOST implementations, I firmly claim that an entirely conformant
+</EM><BR>
+<EM>&gt; TCP implementation could have different results, and that it would be
+</EM><BR>
+<EM>&gt; inappropriate to claim either result as uniquely correct.
+</EM><BR>
+<EM>&gt; Adapting Postel's motto and Floyd's position, I am advocating that
+</EM><BR>
+<EM>&gt; (excepting bugs, which was where this WG started), we do not 
+</EM><BR>
+<EM>&gt; overspecify the behavior of a TCP implementation.
+</EM><BR>
+<P>SHEESH!  Why do you think I care about the answer?  Give me more credit
+<BR>
+than care about getting your hypotetical, probably non-existent
+<BR>
+implementations declared non-conformant.  If, as you say, &quot;MOST
+<BR>
+implementations&quot; statisfy my pedantic proposition, then instead of
+<BR>
+defining yet another API bit, we can talk about the heretofore ill
+<BR>
+defined results of turning Nagle off and on.  Most of us would agree
+<BR>
+that adding yet another flag to the standard send() API is more of a
+<BR>
+constraint on or over-specification of implementations than specifying
+<BR>
+what happens when you toggle Nagle, particularly when the latter would
+<BR>
+require no changes to any existing implementation.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; I've noticed people with .edu addresses on the Southern Calif. coast tend
+</EM><BR>
+<EM>&gt; &gt; to have strong views on the sanctity of Architecture and Network Layers.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Yes, we are minimalists about architecture, and some would claim
+</EM><BR>
+<EM>&gt; that has helped, rather than hurt. 
+</EM><BR>
+<P>No, just the opposite of &quot;minimalist architecture&quot;.  (Never mind how
+<BR>
+rewindable streams might be called minimalist anything.)  The tendency
+<BR>
+I've noticed over there is to support surprising positions by appeals
+<BR>
+to the Oracles of Network Architecture and the Sacred Network Layering.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; NO!  ALWAYS!  In the common case, &quot;disabling&quot; involves code in the critical
+</EM><BR>
+<EM>&gt; &gt; exection path. 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; See the Fast Sockets work at Berkeley. You can make almost all your decisions 
+</EM><BR>
+<EM>&gt; at connection setup time, and run completely different implementations
+</EM><BR>
+<EM>&gt; if you prefer. Even those decisions that are made while an implementation is
+</EM><BR>
+<EM>&gt; running need not be made on a per-packet basis, necessarily.
+</EM><BR>
+<P>DOUBLE SHEESH!...I heard about the Berkeley (or Livermore) squashed stacks
+<BR>
+at least 6 and I think 8 years ago.  Didn't you notice my reference to a
+<BR>
+&quot;few dozen instructions&quot;?  For that matter, what do you think the far
+<BR>
+older header-prediction amounts to, except moving optional stuff out of
+<BR>
+the fast path?
+<BR>
+<P>The problem with &quot;making almost all of your decisions at connection setup&quot;
+<BR>
+or otherwise out of the performance path is that it puts you in a worse
+<BR>
+mess then compile-time option selection.  You still have zillions of lines
+<BR>
+of bug prone code that does not get well tested, and that sends competant
+<BR>
+programmers screaming and running away.  It's a worse mess because you
+<BR>
+don't only have the optional code in the source tree, but also sitting in
+<BR>
+your kernel, ready for execution when you least expect it, and bloating
+<BR>
+your systems minimum memory footprint.   Do you think that kernel memory
+<BR>
+is free?  Yes, you might make your kernel TCP code pagable, but that's
+<BR>
+not without large costs.
+<BR>
+<P>THERE IS NO SUCH THING AS A FREE OPTION!  Not in any real implementations,
+<BR>
+that is.  Implementations that exist only on standards committee overhead
+<BR>
+projectors and management whiteboards are not so limited.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902182250.PAA11070@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1606.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1642.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1607">[ date ]</A>
+<A HREF="index.html#1607">[ thread ]</A>
+<A HREF="subject.html#1607">[ subject ]</A>
+<A HREF="author.html#1607">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

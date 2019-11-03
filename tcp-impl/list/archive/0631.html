@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 18:36:07 1997" -->
+<!-- isoreceived="19970731223607" -->
+<!-- sent="Thu, 31 Jul 97 18:30:25 -0700" -->
+<!-- isosent="19970801013025" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708010130.SAA18194@aland.bbn.com" -->
+<!-- inreplyto="199708010104.SAA11638@rum.isi.edu" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010130.SAA18194@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 21:30:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#631">[ date ]</A>
+<A HREF="index.html#631">[ thread ]</A>
+<A HREF="subject.html#631">[ subject ]</A>
+<A HREF="author.html#631">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Joe:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+I'm afraid I don't quite follow your logic.  Let me try coming at
+<BR>
+the problem another way.
+<BR>
+<P>First, let's clearly label the three slow start starting windows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;there's the initial window (IW), used at connection start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;there's the restart window (RW), used after a connection is idle
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;there's the loss window (LW), used after a loss
+<BR>
+<P>Now consider the two possible conditions:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;(1) IF the available path capacity per TCP connection is &gt; 2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN the IW, LW and RW can all be 2 since there's enough
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;capacity
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;(2) IF the available path capacity per TCP connection is &lt; 2
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN IW can be 2, since it will promptly suffer loss and learn
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;its window is too big
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LW must be 1, since we need to be able to get our congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window that low
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RW could possibly be 2, since on restart we look rather like
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a new TCP connection, but if we allowed ourself to become
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle, we presumably aren't concerned about high performance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anyway, so how's about we are nice to the other connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and set RW=1?
+<BR>
+<P>Further observe that when we restart the window, or do slow start after
+<BR>
+a loss, we don't know if we are in condition (1) or (2).  When restarting,
+<BR>
+more connections may have arrived while we were quiet, and loss presumably
+<BR>
+indicated the arrival of new traffic (e.g., new connections).
+<BR>
+<P>So for LW and RW we must assume we might be in condition (2). So LW must
+<BR>
+be 1, and RW ought to be 1.
+<BR>
+<P>Craig
+<BR>
+<P>PS: Vern's note suggests the new I-D says it is safe to set IW=2.  I'll
+<BR>
+observe that the I-D was revised just before it went out to point out that
+<BR>
+there are at least two situations that we don't understand well enough
+<BR>
+to say that increasing the initial window is safe.  (A little more
+<BR>
+simulation is needed).
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#631">[ date ]</A>
+<A HREF="index.html#631">[ thread ]</A>
+<A HREF="subject.html#631">[ subject ]</A>
+<A HREF="author.html#631">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

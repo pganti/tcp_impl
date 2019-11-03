@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: San Jose TCP Implementation BOF</TITLE>
+<META NAME="Author" CONTENT="Steve Alexander (sca@refugee)">
+<META NAME="Subject" CONTENT="San Jose TCP Implementation BOF Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>San Jose TCP Implementation BOF Minutes</H1>
+<!-- received="Fri Jan 10 04:44:05 1997" -->
+<!-- isoreceived="19970110094405" -->
+<!-- sent="Thu, 09 Jan 1997 20:42:16 -0800" -->
+<!-- isosent="19970110044216" -->
+<!-- name="Steve Alexander" -->
+<!-- email="sca@refugee" -->
+<!-- subject="San Jose TCP Implementation BOF Minutes" -->
+<!-- id="199701100442.UAA20328@refugee.engr.sgi.com" -->
+<STRONG>From:</STRONG> Steve Alexander (<A HREF="mailto:sca@refugee?Subject=Re:%20San%20Jose%20TCP%20Implementation%20BOF%20Minutes&In-Reply-To=&lt;199701100442.UAA20328@refugee.engr.sgi.com&gt;"><EM>sca@refugee</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jan 09 1997 - 23:42:16 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0038.html">Steve Alexander: "web page now available"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0036.html">Steve Alexander: "archive now available"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#37">[ date ]</A>
+<A HREF="index.html#37">[ thread ]</A>
+<A HREF="subject.html#37">[ subject ]</A>
+<A HREF="author.html#37">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+[ My apologies for being tardy with these ]
+<BR>
+<P>The TCP Implementation BOF was held at 3:30 PM, on Wednesday, December 11th.
+<BR>
+The BOF was intended to determine whether or not consensus exists for forming
+<BR>
+a working group for the purpose of making implementors aware of problems in
+<BR>
+current TCP implementations.
+<BR>
+<P>The BOF was co-chaired by Steve Alexander (<A HREF="mailto:sca@sgi.com?Subject=Re:%20San%20Jose%20TCP%20Implementation%20BOF%20Minutes&In-Reply-To=&lt;199701100442.UAA20328@refugee.engr.sgi.com&gt;">sca@sgi.com</A>) from Silicon Graphics
+<BR>
+and Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20San%20Jose%20TCP%20Implementation%20BOF%20Minutes&In-Reply-To=&lt;199701100442.UAA20328@refugee.engr.sgi.com&gt;">vern@ee.lbl.gov</A>) of Lawrence Berkeley Labs.
+<BR>
+<P>Steve started off by presenting the BOF Agenda and then gave a motivation for
+<BR>
+having the BOF.  The idea (originally suggested by Jamshid Mahdavi and Matt
+<BR>
+Mathis) is to help TCP implementors improve the quality of their products by
+<BR>
+making them aware of problems in existing implementations and any tools or test
+<BR>
+suites that might make the development process more productive.
+<BR>
+<P>Vern Paxson then gave a presentation on the results of several research studies,
+<BR>
+which included work by Brakmo and Peterson; Comer and Lin; Stevens; Dawson,
+<BR>
+Jahanian, and Milton; and Paxson.
+<BR>
+<P>The above studies showed that many TCP implementations exhibit bad behavior
+<BR>
+at times, and that some of these problems can lead to a great deal of data
+<BR>
+being needlessly retransmitted.  Among the other problems mentioned were:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Some TCP implementations send data after having reset the connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Some do not acknowledge zero-window probes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Some throw away all data after a hole in the sequence space
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Wide variety of MSS values (some very bizarre)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Many problems with keepalives
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Congestion avoidance algorithms such as slow-start are not ubiquitous
+<BR>
+<P>Vern wrapped up with an overview of two tools, ORCHESTRA, and tcpanaly.
+<BR>
+ORCHESTRA (<A HREF="http://www.eecs.umich.edu/~sdawson">http://www.eecs.umich.edu/~sdawson</A>) is an x-kernel based tool that
+<BR>
+allows instrumentation of networking code.  It allows a developer to trace
+<BR>
+packets and generate probe packets.
+<BR>
+<P>tcpanaly is a tool that Vern has developed for post-processing of tcpdump
+<BR>
+traces.  It can detect anomalies in a TCP connection, particularly WRT
+<BR>
+congestion avoidance.
+<BR>
+<P>Steve Parker from SunSoft then gave a brief presentation on the Packet Shell,
+<BR>
+which is a tool that he and Chris Schmechel have been developing.  The packet
+<BR>
+shell is a set of TCL extensions that allows packet-level tests to be developed
+<BR>
+easily using the TCL scripting language.  Steve presented several examples of
+<BR>
+how this could be used to verify that a TCP is behaving correctly.  The packet
+<BR>
+shell is available at <A HREF="ftp://playground.sun.com/pub/sparker">ftp://playground.sun.com/pub/sparker</A>.
+<BR>
+<P>After the presentations concluded, discussion turned to the proposed charter
+<BR>
+and milestones for the working group, which were:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;- Produce a compilation of known problems and their solutions.  This will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise awareness of these issues.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;- (optional) Determine if any problems found are the result of ambiguities
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the TCP specification.  If necessary, produce a document which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clarifies the specification.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;- Catalog existing TCP test suites, diagnostic tools, testing organizations,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and procedures that can be used by implementors to improve their code, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;produce a document enumerating them.
+<BR>
+<P>&nbsp;Goals and Milestones:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Dec 96       Working group formation
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Mar 97       Produce initial document describing problems and fixes
+<BR>
+<P>&nbsp;&nbsp;&nbsp;May 97       Produce I-D which clarifies 793, 1122, 1323, if necessary
+<BR>
+<P>&nbsp;&nbsp;&nbsp;May 97       Produce initial catalog of test suites, etc.
+<BR>
+<P>A large percentage of the discussion centered around publically naming vendors
+<BR>
+with sub-optimal implementations.  It was emphasized several times that the
+<BR>
+group is targeted at developers, not at users or administrators.  In that
+<BR>
+context, it is not clear that mentioning implementors by name serves the
+<BR>
+group's purpose.  Allyn Romanow mentioned that the IESG is still determining
+<BR>
+whether doing so has any legal ramifications.  It was not clear that consensus
+<BR>
+was reached on this issue.
+<BR>
+<P>Another potentially controversial issue has to do with handling security
+<BR>
+issues.  Steve Bellovin argued in favor of being as open as possible about such
+<BR>
+matters.
+<BR>
+<P>Although the goal of updating the TCP specifications is potentially an
+<BR>
+unbounded problem, several people felt that it will be necessary.  In
+<BR>
+particular, Dave Borman presented a list of several items that he felt needed
+<BR>
+clarification.  Although there were few other specific issues mentioned, there
+<BR>
+seemed to be a growing belief that some enhancements to existing specifications
+<BR>
+will be needed.
+<BR>
+<P>It was generally felt that the scope of the group will need to be carefully
+<BR>
+defined in order to make forward progress.  For example, drawing the line
+<BR>
+between what is &quot;research&quot; and what is &quot;production code&quot; will be an issue.
+<BR>
+Discussion with the IRTF might be useful in evaluating this issue.
+<BR>
+<P>There was some discussion on test suites and test tools, although it did not
+<BR>
+appear that any conclusions were drawn.  At the present time, it is not clear
+<BR>
+that everyone agrees on what a test suite should do, or whether a test suite
+<BR>
+could be a product of an IETF group.
+<BR>
+<P>Bob Braden suggested that the proposed dates were wildly optimistic.  There
+<BR>
+was general agreement on this point.
+<BR>
+<P>Several other specific issues were raised:
+<BR>
+<P>There was a brief mention of SACK, and whether or not it is implemented widely
+<BR>
+enough to be addressed? (no consensus yet).
+<BR>
+<P>The question of issues surrounding asymmetric paths was raised as well.
+<BR>
+<P>Fred Baker raised the issue of performance over satellites as something that
+<BR>
+mighe be appropriate (there was no clear consensus on this being appropriate
+<BR>
+yet).
+<BR>
+<P>One concern was that a working group could become a perpetually ongoing effort.
+<BR>
+Some felt that this group could never really finish as long as TCP
+<BR>
+implementations keep evolving.  The consensus seemed to be that this might be
+<BR>
+true but that a first effort has to be successful prior to continuing on.  If
+<BR>
+the group cannot be productive initially, then the question is moot.
+<BR>
+<P>Some questions were raised about environmental assumptions present in the
+<BR>
+specifications, namely are there some, and if so are they clear?  It seems
+<BR>
+that further discussion is needed on this topic.
+<BR>
+<P>It was suggested that another potential deliverable is a guide to
+<BR>
+tuning/defaults for administrators.  Again, this needs further discussion, and
+<BR>
+may require working with the User Services area.
+<BR>
+<P>There seemed to be general agreement that a working group should be formed, but
+<BR>
+many details remain to be worked out about the charter and deliverables.
+<BR>
+<P>Steve Alexander
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0038.html">Steve Alexander: "web page now available"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0036.html">Steve Alexander: "archive now available"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#37">[ date ]</A>
+<A HREF="index.html#37">[ thread ]</A>
+<A HREF="subject.html#37">[ subject ]</A>
+<A HREF="author.html#37">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

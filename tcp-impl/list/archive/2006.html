@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="julian_satran@il.ibm.com (julian_satran@il.ibm.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 05:01:49 2000" -->
+<!-- isoreceived="20000225100149" -->
+<!-- sent="Fri, 25 Feb 2000 11:54:25 +0200" -->
+<!-- isosent="20000225095425" -->
+<!-- name="julian_satran@il.ibm.com" -->
+<!-- email="julian_satran@il.ibm.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="C1256890.003670A7.00@d12mta05.de.ibm.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> <A HREF="mailto:julian_satran@il.ibm.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;C1256890.003670A7.00@d12mta05.de.ibm.com&gt;"><EM>julian_satran@il.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 04:54:25 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2007.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2006">[ date ]</A>
+<A HREF="index.html#2006">[ thread ]</A>
+<A HREF="subject.html#2006">[ subject ]</A>
+<A HREF="author.html#2006">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Message boundaries are only part of the proposal - and they don't imply
+<BR>
+additional work at the client. Doing zero copy based only on the
+<BR>
+information in current headers is certainly possible at low speed. Over 1
+<BR>
+Gb/s it requires some innovation and lots of silicon. The RDMA option makes
+<BR>
+it possible at a far lower price. And the zero copy it enables might go
+<BR>
+deep into the application space as it is only an annotation on packets.
+<BR>
+It certainly makes sense on all the new applications (NFS4, SCSI, etc) and
+<BR>
+the retrofit into existing ones is not that difficult either.
+<BR>
+And placing it over TCP puts it on a safer ground that having to use at
+<BR>
+higher speed completely new and unproven protocols (VIA, NGIO etc.).
+<BR>
+<P>Julo
+<BR>
+Julian Satran - IBM Research
+<BR>
+<P>David Robinson &lt;<A HREF="mailto:David.Robinson@EBay.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;C1256890.003670A7.00@d12mta05.de.ibm.com&gt;">David.Robinson@EBay.Sun.COM</A>&gt; on 25/02/2000 03:42:05
+<BR>
+<P>Please respond to David Robinson &lt;<A HREF="mailto:David.Robinson@EBay.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;C1256890.003670A7.00@d12mta05.de.ibm.com&gt;">David.Robinson@EBay.Sun.COM</A>&gt;
+<BR>
+<P>To:   <A HREF="mailto:ips@ece.cmu.edu?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;C1256890.003670A7.00@d12mta05.de.ibm.com&gt;">ips@ece.cmu.edu</A>
+<BR>
+cc:   <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;C1256890.003670A7.00@d12mta05.de.ibm.com&gt;">tcp-impl@grc.nasa.gov</A> (bcc: Julian Satran/Haifa/IBM)
+<BR>
+Subject:  Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.
+<BR>
+<P><P><P><P>To efficently determine boundaries within a packet stream work
+<BR>
+must be done somewhere.  In the RDMA proposal it is up to the
+<BR>
+clients to do the work to make the server's job easier.  In traditional
+<BR>
+intelligent NIC cards the server does the work by parsing the headers.
+<BR>
+<P>It seems that the design of RDMA is backwards as it relies on changes
+<BR>
+to the many clients to enable efficiency on the server. A traditional
+<BR>
+intelligent NIC card with a modest amount of hardware/firmware
+<BR>
+can handle 99+% of requests from unmodified clients.  The existence
+<BR>
+proof is checksumming NICs and NFS accelerator boards.
+<BR>
+<P>For an efficient IP storage device it will have to deal with legacy IP
+<BR>
+client stacks (no RDMA) and a competitive IP storage vendor will
+<BR>
+implement the smart NIC described above. Why is RDMA more compelling?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2007.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2006">[ date ]</A>
+<A HREF="index.html#2006">[ thread ]</A>
+<A HREF="subject.html#2006">[ subject ]</A>
+<A HREF="author.html#2006">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

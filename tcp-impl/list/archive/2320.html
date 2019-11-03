@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Thu Aug 17 20:27:47 2000" -->
+<!-- isoreceived="20000818002747" -->
+<!-- sent="Thu, 17 Aug 2000 17:24:02 -0700" -->
+<!-- isosent="20000818002402" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="399C8222.F1F66795@isi.edu" -->
+<!-- inreplyto="3.0.5.32.20000817152442.01258dd0@scamp.eng.ascend.com" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;399C8222.F1F66795@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 17 2000 - 20:24:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2319.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2320">[ date ]</A>
+<A HREF="index.html#2320">[ thread ]</A>
+<A HREF="subject.html#2320">[ subject ]</A>
+<A HREF="author.html#2320">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Ignacio Goyret wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; At 02:11 PM 8/17/00 -0700, Joe Touch wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;Ignacio Goyret wrote:
+</EM><BR>
+<EM>&gt; &gt;&gt;
+</EM><BR>
+<EM>&gt; &gt;&gt; At 06:54 PM 8/1/00 -0400, Bernie Volz wrote:
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;Some that I could think of are:
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;- No listener (for a SYN segment)
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;- Unknown connection
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;- Receiver discard connection (data received on a connection with no higher
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;level receiver available)
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;- Application abort (application requested RST on connection instead of
+</EM><BR>
+<EM>&gt; &gt;&gt; &gt;closing it)
+</EM><BR>
+<EM>&gt; &gt;&gt;
+</EM><BR>
+<EM>&gt; &gt;&gt; I'm sure that your reasons are well-meant and quite honest, but I have to
+</EM><BR>
+<EM>&gt; &gt;&gt; wonder out loud if these codes won't be of great help to a hacker.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;Only if they're trying to hack your statistics or debugging.
+</EM><BR>
+<EM>&gt; &gt;I don't think (pls correct me if this is not the case) that
+</EM><BR>
+<EM>&gt; &gt;anyone is proposing different receiver actions based on these
+</EM><BR>
+<EM>&gt; &gt;codes; it's just for diagnoses, right?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Any information shot back to the sender of a SYN is potential information
+</EM><BR>
+<EM>&gt; for a hacker. For example, if the code says something like &quot;too busy&quot; (or
+</EM><BR>
+<EM>&gt; something that might indicate that), then Joe Hacker knows that your server
+</EM><BR>
+<EM>&gt; is on the brink: just keep pumping SYNs until it keels over. If it says
+</EM><BR>
+<EM>&gt; something like &quot;bad security&quot; or &quot;bad precedence&quot;, well, you are just asking
+</EM><BR>
+<EM>&gt; for it. :-)
+</EM><BR>
+<P>Agreed. &quot;too busy&quot; is a foolish place to send a RST, however. 
+<BR>
+<P>The message needs to have meaning in the TCP-sense; bad precedence means
+<BR>
+something, but bad security doesn't (that message would come in other
+<BR>
+layers, or not at all. why would you tell someone about that?).
+<BR>
+<P><EM>&gt; All I say is &quot;let's be careful&quot;. The less information you provide back to the
+</EM><BR>
+<EM>&gt; potentially malicious instigator, the lesser the chances that it will know how
+</EM><BR>
+<EM>&gt; to affect you worst.
+</EM><BR>
+<P>The primary purpose I saw was to send &quot;where in the TCP stack the RST
+<BR>
+came from&quot;. I wouldn't suggest 'different application reasons'; it seems
+<BR>
+to me TCP's job is over once you tell be why _TCP_ did something.
+<BR>
+<P><EM>&gt; In fact, I would almost argue that an RST in response to a SYN or SYN/ACK should
+</EM><BR>
+<EM>&gt; not contain any information whatsoever (unless a kernel flag was turned on) to
+</EM><BR>
+<EM>&gt; minimize this potential. I have no problem with info on RSTs which are sent
+</EM><BR>
+<EM>&gt; elsewhere in the cycle, ie, from established onwards.
+</EM><BR>
+<P>It could say &quot;SYN rejected&quot;, or &quot;SYN/ACK rejected&quot;. There are different
+<BR>
+reasons for the SYN/ACK rejection, including precedence. But that
+<BR>
+doesn't seem like information that's particularly useful. Either _you_
+<BR>
+changed the precedence (in which case this is helpful) or a hacker did
+<BR>
+(in which case they can change the RST anyway).
+<BR>
+<P>This is the reason I caution about _USE_ of the information, e.g., used
+<BR>
+for diagnostics only.
+<BR>
+<P><EM>&gt; What I'm saying is that you only want to turn them on when you are actively
+</EM><BR>
+<EM>&gt; debugging something. Until then, leave them off. There is no need to provide
+</EM><BR>
+<EM>&gt; extra tools to the intruders out there.
+</EM><BR>
+<P>If it's turned off by default, it may be impossible to debug. I don't
+<BR>
+always have control over both ends.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2319.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2320">[ date ]</A>
+<A HREF="index.html#2320">[ thread ]</A>
+<A HREF="subject.html#2320">[ subject ]</A>
+<A HREF="author.html#2320">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

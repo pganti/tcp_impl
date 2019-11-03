@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 12:08:25 1999" -->
+<!-- isoreceived="19990205170825" -->
+<!-- sent="Fri, 5 Feb 1999 11:06:35 -0600 (CST)" -->
+<!-- isosent="19990205170635" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902051706.LAA01625@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902051706.LAA01625@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 12:06:35 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1518.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1516.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1540.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1540.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1517">[ date ]</A>
+<A HREF="index.html#1517">[ thread ]</A>
+<A HREF="subject.html#1517">[ subject ]</A>
+<A HREF="author.html#1517">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Thu, 04 Feb 1999 11:07:01 -0800
+</EM><BR>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902051706.LAA01625@frantic.bsdi.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: internet draft on suggested mod to the Nagle algorithm
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; whereas the current Nagle code would produce:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;         1st write:      send 1460 bytes  (defer 40 bytes)
+</EM><BR>
+<EM>&gt; &gt;         2nd write:      send 40 + 1420 = 1460 bytes (defer 80 bytes)
+</EM><BR>
+<EM>&gt; &gt;         3rd write:      send 80 + 1380 = 1460 bytes  (defer 120 bytes)
+</EM><BR>
+<EM>&gt; &gt;                         (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt; &gt;                         send 120 bytes
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; and the proposed Nagle (and the current BSD/OS) would produce:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;         1st write:      send 1460 bytes
+</EM><BR>
+<EM>&gt; &gt;                         send 40 bytes
+</EM><BR>
+<EM>&gt; &gt;         2nd write:      send 1460 bytes (defer 40 bytes)
+</EM><BR>
+<EM>&gt; &gt;         3rd write       send 40 + 1420 = 1460 bytes (defer 80 bytes)
+</EM><BR>
+<EM>&gt; &gt;                         (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt; &gt;                         send 80 bytes
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is at least one extra send operation, which can't be a good thing,
+</EM><BR>
+<EM>&gt; particularly when the network is over-utilized (or near to it) already.
+</EM><BR>
+<EM>&gt; While this isn't as bad as Rick's example (1461-byte writes), it is
+</EM><BR>
+<EM>&gt; still bad utilization. (I'd hate to own the network that did both.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I'd say that based on this info, it is better to just disable Nagle if
+</EM><BR>
+<EM>&gt; your application is going to be writing small (1.5 segments) chunks, and
+</EM><BR>
+<EM>&gt; leaving it enabled for applications that do large writes, rather than
+</EM><BR>
+<EM>&gt; introducing lots of new frames to the network.
+</EM><BR>
+<P>But turning off Nagle is even worse.  You then get:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+<P>Also, I might not have said it, but this example was to show
+<BR>
+3 separate transaction requests, not 1 transaction done with
+<BR>
+3 writes.  If it was one request, it should really be done with
+<BR>
+a single 4500 byte write, yeilding:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 120 bytes
+<BR>
+the difference being that with the modified Nagle algorithm, the
+<BR>
+wait for ACK or timeout would be skipped.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902051706.LAA01625@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1518.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1516.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1540.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1540.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1517">[ date ]</A>
+<A HREF="index.html#1517">[ thread ]</A>
+<A HREF="subject.html#1517">[ subject ]</A>
+<A HREF="author.html#1517">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,797 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Slow-start restart - discussion</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Slow-start restart - discussion of fixes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Slow-start restart - discussion of fixes</H1>
+<!-- received="Mon Mar 23 15:46:36 1998" -->
+<!-- isoreceived="19980323204636" -->
+<!-- sent="Mon, 23 Mar 1998 15:40:23 -0800 (PST)" -->
+<!-- isosent="19980323234023" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Slow-start restart - discussion of fixes" -->
+<!-- id="199803232340.PAA09496@rum.isi.edu" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Slow-start%20restart%20-%20discussion%20of%20fixes&In-Reply-To=&lt;199803232340.PAA09496@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 23 1998 - 18:40:23 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1014.html">Vern Paxson: "increasing TCP's initial window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1012.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1013">[ date ]</A>
+<A HREF="index.html#1013">[ thread ]</A>
+<A HREF="subject.html#1013">[ subject ]</A>
+<A HREF="author.html#1013">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>At the last IETF, I presented a discussion of the TCP slow-start
+<BR>
+restart failure for HTTP-style request/responses over persistent
+<BR>
+connections.
+<BR>
+<P>The following is a draft summarizing the problem and potential
+<BR>
+solutions, which is being submitted. If there is sufficient interest,
+<BR>
+we have graphs describing the implementations and comparing them which
+<BR>
+can be discussed at the LA meeting.
+<BR>
+<P>Joe (and Amy and John)
+<BR>
+<P>PS - the draft does not yet have an official name, but will be
+<BR>
+available at:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.isi.edu/touch/pubs/draft-xxx.txt">http://www.isi.edu/touch/pubs/draft-xxx.txt</A>
+<BR>
+<P><P>-----------------------------------------------------------------------
+<BR>
+
+<BR>
+<P>INTERNET-DRAFT                     Amy Hughes, Joe Touch, John Heidemann
+<BR>
+draft-xxx.txt                                                        ISI
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;March 30, 1998
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expires: Sept. 30, 1998
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Issues in TCP Slow-Start Restart After Idle
+<BR>
+<P>Status of this Memo
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This document is an Internet-Draft.  Internet-Drafts are working
+<BR>
+&nbsp;&nbsp;&nbsp;documents of the Internet Engineering Task Force (IETF), its areas,
+<BR>
+&nbsp;&nbsp;&nbsp;and its working groups.  Note that other groups may also distribute
+<BR>
+&nbsp;&nbsp;&nbsp;working documents as Internet-Drafts.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Internet-Drafts are draft documents valid for a maximum of six months
+<BR>
+&nbsp;&nbsp;&nbsp;and may be updated, replaced, or obsoleted by other documents at any
+<BR>
+&nbsp;&nbsp;&nbsp;time.  It is inappropriate to use Internet- Drafts as reference
+<BR>
+&nbsp;&nbsp;&nbsp;material or to cite them other than as ``work in progress.''
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Please check the I-D abstract listing contained in each Internet
+<BR>
+&nbsp;&nbsp;&nbsp;Draft directory to learn the current status of this or any other
+<BR>
+&nbsp;&nbsp;&nbsp;Internet Draft.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The distribution of this document is unlimited.
+<BR>
+<P>Abstract
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This draft discusses variations in the TCP 'slow-start restart' (SSR)
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm, and the unintended failure of some variations to properly
+<BR>
+&nbsp;&nbsp;&nbsp;restart in some environments. SSR is intended to avoid line-rate
+<BR>
+&nbsp;&nbsp;&nbsp;bursts after idle periods, where TCP accumulates permission to send
+<BR>
+&nbsp;&nbsp;&nbsp;in the form of ACKs, but does not consume that permission
+<BR>
+&nbsp;&nbsp;&nbsp;immediately. SSR's original &quot;restart after send is idle&quot; is commonly
+<BR>
+&nbsp;&nbsp;&nbsp;implemented as &quot;restart after receive is idle&quot;. The latter
+<BR>
+&nbsp;&nbsp;&nbsp;unintentionally fails to restart for bidirectional connections where
+<BR>
+&nbsp;&nbsp;&nbsp;the sender's burst is triggered by a reverse-path data packet, such
+<BR>
+&nbsp;&nbsp;&nbsp;as in persistent HTTP. Both the former and latter are shown to permit
+<BR>
+&nbsp;&nbsp;&nbsp;bursts in other circumstances. Three solutions are discussed, and
+<BR>
+&nbsp;&nbsp;&nbsp;their implementations evaluated.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This document is a product of the LSAM project at ISI.  Comments are
+<BR>
+&nbsp;&nbsp;&nbsp;solicited and should be addressed to the authors.
+<BR>
+<P>Introduction
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Slow-Start Restart (SSR) describes one TCP behavior to respond to
+<BR>
+&nbsp;&nbsp;&nbsp;long sending pauses in an open connection.  When a sender becomes
+<BR>
+&nbsp;&nbsp;&nbsp;idle, the normal ack-clocking mechanism which regulates traffic is no
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 1]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;longer present and the sender may introduce a burst of packets into
+<BR>
+&nbsp;&nbsp;&nbsp;the network as large as the current congestion window (CWND).  Such a
+<BR>
+&nbsp;&nbsp;&nbsp;burst may be too large for the intermediate routers to handle and may
+<BR>
+&nbsp;&nbsp;&nbsp;be too large for the receiver to handle at one time as well.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;A send timer was first proposed [JK90] to detect idle sending
+<BR>
+&nbsp;&nbsp;&nbsp;periods; the recommended response is to close the congestion window
+<BR>
+&nbsp;&nbsp;&nbsp;and perform a new slow-start.  However, a footnote to this first
+<BR>
+&nbsp;&nbsp;&nbsp;proposed solution noted that send/receive symmetry on the channel
+<BR>
+&nbsp;&nbsp;&nbsp;meant that a receive timer could be used instead to achieve the same
+<BR>
+&nbsp;&nbsp;&nbsp;results.  As this second solution takes advantage of a timer that is
+<BR>
+&nbsp;&nbsp;&nbsp;already required (to detect packet loss) it was implemented by
+<BR>
+&nbsp;&nbsp;&nbsp;Jacobson and Karels.  This solution has been repeated in
+<BR>
+&nbsp;&nbsp;&nbsp;implementations which derive from their work.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Bursty connections, such as the persistent connections required in
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP/1.1 [FGMFB97] have been found to interact in meaningful ways
+<BR>
+&nbsp;&nbsp;&nbsp;with SSR [6].  In fact, it was discovered that SSR never occurs with
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP/1.1 [Poo97].  This is because a new request will reset the
+<BR>
+&nbsp;&nbsp;&nbsp;receive timer (as suggested in the footnote in [JK90]) and the
+<BR>
+&nbsp;&nbsp;&nbsp;sending pause will not be detected [Tou97].
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Further, both timer solutions depend on the retransmit timeout (RTO)
+<BR>
+&nbsp;&nbsp;&nbsp;and cannot detect send pauses that are shorter than this duration.
+<BR>
+&nbsp;&nbsp;&nbsp;In such cases, the sender may transmit a burst as large as the full
+<BR>
+&nbsp;&nbsp;&nbsp;congestion window.
+<BR>
+<P>Burst detection.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;There are several ways of determining whether a connection is at risk
+<BR>
+&nbsp;&nbsp;&nbsp;of sending a burst of packets into the channel.  We will discuss each
+<BR>
+&nbsp;&nbsp;&nbsp;method below, from the least radical to the most radical.
+<BR>
+<P>&nbsp;Receive Timer:
+<BR>
+&nbsp;&nbsp;&nbsp;The use of a receive timer is the most common burst detection method.
+<BR>
+&nbsp;&nbsp;&nbsp;It is attractive because it is simple and makes use of an existing
+<BR>
+&nbsp;&nbsp;&nbsp;timer.  However, a receive timer does not properly detect bursts in
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP/1.1 because the timer is cancelled when the request packet is
+<BR>
+&nbsp;&nbsp;&nbsp;received.  Further, when the connection is idle for less than a full
+<BR>
+&nbsp;&nbsp;&nbsp;RTO, a burst cannot be detected.  Such a burst can happen when the
+<BR>
+&nbsp;&nbsp;&nbsp;connection is &quot;nearly idle&quot; or when acks are lost or reordered.
+<BR>
+<P>&nbsp;Send Timer:
+<BR>
+&nbsp;&nbsp;&nbsp;A send timer is the reciprocal solution to using a receive timer.
+<BR>
+&nbsp;&nbsp;&nbsp;While it requires a new timestamp field to be maintained, it clearly
+<BR>
+&nbsp;&nbsp;&nbsp;detects send pauses and corrects the problem presented by HTTP/1.1.
+<BR>
+&nbsp;&nbsp;&nbsp;However, as with the receive timer, it cannot detect bursts that
+<BR>
+&nbsp;&nbsp;&nbsp;could happen before a full RTO.
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 2]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;Packet Counting:
+<BR>
+&nbsp;&nbsp;&nbsp;An alternative method examines the unused portion of the congestion
+<BR>
+&nbsp;&nbsp;&nbsp;window to determine if the capacity to burst exists.  This method is
+<BR>
+&nbsp;&nbsp;&nbsp;simple, it uses existing information to make its decision, and it
+<BR>
+&nbsp;&nbsp;&nbsp;solves both the HTTP/1.1. problem as well as the RTO problem.  In
+<BR>
+&nbsp;&nbsp;&nbsp;addition, it addresses the problem that needs to be solved (bursts)
+<BR>
+&nbsp;&nbsp;&nbsp;instead of a specific circumstance where the problem could happen
+<BR>
+&nbsp;&nbsp;&nbsp;(send pauses).  However, where timer detection avoids defining a
+<BR>
+&nbsp;&nbsp;&nbsp;burst (it defines idle periods instead), here a burst must be defined
+<BR>
+&nbsp;&nbsp;&nbsp;before it can be detected.  One possible definition is the situation
+<BR>
+&nbsp;&nbsp;&nbsp;where the available portion of the sending window is some proportion
+<BR>
+&nbsp;&nbsp;&nbsp;of the entire congestion window, say 50%.  Another definition places
+<BR>
+&nbsp;&nbsp;&nbsp;a numerical limit on the available portion of the congestion window,
+<BR>
+&nbsp;&nbsp;&nbsp;say 4 or CWND-1 packets.
+<BR>
+<P>Burst Response
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Once a burst is detected, there are several different ways to take
+<BR>
+&nbsp;&nbsp;&nbsp;action.  The different possibilities are listed below, again from
+<BR>
+&nbsp;&nbsp;&nbsp;least to most radical.
+<BR>
+<P>&nbsp;Full Restart:
+<BR>
+&nbsp;&nbsp;&nbsp;Reducing the congestion window to one packet and re-entering slow-
+<BR>
+&nbsp;&nbsp;&nbsp;start, the original slow-start restart is one response.  This was the
+<BR>
+&nbsp;&nbsp;&nbsp;solution proposed by J&amp;K.  This is a very conservative response and
+<BR>
+&nbsp;&nbsp;&nbsp;it defeats most of the speedup that HTTP/1.1 provides [HOT97].
+<BR>
+&nbsp;&nbsp;&nbsp;Current proposals [FAP97] have suggested increasing the initial
+<BR>
+&nbsp;&nbsp;&nbsp;window from 1 packet to 4 packets.  Further, depending on the method
+<BR>
+&nbsp;&nbsp;&nbsp;of burst detection, Full Restart can be far more punitive than it
+<BR>
+&nbsp;&nbsp;&nbsp;should be.  Coupled with a timer, full restart is most likely to
+<BR>
+&nbsp;&nbsp;&nbsp;respond to a completely empty congestion window.  Coupled with Packet
+<BR>
+&nbsp;&nbsp;&nbsp;Counting, the response could close the window too far, even smaller
+<BR>
+&nbsp;&nbsp;&nbsp;than the amount of outstanding data.
+<BR>
+<P>&nbsp;Window Limiting:
+<BR>
+&nbsp;&nbsp;&nbsp;This is a modified version of Full Restart which solves the problem
+<BR>
+&nbsp;&nbsp;&nbsp;created by using Packet Counting to detect bursts.  With this type of
+<BR>
+&nbsp;&nbsp;&nbsp;response, the congestion window is reduced to the amount of
+<BR>
+&nbsp;&nbsp;&nbsp;outstanding data plus the slow-start initial window (1, 2, or 4).  It
+<BR>
+&nbsp;&nbsp;&nbsp;works exactly like Full Restart in the idle case, but is successful
+<BR>
+&nbsp;&nbsp;&nbsp;at controlling bursts in an active connection.  Further, in an active
+<BR>
+&nbsp;&nbsp;&nbsp;connection, it effectively implements a leaky bucket of the initial
+<BR>
+&nbsp;&nbsp;&nbsp;window size for the accumulation of send opportunity based on the
+<BR>
+&nbsp;&nbsp;&nbsp;receipt of acks.  This solution is fairly conservative, especially as
+<BR>
+&nbsp;&nbsp;&nbsp;it defaults to Full Restart, but more importantly, sending
+<BR>
+&nbsp;&nbsp;&nbsp;opportunity is simply lost if not used, and is not available for
+<BR>
+&nbsp;&nbsp;&nbsp;paced output.  Also, it forces negative congestion feedback on the
+<BR>
+&nbsp;&nbsp;&nbsp;congestion window.
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 3]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;Burst Size Limitation:
+<BR>
+&nbsp;&nbsp;&nbsp;When a burst is detected, its effects are limited, the sender may not
+<BR>
+&nbsp;&nbsp;&nbsp;send any more than a preset number of packets into the network.  It
+<BR>
+&nbsp;&nbsp;&nbsp;is less conservative than the first two responses in that it does not
+<BR>
+&nbsp;&nbsp;&nbsp;affect the size of the congestion window, and it is simple to
+<BR>
+&nbsp;&nbsp;&nbsp;implement, simply count up the number of packets you can send and
+<BR>
+&nbsp;&nbsp;&nbsp;stop when you reach the limit.  Whether to wait for an ack or some
+<BR>
+&nbsp;&nbsp;&nbsp;other signal to resume sending is an implementation detail.  Lastly,
+<BR>
+&nbsp;&nbsp;&nbsp;this burst response can be performed after each ack or with each
+<BR>
+&nbsp;&nbsp;&nbsp;send. The behavior is slightly different in each case.
+<BR>
+<P>&nbsp;Pacing:
+<BR>
+&nbsp;&nbsp;&nbsp;When a burst is detected, packets are dribbled into the network until
+<BR>
+&nbsp;&nbsp;&nbsp;the sender starts receiving acks and normal maintenance can be
+<BR>
+&nbsp;&nbsp;&nbsp;resumed [VH97].  This solution is very easy on the network and scales
+<BR>
+&nbsp;&nbsp;&nbsp;well in cases of high bw/delay.  However, it requires a new timer and
+<BR>
+&nbsp;&nbsp;&nbsp;parameter tuning require more research.
+<BR>
+<P>Implemented Solutions
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Now we will examine combinations of the different detection and
+<BR>
+&nbsp;&nbsp;&nbsp;response methods presented above.  Each of the solutions that below
+<BR>
+&nbsp;&nbsp;&nbsp;have been implemented in some form.
+<BR>
+<P>&nbsp;BSD Implementation (Jacobson and Karels)
+<BR>
+&nbsp;&nbsp;&nbsp;The most common implementation uses a receive timer coupled with Full
+<BR>
+&nbsp;&nbsp;&nbsp;Restart.  This is the implementation that causes the interaction
+<BR>
+&nbsp;&nbsp;&nbsp;problems with HTTP/1.1.  The obvious alternative is to implement a
+<BR>
+&nbsp;&nbsp;&nbsp;send timer as originally intended and use Full Restart.  There are
+<BR>
+&nbsp;&nbsp;&nbsp;several drawbacks to this solution.  First, a send timer adds
+<BR>
+&nbsp;&nbsp;&nbsp;additional state and serves no purpose other than to correct the
+<BR>
+&nbsp;&nbsp;&nbsp;bursting behavior after send pauses.  Second, forcing a slow-start in
+<BR>
+&nbsp;&nbsp;&nbsp;this situation is problematic for HTTP/1.1.  A slow-start for each
+<BR>
+&nbsp;&nbsp;&nbsp;new user request adds a delay burden to characteristically small HTTP
+<BR>
+&nbsp;&nbsp;&nbsp;responses. Further, the HTTP user request pattern is unpredictable.
+<BR>
+&nbsp;&nbsp;&nbsp;It is possible for the user to make a new request before the send
+<BR>
+&nbsp;&nbsp;&nbsp;timer expires, triggering a burst that would defeat such a timer.
+<BR>
+<P>&nbsp;Maximum Burst Limitation (Floyd)
+<BR>
+&nbsp;&nbsp;&nbsp;Floyd has proposed a coupling of Packet Counting with Burst Size
+<BR>
+&nbsp;&nbsp;&nbsp;Limitation.  This solution has been implemented in ns and it prevents
+<BR>
+&nbsp;&nbsp;&nbsp;the sender from transmitting a series of back-to-back packets larger
+<BR>
+&nbsp;&nbsp;&nbsp;than the user configured burst limit (suggested to be 4 packets)
+<BR>
+&nbsp;&nbsp;&nbsp;[NS97].  There are several issues involved with recovering from a
+<BR>
+&nbsp;&nbsp;&nbsp;burst and the ns implementation doesn't address them consistently.
+<BR>
+&nbsp;&nbsp;&nbsp;First, it is not clear when the sender is allowed to send again after
+<BR>
+&nbsp;&nbsp;&nbsp;sending the the first limited burst of packets.  One implementation
+<BR>
+&nbsp;&nbsp;&nbsp;requires the sender to wait for the burst timer to expire.  Another
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 4]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;seems to allow a series of short bursts.  Another issue is how the
+<BR>
+&nbsp;&nbsp;&nbsp;simulation implementation and usage translates to a live network
+<BR>
+&nbsp;&nbsp;&nbsp;situation.  The implementation of this solution can range from simple
+<BR>
+&nbsp;&nbsp;&nbsp;to more complex.
+<BR>
+<P>&nbsp;Congestion Window Monitoring (Hughes, Touch, and Heidemann)
+<BR>
+&nbsp;&nbsp;&nbsp;Our proposed solution combines Packet Counting with Window Limiting.
+<BR>
+&nbsp;&nbsp;&nbsp;Whenever (CWND - outstanding data &gt; 4), we reduce CWND to
+<BR>
+&nbsp;&nbsp;&nbsp;(outstanding data + 4).  The choice of 4 packets is discussed in with
+<BR>
+&nbsp;&nbsp;&nbsp;the implementation details below.  Congestion Window Monitoring (CWM)
+<BR>
+&nbsp;&nbsp;&nbsp;allows the congestion window to grow normally but shrinks the
+<BR>
+&nbsp;&nbsp;&nbsp;congestion window as the sender becomes idle.  It also prevents the
+<BR>
+&nbsp;&nbsp;&nbsp;sender from transmitting any bursts larger than 4 packets in response
+<BR>
+&nbsp;&nbsp;&nbsp;to a new request. Because CWM is not dependent on any timers, the
+<BR>
+&nbsp;&nbsp;&nbsp;loss of an ack or a nearly idle connection cannot cause any bursts.
+<BR>
+&nbsp;&nbsp;&nbsp;CWM is similar to Burst Limitation, but avoids the burst by reducing
+<BR>
+&nbsp;&nbsp;&nbsp;CWND, rather than by inhibiting the sends directly.  As a result, we
+<BR>
+&nbsp;&nbsp;&nbsp;avoid the potential problem of sequential calls to TCP_output, which
+<BR>
+&nbsp;&nbsp;&nbsp;would cause bursts in the former, but not the latter.  CWM also
+<BR>
+&nbsp;&nbsp;&nbsp;causes TCP to use the feedback of 'not using the CWND fast enough',
+<BR>
+&nbsp;&nbsp;&nbsp;which results in a decrease in the CWND.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;CWM effectively imposes a leaky bucket type limitation on the
+<BR>
+&nbsp;&nbsp;&nbsp;congestion window.  The window is allowed to grow and be managed
+<BR>
+&nbsp;&nbsp;&nbsp;normally but the sender is not allowed to save up any sending
+<BR>
+&nbsp;&nbsp;&nbsp;opportunities.  Any opportunity that is not used is lost.  This
+<BR>
+&nbsp;&nbsp;&nbsp;property of CWM forces interleaved reception of acks and processing
+<BR>
+&nbsp;&nbsp;&nbsp;of sends.
+<BR>
+<P>&nbsp;Rate Based Pacing (Visweswaraiah and Heidemann)
+<BR>
+&nbsp;&nbsp;&nbsp;Rate Based Pacing combines the Pacing response with either a Send
+<BR>
+&nbsp;&nbsp;&nbsp;Timer or Packet Counting.  It avoids slow-start when resuming after
+<BR>
+&nbsp;&nbsp;&nbsp;sending pauses and allows the normal clocking of packets to be
+<BR>
+&nbsp;&nbsp;&nbsp;gracefully restarted.  When a burst potential is detected, the
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm meters a small burst of packets into the channel [VH97].
+<BR>
+&nbsp;&nbsp;&nbsp;RBP is the least conservative solution to the bursting problem
+<BR>
+&nbsp;&nbsp;&nbsp;because it continues to make use of the pre-pause congestion window.
+<BR>
+&nbsp;&nbsp;&nbsp;If network conditions have changed significantly, maintaining the
+<BR>
+&nbsp;&nbsp;&nbsp;previous window could cause the paced connection to be overly
+<BR>
+&nbsp;&nbsp;&nbsp;aggressive as compared to other connections.  (Although some work
+<BR>
+&nbsp;&nbsp;&nbsp;suggests congestion windows are stable over multi-minute timeframes
+<BR>
+&nbsp;&nbsp;&nbsp;[BSSK97].)  More recently pacing been suggested for use in wireless
+<BR>
+&nbsp;&nbsp;&nbsp;networking scenarios [BPK97], and for satellite connections.
+<BR>
+<P>Experimental Comparisons
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Packet traces of the current FreeBSD implementation of SSR (using the
+<BR>
+&nbsp;&nbsp;&nbsp;receive timer), of a modified version of FreeBSD using a send timer,
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 5]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;and of CWM with HTTP/1.1 support the above observations.  In all of
+<BR>
+&nbsp;&nbsp;&nbsp;the traces, the response pattern for the first request is the same
+<BR>
+&nbsp;&nbsp;&nbsp;with each method.  This shows that CWM allows the congestion window
+<BR>
+&nbsp;&nbsp;&nbsp;to grow normally.  Because of the different actions taken by the
+<BR>
+&nbsp;&nbsp;&nbsp;three algorithms, the response pattern for the second request differs
+<BR>
+&nbsp;&nbsp;&nbsp;as would be expected.  [We have graphs available upon request]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;When the second request arrives at the server after the
+<BR>
+&nbsp;&nbsp;&nbsp;retransmission timeout (RTO), normal FreeBSD allows the server to
+<BR>
+&nbsp;&nbsp;&nbsp;respond with a burst of packets.  FreeBSD using a send timer responds
+<BR>
+&nbsp;&nbsp;&nbsp;by entering slow-start. CWM allows a 4 packet burst.  When the second
+<BR>
+&nbsp;&nbsp;&nbsp;request arrives at the server before the RTO, both timer
+<BR>
+&nbsp;&nbsp;&nbsp;implementations allow a burst.  CWM again limits the burst to 4
+<BR>
+&nbsp;&nbsp;&nbsp;packets.  Note, RTO is the common timer limit, but any value would
+<BR>
+&nbsp;&nbsp;&nbsp;have the same results, depending on when the second request was
+<BR>
+&nbsp;&nbsp;&nbsp;presented in relation to the timer.
+<BR>
+<P>Implementation of Congestion Window Monitoring
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Congestion Window Monitoring requires a simple modification to
+<BR>
+&nbsp;&nbsp;&nbsp;existing TCP output routines.  The changes required replace the
+<BR>
+&nbsp;&nbsp;&nbsp;current idle detection code.  Replace the existing 3 lines of code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle = (snd_max == snd_una)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (idle &amp;&amp; now - lastrcv &gt;= rto)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cwnd = 1;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;with the following 3 lines of code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maxwin = 4 + snd_nxt - snd_una;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (cwnd &gt; maxwin)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cwnd = maxwin;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Packet counting is implemented by line 1.  Lines 2 and 3 implement
+<BR>
+&nbsp;&nbsp;&nbsp;Window Limitation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The choice of limiting the available congestion window to 4 packets
+<BR>
+&nbsp;&nbsp;&nbsp;is based on the normal operation of TCP.  An ACK received by the
+<BR>
+&nbsp;&nbsp;&nbsp;sender may be in response to the receipt of 2 packets, allowing
+<BR>
+&nbsp;&nbsp;&nbsp;another 2 to be sent.  Further, normal window growth may require the
+<BR>
+&nbsp;&nbsp;&nbsp;sending of a third packet.  Lastly, in slow-start with delayed ACKs,
+<BR>
+&nbsp;&nbsp;&nbsp;the receipt of an ACK can trigger the sending of 4 packets. Thus, 4
+<BR>
+&nbsp;&nbsp;&nbsp;packets is a reasonable burst to send into the network.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Increasing the initial window in slow-start to 4 packets has already
+<BR>
+&nbsp;&nbsp;&nbsp;been proposed [FAP97].  The effects of this change have been explored
+<BR>
+&nbsp;&nbsp;&nbsp;in simulation in [PN98] and in practice in [AHO97].  Such a
+<BR>
+&nbsp;&nbsp;&nbsp;modification to TCP would cause the same behavior as our solution in
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 6]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;the cases where the pause timer has expired.  It does not address the
+<BR>
+&nbsp;&nbsp;&nbsp;pre-timeout bursting situation we are concerned with.
+<BR>
+<P>Conclusions
+<BR>
+<P>&nbsp;&nbsp;&nbsp;At this time, we propose CWM as a simple, minimal and effective fix
+<BR>
+&nbsp;&nbsp;&nbsp;to the 'bug' in current TCP implementations that is exploited by
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP/1.1.  Modifications can be made to TCP to solve the slow-start
+<BR>
+&nbsp;&nbsp;&nbsp;restart problem that are consistent with the original congestion
+<BR>
+&nbsp;&nbsp;&nbsp;avoidance specifications (i.e. a send timer).  However, we feel that
+<BR>
+&nbsp;&nbsp;&nbsp;the original intended behavior is not appropriate to some current
+<BR>
+&nbsp;&nbsp;&nbsp;applications, specifically HTTP. Thus, we recommend Congestion Window
+<BR>
+&nbsp;&nbsp;&nbsp;Monitoring to prevent bursts into the network.  Not only does this
+<BR>
+&nbsp;&nbsp;&nbsp;solution solve the current problem in a simple way, it will prevent
+<BR>
+&nbsp;&nbsp;&nbsp;bursting in any other situation that might arise. The 4 packet bursts
+<BR>
+&nbsp;&nbsp;&nbsp;which we allow are consistent with congestion window growth
+<BR>
+&nbsp;&nbsp;&nbsp;algorithms and with Floyd's conclusion about increasing the initial
+<BR>
+&nbsp;&nbsp;&nbsp;window size.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;CWM, as well as the other solutions listed, need to be re-evaluated
+<BR>
+&nbsp;&nbsp;&nbsp;within emerging TCP implementations, e.g., SACK [JB88].  In general,
+<BR>
+&nbsp;&nbsp;&nbsp;TCP has no rate pacing and uses congestion control to avoid bursts in
+<BR>
+&nbsp;&nbsp;&nbsp;current implementations.  A more explicit mechanism, such as RBP or
+<BR>
+&nbsp;&nbsp;&nbsp;similar proposals may be desirable in the future.
+<BR>
+<P>Security implications
+<BR>
+<P>&nbsp;&nbsp;&nbsp;CWM presents no security problems.
+<BR>
+<P>References
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;[AHO97] Mark Allman, Chris Hayes, and Shawn Ostermann.  An Evaluatin
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of TCP Slow Start Modifications, July 1997.  (Submitted to CCR,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;draft available from <A HREF="http://jarok.cs.ohiou.edu/papers/">http://jarok.cs.ohiou.edu/papers/</A>)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[BPK97] Hari Balakrishnan, Venkata N. Padmanabhan, and Randy H. Katz.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Effects of Asymmetry on TCP Performance.  In Proceedings of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the ACM/IEEE Mobicom, Budapest, Hungary, ACM.  September, 1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[BSSK97] Hari Balakrishnan, Srinivasan Seshan, Mark Stemm, and Randy
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H. Katz.  Analyzing Stability in Wide-Area Network Performance.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In Proceedings of the ACM SIGMETRICS, Seattle WA, USA, ACM.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;June, 1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[FGMFB97] R. Fielding, Jim Gettys, Jeffrey C. Mogul, H. Frystyk, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tim Berners-Lee. Hypertext Transfer Protocol -- HTTP/1.1, January
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1997.  RFC 2068.
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 7]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;[FAP97] Sally Floyd, Mark Allman, and Craig Partridge.  Increasing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP's Initial Window, July 1997.  Internet Draft draft-floyd-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;incr-init-win-01.txt
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[Hei97] John Heidemann. Performance Interactions Between P-HTTP and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP Implementations.  ACM Computer Communications Review, 27(2),
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;65-73, April 1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[HOT97] John Heidemann, Katia Obraczka, and Joe Touch.  Modeling the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Performance of HTTP Over Several Transport Protocols.  ACM/IEEE
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transactions on Networking 5(5), 616-630, October, 1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[JB88] Van Jacobson and R.T. Braden. TCP extensions for long-delay
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;paths, October 1988. RFC 1072.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[JK90] Van Jacobson and Michael J. Karels.  Congestion Avoidance and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Control.  ACM Computer Communication Review, 18(4):314-329,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;August 1990. Revised version of his SIGCOMM '88 paper.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[NS97] ns Network Simulator.  <A HREF="http://www-mash.cs.berkeley.edu/ns/">http://www-mash.cs.berkeley.edu/ns/</A>,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[PN98] K. Poduri and K. Nichols. Simulation Studies of Increased
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial TCP Window Size, February 1998.  Internet Draft draft-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ietf-tcpimpl-poduri-00.txt
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[Poo97] Kacheong Poon, Sun Microsystems, tcp-implementors mailing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list, August, 1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[Tou97] Joe Touch, ISI, tcp-implementors mailing list, August 12,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1997.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[VH97] Vikram Visweswaraiah and John Heidemann.  Improving Restart of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Idle TCP Connections.  Technical Report 97-661, University of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Southern California, November 1997.
+<BR>
+<P><P><P>Authors/ Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Amy Hughes, Joe Touch, John Hiedemann
+<BR>
+&nbsp;&nbsp;&nbsp;University of Southern California/Information Sciences Institute
+<BR>
+&nbsp;&nbsp;&nbsp;4676 Admiralty Way
+<BR>
+&nbsp;&nbsp;&nbsp;Marina del Rey, CA 90292-6695
+<BR>
+&nbsp;&nbsp;&nbsp;USA
+<BR>
+&nbsp;&nbsp;&nbsp;Phone: +1 310-822-1511
+<BR>
+&nbsp;&nbsp;&nbsp;Fax:   +1 310-823-6714
+<BR>
+&nbsp;&nbsp;&nbsp;URLs:   <A HREF="http://www.isi.edu/~ahughes">http://www.isi.edu/~ahughes</A>
+<BR>
+<P><P><P>Expires Sept. 30, 1998                                          [Page 8]
+<BR>
+
+<BR>
+Hughes, et al.             Restart After Idle             March 30, 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.isi.edu/~touch">http://www.isi.edu/~touch</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.isi.edu/~johnh">http://www.isi.edu/~johnh</A>
+<BR>
+&nbsp;&nbsp;&nbsp;Email: <A HREF="mailto:ahughes@isi.edu?Subject=Re:%20Slow-start%20restart%20-%20discussion%20of%20fixes&In-Reply-To=&lt;199803232340.PAA09496@rum.isi.edu&gt;">ahughes@isi.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:touch@isi.edu?Subject=Re:%20Slow-start%20restart%20-%20discussion%20of%20fixes&In-Reply-To=&lt;199803232340.PAA09496@rum.isi.edu&gt;">touch@isi.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:johnh@isi.edu?Subject=Re:%20Slow-start%20restart%20-%20discussion%20of%20fixes&In-Reply-To=&lt;199803232340.PAA09496@rum.isi.edu&gt;">johnh@isi.edu</A>
+<BR>
+<P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P>Expires Sept. 30, 1998                                          [Page 9]
+<BR>
+
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20Slow-start%20restart%20-%20discussion%20of%20fixes&In-Reply-To=&lt;199803232340.PAA09496@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1014.html">Vern Paxson: "increasing TCP's initial window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1012.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1013">[ date ]</A>
+<A HREF="index.html#1013">[ thread ]</A>
+<A HREF="subject.html#1013">[ subject ]</A>
+<A HREF="author.html#1013">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

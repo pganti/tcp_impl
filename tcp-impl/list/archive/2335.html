@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sat Sep 16 14:22:14 2000" -->
+<!-- isoreceived="20000916182214" -->
+<!-- sent="Sat, 16 Sep 2000 12:19:02 -0600 (MDT)" -->
+<!-- isosent="20000916181902" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009161819.e8GIJ2u29202@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161819.e8GIJ2u29202@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Sep 16 2000 - 14:19:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2335">[ date ]</A>
+<A HREF="index.html#2335">[ thread ]</A>
+<A HREF="subject.html#2335">[ subject ]</A>
+<A HREF="author.html#2335">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161819.e8GIJ2u29202@calcite.rhyolite.com&gt;">ak@muc.de</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; I don't agree that MD5 hashes of secrets are always required....not
+</EM><BR>
+<EM>&gt; &gt; that he says that, but that's what the test authors tell their customers.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; There are much easier ways to attack the ISN computation in most OS
+</EM><BR>
+<EM>&gt; anyways than attacking MD5:  you attack the secret generation.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; On diskless devices you can usually just find out the initial secret because 
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Yes, if the bad guy knows what you're feeding MD5 or SHA, then using them
+<BR>
+is a waste of CPU cycles.
+<BR>
+<P>That's why I think
+<BR>
+&nbsp;- the products that claim to detect predictable ISN's are snake oil and
+<BR>
+&nbsp;&nbsp;frauds, because they have both false positives and false negatives.
+<BR>
+<P>&nbsp;- in addition to (or even instead of) a static secret that you feed to
+<BR>
+&nbsp;&nbsp;MD5, you should use something that even the host cannot know in advance,
+<BR>
+&nbsp;&nbsp;such as a fine granularity real time clock.  It's also nice to throw
+<BR>
+&nbsp;&nbsp;into the pot things with at least some bits of entropy such as the
+<BR>
+&nbsp;&nbsp;memory addresses of TSP's and buffers containing packets such as the SYN.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; As soon as you can guess the entropy pool you can guess the secret and
+</EM><BR>
+<EM>&gt; attacking the ISN is trivial.
+</EM><BR>
+<P>and so the trick is to find sufficient entropy with which to generate
+<BR>
+the ISN.
+<BR>
+<P>On a 10 MHz Ethernet, packets (including the SYN) arrive with milliseconds
+<BR>
+of jitter and so more entropy than you can use for the ISN, provided you
+<BR>
+have a clock that ticks microseconds or better.
+<BR>
+<P>You still need MD5 to meet the checklists.  MD5 is handy and now fast
+<BR>
+enough for mixing whatever you have, including configured secrets, entropy
+<BR>
+from disk spindles, clocks, and buffer addresses.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161819.e8GIJ2u29202@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2335">[ date ]</A>
+<A HREF="index.html#2335">[ thread ]</A>
+<A HREF="subject.html#2335">[ subject ]</A>
+<A HREF="author.html#2335">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

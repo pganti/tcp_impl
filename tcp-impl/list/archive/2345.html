@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Mon Sep 18 22:53:46 2000" -->
+<!-- isoreceived="20000919025346" -->
+<!-- sent="Mon, 18 Sep 2000 20:48:13 -0600 (MDT)" -->
+<!-- isosent="20000919024813" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009190248.e8J2mDZ27849@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009190248.e8J2mDZ27849@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 18 2000 - 22:48:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2345">[ date ]</A>
+<A HREF="index.html#2345">[ thread ]</A>
+<A HREF="subject.html#2345">[ subject ]</A>
+<A HREF="author.html#2345">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: stanislav shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009190248.e8J2mDZ27849@calcite.rhyolite.com&gt;">shalunov@internet2.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Have you looked at the Yarrow paper I gave a link to?
+</EM><BR>
+<P>That's good advise.  It says that Yarrow-160 uses 3-DES instead of Blowfish
+<BR>
+as you said, or even Twofish as one might expect given the key scheduling
+<BR>
+costs of Blowfish, the application (crypto-PRNG's), and the common source
+<BR>
+of Blowfish, Twofish, and Yarrow.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I guess the short summary should be that cryptographers know how to
+</EM><BR>
+<EM>&gt; make good PRNGs, and they even give them away into public domain.
+</EM><BR>
+<EM>&gt; On the other hands, non-cryptographers--predictably--have less thorough
+</EM><BR>
+<EM>&gt; understanding of producing cryptographically secure PRNGs.
+</EM><BR>
+<P>No, the short summary is something about people who have read a little
+<BR>
+about things outside their strict expertise, and then want to talk about
+<BR>
+them in yet other contexts where they not well versed.  (I admit to knowing
+<BR>
+no more about crypto stuff than the very little I've read and a few
+<BR>
+commercial implementations of some bog standard encryption stuff.)
+<BR>
+<P>As Bruce Schneier of Blowfish, Yarrow, and Twofish fame has been saying
+<BR>
+a lot lately, designing and implementing a wonderful cipher is the
+<BR>
+relatively easy part of the battle.  You should look at the whole picture,
+<BR>
+from what you're trying to protect to how much you should spend protecting
+<BR>
+it.  The old analogies of armoured car deliveries to park benches and
+<BR>
+super-duper vault doors on cardboard boxes are relevant.
+<BR>
+<P>This particular context concerns TCP initial sequence numbers.
+<BR>
+Cryptographic PRNG's, /dev/random, entropy pools, DES, PGP, SHA and so
+<BR>
+forth are merely tools for the main issue, bad guys guessing ISN's.
+<BR>
+<P>The ISN issue once mattered, but today it is a minor threat blown out of
+<BR>
+proportion by &quot;security audit&quot; software vendors, &quot;computer security&quot;
+<BR>
+consultants, trade rag consultant authors, and others.  What bad things
+<BR>
+happen if you use completely predictable ISN's?  You've fixed your systems
+<BR>
+to not use IP addresses as authenticators by turning off /etc/hosts.equiv
+<BR>
+and .rhosts, right?  So what if a bad guy predicts all of your ISN's?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009190248.e8J2mDZ27849@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2345">[ date ]</A>
+<A HREF="index.html#2345">[ thread ]</A>
+<A HREF="subject.html#2345">[ subject ]</A>
+<A HREF="author.html#2345">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 18:17:13 1999" -->
+<!-- isoreceived="19990104231713" -->
+<!-- sent="Mon, 4 Jan 1999 16:16:57 -0700 (MST)" -->
+<!-- isosent="19990104231657" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901042316.QAA03757@calcite.rhyolite.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 18:16:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1443.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1442">[ date ]</A>
+<A HREF="index.html#1442">[ thread ]</A>
+<A HREF="subject.html#1442">[ subject ]</A>
+<A HREF="author.html#1442">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;">tcp-impl@lerc.nasa.gov</A>, <A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;">vjs@calcite.rhyolite.com</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;">Richard_Berke@troweprice.com</A>
+</EM><BR>
+<P><EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; As far as I can see, there would be no problem (other than cost) with what
+</EM><BR>
+<EM>&gt; &gt; Microsoft is alledged to be doing if they guarantee that all initial
+</EM><BR>
+<EM>&gt; &gt; sequence numbers are &quot;sufficently far apart.&quot;   &quot;Smaller&quot; is as good as
+</EM><BR>
+<EM>&gt; &gt; &quot;larger&quot;, provided the delta is large enough so the probability of
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Well, I wouldn't say &quot;no problem&quot;.  What I see at issue is that many
+</EM><BR>
+<EM>&gt; TCP implementations (such as BSD) will allow a connection in TIME-WAIT to
+</EM><BR>
+<EM>&gt; be reused before the TIME-WAIT has expired, if the incoming SYN has an ISS
+</EM><BR>
+<EM>&gt; that is greater than the FIN from the previous instance of the connection.
+</EM><BR>
+<EM>&gt; Otherwise, since there is no ACK bit, the SYN and any retranmissions of the
+</EM><BR>
+<EM>&gt; SYN will be silently dropped until the TIME-WAIT state expires.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; So, for a TCP that generates random ISS values, when quickly re-using a
+</EM><BR>
+<EM>&gt; TCP connection, they are going to have a 50/50 chance of the connection
+</EM><BR>
+<EM>&gt; either being quickly established, or hung up doing SYN retransmissions until
+</EM><BR>
+<EM>&gt; the TIME-WAIT connection on the server goes away or the client gives up on
+</EM><BR>
+<EM>&gt; its SYN retransmissions.
+</EM><BR>
+<P>That's a good point.
+<BR>
+<P>What is the political odor of that BSD feature in the IETF today?
+<BR>
+<P><P><EM>&gt; Of course, one problem is that since most TCPs destroy the PCB after
+</EM><BR>
+<EM>&gt; getting the FIN in LAST-ACK state, if they immediatly reuse the
+</EM><BR>
+<EM>&gt; connection they have no idea what the last sequence number used was.
+</EM><BR>
+<EM>&gt; So the new ISS is just the standard ISS increment, and if the previous
+</EM><BR>
+<EM>&gt; connection transfered more data than the delta between the ISSs, the
+</EM><BR>
+<EM>&gt; ISS on the new SYN won't pass the TIME-WAIT check...
+</EM><BR>
+<P>Both this problem and your other point apply only if the same
+<BR>
+(addr,port,addr,port) 4-tuple is used, right?
+<BR>
+<P>In both problems, isn't the worst case a TIME-WAIT delay, and not the data
+<BR>
+corruption of the likely implementation of the alledged random Microsoft
+<BR>
+ISS's?   Of course, over the years we've each heard vastly more complaints
+<BR>
+about TIME-WAIT delays than about data corruption, and never mind validity.
+<BR>
+<P><P>How likely is the re-use of a 4-tuple today?  In ancient days, wasn't it
+<BR>
+fairly unlikely because hosts had enough state to keep the client end of
+<BR>
+a connection in TIME-WAIT?  Reboot-every-few-minutes DOS hurt that
+<BR>
+protection, but current Microsoft systems don't like unscheduled rebooting
+<BR>
+and simply don't reboot quickly.  (A 300 MHz PII WIN95 w/fast disks of my
+<BR>
+acquantance wants about 100 seconds if it doesn't insist on running chkdisk,
+<BR>
+and lots more if it does.  Don't ask about the agility of the 33 MHz 486
+<BR>
+NT system I use.  Redhat 5.2 Linux is worse.)  On the fifth hand, dynamic
+<BR>
+PPP IP addresses could mean that some 4-tuples are rather popular.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042316.QAA03757@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1443.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1442">[ date ]</A>
+<A HREF="index.html#1442">[ thread ]</A>
+<A HREF="subject.html#1442">[ subject ]</A>
+<A HREF="author.html#1442">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

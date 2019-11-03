@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="mrosu@us.ibm.com (mrosu@us.ibm.com)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Wed Mar 17 01:19:43 1999" -->
+<!-- isoreceived="19990317061943" -->
+<!-- sent="Wed, 17 Mar 1999 01:12:25 -0500" -->
+<!-- isosent="19990317061225" -->
+<!-- name="mrosu@us.ibm.com" -->
+<!-- email="mrosu@us.ibm.com" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="85256737.00221895.00@D51MTA03.pok.ibm.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256737.00221895.00@D51MTA03.pok.ibm.com&gt;"><EM>mrosu@us.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Mar 17 1999 - 01:12:25 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1678">[ date ]</A>
+<A HREF="index.html#1678">[ thread ]</A>
+<A HREF="subject.html#1678">[ subject ]</A>
+<A HREF="author.html#1678">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;Included message from <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256737.00221895.00@D51MTA03.pok.ibm.com&gt;">mrosu@us.ibm.com</A>:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;.....
+<BR>
+&nbsp;&nbsp;&nbsp;Let me try another example.  Using your notation, cwnd = 5,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[1] 2 [3] 4 5
+<BR>
+<P>&nbsp;&nbsp;&nbsp;After fast retransmitting seg 1, partial ack for seg 2 comes back.  Then
+<BR>
+&nbsp;&nbsp;&nbsp;dup_ack_cnt -= 2 - 1 = 2.  (I hope I get it right this time (-:)  So
+<BR>
+&nbsp;&nbsp;&nbsp;using your idea, since dup_ack_cnt &lt; 3, seg 3 will not be retransmitted.
+<BR>
+&nbsp;&nbsp;&nbsp;cwnd is set to 5 - 2 + 1 = 3.  So no new segment can be sent.  TCP has
+<BR>
+&nbsp;&nbsp;&nbsp;to time out.
+<BR>
+<P>Yes, you're right...
+<BR>
+However, in my original message, under Example 1, I say:
+<BR>
+&quot;....If we want to be more aggressive and count the retransmission of
+<BR>
+segment 1 as a segment sent after 7 but acked before 7, then the new
+<BR>
+value of dupacks should be 2....&quot;
+<BR>
+<P>I was trying to say that you can be more aggressive for the second
+<BR>
+retransmission. The more aggressive algorithm won't timeout on
+<BR>
+&quot;[1] 2 [3] 4 5&quot;.
+<BR>
+<P>Here is a better way to count fast retransmissions as messages sent after X
+<BR>
+but acked before X:
+<BR>
+<P>Enter in fast retransmit phase and retransmit if dupacks &gt;= 3.
+<BR>
+Upon receiving a partial ACK, always decrement dupacks by (# segs_acked - 1)
+<BR>
+and:
+<BR>
+if this would be the 2nd fast retransmit, then retransmit if dupacks &gt;= 2,
+<BR>
+or if this would be the 3rd fast retransmit, then retransmit if dupacks &gt;= 1,
+<BR>
+otherwise, retransmit unconditionally.
+<BR>
+<P>I believe that you can prove that the shortest three examples for which the
+<BR>
+aggressive algorithm timeouts are the following: [1] 2 3 4 [5] [6] 7,
+<BR>
+[1] 2 3 4 [5] 6 [7], and [1] 2 3 4 [5] [6] [7]. The main observation is that
+<BR>
+while in the fast retransmit phase, cwnd is always &gt;= cwnd0/2, where cwnd0
+<BR>
+is the initial congestion window (before the congestion event).
+<BR>
+<P>Using the same observation, you can prove that the aggressive algorithm
+<BR>
+timeouts after the first retransmit only if 1/2 of the window or more is
+<BR>
+lost (in the examples above, at least 3 messages are lost for a window of 7).
+<BR>
+NewReno won't timeout if 1/2 window or more is lost.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;......
+<BR>
+&nbsp;&nbsp;&nbsp;I think we can separate your modification into 2 cases.  Using NewReno's
+<BR>
+&nbsp;&nbsp;&nbsp;terms, partial ack and ack covers recover.  Firstly, I don't believe that it
+<BR>
+&nbsp;&nbsp;&nbsp;is &quot;risky&quot; at all in retransmitting the first unack'ed segment after getting
+<BR>
+&nbsp;&nbsp;&nbsp;a partial ack.  Fast retransmit is triggered because of 3 dup acks.  We
+<BR>
+&nbsp;&nbsp;&nbsp;assume that there is no reordering, thus the segment is really dropped.  This
+<BR>
+&nbsp;&nbsp;&nbsp;means that no partial ack or complete ack can be sent back until this
+<BR>
+&nbsp;&nbsp;&nbsp;dropped segment is retransmitted and received by the receiver.  Thus
+<BR>
+&nbsp;&nbsp;&nbsp;retransmitting a segment because of a partial ack is as &quot;risky&quot; as the first
+<BR>
+&nbsp;&nbsp;&nbsp;fast retransmission.  They are all linked together.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Suppose for the moment, we just apply half of your idea, do the dup_ack_cnt
+<BR>
+&nbsp;&nbsp;&nbsp;calculation but relax the dup_ack_cnt &gt;= 3 rule.  If after leaving fast
+<BR>
+&nbsp;&nbsp;&nbsp;retransmit phase, dup_ack_cnt is still &gt; 0, can we infer that some of the
+<BR>
+&nbsp;&nbsp;&nbsp;new segments sent during fast retransmit phase are also dropped?  I'll say
+<BR>
+&nbsp;&nbsp;&nbsp;probably.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;.......
+<BR>
+<P>OK, lets separate my proposal in two cases and apply only part of the idea.
+<BR>
+In the fast retransmit phase upon receiving a partial ACK, adjust dupacks as
+<BR>
+I proposed and retransmit unconditionally (because it is safe to assume
+<BR>
+the segment was lost after at least one roundtrip).
+<BR>
+Upon receiving a full ACK, adjust dupacks as I proposed. If dupacks &gt; 0, use
+<BR>
+it to determine the start of a new fast retransmit phase.
+<BR>
+<P>I believe that if you filter window updates correctly, a positive value
+<BR>
+of dupacks upon leaving the fast retransmit is a pretty safe indication of
+<BR>
+a lost segment.
+<BR>
+If ACKs are lost on their way back to the source, dupacks underestimates
+<BR>
+the number of segments received out of order.
+<BR>
+Why do you say 'probably'?
+<BR>
+<P><EM>   &gt;I don't see the benefit of clearing the dupacks counter. Please elaborate.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;The dup_ack_cnt is just an implementation detail in NewReno which is used to
+<BR>
+&nbsp;&nbsp;&nbsp;identify when fast retransmit start and ends.  Reseting it to 0 just means
+<BR>
+&nbsp;&nbsp;&nbsp;it is the end.
+<BR>
+<P>Comparing against the current value of the 'recover' variable will do the same.
+<BR>
+I assume that 'recover' is never cleared; only set when fast retransmit starts.
+<BR>
+<P><EM>   &gt;When there are no losses, the dupacks counter will go to zero rapidly.
+</EM><BR>
+<EM>   &gt;Because of lost acks, there will be attempts to decrement the counter
+</EM><BR>
+<EM>   &gt;below zero. Anyway, dupacks should always be &gt;= 0.
+</EM><BR>
+<EM>   &gt;No. The congestion window should be handled as in the current draft.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;Actually, my intention is to ask when you stop the fast retransmit phase.
+<BR>
+&nbsp;&nbsp;&nbsp;Do you stop only when dup_ack_cnt becomes 0 or a time out happens?  The
+<BR>
+&nbsp;&nbsp;&nbsp;reason I ask is that a fast retransmit phase covers a single congestion
+<BR>
+&nbsp;&nbsp;&nbsp;event.
+<BR>
+<P>You stop the current retransmit phase upon receiving a full ACK. Adjust cwnd
+<BR>
+as the draft says and adjust dupacks as I suggested. If updated dupacks &gt;= 3,
+<BR>
+start a new retransmit phase; follow steps 1 and 2 in the draft. Clear dupacks
+<BR>
+only if negative (if ACKs are lost, my algorithm for adjusting dupacks can
+<BR>
+yield negative values).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If cwnd is adjusted as in the draft, the loss of a new segment sent
+<BR>
+&nbsp;&nbsp;&nbsp;during fast retransmit phase is treated as the same congestion event.
+<BR>
+&nbsp;&nbsp;&nbsp;I'd suggest cwnd needs to be decremented when recovering for segments
+<BR>
+&nbsp;&nbsp;&nbsp;sent beyond recover.
+<BR>
+<P>Upon receiving a full or partial ACK, cwnd should be adjusted as specified in
+<BR>
+the draft.
+<BR>
+<P><EM>   &gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256737.00221895.00@D51MTA03.pok.ibm.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P>Looking forward to your comments,
+<BR>
+Marcel
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1679.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1678">[ date ]</A>
+<A HREF="index.html#1678">[ thread ]</A>
+<A HREF="subject.html#1678">[ subject ]</A>
+<A HREF="author.html#1678">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

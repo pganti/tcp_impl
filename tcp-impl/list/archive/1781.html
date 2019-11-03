@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Impact of Receiver Window</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: Impact of Receiver Window">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Impact of Receiver Window</H1>
+<!-- received="Fri Jul 30 10:36:49 1999" -->
+<!-- isoreceived="19990730143649" -->
+<!-- sent="Fri, 30 Jul 1999 10:31:48 -0400" -->
+<!-- isosent="19990730143148" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="Re: Impact of Receiver Window" -->
+<!-- id="199907301431.KAA25007@guns.lerc.nasa.gov" -->
+<!-- inreplyto="Impact of Receiver Window" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20Impact%20of%20Receiver%20Window&In-Reply-To=&lt;199907301431.KAA25007@guns.lerc.nasa.gov&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jul 30 1999 - 10:31:48 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1779.html">Chadi M. BARAKAT: "Impact of Receiver Window"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1781">[ date ]</A>
+<A HREF="index.html#1781">[ thread ]</A>
+<A HREF="subject.html#1781">[ subject ]</A>
+<A HREF="author.html#1781">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A couple notes in addition to Bill's comments about application
+<BR>
+layer control.
+<BR>
+<P><EM>&gt; While simulating TCP, I found that the receiver window (rwnd)
+</EM><BR>
+<EM>&gt; prevents sometimes the source from sending new packets during the
+</EM><BR>
+<EM>&gt; recovery phase.  This happens when the inflated congestion window
+</EM><BR>
+<EM>&gt; (cwnd) exceeds rwnd.  First, this causes bursts at the end of the
+</EM><BR>
+<EM>&gt; recovery phase which overwhelms network buffers. Second, this
+</EM><BR>
+<EM>&gt; causes low throughput during Fast Recovery. Third, in case of
+</EM><BR>
+<EM>&gt; Reno, this may prohibit the source from correcting the second loss
+</EM><BR>
+<EM>&gt; in a window (Reno cannot correct more than two losses).
+</EM><BR>
+<P>As a note, this effect is explored for various versions of TCP in
+<BR>
+the following:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Chris Hayes. Analyzing the Performance of New TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Implementations over Satellite Links. Master's Thesis, Ohio
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;University, August 1997.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://jarok.cs.ohiou.edu/papers/hayes-thesis.ps">http://jarok.cs.ohiou.edu/papers/hayes-thesis.ps</A>
+<BR>
+<P><EM>&gt; I think that transmitting more packets that the receiver window
+</EM><BR>
+<EM>&gt; (during a short period) doesn't violate TCP congestion control. No
+</EM><BR>
+<EM>&gt; more load is injected in the network than in the case of large
+</EM><BR>
+<EM>&gt; rwnd.
+</EM><BR>
+<P>I agree you could get the same impact on the network by opening
+<BR>
+rwnd.  However, there is one key difference, I think.  If the
+<BR>
+segment you send is rejected once it gets to the receiver because of
+<BR>
+no buffer space then we wasted capacity in any congested routers in
+<BR>
+the network path (and, we know there is at least one).  I believe
+<BR>
+such cases are discussed in the following paper (probably in the
+<BR>
+context of constant rate UDP traffic):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Floyd, S., and Fall, K., Promoting the Use of End-to-End
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Congestion Control in the Internet, May 1999. (To appear in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;IEEE/ACM Transactions on Networking, August 1999.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.aciri.org/floyd/papers/collapse.may99.ps">http://www.aciri.org/floyd/papers/collapse.may99.ps</A>
+<BR>
+<P>While I don't think the case you are suggesting is nearly as bad as
+<BR>
+the case of streaming UDP apps, I think there is a potential for it
+<BR>
+to have a negative impact on the network.
+<BR>
+<P>allman
+<BR>
+<P><P><PRE>
+---
+<A HREF="http://roland.grc.nasa.gov/~mallman/">http://roland.grc.nasa.gov/~mallman/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1779.html">Chadi M. BARAKAT: "Impact of Receiver Window"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1781">[ date ]</A>
+<A HREF="index.html#1781">[ thread ]</A>
+<A HREF="subject.html#1781">[ subject ]</A>
+<A HREF="author.html#1781">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

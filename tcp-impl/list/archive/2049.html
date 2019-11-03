@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Mon Feb 28 07:58:44 2000" -->
+<!-- isoreceived="20000228125844" -->
+<!-- sent="Mon, 28 Feb 2000 12:52:11 +0000 (GMT)" -->
+<!-- isosent="20000228125211" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="E12PPeo-0001qn-00@the-village.bc.nu" -->
+<!-- inreplyto="3.0.3.32.20000227175017.006baa14@ruby.cisco.com" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;E12PPeo-0001qn-00@the-village.bc.nu&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 28 2000 - 07:52:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2049">[ date ]</A>
+<A HREF="index.html#2049">[ thread ]</A>
+<A HREF="subject.html#2049">[ subject ]</A>
+<A HREF="author.html#2049">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Given you are concerned about Appletalk and PCI, perhaps we just
+</EM><BR>
+<EM>&gt; need to agree you are addressing a different performance level of
+</EM><BR>
+<EM>&gt; storage system.  I see no reason for hardware support at Appletalk
+</EM><BR>
+<P>No we are addressing the same level of performance in a general purpose OS
+<BR>
+the difference is my case doesn't need weird protocol hacks. When working
+<BR>
+with a dedicated storage system RDMA becomes even less interesting because
+<BR>
+you code the stack to the needs of the filer. You don't even need an MMU
+<BR>
+on such kit
+<BR>
+<P><EM>&gt; proposed NIC if this is really to be taken as a serious alternative
+</EM><BR>
+<EM>&gt; to an RDMA option.  I for one dont find it a competitive design
+</EM><BR>
+<EM>&gt; (it is also one that was previously considered.)
+</EM><BR>
+<P>I don't find RDMA a credible useful solution at the protocol level. It
+<BR>
+doesn't offer any visible advantage, it complicates the stack futher thus
+<BR>
+punishing the majority in the interest of the few.
+<BR>
+<P>I'm interested in why you think such a NIC wouldnt work, Providing you have
+<BR>
+interrupt mitigation I see no reason for it to fail. I'd be interested
+<BR>
+to know what the flaws in that technique were in your eyes.
+<BR>
+<P><EM>&gt; doing this, so I regard this as a done deal.  (I'd hate
+</EM><BR>
+<EM>&gt; to be a high-speed NIC vendor that cant do this.)
+</EM><BR>
+<P>But can you do it at $6 a part in volume ? Thats what the other 99.9% of the
+<BR>
+people care about.
+<BR>
+<P><EM>&gt; The only issue is how to handle the next level of 
+</EM><BR>
+<EM>&gt; protocols that have high performance requirements, i.e. storage.
+</EM><BR>
+<P>ST already has this sort of stuff figured out.
+<BR>
+<P><EM>&gt; Also, NICs with hardware enhancements for protocol support,
+</EM><BR>
+<EM>&gt; such as the Intel Gigabit Ethernet NIC have been very successful
+</EM><BR>
+<EM>&gt; both in performance and market.  So, expect more there.
+</EM><BR>
+<P>Intel provide no useful documentation so that is hard to evaluate.
+<BR>
+<P><EM>&gt; Finally, the RDMA option is targeted to allow use of standard
+</EM><BR>
+<EM>&gt;  Internet protocols for SANs in place of  specialized protocols
+</EM><BR>
+<EM>&gt; and networks such as  FibreChannel, especially for non-local 
+</EM><BR>
+<EM>&gt; access.
+</EM><BR>
+<P>So is ST and ST is proven technology. If you are going to break the protocol
+<BR>
+to add hacks to it you might as well design the protocol properly based on the
+<BR>
+past twenty years of learning where TCP is hard to get right. You need IP to
+<BR>
+be compatible you don't need TCP.
+<BR>
+<P>If you want to solve the generic problem then you don't need RDMA anyway
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2049">[ date ]</A>
+<A HREF="index.html#2049">[ thread ]</A>
+<A HREF="subject.html#2049">[ subject ]</A>
+<A HREF="author.html#2049">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

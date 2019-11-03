@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: query: using two write() calls i</TITLE>
+<META NAME="Author" CONTENT="rajiv.chakravorty@philips.com (rajiv.chakravorty@philips.com)">
+<META NAME="Subject" CONTENT="query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>query: using two write() calls in succession</H1>
+<!-- received="Mon Mar 26 07:30:50 2001" -->
+<!-- isoreceived="20010326123050" -->
+<!-- sent="Mon, 26 Mar 2001 14:14:02 +0200" -->
+<!-- isosent="20010326121402" -->
+<!-- name="rajiv.chakravorty@philips.com" -->
+<!-- email="rajiv.chakravorty@philips.com" -->
+<!-- subject="query: using two write() calls in succession" -->
+<!-- id="0056890024992624000002L942*@MHS" -->
+<STRONG>From:</STRONG> <A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;0056890024992624000002L942*@MHS&gt;"><EM>rajiv.chakravorty@philips.com</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Mar 26 2001 - 07:14:02 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2478.html">Ahmed Karmouch: "IEEE/ACM Workshop on Mobile Software Agents-  MATA 2001- Deadline-April 1."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2481.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2482.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2485.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2479">[ date ]</A>
+<A HREF="index.html#2479">[ thread ]</A>
+<A HREF="subject.html#2479">[ subject ]</A>
+<A HREF="author.html#2479">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi, 
+<BR>
+<P>This problem is regarding use of  two write() call in succession. Let me explain the 
+<BR>
+problem. In one of the blocking socket implementations, I have used two write calls mainly 
+<BR>
+to detect the state of the TCP connection. I can expect that if the TCP connection has 
+<BR>
+been closed (FIN) by the http server (due to http/1.1  timeout), the use of two write calls in sequence 
+<BR>
+at the client side should detect if the connection was closed. As normally expected, when I 
+<BR>
+make the first write() call, the server would ackowledge the client with a RST since 
+<BR>
+the connection was  already closed. Now, when I make my second write() call, in 
+<BR>
+succession, the presence of RST at the client TCP should prompt the second write() 
+<BR>
+to fail and return with errno to ECONNRESET. I wrote a small code to check this behaviour.
+<BR>
+I  ran this code in linux 2.2.16 to retrive the index.html page from an intranet web server.
+<BR>
+In this code, I made a TCP connection to send and retrieve the index.html file normally and 
+<BR>
+then slept for about 20 seconds allowing the web server to timeout.  After 20 seconds, after the
+<BR>
+web server had timed-out and closed the connection, I again called the two writes (breaking the request)
+<BR>
+&nbsp;with the same GET HTTP/1.1 request in succession. 
+<BR>
+I have some observations:
+<BR>
+<P>1. The second write() call in succession  does not fail. However, if I sleep for 1 second
+<BR>
+in between the two writes, the second write() call fails and returns errno with ECONNRESET.
+<BR>
+I checked this behaviour running it in Linux2.2.16/ SunOS _5.5.1/ 5.8 and the behavior remains same.
+<BR>
+&nbsp;However, in Sun OS 5.7, second write() call does not fail at all even after giving this delay. (I tried to
+<BR>
+&nbsp;increase the delay, but without any result). In VxWorks 5.2, we could detect the error in the second 
+<BR>
+write call without any delay at all.
+<BR>
+<P>Q.1.1  Why do we need some delay for the second write() call to fail in most of the systems??
+<BR>
+Q.2 .1 Why do we see such inconsistencies in various TCP implementations? (maybe I am missing 
+<BR>
+something)...
+<BR>
+<P><P>2. I checked the tcpdump output of Linux 2.2.16 and I find that when I make the second write call
+<BR>
+and after the client has received RST from the first write , the client TCP generates it own RST to be 
+<BR>
+sent to the server. I do think that this is not the expected behaviour from the TCP. I checked the tcpdump
+<BR>
+output running the same code in SunOS 5.7 and I dont find any RST being returned from the client to 
+<BR>
+the server, after it itself has received the RST. This is the normal expected behavior of TCP, which 
+<BR>
+is somehow not evident in Linux (I have included the tcpdump file; linuxdump.txt)
+<BR>
+<P>Q.2.1 Is there some problems in the 2.2.16 TCP stack of Linux that prompts it to return RST for an RST 
+<BR>
+when the second write() call is made ??
+<BR>
+<P>Maybe I am missing something important or my interpretation of the problem. 
+<BR>
+Would really appreciate your comments.
+<BR>
+<P>Regds,
+<BR>
+Rajiv Chakravorty 
+<BR>
+<P>Philips Advanced Systems and Applications Labs (ASA-Labs)
+<BR>
+Eindhoven, The Netherlands     <A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;0056890024992624000002L942*@MHS&gt;">rajiv.chakravorty@philips.com</A>
+<BR>
+<P>ps: appended, please find the tcpdump(linuxdump.txt) for linux and
+<BR>
+the sampe code (testsock2.cpp) code used in this process.
+<BR>
+for compilation and final executable:  g++ testsock2.cpp -o testsock -lnsl -lsocket
+<BR>
+for accessing the server use:  testsock  &lt;webserver&gt;  &lt;file to be retrieved&gt;
+<BR>
+<P><P><P><P>
+<BR><HR NOSHADE>
+<UL>
+<LI>application/octet-stream attachment: <A HREF="att-2479/01-linuxdump.txt">linuxdump.txt</A>
+</UL>
+<!-- attachment="01-linuxdump.txt" -->
+
+<BR><HR NOSHADE>
+<UL>
+<LI>application/octet-stream attachment: <A HREF="att-2479/02-testsock2.cpp">testsock2.cpp</A>
+</UL>
+<!-- attachment="02-testsock2.cpp" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2478.html">Ahmed Karmouch: "IEEE/ACM Workshop on Mobile Software Agents-  MATA 2001- Deadline-April 1."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2481.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2482.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2485.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2479">[ date ]</A>
+<A HREF="index.html#2479">[ thread ]</A>
+<A HREF="subject.html#2479">[ subject ]</A>
+<A HREF="author.html#2479">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Mar 26 2001 - 07:31:20 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

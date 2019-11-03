@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Anomalous TCP behaviour (usi</TITLE>
+<META NAME="Author" CONTENT="Stefan Savage (savage@cs.washington.edu)">
+<META NAME="Subject" CONTENT="RE: Anomalous TCP behaviour (using ip_id to disambiguate reordering)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Anomalous TCP behaviour (using ip_id to disambiguate reordering)</H1>
+<!-- received="Wed, 26 Jan 2000 09:05:51 -0800" -->
+<!-- isoreceived="20000126170551" -->
+<!-- sent="Wed, 26 Jan 2000 09:05:51 -0800" -->
+<!-- isosent="20000126170551" -->
+<!-- name="Stefan Savage" -->
+<!-- email="savage@cs.washington.edu" -->
+<!-- subject="RE: Anomalous TCP behaviour (using ip_id to disambiguate reordering)" -->
+<!-- id="055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu" -->
+<!-- inreplyto="Anomalous TCP behaviour (using ip_id to disambiguate reordering)" -->
+<STRONG>From:</STRONG> Stefan Savage (<A HREF="mailto:savage@cs.washington.edu?Subject=RE:%20Anomalous%20TCP%20behaviour%20(using%20ip_id%20to%20disambiguate%20reordering)&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu&gt;"><EM>savage@cs.washington.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jan 26 2000 - 12:05:51 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1948.html">Shawn Ostermann: "Re: Anomalous TCP behaviour (using ip_id to disambiguate reordering)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1949">[ date ]</A>
+<A HREF="index.html#1949">[ thread ]</A>
+<A HREF="subject.html#1949">[ subject ]</A>
+<A HREF="author.html#1949">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Absolutely correct.  In fact, it doesn't work for OpenBSD (they use a
+<BR>
+pseudo-random nonrepeating sequence). 
+<BR>
+<P>This is one of those tricks that goes in the &quot;works alot of the time, but
+<BR>
+don't depend on it&quot; toolbox.  Of course... that's true about just about
+<BR>
+every measurement technology out there :-)
+<BR>
+<P>- Stefan
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Shawn Ostermann [mailto:<A HREF="mailto:ostermann@cs.ohiou.edu?Subject=RE:%20Anomalous%20TCP%20behaviour%20(using%20ip_id%20to%20disambiguate%20reordering)&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu&gt;">ostermann@cs.ohiou.edu</A>]
+<BR>
+Sent: Wednesday, January 26, 2000 7:17 AM
+<BR>
+To: Stefan Savage
+<BR>
+Cc: '<A HREF="mailto:ostermann@cs.ohiou.edu?Subject=RE:%20Anomalous%20TCP%20behaviour%20(using%20ip_id%20to%20disambiguate%20reordering)&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu&gt;">ostermann@cs.ohiou.edu</A>'; Vern Paxson; <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20Anomalous%20TCP%20behaviour%20(using%20ip_id%20to%20disambiguate%20reordering)&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu&gt;">tcp-impl@lerc.nasa.gov</A>;
+<BR>
+Anupama Sundaresan
+<BR>
+Subject: Re: Anomalous TCP behaviour (using ip_id to disambiguate
+<BR>
+reordering)
+<BR>
+<P><P><P><EM>&gt; Minor tangential point: you can usually disambiguate re-ordering
+</EM><BR>
+<EM>&gt; from retransmissions at the receiver by observing ip_id.  Most OSs
+</EM><BR>
+<EM>&gt; provide monotonicity in ip_id (at least per-flow) so re-ordered
+</EM><BR>
+<EM>&gt; segments will have in-order ip_id values, and retransmitted segments
+</EM><BR>
+<EM>&gt; will not (excluding a few special cases).
+</EM><BR>
+<P>I can't dispute your claim, but I'm skeptical how safe it would be.
+<BR>
+As far as I can tell, the protocol standard (791 at least) only
+<BR>
+requires that the identifier field be unique:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Thus, the sender must choose the Identifier to be unique for this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;source, destination pair and protocol for the time the datagram
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(or any fragment of it) could be alive in the internet.
+<BR>
+<P>Of course, with today's fast networks, even that requirement is
+<BR>
+difficult (impossible) to meet.  I'd be hesitant to rely on a
+<BR>
+heuristic that isn't guaranteed to hold for all IP stacks and that
+<BR>
+would definitely not work with IPv6.
+<BR>
+<P>It's an interesting idea, though.  It would be very useful for an set
+<BR>
+of experiments.
+<BR>
+<P><P>Shawn
+<BR>
+-------------------------------------------------------------------------
+<BR>
+&nbsp;&nbsp;&nbsp;Dr. Shawn Ostermann  -  Associate Professor  -  Ohio University
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;322 Stocker Center, Ohio University, Athens, Ohio  45701-2979
+<BR>
+&nbsp;<A HREF="mailto:ostermann@cs.ohiou.edu?Subject=RE:%20Anomalous%20TCP%20behaviour%20(using%20ip_id%20to%20disambiguate%20reordering)&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D8C@exchsrv1.cs.washington.edu&gt;">ostermann@cs.ohiou.edu</A> -- FAX: (740)593-0007 -- Voice: (740)593-1234
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://ace.cs.ohiou.edu/~osterman">http://ace.cs.ohiou.edu/~osterman</A>   <A HREF="http://jarok.cs.ohiou.edu">http://jarok.cs.ohiou.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1948.html">Shawn Ostermann: "Re: Anomalous TCP behaviour (using ip_id to disambiguate reordering)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1949">[ date ]</A>
+<A HREF="index.html#1949">[ thread ]</A>
+<A HREF="subject.html#1949">[ subject ]</A>
+<A HREF="author.html#1949">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

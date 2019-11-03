@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 14:09:34 1999" -->
+<!-- isoreceived="19990104190934" -->
+<!-- sent="Mon, 4 Jan 1999 14:08:21 -0500 (EST)" -->
+<!-- isosent="19990104190821" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901041908.OAA05416@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041908.OAA05416@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 14:08:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1432.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1436.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1431">[ date ]</A>
+<A HREF="index.html#1431">[ thread ]</A>
+<A HREF="subject.html#1431">[ subject ]</A>
+<A HREF="author.html#1431">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Well, I'm hardly a TCP guru, but here's my take on this.  I'm sure that
+<BR>
+if I've botched it, someone who *does* know will correct me.
+<BR>
+<P>With that caveat...*charrrrge!* :)
+<BR>
+<P><EM>&gt; In a packet trace [] I saw a TCP session finish normally with a
+</EM><BR>
+<EM>&gt; FIN/ACK.  About a minute later, the client requested a new session,
+</EM><BR>
+<EM>&gt; [].  The client and server used the same TCP ports as in the previous
+</EM><BR>
+<EM>&gt; session.  The server indicated in its SYN ACK a TCP sequence number
+</EM><BR>
+<EM>&gt; of 2+million LOWER than the sequence number it had used to send data
+</EM><BR>
+<EM>&gt; at the end of the previous session.
+</EM><BR>
+<P><EM>&gt; Microsoft asserts this behavior is okay.
+</EM><BR>
+<P>In theory, they are wrong; in practice, they're probably right.
+<BR>
+<P><EM>&gt; In fact, they tell me that in the near future they will be selecting
+</EM><BR>
+<EM>&gt; initial TCP sequence numbers at random as a technique to thwart
+</EM><BR>
+<EM>&gt; hijacking of TCP sessions.
+</EM><BR>
+<P>The person who told you this is either incompetent or confused.  Random
+<BR>
+ISNs does not thwart session *hijacking*.  What it does thwart is
+<BR>
+session *forging*, where host A pretends to be host B when speaking to
+<BR>
+host C, and manages to carry out a complete session without seeing any
+<BR>
+of C's response packets (which go to B, who may be dead or inaccessible
+<BR>
+or even nonexistent).  In order to do this, A has to guess the ISN C
+<BR>
+chooses for the connection.
+<BR>
+<P><EM>&gt; Microsoft asserts that there is no regard in the client for the prior
+</EM><BR>
+<EM>&gt; session TCP once the FINish process completes successfully.
+</EM><BR>
+<P>As I said above, this is a case where practice and theory diverge
+<BR>
+widely.
+<BR>
+<P>IP packet TTLs are theoretically times in seconds.  In practice,
+<BR>
+nowadays, they are hop counts (how many routers, even those that can
+<BR>
+have &gt;1sec queues, actually bother to decrement the TTL for every
+<BR>
+second a packet spends waiting?).
+<BR>
+<P>The theoretical reason for the holddown is that a data packet may fall
+<BR>
+into a routing warp and get stuck in a very high-delay path; a
+<BR>
+retransmission succeeds and the conneciton completes.  Later, the stuck
+<BR>
+packet can emerge and hit the new session.  This is possible whether or
+<BR>
+not the client has FINned the first connection, and if the sequence
+<BR>
+numbers are reasonable, it will be accepted as valid data.  The
+<BR>
+requirement is intended to ensure that by the time the second
+<BR>
+connection's sequence numbers have made it around to where they overlap
+<BR>
+the first connection, the MSL will have caused any old segments to
+<BR>
+expire if they're still bouncing around the network somewhere.
+<BR>
+<P>In practice, this happens rarely enough to be ignored, especially by
+<BR>
+the likes of &quot;so what's rebooting twice a day?&quot; Microsoft.  Perhaps
+<BR>
+they'll change their tune when some big customer gets hit by a
+<BR>
+once-in-a-blue-moon event like this; more likely, since it won't be
+<BR>
+easily reproducible, they'll just write it off.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041908.OAA05416@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1432.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1436.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1431">[ date ]</A>
+<A HREF="index.html#1431">[ thread ]</A>
+<A HREF="subject.html#1431">[ subject ]</A>
+<A HREF="author.html#1431">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

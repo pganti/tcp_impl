@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: types of traffic in tcp cong</TITLE>
+<META NAME="Author" CONTENT="Anumita Biswas (BAnumita@novell.com)">
+<META NAME="Subject" CONTENT="Re: types of traffic in tcp congest control">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: types of traffic in tcp congest control</H1>
+<!-- received="Wed May 15 01:18:06 2002" -->
+<!-- isoreceived="20020515051806" -->
+<!-- sent="Tue, 14 May 2002 23:10:53 -0600" -->
+<!-- isosent="20020515051053" -->
+<!-- name="Anumita Biswas" -->
+<!-- email="BAnumita@novell.com" -->
+<!-- subject="Re: types of traffic in tcp congest control" -->
+<!-- id="sce1998e.077@prv-mail25.provo.novell.com" -->
+<!-- inreplyto="types of traffic in tcp congest control" -->
+<STRONG>From:</STRONG> Anumita Biswas (<A HREF="mailto:BAnumita@novell.com?Subject=Re:%20types%20of%20traffic%20in%20tcp%20congest%20control&In-Reply-To=&lt;sce1998e.077@prv-mail25.provo.novell.com&gt;"><EM>BAnumita@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed May 15 2002 - 01:10:53 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2744.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2742.html">cathy_nj: "applicability of Tcp Throughput model"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2727.html">大李: "types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2743">[ date ]</A>
+<A HREF="index.html#2743">[ thread ]</A>
+<A HREF="subject.html#2743">[ subject ]</A>
+<A HREF="author.html#2743">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Is it not true that overprovisioning is never a long term solution, as
+<BR>
+bandwidth is never ever enough? As Alan says, &quot;Usage expands to fit
+<BR>
+network bandwidth&quot;.
+<BR>
+<P>Assuming that the above is true, it becomes necessary to follow one of
+<BR>
+the below to solve the problem:
+<BR>
+1. Continue with the present day best effort service and let congestion
+<BR>
+happen in its non deterministic manner. Users are anyway not complaining
+<BR>
+about the throughput they are getting today. 
+<BR>
+<P>2. Given that with Mice connections also congestion has been observed.
+<BR>
+By Mice, correct me if I am wrong, we mean traffic corresponding to
+<BR>
+typical request response type of connections, where at most 5 or 6 data
+<BR>
+TCP packets traverse two way. These first few packets usually get going
+<BR>
+in the slowstart phase of congestion control. And slowstart is by
+<BR>
+definition itself non-aggressive. But if congestion is happening at this
+<BR>
+stage itself, it clearly means that even slow start is aggressive enough
+<BR>
+for a heavily loaded Internet. So, question is , should there be an
+<BR>
+added term in the slow start equation that slows it down further. The
+<BR>
+counter argument would be that, the user experience may suck as a result
+<BR>
+of the added term.
+<BR>
+<P>3.  Going by a per TCP connection strategy(2 above) to reduce
+<BR>
+congestion may not be an effective way of solving the problem. As each
+<BR>
+individual TCP may not have the information to accurately determine the
+<BR>
+state of the path to its destination. Logically, a third party may be in
+<BR>
+a better position to dynamically measure bandwidth utilization and make
+<BR>
+this information available to all the TCPs, then overall throughput may
+<BR>
+be better. Is it worth considering separating out congestion control
+<BR>
+from TCP Data flow and treat it as a separate protocol &quot;building block&quot;,
+<BR>
+(like a routing protocol perhaps) that calculates and stores information
+<BR>
+about the state of the network in a distributed manner, which can then
+<BR>
+be used by individual TCPs? Ofcourse, this is not backward compatible.
+<BR>
+But if feasible, this would scale.
+<BR>
+<P>4. QoS is another option too. But the basis for differentiating service
+<BR>
+would be user priority or the SLA. This model does not take into
+<BR>
+consideration the congestion factor and hence will not be effective for
+<BR>
+all. 
+<BR>
+<P>Any comments would be welcome,
+<BR>
+<P>thanks
+<BR>
+Anumita
+<BR>
+<P><EM>&gt;&gt;&gt; Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20types%20of%20traffic%20in%20tcp%20congest%20control&In-Reply-To=&lt;sce1998e.077@prv-mail25.provo.novell.com&gt;">touch@ISI.EDU</A>&gt; 05/14/02 06:06AM &gt;&gt;&gt;
+</EM><BR>
+<P><P>Alan Cox wrote:
+<BR>
+<EM>&gt;&gt;&gt;A given number of Mice may consume the network and reduce effective
+</EM><BR>
+use of
+<BR>
+<EM>&gt;&gt;&gt;Elephants even with  Dense Wavelength Division Multiplexing in the
+</EM><BR>
+mix.
+<BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;Indeed, give way to mice will decrease the efficiency of the network,
+</EM><BR>
+but
+<BR>
+<EM>&gt;&gt;gained a low queuing delay, that is a trade-off. As more real-time
+</EM><BR>
+<EM>&gt;&gt;applications are deployed to the Internet, it should be worthy.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Economic reality #1: Usage expands to fit network bandwidth
+</EM><BR>
+<P>Usage expands to fit available bandwidth when bandwidth is limited. 
+<BR>
+Granted that's the case on most links (like most highways), which are 
+<BR>
+deployed (by design) to barely keep pace with demand.
+<BR>
+<P>There are plenty of cases where this isn't true, however. Bandwidth can
+<BR>
+<P>be overprovisioned; it just usually isn't.
+<BR>
+<P><EM>&gt; Economic reality #2: People will pay more for QoS - right now via
+</EM><BR>
+private
+<BR>
+<EM>&gt; 		     IP networks
+</EM><BR>
+<P>More specifically:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;People will pay more to avoid commercials and get higher
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bandwidth.
+<BR>
+<P>Users haven't been paying for anything sophisticated enough to call
+<BR>
+QoS.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2744.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2742.html">cathy_nj: "applicability of Tcp Throughput model"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2727.html">大李: "types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2743">[ date ]</A>
+<A HREF="index.html#2743">[ thread ]</A>
+<A HREF="subject.html#2743">[ subject ]</A>
+<A HREF="author.html#2743">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed May 15 2002 - 01:18:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

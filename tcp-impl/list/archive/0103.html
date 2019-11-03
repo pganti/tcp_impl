@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (hkchu@pacific-86.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="RE: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Sat Feb 15 04:25:02 1997" -->
+<!-- isoreceived="19970215092502" -->
+<!-- sent="Fri, 14 Feb 1997 20:11:26 -0800" -->
+<!-- isosent="19970215041126" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="hkchu@pacific-86.Eng.Sun.COM" -->
+<!-- subject="RE: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702150411.UAA04836@taipei.eng.sun.com" -->
+<!-- inreplyto="HTTP and RFC1122 half duplex close" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:hkchu@pacific-86.Eng.Sun.COM?Subject=RE:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702150411.UAA04836@taipei.eng.sun.com&gt;"><EM>hkchu@pacific-86.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 14 1997 - 23:11:26 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0102.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0099.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#103">[ date ]</A>
+<A HREF="index.html#103">[ thread ]</A>
+<A HREF="subject.html#103">[ subject ]</A>
+<A HREF="author.html#103">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;From Thomas Narten:
+</EM><BR>
+<P><EM>&gt;&gt; 2. Client *stack* doesnt send RSTs to the servers data when its in
+</EM><BR>
+<EM>&gt;&gt; 	FIN_WAIT_X
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I actually think this is correct. The FIN_WAIT_x states imply that the
+</EM><BR>
+<EM>&gt;application is still using the socket, waiting for the peer to finish
+</EM><BR>
+<EM>&gt;sending data. If, on the other hand, the application had invoked
+</EM><BR>
+<EM>&gt;'half-duplex close' (and has destroyed the socket), the client TCP
+</EM><BR>
+<EM>&gt;should go into some state other than FIN_WAIT_x.
+</EM><BR>
+<P>I don't think whether a tcp end-point still has a client associated
+<BR>
+with it has anything to do with what tcp state the connection should
+<BR>
+be in. The key is to send a RST to break a potential deadlock if data
+<BR>
+still arrives for any connection whose client has ditched it already.
+<BR>
+<P><EM>&gt;&gt; client closes with FIN, server ACKs: 
+</EM><BR>
+<EM>&gt;&gt; client in FIN-WAIT-2 advertising zero window (which makes a lot
+</EM><BR>
+<EM>&gt;&gt; of sense since it cannot read any more)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Here is where we still seem to be having a disagreement. If the client
+</EM><BR>
+<EM>&gt;has &quot;destroyed&quot; the socket and is no longer using the socket, then TCP
+</EM><BR>
+<EM>&gt;will never be able to deliver additional received data to the client
+</EM><BR>
+<EM>&gt;application. In this scenario, it is wrong for the client TCP to
+</EM><BR>
+<EM>&gt;respond with an ACK and window advertisement of zero,
+</EM><BR>
+<P>Again a RST and nothing else should be sent whenever data arrives
+<BR>
+destined to a detached connection.
+<BR>
+<P><EM>&gt;From Ian Heavens:
+</EM><BR>
+<P><EM>&gt;I think the close() call, or the Winsock equivalent, sends a FIN
+</EM><BR>
+<EM>&gt;as normal, unless there is pending data to be read, in which
+</EM><BR>
+<EM>&gt;case a RST is sent.  If data arrives after the FIN has been sent,
+</EM><BR>
+<EM>&gt;a RST is sent (RFC1122).
+</EM><BR>
+<P>Solaris does the just that.
+<BR>
+<P><EM>&gt;From Josh Cohen:
+</EM><BR>
+<P><EM>&gt;&gt; send FINs, it tells TCP to do so via an API call. I suspect that you
+</EM><BR>
+<EM>&gt;&gt; mean it issues a 'half-duplex close', which is *supposed* to send RSTs
+</EM><BR>
+<EM>&gt;&gt; and cause subsequent received data to trigger a RST.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;Umm. I dont think thats right.  A half close does not cause a 
+</EM><BR>
+<EM>&gt;RST to be sent.  Actually, I think that regardless of the
+</EM><BR>
+<EM>&gt;half or full close, what is sent on the wire is the same, a FIN.
+</EM><BR>
+<EM>&gt;half close is just the time that elapses after the client sends
+</EM><BR>
+<EM>&gt;the FIN and before the server sends its own FIN.
+</EM><BR>
+<P>It looks like there is still some confusion between half-close and
+<BR>
+'half-duplex close' here. The former is for a client to tell the other
+<BR>
+end 'I have no more data to SEND', whereas the latter says
+<BR>
+'I don't intend to RECEIVE any more data 'cause I'm going away.'
+<BR>
+Unfortunately, TCP protocol only offers an explicit signal for the
+<BR>
+former, namely 'FIN'. Therefore RST has to be called upon for the
+<BR>
+latter when there is any potential risk of deadlock, e.g. data
+<BR>
+is destined for a detached connection. (Of course the timer should
+<BR>
+always be able to break a deadlock like this. But it could take a
+<BR>
+long time...)
+<BR>
+<P><EM>&gt;From Mathew Lodge:
+</EM><BR>
+<P><EM>&gt;While we're on the subject of vendors... isn't the best way to ensure that
+</EM><BR>
+<EM>&gt;good TCP implementations are widely used to explicitly involve the vendors
+</EM><BR>
+<EM>&gt;of popular OSes?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;For example, if you could get (say) Microsoft and Sun involved, you'd cover
+</EM><BR>
+<EM>&gt;most of the clients and many of the servers on the Internet. Yes, I know
+</EM><BR>
+<EM>&gt;there are other popular boxes out there and Bill Gates is beelzebub, but
+</EM><BR>
+<EM>&gt;let's face it -- Windows has a huge installed user base and lots of folks
+</EM><BR>
+<EM>&gt;are using that Windows TCP/IP stack, and Sun also has a huge installed
+</EM><BR>
+<EM>&gt;server base.
+</EM><BR>
+<P>You can rest assured that we (Sun) are very involved :-).
+<BR>
+<P>Jerry Chu
+<BR>
+Internet Engineering
+<BR>
+SunSoft
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0102.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0099.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#103">[ date ]</A>
+<A HREF="index.html#103">[ thread ]</A>
+<A HREF="subject.html#103">[ subject ]</A>
+<A HREF="author.html#103">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

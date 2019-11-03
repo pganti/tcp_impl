@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="RE: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 10:28:36 1998" -->
+<!-- isoreceived="19980820142836" -->
+<!-- sent="Thu, 20 Aug 1998 11:27:29 -0600 (MDT)" -->
+<!-- isosent="19980820172729" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="RE: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201727.LAA09834@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201727.LAA09834@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 13:27:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1236.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1234.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1241.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1241.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1235">[ date ]</A>
+<A HREF="index.html#1235">[ thread ]</A>
+<A HREF="subject.html#1235">[ subject ]</A>
+<A HREF="author.html#1235">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Steve Alexander&quot; &lt;<A HREF="mailto:stevea@shastanets.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201727.LAA09834@calcite.rhyolite.com&gt;">stevea@shastanets.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; I've seen two major classes of customers that want keepalives and want
+</EM><BR>
+<EM>&gt; them to take place at frequent intervals:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	- trading firms that want to detect failure immediately; they don't
+</EM><BR>
+<EM>&gt; 	  care about the traffic; they could do it in the app, but they don't
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	- web sites trying to deal w/ Lame-o-matic(TM) clients that don't
+</EM><BR>
+<EM>&gt; 	  terminate correctly and would otherwise suffer heavy memory usage
+</EM><BR>
+<EM>&gt; 	  due to kernel state; I suspect I'm not the only person on this list
+</EM><BR>
+<EM>&gt; 	  to have encountered such sites
+</EM><BR>
+<P>Steve knows as well as I, and as well as anyone else with the least
+<BR>
+real-life experience with busy HTTP servers, that there are many major
+<BR>
+HTTP sites that would immediately croak without keepalives.  There are
+<BR>
+many real (read &quot;$$$&quot;) reasons why so many commercial TCP implementations
+<BR>
+now include mechanisms for &quot;tuning&quot; the keepalive interval to ridiculously
+<BR>
+(my word) tiny values.
+<BR>
+<P>I think Steve is wrong to attribute the problem to Lame-O-Matic TCP (tm)
+<BR>
+(gotta spell it right, or their land sharks might bite).  Even the best
+<BR>
+TCP implementation has trouble sending a FIN when the human has powered
+<BR>
+off the modem.
+<BR>
+<P>It is clearly wrong to talk about &quot;active&quot; TCP connections being a panacea.
+<BR>
+There are very few TCP applications that involve the notion of &quot;servers&quot;
+<BR>
+and that absolutely always appear busy to the TCP state machine, where
+<BR>
+you cannot suddenly halt traffic and have one end think the other is just
+<BR>
+being very, very slow.  Please name a few among current TCP applications.
+<BR>
+The trouble with &quot;servers&quot; is that they tend to be passive and not say
+<BR>
+anything until asked by &quot;clients,&quot; and so tend to fail to notice dead
+<BR>
+clients.
+<BR>
+<P>It is also wrong to claim that keepalives waste significant bandwidth
+<BR>
+today.  Isn't it true essentially all TCP traffic is HTTP, SMTP, FTP,
+<BR>
+SNMP, DNS, and POP/IMAP?  Which of those has application-layer keepalives
+<BR>
+and so does not benefit from TCP keepalives?  (ok, maybe FTP in some
+<BR>
+installations, due to the idle timeout).  Which of those do not involve
+<BR>
+TCP connections that thanks to the graceless termination of the client
+<BR>
+cannot appear to be indefinitely alive but quiet connections?  (ok, maybe
+<BR>
+FTP sometimes).  For which is a TCP connection that is quiet for 5 minutes
+<BR>
+not a sure fire indication of a dead connection and where a keepalive is
+<BR>
+not in the least a waste of bandwidth?
+<BR>
+<P><P><EM>&gt; This just confirms Alexander's Law of Network Marketing, to wit: If you
+</EM><BR>
+<EM>&gt; want to know what features to implement in a networking product for it to
+</EM><BR>
+<EM>&gt; be successful, just ask your networking experts what things they think are
+</EM><BR>
+<EM>&gt; stupid and do those first.
+</EM><BR>
+<P>A more polite way to say that is real life trumps theory and religion.
+<BR>
+Or maybe, &quot;in theory, there is no difference between theory and practice,
+<BR>
+but in practice, there is.&quot;
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201727.LAA09834@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1236.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1234.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1241.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1241.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1235">[ date ]</A>
+<A HREF="index.html#1235">[ thread ]</A>
+<A HREF="subject.html#1235">[ subject ]</A>
+<A HREF="author.html#1235">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:50 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

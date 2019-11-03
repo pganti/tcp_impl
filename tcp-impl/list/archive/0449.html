@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 14:07:18 1997" -->
+<!-- isoreceived="19970605180718" -->
+<!-- sent="Thu, 5 Jun 1997 13:57:45 -0700" -->
+<!-- isosent="19970605205745" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052057.AA07424@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052057.AA07424@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 16:57:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0450.html">Andy W. Barclay: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0448.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0453.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0453.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#449">[ date ]</A>
+<A HREF="index.html#449">[ thread ]</A>
+<A HREF="subject.html#449">[ subject ]</A>
+<A HREF="author.html#449">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052057.AA07424@ash.isi.edu&gt;">Eric.Schenk@dna.lth.se</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TIME-WAIT truncation 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Larry Backman &lt;<A HREF="mailto:backman@ftp.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052057.AA07424@ash.isi.edu&gt;">backman@ftp.com</A>&gt; writes:
+</EM><BR>
+<EM>&gt; &gt;Seriously we were forced into reclaiming the oldest time-wait connection(s)
+</EM><BR>
+<EM>&gt; &gt;in a queue rather than continueing to allocate memory till we ate the
+</EM><BR>
+<EM>&gt; &gt;machine.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Rather than just tossing out the oldest time-waiter, it would be better
+</EM><BR>
+<EM>&gt; to grab the last sequence number information from that socket and make
+</EM><BR>
+<EM>&gt; sure to offer a sequence number just following that on the new connection.
+</EM><BR>
+<EM>&gt; If I recall correctly BSD boxes already do this if there is an incoming
+</EM><BR>
+<EM>&gt; connection to a specific port that is in TIME_WAIT, and recent Linux
+</EM><BR>
+<P>The client needs to do this, not the server, since the client is
+<BR>
+the one opening the connection, and the source port is already chosen
+<BR>
+by the time the SYN is sent.
+<BR>
+<P>Getting rid of the oldest number isn't quite right, however. It is
+<BR>
+correct to keep a range of numbers (assuming the entire contents
+<BR>
+of the range are in TIME_WAIT). However, with lots of quick connections,
+<BR>
+the number space wraps fast and we're back where we started,
+<BR>
+with a problem.
+<BR>
+<P>The easier solution is to make the client CLOSE the connection,
+<BR>
+rather than the server (e.g., using size info in the HTTP header,
+<BR>
+for HTTP). Then each client holds its own TCBs, and there's no
+<BR>
+clogging at the server. 
+<BR>
+<P>Another solution is to modify TCP (which is what we're working on
+<BR>
+here). The idea is to cause the client and server to essentially
+<BR>
+swap functions at the CLOSE. Basically:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client				server
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESTABLISHED			ESTABLISHED
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get a CLOSE call)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send FIN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto FIN_WAIT_1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;------ FIN -----------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------- ACK ----------&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto CLOSE_WAIT			goto FIN_WAIT_2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** SEND FIN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------- FIN ----------&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** SEND RST			goto TIME_WAIT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** goto TIME_WAIT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------- RST ----------&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto CLOSED
+<BR>
+<P>We're still working out the details, though, and this is NOT
+<BR>
+something we'd recommend until it's clearer.
+<BR>
+<P>Joe
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+<P><P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052057.AA07424@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0450.html">Andy W. Barclay: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0448.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0453.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0453.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#449">[ date ]</A>
+<A HREF="index.html#449">[ thread ]</A>
+<A HREF="subject.html#449">[ subject ]</A>
+<A HREF="author.html#449">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

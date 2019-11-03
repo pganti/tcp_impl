@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Which implementation is bett</TITLE>
+<META NAME="Author" CONTENT="Mahmoud Chilali (chilali@chilali.net)">
+<META NAME="Subject" CONTENT="Re: Which implementation is better...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Which implementation is better...</H1>
+<!-- received="Wed Feb 14 13:56:23 2001" -->
+<!-- isoreceived="20010214185623" -->
+<!-- sent="Wed, 14 Feb 2001 19:32:45 +0100" -->
+<!-- isosent="20010214183245" -->
+<!-- name="Mahmoud Chilali" -->
+<!-- email="chilali@chilali.net" -->
+<!-- subject="Re: Which implementation is better..." -->
+<!-- id="4.3.0.20010214191202.043c15a0@pop.free.fr" -->
+<!-- inreplyto="011301c08fa4$4e4fb930$1703020a@lukeskywalker.dublin.iona.i e" -->
+<STRONG>From:</STRONG> Mahmoud Chilali (<A HREF="mailto:chilali@chilali.net?Subject=Re:%20Which%20implementation%20is%20better...&In-Reply-To=&lt;4.3.0.20010214191202.043c15a0@pop.free.fr&gt;"><EM>chilali@chilali.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 14 2001 - 13:32:45 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2459.html">Erik Nordmark: "Re: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2460">[ date ]</A>
+<A HREF="index.html#2460">[ thread ]</A>
+<A HREF="subject.html#2460">[ subject ]</A>
+<A HREF="author.html#2460">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+When you close the fd, the socket is not immediately freed at the TCP
+<BR>
+level. so the port will be &quot;already in use&quot; even if no application is using
+<BR>
+it. This may be either annoying or not a problem depending on your
+<BR>
+requirements.
+<BR>
+<P>I personally prefer setting a max-connections threeshold (this should be
+<BR>
+less than the number of fds per process), and if the threshold is reached,
+<BR>
+accept the connection and close it immediately. The time this takes is
+<BR>
+short enough compared to what you need as timeouts.
+<BR>
+<P><P>regards
+<BR>
+Mahmoud
+<BR>
+<P>At 18:49 05/02/01 +0000, ravi reddy wrote:
+<BR>
+<P><EM>&gt;   Hi all,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   We have clients and servers in our product. When the server runs out of
+</EM><BR>
+<EM>&gt;FDs, we usually remove the listener FD from the select set and register it
+</EM><BR>
+<EM>&gt;back when any FD is freed. Are there any drawbacks with this solution?.
+</EM><BR>
+<EM>&gt;Currently we have connection timeouts and so the clients will timeout fast
+</EM><BR>
+<EM>&gt;enough without waiting for server to accept the connections or until the
+</EM><BR>
+<EM>&gt;keepalive probes kickin. But infinite connection timeouts are not also ruled
+</EM><BR>
+<EM>&gt;out in the implemenation.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   What are the drawbacks of closing the listener socket and binding it again
+</EM><BR>
+<EM>&gt;to the same port?. The only drawback I can think of right now is that the
+</EM><BR>
+<EM>&gt;port could be reused by the OS and the server which has closed its listener
+</EM><BR>
+<EM>&gt;socket will not be able to bind to it.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   Any help greatly appreciated.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   regards,
+</EM><BR>
+<EM>&gt;   Ravi.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2459.html">Erik Nordmark: "Re: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2461.html">ravi reddy: "RE: Which implementation is better..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2460">[ date ]</A>
+<A HREF="index.html#2460">[ thread ]</A>
+<A HREF="subject.html#2460">[ subject ]</A>
+<A HREF="author.html#2460">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 14 2001 - 13:56:53 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

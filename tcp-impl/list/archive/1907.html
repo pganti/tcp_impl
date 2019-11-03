@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Why do large downloads fail ?</TITLE>
+<META NAME="Author" CONTENT="Keith Owens (kaos@ocs.com.au)">
+<META NAME="Subject" CONTENT="Re: Why do large downloads fail ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Why do large downloads fail ?</H1>
+<!-- received="Fri Oct 22 16:47:03 1999" -->
+<!-- isoreceived="19991022204703" -->
+<!-- sent="Sat, 23 Oct 1999 06:40:26 +1000" -->
+<!-- isosent="19991022204026" -->
+<!-- name="Keith Owens" -->
+<!-- email="kaos@ocs.com.au" -->
+<!-- subject="Re: Why do large downloads fail ?" -->
+<!-- id="19991022204029.17457.qmail@mail.ocs.com.au" -->
+<!-- inreplyto="199910221754.LAA22277@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Keith Owens (<A HREF="mailto:kaos@ocs.com.au?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;19991022204029.17457.qmail@mail.ocs.com.au&gt;"><EM>kaos@ocs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Oct 22 1999 - 16:40:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1908.html">Vern Paxson: "announcement of TSVWG"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1906.html">Craig Partridge: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1904.html">Vernon Schryver: "Re: Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1905.html">Rahul Kasralikar: "RE: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1907">[ date ]</A>
+<A HREF="index.html#1907">[ thread ]</A>
+<A HREF="subject.html#1907">[ subject ]</A>
+<A HREF="author.html#1907">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Fri, 22 Oct 1999 11:54:03 -0600 (MDT), 
+<BR>
+Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;19991022204029.17457.qmail@mail.ocs.com.au&gt;">vjs@calcite.rhyolite.com</A>&gt; wrote:
+<BR>
+<EM>&gt;If you ask me always givin up after 5 retransmissions violates at least
+</EM><BR>
+<EM>&gt;the spirit of RFC 1122 and is a Bad Idea(tm).  What's worse, as far as I
+</EM><BR>
+<EM>&gt;can tell, WINSOCK 2 has no provisions such as SO_RCVTIMEO.  (There are
+</EM><BR>
+<EM>&gt;explicit words in the WINSOCK 2 document saing SO_RCVTIMEO is unsuported.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;In other words, it sounds like a Microsoft bug.
+</EM><BR>
+<P>There is a registry entry to increase the number of retries.  Under
+<BR>
+Hkey_Local_Machine\System\CurrentControlSet\Services\VxD\MSTCP (not
+<BR>
+Parameters), add a new value.  The value name is MaxDataRetries, it is
+<BR>
+a string value, set the value to something larger than 5, &quot;64&quot; has been
+<BR>
+tried and works.  Increasing this value greatly reduces the likelihood
+<BR>
+of a session dying too soon.  It may work for Windows NT, the Microsoft
+<BR>
+documentation is unclear.
+<BR>
+<P>Be careful adding the registry entry.  It must be a string value and
+<BR>
+you must type the value in without quotes, regedit will add the quotes.
+<BR>
+If you define the wrong type or include non-numeric characters in the
+<BR>
+value then regedit will accept it without complaint.  TCP/IP will not
+<BR>
+complain either, it silently takes the value as 0 retries.  The only
+<BR>
+way you can tell if the value was mistyped is when you lose one packet
+<BR>
+and the connection dies IMMEDIATELY.  Windows is not exactly the
+<BR>
+world's most reliable software, and we use it for mission critical
+<BR>
+software - sigh.
+<BR>
+<P>Getting a good value for MaxDataRetries is trial and error.  You want a
+<BR>
+large value on fast links and a small value on slow links.  As far as I
+<BR>
+can tell, the only way to pick up any change to MaxDataRetries is to
+<BR>
+reboot Windows.
+<BR>
+<P>&quot;Your mouse has moved, you need to reboot Windows&quot;.
+<BR>
+<P>This message was brought to you by exmh, qmail and Linux 2.3.22 in a
+<BR>
+Microsoft free zone.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1908.html">Vern Paxson: "announcement of TSVWG"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1906.html">Craig Partridge: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1904.html">Vernon Schryver: "Re: Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1905.html">Rahul Kasralikar: "RE: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1907">[ date ]</A>
+<A HREF="index.html#1907">[ thread ]</A>
+<A HREF="subject.html#1907">[ subject ]</A>
+<A HREF="author.html#1907">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

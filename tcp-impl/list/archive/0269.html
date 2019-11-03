@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Wed Mar 26 16:31:33 1997" -->
+<!-- isoreceived="19970326213133" -->
+<!-- sent="Wed, 26 Mar 97 23:08:52 GMT" -->
+<!-- isosent="19970326230852" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="5736.wsimpson@greendragon.com" -->
+<!-- inreplyto="OT 1.1.2 trace -- delayed Ack" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5736.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 26 1997 - 18:08:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0271.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0271.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#269">[ date ]</A>
+<A HREF="index.html#269">[ thread ]</A>
+<A HREF="subject.html#269">[ subject ]</A>
+<A HREF="author.html#269">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5736.wsimpson@greendragon.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; Much of the timing issues here are related to RTT as opposed to a fixed
+</EM><BR>
+<EM>&gt; &gt; timer.  Should delayed ACK timers be based on a RTT-multiplier instead
+</EM><BR>
+<EM>&gt; &gt; of a constant?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Since the goal is to coalesce acks, the key parameter of interest is
+</EM><BR>
+<EM>&gt; the interarrival time between data packets, as Eric Schenk mentioned
+</EM><BR>
+<EM>&gt; in previous mail.  So that argues it's orthogonal to RTT.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Actually, 3 key parameters, as already written in RFC-813:
+<BR>
+<P>&nbsp;1) Should not be less than the time the application takes to process
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the data (&quot;holding&quot; or &quot;processing&quot; time).  When RTT dominated by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;processing time (low delay networks), need floor (&quot;minimum value&quot;).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;No floor specified, but the example is 200 to 300 milliseconds.  I
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;always thought of that as a floor of 200 and a ceiling of 300.
+<BR>
+<P>&nbsp;2) Should not be more than measured 1/2 RTT, as otherwise might cause
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;retransmission.  RFC-1122 specifies a ceiling of 500 milliseconds.
+<BR>
+<P>&nbsp;3) Should be related to inter-arrival time of packet _bursts_ (back to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;back packets).  This was for _high_ delay &quot;very slow&quot; links, trying
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to measure how long it takes a packet to transmit down the slowest
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;link.  Unfortunately, a packet train over ethernet/FDDI/OC-3 will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;have virtually zero inter-arrival time, while a 1500 byte packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;at 9600 bps is 1.5 seconds.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;BTW, this was for future research, in the appendix.
+<BR>
+<P>As I mentioned, I used &quot;srtt/2 + mdev&quot; quite successfully, with a floor
+<BR>
+of 100 ms and a ceiling of 500 ms.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5736.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5736.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0271.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0271.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#269">[ date ]</A>
+<A HREF="index.html#269">[ thread ]</A>
+<A HREF="subject.html#269">[ subject ]</A>
+<A HREF="author.html#269">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

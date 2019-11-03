@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Wed Sep 20 23:39:13 2000" -->
+<!-- isoreceived="20000921033913" -->
+<!-- sent="Thu, 21 Sep 2000 13:27:13 +1000" -->
+<!-- isosent="20000921032713" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="001401c0237b$d6744eb0$364214ac@james.cvs.net" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;001401c0237b$d6744eb0$364214ac@james.cvs.net&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 20 2000 - 23:27:13 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2367.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2371.html">Vernon Schryver: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2368">[ date ]</A>
+<A HREF="index.html#2368">[ thread ]</A>
+<A HREF="subject.html#2368">[ subject ]</A>
+<A HREF="author.html#2368">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+-----Original Message-----
+<BR>
+From: der Mouse &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;001401c0237b$d6744eb0$364214ac@james.cvs.net&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt;
+<BR>
+To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;001401c0237b$d6744eb0$364214ac@james.cvs.net&gt;">tcp-impl@grc.nasa.gov</A> &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;001401c0237b$d6744eb0$364214ac@james.cvs.net&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+<BR>
+Date: Thursday, September 21, 2000 11:09 AM
+<BR>
+Subject: Re: TCP sequence numbers
+<BR>
+<P><P><EM>&gt;&gt; Why is guessing the sequence number of the first packet before it
+</EM><BR>
+<EM>&gt;&gt; arrives such a big deal?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Because it allows you to impersonate an arbitrary IP address, provided
+</EM><BR>
+<EM>&gt;you don't care about seeing what the victim sends back, and provided
+</EM><BR>
+<EM>&gt;that the host you're impersonating doesn't RST the connection before
+</EM><BR>
+<EM>&gt;your evil deeds can be done.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The way it works:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;(1) You send a SYN, with a forged ip_src and whatever ISN you feel
+</EM><BR>
+<EM>&gt;    like.  Except for the forged ip_src, this is a perfectly normal SYN.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;(2) Victim responds, to the address you're pretending to be, ACKing
+</EM><BR>
+<EM>&gt;    your SYN and sending its own SYN, with its own ISN.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;(3) If this were a normal connection, you'd ACK its SYN.  But since the
+</EM><BR>
+<EM>&gt;    reply goes off towards the machine you're impersonating, rather
+</EM><BR>
+<EM>&gt;    than to you, you have to guess the ISN in order to ACK it
+</EM><BR>
+<EM>&gt;    acceptably.
+</EM><BR>
+<P>If you don't see the syn I think it is fair enough to say we don't see the
+<BR>
+rest of the session.
+<BR>
+<P>So it's a one sided conversation hoping that the server is lisening.
+<BR>
+<P>I hope we are not to assume routing didn't worked out for syn but magically
+<BR>
+works for the rest of the session.
+<BR>
+<P>If I am close enough to guess the clock value surly I am not on the wrong
+<BR>
+side of a router; or are we to assume a deterministic router.
+<BR>
+<P>I'm sorry but if I am going to do this I am going to do it where I can see
+<BR>
+the reply and I aren't going to bother guessing the ISN. I am going to wait
+<BR>
+for the server to give it to me; they tend to do that.
+<BR>
+<P>Regards
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2367.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2371.html">Vernon Schryver: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2368">[ date ]</A>
+<A HREF="index.html#2368">[ thread ]</A>
+<A HREF="subject.html#2368">[ subject ]</A>
+<A HREF="author.html#2368">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Sep 20 2000 - 23:39:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

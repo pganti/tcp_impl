@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="Perry E. Metzger (perry@piermont.com)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 13:31:13 1997" -->
+<!-- isoreceived="19970620173113" -->
+<!-- sent="Fri, 20 Jun 1997 16:23:42 -0400" -->
+<!-- isosent="19970620202342" -->
+<!-- name="Perry E. Metzger" -->
+<!-- email="perry@piermont.com" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706202023.QAA15828@jekyll.piermont.com" -->
+<!-- inreplyto="199706202002.QAA14292@frankenstein.piermont.com" -->
+<STRONG>From:</STRONG> Perry E. Metzger (<A HREF="mailto:perry@piermont.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202023.QAA15828@jekyll.piermont.com&gt;"><EM>perry@piermont.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 16:23:42 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0532.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#531">[ date ]</A>
+<A HREF="index.html#531">[ thread ]</A>
+<A HREF="subject.html#531">[ subject ]</A>
+<A HREF="author.html#531">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202023.QAA15828@jekyll.piermont.com&gt;">kennethw@VNET.IBM.COM</A> writes:
+<BR>
+<EM>&gt; The second prospective on the issue is exactly how useful this
+</EM><BR>
+<EM>&gt; information would be to an entity attempting to steal or misuse
+</EM><BR>
+<EM>&gt; a connection. Using SNMP to retrieve this information while
+</EM><BR>
+<EM>&gt; looking at the data flow in real-time to attempt to steal or
+</EM><BR>
+<EM>&gt; misuse a connection would be challenging for an active connection
+</EM><BR>
+<EM>&gt; since I suspect that the data retrieved via SNMP would not
+</EM><BR>
+<EM>&gt; correlate exactly to the current connection data flow.
+</EM><BR>
+<P>I see you haven't been examining the literature on session
+<BR>
+stealing. You can already do it with very, very rough guesses -- the
+<BR>
+SNMP provided data would make the guess range microscopic -- so small
+<BR>
+as to guarantee success. You are giving out the sorts of information
+<BR>
+that improve the chances of success with a wide variety of attacks
+<BR>
+that are now marginal, too.
+<BR>
+<P><EM>&gt; Finally, I understand that there are various security layers that
+</EM><BR>
+<EM>&gt; have and are being defined within the IETF. For example, IP
+</EM><BR>
+<EM>&gt; Security. If the IP layer is protected does presentation of the
+</EM><BR>
+<EM>&gt; objects in the optional group till make misuse easier?
+</EM><BR>
+<P>I'm an active participant in the security area. As one of the people
+<BR>
+who has his name on some of the IPSEC RFCs, let me say that encryption
+<BR>
+isn't going to be ubiquitous any time soon.
+<BR>
+<P><EM>&gt; Regardless of this these objects would still fall within the SNMP
+</EM><BR>
+<EM>&gt; Security Framework available to a platform implementing any of these
+</EM><BR>
+<EM>&gt; objects. Does this address your concern?
+</EM><BR>
+<P>No. You still have leaked very, very sensitive information to a far
+<BR>
+wider perimeter than has obvious need for the data. It makes me very,
+<BR>
+very jittery, especially given the quality of past SNMP security
+<BR>
+efforts.
+<BR>
+<P>Perry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0532.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#531">[ date ]</A>
+<A HREF="index.html#531">[ thread ]</A>
+<A HREF="subject.html#531">[ subject ]</A>
+<A HREF="author.html#531">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

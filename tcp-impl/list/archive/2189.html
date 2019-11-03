@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Wed Jun 28 15:41:06 2000" -->
+<!-- isoreceived="20000628194106" -->
+<!-- sent="Wed, 28 Jun 2000 13:35:11 -0600" -->
+<!-- isosent="20000628193511" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="395A536F.7CA35A6E@Novell.COM" -->
+<!-- inreplyto="200006281912.XAA04185@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395A536F.7CA35A6E@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 28 2000 - 15:35:11 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2190.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2189">[ date ]</A>
+<A HREF="index.html#2189">[ thread ]</A>
+<A HREF="subject.html#2189">[ subject ]</A>
+<A HREF="author.html#2189">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SND.UNA cannot be less than SND.WL2, certainly.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But it can be greater, when window update is not accepted due
+</EM><BR>
+<EM>&gt; to the first rule.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In this case SND.WL2 is frozen before SND.UNA and the first duplicate
+</EM><BR>
+<EM>&gt; ACK with SEG.ACK==SND.UNA will change window. See?
+</EM><BR>
+<EM>&gt; Normally, dupacks only increase window. But dupack with SEG.SEQ &gt; SND.WL1
+</EM><BR>
+<EM>&gt; is allowed to shrink it.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>I am not sure what you mean by &quot;not accepted due to the first rule&quot;. In
+<BR>
+the standard BSD scheme, the only case where new data is ACKed AND the
+<BR>
+window information is NOT used is when SEG.SEQ &lt;  SND.WL1: As I pointed,
+<BR>
+out this causes grief during retransmission involving bidirectional data
+<BR>
+transfer. In fact, it would appear to me that SND.WL2 was probably
+<BR>
+originally intended to freeze the window updates during retransmits (by
+<BR>
+the receiver) when doing bidirectional data transfer. i.e. it is more of
+<BR>
+a &quot;feature&quot; than a bug. If it really was the case, I am not sure what
+<BR>
+the motivation behind this was.
+<BR>
+<P>I am not able to see any other case where SND.WL2 is not moved along
+<BR>
+with SND.UNA. Thus, if it is okay to update the send window (I don't see
+<BR>
+any reason why we shouldn't be) during retransmits by the receiver,
+<BR>
+SND.WL2 naturally becomes redundant. 
+<BR>
+<P>From a coding perspective, I can understand why SND.WL2 may have been
+<BR>
+there: by the time you get to the send window update part, your SND.UNA
+<BR>
+has already been set to SEG.ACK. Hence, you can't compare SND.UNA with
+<BR>
+SEG.ACK. SND.WL2 in this case really serves as value of SND.UNA *before*
+<BR>
+it was set to SEG.ACK.
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2189/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2190.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2189">[ date ]</A>
+<A HREF="index.html#2189">[ thread ]</A>
+<A HREF="subject.html#2189">[ subject ]</A>
+<A HREF="author.html#2189">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: query: using two write() cal</TITLE>
+<META NAME="Author" CONTENT="rajiv.chakravorty@philips.com (rajiv.chakravorty@philips.com)">
+<META NAME="Subject" CONTENT="Re: query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: query: using two write() calls in succession</H1>
+<!-- received="Wed Mar 28 06:32:51 2001" -->
+<!-- isoreceived="20010328113251" -->
+<!-- sent="Wed, 28 Mar 2001 13:21:47 +0200" -->
+<!-- isosent="20010328112147" -->
+<!-- name="rajiv.chakravorty@philips.com" -->
+<!-- email="rajiv.chakravorty@philips.com" -->
+<!-- subject="Re: query: using two write() calls in succession" -->
+<!-- id="0056890025220977000002L972*@MHS" -->
+<!-- inreplyto="query: using two write() calls in succession" -->
+<STRONG>From:</STRONG> <A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;0056890025220977000002L972*@MHS&gt;"><EM>rajiv.chakravorty@philips.com</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Mar 28 2001 - 06:21:47 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2485.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2483.html">Zhi-Li Zhang: "(no subject)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2487.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2484">[ date ]</A>
+<A HREF="index.html#2484">[ thread ]</A>
+<A HREF="subject.html#2484">[ subject ]</A>
+<A HREF="author.html#2484">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Rick and der Mouse,
+<BR>
+<P>I have some doubts regarding your interpretation of the problem. I was 
+<BR>
+under the impression that a blocking write (or send) call would block until
+<BR>
+it has received an ACK or an RST for data sent and then perform the 2nd write.
+<BR>
+I have noticed that this  happens even when I had made two write calls by 
+<BR>
+breaking  the request (1+32)  while making the first normal request to the server. 
+<BR>
+(check the previous linuxdump.txt file). I have appended relevant parts of it here:
+<BR>
+<P>17:31:17.186250 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 1:2(1) ack 1 win 32120 (DF) 
+<BR>
+17:31:17.233839 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 1:1(0) ack 2 win 8760 (DF) 
+<BR>
+17:31:17.233891 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 2:34(32) ack 1 win 32120 (DF) 
+<BR>
+<P>As you can see, when I make my first write call by sending 1 byte of data, it  waits until 
+<BR>
+it receives the ACK and then proceed with the second write. That means, in this case write call
+<BR>
+blocks until the server or peer TCP ackowledges the data. (unless using non-blocking 
+<BR>
+sockets, or using MSG_DONTWAIT option if used with send() call). Also, in this case, I have not 
+<BR>
+disabled Nagle's algoritm. Ofcourse, my linux client is a dual P-II terminal. 
+<BR>
+<P>After, looking into all this, is it possible that RST can be received even after the application has already
+<BR>
+come out from the first write call ?? ...or its actually the tcp stack that's still not able to detect the RST just
+<BR>
+before sending the request data for the second write (as you can see it still detects if some delay is given).  
+<BR>
+Maybe something to do with silly window syndrome since I am writing small amount of data... ??
+<BR>
+<P>Please enlighten me with comments and/or pointers.
+<BR>
+<P>Regards,
+<BR>
+Rajiv Chakravorty 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2485.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2483.html">Zhi-Li Zhang: "(no subject)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2487.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2484">[ date ]</A>
+<A HREF="index.html#2484">[ thread ]</A>
+<A HREF="subject.html#2484">[ subject ]</A>
+<A HREF="author.html#2484">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Mar 28 2001 - 06:33:21 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

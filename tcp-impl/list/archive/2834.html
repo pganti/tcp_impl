@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Handling Packet Misordering?</TITLE>
+<META NAME="Author" CONTENT="Fred Baker (fred@cisco.com)">
+<META NAME="Subject" CONTENT="Re: Handling Packet Misordering?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Handling Packet Misordering?</H1>
+<!-- received="Mon Sep  9 15:19:54 2002" -->
+<!-- isoreceived="20020909191954" -->
+<!-- sent="Mon, 09 Sep 2002 12:18:41 -0700" -->
+<!-- isosent="20020909191841" -->
+<!-- name="Fred Baker" -->
+<!-- email="fred@cisco.com" -->
+<!-- subject="Re: Handling Packet Misordering?" -->
+<!-- id="5.1.1.6.2.20020909120131.01dbfaf0@mira-sjcm-4.cisco.com" -->
+<!-- inreplyto="003801c25820$7b824d50$b629f59b@essex.ac.uk" -->
+<STRONG>From:</STRONG> Fred Baker (<A HREF="mailto:fred@cisco.com?Subject=Re:%20Handling%20Packet%20Misordering?&In-Reply-To=&lt;5.1.1.6.2.20020909120131.01dbfaf0@mira-sjcm-4.cisco.com&gt;"><EM>fred@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 09 2002 - 15:18:41 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2835.html">Rick Jones: "Re: Handling Packet Misordering?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2833.html">Poh Tze Ven: "Re: Handling Packet Misordering?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2833.html">Poh Tze Ven: "Re: Handling Packet Misordering?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2835.html">Rick Jones: "Re: Handling Packet Misordering?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2836.html">Craig Partridge: "Re: Handling Packet Misordering?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2834">[ date ]</A>
+<A HREF="index.html#2834">[ thread ]</A>
+<A HREF="subject.html#2834">[ subject ]</A>
+<A HREF="author.html#2834">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 05:46 PM 9/9/2002 +0100, Poh Tze Ven wrote:
+<BR>
+<EM>&gt; &gt; routing comes up with a multipath route, or changes the route that it is
+</EM><BR>
+<EM>&gt; &gt; using for a session, reordering can happen, and TCP should not break.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  TCP does not break, but the performance degrades.
+</EM><BR>
+<P>should it trigger the fast retransmit mechanism, yes. But it can also 
+<BR>
+improve - if I alternate segments over two disjoint paths of speed 
+<BR>
+&lt;mumble&gt;, my theoretical capacity is 2*&lt;mumble&gt;, and the degradation is 
+<BR>
+against theoretical capacity. If actual capacity used exceeds &lt;mumble&gt;, I 
+<BR>
+have a net improvement over using a single path. Or, if I am using a single 
+<BR>
+path a routing changes, and I have a temporary reordering that triggers 
+<BR>
+fast retransmit, the new route is likely to be stable, and the degradation 
+<BR>
+will only last for a few RTTs after that before undegraded service is restored.
+<BR>
+<P>My point is that the real alternative to accepting resolution of reordering 
+<BR>
+at the endpoints is doing something in the network while will guarantee 
+<BR>
+sequential packet ordering. That is something that could be pretty 
+<BR>
+interesting to design and implement in terms of complexity and brittleness 
+<BR>
+added to the network, and very possible has the same effects.
+<BR>
+<P>For example, suppose we decide that MPLS is the solution to the world's 
+<BR>
+problems in this area. Some say it is, and then ask &quot;what was your 
+<BR>
+question?&quot;. It would force packet order by forcing a single route - no 
+<BR>
+multipath routes - and by forcing the network to drain the traffic in 
+<BR>
+flight before imposing a new path when things change. Since TCP doesn't see 
+<BR>
+the routing change, the process of draining the network necessarily 
+<BR>
+involves dropping traffic, whether it is the traffic already in the 
+<BR>
+pipeline when an MPLS path changes, or by denying new traffic entry to the 
+<BR>
+network for a period of time, and maybe both.
+<BR>
+<P>Reordering has a certain probability of triggering fast retransmit - if the 
+<BR>
+session has four or more packets outstanding (relatively unusual) and drops 
+<BR>
+the first, the duplicate acks resulting from its successors will trigger 
+<BR>
+fast retransmit. The probability is relatively low, though - you might want 
+<BR>
+to read &quot;TCP Behavior of a Busy Internet Server: Analysis and Improvements&quot; 
+<BR>
+in INFOCOMM '98 on that. Behaviors which trigger reordering, however, have 
+<BR>
+a non-zero probability of delivering the traffic, while behaviors that drop 
+<BR>
+the traffic during the re-route event by definition do not. Which has a 
+<BR>
+greater effect on TCP, and on the applications it supports?
+<BR>
+<P>If you want to re-design fast retransmit to do so better, such as is done 
+<BR>
+in New Reno or in SACK, I'm all for that. But I really don't think that the 
+<BR>
+network behaviors which might eliminate reordering are improvements. They 
+<BR>
+require the network to support additional complexity, which itself is prone 
+<BR>
+to failures, and their cure may be worse than the disease.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2835.html">Rick Jones: "Re: Handling Packet Misordering?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2833.html">Poh Tze Ven: "Re: Handling Packet Misordering?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2833.html">Poh Tze Ven: "Re: Handling Packet Misordering?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2835.html">Rick Jones: "Re: Handling Packet Misordering?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2836.html">Craig Partridge: "Re: Handling Packet Misordering?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2834">[ date ]</A>
+<A HREF="index.html#2834">[ thread ]</A>
+<A HREF="subject.html#2834">[ subject ]</A>
+<A HREF="author.html#2834">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Sep 09 2002 - 15:20:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

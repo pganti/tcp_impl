@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Unacceptable ACK in SYN_RCVD</TITLE>
+<META NAME="Author" CONTENT="Murali Bashyam (mbashyam@cisco.com)">
+<META NAME="Subject" CONTENT="Re: Unacceptable ACK in SYN_RCVD state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Unacceptable ACK in SYN_RCVD state handling</H1>
+<!-- received="Mon Apr  8 17:58:03 2002" -->
+<!-- isoreceived="20020408215803" -->
+<!-- sent="Mon, 08 Apr 2002 14:58:03 -0700" -->
+<!-- isosent="20020408215803" -->
+<!-- name="Murali Bashyam" -->
+<!-- email="mbashyam@cisco.com" -->
+<!-- subject="Re: Unacceptable ACK in SYN_RCVD state handling" -->
+<!-- id="3CB2126B.DE449DF4@cisco.com" -->
+<!-- inreplyto="200204082145.VAA04951@gra.isi.edu" -->
+<STRONG>From:</STRONG> Murali Bashyam (<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB2126B.DE449DF4@cisco.com&gt;"><EM>mbashyam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 08 2002 - 17:58:03 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2670.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2668.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2668.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2669">[ date ]</A>
+<A HREF="index.html#2669">[ thread ]</A>
+<A HREF="subject.html#2669">[ subject ]</A>
+<A HREF="author.html#2669">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bob Braden wrote:
+<BR>
+<P><EM>&gt;   *&gt; From <A HREF="mailto:owner-tcp-impl@grc.nasa.gov?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB2126B.DE449DF4@cisco.com&gt;">owner-tcp-impl@grc.nasa.gov</A>  Fri Apr  5 11:22:21 2002
+</EM><BR>
+<EM>&gt;   *&gt; Date: Fri, 05 Apr 2002 11:14:22 -0800
+</EM><BR>
+<EM>&gt;   *&gt; From: Murali Bashyam &lt;<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB2126B.DE449DF4@cisco.com&gt;">mbashyam@cisco.com</A>&gt;
+</EM><BR>
+<EM>&gt;   *&gt; X-Accept-Language: en
+</EM><BR>
+<EM>&gt;   *&gt; MIME-Version: 1.0
+</EM><BR>
+<EM>&gt;   *&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB2126B.DE449DF4@cisco.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt;   *&gt; Subject: Unacceptable ACK in SYN_RCVD state handling
+</EM><BR>
+<EM>&gt;   *&gt; Content-Transfer-Encoding: 7bit
+</EM><BR>
+<EM>&gt;   *&gt; X-AntiVirus: scanned by AMaViS 0.2.1
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; Hi
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; In SYN_RECEIVED state after sending a SYN-ACK to the peer, when TCP
+</EM><BR>
+<EM>&gt;   *&gt; receives a unacceptable ACK
+</EM><BR>
+<EM>&gt;   *&gt; i.e the ACK lies outside the receive window, it is supposed to drop the
+</EM><BR>
+<EM>&gt;   *&gt; incoming ACK and respond with a pure ACK as it should for any packet
+</EM><BR>
+<EM>&gt;   *&gt; that is completely outside the receive window. This is reqd as per RFC
+</EM><BR>
+<EM>&gt;   *&gt; 793.
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; In BSD TCP code (FREEBSD/NETBSD) i notice that in SYN-RECEIVED state any
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; outgoing segment generated would carry the SYN bit as well as the ACK
+</EM><BR>
+<EM>&gt;   *&gt; bit set. So BSD code, when it responds with a ACK in the above scenario
+</EM><BR>
+<EM>&gt;   *&gt; also has the SYN bit set. Is this acceptable behaviour? Linux responds
+</EM><BR>
+<EM>&gt;   *&gt; with a pure ACK in this scenario.
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; Murali
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Hmmm.  I was about to say that:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         The TCP has sent a SYN,ACK and its SYN has not been acknowledged.  It
+</EM><BR>
+<EM>&gt;         is still in SYN RECEIVED state, so retransmitting the SYN seems to me
+</EM><BR>
+<EM>&gt;         to be acceptable behavior in this situation.
+</EM><BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; But glancing at RFC 793, it appears that it says to send a RST segment
+</EM><BR>
+<EM>&gt; at that point (ACK bit on and unacceptable ACK in SYN RECEIVED state,
+</EM><BR>
+<EM>&gt; page 72 of RFC 793.)
+</EM><BR>
+<P>No, the scenario that applies is described on page 68 (sequence number check),
+<BR>
+in this
+<BR>
+case the ACK carries a sequence number that lies outside the receive window and
+<BR>
+hence
+<BR>
+the action recommended on page 68 is the following
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If an incoming segment is not acceptable, an acknowledgment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be sent in reply (unless the RST bit is set, if so drop
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the segment and return):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;SEQ=SND.NXT&gt;&lt;ACK=RCV.NXT&gt;&lt;CTL=ACK&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After sending the acknowledgment, drop the unacceptable segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and return.
+<BR>
+<P>The point u mentioned above is the conflict i am having as well, it seems to me
+<BR>
+that retransmitting
+<BR>
+a SYN-ACK seems the right thing to do. But the BSD stack doesn't seem to be
+<BR>
+doing that.
+<BR>
+<P>Murali
+<BR>
+<P><P><P><P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Bob Braden
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2670.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2668.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2668.html">Bob Braden: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2669">[ date ]</A>
+<A HREF="index.html#2669">[ thread ]</A>
+<A HREF="subject.html#2669">[ subject ]</A>
+<A HREF="author.html#2669">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Apr 08 2002 - 17:58:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

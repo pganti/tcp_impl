@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="mrosu@us.ibm.com (mrosu@us.ibm.com)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Tue Mar 16 23:25:27 1999" -->
+<!-- isoreceived="19990317042527" -->
+<!-- sent="Tue, 16 Mar 1999 23:18:04 -0500" -->
+<!-- isosent="19990317041804" -->
+<!-- name="mrosu@us.ibm.com" -->
+<!-- email="mrosu@us.ibm.com" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="85256737.00179E9B.00@D51MTA03.pok.ibm.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256737.00179E9B.00@D51MTA03.pok.ibm.com&gt;"><EM>mrosu@us.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Mar 16 1999 - 23:18:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1677">[ date ]</A>
+<A HREF="index.html#1677">[ thread ]</A>
+<A HREF="subject.html#1677">[ subject ]</A>
+<A HREF="author.html#1677">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;.........
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Let X and Y the lowest and the highest sequence numbers transmitted when
+<BR>
+&nbsp;&nbsp;&nbsp;Fast Recovery is called. X is lost.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Let Z be the highest sequence number between X and Y that is also lost.
+<BR>
+&nbsp;&nbsp;&nbsp;When the source receives the partial ACK asking for packet Z, it has
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted new packets until T whith T&gt;Y.
+<BR>
+&nbsp;&nbsp;&nbsp;Here it retransmits Z and may be some new packets beyond T. Packet Z
+<BR>
+&nbsp;&nbsp;&nbsp;arrives at the destination which must ack all the packets till T if they
+<BR>
+&nbsp;&nbsp;&nbsp;are correctly received of course. Suppose that a packet between Y and T
+<BR>
+&nbsp;&nbsp;&nbsp;is also lost, call it U, we have the following figure
+<BR>
+<P>&nbsp;&nbsp;&nbsp;X  [Z]  Y  [U]  T
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Here the source receives an ACK asking for packet U. If it resets the
+<BR>
+&nbsp;&nbsp;&nbsp;dupacks counter after leaving fast recovery and if the number of
+<BR>
+&nbsp;&nbsp;&nbsp;segments sent after T is less than three, the detection of the loss of U
+<BR>
+&nbsp;&nbsp;&nbsp;requires a timeout. Recall that all the dupack of segments X till T have
+<BR>
+&nbsp;&nbsp;&nbsp;been already received when the ack asking for segment U arrived. However
+<BR>
+&nbsp;&nbsp;&nbsp;if the source uses the dupack counter as proposed by Marcel, it will
+<BR>
+&nbsp;&nbsp;&nbsp;consider the dup acks of packets sent between U and T with any dup ack
+<BR>
+&nbsp;&nbsp;&nbsp;for a packet sent after T. This may also cause a failure of Fast
+<BR>
+&nbsp;&nbsp;&nbsp;Retransmit if the number of these dup acks is less than three. However
+<BR>
+&nbsp;&nbsp;&nbsp;this proposition is better than resetting the counter because it takes
+<BR>
+&nbsp;&nbsp;&nbsp;account of dup acks for packets between U and T.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I propose here that the source should retransmit directly packet U
+<BR>
+&nbsp;&nbsp;&nbsp;without waiting for three dupack or timeout. At least one round trip
+<BR>
+&nbsp;&nbsp;&nbsp;time has passed since the transmission of U and it is very probable that
+<BR>
+&nbsp;&nbsp;&nbsp;it is lost. How to do this??
+<BR>
+<P>&nbsp;&nbsp;&nbsp;......
+<BR>
+<P>&nbsp;&nbsp;&nbsp;What do you think?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Chadi
+<BR>
+<P>I'm not sure your argument is correct.
+<BR>
+<P>Lets assume that U = T. What if Z is retransmitted immediately after U?
+<BR>
+On their way to the receiver, Z and U get reordered, Z is received first and
+<BR>
+an ACK asking for U is send back to the source. Immediately after that,
+<BR>
+U is acked in a separate ACK message. The two acks are received by the source
+<BR>
+in the order they were sent. Upon receiving the first of the two ACKs, U is
+<BR>
+retransmitted unnecessarily.
+<BR>
+<P>In the following, U != T.
+<BR>
+I believe you can use your idea only to fast retransmit the packets beyond Y
+<BR>
+that were sent before V, where V is the packet with the highest sequence
+<BR>
+number between X and Z, that was lost. In other words, you can fast
+<BR>
+retransmit U if T is the highest new packet sent before the retransmision
+<BR>
+of V, where X [V] [Z] Y [U] T.
+<BR>
+<P>A second case when it is safe to fast retransmit U is when there are at
+<BR>
+least two packets between U and T. In this case, there are three packets
+<BR>
+between U and the retransmission of Z and it is safe to ignore packet
+<BR>
+reordering.
+<BR>
+(This second case will be handled correctly by Reno/NewReno and U will be
+<BR>
+fast retransmitted because dupacks &gt;= 3 when the ACK asking for U is received).
+<BR>
+<P>Please correct me if I'm wrong.
+<BR>
+<P>If my understanding of NewReno is correct, the first retransmission is protected
+<BR>
+by the first three duplicate ACKs, while the next retransmissions are protected
+<BR>
+by the &quot;at least one roundtrip&quot; argument. Once you exit the window, you are
+<BR>
+protected by the &quot;at least one roundtrip&quot; argument only in the special case
+<BR>
+described above. Otherwise, you need to wait for the three dup acks.
+<BR>
+<P>In my proposal, you fast retransmit only when protected by three dup ACKs,
+<BR>
+when you're inside or outside the window.
+<BR>
+<P>Marcel
+<BR>
+<P>&nbsp;&nbsp;&nbsp;--
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**  Chadi Mohamad BARAKAT  **
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/\
+<BR>
+&nbsp;&nbsp;&nbsp;PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256737.00179E9B.00@D51MTA03.pok.ibm.com&gt;">Chadi.Barakat@sophia.inria.fr</A>
+<BR>
+&nbsp;&nbsp;&nbsp;2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+<BR>
+&nbsp;&nbsp;&nbsp;06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1677">[ date ]</A>
+<A HREF="index.html#1677">[ thread ]</A>
+<A HREF="subject.html#1677">[ subject ]</A>
+<A HREF="author.html#1677">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

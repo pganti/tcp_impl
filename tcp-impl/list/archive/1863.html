@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: a question about SYN attack</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: a question about SYN attack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: a question about SYN attack</H1>
+<!-- received="Wed Oct 13 18:04:55 1999" -->
+<!-- isoreceived="19991013220455" -->
+<!-- sent="Wed, 13 Oct 1999 11:06:54 -0500 (CDT)" -->
+<!-- isosent="19991013160654" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: a question about SYN attack" -->
+<!-- id="969378667.0023@hypermail.dummy" -->
+<!-- inreplyto="a question about SYN attack" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0023@hypermail.dummy&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Oct 13 1999 - 12:06:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1864.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1862.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1849.html">william Li: "a question about SYN attack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1864.html">David Borman: "Re: a question about SYN attack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1863">[ date ]</A>
+<A HREF="index.html#1863">[ thread ]</A>
+<A HREF="subject.html#1863">[ subject ]</A>
+<A HREF="author.html#1863">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Tue, 12 Oct 1999 17:09:48 -0600 (MDT)
+</EM><BR>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0023@hypermail.dummy&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: a question about SYN attack
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; From: william Li &lt;<A HREF="mailto:liw@ascend.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0023@hypermail.dummy&gt;">liw@ascend.com</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; This is the syn_cooky solusion. I believe that
+</EM><BR>
+<EM>&gt; &gt; Vernon's random_drop solusion super-set this
+</EM><BR>
+<EM>&gt; &gt; one. Does anyone have info about the radom_drop
+</EM><BR>
+<EM>&gt; &gt; solusion ?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I think the syn-cooky solution was different, and neither a super-set,
+</EM><BR>
+<EM>&gt; sub-set, extension, or precursor of random-drop.  I also don't like it.
+</EM><BR>
+<P>Correct.  The idea behind the syn-cookie is that when a SYN is received,
+<BR>
+send out the SYN/ACK, and forget about the connection.  When the ACK
+<BR>
+is received, the connection is then created.  But to avoid switching
+<BR>
+the SYN attack to an ACK attack, some magic encoding is done in the
+<BR>
+sequence number in the SYN/ACK, so that when the ACK is received, it
+<BR>
+can be verified whether or not it is in response to a SYN/ACK that we
+<BR>
+sent out.  The issues with syn-cookies is how to do that encoding,
+<BR>
+and if you have to drop to a lower level of service due to lack of
+<BR>
+bits for encoding state information (like TCP window scale option).
+<BR>
+<P><EM>&gt; Dave Borman's solution can be viewed as a superset of random drop.  He
+</EM><BR>
+<EM>&gt; switched to a hash table to find TCB's, something that everyone who deals
+</EM><BR>
+<EM>&gt; with large numbers of sockets must do to avoid performance problems.  He
+</EM><BR>
+<EM>&gt; also changed things so that much less state is kept for each partly open
+</EM><BR>
+<EM>&gt; connection.  When that table overflowed, he picked an arbitrary,
+</EM><BR>
+<EM>&gt; reasonably random connection to throw out of the table.  That last bit
+</EM><BR>
+<EM>&gt; of picking a random connection to give up on instead of either the classic 
+</EM><BR>
+<EM>&gt; 4.*BSD tactic of the newest connection or other systems' giving up on
+</EM><BR>
+<EM>&gt; the oldest connection is crux of random-drop.
+</EM><BR>
+<P>Well, it's not exactly random drop.  Each hash bucket has a limit, and
+<BR>
+the overall table has a limit.  When we decide that we need to drop a
+<BR>
+connection due to either limit being exceeded, we drop the oldest connection
+<BR>
+on the hash bucket where we are trying to put the new connection.
+<BR>
+The hashing function is designed to be non-predictable (from the outside),
+<BR>
+so that there is a fairly good distribution across all the buckets.
+<BR>
+<P><EM>&gt; Has something happened to BSDI?
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>No, other than our ISP had a 48 hour outage between POPs that knocked us
+<BR>
+off the net for 48 hours (compounded by anyone trying to call BSDI on
+<BR>
+Monday not being able to get anyone, since the main office was closed
+<BR>
+for Columbus Day.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0023@hypermail.dummy&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1864.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1862.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1849.html">william Li: "a question about SYN attack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1864.html">David Borman: "Re: a question about SYN attack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1863">[ date ]</A>
+<A HREF="index.html#1863">[ thread ]</A>
+<A HREF="subject.html#1863">[ subject ]</A>
+<A HREF="author.html#1863">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

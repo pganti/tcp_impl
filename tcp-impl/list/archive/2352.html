@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="Bob Braden (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Tue Sep 19 12:24:59 2000" -->
+<!-- isoreceived="20000919162459" -->
+<!-- sent="Tue, 19 Sep 2000 16:04:34 GMT" -->
+<!-- isosent="20000919160434" -->
+<!-- name="Bob Braden" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="200009191604.QAA09510@gra.isi.edu" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> Bob Braden (<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 12:04:34 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2362.html">Mark Allman: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2352">[ date ]</A>
+<A HREF="index.html#2352">[ thread ]</A>
+<A HREF="subject.html#2352">[ subject ]</A>
+<A HREF="author.html#2352">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Tue Sep 19 06:38:47 2000
+<BR>
+&nbsp;&nbsp;*&gt; Date: Tue, 19 Sep 2000 17:56:41 +0530
+<BR>
+&nbsp;&nbsp;*&gt; From: &quot;T Srivathsa&quot; &lt;<A HREF="mailto:srivathsa.tirumala@wipro.com?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">srivathsa.tirumala@wipro.com</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; Reply-To: <A HREF="mailto:srivathsa.tirumala@wipro.com?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">srivathsa.tirumala@wipro.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; X-Mailer: Mozilla 4.7 [en] (Win95; I)
+<BR>
+&nbsp;&nbsp;*&gt; X-Accept-Language: en
+<BR>
+&nbsp;&nbsp;*&gt; MIME-Version: 1.0
+<BR>
+&nbsp;&nbsp;*&gt; To: &quot;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>&quot; &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; Subject: TCP sequence numbers
+<BR>
+&nbsp;&nbsp;*&gt; Content-Transfer-Encoding: 7bit
+<BR>
+&nbsp;&nbsp;*&gt; Sender: <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009191604.QAA09510@gra.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A>
+<BR>
+&nbsp;&nbsp;*&gt; Precedence: bulk
+<BR>
+&nbsp;&nbsp;*&gt; X-Lines: 26
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Hi,
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt;     My understanding of the Initial Sequence Numbers in TCP is that they
+<BR>
+&nbsp;&nbsp;*&gt; increment at a much faster rate (typically once every 4 usecs) than the
+<BR>
+&nbsp;&nbsp;*&gt; subsequent sequence numbers (which depends on how fast TCP pumps that
+<BR>
+&nbsp;&nbsp;*&gt; connection's data into the network).
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>Please see the Appendix to RFC1185.
+<BR>
+<P>Bob Braden
+<BR>
+<P>&nbsp;&nbsp;*&gt;  This way, during a reincarnation (same src, dst ip addresses and same
+<BR>
+&nbsp;&nbsp;*&gt; src, dst ports) of a connection, even if an old duplicate surfaces, it
+<BR>
+&nbsp;&nbsp;*&gt; can be rejected because &quot;it's sequence number will be WAY BEHIND&quot;.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Question 1:
+<BR>
+&nbsp;&nbsp;*&gt;     Recently, there has been talk on the tcp-impl mailing list that ISN
+<BR>
+&nbsp;&nbsp;*&gt; can be random. If so, how can it be guaranteed that an old duplicate
+<BR>
+&nbsp;&nbsp;*&gt; will be rejected during a reincarnation?
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Question 2:
+<BR>
+&nbsp;&nbsp;*&gt;     Can circumstances arise such that TCP pumps the connection's data
+<BR>
+&nbsp;&nbsp;*&gt; into the network at such a high rate, that subsequent sequence numbers
+<BR>
+&nbsp;&nbsp;*&gt; increase at the same rate as ISNs?
+<BR>
+&nbsp;&nbsp;*&gt;     For eg, an FTP between very fast machines, on a very fast LAN, with
+<BR>
+&nbsp;&nbsp;*&gt; TCP WINDOW SCALING?
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Bye
+<BR>
+&nbsp;&nbsp;*&gt; Srivathsa
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2362.html">Mark Allman: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2352">[ date ]</A>
+<A HREF="index.html#2352">[ thread ]</A>
+<A HREF="subject.html#2352">[ subject ]</A>
+<A HREF="author.html#2352">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 12:25:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

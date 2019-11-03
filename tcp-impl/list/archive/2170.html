@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 21:53:34 2000" -->
+<!-- isoreceived="20000617015334" -->
+<!-- sent="Sat, 17 Jun 2000 07:16:17 +1000" -->
+<!-- isosent="20000616211617" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="394A9920.3756850A@cvs.com.au" -->
+<!-- inreplyto="E132xsJ-00067X-00@the-village.bc.nu" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;394A9920.3756850A@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 17:16:17 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2170">[ date ]</A>
+<A HREF="index.html#2170">[ thread ]</A>
+<A HREF="subject.html#2170">[ subject ]</A>
+<A HREF="author.html#2170">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I can see your point; and have no difficulty seeing you saved a pass over the data
+<BR>
+for all but the first fragment, quite clever really, but it would make life harder
+<BR>
+for those that believe layering can be ignored completely when handling data that
+<BR>
+has been put on the wire ( and I think those in that school are crazy).
+<BR>
+<P>I however are in  the enforce layering absolutely school; and I  used objects when
+<BR>
+doing my stack. The tcp ( and all other protocols) checksums are done by calling
+<BR>
+the protocol object, so the call has to be done after you have filled in the
+<BR>
+destination and before you fragment.  The concept of fragmentation is unknown to
+<BR>
+the protocol object and it definitely doesn't get involved on putting the data on
+<BR>
+the wire.
+<BR>
+<P>Mind you; just as I believe defragmentation belongs in the NIC, I believe
+<BR>
+fragmentation belongs there also. This is possible if you treat the destination as
+<BR>
+something the protocol layer can get with a call to the routing layer ( which you
+<BR>
+have to do anyway as the destination address at least has to remain stable even if
+<BR>
+the destination has multiple NICs and the path changes), and you do the protocol
+<BR>
+checksum calculation in the protocol layer.
+<BR>
+<P>I however can see this is not how most people see the world. If the NIC deals with
+<BR>
+fragmentation and defragmentation. then there is no penalty if you use 64k ip
+<BR>
+packets, in fact things go better as you only have to deal with one header for
+<BR>
+every 64k in the main CPU. If there is no penalty why would you spend anytime
+<BR>
+working out the optimum packet size for the initial path.
+<BR>
+<P>Regards
+<BR>
+<P>Alan Cox wrote:
+<BR>
+<P><EM>&gt; &gt; During testing of Packet Classification capability
+</EM><BR>
+<EM>&gt; &gt; on for Diffserv-capable routers, one of my colleagues
+</EM><BR>
+<EM>&gt; &gt; discovered that the Linux TCP sender intentionally
+</EM><BR>
+<EM>&gt; &gt; reorders fragments - the pkt containing the TCP port
+</EM><BR>
+<EM>&gt; &gt; number is the last pkt sent in a family (same ip_id)
+</EM><BR>
+<EM>&gt; &gt; of fragments.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; We don't reorder fragments we send packets in an optimised fashion.
+</EM><BR>
+<EM>&gt; Im suprised nobody else is doing this. Its common sense for any end host
+</EM><BR>
+<EM>&gt; that has to support software tcp checksumming
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2171.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2170">[ date ]</A>
+<A HREF="index.html#2170">[ thread ]</A>
+<A HREF="subject.html#2170">[ subject ]</A>
+<A HREF="author.html#2170">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

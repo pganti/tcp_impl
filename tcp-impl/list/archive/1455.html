@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Rodney Van Meter (Rodney.Vanmeter@quantum.com)">
+<META NAME="Subject" CONTENT="RE: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Question on initial sequence numbers</H1>
+<!-- received="Tue Jan  5 18:19:40 1999" -->
+<!-- isoreceived="19990105231940" -->
+<!-- sent="Tue, 5 Jan 1999 14:58:57 -0800 " -->
+<!-- isosent="19990105225857" -->
+<!-- name="Rodney Van Meter" -->
+<!-- email="Rodney.Vanmeter@quantum.com" -->
+<!-- subject="RE: Question on initial sequence numbers" -->
+<!-- id="E4D8D565D10DD211A3E400805FA7387C26463D@milcmsg1.qntm.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Rodney Van Meter (<A HREF="mailto:Rodney.Vanmeter@quantum.com?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;E4D8D565D10DD211A3E400805FA7387C26463D@milcmsg1.qntm.com&gt;"><EM>Rodney.Vanmeter@quantum.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 05 1999 - 17:58:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1456.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1454.html">Rick Jones: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1455">[ date ]</A>
+<A HREF="index.html#1455">[ thread ]</A>
+<A HREF="subject.html#1455">[ subject ]</A>
+<A HREF="author.html#1455">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Okay, time for me to show my ignorance :-).
+<BR>
+<P>I'm on the side of the conservatives here (stick to the rules as spec'ed in
+<BR>
+order to be right), but I have a few questions:
+<BR>
+<P>1) How does DHCP deal with the possibility of giving out the same IP address
+<BR>
+resulting in corruption?  Does it simply refuse to give out a specific
+<BR>
+address until TIME_WAIT after the prior lease expires?
+<BR>
+<P>2) How does IPv6 automatic address configuration (or any other distributed
+<BR>
+address selection mechanism) avoid this?  What if host A picks address
+<BR>
+1.2.3.4(.x.y.z...), then it dies mid-stream, host B comes up and, using the
+<BR>
+same algorithm, picks 1.2.3.4, since as far as it can tell, it's not in use?
+<BR>
+Or will, with IPv6, no two hosts ever pick the same address?
+<BR>
+<P>3) If we're using non-routable addresses, traffic guaranteed to be on this
+<BR>
+LAN only, is it possible to relax the TIME_WAIT constraint?
+<BR>
+<P>4) Getting off the list topic a bit, but, are XTP and other transport
+<BR>
+protocols vulnerable to the same problem?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--Rod
+<BR>
+<P>P.S.  I'll go with whatever Bob Braden says ;-).
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From:	Rick Jones [SMTP:<A HREF="mailto:raj@cup.hp.com?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;E4D8D565D10DD211A3E400805FA7387C26463D@milcmsg1.qntm.com&gt;">raj@cup.hp.com</A>]
+</EM><BR>
+<EM>&gt; Sent:	Tuesday, January 05, 1999 12:23 PM
+</EM><BR>
+<EM>&gt; To:	<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;E4D8D565D10DD211A3E400805FA7387C26463D@milcmsg1.qntm.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject:	Re: Question on initial sequence numbers
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; All it really takes is switching an IP address from one system to
+</EM><BR>
+<EM>&gt; another in the event of failure. Then instead of being a question of how
+</EM><BR>
+<EM>&gt; long it takes for a system to reboot, it becomes a question of how long
+</EM><BR>
+<EM>&gt; it takes for the system failure to be detected and the IP address
+</EM><BR>
+<EM>&gt; (identity) be assumed by the back-up system (and of course, whether or
+</EM><BR>
+<EM>&gt; not the backup system was being kept up-to-date wrt TIME_WAIT.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Given the pressures on HA in certain markets, I think there is pressure
+</EM><BR>
+<EM>&gt; to have this detection and failover happen in &lt;&lt; TIME_WAIT. I am
+</EM><BR>
+<EM>&gt; reasonably confident that modulo icky things like DB recovery the
+</EM><BR>
+<EM>&gt; switchovers are happening &lt; 60 seconds today on a number of platforms.
+</EM><BR>
+<EM>&gt; Probably much less.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; rick jones
+</EM><BR>
+<EM>&gt; -- 
+</EM><BR>
+<EM>&gt; these opinions are mine, all mine; HP might not want them anyway... :)
+</EM><BR>
+<EM>&gt; feel free to email, or post, but please do not do both...
+</EM><BR>
+<EM>&gt; my email address is raj in the cup.hp.com domain...
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1456.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1454.html">Rick Jones: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1455">[ date ]</A>
+<A HREF="index.html#1455">[ thread ]</A>
+<A HREF="subject.html#1455">[ subject ]</A>
+<A HREF="author.html#1455">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

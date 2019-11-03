@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 08:26:10 2000" -->
+<!-- isoreceived="20000225132610" -->
+<!-- sent="Fri, 25 Feb 2000 19:55:31 +1100" -->
+<!-- isosent="20000225085531" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="38B64383.7F0A213@cvs.com.au" -->
+<!-- inreplyto="200002242156.NAA18955@csapuntz-u1.cisco.com" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B64383.7F0A213@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 03:55:31 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2011.html">Brian E Carpenter: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2010">[ date ]</A>
+<A HREF="index.html#2010">[ thread ]</A>
+<A HREF="subject.html#2010">[ subject ]</A>
+<A HREF="author.html#2010">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I must have missed something.
+<BR>
+<P>If we don't have this, you can take the destination port, convert to a
+<BR>
+table address, use the sequence number,
+<BR>
+do some calculations and come up with a buffer address and an offset. If
+<BR>
+you want to mess up the layering
+<BR>
+of your stack, they are all things you can do now.
+<BR>
+<P>or using RDMA
+<BR>
+<P>You tell the would the contents of your table, have the server play with
+<BR>
+the data so detailed,
+<BR>
+the server sends back info in this option.
+<BR>
+<P>---&gt;An attacker plays with the data so returned.
+<BR>
+<P>The client instead of doing the port to table translation to determine
+<BR>
+where to send the data
+<BR>
+from the packet , does a port to table translation to find the table to
+<BR>
+detect malicious corruption's
+<BR>
+of the option.
+<BR>
+<P>How can you assume anything in the option is nothing but rubbish until
+<BR>
+such
+<BR>
+a translation and check is done?
+<BR>
+<P><P>1) Haven't you only changed the reason to do the port to table
+<BR>
+translation.
+<BR>
+2) Have completely messed up the layering of your stack. Ok people do it,
+<BR>
+but as an option?
+<BR>
+3) Provided a whole new farm yard of bugs and potential attacks?
+<BR>
+<P>As I read more and more RFC's one question I am constantly asking, why are
+<BR>
+people making this terrific
+<BR>
+protocol more and more complicated.
+<BR>
+<P>Isn't it difficult enough to implement already ( I think it is anyway).
+<BR>
+<P><P><P>Costa Sapuntzakis wrote:
+<BR>
+<P><EM>&gt; The TCP RDMA option reduces the overhead of receiving data over
+</EM><BR>
+<EM>&gt; TCP-based protocols such as NFS and HTTP.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It enables the construction of a simple hardware accelerator that
+</EM><BR>
+<EM>&gt; copies data directly from the incoming packet into application
+</EM><BR>
+<EM>&gt; buffers, avoiding expensive copies in the protocol stack.  Even
+</EM><BR>
+<EM>&gt; without hardware acceleration, the option enables the protocol stack
+</EM><BR>
+<EM>&gt; to decrease the number of copies it must do.
+</EM><BR>
+<P>1) I think your a bit game if you assume the data in the option is
+<BR>
+anything other than a story that aims to mislead.
+<BR>
+2) If you want to play this game why can't you use the port, sequence
+<BR>
+number and a table? All things available
+<BR>
+to you without advertising the state of your system.
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The TCP RDMA option is an annotation and requires no modifications to
+</EM><BR>
+<EM>&gt; higher layer protocols. It can be used with popular protocols such as
+</EM><BR>
+<EM>&gt; HTTP, NFS, and CIFS, along with new protocols.
+</EM><BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The TCP option also provides a bit to indicate application-level
+</EM><BR>
+<EM>&gt; message boundaries. The bit enables out-of-order processing of the TCP
+</EM><BR>
+<EM>&gt; receive queue, potentially decreasing service times in the presence of
+</EM><BR>
+<EM>&gt; packet drops and improving performance on parallel systems.
+</EM><BR>
+<P>Out of order processing assumes the data that didn't arrive one day will.
+<BR>
+Is that a valid
+<BR>
+assumption on the internet? What happens with packets that are received
+<BR>
+more than once,
+<BR>
+do you DMA over the previous data thus corrupting the changes that have
+<BR>
+been made
+<BR>
+by the application? Do you make the rule the application may not alter the
+<BR>
+DMA buffers?
+<BR>
+Or do you check for this condition? Is this check in your acceleration
+<BR>
+hardware?
+<BR>
+<P>I assume you believe you still only move the sequence number forward if
+<BR>
+all data has
+<BR>
+been received to that sequence number. Is this done in the acceleration
+<BR>
+hardware?
+<BR>
+<P>By the time you have checked that the option is valid, updated your
+<BR>
+received
+<BR>
+sequence number, and made sure you are not DMAing  over data the
+<BR>
+application already
+<BR>
+has, what have you gained that could not be had without this option and a
+<BR>
+restructure of a stack.
+<BR>
+<P>P.S. Maximum of two copies in the stack I wrote, one from card to
+<BR>
+ip_buffer, and an
+<BR>
+optional copy from ip_buffer to application_buffer. I don't believe I am
+<BR>
+partially smart.
+<BR>
+I deceive the introduction is misleading.
+<BR>
+<P><P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>&gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; -Costa
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2011.html">Brian E Carpenter: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2009.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2010">[ date ]</A>
+<A HREF="index.html#2010">[ thread ]</A>
+<A HREF="subject.html#2010">[ subject ]</A>
+<A HREF="author.html#2010">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

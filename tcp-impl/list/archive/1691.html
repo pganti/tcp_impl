@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: ISN numbers and TIME_WAIT</TITLE>
+<META NAME="Author" CONTENT="vinayb@vinayb.engr.sgi.com (vinayb@vinayb.engr.sgi.com)">
+<META NAME="Subject" CONTENT="ISN numbers and TIME_WAIT">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>ISN numbers and TIME_WAIT</H1>
+<!-- received="Sat Mar 27 18:50:56 1999" -->
+<!-- isoreceived="19990327235056" -->
+<!-- sent="Sat, 27 Mar 1999 15:43:33 -0800 (PST)" -->
+<!-- isosent="19990327234333" -->
+<!-- name="vinayb@vinayb.engr.sgi.com" -->
+<!-- email="vinayb@vinayb.engr.sgi.com" -->
+<!-- subject="ISN numbers and TIME_WAIT" -->
+<!-- id="199903272343.PAA08255@vinayb.engr.sgi.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:vinayb@vinayb.engr.sgi.com?Subject=Re:%20ISN%20numbers%20and%20TIME_WAIT&In-Reply-To=&lt;199903272343.PAA08255@vinayb.engr.sgi.com&gt;"><EM>vinayb@vinayb.engr.sgi.com</EM></A><BR>
+<STRONG>Date:</STRONG> Sat Mar 27 1999 - 18:43:33 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1692.html">Emanuele Zanotti: "Doubts about RFC 2001 (Slow Start and Congestion Avoidance in TCP)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1691">[ date ]</A>
+<A HREF="index.html#1691">[ thread ]</A>
+<A HREF="subject.html#1691">[ subject ]</A>
+<A HREF="author.html#1691">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi folks,
+<BR>
+<P>This is a constantly recurring theme on the tcpimpl mailing list but the
+<BR>
+solution seems to be elusive or divided among vendors. I have collected
+<BR>
+some snoop traces from some of the TCP sessions between Irix, SunOS, Linux
+<BR>
+and NT SP4.  This investigations were part of a bug that I was looking at
+<BR>
+involving Irix and NT SP4. The test case involved running a remote rsh
+<BR>
+command from a NT PC running SP4 to connect to a SGI Indy running
+<BR>
+6.5.x. The command used to run on the client machines involved
+<BR>
+<P>rsh &lt;remote-hostname&gt; -l guest ls
+<BR>
+<P>Rsh uses a reserved port and not the ephemeral port for initiating the
+<BR>
+connection. This sometimes leads to reuse of the same port number when the
+<BR>
+command is re-issued. This might result in the remote TCP server getting a
+<BR>
+SYN packet while in the midst of 2MSL timeout in the TIME_WAIT state. It
+<BR>
+is also assumed that so long as the ISN number is monotonically increasing
+<BR>
+(as specified in RFC 793), it is okay for the client to send another SYN
+<BR>
+packet to the remote host to initiate another connection. However, the
+<BR>
+behavior of the NT SP4 stack appears to not honor this &quot;MUST&quot;
+<BR>
+requirement. I have collected snoop traces in which the SYN is sent to a
+<BR>
+port in TIME_WAIT with a ISN number that is lower than what was used for
+<BR>
+the previous connection. 
+<BR>
+<P>qepc-miles ---&gt; NT client executing the rsh command
+<BR>
+<P>vinayb---&gt; Indy running Irix 6.5.x acting as the remote server
+<BR>
+<P>Here is a excerpt of the snoop.
+<BR>
+<P>________________________________
+<BR>
+&nbsp;20   0.124234       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+128 bytes
+<BR>
+&nbsp;20   0.124234       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=114, ID=6923
+<BR>
+&nbsp;20   0.124234       vinayb -&gt; qepc-miles   TCP D=1023 S=514 Fin Ack=40086
+<BR>
+Seq=1227531872 Len=74 Win=61320
+<BR>
+&nbsp;20   0.124234       vinayb -&gt; qepc-miles   RSHELL R port=1023
+<BR>
+Desktop\ndumpster\ngue
+<BR>
+________________________________
+<BR>
+&nbsp;21   0.000657       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+54 bytes
+<BR>
+&nbsp;21   0.000657       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=40, ID=6924
+<BR>
+&nbsp;21   0.000657       vinayb -&gt; qepc-miles   TCP D=1022 S=1023 Fin
+<BR>
+Ack=40058 Seq=1227593920 Len=0 Win=61320
+<BR>
+________________________________
+<BR>
+&nbsp;22   0.002294   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;22   0.002294   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=40, ID=32012
+<BR>
+&nbsp;22   0.002294   qepc-miles -&gt; vinayb       TCP D=514 S=1023
+<BR>
+Ack=1227531947 Seq=40086 Len=0 Win=8685
+<BR>
+&nbsp;22   0.002294   qepc-miles -&gt; vinayb       RSHELL C port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;23   0.000047   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;23   0.000047   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=40, ID=32268
+<BR>
+&nbsp;23   0.000047   qepc-miles -&gt; vinayb       TCP D=1023 S=1022
+<BR>
+Ack=1227593921 Seq=40058 Len=0 Win=8760
+<BR>
+________________________________
+<BR>
+&nbsp;24   0.000522   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;24   0.000522   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=40, ID=32524
+<BR>
+&nbsp;24   0.000522   qepc-miles -&gt; vinayb       TCP D=514 S=1023 Fin
+<BR>
+Ack=1227531947 Seq=40086 Len=0 Win=8685
+<BR>
+&nbsp;24   0.000522   qepc-miles -&gt; vinayb       RSHELL C port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;25   0.000107   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;25   0.000107   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=40, ID=32780
+<BR>
+&nbsp;25   0.000107   qepc-miles -&gt; vinayb       TCP D=1023 S=1022 Fin
+<BR>
+Ack=1227593921 Seq=40058 Len=0 Win=8760
+<BR>
+________________________________
+<BR>
+&nbsp;26   0.000187       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+54 bytes
+<BR>
+&nbsp;26   0.000187       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=40, ID=6925
+<BR>
+&nbsp;26   0.000187       vinayb -&gt; qepc-miles   TCP D=1023 S=514     Ack=40087
+<BR>
+Seq=1227531947 Len=0 Win=61320
+<BR>
+&nbsp;26   0.000187       vinayb -&gt; qepc-miles   RSHELL R port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;27   0.000312       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+54 bytes
+<BR>
+&nbsp;27   0.000312       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=40, ID=6926
+<BR>
+&nbsp;27   0.000312       vinayb -&gt; qepc-miles   TCP D=1022 S=1023
+<BR>
+Ack=40059 Seq=1227593921 Len=0 Win=61319
+<BR>
+________________________________
+<BR>
+&nbsp;28   8.296753   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;28   8.296753   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=44, ID=34060
+<BR>
+&nbsp;28   8.296753   qepc-miles -&gt; vinayb       TCP D=514 S=1023 Syn Seq=40059
+<BR>
+Len=0 Win=8192
+<BR>
+&nbsp;28   8.296753   qepc-miles -&gt; vinayb       RSHELL C port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;29   0.000329       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+54 bytes
+<BR>
+&nbsp;29   0.000329       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=40, ID=6988
+<BR>
+&nbsp;29   0.000329       vinayb -&gt; qepc-miles   TCP D=1023 S=514     Ack=40087
+<BR>
+Seq=1227531947 Len=0 Win=61320
+<BR>
+&nbsp;29   0.000329       vinayb -&gt; qepc-miles   RSHELL R port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;30   0.002796   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;30   0.002796   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=40, ID=34316
+<BR>
+&nbsp;30   0.002796   qepc-miles -&gt; vinayb       TCP D=514 S=1023 Rst Seq=40087
+<BR>
+Len=0 Win=0
+<BR>
+&nbsp;30   0.002796   qepc-miles -&gt; vinayb       RSHELL C port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;31   2.919513   qepc-miles -&gt; vinayb       ETHER Type=0800 (IP), size =
+<BR>
+60 bytes
+<BR>
+&nbsp;31   2.919513   qepc-miles -&gt; vinayb       IP  D=150.166.75.35
+<BR>
+S=192.82.162.65 LEN=44, ID=35084
+<BR>
+&nbsp;31   2.919513   qepc-miles -&gt; vinayb       TCP D=514 S=1023 Syn Seq=40059
+<BR>
+Len=0 Win=8192
+<BR>
+&nbsp;31   2.919513   qepc-miles -&gt; vinayb       RSHELL C port=1023
+<BR>
+________________________________
+<BR>
+&nbsp;32   0.000290       vinayb -&gt; qepc-miles   ETHER Type=0800 (IP), size =
+<BR>
+54 bytes
+<BR>
+&nbsp;32   0.000290       vinayb -&gt; qepc-miles   IP  D=192.82.162.65
+<BR>
+S=150.166.75.35 LEN=40, ID=7002
+<BR>
+&nbsp;32   0.000290       vinayb -&gt; qepc-miles   TCP D=1023 S=514     Ack=40087
+<BR>
+Seq=1227531947 Len=0 Win=61320
+<BR>
+&nbsp;32   0.000290       vinayb -&gt; qepc-miles   RSHELL R port=1023
+<BR>
+<P>Packets prior to 28 are part of the earlier connection. Packets from 28
+<BR>
+onwards belong to the new session (executing the same command again). The
+<BR>
+packets of interest are 28 and 29. 
+<BR>
+<P>The NT box initiates a new TCP connection as shown in packet 28. However,
+<BR>
+it chooses to use a ISN which is lower than the previous SEQ number for
+<BR>
+the same earlier connection and the 2MSL timeout has not yet expired. The
+<BR>
+Irix box responds by sending a ACK packet of the previous connection is
+<BR>
+shown in packet 29.  The NT responds with a RST in packet 30. This where
+<BR>
+the great debate starts. Since the 2MSL has not expired and according to
+<BR>
+RFC 1337 (Time Wait Assassination Hazard), we do nothing but send a ACK
+<BR>
+from the previous session.  Isn't this the correct behavior? Because I
+<BR>
+have noticed that some vendors drop the PCB from the TIME_WAIT state and
+<BR>
+respond with a SYN-ACK for the retransmitted SYN from the PC. I have snoop
+<BR>
+traces for SunOS and others which do that. I guess I am looking for what is
+<BR>
+the correct approach for these kinds of situation. On the other hand, if
+<BR>
+the NT SP4 were to generate the proper ISN than all this would not be
+<BR>
+required.
+<BR>
+<P>Comments are appreciated.
+<BR>
+Vinay
+<BR>
+<PRE>
+-- 
+Vinay Bannai &lt;<A HREF="mailto:vinayb@engr.sgi.com?Subject=Re:%20ISN%20numbers%20and%20TIME_WAIT&In-Reply-To=&lt;199903272343.PAA08255@vinayb.engr.sgi.com&gt;">vinayb@engr.sgi.com</A>&gt;,  Email Pager: <A HREF="mailto:vinayb_p@pager.sgi.com?Subject=Re:%20ISN%20numbers%20and%20TIME_WAIT&In-Reply-To=&lt;199903272343.PAA08255@vinayb.engr.sgi.com&gt;">vinayb_p@pager.sgi.com</A> 
+Networking Core, Ph: (650)-933-2510, Pager: 1-888-515-3512
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1692.html">Emanuele Zanotti: "Doubts about RFC 2001 (Slow Start and Congestion Avoidance in TCP)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1691">[ date ]</A>
+<A HREF="index.html#1691">[ thread ]</A>
+<A HREF="subject.html#1691">[ subject ]</A>
+<A HREF="author.html#1691">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

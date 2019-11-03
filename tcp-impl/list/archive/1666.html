@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Nagle on send</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="Nagle on send">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Nagle on send</H1>
+<!-- received="Thu Mar 11 15:43:29 1999" -->
+<!-- isoreceived="19990311204329" -->
+<!-- sent="Thu, 11 Mar 1999 12:26:45 -0800" -->
+<!-- isosent="19990311202645" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="Nagle on send" -->
+<!-- id="199903112026.MAA00329@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20Nagle%20on%20send&In-Reply-To=&lt;199903112026.MAA00329@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 11 1999 - 15:26:45 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1665.html">Chadi M. BARAKAT: "Bandwidth estimation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1666">[ date ]</A>
+<A HREF="index.html#1666">[ thread ]</A>
+<A HREF="subject.html#1666">[ subject ]</A>
+<A HREF="author.html#1666">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi.  Thanks for people's responses to my query of &quot;what does Nagle on send 
+<BR>
+mean?&quot;.
+<BR>
+<P>Here are what i think the variants are:
+<BR>
+<P>1.  FreeBSD 2.2.5, for example, says that if the send is bigger than an MTU 
+<BR>
+but isn't too big (bigger than MCLBYTES), and there was no outstanding 
+<BR>
+unacknowledged data, then all the data in the send, including any residual 
+<BR>
+data making up only a small packet, will be transmitted.
+<BR>
+<P>2.  What i think most people would agree on:  If the send is bigger than an 
+<BR>
+MTU, then even if there is unacknowledged data, then all the data in the send 
+<BR>
+(no matter how large the send was, more or less), including any residual data 
+<BR>
+making up only a small packet, will be transmitted.
+<BR>
+<P>3.  (I think this is what Vernon has in mind.)  If the send is not big enough 
+<BR>
+and there is data in the pipe and NODELAY is not set, then don't call 
+<BR>
+tcp_output().  And (if i understand correctly) don't do any Nagle in 
+<BR>
+tcp_output().
+<BR>
+<P><P>OK, so forget #1 above (it doesn't meet most of our idea of &quot;Nagle on send&quot;).
+<BR>
+<P>(I'm going to concentrate on #2, since i have a problem with #3, since i think 
+<BR>
+it means that the next ACK received will cause a small packet to be generated, 
+<BR>
+even if the next ACK doesn't acknowledge all outstanding data, and i'm not 
+<BR>
+sure that is a good idea.  Also, the *intent* (and, i guess, mostly the 
+<BR>
+*effect*) of #3 is the same as that of #2.)
+<BR>
+<P>Case #2 breaks into two categories, based on what happens if the current 
+<BR>
+window/cwnd doesn't allow you to immediately transmit all the data from the 
+<BR>
+send:
+<BR>
+<P>2a.  If because of window issues all the data can't be transmitted, then 
+<BR>
+future transmissions will be constrained by things like &quot;traditional Nagle&quot;.
+<BR>
+<P>2b.  If because of window issues all the data can't be transmitted, then 
+<BR>
+future transmissions will *not* be constrained by things like &quot;traditional 
+<BR>
+Nagle&quot;.
+<BR>
+<P><P>I think one would prefer 2b.  I.e., the application makes a 64KB send() into a 
+<BR>
+somewhat full pipe (i.e., data already transmitting), then you'd like to send 
+<BR>
+the final 1296 (whatever) bytes as soon as the window allows, rather than 
+<BR>
+waiting for all the data to drain from the pipe and the acknowledgment of the 
+<BR>
+final 1460 byte segment.
+<BR>
+<P>Thoughts?
+<BR>
+<P>Greg
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1665.html">Chadi M. BARAKAT: "Bandwidth estimation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1666">[ date ]</A>
+<A HREF="index.html#1666">[ thread ]</A>
+<A HREF="subject.html#1666">[ subject ]</A>
+<A HREF="author.html#1666">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

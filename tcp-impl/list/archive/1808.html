@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 12:26:39 1999" -->
+<!-- isoreceived="19990915162639" -->
+<!-- sent="Wed, 15 Sep 1999 09:22:51 PDT" -->
+<!-- isosent="19990915162251" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="199909151622.JAA18565@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Wed, 15 Sep 1999 11:51:53 PDT" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151622.JAA18565@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 12:22:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1807.html">Vern Paxson: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1810.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1808">[ date ]</A>
+<A HREF="index.html#1808">[ thread ]</A>
+<A HREF="subject.html#1808">[ subject ]</A>
+<A HREF="author.html#1808">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 1. Emerging DiffServ technology redefines a protocol header field (dangerous
+</EM><BR>
+<EM>&gt; proposition at best).
+</EM><BR>
+<EM>&gt; 2. It's discovered that header field redefinition in the DiffServ emerging
+</EM><BR>
+<EM>&gt; technology (not a standard yet) causes TCPs (a well established, long
+</EM><BR>
+<EM>&gt; existing standard) to send resets when they previously did not. 
+</EM><BR>
+<EM>&gt; 3. DiffServ bug causes undesirable TCP behavior.
+</EM><BR>
+<EM>&gt; 4. Fix to DiffServ: change all existing TCPs.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Very illogical.  DiffServ should have formalized the TCP change before
+</EM><BR>
+<EM>&gt; proceeding with the DiffServ implementation.  They are very naughty network
+</EM><BR>
+<EM>&gt; citizens.
+</EM><BR>
+<P>That's not the sequence.  It's:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.  Emerging DiffServ technology redefines a protocol header field
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dangerous proposition at best).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.  This change is widely publicized and debated.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.  A formal IETF last call occurs saying &quot;here's your last chance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to comment on this before it becomes a Proposed Standard.&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No one raises the TCP problem.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.  Diffserv becomes a Proposed Standard.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.  6 months later it's discvered that the redefinition causes one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP to send resets.  The email describing this says
+<BR>
+<P><EM>		  &gt; As it turns out, this is an archaically (sp) known
+</EM><BR>
+<EM>		  &gt; problem, with a pre-existing patch.
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and elicits a reply:
+<BR>
+<P><EM>		  &gt; MacTCP is *old*, and has many more problems than
+</EM><BR>
+<EM>		  &gt; this.  Please tell your help desks that if they run
+</EM><BR>
+<EM>		  &gt; across users still using MacTCP, that they advise
+</EM><BR>
+<EM>		  &gt; them to upgrade to at least MacOS 7.5.3 (preferably
+</EM><BR>
+<EM>		  &gt; 7.5.5), which is free, and includes Open
+</EM><BR>
+<EM>		  &gt; Transport.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.  The question now is how many significant TCPs are actually
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;effected, and, accordingly, how to fix the problem.
+<BR>
+<P>- Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1807.html">Vern Paxson: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1810.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1808">[ date ]</A>
+<A HREF="index.html#1808">[ thread ]</A>
+<A HREF="subject.html#1808">[ subject ]</A>
+<A HREF="author.html#1808">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

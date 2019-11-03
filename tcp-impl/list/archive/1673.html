@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="mrosu@us.ibm.com (mrosu@us.ibm.com)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Tue Mar 16 01:48:52 1999" -->
+<!-- isoreceived="19990316064852" -->
+<!-- sent="Tue, 16 Mar 1999 01:41:20 -0500" -->
+<!-- isosent="19990316064120" -->
+<!-- name="mrosu@us.ibm.com" -->
+<!-- email="mrosu@us.ibm.com" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="85256736.0024BCC6.00@D51MTA03.pok.ibm.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256736.0024BCC6.00@D51MTA03.pok.ibm.com&gt;"><EM>mrosu@us.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Mar 16 1999 - 01:41:20 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1674.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1673">[ date ]</A>
+<A HREF="index.html#1673">[ thread ]</A>
+<A HREF="subject.html#1673">[ subject ]</A>
+<A HREF="author.html#1673">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;Hello,
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;Now for the value of the dup ACK counter at the end of fast Recovery, I
+<BR>
+&nbsp;&nbsp;&nbsp;think that here the value of this counter doesn't count a lot.
+<BR>
+<P>Why? Because of lost ACKs?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Setting
+<BR>
+&nbsp;&nbsp;&nbsp;it to zero may prohibit the source from detecting some losses as you
+<BR>
+&nbsp;&nbsp;&nbsp;show in your exemple. Also taking the number of duplicate ACKs into
+<BR>
+&nbsp;&nbsp;&nbsp;account may cause a problem because we are not sure if these duplicate
+<BR>
+&nbsp;&nbsp;&nbsp;ACKs correspond to packets sent before or after the loss. A duplicate
+<BR>
+&nbsp;&nbsp;&nbsp;ACK for a packet sent before the missing packet is not a signal for the
+<BR>
+&nbsp;&nbsp;&nbsp;loss of this packet.
+<BR>
+<P>At the end of Fast Recovery, if you update the dup ACK counter after
+<BR>
+each partial or full ACK as I proposed, you have a useful count of the
+<BR>
+packets sent after the loss and received by the other end. As long as
+<BR>
+you don't overestimate this count, any number should be more useful than zero.
+<BR>
+<P>Marcel
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I propose here to not count on the counter and
+<BR>
+&nbsp;&nbsp;&nbsp;instead to stretch the Fast Recovery phase to cover the new packets sent
+<BR>
+&nbsp;&nbsp;&nbsp;during Fast Recovery. Let X be the highest sequence number sent when the
+<BR>
+&nbsp;&nbsp;&nbsp;Fast Recovery phase is called, let Y be the highest sequence number sent
+<BR>
+&nbsp;&nbsp;&nbsp;when the last loss in the window is retransmitted. When an ACK for this
+<BR>
+&nbsp;&nbsp;&nbsp;loss is received, if this ACK askes for a packet less than Y than we can
+<BR>
+&nbsp;&nbsp;&nbsp;conclude that this packet is also lost without waiting for dup ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;because at least one Roundtrip time has passed since its transmission.
+<BR>
+&nbsp;&nbsp;&nbsp;Now if the ACK carries a sequence number more than or equal to Y than
+<BR>
+&nbsp;&nbsp;&nbsp;dup ACK can be set to zero and normal Fast Retransmit can be used to
+<BR>
+&nbsp;&nbsp;&nbsp;detect the subsequent losses.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Chadi
+<BR>
+&nbsp;&nbsp;&nbsp;--
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**  Chadi Mohamad BARAKAT  **
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/\
+<BR>
+&nbsp;&nbsp;&nbsp;PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256736.0024BCC6.00@D51MTA03.pok.ibm.com&gt;">Chadi.Barakat@sophia.inria.fr</A>
+<BR>
+&nbsp;&nbsp;&nbsp;2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+<BR>
+&nbsp;&nbsp;&nbsp;06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1674.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1673">[ date ]</A>
+<A HREF="index.html#1673">[ thread ]</A>
+<A HREF="subject.html#1673">[ subject ]</A>
+<A HREF="author.html#1673">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

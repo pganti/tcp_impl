@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP performance in asymmetri</TITLE>
+<META NAME="Author" CONTENT="Kathleen Nichols (nichols@com21.com)">
+<META NAME="Subject" CONTENT="Re: TCP performance in asymmetric networks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP performance in asymmetric networks</H1>
+<!-- received="Thu May 22 15:44:19 1997" -->
+<!-- isoreceived="19970522194419" -->
+<!-- sent="Thu, 22 May 1997 15:27:01 -0700" -->
+<!-- isosent="19970522222701" -->
+<!-- name="Kathleen Nichols" -->
+<!-- email="nichols@com21.com" -->
+<!-- subject="Re: TCP performance in asymmetric networks" -->
+<!-- id="199705222227.PAA01329@walnut.com21.com" -->
+<!-- inreplyto="TCP performance in asymmetric networks" -->
+<STRONG>From:</STRONG> Kathleen Nichols (<A HREF="mailto:nichols@com21.com?Subject=Re:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;199705222227.PAA01329@walnut.com21.com&gt;"><EM>nichols@com21.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 22 1997 - 18:27:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#421">[ date ]</A>
+<A HREF="index.html#421">[ thread ]</A>
+<A HREF="subject.html#421">[ subject ]</A>
+<A HREF="author.html#421">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:subir@enterprise.hybrid.com?Subject=Re:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;199705222227.PAA01329@walnut.com21.com&gt;">subir@enterprise.hybrid.com</A> Thu May 22 13:04:42 1997
+</EM><BR>
+<P><EM>&gt;         Most of the emerging broadband access networks are asymmetric in
+</EM><BR>
+<EM>&gt; nature, i.e., high BW in the downstream direction and low BW in the
+</EM><BR>
+<EM>&gt; upstream direction. Examples include HFC, ADSL, Satellite, Wireless
+</EM><BR>
+<EM>&gt; access networks. In these systems, TCP Tahoe shows better performance as
+</EM><BR>
+<EM>&gt; compared to TCP Reno. This problem has been analyzed by Lakshman et.al.
+</EM><BR>
+<EM>&gt; in their paper &quot;Window based error recovery and flow control with a slow
+</EM><BR>
+<EM>&gt; ack channel: A study of TCP/IP performance&quot;, available at
+</EM><BR>
+<EM>&gt; <A HREF="http://tesla.csl.uiuc.edu/~madhow/publications.html">http://tesla.csl.uiuc.edu/~madhow/publications.html</A>. The reason for this
+</EM><BR>
+<P>Subir,
+<BR>
+Have you actually observed the problems mentioned in this paper in your
+<BR>
+cable data systems? I took a look at that paper and there seem to me
+<BR>
+to be some assumptions made about the underlying MAC that would be
+<BR>
+a poor design. Lakshman et al state that a solution is to control 
+<BR>
+access to the upstream link. Com21's systems do this and it is
+<BR>
+certainly possibly within the MCNS spec. It seems like most of the
+<BR>
+buffer overflow problems could be solved with sufficiently large buffers.
+<BR>
+The asymmetry problem appears somewhat overblown, too, as the downstream
+<BR>
+bandwidth is the limiter for two-way cable modems and the telco return
+<BR>
+is only return limited if there's no sharing of the downstream. Admittedly,
+<BR>
+there are still a lot of unknowns about cable data system performance,
+<BR>
+but we haven't seen this sort of thing in detailed simulations or in
+<BR>
+packet traces on our systems. I'd be inclined to try to get the MAC
+<BR>
+designed right before trying to change the implementation of a protocol
+<BR>
+that runs on a lot more kinds of systems.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathie
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:nichols@com21.com?Subject=Re:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;199705222227.PAA01329@walnut.com21.com&gt;">nichols@com21.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#421">[ date ]</A>
+<A HREF="index.html#421">[ thread ]</A>
+<A HREF="subject.html#421">[ subject ]</A>
+<A HREF="author.html#421">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

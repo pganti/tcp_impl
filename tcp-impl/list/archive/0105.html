@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: OOB [was Re: HTTP and RFC1122 ha</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="OOB [was Re: HTTP and RFC1122 half duplex close]">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>OOB [was Re: HTTP and RFC1122 half duplex close]</H1>
+<!-- received="Wed Feb 19 21:23:07 1997" -->
+<!-- isoreceived="19970220022307" -->
+<!-- sent="Wed, 19 Feb 1997 16:17:34 -0500 (EST)" -->
+<!-- isosent="19970219211734" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="OOB [was Re: HTTP and RFC1122 half duplex close]" -->
+<!-- id="199702192117.QAA23602@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20OOB%20[was%20Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close]&In-Reply-To=&lt;199702192117.QAA23602@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 19 1997 - 16:17:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0107.html">Larry Backman: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0108.html">der Mouse : "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#105">[ date ]</A>
+<A HREF="index.html#105">[ thread ]</A>
+<A HREF="subject.html#105">[ subject ]</A>
+<A HREF="author.html#105">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+To pick up on a site comment, tangential to the main point of the note
+<BR>
+I'm replying to,
+<BR>
+<P><EM>&gt; [...late '80s...4.2...]  The Bsd OOB confusion is a perfect example
+</EM><BR>
+<EM>&gt; as we at least, and I'm sure most other stacks also, have code to do
+</EM><BR>
+<EM>&gt; OOB either Bsd style or correctly.
+</EM><BR>
+<P>I don't think there _is_ any &quot;correctly&quot;.  TCP does not have OOB.  What
+<BR>
+it has is an urgent pointer.  Some grad student who must have been
+<BR>
+either on drugs or on a minimal understanding of TCP thought it would
+<BR>
+be useful to take the byte the urgent pointer points to and treat it as
+<BR>
+a byte in an out-of-band channel.
+<BR>
+<P>This almost works.  If you send one byte at time, with low data rates
+<BR>
+compared to the network bandwidth*latency product, it will work fine.
+<BR>
+<P>But as soon as you try to send high data rates, use it over a lossy
+<BR>
+network, or certain other circumstances you can figure out by reading
+<BR>
+the RFC specifying what TCP really has, you'll see that at a minimum
+<BR>
+the urgent pointer can be advanced to a later &quot;OOB&quot; byte before any
+<BR>
+packet is emitted with the urgent pointer pointing to the earlier &quot;OOB&quot;
+<BR>
+byte, which results in merging the previous byte into the non-&quot;OOB&quot;
+<BR>
+data stream.  It can probably fail in other ways too; I haven't thought
+<BR>
+about it much beyond determining that it definitely is broken.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20OOB%20[was%20Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close]&In-Reply-To=&lt;199702192117.QAA23602@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0106.html">Steve Alexander: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0107.html">Larry Backman: "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0108.html">der Mouse : "Re: OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#105">[ date ]</A>
+<A HREF="index.html#105">[ thread ]</A>
+<A HREF="subject.html#105">[ subject ]</A>
+<A HREF="author.html#105">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

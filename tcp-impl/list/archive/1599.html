@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 21:38:25 1999" -->
+<!-- isoreceived="19990218023825" -->
+<!-- sent="Wed, 17 Feb 1999 21:33:27 -0500 (EST)" -->
+<!-- isosent="19990218023327" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902180233.VAA05196@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180233.VAA05196@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 21:33:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1600.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1598.html">der Mouse : "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1600.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1599">[ date ]</A>
+<A HREF="index.html#1599">[ thread ]</A>
+<A HREF="subject.html#1599">[ subject ]</A>
+<A HREF="author.html#1599">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; What's the difference [on the wire] between a flush bit in the
+</EM><BR>
+<EM>&gt;&gt; send() system call, and explicit setsockopt()'s turning off
+</EM><BR>
+<EM>&gt;&gt; TCP_NODELAY off before a send() and on afterwards?
+</EM><BR>
+<P>None that I can see.
+<BR>
+<P><EM>&gt; The problem is that there isn't really a required correlation between
+</EM><BR>
+<EM>&gt; send() calls and segments, regardless of NODELAY (or anything else I
+</EM><BR>
+<EM>&gt; can find, excepting _only_ the proposed flush bit, which might be
+</EM><BR>
+<EM>&gt; defined as guaranteeing that the last byte of the write is the last
+</EM><BR>
+<EM>&gt; byte of a segment).
+</EM><BR>
+<P>That's not how I read it.  Suppose there is no send window available,
+<BR>
+MSS 1500, 500 bytes buffered waiting for window, and then, without any
+<BR>
+network traffic occurring during it, the application does
+<BR>
+write-with-flush 10 bytes then ordinary write 10 bytes more.  I don't
+<BR>
+think any of the flush-bit proposals would require the next segment to
+<BR>
+hold 510 bytes rather than 520 (assuming that when the window opens, it
+<BR>
+opens at least 520 bytes' worth).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180233.VAA05196@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1600.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1598.html">der Mouse : "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1600.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1599">[ date ]</A>
+<A HREF="index.html#1599">[ thread ]</A>
+<A HREF="subject.html#1599">[ subject ]</A>
+<A HREF="author.html#1599">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

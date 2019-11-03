@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: question about Nagle algorit</TITLE>
+<META NAME="Author" CONTENT="Erich Nahum (nahum@watson.ibm.com)">
+<META NAME="Subject" CONTENT="Re: question about Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: question about Nagle algorithm</H1>
+<!-- received="Wed Feb 18 07:56:22 1998" -->
+<!-- isoreceived="19980218125622" -->
+<!-- sent="Wed, 18 Feb 1998 10:51:03 -0500 (EST)" -->
+<!-- isosent="19980218155103" -->
+<!-- name="Erich Nahum" -->
+<!-- email="nahum@watson.ibm.com" -->
+<!-- subject="Re: question about Nagle algorithm" -->
+<!-- id="9802181551.AA28848@meghana.watson.ibm.com" -->
+<!-- inreplyto="199802180049.QAA06937@napali.hpl.hp.com" -->
+<STRONG>From:</STRONG> Erich Nahum (<A HREF="mailto:nahum@watson.ibm.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;9802181551.AA28848@meghana.watson.ibm.com&gt;"><EM>nahum@watson.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 10:51:03 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0950.html">David Mosberger: "question about Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0961.html">David Mosberger: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0961.html">David Mosberger: "Re: question about Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#953">[ date ]</A>
+<A HREF="index.html#953">[ thread ]</A>
+<A HREF="subject.html#953">[ subject ]</A>
+<A HREF="author.html#953">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+David Mosberger writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; [Solution 1:]
+</EM><BR>
+<EM>&gt;   The solution is to inhibit the sending of new TCP  segments  when
+</EM><BR>
+<EM>&gt;   new  outgoing  data  arrives  from  the  user  if  any previously
+</EM><BR>
+<EM>&gt;   transmitted data on the connection remains unacknowledged.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; [Solution 2:]
+</EM><BR>
+<EM>&gt;   The solution is to inhibit the sending of new small TCP segments
+</EM><BR>
+<EM>&gt;   when new outgoing data arrives from the user if the previously
+</EM><BR>
+<EM>&gt;   transmitted data on the connection was small and remains
+</EM><BR>
+<EM>&gt;   unacknowledged (small == less than max. segment size).
+</EM><BR>
+<P>Hey David,
+<BR>
+<P>I believe the BSD derived TCP's follow solution 2 above; certainly
+<BR>
+AIX does.  The only difference between 1 and 2 as you describe
+<BR>
+them above seems to be the size of the segment in question.  Solution 
+<BR>
+1 forces TCP to behave in something similar to a stop-and-wait flow 
+<BR>
+control protocol, i.e., even if the segment is a full MTU size wait
+<BR>
+for ACKs to come back.  The spirit of the Nagle algorithm is to
+<BR>
+reduce the use of small packets.  Solution 2 means `have at most
+<BR>
+one outstanding small packet per conversation.'
+<BR>
+<P><EM>&gt; It seems to me that solution 2 more directly addresses Nagle's concern
+</EM><BR>
+<EM>&gt; while disturbing other traffic less.  E.g., consider the case of
+</EM><BR>
+<EM>&gt; sending an HTTP reply that has a size of 1.5*mss.  Nagle's algorithm
+</EM><BR>
+<EM>&gt; has the effect of sending the first segment immediately but delaying
+</EM><BR>
+<EM>&gt; the sending of the second (half-full) segment until the first segment
+</EM><BR>
+<EM>&gt; has been acknowledged.  This clearly is unacceptable for any
+</EM><BR>
+<EM>&gt; application that uses request/response style communication over a
+</EM><BR>
+<EM>&gt; single TCP connection.
+</EM><BR>
+<P>John Heidemann has a good writeup on this very issue that appeared
+<BR>
+in CCR last year.  It turns out Nagle isn't really an issue with 1.0
+<BR>
+traffic, since closing the connection forces the data out with the
+<BR>
+FIN.  However, it does affect 1.1 traffic, or 1.0 using persistent
+<BR>
+connections, where the connection stays open.
+<BR>
+<P><EM>&gt; It's interesting to note that the
+</EM><BR>
+<EM>&gt; description of Nagle's algorithm in Steven's TCP/IP Illustrated, Vol 1
+</EM><BR>
+<EM>&gt; reads:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	[The Nagle] algorithm says that a TCP connection can have only
+</EM><BR>
+<EM>&gt; 	one outstanding small segment that has not yet been
+</EM><BR>
+<EM>&gt; 	acknowledged.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is much closer to solution 2 than solution 1.
+</EM><BR>
+<P>As I mentioned, this seems to be what BSD does.
+<BR>
+<P><EM>&gt; So, apart from implementation complexit/speed issues, are there any
+</EM><BR>
+<EM>&gt; reasons not to use Solution 2?
+</EM><BR>
+<P>Is there a big difference between the two solutions in terms of
+<BR>
+implementation complexity or speed?  I don't see it.
+<BR>
+<P>There is a related issue about how disabling Nagle on each connection
+<BR>
+is a performance issue, since it's on the fast path for serving an
+<BR>
+HTTP request, but that doesn't sound like what you're talking about.
+<BR>
+<P>-Erich
+<BR>
+<P><PRE>
+-- 
+Erich M. Nahum                  IBM T.J. Watson Research Center
+Networking Research             P.O. Box 704
+<A HREF="mailto:nahum@watson.ibm.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;9802181551.AA28848@meghana.watson.ibm.com&gt;">nahum@watson.ibm.com</A>            Yorktown Heights NY 10598
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0950.html">David Mosberger: "question about Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0961.html">David Mosberger: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0961.html">David Mosberger: "Re: question about Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#953">[ date ]</A>
+<A HREF="index.html#953">[ thread ]</A>
+<A HREF="subject.html#953">[ subject ]</A>
+<A HREF="author.html#953">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

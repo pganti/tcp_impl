@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 10:25:11 1997" -->
+<!-- isoreceived="19970403152511" -->
+<!-- sent="Thu, 03 Apr 1997 13:15:52 -0500" -->
+<!-- isosent="19970403181552" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704031815.NAA11816@brookfield.ans.net" -->
+<!-- inreplyto="9704021637.AA03925@pachyderm.pa.dec.com" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704031815.NAA11816@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 13:15:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0314.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#315">[ date ]</A>
+<A HREF="index.html#315">[ thread ]</A>
+<A HREF="subject.html#315">[ subject ]</A>
+<A HREF="author.html#315">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:9704021637.AA03925@pachyderm.pa.dec.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704031815.NAA11816@brookfield.ans.net&gt;">9704021637.AA03925@pachyderm.pa.dec.com</A>&gt;, Jim Gettys writes:
+<BR>
+<EM>&gt; The reality of HTTP is that it is an interactive bulk transport
+</EM><BR>
+<EM>&gt; protocol; i.e. there are users, who often changes their minds as a result
+</EM><BR>
+<EM>&gt; of what they see on the screen, and then surf on to another page
+</EM><BR>
+<EM>&gt; (or further down the screen, with a different set of embedded graphics
+</EM><BR>
+<EM>&gt; to fetch).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Control of latency by a browser is therefore important.  This isn't just
+</EM><BR>
+<EM>&gt; file transfer...
+</EM><BR>
+<P>This is something that should be fixed within HTTP using a single TCP
+<BR>
+flow.
+<BR>
+<P>&nbsp;&nbsp;Major HTTP/1.1 goals include: 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;improving performance for end users 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lower HTTP's load on the Internet for the same amount of &quot;real work&quot; 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make HTTP a good &quot;network citizen&quot; 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enable applications to work reliably even with caching 
+<BR>
+<P>&nbsp;&nbsp;HTTP/1.1 includes a number of new elements that together should have a
+<BR>
+&nbsp;&nbsp;major effect on Internet traffic. These include:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transport improvements, consisting of persistent connections,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;additions to allow pipelining,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transport data compression, and range requests. All of these
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;improvements are optional parts of HTTP/1.1. 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caching extensions, to allow applications to work reliably in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the face of caching, and to allow applications to mark more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content cacheable, including the results of searches.
+<BR>
+<P>That is from:
+<BR>
+<P>&nbsp;&nbsp;<A HREF="http://www.w3.org/pub/WWW/Protocols/HTTP/Performance/Pipeline.html">http://www.w3.org/pub/WWW/Protocols/HTTP/Performance/Pipeline.html</A>
+<BR>
+<P>which you no doubt know about since your name is on it.
+<BR>
+<P>The client can make limited range requests, overlapped to keep data in
+<BR>
+flight (for example: request two large ranges and when the first is
+<BR>
+complete request a third).  When you have to switch streams because a
+<BR>
+different inline is in view, request ranges from that one.
+<BR>
+<P>I don't think HTTP supports it yet but the ability to say &quot;clear my
+<BR>
+list of requests that you haven't already started sending and send
+<BR>
+this instead&quot;.  It might also be useful to be able to make one request
+<BR>
+to send in chunks and then use this &quot;cancel and reshuffle&quot; request if
+<BR>
+the sending order needs to change.
+<BR>
+<P>Any WAN transport is going to have to keep data in flight to keep
+<BR>
+performance up and to do so is going to have to live with a delay in
+<BR>
+switching from one stream to another including living with some data
+<BR>
+in the wire and in the router queue in front of the stream you just
+<BR>
+switched to.  The only optimization you can do is to try to reduce the
+<BR>
+amount of data in flight so as not to be excessive and slow the
+<BR>
+switch.  Reducing data in flight too much would reduce performance in
+<BR>
+the normal streaming case.
+<BR>
+<P>One way to reduce the cutover time is to provide an indication in the
+<BR>
+initial HTTP request of the clients recieve buffer size.  The server
+<BR>
+can set the send buffer size to match (accomodating faster links as
+<BR>
+well as slower links and allowing the default to be set small) before
+<BR>
+ever writing to the socket.  This way the amount of data in the send
+<BR>
+buffer on the server host prior to switch over is at most 1 send
+<BR>
+buffer worth (which should be only a few RTT if the client hasn't set
+<BR>
+the receive buffer way too big.
+<BR>
+<P><EM>&gt; Now if you'd like the Web to go off and invent its own transport protocol
+</EM><BR>
+<EM>&gt; rather than TCP, I'm sure there are people in the Web community who'd be
+</EM><BR>
+<EM>&gt; happy to do so.  Just don't count on them understanding congestion and
+</EM><BR>
+<EM>&gt; flow control issues very well. :-(.  And maybe this is the right thing
+</EM><BR>
+<EM>&gt; to do ultimately.  But there be dragons there, as this mailing list certainly
+</EM><BR>
+<EM>&gt; knows.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 				- Jim
+</EM><BR>
+<P>I don't follow the HTTP WG but I thought the more clueful among them
+<BR>
+are trying to consolidate the HTTP multiple flow mess into one TCP
+<BR>
+flow as the HTTP 1.1 changes do.
+<BR>
+<P>Curtis
+<BR>
+<P>ps- This is no longer about TCP implementation so if we want to talk
+<BR>
+further about possible ways to tune HTTP can we take this offline.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0314.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#315">[ date ]</A>
+<A HREF="index.html#315">[ thread ]</A>
+<A HREF="subject.html#315">[ subject ]</A>
+<A HREF="author.html#315">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

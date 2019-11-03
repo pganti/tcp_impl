@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="stanislav shalunov (shalunov@internet2.edu)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Mon Sep 18 20:17:57 2000" -->
+<!-- isoreceived="20000919001757" -->
+<!-- sent="18 Sep 2000 20:11:05 -0400" -->
+<!-- isosent="20000919001105" -->
+<!-- name="stanislav shalunov" -->
+<!-- email="shalunov@internet2.edu" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="87itrtw89y.fsf@cain.internet2.edu" -->
+<!-- inreplyto="200009181839.OAA19667@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> stanislav shalunov (<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87itrtw89y.fsf@cain.internet2.edu&gt;"><EM>shalunov@internet2.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 18 2000 - 20:11:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2344">[ date ]</A>
+<A HREF="index.html#2344">[ thread ]</A>
+<A HREF="subject.html#2344">[ subject ]</A>
+<A HREF="author.html#2344">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+der Mouse &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87itrtw89y.fsf@cain.internet2.edu&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt; writes:
+<BR>
+<P><EM>&gt; &gt; You don't need 32 bits of true randomness per ISN.  Once you have 128
+</EM><BR>
+<EM>&gt; &gt; bits of true randomness you can safely get trillions of ISNs without
+</EM><BR>
+<EM>&gt; &gt; giving an attacker a chance to recognize you're not using a true
+</EM><BR>
+<EM>&gt; &gt; random number generator.
+</EM><BR>
+<P><EM>&gt; That statement sounds highly dubious to me.  What are your grounds for
+</EM><BR>
+<EM>&gt; making it?
+</EM><BR>
+<P>Take that 128 bits of true ranodmness and use it as the key for AES
+<BR>
+running in counter mode.  I believe it's accepted that about 2^{128/3}
+<BR>
+blocks of output will be indistinguishable from truely random data by
+<BR>
+attacker who cannot break the cipher in use.  (At least, I didn't ever
+<BR>
+hear any cryptographer dispute this very conservative estimate.)
+<BR>
+<P>Have you looked at the Yarrow paper I gave a link to?
+<BR>
+<P><EM>&gt; That is, as far as I can see, you lose a certain amount of entropy with
+</EM><BR>
+<EM>&gt; each ISN you generate.  Your ISNs are only as unguessable as the amount
+</EM><BR>
+<EM>&gt; of entropy you drain off to generate each one.
+</EM><BR>
+<P>No.  The point is that once you have certain amount of entropy further
+<BR>
+increases bring no real increase in security of the system.  Most
+<BR>
+people still feel more comfortable with using &quot;true&quot; randomness to
+<BR>
+generate things like long-living keys.
+<BR>
+<P><EM>&gt; And once you've no entropy left un-exposed, all you have left is a PRNG
+</EM><BR>
+<EM>&gt; whose internal state the attacker has to deduce.  This can be made
+</EM><BR>
+<EM>&gt; comparatively difficult, for example if you use a decent one-way
+</EM><BR>
+<EM>&gt; function between the entropy and the resulting ISN, but by no means
+</EM><BR>
+<EM>&gt; impossible.  In theory, the attacker could even brute-force it.
+</EM><BR>
+<P>I don't understand how you can brute-force something in theory.
+<BR>
+Brute-force search of key space isn't theoretic.  It's practical.
+<BR>
+If it's practically infeasible to search the key space, there's
+<BR>
+nothing to worry about.
+<BR>
+<P>And 128 bits Ought to be Enough for Everybody(TM).  (But if they
+<BR>
+aren't enough for you, you can always replace 128 with 640 or more.)
+<BR>
+<P><EM>&gt; As for the attacker recognizing how you generate your ISNs, well, as
+</EM><BR>
+<EM>&gt; any crypto person will tell you, your security cannot, in more than the
+</EM><BR>
+<EM>&gt; short term, rest on keeping your algorithms themselves secret.
+</EM><BR>
+<P>You must be responding to somebody else's comments here.
+<BR>
+<P><EM>&gt; Or, of course, you could be lucky, and have hardware attached that
+</EM><BR>
+<EM>&gt; produces entropy faster than incoming connection attempts consume it.
+</EM><BR>
+<P>This is unnecessary, and, I think is prone to being less secure than a
+<BR>
+decent PRNG.
+<BR>
+<P>I guess the short summary should be that cryptographers know how to
+<BR>
+make good PRNGs, and they even give them away into public domain.
+<BR>
+On the other hands, non-cryptographers--predictably--have less thorough
+<BR>
+understanding of producing cryptographically secure PRNGs.
+<BR>
+<P><PRE>
+-- 
+Stanislav Shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87itrtw89y.fsf@cain.internet2.edu&gt;">shalunov@internet2.edu</A>&gt;	Internet Engineer, Internet2
+<P>&quot;The power of accurate observation is commonly called cynicism by
+those who have not got it.&quot;			-- G. B. Shaw
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2344">[ date ]</A>
+<A HREF="index.html#2344">[ thread ]</A>
+<A HREF="subject.html#2344">[ subject ]</A>
+<A HREF="author.html#2344">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

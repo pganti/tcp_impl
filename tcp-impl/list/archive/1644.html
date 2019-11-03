@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revised internet draft on su</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: revised internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revised internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Mar  1 20:07:01 1999" -->
+<!-- isoreceived="19990302010701" -->
+<!-- sent="Mon, 1 Mar 1999 18:03:07 -0700 (MST)" -->
+<!-- isosent="19990302010307" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: revised internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199903020103.SAA27399@calcite.rhyolite.com" -->
+<!-- inreplyto="revised internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903020103.SAA27399@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 01 1999 - 20:03:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1643.html">Jon Snader: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1644">[ date ]</A>
+<A HREF="index.html#1644">[ thread ]</A>
+<A HREF="subject.html#1644">[ subject ]</A>
+<A HREF="author.html#1644">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Jon Snader &lt;<A HREF="mailto:jsnader@ix.netcom.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903020103.SAA27399@calcite.rhyolite.com&gt;">jsnader@ix.netcom.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; I think it is also clear that there would
+</EM><BR>
+<EM>&gt; &gt; be wide support for an ID that said that the Nagle algorithm should be
+</EM><BR>
+<EM>&gt; &gt; implemented according to the spirit of RFC 896.  We seem to agree that
+</EM><BR>
+<EM>&gt; &gt; the right way is to delay an application's send request when the connection
+</EM><BR>
+<EM>&gt; &gt; is not idle, but not delay any anything otherwise.
+</EM><BR>
+<P><EM>&gt; RFC 896 says that *no* newly arrived data is to be sent if
+</EM><BR>
+<EM>&gt; the connection is not idle.  Most BSD derived implementations
+</EM><BR>
+<EM>&gt; will send new data if there is at least a full segment.  Are
+</EM><BR>
+<EM>&gt; you proposing to disallow this practice or is this still in
+</EM><BR>
+<EM>&gt; the spirit of RFC 896?
+</EM><BR>
+<P>I think sending full segments is in the spirit of RFC 896.  The problem
+<BR>
+that RFC 896 tries to solve is &quot;too many small packets.&quot;  RFC 896 is not
+<BR>
+about sending the absolute minimum number of packets or about minimizing
+<BR>
+latency.  It is an &quot;engineering solution&quot; to &quot;too many small packets.&quot;
+<BR>
+<P>On the other hand, does it matter whether you disallow that practice?
+<BR>
+If the link is not idle, then an Ack is coming back.  If the previous
+<BR>
+write which is causing that Ack was large, then the Ack will appear
+<BR>
+soon and the system is probably congestion-window constrained and
+<BR>
+unable to send any new data regardless.  If the previous write before
+<BR>
+the big write was small, then it makes sense to delay the new data no
+<BR>
+matter how large (provided the application does not the Nagle algorithm
+<BR>
+turned off in general).  In either of those cases, delaying a big
+<BR>
+write is either almost harmless or desirable.
+<BR>
+<P>Nothing can elminate the many legitimate situations where the Nagle
+<BR>
+algorithm must be turned off.  You can at most hope to make it do the
+<BR>
+right things on pure request-response applications.
+<BR>
+<P>I envision a flag sent through pru_send() like MORETOSEND but that says
+<BR>
+&quot;DO (NOT) DELAY IF IDLE,&quot; and removing the test of the NODELAY bit from
+<BR>
+tcp_output().  That would move the policy issue to sosend() which could
+<BR>
+worry about the definition of &quot;small&quot; or honor per-request &quot;do (not) delay&quot;
+<BR>
+flag bits from the application.  If data were delayed by tcp_output because
+<BR>
+tcp_output decide the link is idle and the new bit concurred, then later
+<BR>
+when an Ack finally arrived, all queued data would be sent (subject to
+<BR>
+windows, silly window avoidance, etc.).  That would solve the problem the
+<BR>
+previous proposal addresses.  This idea would require no new state in the
+<BR>
+TCB and less processing than the previous proposal.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903020103.SAA27399@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1643.html">Jon Snader: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1644">[ date ]</A>
+<A HREF="index.html#1644">[ thread ]</A>
+<A HREF="subject.html#1644">[ subject ]</A>
+<A HREF="author.html#1644">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

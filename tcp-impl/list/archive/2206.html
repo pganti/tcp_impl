@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Fri Jun 30 16:41:33 2000" -->
+<!-- isoreceived="20000630204133" -->
+<!-- sent="Fri, 30 Jun 2000 14:34:31 -0600" -->
+<!-- isosent="20000630203431" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="395D0456.CAF0613A@Novell.COM" -->
+<!-- inreplyto="200006301845.WAA25907@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395D0456.CAF0613A@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 30 2000 - 16:34:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2205.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2202.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2218.html">venkat venkatsubra: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2218.html">venkat venkatsubra: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2206">[ date ]</A>
+<A HREF="index.html#2206">[ thread ]</A>
+<A HREF="subject.html#2206">[ subject ]</A>
+<A HREF="author.html#2206">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The original algorithm accepts window updates if:
+<BR>
+<P>SEG.SEQ &gt; SND.WL1
+<BR>
+<P>OR if ((SEG.SEQ == SND.WL1) AND (SEG.ACK &gt; SND.WL2))
+<BR>
+<P>OR if ((SEG.ACK == SND.WL2) AND (SEG.WND &gt; SND.WND))
+<BR>
+<P>All that we have really changed is check # 2, which doesn't handle the
+<BR>
+case of retransmits involving bidirectional data transfer, as reproduced
+<BR>
+here again below:
+<BR>
+<P>OR if (SEG.ACK &gt;SND.WL2)
+<BR>
+<P>Unless someone explains the reason behind not using window information
+<BR>
+sent by receiver during retransmits, the above modification would
+<BR>
+correctly handle things.
+<BR>
+<P>So, window information from a received ACK would be used: [Assuming
+<BR>
+trimming has been already done and basic ACK validation has already been
+<BR>
+done].
+<BR>
+<P>- If the segment has new data
+<BR>
+- If the segment ACKs new data
+<BR>
+- If this is a window update [announcing a bigger window] that is not
+<BR>
+out of order.
+<BR>
+<P>Let me know whether there are any issues.
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P><A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395D0456.CAF0613A@Novell.COM&gt;">kuznet@ms2.inr.ac.ru</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hello!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Set SND.WND = SEG.WND: [Assuming Window scaling is correctly handled].
+</EM><BR>
+<EM>&gt; &gt; if (SEG.SEQ &gt; SND.WL1) [Set SND.WL1 = SEG.SEQ]
+</EM><BR>
+<EM>&gt; &gt; OR if (SEG.ACK &gt; SND.WL2) [Set SND.WL2 = SEG.WL2]
+</EM><BR>
+<EM>&gt; &gt; OR if ((SND.WL2 == SEG.ACK) &amp;&amp; (SEG.WND &gt; SND.WND))
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hey, stop! I tried to code this and immediately found, that
+</EM><BR>
+<EM>&gt; window is updated if:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         if (SEG.SEQ &gt; SND.WL1 ||
+</EM><BR>
+<EM>&gt;             SEG.ACK &gt; SND.UNA ||
+</EM><BR>
+<EM>&gt;             SEG.WND &gt; SND.WND)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In other words, it accepts each window expansion not depending on anything.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Are you sure, that you wanted this?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Alexey
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2206/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2205.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2202.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2218.html">venkat venkatsubra: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2218.html">venkat venkatsubra: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2206">[ date ]</A>
+<A HREF="index.html#2206">[ thread ]</A>
+<A HREF="subject.html#2206">[ subject ]</A>
+<A HREF="author.html#2206">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

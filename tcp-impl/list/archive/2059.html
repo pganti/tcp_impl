@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Pathologic Solaris TCP behav</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Pathologic Solaris TCP behavior">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Pathologic Solaris TCP behavior</H1>
+<!-- received="Tue Mar 21 01:50:16 2000" -->
+<!-- isoreceived="20000321065016" -->
+<!-- sent="Tue, 21 Mar 2000 01:42:22 -0500 (EST)" -->
+<!-- isosent="20000321064222" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Pathologic Solaris TCP behavior" -->
+<!-- id="200003210642.BAA26221@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Pathologic Solaris TCP behavior" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Pathologic%20Solaris%20TCP%20behavior&In-Reply-To=&lt;200003210642.BAA26221@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 21 2000 - 01:42:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2058.html">Ignacio Goyret: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2056.html">Wu-chang Feng: "Pathologic Solaris TCP behavior"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2059">[ date ]</A>
+<A HREF="index.html#2059">[ thread ]</A>
+<A HREF="subject.html#2059">[ subject ]</A>
+<A HREF="author.html#2059">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Has anyone experienced problems with Solaris TCP where you basically
+</EM><BR>
+<EM>&gt; get modem-speed performance over a full duplex ethernet link?
+</EM><BR>
+<P>This sounds to me a lot more like broken full-duplex than like a broken
+<BR>
+TCP stack.  I had very similar performance problems with a NetBSD/alpha
+<BR>
+machine on 100baseTX until I disabled autonegotiation, hardwiring both
+<BR>
+ends to 100/full.  In another case I know of, the problem was that the
+<BR>
+OS (a Linux variant, in this case) claimed the card was in full-duplex
+<BR>
+but it was not in fact so.
+<BR>
+<P>Do you have the switch set to autonegotiate?  The Netras?  Try
+<BR>
+hand-configuring full-duplex.  If that fails try hand-configuring
+<BR>
+half-duplex.  Also try hand-configuring the speed, if the cards are
+<BR>
+100-capable; if your wiring is not up to scratch it may work at 10 but
+<BR>
+produce piles of errors at 100.
+<BR>
+<P><EM>&gt; On the incoming interface of the destination machine (which is
+</EM><BR>
+<EM>&gt; completely unloaded) I get a large number of Ierrs.....
+</EM><BR>
+<P>This is a very strong indication that the problem is high packet loss
+<BR>
+caused by broken hardware behavior, not a TCP stack problem at all.
+<BR>
+The stack is probably doing as well as it can given the high loss rates
+<BR>
+it's faced with.  My first guess is a duplex mismatch; my second is
+<BR>
+attempting 100baseTX over wiring that's not up to spec for 100Mbit.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Pathologic%20Solaris%20TCP%20behavior&In-Reply-To=&lt;200003210642.BAA26221@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2058.html">Ignacio Goyret: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2056.html">Wu-chang Feng: "Pathologic Solaris TCP behavior"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2059">[ date ]</A>
+<A HREF="index.html#2059">[ thread ]</A>
+<A HREF="subject.html#2059">[ subject ]</A>
+<A HREF="author.html#2059">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

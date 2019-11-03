@@ -1,0 +1,309 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Memphis Minutes</TITLE>
+<META NAME="Author" CONTENT="Steve Alexander (sca@refugee.engr.sgi.com)">
+<META NAME="Subject" CONTENT="Memphis Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Memphis Minutes</H1>
+<!-- received="Sat Apr 12 15:12:31 1997" -->
+<!-- isoreceived="19970412191231" -->
+<!-- sent="Sat, 12 Apr 1997 15:05:39 -0700" -->
+<!-- isosent="19970412220539" -->
+<!-- name="Steve Alexander" -->
+<!-- email="sca@refugee.engr.sgi.com" -->
+<!-- subject="Memphis Minutes" -->
+<!-- id="199704122205.PAA18292@refugee.engr.sgi.com" -->
+<STRONG>From:</STRONG> Steve Alexander (<A HREF="mailto:sca@refugee.engr.sgi.com?Subject=Re:%20Memphis%20Minutes&In-Reply-To=&lt;199704122205.PAA18292@refugee.engr.sgi.com&gt;"><EM>sca@refugee.engr.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Apr 12 1997 - 18:05:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0329.html">Steve Alexander: "Memphis slides online"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0336.html">Matt Mathis: "Re: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0336.html">Matt Mathis: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0338.html">Vern Paxson: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0339.html">Larry Backman: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0340.html">Frank T Solensky: "RE: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0341.html">der Mouse : "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0343.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0344.html">Jonathan Webb: "RE: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0358.html">Scott Dawson: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0359.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0360.html">Scott Dawson: "Re: Memphis Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#328">[ date ]</A>
+<A HREF="index.html#328">[ thread ]</A>
+<A HREF="subject.html#328">[ subject ]</A>
+<A HREF="author.html#328">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+If you see things that need clarification or outright correction, please
+<BR>
+let me know by 4/18.
+<BR>
+<P>Thanks,
+<BR>
+-- Steve
+<BR>
+<P><P>
+<P>
+The first formal meeting of the TCP Implementor's Working Group was held at
+<BR>
+1:30 PM on Monday, April 7th.  The chairs of the group are Steve Alexander
+<BR>
+(<A HREF="mailto:sca@sgi.com?Subject=Re:%20Memphis%20Minutes&In-Reply-To=&lt;199704122205.PAA18292@refugee.engr.sgi.com&gt;">sca@sgi.com</A>) of Silicon Graphics and Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Memphis%20Minutes&In-Reply-To=&lt;199704122205.PAA18292@refugee.engr.sgi.com&gt;">vern@ee.lbl.gov</A>) of
+<BR>
+Lawrence Berkeley Labs.
+<BR>
+<P>Vern started off the meeting by presenting the agenda.  In order to ensure that
+<BR>
+the attendees were up-to-date, Vern then presented a brief overview of the
+<BR>
+scope, charter, and deliverables of the group.
+<BR>
+<P>A brief overview of the policy on naming of vendor names followed.  The policy
+<BR>
+is currently that it is acceptable to mention vendor names explicitly on the
+<BR>
+mailing list, or in informal discussions, but not in official products of the
+<BR>
+group, e.g. RFCs.  In general, this is motivated by the belief that information
+<BR>
+about bugs in vendor releases tends to become out-of-date rather quickly, and
+<BR>
+that embedding such information in documents with a long life-time is
+<BR>
+problematic.
+<BR>
+<P>Vern then presented an overview of the current format of the I-D on known
+<BR>
+TCP problems.  This document is an enumeration of problem descriptions, with
+<BR>
+each description containing:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Name
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Significance (this is an impact, not a MUST/SHOULD/MAY)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Traces (if available)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Information about Detection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Suggested Fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Any Specific Information pertaining to the problem
+<BR>
+<P>Vern gave an overview of the current I-D status.  At present, it has
+<BR>
+information about four problems:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- no slow start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- no slow start after retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- retransmission of different data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- failure to retain above-sequence data (violates SHOULD, not MUST)
+<BR>
+<P>The problems remaining to be documented include:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- initial RTO too low
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- uninitialized congestion window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- slow-start with two segments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- violations of delayed ACK rules
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- failure to correctly set PSH
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Brakmo/Peterson header prediction bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Brakmo/Peterson deflation bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- fast retransmit with timestamp sends two segments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Dawson keepalive problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- failure to correctly implement Nagle's algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- keepalive behavior (0-byte/1-byte)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- failure to ACK above-sequence data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- predictable ISN security problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- SYN-flood security problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- failure to implement fast retransmit/recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RTO estimation on slow links
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- replies to random ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ICMP error handling
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- half-duplex close ignores subsequent data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- urgent pointer confusion
+<BR>
+<P>At this point, Vern briefly enumerated issues surrounding test tools.  The
+<BR>
+chairs are soliciting a list for compilation into an I-D.  The current goal
+<BR>
+is to have a first draft of this I-D available by the Munich meeting in August.
+<BR>
+There are a few technical issues related to some of the existing tools, such
+<BR>
+as Steve Parker's Packet Shell.  These are:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- a portable &quot;raw socket&quot; interface for such tools to use
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- how to suppress responses from the host TCP
+<BR>
+<P>These need to be discussed, either directly between the interested parties, or
+<BR>
+on the group mailing list.
+<BR>
+<P>Vern closed with a request for volunteers to help with the following areas:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- reporting any problems not on the current list
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- working on detailed descriptions of known problems for inclusion in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the I-D
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- developing new testing tools
+<BR>
+<P>This concluded the formal agenda and open discussion began.  The following
+<BR>
+issues were raised:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Is the group formally attempting to survey all available
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementations for the known problems, or in an effort to find
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new issues?  Answer: not really.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bob Braden asked what percentage of the attendees are or have been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementors.  Relatively few of the attendees appeared to be.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It was suggested that perhaps bake-offs should be started up again.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This was generally considered to be a good idea; it is not clear that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this is the responsibility of the group, and this should be discussed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on the list and with the IESG.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matt Mathis raised the issue of backward compatibility and suggested
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that workarounds for defective implementations should be well-known,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;easy to test for, and easy to disable in the event that they cause
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performance overhead when not actually needed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jim Gettys brought up an issue with connections remaining in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN-WAIT-2 indefinitely.  This appears to be most common when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using the Apache web server, but may have other causes as well.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This should be added to the list of known issues.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perry Metzger brought up the issue of minimizing memory usage in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stacks which fail to retain state after the application has closed.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This probably requires further discussion on the mailing list.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bob Briscoe suggested the the specification is ambiguous about slow-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start after an idle period.  This needs to be reviewed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matt Mathis suggested that part of the above problem is due to failure
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to agree on what how long of a time value is used to determine whether
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or not the connection is &quot;idle.&quot;  This borders on a research issue;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more discussion seems to be needed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perry Metzger brought up the fact that RFC 1948 (Defending Against
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sequence Number Attacks) is not currently a standards-track document.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern suggested that perhaps the group should recommend it in one of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the new documents.  We should probably also investigate whether the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;status of the document could (or should) be changed, possibly to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ian Heavens raised the issue of problem taxonomy.  This may just be an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;issue of how the current I-D is organized.  We should discuss this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on the list.
+<BR>
+<P>The meeting concluded at this point.
+<BR>
+<P>Steve Alexander
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0329.html">Steve Alexander: "Memphis slides online"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0336.html">Matt Mathis: "Re: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0336.html">Matt Mathis: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0338.html">Vern Paxson: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0339.html">Larry Backman: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0340.html">Frank T Solensky: "RE: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0341.html">der Mouse : "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0343.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0344.html">Jonathan Webb: "RE: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0358.html">Scott Dawson: "Re: Memphis Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0359.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0360.html">Scott Dawson: "Re: Memphis Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#328">[ date ]</A>
+<A HREF="index.html#328">[ thread ]</A>
+<A HREF="subject.html#328">[ subject ]</A>
+<A HREF="author.html#328">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

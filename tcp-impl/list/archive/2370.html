@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Dynamic Network Architecture</TITLE>
+<META NAME="Author" CONTENT="Dave Hudson (dave@humbug.demon.co.uk)">
+<META NAME="Subject" CONTENT="Re: Dynamic Network Architecture">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Dynamic Network Architecture</H1>
+<!-- received="Thu Sep 21 10:01:23 2000" -->
+<!-- isoreceived="20000921140123" -->
+<!-- sent="Thu, 21 Sep 2000 14:46:47 +0100" -->
+<!-- isosent="20000921134647" -->
+<!-- name="Dave Hudson" -->
+<!-- email="dave@humbug.demon.co.uk" -->
+<!-- subject="Re: Dynamic Network Architecture" -->
+<!-- id="39CA1147.7EF0D8C9@humbug.demon.co.uk" -->
+<!-- inreplyto="382912510.969509786508.JavaMail.root@web301-mc.mail.com" -->
+<STRONG>From:</STRONG> Dave Hudson (<A HREF="mailto:dave@humbug.demon.co.uk?Subject=Re:%20Dynamic%20Network%20Architecture&In-Reply-To=&lt;39CA1147.7EF0D8C9@humbug.demon.co.uk&gt;"><EM>dave@humbug.demon.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 21 2000 - 09:46:47 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2371.html">Vernon Schryver: "Re: TCP sequence numbers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2370">[ date ]</A>
+<A HREF="index.html#2370">[ thread ]</A>
+<A HREF="subject.html#2370">[ subject ]</A>
+<A HREF="author.html#2370">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>Srijith K wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I was going through the paper &quot;A Dynamic Network Architecture&quot; by Sean
+</EM><BR>
+<EM>&gt; O'Malley and Larry Peterson. In this paper they introduce a dynamic network
+</EM><BR>
+<EM>&gt; arch. in which the number of layers visited by each message/packet is
+</EM><BR>
+<EM>&gt; variable.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I find this a very interesting idea. What do you all say ?? Has any further
+</EM><BR>
+<EM>&gt; work been done on this??
+</EM><BR>
+<P>I believe that there's been quite a lot of further work done by the
+<BR>
+(same?) team at the University of Arizona (I've got quite a few of their
+<BR>
+papers in front of me). 
+<BR>
+<P>Having recently read their papers I've found that the system I've been
+<BR>
+building for embedded networking (initially for 8 bit systems) is very
+<BR>
+similar.  It's a very good concept for building systems when resources
+<BR>
+are tight (my main target has 128 kBytes of flash for code and 32 kBytes
+<BR>
+of SRAM for data).
+<BR>
+<P>Please note that the following comments are entirely based on my
+<BR>
+experience (with my own code) with such small systems and I'm not sure
+<BR>
+how well the implementation scales (although I should know fairly soon
+<BR>
+as the code's being ported to the i386 now).  It's also worth noting
+<BR>
+that the OS hosting this stack supports very fine grained priority
+<BR>
+handling (it's an RTOS), and this does have an impact...
+<BR>
+<P>I'll start with the obvious downside: inter-layer transitions cost
+<BR>
+time.  There is an upside that helps compensate this to an extent:
+<BR>
+binding only those elements that are necessary avoids and wasted
+<BR>
+conditional code sequences.  The net effect is, however, negative.
+<BR>
+<P>The number of threads required for its use is not dependent on the
+<BR>
+number of services being handled.  In a trivial case, 1 thread per
+<BR>
+datalink device is sufficient as the threads simply push packets through
+<BR>
+the stack all the way to the end-application.  It looks like on higher
+<BR>
+performance systems the thread count could be weighted, giving more
+<BR>
+threads to faster devices.  By having a thread per message and avoiding
+<BR>
+context switching is a big win - in my own case this far outweighs the
+<BR>
+losses due to inter-layer transitions (very conservatively this is about
+<BR>
+a 10:1 ratio).
+<BR>
+<P>By dynamically binding the layers at run-time, the linker can remove any
+<BR>
+layers that can never be referenced (huge win for small systems) without
+<BR>
+resorting to a lot of conditional compilation.  An example here is that
+<BR>
+a device doesn't have to carry any SLIP-support code if running purely
+<BR>
+on Ethernet, or conversely I don't carry any of the ARP, Ethernet
+<BR>
+framing, etc, when only using SLIP. The downside is that there is some
+<BR>
+additional overhead to manage the dynamically bound layers.  Dynamic
+<BR>
+binding makes it easy to insert things such as packet filters so this
+<BR>
+can be a run-time decision, but with no cost if the filter is not bound.
+<BR>
+<P>The fine-grained layers make it easier to separate policy and mechanism
+<BR>
+- in my code, when a listening TCP port, receives a SYN, the service
+<BR>
+bound to the port is upcalled and can decide whether or not to accept or
+<BR>
+decline the connection.  More generally in the TCP case this means that
+<BR>
+there are no resources being consumed by the stack without the agreement
+<BR>
+of the applications (or at least the upper layers).
+<BR>
+<P>Avoiding context switching means that a lot of queuing can be avoided
+<BR>
+too.  An earlier evolution of my stack was far more conventional and
+<BR>
+used to have threads in the IP layer and each application service as
+<BR>
+well as in the device drivers.  It was fairly trivial to crash the whole
+<BR>
+system with buffer overflows (only 32k SRAM in the system) - flood
+<BR>
+pinging would take almost no time to do this.  I originally added buffer
+<BR>
+management and this simply resulted in no crashes but no work being done
+<BR>
+either (total DoS)!  The new stack degrades gracefully - if I have a
+<BR>
+debug compiled version of the code (does lots of sanity checks) a flood
+<BR>
+ping may result in a 30% response rate, whilst a full-speed version
+<BR>
+might yield a 45% response.
+<BR>
+<P>I was just about to note that one downside with this style of system is
+<BR>
+that it doesn't support BSD sockets (to support existing code), but of
+<BR>
+course these can be implemented as (almost) trivial layers on top the
+<BR>
+&quot;native&quot; code.
+<BR>
+<P>One other nice feature of this style of system is that it makes it easy
+<BR>
+to develop.  By dynamically binding each of the layers, it's extremely
+<BR>
+easy to change one of them.  My main plan when I start to look at some
+<BR>
+of the higher-performance TCP extensions will be to retain my existing
+<BR>
+(slow but working) TCP code bound to my SLIP link for my debugging
+<BR>
+services whilst binding the newer (faster but, initially at least,
+<BR>
+probably not-working) TCP code to the Ethernet link.
+<BR>
+<P>Sorry if this is a bit rambling, but it's about the first time I've
+<BR>
+tried to explain what I've been doing and I might have got a bit carried
+<BR>
+away :-)
+<BR>
+<P><P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Regards,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dave
+<BR>
+<P><P><P>PS. The code is available under LGPL, although this may move to a
+<BR>
+slightly less restrictive licence soon to allow it to be used in
+<BR>
+mask-ROM or OTP microcontrollers.  Please see
+<BR>
+<A HREF="http://liquorice.sourceforge.net/">http://liquorice.sourceforge.net/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2371.html">Vernon Schryver: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2369.html">Srijith K: "Dynamic Network Architecture"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2370">[ date ]</A>
+<A HREF="index.html#2370">[ thread ]</A>
+<A HREF="subject.html#2370">[ subject ]</A>
+<A HREF="author.html#2370">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Sep 21 2000 - 10:01:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: First SACK-permitted on &lt;</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: First SACK-permitted on &lt;SYN,ACK&gt;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: First SACK-permitted on &lt;SYN,ACK&gt;</H1>
+<!-- received="Tue Aug  8 19:56:35 2000" -->
+<!-- isoreceived="20000808235635" -->
+<!-- sent="Tue, 8 Aug 2000 19:44:14 -0400 (EDT)" -->
+<!-- isosent="20000808234414" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: First SACK-permitted on &lt;SYN,ACK&gt;" -->
+<!-- id="Pine.NEB.4.05.10008081858000.24896-100000@tesla.psc.edu" -->
+<!-- inreplyto="200008071941.UAA10046@starburst.demon.co.uk" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20First%20SACK-permitted%20on%20&lt;SYN,ACK&gt;&In-Reply-To=&lt;Pine.NEB.4.05.10008081858000.24896-100000@tesla.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 08 2000 - 19:44:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2286.html">Proneet Biswas: "Out Of Sequence Packets"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2284.html">Richard Wendland: "First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2284.html">Richard Wendland: "First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2287.html">Alan Cox: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2287.html">Alan Cox: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2294.html">kuznet@ms2.inr.ac.ru: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2314.html">Richard Wendland: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2285">[ date ]</A>
+<A HREF="index.html#2285">[ thread ]</A>
+<A HREF="subject.html#2285">[ subject ]</A>
+<A HREF="author.html#2285">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Mon, 7 Aug 2000, Richard Wendland wrote:
+<BR>
+<P><EM>&gt; RFC 2018 simply says &quot;may be sent in a SYN&quot;, which must include both
+</EM><BR>
+<EM>&gt; &lt;SYN&gt; and &lt;SYN,ACK&gt; for RFC 2018 to work.  I assume this must be an
+</EM><BR>
+<EM>&gt; oversight in the wording, but it is now the specification, so I suppose
+</EM><BR>
+<EM>&gt; more implementations may start doing this.
+</EM><BR>
+<P>Oops, it was indeed an oversight.  Well, I'm not sure - we were pretty careful
+<BR>
+to try to leave a trace of wiggle room in places where the community wanted us
+<BR>
+to be more restrictive than we felt absolutely necessary.
+<BR>
+<P>However let me clarify:
+<BR>
+<EM>&gt;&gt; the SACK people would like this option too - Matt Mathis told me
+</EM><BR>
+<EM>&gt;&gt; afterwards however that currently SACK options must be sent with the
+</EM><BR>
+<EM>&gt;&gt; SYN as some implementations fall over if the first TCP option is sent
+</EM><BR>
+<EM>&gt;&gt; with a non-SYN segment.
+</EM><BR>
+<EM>&gt; Is this actually still true?  Are any of the TCPs with this bug
+</EM><BR>
+<EM>&gt; still in significant use?
+</EM><BR>
+<P>My conversation was slightly garbled.   The problem is that 1323 timestamps
+<BR>
+must be committed (on or off) on the SYN and SYN-ACK.  Once committed you are
+<BR>
+stuck if you got it wrong.
+<BR>
+<P>Since timestamps so badly waste header compressed slow links, most vendors
+<BR>
+ship systems that default to RFC 1323 off.  This adds yet another step for 
+<BR>
+ordinary people to do wrong before they can get decent rates out of any well
+<BR>
+any connected workstation (e.g. almost any system at a university).
+<BR>
+<P>It would be better if all connections could start w/o time stamps and
+<BR>
+automaticly turn them on when the data rate reaches some threshold.  I believe
+<BR>
+that accepting such a late TS option is a 2 line code change (triggering it is
+<BR>
+harder of course).
+<BR>
+<P>However, this was expressly forbidden by 1323 due to a couple of (now ancient)
+<BR>
+systems known to die horrible deaths on unexpected TCP options.  Nobody has any
+<BR>
+reasonable estimates of the residual population of these system.
+<BR>
+<P>In my copious spare time I would love to run a semi-production web server that
+<BR>
+always sent late experimental (unpublished) options to see if I could detect
+<BR>
+any systems with bugs.  I would bet not, and would then consider proposing to
+<BR>
+revise 1323 to allow and even encourage late TS options.  (In my spare time!)
+<BR>
+<P>I wish that somebody would actually try this experiment or reconstruct more
+<BR>
+details of the history.   Perhaps SGI has already done this well enough because
+<BR>
+SACK-enabled on the SYN-ACK is guaranteed to be unexpected.
+<BR>
+<P>This prohibition on late TCP options is thwarting at least 2 reasonable
+<BR>
+proposals for TCP options, including the RST error code.
+<BR>
+<P>--MM--
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2286.html">Proneet Biswas: "Out Of Sequence Packets"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2284.html">Richard Wendland: "First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2284.html">Richard Wendland: "First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2287.html">Alan Cox: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2287.html">Alan Cox: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2294.html">kuznet@ms2.inr.ac.ru: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2314.html">Richard Wendland: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2285">[ date ]</A>
+<A HREF="index.html#2285">[ thread ]</A>
+<A HREF="subject.html#2285">[ subject ]</A>
+<A HREF="author.html#2285">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

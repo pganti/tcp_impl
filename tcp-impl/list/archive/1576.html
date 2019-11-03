@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 12 23:14:28 1999" -->
+<!-- isoreceived="19990213041428" -->
+<!-- sent="Fri, 12 Feb 1999 21:12:03 -0700 (MST)" -->
+<!-- isosent="19990213041203" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902130412.VAA22104@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902130412.VAA22104@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 12 1999 - 23:12:03 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1577.html">Raouf Boutaba: "MMM'99 Call for Paper"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1575.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1576">[ date ]</A>
+<A HREF="index.html#1576">[ thread ]</A>
+<A HREF="subject.html#1576">[ subject ]</A>
+<A HREF="author.html#1576">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Greg Minshall &lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902130412.VAA22104@calcite.rhyolite.com&gt;">minshall@siara.com</A>&gt;
+</EM><BR>
+&nbsp;
+<BR>
+<EM>&gt; &gt; for changing the Nagle algorithm.  Could someone review the plausible
+</EM><BR>
+<EM>&gt; &gt; scenarios where the change helps?  (I.e. not just switching the
+</EM><BR>
+<EM>&gt; &gt; interpretation of &quot;send&quot; from what it seems no one used to something
+</EM><BR>
+<EM>&gt; &gt; closer to what everyone is doing.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The scenario is that TCP has been willing to send lots of data because (either
+</EM><BR>
+<EM>&gt;at tcp_output() or at send()) it was presented with &quot;lots&quot; of data to send (&gt;=
+</EM><BR>
+<EM>&gt; MSS), and so has sent lots of data.  Now, it is presented (either at
+</EM><BR>
+<EM>&gt; tcp_output() or at send()) with a &quot;little bit&quot; of data.  In this case, TCP
+</EM><BR>
+<EM>&gt; will wait until all the previous data has been acknowledged.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; (The change would allow TCP to transmit this &quot;little bit&quot; of data (but not
+</EM><BR>
+<EM>&gt;transmit any subsequent &quot;little bit&quot; of data until *this* &quot;little bit&quot; of data 
+</EM><BR>
+<EM>&gt; has been acknowledged.)
+</EM><BR>
+<P>That's toward answering my question, but doesn't quite hit it.
+<BR>
+First, could we forget the &quot;at tcp_output()&quot; clause since it seems everyone
+<BR>
+agrees that the original RFC 896 text, the RFC 1122 text, and common
+<BR>
+implementations want the delaying to happen only at send() and many
+<BR>
+implementaitons come pretty close to achieving that?  To the extent that
+<BR>
+some do not achieve that, it might be worthwhile to write something,
+<BR>
+probably in the 'common bugs' RFC.
+<BR>
+&nbsp;&nbsp;
+<BR>
+Second, could we please have something to make the bad scenario compelling?
+<BR>
+For me, that means either a convincing argument that significantly many
+<BR>
+well written applications (no write-write junk) suffer the problem, or a
+<BR>
+pointer to a real application that exemplifies the class of suffering
+<BR>
+applications.  These must be applications that now suffer unnecessary
+<BR>
+latency on real world TCP stacks on private nets or the Internet.
+<BR>
+(Statements like &quot;this code would have problems if it did something other
+<BR>
+than what it does&quot; are inadmissable.)
+<BR>
+<P>Statements like &quot;my intuition says there must be lots of code that writes
+<BR>
+1700 bytes with MSS=1460 on a system that worries about tcp_output() but
+<BR>
+not send()&quot; are not convincing.  My intuition says that most applications
+<BR>
+uses stacks that watch send() (or won't be fixed so this is all moot), or
+<BR>
+either write less than an MSS or so much more than an MSS that they hit
+<BR>
+windows, or would have to use TCP_NODELAY regardless of Nagle
+<BR>
+modifications.
+<BR>
+<P>Good design changes depend on a kind of Occam's Razor says that in the
+<BR>
+absense of objective evidence, the 'gut feeling' that supports the
+<BR>
+status quo is always right.
+<BR>
+&nbsp;________________________________
+<BR>
+&nbsp;
+<BR>
+] From: Kacheong Poon &lt;<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902130412.VAA22104@calcite.rhyolite.com&gt;">Kacheong.Poon@Eng.Sun.COM</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] 1. There is a bad interaction between some applications, e.g. transaction
+<BR>
+] type applications, and Nagle algorithm.
+<BR>
+<P>We have only hypothetical applications that suffer bad interactions.
+<BR>
+<P>] ...
+<BR>
+] 4. Many TCP stacks already have some form of modified Nagle algorithm.  The
+<BR>
+] interesting thing is that most people do not know about that.  And since
+<BR>
+] there is no &quot;standard&quot; modified Nagle, application programmers cannot rely
+<BR>
+] on this fact if they want their applications to run well on multiple
+<BR>
+] platforms.  Thus having a modified Nagle algorithm does not help reduce
+<BR>
+] the number of applications setting TCP_NODELAY.
+<BR>
+<P>As far as I can tell, much of the so called &quot;modification&quot; consists of
+<BR>
+doing what RFC 896 actually says instead of what some people thought it
+<BR>
+said, namely delaying by send() instead of tcp_ouptut().  It's not clear
+<BR>
+&quot;do what RFC 896 says instead of what we thought it says&quot; needs to be
+<BR>
+published, except perhaps in the 'common bugs' RFC.
+<BR>
+<P>] Because of 3, Greg and many others thought that we should find a way to 
+<BR>
+] remedy 2.  And many such applications are like 1. ...
+<BR>
+<P>The assertion that there are many applications that would benefit has been
+<BR>
+repeated many times.  Maybe I've been made cynical by politicians, each
+<BR>
+repetition of an unsupported claim convinces me more of the opposite.
+<BR>
+Again, please name or compellingly describe an application that is well
+<BR>
+written (e.g. uses writev() or WSASend()), suffers undesirable latencies,
+<BR>
+and would be helped by a change to the Nagle algorithm, as the Nagle
+<BR>
+algorithm is defined in RFC 896 and widely implemented.
+<BR>
+<P><P>] ...
+<BR>
+] My observation is that Vernon, and maybe others, think that there is no
+<BR>
+] problem at all.  It is just a problem of incompetent programmers and IETF
+<BR>
+] should not do anything about it.  Rick and others think that we should
+<BR>
+] document the modified Nagle many stacks also have, namely doing the check
+<BR>
+] on a per-send basis.  This helps 4.  And to further reduce the problem set
+<BR>
+] of bad interactions, we should investigate EPS.  Have I misunderstood the
+<BR>
+] flow of discussions so far?
+<BR>
+<P>That overstates my view--I could be easily convinced the problem exists
+<BR>
+by other than repetitions of unsupported claims.  The availability of
+<BR>
+NODELAY may make finding an exemplar difficult.  However, I'd be glad to
+<BR>
+hear of a real application that could stop using NODELAY thanks to a
+<BR>
+modified Nagle.
+<BR>
+<P><P>] ...
+<BR>
+] You have been involved with IETF much longer than I do.  I guess I have
+<BR>
+] misunderstood the intention of FYI notes and various other infomational
+<BR>
+] documents IETF has published...  Is IETF really only a &quot;standards committee?&quot;
+<BR>
+] Maybe you can tell me what those documents are for.  In your opinion, do
+<BR>
+] many of them also fall into the category of textbooks and IETF should not
+<BR>
+] have published them in the first place?  I guess probably.
+<BR>
+<P>Yes, the IETF is merely a standards committee.  Standards committees have
+<BR>
+many people who feel more publish-or-perish pressure than the canonical
+<BR>
+academic.  The FYI's and &quot;various other infomational documents&quot; (presumably
+<BR>
+the Informational RFC's, since the IETF only publishes RFCs, some of which
+<BR>
+also get the FYI label) are generally not the most admired, admirable,
+<BR>
+and/or influential documents from the IETF.  Some are of only trade rag
+<BR>
+quality, between just plain wrong and painfully naive.
+<BR>
+<P>] My point is that it seems that so far no textbook has been clear on what Nagle
+<BR>
+] algorithm is and its implication.  Maybe textbook authors do not care, or
+<BR>
+] people designing protocol do not care to tell them about it, or ...  IMHO, a
+<BR>
+] brief document from TCP implementors urging people not to disable the
+<BR>
+] algorithm by default  and describing the right way to write network programs
+<BR>
+] using TCP is another way to tackle the problem the draft tries to solve, but
+<BR>
+] without modifying Nagle algorithm.  And it will carry more credits than from
+<BR>
+] any textbook.
+<BR>
+<P>To paraphrase, you want to use the bully pulpit of the IETF to preach
+<BR>
+about something we agree is bad.  You figure that an RFC would be influence
+<BR>
+more people, be more authoritative, and more effectively fix the problem
+<BR>
+than a textbook.
+<BR>
+<P>I've had this argument many times over the years with people who want to
+<BR>
+write mini-textbook RFC's.  Since I first took my position, I've seen too
+<BR>
+many poor informational RFC's published.   I've also seen (and written)
+<BR>
+countless words about subjects like the Nagle problem (including the Nagle
+<BR>
+problem) in forums more widely read than the RFC archives (e.g.
+<BR>
+mailinglists and netnews).  The problems go one.  If RFC 896 didn't fix
+<BR>
+it, then your RFC 3999 won't either.  The best and most effective thing
+<BR>
+you might do to fix the Nagle problem is to help/convince the big TCP
+<BR>
+textbook authors to produce revised editions.  (By &quot;Nagle problem&quot;, I mean
+<BR>
+junk code that does unncessary tiny_write-tiny_write or necessary
+<BR>
+write-write but does not know about Nagle.)  I offer RFC 896 and those
+<BR>
+#$%*@! textbooks and trade rag idiots that say that Ethernet is limited
+<BR>
+to 37% as proofs.
+<BR>
+<P>I've seen a very little, merely second hand, of what it costs and profits
+<BR>
+an author to write a real textbook.  That has convinced me the real thing
+<BR>
+too much like hard labor for my tastes, and made me a little cynical about
+<BR>
+the common ambition to spend a few hours and whip out a mini-textbook RFC.
+<BR>
+&nbsp;&nbsp;&nbsp;________________
+<BR>
+<P><P>] From: Greg Minshall &lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902130412.VAA22104@calcite.rhyolite.com&gt;">minshall@siara.com</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] &gt; One thought that just struck me is that we've all been bantering about
+<BR>
+] &gt; with a 1460 MSS thinking primarily about 1500 byte MTU networks and how
+<BR>
+] &gt; 4096 is big enough for a 1500 byte MTU network and all that.
+<BR>
+]
+<BR>
+] While i don't think it is reasonable to assume that an application tracks the 
+<BR>
+] actual MSS (given path MTU, etc.), i think it *is* reasonable that an 
+<BR>
+] application know *something* (such as the largest MTU on a connected, 
+<BR>
+] non-loopback interface).
+<BR>
+<P>I think that's asking too much of applications, what with mulitihoming,
+<BR>
+dynamic routing, the difficulties in finding the MTU's of all currently
+<BR>
+active interfaces on some platforms, and interfaces that come and go
+<BR>
+(e.g. SLIP and PPP).
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902130412.VAA22104@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1577.html">Raouf Boutaba: "MMM'99 Call for Paper"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1575.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1576">[ date ]</A>
+<A HREF="index.html#1576">[ thread ]</A>
+<A HREF="subject.html#1576">[ subject ]</A>
+<A HREF="author.html#1576">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

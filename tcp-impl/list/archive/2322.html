@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Ignacio Goyret (igoyret@lucent.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Thu Aug 17 21:35:11 2000" -->
+<!-- isoreceived="20000818013511" -->
+<!-- sent="Thu, 17 Aug 2000 17:55:04 -0700" -->
+<!-- isosent="20000818005504" -->
+<!-- name="Ignacio Goyret" -->
+<!-- email="igoyret@lucent.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="3.0.5.32.20000817175504.009e94b0@scamp.eng.ascend.com" -->
+<!-- inreplyto="399C83B7.C3E93172@isi.edu" -->
+<STRONG>From:</STRONG> Ignacio Goyret (<A HREF="mailto:igoyret@lucent.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;3.0.5.32.20000817175504.009e94b0@scamp.eng.ascend.com&gt;"><EM>igoyret@lucent.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 17 2000 - 20:55:04 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2318.html">Kacheong Poon: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2322">[ date ]</A>
+<A HREF="index.html#2322">[ thread ]</A>
+<A HREF="subject.html#2322">[ subject ]</A>
+<A HREF="author.html#2322">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 05:30 PM 8/17/00 -0700, Joe Touch wrote:
+<BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; What I meant were the specific codes that have been suggested, such as
+</EM><BR>
+<EM>&gt;&gt; &quot;application abort&quot;, &quot;bad precedence&quot;, &quot;bad security&quot;, &quot;low memory&quot;, etc.
+</EM><BR>
+<EM>&gt;&gt; This type of information is quite interesting for someone trying to do
+</EM><BR>
+<EM>&gt;&gt; damage. All he would need to do is repeat the same SYN ad nauseum, and
+</EM><BR>
+<EM>&gt;&gt; if he keeps getting &quot;application abort&quot;, he is well on his way to crash
+</EM><BR>
+<EM>&gt;&gt; your server. Is this compromise enough?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Any response means he is succeeding.
+</EM><BR>
+<P>Not necessarily. Simple responses that don't tell him the failure reason
+<BR>
+prevents him to tailor his attack.
+<BR>
+<P><P><EM>&gt;&gt; Responding with &quot;bad precedence&quot; or &quot;bad security&quot; is synonymous with inviting
+</EM><BR>
+<EM>&gt;&gt; him to try a few other values. This _adds_ compromise.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Bad precedence just means subsequent packets didn't match the precedence
+</EM><BR>
+<EM>&gt;bits. We already know that they can be changed, and sending two packets
+</EM><BR>
+<EM>&gt;with different values is sufficient to guarantee a crashed connection in
+</EM><BR>
+<EM>&gt;that case. This isn't particularly interesting.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Bad security makes no sense; TCP has no security (SSL does, so does
+</EM><BR>
+<EM>&gt;IPSEC, but then _THEY_ should carry that info, or not. not TCP :-) It'd
+</EM><BR>
+<EM>&gt;be inappropriate to send a RST in response to failed SYN authentication
+</EM><BR>
+<EM>&gt;(to counter DOS attacks); silence is the best response there anyway.
+</EM><BR>
+<P>I'm not disagreeing with you. Both of these are examples of bad codes. They are
+<BR>
+just two examples of the codes that have been suggested on this list by some
+<BR>
+people. I'm guessing (since I don't know the reason why they were initially
+<BR>
+suggested) that they were probably inspired by the text in page 67 of rfc793.
+<BR>
+<P><P><EM>&gt;&gt; A simple empty RST doesn't give him any of this information so he doesn't know
+</EM><BR>
+<EM>&gt;&gt; if you are just not listening on that port or that you rejected his attempt.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;No. He knows you're listening, and that you've responded. Otherwise,
+</EM><BR>
+<EM>&gt;you'd have to have been spamming the world with RSTs.
+</EM><BR>
+<P>RFC 793, page 36, 'Reset Generation', item #1 seems to say otherwise.
+<BR>
+<P>BTW, I use the term &quot;listening&quot; meaning that there is a TCB in the LISTEN state
+<BR>
+for that port. Is that you what you meant?
+<BR>
+<P>And why would I (or anybody else for that matter) be spamming the world with RSTs?
+<BR>
+If I telnet to a port that nobody is listening on, or if inetd fails to spawn the
+<BR>
+proper daemon, I'll get an RST.
+<BR>
+<P><P><EM>&gt;&gt; He can't use the information of why you rejected a particular connection attempt
+</EM><BR>
+<EM>&gt;&gt; against you because he doesn't know it. Adding a code to the RST provides this
+</EM><BR>
+<EM>&gt;&gt; attacker with the information he needs to fine-tune his attack to bring your
+</EM><BR>
+<EM>&gt;&gt; server down.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;There is no new information here that is useful. So he tries again. He
+</EM><BR>
+<EM>&gt;can do that now. The RST has to have information that CHANGES how he
+</EM><BR>
+<EM>&gt;attacks you; there isn't enough info (at least in my view of what's
+</EM><BR>
+<EM>&gt;included) to do that.
+</EM><BR>
+<P>It all depends on the kind of information that is included and that's where the
+<BR>
+issue hinges.
+<BR>
+<P>It has been suggested to add codes indicating &quot;application failure&quot; or &quot;bad
+<BR>
+security/precedence&quot;. These are clearly bad (at least to me) because they
+<BR>
+can tell him how to make his attack more efficient.
+<BR>
+<P>When the list of codes is finally compiled, it should be carefully scrutinized
+<BR>
+to make sure that this attacker is not given golden information.
+<BR>
+<P><P><EM>&gt;&gt; &gt;If you're that worried about hackers, use IPSEC.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; Regarding IPSEC, remember that there are many reasons to use TCP _without_ IPSEC,
+</EM><BR>
+<EM>&gt;&gt; a web server is a good example.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Web servers can use IPSEC for authentication. A web server wouldn't get
+</EM><BR>
+<EM>&gt;too many RSTs in response to SYNs, because they typically answer (not
+</EM><BR>
+<EM>&gt;initiate) connections. Sure, it could get RSTs in response to SYN/ACKs,
+</EM><BR>
+<EM>&gt;but it can do that now.
+</EM><BR>
+<P>Huh? Web servers wouldn't be receiving RSTs: they would be _sending_ RSTs
+<BR>
+with potentially juicy information. The attacker would be receiving the RSTs,
+<BR>
+not sending them. That's what makes it easier for him to attack the server.
+<BR>
+<P>The other way around is not interesting at all.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2318.html">Kacheong Poon: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2322">[ date ]</A>
+<A HREF="index.html#2322">[ thread ]</A>
+<A HREF="subject.html#2322">[ subject ]</A>
+<A HREF="author.html#2322">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

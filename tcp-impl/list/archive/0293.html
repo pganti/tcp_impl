@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: testing tools</TITLE>
+<META NAME="Author" CONTENT="W. Richard Stevens (rstevens@kohala.com)">
+<META NAME="Subject" CONTENT="testing tools">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>testing tools</H1>
+<!-- received="Wed Apr  2 04:03:15 1997" -->
+<!-- isoreceived="19970402090315" -->
+<!-- sent="Wed, 2 Apr 1997 04:57:04 -0700" -->
+<!-- isosent="19970402115704" -->
+<!-- name="W. Richard Stevens" -->
+<!-- email="rstevens@kohala.com" -->
+<!-- subject="testing tools" -->
+<!-- id="199704021157.EAA19350@kohala.kohala.com" -->
+<STRONG>From:</STRONG> W. Richard Stevens (<A HREF="mailto:rstevens@kohala.com?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199704021157.EAA19350@kohala.kohala.com&gt;"><EM>rstevens@kohala.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 06:57:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0295.html">der Mouse : "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0321.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0408.html">David Borman: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0410.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0411.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0412.html">David Borman: "Re: testing tools"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#293">[ date ]</A>
+<A HREF="index.html#293">[ thread ]</A>
+<A HREF="subject.html#293">[ subject ]</A>
+<A HREF="author.html#293">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+[In Vern's message of Apr  2, 12:06am he writes:]
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Calling all testing tools [10 min]
+</EM><BR>
+<EM>&gt; 	Need to document
+</EM><BR>
+<EM>&gt; 	Encourage development of new tools
+</EM><BR>
+<EM>&gt; 		maybe simple raw socket interface for testing
+</EM><BR>
+<EM>&gt; 			particular problems?
+</EM><BR>
+<EM>&gt; 		(but how do you get the host TCP to shut up?)
+</EM><BR>
+<P>I have such a test program and I use a raw socket to write my own TCP
+<BR>
+segments, and then libpcap (e.g., BPF on a BSD/OS system) to read back
+<BR>
+the replies.  The way I shup up my TCP, to keep it from sending back
+<BR>
+RSTs to all the replies to all the segments that I generated, is with
+<BR>
+the following kernel hack:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Locate pcb for segment.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+findpcb:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Following hack to let me read and write my own TCP segments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using BPF, without confusing kernel.  Just patch tcp_ignport
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(at beginning of this file) to desired value. */
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (htons(tcp_ignport) &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(htons(tcp_ignport) == ti-&gt;ti_dport ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;htons(tcp_ignport) == ti-&gt;ti_sport))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto drop;
+<BR>
+<P>I could never figure out another way to do this.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rich Stevens
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0294.html">David S. Miller: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0295.html">der Mouse : "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0321.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0408.html">David Borman: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0410.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0411.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0412.html">David Borman: "Re: testing tools"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#293">[ date ]</A>
+<A HREF="index.html#293">[ thread ]</A>
+<A HREF="subject.html#293">[ subject ]</A>
+<A HREF="author.html#293">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 15:17:08 1997" -->
+<!-- isoreceived="19970605191708" -->
+<!-- sent="Thu, 5 Jun 1997 15:11:08 -0700" -->
+<!-- isosent="19970605221108" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052211.AA07597@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052211.AA07597@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:11:08 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0462.html">Larry Backman: "2MSL and other constants"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0482.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0482.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#463">[ date ]</A>
+<A HREF="index.html#463">[ thread ]</A>
+<A HREF="subject.html#463">[ subject ]</A>
+<A HREF="author.html#463">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052211.AA07597@ash.isi.edu&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052211.AA07597@ash.isi.edu&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; The justification for this was that if someone was launching a Denial of
+</EM><BR>
+<EM>&gt; &gt; &gt; Service attack on your machine, picking a slot at random was most likely
+</EM><BR>
+<EM>&gt; &gt; &gt; to pick one that was opened as part of the attack.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; The only way to avoid SYN flooding is to deny the connection
+</EM><BR>
+<EM>&gt; &gt; attempts, which will happen anyway once the TCB memory space is full.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SYN attacks do not involve TIME_WAIT.
+</EM><BR>
+<P>Correct - they push things into the SYN_RCVD state, which, like TIME_WAIT,
+<BR>
+eat up TCB space. Different timer, different cause, same space, same
+<BR>
+general effect (except that TIME_WAIT is caused by established connections,
+<BR>
+requiring more effort by the malicious host).
+<BR>
+<P><EM>&gt; &quot;Denying the connection attempts&quot; is a poor defense against a denial of
+</EM><BR>
+<EM>&gt; service attack such as SYN bombing, since causing you to deny
+</EM><BR>
+<EM>&gt; connection attemptss is the purpose for the SYM bombing.
+</EM><BR>
+<P>There is NO other solution to SYN attacks. SYN attacks serve two purposes:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- deny other SYN attempts (presumably legitimate)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- deny service to ongoing (ESTABLISHED) connections
+<BR>
+<P>There is no way to avoid denying access to other SYN attempts.
+<BR>
+Ever purported solution, e.g., authenticating incoming SYNs
+<BR>
+via digests, checking them against incoming lists, etc., have
+<BR>
+the additional effect of slowing SYN processing in general, and consuming
+<BR>
+CPU resources in general, both of which slow SYN processing for
+<BR>
+the legitimate requests.
+<BR>
+<P>The best you can do is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1- prevent SYN attacks from consuming large numbers of resources
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., partition the TCB space, and limit the percentage
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allocated to SYN_RCVD
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2- prevent SYN attacks from consuming large amounts of CPU resources
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., limiting the frequency of processing SYN requests
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3- prevent SYN attacks from affecting ESTABLISHED connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., via solutions #1 and #2 together.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4- prevent SYN attacks from synchronizing and completely starving
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;legitimate incoming SYNs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., pick randomly from queued incoming SYNs, not 'end
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of queue'
+<BR>
+<P><EM>&gt; Have you estimated how big your listen queue would need to be at either
+</EM><BR>
+<EM>&gt; 75 or 180 seconds (common listen queue timeouts) if you were being SYN
+</EM><BR>
+<EM>&gt; bombed at T1 or T3 rates, and were not denying any legitimate connections?
+</EM><BR>
+<P>I'm all open to a specific alternative, if anyone has one.
+<BR>
+All alteratives I've seen have the above properties.
+<BR>
+<P><EM>&gt; &gt; The better (and TCP friendly) solution is to queue incoming SYN requests,
+</EM><BR>
+<EM>&gt; &gt; and pick one randomly when a slot opens. This prevents the attacker
+</EM><BR>
+<EM>&gt; &gt; from timing the incoming SYNs to grab TCBs as they get freed.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Pick one what when a slot opens, a slot or an incoming SYN request?
+</EM><BR>
+<P>When a TCB in the SYN_RCVD times out, there is the opportunity
+<BR>
+to process one incoming SYN. Pick one SYN randomly from the 
+<BR>
+incoming queue of SYNs. If there is only one (the case most
+<BR>
+of the time when there is no attack), everything works fine.
+<BR>
+<P><EM>&gt; &gt; That would satisfy CERT, too, I presume (someone should
+</EM><BR>
+<EM>&gt; &gt; check, though I suspect they'd look to us for verification anyway).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The SYN bombing issue is long over and solved, essentially
+</EM><BR>
+<EM>&gt; independently of CERT, and certainly independently of any verifying by
+</EM><BR>
+<EM>&gt; you or ISI.
+</EM><BR>
+<P>Geez - *US* meant this group. Not me or ISI, though, if the SYN
+<BR>
+bombing is so over and solved, why is the issue of parititioning
+<BR>
+the processing and having to live with slower SYN processing 
+<BR>
+still misunderstood?
+<BR>
+<P><EM>&gt; The solution to SYN bombing is 
+</EM><BR>
+<EM>&gt;     - use as large a listen queue as you can afford, and try to make
+</EM><BR>
+<EM>&gt;        the cost of each slot on the listen queue small and searching a
+</EM><BR>
+<EM>&gt;        big queue fast so you can afford more.  At least 30K slots is
+</EM><BR>
+<EM>&gt;        one recommendation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     - drop either the oldest or a random, pre-existing entry in your
+</EM><BR>
+<EM>&gt;        listen queue when it is full and a new SYN arrives.
+</EM><BR>
+<P>No. The solution is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- LIMIT the size of the listen queue to some percentage of 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the overall mbuf or TCB space
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- I don't know how to drop, but I know that picking randomly 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;works, if the queue can hold them - I do know that picking
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the newest one is wrong, since it allows the attacker to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;synchronize with the timeout of the SYN_RCVD states.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052211.AA07597@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0462.html">Larry Backman: "2MSL and other constants"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0482.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0482.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#463">[ date ]</A>
+<A HREF="index.html#463">[ thread ]</A>
+<A HREF="subject.html#463">[ subject ]</A>
+<A HREF="author.html#463">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

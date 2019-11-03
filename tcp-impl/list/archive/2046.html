@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="David R. Cheriton (cheriton@cisco.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 21:03:23 2000" -->
+<!-- isoreceived="20000228020323" -->
+<!-- sent="Sun, 27 Feb 2000 17:50:17 -0800" -->
+<!-- isosent="20000228015017" -->
+<!-- name="David R. Cheriton" -->
+<!-- email="cheriton@cisco.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="3.0.3.32.20000227175017.006baa14@ruby.cisco.com" -->
+<!-- inreplyto="E12PCN6-0000vD-00@the-village.bc.nu" -->
+<STRONG>From:</STRONG> David R. Cheriton (<A HREF="mailto:cheriton@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;3.0.3.32.20000227175017.006baa14@ruby.cisco.com&gt;"><EM>cheriton@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 20:50:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2046">[ date ]</A>
+<A HREF="index.html#2046">[ thread ]</A>
+<A HREF="subject.html#2046">[ subject ]</A>
+<A HREF="author.html#2046">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Alan,
+<BR>
+<P>Given you are concerned about Appletalk and PCI, perhaps we just
+<BR>
+need to agree you are addressing a different performance level of
+<BR>
+storage system.  I see no reason for hardware support at Appletalk
+<BR>
+and PCI speeds either.  The RDMA option, even implemented in
+<BR>
+a hardware NIC, would not preclude software processing of Appletalk
+<BR>
+or anything else.
+<BR>
+<P>&nbsp;&nbsp;I think it would be only fair for this group to expect you to
+<BR>
+provide a more fully worked out design and evaluation of your
+<BR>
+proposed NIC if this is really to be taken as a serious alternative
+<BR>
+to an RDMA option.  I for one dont find it a competitive design
+<BR>
+(it is also one that was previously considered.)
+<BR>
+<P>Regarding the complexity of TCP processing in hardware, people are 
+<BR>
+doing this, so I regard this as a done deal.  (I'd hate
+<BR>
+to be a high-speed NIC vendor that cant do this.)
+<BR>
+The only issue is how to handle the next level of 
+<BR>
+protocols that have high performance requirements, i.e. storage.
+<BR>
+Also, NICs with hardware enhancements for protocol support,
+<BR>
+such as the Intel Gigabit Ethernet NIC have been very successful
+<BR>
+both in performance and market.  So, expect more there.
+<BR>
+<P>Finally, the RDMA option is targeted to allow use of standard
+<BR>
+&nbsp;Internet protocols for SANs in place of  specialized protocols
+<BR>
+and networks such as  FibreChannel, especially for non-local 
+<BR>
+access.
+<BR>
+I.e. an extra option rather than an extra protocol stack and network.
+<BR>
+I hope the discussion can recognize that broader issue in considering
+<BR>
+alternatives and the general need for the RDMA option.
+<BR>
+I.e. can SCSI over TCP really compete with FC without the RDMA option?
+<BR>
+(In this sense, the subject line should have put SCSI first.)
+<BR>
+<P>DRC
+<BR>
+<P>At 10:41 PM 2/27/00 +0000, Alan Cox wrote:
+<BR>
+<EM>&gt;&gt; it seems like a cost issue of providing the above hardware resources
+</EM><BR>
+<EM>&gt;&gt; vs. providing a NIC chip that can RDMA.  
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;or a NIC chip that has more memory on the chip and sends you the header then
+</EM><BR>
+<EM>&gt;you asynchronously give a DMA location for the rest of the buffer.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;You've now got rid of RDMA, instead your little bit of extra silicon is 
+</EM><BR>
+<EM>&gt;generic, and will work with stuff like appletalk even. What does the
+</EM><BR>
+<EM>&gt;extra RAM and PCI glue cost you - probably not a lot.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;That is why I prefer software solutions
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; &gt;It might also be fragmented of course.
+</EM><BR>
+<EM>&gt;&gt; What you need to do &gt;&gt;in the common case&lt;&lt; before processing the RDMA
+</EM><BR>
+<EM>&gt;&gt; option is relatively simple and a very small portion of the
+</EM><BR>
+<EM>&gt;&gt; overall protocol state machines, so I presume your comment is
+</EM><BR>
+<EM>&gt;&gt; asking for more careful wording? Or do you really disagree with the
+</EM><BR>
+<EM>&gt;&gt; fundamental point?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Yes
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The sequence of operations you must execute is complex. 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;You have to
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Check the packet is long enough
+</EM><BR>
+<EM>&gt;Check the header is IPv4
+</EM><BR>
+<EM>&gt;Check the IPV4 IHL is valid
+</EM><BR>
+<EM>&gt;Check the protocol field
+</EM><BR>
+<EM>&gt;Check the source/dest addresses are legal
+</EM><BR>
+<EM>&gt;Work out if dest is for us or another node
+</EM><BR>
+<EM>&gt;Perform IP fragmentation (checks at least cannot be deferred defrag can)
+</EM><BR>
+<EM>&gt;Walk the IP options (I guess you could defer this)
+</EM><BR>
+<EM>&gt;Get the tcp header
+</EM><BR>
+<EM>&gt;Check the tcp header lengths are legal and fit the packet length
+</EM><BR>
+<EM>&gt;Check the tcp ports to figure out the socket
+</EM><BR>
+<EM>&gt;Parse the tcp options 
+</EM><BR>
+<EM>&gt;Check the RDMA identifier, arbitarily aligned of course
+</EM><BR>
+<EM>&gt;Check the RDMA identifier, port and addresses match
+</EM><BR>
+<EM>&gt;Perform sequence space checks
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Then you can deliver the packet.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Alan
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2046">[ date ]</A>
+<A HREF="index.html#2046">[ thread ]</A>
+<A HREF="subject.html#2046">[ subject ]</A>
+<A HREF="author.html#2046">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

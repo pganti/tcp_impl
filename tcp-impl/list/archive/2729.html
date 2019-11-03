@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: types of traffic in tcp cong</TITLE>
+<META NAME="Author" CONTENT="J Wu (jinw@comp.leeds.ac.uk)">
+<META NAME="Subject" CONTENT="Re: types of traffic in tcp congest control">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: types of traffic in tcp congest control</H1>
+<!-- received="Sun May 12 20:10:10 2002" -->
+<!-- isoreceived="20020513001010" -->
+<!-- sent="Mon, 13 May 2002 00:26:43 +0100 (BST)" -->
+<!-- isosent="20020512232643" -->
+<!-- name="J Wu" -->
+<!-- email="jinw@comp.leeds.ac.uk" -->
+<!-- subject="Re: types of traffic in tcp congest control" -->
+<!-- id="Pine.LNX.4.33.0205122354460.30118-100000@cslin135.leeds.ac.uk" -->
+<!-- inreplyto="20020512135045.28137.qmail@sina.com" -->
+<STRONG>From:</STRONG> J Wu (<A HREF="mailto:jinw@comp.leeds.ac.uk?Subject=Re:%20types%20of%20traffic%20in%20tcp%20congest%20control&In-Reply-To=&lt;Pine.LNX.4.33.0205122354460.30118-100000@cslin135.leeds.ac.uk&gt;"><EM>jinw@comp.leeds.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun May 12 2002 - 19:26:43 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2730.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2728.html">Fred Baker: "Re: Measuring bandwidth"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2727.html">大李: "types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2730.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2729">[ date ]</A>
+<A HREF="index.html#2729">[ thread ]</A>
+<A HREF="subject.html#2729">[ subject ]</A>
+<A HREF="author.html#2729">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sun, 12 May 2002, 大李 wrote:
+<BR>
+<P><EM>&gt; Hello,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I need some help with the following :
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; i had read a paper writen by Steven H.low, Internet Congestion Control ,published by ieee control systems magazine , which describes the types of traffic as follows:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; most TCP connections are &quot;mice&quot; (short, but requiring low latency), but a few long TCP connections (&quot;elephants,&quot; which can tolerate latency) generate most of the traffic. By controlling the network around a state with full queues, the elephants subject the mice to unnecessary loss and queueing delays...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; i don't think that &quot;mice&quot; or &quot;elephants&quot; have direct relationship with the long or short latency, the length of latency may be caused by the type of application, such as voice, multimedia, as so no.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Please check this  viewpoint,  thanks.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Y. Lee
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Yong Lee,  Ph.D Candidate
+</EM><BR>
+<EM>&gt; Network Lab.
+</EM><BR>
+<EM>&gt; Dept. of Computer Science &amp; Engineering
+</EM><BR>
+<EM>&gt; Southeast University
+</EM><BR>
+<EM>&gt; Sipailou2#(PC.210096)
+</EM><BR>
+<EM>&gt; Nanjing, P.R.China
+</EM><BR>
+<EM>&gt; (Phone) +86-25-3791010
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ===================================================================
+</EM><BR>
+<EM>&gt; 新浪免费电子邮箱 (<A HREF="http://mail.sina.com.cn">http://mail.sina.com.cn</A>)
+</EM><BR>
+<EM>&gt; 新浪分类信息：二手市场走一走，该出手时就出手！ (<A HREF="http://classad.sina.com.cn/2shou/">http://classad.sina.com.cn/2shou/</A>)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>Hi Li,
+<BR>
+I think that the &quot;length of latancy&quot; in your email is representing for
+<BR>
+network delays, which caused by queuing delay at routers and propagation
+<BR>
+delay of the medias. So, this kind of lantancy is absolutly decided by the
+<BR>
+transmittion subnet and have nothing to do with the upper layer
+<BR>
+applications.
+<BR>
+<P>As my understanding of S.Low's paper that the mice stands for small scale
+<BR>
+transmition with delay sensitive and the elephant stands for large scale
+<BR>
+transmition. The small scale transmitions will not cause any congestion,
+<BR>
+but the large scale transmitions will. If cut off the large scale
+<BR>
+transmitions for a litte to eliminate the congestion, which can benifit
+<BR>
+a lot for the delay sensitive small scale transmitions.Also, as the
+<BR>
+&quot;elephant&quot; is huge that harms little for gives way to &quot;mice&quot;.
+<BR>
+<P><P><PRE>
+-- 
+Jin Wu
+School of Computing,
+University of Leeds.
+Tel: +44 113 2336806
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2730.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2728.html">Fred Baker: "Re: Measuring bandwidth"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2727.html">大李: "types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2730.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2729">[ date ]</A>
+<A HREF="index.html#2729">[ thread ]</A>
+<A HREF="subject.html#2729">[ subject ]</A>
+<A HREF="author.html#2729">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sun May 12 2002 - 20:10:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

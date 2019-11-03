@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kacheong.poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start bit</H1>
+<!-- received="Mon May 17 15:27:34 1999" -->
+<!-- isoreceived="19990517192734" -->
+<!-- sent="Mon, 17 May 1999 12:24:40 -0700 (PDT)" -->
+<!-- isosent="19990517192440" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kacheong.poon@Eng.Sun.COM" -->
+<!-- subject="Re: slow-start bit" -->
+<!-- id="Roam.SIMC.2.0.6.926969080.7089.kcpoon@jurassic" -->
+<!-- inreplyto="199905150415.VAA03266@bossette.engr.sgi.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kacheong.poon@Eng.Sun.COM?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;Roam.SIMC.2.0.6.926969080.7089.kcpoon@jurassic&gt;"><EM>kacheong.poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon May 17 1999 - 15:24:40 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1711.html">David Borman: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1712">[ date ]</A>
+<A HREF="index.html#1712">[ thread ]</A>
+<A HREF="subject.html#1712">[ subject ]</A>
+<A HREF="author.html#1712">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Is there any reason why it wouldn't be a good idea to use one of the
+</EM><BR>
+<EM>&gt; free bits in the TCP header as a `slow-start' bit to enable a sender
+</EM><BR>
+<EM>&gt; to indicate to the receiver that it is sending the first packet
+</EM><BR>
+<EM>&gt; of a slow-start phase?  This would enable the receiver to ACK
+</EM><BR>
+<EM>&gt; immediately rather than delay the ACK, which can cause an unnecessary
+</EM><BR>
+<EM>&gt; 200ms delay in some scenarios.
+</EM><BR>
+<P>First of all, I think most stacks now default to have a larger initial
+<BR>
+window according to RFC2414.  But let's assume otherwise.  TCP does slow
+<BR>
+start in 3 cases, initial slow start, slow start after idle, and slow
+<BR>
+start after a retransmission timeout.
+<BR>
+<P>In the first case, if a receiver acks immediately for the first segment,
+<BR>
+there will be no delay ack.  In the third case, it is quite probable that
+<BR>
+the first segment will be out of order, unless all the segments in the
+<BR>
+last window are lost.  The receiver should ack immediately.  So I guess the
+<BR>
+slow start bit is most useful in the second case.  But because of an
+<BR>
+implementation artifact (use last receive time to do idle check), most stacks
+<BR>
+do not perform slow start after idle in many cases, like HTTP requests.  Again
+<BR>
+there will be no delay ack.
+<BR>
+<P>It seems to me that the slow start bit may not be very useful in the context
+<BR>
+of the problem you described above, even with stacks which do not support
+<BR>
+RFC2414.  Well, I assume that most stacks ack immediatley at least for the
+<BR>
+first segment and slow start after timeout is likely to trigger an immediate
+<BR>
+ack...  There can be other uses of slow start bit.  But I do not think it is a
+<BR>
+good idea to use it to solve the delay ack problem you described.  Larger
+<BR>
+initial window is better solution.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;Roam.SIMC.2.0.6.926969080.7089.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1711.html">David Borman: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1712">[ date ]</A>
+<A HREF="index.html#1712">[ thread ]</A>
+<A HREF="subject.html#1712">[ subject ]</A>
+<A HREF="author.html#1712">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

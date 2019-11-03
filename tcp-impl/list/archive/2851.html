@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Tcp persist mode</TITLE>
+<META NAME="Author" CONTENT="Prakash Khemani (khemani@netscaler.com)">
+<META NAME="Subject" CONTENT="RE: Tcp persist mode">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Tcp persist mode</H1>
+<!-- received="Thu Sep 19 04:19:49 2002" -->
+<!-- isoreceived="20020919081949" -->
+<!-- sent="Thu, 19 Sep 2002 01:15:24 -0700" -->
+<!-- isosent="20020919081524" -->
+<!-- name="Prakash Khemani" -->
+<!-- email="khemani@netscaler.com" -->
+<!-- subject="RE: Tcp persist mode" -->
+<!-- id="DDBFD47DDBB36947B025EE49528F9B5212EB33@mail2.engineering.netscaler.com" -->
+<!-- inreplyto="Tcp persist mode" -->
+<STRONG>From:</STRONG> Prakash Khemani (<A HREF="mailto:khemani@netscaler.com?Subject=RE:%20Tcp%20persist%20mode&In-Reply-To=&lt;DDBFD47DDBB36947B025EE49528F9B5212EB33@mail2.engineering.netscaler.com&gt;"><EM>khemani@netscaler.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 19 2002 - 04:15:24 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2852.html">Bob Braden: "Re: TCP Retransmission timers ?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2850.html">pierluigimarra@blu.it: "Tcp persist mode"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2850.html">pierluigimarra@blu.it: "Tcp persist mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2854.html">Neil Spring: "Re: Tcp persist mode"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2851">[ date ]</A>
+<A HREF="index.html#2851">[ thread ]</A>
+<A HREF="subject.html#2851">[ subject ]</A>
+<A HREF="author.html#2851">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:pierluigimarra@blu.it?Subject=RE:%20Tcp%20persist%20mode&In-Reply-To=&lt;DDBFD47DDBB36947B025EE49528F9B5212EB33@mail2.engineering.netscaler.com&gt;">pierluigimarra@blu.it</A> [mailto:<A HREF="mailto:pierluigimarra@blu.it?Subject=RE:%20Tcp%20persist%20mode&In-Reply-To=&lt;DDBFD47DDBB36947B025EE49528F9B5212EB33@mail2.engineering.netscaler.com&gt;">pierluigimarra@blu.it</A>]
+</EM><BR>
+<EM>&gt; Sent: Thursday, September 19, 2002 1:04 PM
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Tcp%20persist%20mode&In-Reply-To=&lt;DDBFD47DDBB36947B025EE49528F9B5212EB33@mail2.engineering.netscaler.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Tcp persist mode
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'm wondering about TCP persist mode.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As you know, if receiver sends ACK with 0 window size, sender stops
+</EM><BR>
+<EM>&gt; sending new data.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Consider this scenario:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Suppose that sender transmitted segments [1] [2] [3] [4] [5] [6].
+</EM><BR>
+Than,
+<BR>
+<EM>&gt; receiver sends ack for segment [2] and shrinks window to zero.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; when sender receives it, enters persist mode and stops sending new
+</EM><BR>
+data.
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; After, receiver sends ack for segment [4] and reopens window.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; My questions are:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1) what happens at segment [5] and [6] ? Are they retransmitted by
+</EM><BR>
+sender?
+<BR>
+<EM>&gt; If they are retransmitted, when sender retransmits them?
+</EM><BR>
+<P>Yes sender should retransmit them after the retransmission timeout,
+<BR>
+provided by then the sender has come out of the persist mode.
+<BR>
+<P><EM>&gt; Must the sender
+</EM><BR>
+<EM>&gt; wait  receiver to reopen window or can retransmits them when it is in
+</EM><BR>
+<EM>&gt; persist state?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>No retransmissions are allowed in the persist state.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; 2) Could sender shrinks its congestion window, in this scenario?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>The sender can choose to always shrink congestion window on
+<BR>
+retransmission. It may choose to ignore the fact that the retransmission
+<BR>
+occurred because of the receiver shrunk the window.
+<BR>
+<P><P><P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks in advance.
+</EM><BR>
+<EM>&gt; P.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2852.html">Bob Braden: "Re: TCP Retransmission timers ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2850.html">pierluigimarra@blu.it: "Tcp persist mode"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2850.html">pierluigimarra@blu.it: "Tcp persist mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2854.html">Neil Spring: "Re: Tcp persist mode"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2851">[ date ]</A>
+<A HREF="index.html#2851">[ thread ]</A>
+<A HREF="subject.html#2851">[ subject ]</A>
+<A HREF="author.html#2851">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Sep 19 2002 - 04:19:57 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

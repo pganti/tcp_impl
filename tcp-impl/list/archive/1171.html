@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problems</TITLE>
+<META NAME="Author" CONTENT="Tim Dorcey (tdorcey@boxtop.com)">
+<META NAME="Subject" CONTENT="Re: New problems">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problems</H1>
+<!-- received="Fri Jul 17 13:34:06 1998" -->
+<!-- isoreceived="19980717173406" -->
+<!-- sent="Fri, 17 Jul 1998 13:34:54 -0700" -->
+<!-- isosent="19980717203454" -->
+<!-- name="Tim Dorcey" -->
+<!-- email="tdorcey@boxtop.com" -->
+<!-- subject="Re: New problems" -->
+<!-- id="v03102808b1d561bc6455@[204.80.124.68]" -->
+<!-- inreplyto="199807172002.PAA11286@hertz.ece.wisc.edu" -->
+<STRONG>From:</STRONG> Tim Dorcey (<A HREF="mailto:tdorcey@boxtop.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;"><EM>tdorcey@boxtop.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jul 17 1998 - 16:34:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1170.html">David Borman: "Re: max active TCP connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1173.html">Sean Doran: "Re: New problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1171">[ date ]</A>
+<A HREF="index.html#1171">[ thread ]</A>
+<A HREF="subject.html#1171">[ subject ]</A>
+<A HREF="author.html#1171">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In case anyone else misunderstood my problem, the multiple slow rate
+<BR>
+connections discussed below involve different data to different
+<BR>
+destinations.  It is not an attempt to bypass TCP flow control.  The
+<BR>
+preference for UDP over TCP is to avoid continually opening and closing TCP
+<BR>
+connections for a single packet worth of data (since the number of
+<BR>
+&quot;connections&quot; is too large to maintain an open TCP connection to each one).
+<BR>
+What I also should have clarified is that the UDP traffic is single packet
+<BR>
+request-reply transactions, so the rate is limited by an effective &quot;window
+<BR>
+size&quot; of 1 packet, and actually much slower than (packet_size/RTT) because
+<BR>
+of the application needs.
+<BR>
+<P>I agree completely with Constantinos concerns regarding non-adaptive traffic.
+<BR>
+<P>Tim
+<BR>
+<P><P>At 3:02 PM -0500 7/17/98, Constantinos wrote:
+<BR>
+<EM>&gt;Folks,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The forwarded message appeared in a discussion today at
+</EM><BR>
+<EM>&gt;the TCP implementation list. It is very interesting,
+</EM><BR>
+<EM>&gt;mainly because of the things that are implied rather
+</EM><BR>
+<EM>&gt;than said:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;1. The problem with congestion unresponsive traffic
+</EM><BR>
+<EM>&gt;is becoming increasingly serious as people find
+</EM><BR>
+<EM>&gt;smart ways to cheat the net.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;2. Network mechanisms that can only provide a degree
+</EM><BR>
+<EM>&gt;of fairness between individual flows may not be sufficient.
+</EM><BR>
+<EM>&gt;It seems that some fairness between users is need
+</EM><BR>
+<EM>&gt;as well, as a user can start dozens of flows to increase
+</EM><BR>
+<EM>&gt;the aggregate throughput.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;If some countermeasures are not taken urgently with the
+</EM><BR>
+<EM>&gt;appropriate network and pricing mechanisms, I am afraid that
+</EM><BR>
+<EM>&gt;soon we will start experiencing the first large-scale
+</EM><BR>
+<EM>&gt;congestion collapses.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Constantinos
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;------------- Begin Forwarded Message -------------
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Fri Jul 17 14:43 EDT 1998
+</EM><BR>
+<EM>&gt;&gt; X-Sender: <A HREF="mailto:tdorcey@mail.boxtop.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">tdorcey@mail.boxtop.com</A>
+</EM><BR>
+<EM>&gt;&gt; Mime-Version: 1.0
+</EM><BR>
+<EM>&gt;&gt; Date: Fri, 17 Jul 1998 10:17:40 -0700
+</EM><BR>
+<EM>&gt;&gt; To: Graham Cope &lt;<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">G.Cope@ftel.co.uk</A>&gt;
+</EM><BR>
+<EM>&gt;&gt; From: Tim Dorcey &lt;<A HREF="mailto:tdorcey@boxtop.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">tdorcey@boxtop.com</A>&gt;
+</EM><BR>
+<EM>&gt;&gt; Subject: Re: max active TCP connections
+</EM><BR>
+<EM>&gt;&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; At 8:53 AM +0100 7/17/98, Graham Cope wrote:
+</EM><BR>
+<EM>&gt;&gt; &gt;
+</EM><BR>
+<EM>&gt;&gt; &gt;Suppose each has a receive buffer of 8KBytes. Then 10K connections
+</EM><BR>
+<EM>&gt;&gt; &gt;requires 800MBytes from somewhere.
+</EM><BR>
+<EM>&gt;&gt; &gt;  Perhaps someone else can suggest where.
+</EM><BR>
+<EM>&gt;&gt; &gt;
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; I didn't ask my question very well.  I am interested in the case where each
+</EM><BR>
+<EM>&gt;&gt; of the connections operates at a slow average transmission rate, where we
+</EM><BR>
+<EM>&gt;&gt; aren't increasing the aggregate transmit rate, but dividing it over more
+</EM><BR>
+<EM>&gt;&gt; connections.  The implementation will use UDP, but I figured some of the
+</EM><BR>
+<EM>&gt;&gt; scaling issues would be similar to what you would run into if you tried to
+</EM><BR>
+<EM>&gt;&gt; push the simultaneous connection limit of a TCP implementation.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; Tim
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; Tim Dorcey
+</EM><BR>
+<EM>&gt;&gt; iXL-Los Angeles
+</EM><BR>
+<EM>&gt;&gt; <A HREF="mailto:tdorcey@boxtop.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">tdorcey@boxtop.com</A>
+</EM><BR>
+<EM>&gt;&gt; (310) 235-3928
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; ------------- End Forwarded Message -------------
+</EM><BR>
+<P><P>Tim Dorcey
+<BR>
+iXL-Los Angeles
+<BR>
+<A HREF="mailto:tdorcey@boxtop.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;v03102808b1d561bc6455@[204.80.124.68]&gt;">tdorcey@boxtop.com</A>
+<BR>
+(310) 235-3928
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1170.html">David Borman: "Re: max active TCP connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1172.html">Sam Manthorpe: "Re: New problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1173.html">Sean Doran: "Re: New problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1171">[ date ]</A>
+<A HREF="index.html#1171">[ thread ]</A>
+<A HREF="subject.html#1171">[ subject ]</A>
+<A HREF="author.html#1171">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

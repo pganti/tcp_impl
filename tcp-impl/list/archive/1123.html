@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RFC 1323 implementation</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (Jerry.Chu@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: RFC 1323 implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RFC 1323 implementation</H1>
+<!-- received="Fri May  1 16:03:41 1998" -->
+<!-- isoreceived="19980501200341" -->
+<!-- sent="Fri, 1 May 1998 15:59:05 -0700 (PDT)" -->
+<!-- isosent="19980501225905" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="Jerry.Chu@eng.Sun.COM" -->
+<!-- subject="Re: RFC 1323 implementation" -->
+<!-- id="199805012259.PAA22730@taipei.eng.sun.com" -->
+<!-- inreplyto="RFC 1323 implementation" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:Jerry.Chu@eng.Sun.COM?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199805012259.PAA22730@taipei.eng.sun.com&gt;"><EM>Jerry.Chu@eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri May 01 1998 - 18:59:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1122.html">Craig Buffinton: "RE: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1123">[ date ]</A>
+<A HREF="index.html#1123">[ thread ]</A>
+<A HREF="subject.html#1123">[ subject ]</A>
+<A HREF="author.html#1123">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vendor: Sun Microsystems, Inc.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product: Solaris
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 2.6
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1-14 (except for a couple of minor known bugs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;described below)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By default the active open side will NOT initiate any window scale/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp options unless necessary (e.g. app specifying a &gt;= 64k
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive buffer size). The can be overridden by some system tunables.
+<BR>
+<P>------------------------------------------------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. |X|   Window Scale Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. |X|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. |X|   Window Scale size based on receive buffer size
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. |X|   Shift values &gt; 14 are logged and treated as 14.
+<BR>
+<P>=&gt; We treat values &gt; 14 as 14 but don't log an error.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. |x|   Timestamps Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. |x|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7. |x|   RTT calculations based on Timestamps
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.4
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*8. |x|   Update TS.Recent if:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEG.TSval &gt;= TSrecent and SEG.SEQ &lt;= Last.ACK.sent
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 4.x
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9. |X|   PAWS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10. |X|   &quot;invalidate&quot; TS.Recent if idle &gt; 24 days.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix A:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*11. |X|   TCP Maxseg option: MSS = MTU - fixed IP/TCP header
+<BR>
+<P>=&gt; We just discovered a bug, although minor, when some IP option is
+<BR>
+=&gt; enabled. The size of the IP option gets subtracted from MSS by mistake.
+<BR>
+=&gt; Since we implemented 12/13 correctly, this only unnecessarily reduces
+<BR>
+=&gt; the effective usable payload size. The bug will be fixed asap.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*12. |X|   On output: adjust TCP data length for TCP options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*13. |X|              adjust TCP data length for IP options
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix C:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*14. |X|   Disable Karn algorithm w/RTTM
+<BR>
+<P>* New/changed items from RFC 1323.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1122.html">Craig Buffinton: "RE: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1123">[ date ]</A>
+<A HREF="index.html#1123">[ thread ]</A>
+<A HREF="subject.html#1123">[ subject ]</A>
+<A HREF="author.html#1123">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

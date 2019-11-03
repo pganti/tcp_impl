@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: doubts in rfc793</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: doubts in rfc793">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: doubts in rfc793</H1>
+<!-- received="Sun Jul 11 03:25:23 1999" -->
+<!-- isoreceived="19990711072523" -->
+<!-- sent="Sun, 11 Jul 1999 03:13:45 -0400 (EDT)" -->
+<!-- isosent="19990711071345" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: doubts in rfc793" -->
+<!-- id="199907110713.DAA16952@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="doubts in rfc793" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20doubts%20in%20rfc793&In-Reply-To=&lt;199907110713.DAA16952@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jul 11 1999 - 03:13:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1776.html">Dennis Connors: "Call for Papers, WOSBIS 99"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1775">[ date ]</A>
+<A HREF="index.html#1775">[ thread ]</A>
+<A HREF="subject.html#1775">[ subject ]</A>
+<A HREF="author.html#1775">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Doubt-2
+</EM><BR>
+<EM>&gt; -------
+</EM><BR>
+<EM>&gt; The RFC says that  (this is just after connection diag. in the section 3.4)
+</EM><BR>
+<EM>&gt; &quot;1. If the connection does not exist (CLOSED) then a reset is sent
+</EM><BR>
+<EM>&gt;     in response to any incoming segment except another reset. In particular, 
+</EM><BR>
+<EM>&gt;     SYNs addressed to a non-existent connection are rejected by this means. &quot;
+</EM><BR>
+<EM>&gt;     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<P><EM>&gt;     RFC seems to be saying that SYN addressed to non-existent connection
+</EM><BR>
+<EM>&gt;     is illegal.
+</EM><BR>
+<P>Basically, yes, though I would prefer a different word, since it's
+<BR>
+valid to attempt to connect when there's nobody listening.  The
+<BR>
+receiving TCP stack just has to reject the attempt.
+<BR>
+<P><EM>&gt;     But, I think that when we are opening a connection, the SYN can
+</EM><BR>
+<EM>&gt;     be addressed to ONLY non-existent connection because SYN only
+</EM><BR>
+<EM>&gt;     starts up the connection.
+</EM><BR>
+<P>This is a flaw in the language.  When there is &quot;someone there&quot;, the
+<BR>
+receiving stack has a TCB in SYN-SENT or LISTEN (the former only in the
+<BR>
+case of a simultaneous open, something that I suspect essentially never
+<BR>
+happens in practice).  In the sentence you emphasized, I believe
+<BR>
+&quot;connection&quot; really means &quot;address/port pair&quot; (loosely, &quot;socket&quot;).
+<BR>
+<P><EM>&gt; RFC says that,
+</EM><BR>
+<EM>&gt; &quot;The sending TCP must be prepared to accept from the user and send at 
+</EM><BR>
+<EM>&gt;  least one octet of new data even if the send window is zero. The sending 
+</EM><BR>
+<EM>&gt;  TCP must regularly retransmit to the receiving TCP even when the window 
+</EM><BR>
+<EM>&gt;  is zero.&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;  1. when send window is 0, how tcp will be able send data?
+</EM><BR>
+<P>It can't.  The point of this low-rate constant retransmission is to
+<BR>
+probe the window, so that in case it opens but the packet carrying that
+<BR>
+fact manages to get lost in transit, data transfer doesn't stall
+<BR>
+indefinitely.
+<BR>
+<P><EM>&gt;  2. does it mean that retransmission are not affected by the present
+</EM><BR>
+<EM>&gt;     window size (0 in the above case)?
+</EM><BR>
+<P>Retransmission of what?  Zero-window probes are very different from
+<BR>
+retransmitting already-sent data.  I don't recall offhand what you're
+<BR>
+supposed to do if you send some data that's in-window, the peer shrinks
+<BR>
+its advertised window so that what you sent is partially (or entirely)
+<BR>
+past the window before acking what you sent, and then your
+<BR>
+retransmission timer goes off.  It seems to me there's little point in
+<BR>
+sending data outside what you think the window is, except for two
+<BR>
+cases: (1) zero-window probes and (2) when the bandwidth*delay product
+<BR>
+is high enough that the window is likely to have opened by the time the
+<BR>
+segment arrives.  The latter case is hard enough to predict that it's
+<BR>
+probably better addressed by window-enlargement schemes, it seems to
+<BR>
+me.  (If the bandwidth*delay product is larger than the peer's
+<BR>
+available buffer space, but the peer is fast enough to swallow bits at
+<BR>
+full path bandwidth, this strategy will lose.  I suspect this is
+<BR>
+relatively rare.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20doubts%20in%20rfc793&In-Reply-To=&lt;199907110713.DAA16952@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1776.html">Dennis Connors: "Call for Papers, WOSBIS 99"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1775">[ date ]</A>
+<A HREF="index.html#1775">[ thread ]</A>
+<A HREF="subject.html#1775">[ subject ]</A>
+<A HREF="author.html#1775">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

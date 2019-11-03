@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Richard Fox (Richard.Fox@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="RE: draft description of &quot;No initial slow start&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: draft description of &quot;No initial slow start&quot;</H1>
+<!-- received="Wed Mar 19 11:13:06 1997" -->
+<!-- isoreceived="19970319161306" -->
+<!-- sent="Wed, 19 Mar 1997 10:56:48 -0800" -->
+<!-- isosent="19970319185648" -->
+<!-- name="Richard Fox" -->
+<!-- email="Richard.Fox@Eng.Sun.COM" -->
+<!-- subject="RE: draft description of &quot;No initial slow start&quot;" -->
+<!-- id="199703191856.KAA07663@skybolt.eng.sun.com" -->
+<!-- inreplyto="draft description of &quot;No initial slow start&quot;" -->
+<STRONG>From:</STRONG> Richard Fox (<A HREF="mailto:Richard.Fox@Eng.Sun.COM?Subject=RE:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;&In-Reply-To=&lt;199703191856.KAA07663@skybolt.eng.sun.com&gt;"><EM>Richard.Fox@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 13:56:48 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0162.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0160.html">Hsiao-keng Jerry Chu: "Re: aggressive delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#161">[ date ]</A>
+<A HREF="index.html#161">[ thread ]</A>
+<A HREF="subject.html#161">[ subject ]</A>
+<A HREF="author.html#161">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As an aside, I observed in your examples that the sending TCP never 
+</EM><BR>
+<EM>&gt; sets the PSH bit except in the first segment. I hope the PSH bit is 
+</EM><BR>
+<EM>&gt; eventually set and is not shown in your traces because these are trace 
+</EM><BR>
+<EM>&gt; fragments and not because the sender is behaving badly. This relates to
+</EM><BR>
+<EM>&gt; an 
+</EM><BR>
+<EM>&gt; issue I had lately with a TCP implementor that did not set the PSH bit
+</EM><BR>
+<EM>&gt; correctly. 
+</EM><BR>
+<EM>&gt; The misbehaving TCP did not always set the PSH bit in the last data
+</EM><BR>
+<EM>&gt; segment 
+</EM><BR>
+<EM>&gt; but still expected that data to be delivered to the application. Our TCP
+</EM><BR>
+<EM>&gt; conforms 
+</EM><BR>
+<EM>&gt; to RFC 1122 section 4.2.2.2 and stages data until either the PSH bit is
+</EM><BR>
+<EM>&gt; set 
+</EM><BR>
+<EM>&gt; or the applications receive buffer is filled. If the sender sends all of
+</EM><BR>
+<EM>&gt; its data 
+</EM><BR>
+<EM>&gt; and does not set the PSH bit, neither of these conditions is met and the
+</EM><BR>
+<EM>&gt; connection is effectively hung. They had tested their product with 
+</EM><BR>
+<EM>&gt; some UNIX boxes that always pass received data to the application
+</EM><BR>
+<EM>&gt; regardless 
+</EM><BR>
+<EM>&gt; of whether the PSH bit is set.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I do not know how wide spread this problem is but caused us some 
+</EM><BR>
+<EM>&gt; considerable grief.
+</EM><BR>
+<P><P>I have seen a number of implementations that seem to depend on the PSH
+<BR>
+bit. I am not so sure one should really ever depend on the PSH bit being
+<BR>
+set to deliver data to the app. I know the definition of the PSH bit
+<BR>
+but I would like to see the RFC amended to say the PSH bit is advisory
+<BR>
+on when to deliver data to the app but a stack should deliver data
+<BR>
+regardless of the PSH bit.
+<BR>
+<P>--rich
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0162.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0160.html">Hsiao-keng Jerry Chu: "Re: aggressive delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#161">[ date ]</A>
+<A HREF="index.html#161">[ thread ]</A>
+<A HREF="subject.html#161">[ subject ]</A>
+<A HREF="author.html#161">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

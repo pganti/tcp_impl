@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Segments with no flags set</TITLE>
+<META NAME="Author" CONTENT="Abolade Gbadegesin (aboladeg@windows.microsoft.com)">
+<META NAME="Subject" CONTENT="RE: Segments with no flags set">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Segments with no flags set</H1>
+<!-- received="Wed May 30 18:36:36 2001" -->
+<!-- isoreceived="20010530223636" -->
+<!-- sent="Wed, 30 May 2001 14:50:54 -0700" -->
+<!-- isosent="20010530215054" -->
+<!-- name="Abolade Gbadegesin" -->
+<!-- email="aboladeg@windows.microsoft.com" -->
+<!-- subject="RE: Segments with no flags set" -->
+<!-- id="9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com" -->
+<!-- inreplyto="Segments with no flags set" -->
+<STRONG>From:</STRONG> Abolade Gbadegesin (<A HREF="mailto:aboladeg@windows.microsoft.com?Subject=RE:%20Segments%20with%20no%20flags%20set&In-Reply-To=&lt;9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com&gt;"><EM>aboladeg@windows.microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed May 30 2001 - 17:50:54 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2557.html">Bob Braden: "Re: Segments with no flags set"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2555.html">Greg Minshall: "Re: Segments with no flags set"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2552.html">bryan@terran.org: "Segments with no flags set"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2556">[ date ]</A>
+<A HREF="index.html#2556">[ thread ]</A>
+<A HREF="subject.html#2556">[ subject ]</A>
+<A HREF="author.html#2556">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+RFC 793, section 3.7, paragraph 3:
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&quot;... Note that once in the ESTABLISHED state all
+<BR>
+&nbsp;&nbsp;segments must carry current acknowledgment information.&quot;
+<BR>
+<P>ibid., section 3.9, page 72:
+<BR>
+<P>&quot;SEGMENT ARRIVES
+<BR>
+&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fifth check the ACK field,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the ACK bit is off drop the segment and return&quot;
+<BR>
+<P><P>-----Original Message-----
+<BR>
+From: David S. Miller [mailto:<A HREF="mailto:davem@redhat.com?Subject=RE:%20Segments%20with%20no%20flags%20set&In-Reply-To=&lt;9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com&gt;">davem@redhat.com</A>] 
+<BR>
+Sent: Wednesday, May 30, 2001 2:20 PM
+<BR>
+To: <A HREF="mailto:bryan@terran.org?Subject=RE:%20Segments%20with%20no%20flags%20set&In-Reply-To=&lt;9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com&gt;">bryan@terran.org</A>
+<BR>
+Cc: IETF TCP WG
+<BR>
+Subject: Re: Segments with no flags set
+<BR>
+<P><P><P><A HREF="mailto:bryan@terran.org?Subject=RE:%20Segments%20with%20no%20flags%20set&In-Reply-To=&lt;9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com&gt;">bryan@terran.org</A> writes:
+<BR>
+<EM> &gt; I recently encountered an interoperability problem between a firewall
+</EM><BR>
+and a
+<BR>
+<EM> &gt; Voice-over-IP hardware device (with embedded TCP stack), where the
+</EM><BR>
+VoIP box
+<BR>
+<EM> &gt; would begin to send segments with no flags set (including ACK) over
+</EM><BR>
+an
+<BR>
+<EM> &gt; established session.  Although I've never observed such use of TCP
+</EM><BR>
+before,
+<BR>
+<EM> &gt; I can't find hard evidence that indicates it is a violation of spec.
+</EM><BR>
+Can
+<BR>
+<EM> &gt; anyone confirm if this is truly against the law?
+</EM><BR>
+<P>I don't see how it could be illegal, if the ACK flag bit is clear this
+<BR>
+simply means to ignore the ACK field.
+<BR>
+<P>I suppose a firewall vendor could claim that this provides a 32-bit
+<BR>
+field in which to create a covert channel of information, but the URG
+<BR>
+field can already be (and honestly, by hardcore crackers probably is)
+<BR>
+used for this purpose :-)
+<BR>
+<P>Later,
+<BR>
+David S. Miller
+<BR>
+<A HREF="mailto:davem@redhat.com?Subject=RE:%20Segments%20with%20no%20flags%20set&In-Reply-To=&lt;9882C98B3C3D9B45A9A5F9EDECE014D8615013@win-msg-01.wingroup.windeploy.ntdev.microsoft.com&gt;">davem@redhat.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2557.html">Bob Braden: "Re: Segments with no flags set"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2555.html">Greg Minshall: "Re: Segments with no flags set"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2552.html">bryan@terran.org: "Segments with no flags set"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2556">[ date ]</A>
+<A HREF="index.html#2556">[ thread ]</A>
+<A HREF="subject.html#2556">[ subject ]</A>
+<A HREF="author.html#2556">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed May 30 2001 - 18:37:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

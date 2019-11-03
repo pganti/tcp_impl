@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 13:39:08 2000" -->
+<!-- isoreceived="20000616173908" -->
+<!-- sent="Fri, 16 Jun 2000 10:28:39 -0700" -->
+<!-- isosent="20000616172839" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="394A63C7.62BD5553@cup.hp.com" -->
+<!-- inreplyto="200006160206.WAA13176@seraph3.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;394A63C7.62BD5553@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 13:28:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2163.html">kuznet@ms2.inr.ac.ru: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2164.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2162">[ date ]</A>
+<A HREF="index.html#2162">[ thread ]</A>
+<A HREF="subject.html#2162">[ subject ]</A>
+<A HREF="author.html#2162">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I thought that end hosts were supposed to avoid fragmenting TCP
+<BR>
+datagrams in the first place :)
+<BR>
+<P>Sending the first fragment last is not _that_ unknown. For example, it
+<BR>
+is done for the HP-PB FDDI NIC from many years ago. In that case it was
+<BR>
+done for UDP (thought I guess it would be done for TCP too if TCP
+<BR>
+segments were fragmented) - the reason? The card basically had a
+<BR>
+checksum accumulator - accumulate the checksum over the relevant
+<BR>
+portions of the rest of the fragments and then insert them into the
+<BR>
+header at the end. That way one does not have a need to DMA the entire
+<BR>
+fragment chain into the NIC before the offloaded checksum can take
+<BR>
+place.
+<BR>
+<P>Basically, it is a way to do a &quot;trailer checksum&quot; without actually doing
+<BR>
+a trailer checksum.
+<BR>
+<P>rick jones
+<BR>
+<P>Nabil Seddigh wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Recent discussions on this list focused on network
+</EM><BR>
+<EM>&gt; devices reordering packets. How about an end-host
+</EM><BR>
+<EM>&gt; that intentionally reorders some TCP packets?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; During testing of Packet Classification capability
+</EM><BR>
+<EM>&gt; on for Diffserv-capable routers, one of my colleagues
+</EM><BR>
+<EM>&gt; discovered that the Linux TCP sender intentionally
+</EM><BR>
+<EM>&gt; reorders fragments - the pkt containing the TCP port
+</EM><BR>
+<EM>&gt; number is the last pkt sent in a family (same ip_id)
+</EM><BR>
+<EM>&gt; of fragments.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The implication of such an implementation is that
+</EM><BR>
+<EM>&gt; Layer-4 packet classification of fragments
+</EM><BR>
+<EM>&gt; is virtually impossible - unless routers try to
+</EM><BR>
+<EM>&gt; cache packets....not a desirable solution.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Of course one could argue that most fragments on
+</EM><BR>
+<EM>&gt; the net are UDP and not TCP but nonetheless:
+</EM><BR>
+<EM>&gt; shouldn't end-hosts avoid intentional reordering?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We checked out various RFCs and didn't find explicit
+</EM><BR>
+<EM>&gt; prohibitions on an end-host reordering the pkts
+</EM><BR>
+<EM>&gt; that it sends out.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Best,
+</EM><BR>
+<EM>&gt; ---
+</EM><BR>
+<EM>&gt; Nabil Seddigh
+</EM><BR>
+<EM>&gt; <A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;394A63C7.62BD5553@cup.hp.com&gt;">nseddigh@nortelnetworks.com</A>
+</EM><BR>
+<P><PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2163.html">kuznet@ms2.inr.ac.ru: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2164.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2162">[ date ]</A>
+<A HREF="index.html#2162">[ thread ]</A>
+<A HREF="subject.html#2162">[ subject ]</A>
+<A HREF="author.html#2162">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

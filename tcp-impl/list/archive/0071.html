@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="C. Harald Koch (chk@border.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 22:28:45 1997" -->
+<!-- isoreceived="19970212032845" -->
+<!-- sent="Tue, 11 Feb 1997 17:23:07 -0500" -->
+<!-- isosent="19970211222307" -->
+<!-- name="C. Harald Koch" -->
+<!-- email="chk@border.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="97Feb11.172057est.30787-2@janus.border.com" -->
+<!-- inreplyto="9702111928.AA15928@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> C. Harald Koch (<A HREF="mailto:chk@border.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;97Feb11.172057est.30787-2@janus.border.com&gt;"><EM>chk@border.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 17:23:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#71">[ date ]</A>
+<A HREF="index.html#71">[ thread ]</A>
+<A HREF="subject.html#71">[ subject ]</A>
+<A HREF="author.html#71">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:3300AE7E.60F9@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;97Feb11.172057est.30787-2@janus.border.com&gt;">3300AE7E.60F9@spider.com</A>&gt;, Ian Heavens writes:
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 1.  server  is blocked on write()
+</EM><BR>
+<EM>&gt; 2.  client closes normally and server ACKs (client in FIN-WAIT-2
+</EM><BR>
+<EM>&gt; and server in CLOSE-WAIT).  No RST because RFC1122 is not followed.
+</EM><BR>
+<EM>&gt; 3.  server never closes
+</EM><BR>
+&nbsp;
+<BR>
+We saw this problem with the web server (and web proxies) on our firewall
+<BR>
+product, and ended up using the (evil expedient) of having the server/proxy
+<BR>
+timeout all connections (after 7200 seconds of zero-traffic, i.e. a *long*
+<BR>
+time). 
+<BR>
+<P>In message &lt;<A HREF="mailto:9702111928.AA15928@ludwigia.raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;97Feb11.172057est.30787-2@janus.border.com&gt;">9702111928.AA15928@ludwigia.raleigh.ibm.com</A>&gt;, Thomas Narten writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The client is clearly broken, and in a major way that just doesn't
+</EM><BR>
+<EM>&gt; make sense to me. In step 3C, the client has destroyed the
+</EM><BR>
+<EM>&gt; connection. Yet in step 4C, when the client gets a TCP segment for
+</EM><BR>
+<EM>&gt; which it doesn't have a control block, it does nothing, as opposed to
+</EM><BR>
+<EM>&gt; sending a RST.
+</EM><BR>
+<P>We most commonly see this when a PPP user has hung-up. Since they're *gone*,
+<BR>
+you don't get any response from the TCP stack. Because of CIDR route
+<BR>
+aggregation, buggy dialup servers, and/or firewalls, you often don't get
+<BR>
+host/net unreachables. The only indication you have that the client has
+<BR>
+disappeared is a timeout.
+<BR>
+<P>All the TCP stack fixes on the client side in the world won't solve this
+<BR>
+particular problem (the dial-up user hung up).
+<BR>
+<P><PRE>
+-- 
+C. Harald Koch          | Senior System Developer, Secure Computing Canada Ltd.
+<A HREF="mailto:chk@border.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;97Feb11.172057est.30787-2@janus.border.com&gt;">chk@border.com</A>          | 100 University Ave., 7th Floor, Toronto ON M5J 1V6
++1 416 813 2054 (voice) | &quot;Madness takes its toll. Please have exact change.&quot;
++1 416 813 2001 (fax)   |		-Karen Murphy &lt;<A HREF="mailto:karenm@descartes.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;97Feb11.172057est.30787-2@janus.border.com&gt;">karenm@descartes.com</A>&gt;
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#71">[ date ]</A>
+<A HREF="index.html#71">[ thread ]</A>
+<A HREF="subject.html#71">[ subject ]</A>
+<A HREF="author.html#71">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

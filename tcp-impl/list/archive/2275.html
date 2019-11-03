@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP timeout mechanism</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: TCP timeout mechanism">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP timeout mechanism</H1>
+<!-- received="Fri Aug  4 18:52:54 2000" -->
+<!-- isoreceived="20000804225254" -->
+<!-- sent="Sat, 05 Aug 2000 04:20:54 +1000" -->
+<!-- isosent="20000804182054" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: TCP timeout mechanism" -->
+<!-- id="398B0985.33BBC947@cvs.com.au" -->
+<!-- inreplyto="398B1001.7480A776@policyone.com" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20timeout%20mechanism&In-Reply-To=&lt;398B0985.33BBC947@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 04 2000 - 14:20:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2274.html">der Mouse : "Re: TCP timeout mechanism"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2271.html">Proneet Biswas: "Re: TCP timeout mechanism"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2279.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2279.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2275">[ date ]</A>
+<A HREF="index.html#2275">[ thread ]</A>
+<A HREF="subject.html#2275">[ subject ]</A>
+<A HREF="author.html#2275">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I know of no way of getting a guaranteed response from the other end of a TCP
+<BR>
+connection. I would love to hear of it if there is.
+<BR>
+<P>Connections can definitely be abandoned, you can definitely be left with the resources
+<BR>
+tied up for no reason, and you will definitely not have unlimited resources. And for
+<BR>
+most OS work rebooting is not an option, though this doesn't seem to be a general
+<BR>
+rule.
+<BR>
+<P>If you time-out TCP connections the time-out period has to be long ( I chose 24
+<BR>
+hours), but with the option of making it indefinite. Having a low priority task going
+<BR>
+through a million connections in that time is no big deal.
+<BR>
+<P>You could have the time-out task link inactive connections in inactivity order; and
+<BR>
+only kill the connection if you have to have the resources. The kill code using the
+<BR>
+linked list as the order to search for a connection to kill, the search would have to
+<BR>
+allow for the possibility the inactivity has stopped, but 99% of the time it would
+<BR>
+take the first connection in the list fins it is still inactive and claim the
+<BR>
+resources for the new connection.
+<BR>
+<P>In fact you could use the inactivity list in the same way as your free resources list.
+<BR>
+Instead of thinking of the resources as in use or free,  think of them as active or
+<BR>
+inactive, and only give up if the inactivity time of the resource your about to use
+<BR>
+falls below say an hour. The resource in question will have a flag to give the state
+<BR>
+of the connection just set them all to &quot;closed&quot; on start-up.
+<BR>
+<P>The low level task just goes through the table linking the list in inactivity order
+<BR>
+and sets a global &quot;load&quot; value. The claiming task searches down the &quot;inactivity list&quot;
+<BR>
+until it finds one that has a time greater than that represented by the&quot; load&quot;. At the
+<BR>
+head of the list you will only have two types of records, inactive connections, or
+<BR>
+connections that have recently become active and are not yet moved down by the
+<BR>
+time-out routine.
+<BR>
+<P>I like it, might be a worthwhile change, problem I now have is how many connections am
+<BR>
+I going to allow.
+<BR>
+<P><P>Regards
+<BR>
+<P>Proneet Biswas wrote:
+<BR>
+<P><EM>&gt; Hi,
+</EM><BR>
+<EM>&gt;    I am currently tryng to investigate other approaches and it would be useful to
+</EM><BR>
+<EM>&gt; know what are the existing alternatives ?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thanks.
+</EM><BR>
+<EM>&gt; Proneet.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Alan Cox wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; see if the difference is greater than the TCP TIMEOUT value, If yes
+</EM><BR>
+<EM>&gt; &gt; &gt; remove the entry and add it to the free pool. It would be great if
+</EM><BR>
+<EM>&gt; &gt; &gt; anybody could suggest other better methods.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; This is incorrect. A TCP session without keepalives has an infinite TCP_TIMEOUT.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; You need to take slightly more active approaches to session tracking
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2274.html">der Mouse : "Re: TCP timeout mechanism"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2271.html">Proneet Biswas: "Re: TCP timeout mechanism"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2279.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2279.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2275">[ date ]</A>
+<A HREF="index.html#2275">[ thread ]</A>
+<A HREF="subject.html#2275">[ subject ]</A>
+<A HREF="author.html#2275">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

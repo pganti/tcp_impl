@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Munich Minutes</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (VOLZ@PROCESS.COM)">
+<META NAME="Subject" CONTENT="Re: Munich Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Munich Minutes</H1>
+<!-- received="Tue Sep 16 15:07:44 1997" -->
+<!-- isoreceived="19970916190744" -->
+<!-- sent="Tue, 16 Sep 1997 18:05 -0400" -->
+<!-- isosent="19970916220555" -->
+<!-- name="Bernie Volz" -->
+<!-- email="VOLZ@PROCESS.COM" -->
+<!-- subject="Re: Munich Minutes" -->
+<!-- id="009BA65397121686.10B8@PROCESS.COM" -->
+<!-- inreplyto="Munich Minutes" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20Munich%20Minutes&In-Reply-To=&lt;009BA65397121686.10B8@PROCESS.COM&gt;"><EM>VOLZ@PROCESS.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 16 1997 - 18:05:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0729.html">Steve Alexander: "Munich Minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#734">[ date ]</A>
+<A HREF="index.html#734">[ thread ]</A>
+<A HREF="subject.html#734">[ subject ]</A>
+<A HREF="author.html#734">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;SA&gt; Bernard Volz mentioned a new problem, namely implementations that
+</EM><BR>
+<EM>&gt;SA&gt; only send a FIN after all outstanding data has been ACKed; this
+</EM><BR>
+<EM>&gt;SA&gt; should be added to the I-D.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  Can a summary of this issue be sent to the list as well so that we
+</EM><BR>
+<EM>&gt;  need not wait for the next draft to see it?
+</EM><BR>
+<EM>&gt;--
+</EM><BR>
+<EM>&gt;Scott Lawrence           EmWeb Embedded Server       &lt;<A HREF="mailto:lawrence@agranat.com?Subject=Re:%20Munich%20Minutes&In-Reply-To=&lt;009BA65397121686.10B8@PROCESS.COM&gt;">lawrence@agranat.com</A>&gt;
+</EM><BR>
+<P>Here's a write up (following the format used in DRAFT-IETF-TCPIMPL-PROB)
+<BR>
+on the additional TCP implementation problem that I raised at the TCP
+<BR>
+Implementators Working Group session in Munich. This is pretty much what
+<BR>
+I sent Craig and Vern in late August.
+<BR>
+<P>- Bernie Volz
+<BR>
+&nbsp;&nbsp;Process Software Corporation
+<BR>
+<P>-----
+<BR>
+<P>Failure to Send FIN Notifications Promptly
+<BR>
+<P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Performance
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When the application &quot;closes&quot; the connection, TCP should send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any remaining data and the FIN notification promptly to the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer. A few implementations will delay sending (any remaining
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data) and the FIN notification until the connection is idle
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ie, all unacknowledged data is acknowledged). This results
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in reduced performance as connection closure is typically
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delayed by the delay acknowledgement of the peer (which is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nominally 200 milliseconds).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The TCP send policy algorithm should include a condition for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a pending FIN. If there is sufficient TCP window space to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send the remaining data, it should be sent immediately with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the FIN indication regardless of how little data is available.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If no data is remaining to be sent, the FIN should be sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immediately.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sending of the FIN should never be delayed if all data has
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;been sent or can be sent with the FIN. Unacknowledged data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;must not delay sending of the FIN unless the window does not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allow sending any remaining unsent data.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that a FIN segment should also always have the PSH flag
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set.
+<BR>
+<P>Significane
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Can lead to reduced performance especially for heavily used
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;services such as HTTP.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reduced performance.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump (no lossed reported):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:38.68 A &gt; B: S 1031850376:1031850376(0) win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:38.71 B &gt; A: S 596916473:596916473(0) ack 1031850377
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:38.73 A &gt; B: . ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:41.98 A &gt; B: P 1:4(3) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.15 B &gt; A: . ack 4 win 8757 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.23 A &gt; B: P 4:7(3) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.25 B &gt; A: P 1:11(10) ack 7 win 8754 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.32 A &gt; B: . ack 11 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.33 B &gt; A: P 11:51(40) ack 7 win 8754 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.51 A &gt; B: . ack 51 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.53 B &gt; A: F 51:51(0) ack 7 win 8754 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.56 A &gt; B: FP 7:7(0) ack52 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04:42.58 B &gt; A: . ack 8 win 8754 (DF)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Machine B in the trace below does not send out a FIN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;notification promptly if there is any data outstanding. It
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead waits for all unacknowledged data to be acknowledged
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;before sending the FIN bit. The connection was closed at
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:04.42.33 after requesting 40 octets to be sent. However,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the FIN notification wasn't sent until 10:04.42.51 (after the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(delayed) acknowledgement of the 40 octets of data).
+<BR>
+<P>Trace file demonstrating correct behavoir:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump (no lossed reported):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:53.85 C &gt; D: S 419744533:419744533(0) win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:53.92 D &gt; C: S 10082297:10082297(0) ack 419744534
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:53.95 C &gt; D: . ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:54.62 D &gt; C: . ack 4 win 8757 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:54.76 C &gt; D: P 4:7(3) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:54.89 D &gt; C: P 1:11(10) ack 7 win 8754 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:54.90 D &gt; C: FP 11:51(40) ack7 win 8754 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:54.92 C &gt; D: . ack 52 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:55.01 C &gt; D: FP 7:7(0) ack 52 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:27:55.09 D &gt; C: . ack 8 win 8754 (DF)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here, Machine D sends the FIN with the 40 octets of data even
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;before the original 10 octets have been acknowledged. This is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correct behavoir as it provides for the highest performance.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0729.html">Steve Alexander: "Munich Minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0735.html">Francesco Potorti`: "Re: Munich Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#734">[ date ]</A>
+<A HREF="index.html#734">[ thread ]</A>
+<A HREF="subject.html#734">[ subject ]</A>
+<A HREF="author.html#734">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:58 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 19:33:09 1999" -->
+<!-- isoreceived="19990218003309" -->
+<!-- sent="Wed, 17 Feb 1999 17:27:42 -0700 (MST)" -->
+<!-- isosent="19990218002742" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902180027.RAA15423@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180027.RAA15423@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 19:27:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1596.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1596.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1595">[ date ]</A>
+<A HREF="index.html#1595">[ thread ]</A>
+<A HREF="subject.html#1595">[ subject ]</A>
+<A HREF="author.html#1595">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Henrik Frystyk Nielsen &lt;<A HREF="mailto:frystyk@w3.org?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180027.RAA15423@calcite.rhyolite.com&gt;">frystyk@w3.org</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Yes, I too do application level buffering with all the problems of figuring
+</EM><BR>
+<EM>&gt; out what a good buffer size is (I ended up using 1K as a compromise). In
+</EM><BR>
+<EM>&gt; most cases this mean I don't need Nagle at all.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; But, from an architectural viewpoint, I think it makes a lot more sense if
+</EM><BR>
+<EM>&gt; I didn't have to do that at the application layer and that I instead could
+</EM><BR>
+<EM>&gt; keep the services separated. This means that I need enough control to be
+</EM><BR>
+<EM>&gt; able to indicate what I want - an explicit flush is one of those hooks.
+</EM><BR>
+<EM>&gt; Today, I don't have that so I have to repeat a lot of the functionality in
+</EM><BR>
+<EM>&gt; a layer above and short-circuit things like Nagle in lower layers.
+</EM><BR>
+<P>That's a fair argument, but I don't see how it actually applies here.
+<BR>
+<P><P>Case 0: no buffering, Nagle off, use flush bit
+<BR>
+Case 1: no buffering, Nagle off, don't use flush bit
+<BR>
+&nbsp;&nbsp;&nbsp;same packets on the wire in either case...far too many!
+<BR>
+<P>Case 2: you don't buffer, leave Nagle on, and use the flush bit.  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Your writes of slow data generally go out immediately, because you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;send them when things are idle.  When you have fast data, you use the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;flush bit, so they also go out immediately instead of possibly being
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;delayed for an Ack of slow data.  The result on the wire is too many
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;packets, almost as bad as #0 and #1.  The only improvement in packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;counts over #0 and #1 is when you happen to send slow data within
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;100 ms after receiving fast data or send 2 slow bursts within 100 ms.
+<BR>
+<P>Case 3:  you buffer, leave Nagle on, and use the flush bit
+<BR>
+Case 4:  you buffer, turn Nagle off, and do not use the flush bit.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Both cases have the similar application code complexity and the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;same, minimal count of packets on the wire.
+<BR>
+<P>Case 5-7:  boring.
+<BR>
+<P>Do you agree that #0 #1 are bad, and so you pick either #3 or #4?
+<BR>
+<P>Given that #4 works everywhere today and forever, why would you ever bother
+<BR>
+to code #3?  For the architectual purity seal of approval?
+<BR>
+<P><P>What's the difference between a flush bit in the send() system call, and
+<BR>
+explicit setsockopt()'s turning off TCP_NODELAY off before a send() and
+<BR>
+on afterwards?  No, I don't like system call overhead--I'm asking what
+<BR>
+happens on the wire.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180027.RAA15423@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1596.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1596.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1595">[ date ]</A>
+<A HREF="index.html#1595">[ thread ]</A>
+<A HREF="subject.html#1595">[ subject ]</A>
+<A HREF="author.html#1595">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: I-D ACTION:draft-ietf-tcpimpl-re</TITLE>
+<META NAME="Author" CONTENT="Internet-Drafts@ietf.org (Internet-Drafts@ietf.org)">
+<META NAME="Subject" CONTENT="I-D ACTION:draft-ietf-tcpimpl-restart-00.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>I-D ACTION:draft-ietf-tcpimpl-restart-00.txt</H1>
+<!-- received="Fri Apr 10 07:56:29 1998" -->
+<!-- isoreceived="19980410115629" -->
+<!-- sent="Fri, 10 Apr 1998 10:52:31 -0400" -->
+<!-- isosent="19980410145231" -->
+<!-- name="Internet-Drafts@ietf.org" -->
+<!-- email="Internet-Drafts@ietf.org" -->
+<!-- subject="I-D ACTION:draft-ietf-tcpimpl-restart-00.txt" -->
+<!-- id="199804101452.KAA15742@ns.ietf.org" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Internet-Drafts@ietf.org?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-restart-00.txt&In-Reply-To=&lt;199804101452.KAA15742@ns.ietf.org&gt;"><EM>Internet-Drafts@ietf.org</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Apr 10 1998 - 10:52:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1058.html">Boucif.Amarbensaber: "Precedence and security in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1056.html">Aaron Falk: "TCP Spoofing I-D"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1057">[ date ]</A>
+<A HREF="index.html#1057">[ thread ]</A>
+<A HREF="subject.html#1057">[ subject ]</A>
+<A HREF="author.html#1057">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A New Internet-Draft is available from the on-line Internet-Drafts directories.
+<BR>
+This draft is a work item of the TCP Implementation Working Group of the IETF.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title		: Issues in TCP Slow-Start Restart After Idle
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s)	: A. Hughes, J. Touch, J. Heidemann
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filename	: draft-ietf-tcpimpl-restart-00.txt
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages		: 7
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date		: 10-Apr-98
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;This draft discusses variations in the TCP 'slow-start restart' (SSR)
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm, and the unintended failure of some variations to properly
+<BR>
+&nbsp;&nbsp;&nbsp;restart in some environments. SSR is intended to avoid line-rate
+<BR>
+&nbsp;&nbsp;&nbsp;bursts after idle periods, where TCP accumulates permission to send
+<BR>
+&nbsp;&nbsp;&nbsp;in the form of ACKs, but does not consume that permission
+<BR>
+&nbsp;&nbsp;&nbsp;immediately. SSR's original 'restart after send is idle' is commonly
+<BR>
+&nbsp;&nbsp;&nbsp;implemented as 'restart after receive is idle'. The latter
+<BR>
+&nbsp;&nbsp;&nbsp;unintentionally fails to restart for bidirectional connections where
+<BR>
+&nbsp;&nbsp;&nbsp;the sender's burst is triggered by a reverse-path data packet, such
+<BR>
+&nbsp;&nbsp;&nbsp;as in persistent HTTP. Both the former and latter are shown to permit
+<BR>
+&nbsp;&nbsp;&nbsp;bursts in other circumstances. Three solutions are discussed, and
+<BR>
+&nbsp;&nbsp;&nbsp;their implementations evaluated.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;This document is a product of the LSAM project at ISI.  Comments are
+<BR>
+&nbsp;&nbsp;&nbsp;solicited and should be addressed to the authors.
+<BR>
+<P><P>Internet-Drafts are available by anonymous FTP.  Login with the username
+<BR>
+&quot;anonymous&quot; and a password of your e-mail address.  After logging in,
+<BR>
+type &quot;cd internet-drafts&quot; and then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;get draft-ietf-tcpimpl-restart-00.txt&quot;.
+<BR>
+A URL for the Internet-Draft is:
+<BR>
+<A HREF="ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-restart-00.txt">ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-restart-00.txt</A>
+<BR>
+<P>Internet-Drafts directories are located at:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Africa:	ftp.is.co.za
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Europe: ftp.nordu.net
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftp.nis.garr.it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pacific Rim: munnari.oz.au
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US East Coast: ftp.ietf.org
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US West Coast: ftp.isi.edu
+<BR>
+<P>Internet-Drafts are also available by mail.
+<BR>
+<P>Send a message to:	mailserv@ietf.org.  In the body type:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;FILE /internet-drafts/draft-ietf-tcpimpl-restart-00.txt&quot;.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+NOTE:	The mail server at ietf.org can return the document in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIME-encoded form by using the &quot;mpack&quot; utility.  To use this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feature, insert the command &quot;ENCODING mime&quot; before the &quot;FILE&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command.  To decode the response(s), you will need &quot;munpack&quot; or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a MIME-compliant mail reader.  Different MIME-compliant mail readers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit different behavior, especially when dealing with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;multipart&quot; MIME messages (i.e. documents which have been split
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up into multiple messages), so check your local documentation on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;how to manipulate these messages.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Below is the data which will enable a MIME compliant mail reader
+<BR>
+implementation to automatically retrieve the ASCII version of the
+<BR>
+Internet-Draft.
+<BR>
+<P><P>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1058.html">Boucif.Amarbensaber: "Precedence and security in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1056.html">Aaron Falk: "TCP Spoofing I-D"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1057">[ date ]</A>
+<A HREF="index.html#1057">[ thread ]</A>
+<A HREF="subject.html#1057">[ subject ]</A>
+<A HREF="author.html#1057">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

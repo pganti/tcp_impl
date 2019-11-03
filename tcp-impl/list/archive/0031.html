@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start related performan</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: slow-start related performance bugs in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start related performance bugs in TCP</H1>
+<!-- received="Thu Nov 28 03:39:38 1996" -->
+<!-- isoreceived="19961128083938" -->
+<!-- sent="Thu, 28 Nov 96 03:15:27 GMT" -->
+<!-- isosent="19961128031527" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: slow-start related performance bugs in TCP" -->
+<!-- id="5511.wsimpson@greendragon.com" -->
+<!-- inreplyto="slow-start related performance bugs in TCP" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;5511.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Nov 27 1996 - 22:15:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0030.html">Alan Cox: "Re: BOF Descriptio"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0023.html">John Heidemann: "slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#31">[ date ]</A>
+<A HREF="index.html#31">[ thread ]</A>
+<A HREF="subject.html#31">[ subject ]</A>
+<A HREF="author.html#31">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: John Heidemann &lt;<A HREF="mailto:johnh@isi.edu?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;5511.wsimpson@greendragon.com&gt;">johnh@isi.edu</A>&gt;
+</EM><BR>
+<EM>&gt; 	The first interaction occurs when the congestion window (cwnd)
+</EM><BR>
+<EM>&gt; 	is at 1x MSS (as at the start of a connection, or after an idle
+</EM><BR>
+<EM>&gt; 	period as described below).  The sender transmits the single
+</EM><BR>
+<EM>&gt; 	packet allowed by cwnd, but the receiver delays ACKing this
+</EM><BR>
+<EM>&gt; 	packet because immediate ACKs are only required after two
+</EM><BR>
+<EM>&gt; 	full packets.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	The second interaction occurs when the cwnd is at 2x MSS.
+</EM><BR>
+<EM>&gt; 	If the sender transmits a less-than full-size segment
+</EM><BR>
+<EM>&gt; 	the receiver will refuse to ACK immediately
+</EM><BR>
+<EM>&gt; 	because delayed ACKs require receipt of two *full-MSS*
+</EM><BR>
+<EM>&gt; 	segments for an immediate ACK.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Well, on my typically low speed links into a fat pipe, I've always
+<BR>
+viewed these both as a &quot;feature&quot;....  The delayed Ack helps keep the
+<BR>
+SRTT from dropping too quickly on these less than full size packets,
+<BR>
+preventing retransmissions of full MSS packets later.
+<BR>
+<P>Unnecessary retransmission of a 1000 ms packet is a much bigger
+<BR>
+performance loser over a short term or bursty connection than an extra
+<BR>
+50 ms delayed Ack at the start.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;5511.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;5511.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0030.html">Alan Cox: "Re: BOF Descriptio"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0023.html">John Heidemann: "slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#31">[ date ]</A>
+<A HREF="index.html#31">[ thread ]</A>
+<A HREF="subject.html#31">[ subject ]</A>
+<A HREF="author.html#31">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

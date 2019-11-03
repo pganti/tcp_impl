@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;I</TITLE>
+<META NAME="Author" CONTENT="Barney Wolff (barney@databus.com)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Insufficient interval between keepalives&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Insufficient interval between keepalives&quot;</H1>
+<!-- received="Tue Apr 29 15:54:53 1997" -->
+<!-- isoreceived="19970429195453" -->
+<!-- sent="Tue, 29 Apr 1997 18:28 EDT" -->
+<!-- isosent="19970429222800" -->
+<!-- name="Barney Wolff" -->
+<!-- email="barney@databus.com" -->
+<!-- subject="Re: draft description of &quot;Insufficient interval between keepalives&quot;" -->
+<!-- id="3366799c0.4393@databus.databus.com" -->
+<!-- inreplyto="draft description of &quot;Insufficient interval between keepalives&quot;" -->
+<STRONG>From:</STRONG> Barney Wolff (<A HREF="mailto:barney@databus.com?Subject=Re:%20draft%20description%20of%20&quot;Insufficient%20interval%20between%20keepalives&quot;&In-Reply-To=&lt;3366799c0.4393@databus.databus.com&gt;"><EM>barney@databus.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 29 1997 - 18:28:00 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0363.html">sparker@Eng.Sun.COM: "Packet Shell 4.0 release now available"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0356.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#362">[ date ]</A>
+<A HREF="index.html#362">[ thread ]</A>
+<A HREF="subject.html#362">[ subject ]</A>
+<A HREF="author.html#362">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Scott Dawson &lt;<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20draft%20description%20of%20&quot;Insufficient%20interval%20between%20keepalives&quot;&In-Reply-To=&lt;3366799c0.4393@databus.databus.com&gt;">sdawson@eecs.umich.edu</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Tue, 29 Apr 1997 14:45:52 -0400
+</EM><BR>
+<P>I don't understand what specifically you are complaining about.
+<BR>
+<P>While the *default* keepalive interval MUST be no less that 2 hours,
+<BR>
+system A may have been configured with a shorter interval, which is
+<BR>
+specifically allowed.  Only if system A's default configuration results
+<BR>
+in keepalives of less than 2 hours is there ground for complaint.  I
+<BR>
+take &quot;configurable&quot; here to mean by, for example, kernel reconfiguration.
+<BR>
+So the application itself may not be able to control the keepalive
+<BR>
+interval, only whether keepalives are used or not.
+<BR>
+<P>As a practical matter, I have often needed the ability to configure
+<BR>
+a keepalive interval of a few minutes, and considered the bandwidth
+<BR>
+used well worth the assurance of peer survival, in cases where the
+<BR>
+higher-level protocols had no easy keepalive mechanism of their own.
+<BR>
+I would prefer the ability to set the keepalive interval from an
+<BR>
+application on a specific connection, but alas that is not required
+<BR>
+by RFC 1122.
+<BR>
+<P>Barney Wolff  &lt;<A HREF="mailto:barney@databus.com?Subject=Re:%20draft%20description%20of%20&quot;Insufficient%20interval%20between%20keepalives&quot;&In-Reply-To=&lt;3366799c0.4393@databus.databus.com&gt;">barney@databus.com</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0363.html">sparker@Eng.Sun.COM: "Packet Shell 4.0 release now available"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0356.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#362">[ date ]</A>
+<A HREF="index.html#362">[ thread ]</A>
+<A HREF="subject.html#362">[ subject ]</A>
+<A HREF="author.html#362">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

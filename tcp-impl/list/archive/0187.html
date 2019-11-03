@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: more on TCP buffering</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="more on TCP buffering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>more on TCP buffering</H1>
+<!-- received="Fri Mar 21 10:46:37 1997" -->
+<!-- isoreceived="19970321154637" -->
+<!-- sent="Fri, 21 Mar 1997 10:41:18 -0800" -->
+<!-- isosent="19970321184118" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="more on TCP buffering" -->
+<!-- id="199703211841.AA07769@ash.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 13:41:18 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0188.html">William Allen Simpson: "Need slow start after idle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#187">[ date ]</A>
+<A HREF="index.html#187">[ thread ]</A>
+<A HREF="subject.html#187">[ subject ]</A>
+<A HREF="author.html#187">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;">narten@raleigh.ibm.com</A> Fri Mar 21 10:23:56 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; Subject: Re: draft description of &quot;Failure to retain above-sequence data&quot; 
+</EM><BR>
+<EM>&gt; Date: Fri, 21 Mar 1997 13:23:24 -0400
+</EM><BR>
+<EM>&gt; From: Thomas Narten &lt;<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;">narten@raleigh.ibm.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; It seems like fixing the PSH (push) bit is a more direct fix, which
+</EM><BR>
+<EM>&gt; &gt; too is not specified sufficiently right now. That bit is intended
+</EM><BR>
+<EM>&gt; &gt; to flush buffers out at the sender, and force received data up
+</EM><BR>
+<EM>&gt; &gt; to the application at the receiver. Unfortunately, the API doesn't
+</EM><BR>
+<EM>&gt; &gt; specify a preemptive callback or interrupt at the receiver when PSH
+</EM><BR>
+<EM>&gt; &gt; is received.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I think you read a bit much into PSH. PSH means tell the TCP
+</EM><BR>
+<P>I'm basing my statements on what was intended by PSH (from talking
+<BR>
+with old-timers involved in the spec), rather than what
+<BR>
+is currently implemented.
+<BR>
+<P>I agree that this is a spec issue, not an impl issue.
+<BR>
+<P><EM>&gt; My take on this discussion is that some (sending) implementation
+</EM><BR>
+<EM>&gt; doesn't set the PSH bit when it should, so the reciver buffers data
+</EM><BR>
+<EM>&gt; forever (expecting data or a PSH to come along later if needed). That
+</EM><BR>
+<EM>&gt; is a bug in the sender TCP; the receiver is behaving correctly.
+</EM><BR>
+<P>PSH wouldn't help in this case - the receiving TCP can dump
+<BR>
+the data to the socket, but the app need not pick it up.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703211841.AA07769@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0188.html">William Allen Simpson: "Need slow start after idle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#187">[ date ]</A>
+<A HREF="index.html#187">[ thread ]</A>
+<A HREF="subject.html#187">[ subject ]</A>
+<A HREF="author.html#187">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

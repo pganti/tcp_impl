@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re:  ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  ICMP must fragment and IPsec</H1>
+<!-- received="Wed Jun 25 13:19:37 1997" -->
+<!-- isoreceived="19970625171937" -->
+<!-- sent="Wed, 25 Jun 1997 13:16:49 -0700" -->
+<!-- isosent="19970625201649" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re:  ICMP must fragment and IPsec" -->
+<!-- id="199706252016.NAA21314@rum.isi.edu" -->
+<!-- inreplyto=" ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 16:16:49 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0589.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0587.html">touch@ISI.EDU: "Re: TCP research issues from a tcp-impl perspectiveT"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#588">[ date ]</A>
+<A HREF="index.html#588">[ thread ]</A>
+<A HREF="subject.html#588">[ subject ]</A>
+<A HREF="author.html#588">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; To: <A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;">VOLZ@PROCESS.COM</A>, <A HREF="mailto:TCP-IMPL@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;">TCP-IMPL@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re:  ICMP must fragment and IPsec
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; To: <A HREF="mailto:TCP-IMPL@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;">TCP-IMPL@cthulhu.engr.sgi.com</A>, vjs, <A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706252016.NAA21314@rum.isi.edu&gt;">VOLZ@PROCESS.COM</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; Vernon,
+</EM><BR>
+<EM>&gt; &gt; I disagree with you and agree with Bernie.  If you have both an
+</EM><BR>
+<EM>&gt; &gt; FDDI and and ethernet interface, it makes sense to use an MSS of 4352,
+</EM><BR>
+<EM>&gt; &gt; not 1500.  Then, if routing changes from the ethernet to the FDDI,
+</EM><BR>
+<EM>&gt; &gt; the Path MTU code can discover the larger MTU.  But if you sent a
+</EM><BR>
+<EM>&gt; &gt; 1500 MSS, you're stuck.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Most systems should be able to send an MSS of 65535, but it is
+</EM><BR>
+<EM>&gt; &gt; an optimization to use the MTU of the largest/outgoing interface.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Why not use an MSS of 65535?  What is being optimized by the choice of
+</EM><BR>
+<EM>&gt; MSS?  I think most systems can IP fragment faster than they can TCP
+</EM><BR>
+<EM>&gt; segment, so they are better off sending 64K TCP segments as a bunch of
+</EM><BR>
+<EM>&gt; IP fragments.  (I've liked that idea ever since someone told me about
+</EM><BR>
+<EM>&gt; using it in an FDDI adapter for a certain supercomputer company's bus
+</EM><BR>
+<EM>&gt; to get what was then an impressive TCP/IP/FDDI speed.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The reason I see to use a smaller MSS is safety or conservatism.  If
+</EM><BR>
+<P>Or latency. Reducing the size of the data chunks reduces the
+<BR>
+store-and-forward latency throughout the path, including at the end
+<BR>
+hosts.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; In #2, at best your routers will be IP fragmenting.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>PS - once things fragment, and I lose a frag of a packet, the packet is
+<BR>
+hosed. ATM all over again.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0589.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0587.html">touch@ISI.EDU: "Re: TCP research issues from a tcp-impl perspectiveT"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#588">[ date ]</A>
+<A HREF="index.html#588">[ thread ]</A>
+<A HREF="subject.html#588">[ subject ]</A>
+<A HREF="author.html#588">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

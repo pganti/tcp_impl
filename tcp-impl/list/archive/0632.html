@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 20:59:51 1997" -->
+<!-- isoreceived="19970801005951" -->
+<!-- sent="Thu, 31 Jul 1997 20:57:47 -0700" -->
+<!-- isosent="19970801035747" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708010357.AA18202@zephyr.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010357.AA18202@zephyr.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 23:57:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0631.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#632">[ date ]</A>
+<A HREF="index.html#632">[ thread ]</A>
+<A HREF="subject.html#632">[ subject ]</A>
+<A HREF="author.html#632">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010357.AA18202@zephyr.isi.edu&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+...
+<BR>
+<EM>&gt; First, let's clearly label the three slow start starting windows:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     there's the initial window (IW), used at connection start
+</EM><BR>
+<EM>&gt;     there's the restart window (RW), used after a connection is idle
+</EM><BR>
+<EM>&gt;     there's the loss window (LW), used after a loss
+</EM><BR>
+<P>I had been assuming that RW and LW were the same; granted
+<BR>
+that is not required.
+<BR>
+<P><EM>&gt; Further observe that when we restart the window, or do slow start after
+</EM><BR>
+<EM>&gt; a loss, we don't know if we are in condition (1) or (2).  When restarting,
+</EM><BR>
+<EM>&gt; more connections may have arrived while we were quiet, and loss presumably
+</EM><BR>
+<EM>&gt; indicated the arrival of new traffic (e.g., new connections).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So for LW and RW we must assume we might be in condition (2). So LW must
+</EM><BR>
+<EM>&gt; be 1, and RW ought to be 1.
+</EM><BR>
+<P>That's where I was going.
+<BR>
+<P>I thought the case was being made that IW = RW = 4 (or pick a 'larger'
+<BR>
+number than 2). LW and RW, as I think you're pointing out above, both
+<BR>
+should be conservative.
+<BR>
+<P>Now consider two cases for IW, large or small:
+<BR>
+<P>more than 10-20 packets in the connection (from open to close,
+<BR>
+approx.):
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the connection will take (best case, 'order' estimates):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 RTT to open
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log2(numpackets) RTTs to transmit the data (approx)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If IW is 1, 2, or 4 we save 0, 1, or 2 RTTs out of a total
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of 5 or more, i.e., the connection saves 25% or less time
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the longer the connection, the less the win for a large IW
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if the connection is BW bound, not latency bound,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmission overwhelms the RTT propagation latency,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the win is even less dramatic)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;**  IW can be small or large, it doesn't help or hurt much either way.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+less than 10-20 packets in the connection:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost to transmit the packets is, as above
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 - 6 RTTs regular IW
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 - 4 RTTs with large IW
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.e., a reduction of 30-75% of the time
+<BR>
+<P>&nbsp;&nbsp;&nbsp;** 	Large IW helps, but then only if it also dominates
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the network behavior, i.e., most of the time we're
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;injecting bursts of 4 packets. If most of the connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are short, this means most of the time we're twice 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as bursty as we are now. That would appear to be bad.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(I don't believe current analysis considers this case,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where most of the traffic is very short connections)
+<BR>
+<P>So either it doesn't help or it hurts.
+<BR>
+<P>In which case, we agree (don't know if it's for the same reason)
+<BR>
+that IW and RW both should be small.
+<BR>
+<P>Joe
+<BR>
+<P><P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010357.AA18202@zephyr.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0631.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#632">[ date ]</A>
+<A HREF="index.html#632">[ thread ]</A>
+<A HREF="subject.html#632">[ subject ]</A>
+<A HREF="author.html#632">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

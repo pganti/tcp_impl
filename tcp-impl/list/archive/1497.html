@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Jonathan Webb (jonwe@sco.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 11:54:23 1999" -->
+<!-- isoreceived="19990204165423" -->
+<!-- sent="Thu, 4 Feb 1999 11:27:01 -0000" -->
+<!-- isosent="19990204112701" -->
+<!-- name="Jonathan Webb" -->
+<!-- email="jonwe@sco.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Jonathan Webb (<A HREF="mailto:jonwe@sco.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com&gt;"><EM>jonwe@sco.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 06:27:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1496.html">Dave Marquardt: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1497">[ date ]</A>
+<A HREF="index.html#1497">[ thread ]</A>
+<A HREF="subject.html#1497">[ subject ]</A>
+<A HREF="author.html#1497">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+SCO UnixWare7 and OSR5 do.
+<BR>
+<P>- Jonathan
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+<BR>
+To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com&gt;">tcp-impl@lerc.nasa.gov</A> &lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com&gt;">tcp-impl@lerc.nasa.gov</A>&gt;
+<BR>
+Date: 03 February 1999 23:52
+<BR>
+Subject: Re: internet draft on suggested mod to the Nagle algorithm
+<BR>
+<P><P><EM>&gt;&gt; &gt; One related question: Does everybody support applications disabling
+</EM><BR>
+<EM>&gt;&gt; &gt; Nagle on a per-circuit basis, as mandated by 4.2.3.4 in RFC 1122?
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; IRIX does.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;] Linux does.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Let's not have a brust of 10,000 messages listing implementations
+</EM><BR>
+<EM>&gt;that do support TCP_NODELAY.  Instead, let's wait for the few, if
+</EM><BR>
+<EM>&gt;any, announcements of those that don't.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;You would expect that the TCP_NODELAY setsockopt() would work on most BSD
+</EM><BR>
+<EM>&gt;derived TCP stacks, including IRIX, BSD/OS, HP-UX, Ultrix and the other
+</EM><BR>
+<EM>&gt;(OSF?) DEC system, System V Release 4 and beyond, AIX, and the zillions
+</EM><BR>
+<EM>&gt;of others I can't think of in 3 seconds.  TCP_NODELAY also seems to work
+</EM><BR>
+<EM>&gt;in some other popular, not exactly BSD-derived systems, notably at least
+</EM><BR>
+<EM>&gt;some &quot;winsock&quot; libraries for WIN32 platforms, including WIN95, WIN98, and
+</EM><BR>
+<EM>&gt;NT 4.0.  (I've rather limited confidence that they do everything right,
+</EM><BR>
+<EM>&gt;but at least those Microsoft system do not complain when my code makes
+</EM><BR>
+<EM>&gt;the TCP_NODELAY request.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I bet there are more systems that do not support the Nagle algorithm at
+</EM><BR>
+<EM>&gt;all than those that support the Nagle algorithm but cannot turn it off
+</EM><BR>
+<EM>&gt;(except, of course, systems that cannot be changed to want to turn it off,
+</EM><BR>
+<EM>&gt;such as embedded code burned into ROM).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Is TCP_NODELAY somewhere in POSIX?  I bet so.  
+</EM><BR>
+<EM>&gt;And also DLPI?  Ditto.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;024201be5032$2eeb1de0$17037e96@barbarella.pd.london.sco.com&gt;">vjs@rhyolite.com</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1496.html">Dave Marquardt: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1497">[ date ]</A>
+<A HREF="index.html#1497">[ thread ]</A>
+<A HREF="subject.html#1497">[ subject ]</A>
+<A HREF="author.html#1497">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

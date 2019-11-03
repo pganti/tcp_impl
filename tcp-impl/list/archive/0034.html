@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: my 2p worth</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: my 2p worth">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: my 2p worth</H1>
+<!-- received="Fri Dec  6 01:20:47 1996" -->
+<!-- isoreceived="19961206062047" -->
+<!-- sent="Thu, 05 Dec 1996 17:10:12 PST" -->
+<!-- isosent="19961206011012" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: my 2p worth" -->
+<!-- id="199612060110.RAA16291@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Fri, 29 Nov 1996 20:17:35 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20my%202p%20worth&In-Reply-To=&lt;199612060110.RAA16291@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Dec 05 1996 - 20:10:12 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0033.html">Ian Heavens: "my 2p worth"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#34">[ date ]</A>
+<A HREF="index.html#34">[ thread ]</A>
+<A HREF="subject.html#34">[ subject ]</A>
+<A HREF="author.html#34">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 1.It would be interesting to know how many independent
+</EM><BR>
+<EM>&gt;   TCP implementations exist, and the rough proportions in
+</EM><BR>
+<EM>&gt;   which they are represented.
+</EM><BR>
+<P>Also, it would be very interesting (but hard to determine!) how much
+<BR>
+traffic each implementation contributes.  This would let you gauge to
+<BR>
+what degree a widespread PC implementation actually influences Internet
+<BR>
+traffic.
+<BR>
+<P>One idea floating around is having as one of the group's products a Web
+<BR>
+page that would have this sort of info.  Something along the lines of
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.psc.edu/networking/perf_tune.html">http://www.psc.edu/networking/perf_tune.html</A>
+<BR>
+<P>which Jamshid Mahdavi et al put together.  There are IETF issues regarding
+<BR>
+a WG providing such a page which Allison &amp; Allyn are looking into.  We
+<BR>
+should have something more concrete to say about this at the BOF.
+<BR>
+<P><EM>&gt; 2. It used to be the case that there were bugs in common implementations
+</EM><BR>
+<EM>&gt;   that you had to workaround ...
+</EM><BR>
+<EM>&gt;   it would be enormously useful to have these listed.
+</EM><BR>
+<P>Definitely!  This is one of the central goals of the WG as I see it.
+<BR>
+<P><EM>&gt; 3.  Most of the bugs mentioned are protocol issues or end-to-end
+</EM><BR>
+<EM>&gt;    performance issues on a single connection.  Is it within scope to
+</EM><BR>
+<EM>&gt;    mention scalability issues, e.g. supporting large numbers of
+</EM><BR>
+<EM>&gt;    connections in TIME-WAIT?
+</EM><BR>
+<P>This also strikes me as within scope, though with the line drawn at
+<BR>
+the point where things cross into the research frontier.  So, for example,
+<BR>
+the issues raised in Joe Touch's draft RFC are good things to discuss;
+<BR>
+but for some of them their resolution (e.g., how to share cwnd across
+<BR>
+multiple connections) is research and needs to be dealt with in another
+<BR>
+forum.  It seems an important benefit of the WG is to highlight where
+<BR>
+the research frontier is, too, so implementors can gauge where different
+<BR>
+features lie.
+<BR>
+<P><EM>&gt; 4.  Are there bugs that crop up persistently in independent TCP
+</EM><BR>
+<EM>&gt;     implementations?  e.g. mishandling of queued data for transmission
+</EM><BR>
+<EM>&gt;     when a close is issued?  These would point to the most difficult
+</EM><BR>
+<EM>&gt;     issues.
+</EM><BR>
+<P>Likewise, this strikes me as a mainstream goal for the proposed WG.
+<BR>
+<P><EM>&gt; 5.   Should we separate buggy implementations of algorithms and
+</EM><BR>
+<EM>&gt;      inappropriate (or debatable) algorithms?   
+</EM><BR>
+<P>Definitely, if by algorithm you mean what's specified in an RFC.  We need
+<BR>
+to consider whether some of the RFC's need clarification or expansion, but
+<BR>
+this is a considerably more significant step than cataloging implementation
+<BR>
+issues.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0033.html">Ian Heavens: "my 2p worth"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#34">[ date ]</A>
+<A HREF="index.html#34">[ thread ]</A>
+<A HREF="subject.html#34">[ subject ]</A>
+<A HREF="author.html#34">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

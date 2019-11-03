@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: query: using two write() cal</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: query: using two write() calls in succession</H1>
+<!-- received="Wed Mar 28 13:17:54 2001" -->
+<!-- isoreceived="20010328181754" -->
+<!-- sent="Wed, 28 Mar 2001 10:06:36 -0800" -->
+<!-- isosent="20010328180636" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: query: using two write() calls in succession" -->
+<!-- id="3AC2282C.BAED34BE@cup.hp.com" -->
+<!-- inreplyto="0056890025220977000002L972*@MHS" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;3AC2282C.BAED34BE@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 28 2001 - 13:06:36 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2488.html">Khurram Saeed: "Re: query: using two write() calls in succession"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2491.html">arun: "initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2487">[ date ]</A>
+<A HREF="index.html#2487">[ thread ]</A>
+<A HREF="subject.html#2487">[ subject ]</A>
+<A HREF="author.html#2487">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;3AC2282C.BAED34BE@cup.hp.com&gt;">rajiv.chakravorty@philips.com</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Rick and der Mouse,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have some doubts regarding your interpretation of the problem. I was
+</EM><BR>
+<EM>&gt; under the impression that a blocking write (or send) call would block
+</EM><BR>
+<EM>&gt; until it has received an ACK or an RST for data sent and then perform
+</EM><BR>
+<EM>&gt; the 2nd write.
+</EM><BR>
+<P>I am afraid your impression, while perhaps natual to the untainted :),
+<BR>
+is incorrect. As often as not, a send/write call to a socket will
+<BR>
+complete once the data has been copied into the stack. This is well
+<BR>
+before it is ACKnowledged by the remote, or even sent out the wire.
+<BR>
+<P><EM>&gt; I have noticed that this  happens even when I had made two write calls
+</EM><BR>
+<EM>&gt; by breaking  the request (1+32)  while making the first normal request
+</EM><BR>
+<EM>&gt; to the server. (check the previous linuxdump.txt file). I have
+</EM><BR>
+<EM>&gt; appended relevant parts of it here:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 17:31:17.186250 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 1:2(1) ack 1 win 32120 (DF)
+</EM><BR>
+<EM>&gt; 17:31:17.233839 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 1:1(0) ack 2 win 8760 (DF)
+</EM><BR>
+<EM>&gt; 17:31:17.233891 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 2:34(32) ack 1 win 32120 (DF)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As you can see, when I make my first write call by sending 1 byte of
+</EM><BR>
+<EM>&gt; data, it  waits until it receives the ACK and then proceed with the
+</EM><BR>
+<EM>&gt; second write. That means, in this case write call blocks until the
+</EM><BR>
+<EM>&gt; server or peer TCP ackowledges the data. (unless using non-blocking
+</EM><BR>
+<EM>&gt; sockets, or using MSG_DONTWAIT option if used with send() call). Also,
+</EM><BR>
+<EM>&gt; in this case, I have not disabled Nagle's algoritm. Ofcourse, my linux
+</EM><BR>
+<EM>&gt; client is a dual P-II terminal.
+</EM><BR>
+<P>What you are seeing in that trace is the Nagle algorithm, implying
+<BR>
+nothing about the completion semantics of the write() call against a
+<BR>
+socket. I suspect that if you were to run a system call trace on your
+<BR>
+program at the same time, you would find that the second write() call
+<BR>
+happened before the ACK.
+<BR>
+<P><EM>&gt; After, looking into all this, is it possible that RST can be received
+</EM><BR>
+<EM>&gt; even after the application has already come out from the first write
+</EM><BR>
+<EM>&gt; call ?? ...or its actually the tcp stack that's still not able to
+</EM><BR>
+<EM>&gt; detect the RST just before sending the request data for the second
+</EM><BR>
+<EM>&gt; write (as you can see it still detects if some delay is given). Maybe
+</EM><BR>
+<EM>&gt; something to do with silly window syndrome since I am writing small
+</EM><BR>
+<EM>&gt; amount of data... ??
+</EM><BR>
+<P>Even on a &quot;blocking socket&quot; a send/write completes once the data is
+<BR>
+written into the socket buffer. This is independent of the decisions TCP
+<BR>
+makes about when to send data onto the wire. 
+<BR>
+<P>If the socket buffer is full, the write() call will block, but only
+<BR>
+until enough space is freed via ACK's or _prior_ writes to allow the
+<BR>
+data of this write() into the buffer.
+<BR>
+<P>I guess the fancier way to say it is that writing data into the
+<BR>
+connection is asynchronous from that data being send on the wire.
+<BR>
+<P>All splitting writes will do is cause your app lication to run afoul of
+<BR>
+the nagle algorithm and take more CPU cycles on the system than it
+<BR>
+should.
+<BR>
+<P>If you want to detect remote connection close (via FIN) use the
+<BR>
+zero-bytes on a recv/read semantic. If you want to detect remote
+<BR>
+connection death, implement a keepalive handshake in your app.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+<A HREF="ftp://ftp.cup.hp.com/dist/networking/misc/rachel/">ftp://ftp.cup.hp.com/dist/networking/misc/rachel/</A>
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2488.html">Khurram Saeed: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2491.html">arun: "initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2487">[ date ]</A>
+<A HREF="index.html#2487">[ thread ]</A>
+<A HREF="subject.html#2487">[ subject ]</A>
+<A HREF="author.html#2487">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Mar 28 2001 - 13:18:24 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

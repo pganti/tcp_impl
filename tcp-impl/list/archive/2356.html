@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Tue Sep 19 15:18:16 2000" -->
+<!-- isoreceived="20000919191816" -->
+<!-- sent="Tue, 19 Sep 2000 13:10:38 -0600 (MDT)" -->
+<!-- isosent="20000919191038" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009191910.e8JJAcK14478@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191910.e8JJAcK14478@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 15:10:38 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2355.html">Harald Koch: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2356">[ date ]</A>
+<A HREF="index.html#2356">[ thread ]</A>
+<A HREF="subject.html#2356">[ subject ]</A>
+<A HREF="author.html#2356">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: stanislav shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191910.e8JJAcK14478@calcite.rhyolite.com&gt;">shalunov@internet2.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; What bad things happen if you use completely predictable ISN's?
+</EM><BR>
+<EM>&gt; &gt; You've fixed your systems to not use IP addresses as authenticators
+</EM><BR>
+<EM>&gt; &gt; by turning off /etc/hosts.equiv and .rhosts, right?  So what if a
+</EM><BR>
+<EM>&gt; &gt; bad guy predicts all of your ISN's?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The bad guy could, for example, relay spam through your
+</EM><BR>
+<EM>&gt; PIPELINE-enabled ESMTP server--in an almost untraceable manner.
+</EM><BR>
+<P>I'm not sure I agree that predicting ISN's would be sufficient to get
+<BR>
+through typical SMTP relay criteria.  I definitiely do not agree with
+<BR>
+&quot;untraceable,&quot; because of the defenses that have evolved against other
+<BR>
+forged IP-source address attacks.  Then there is the fact that in most of
+<BR>
+a decade of trying, not one spammer has been found that can forge a
+<BR>
+believable Received: line, despite the absolutely trivial effort needed.
+<BR>
+I doubt you could find a spammer or spamware author capable of
+<BR>
+understanding the concept &quot;TCP initial sequence number&quot; or even &quot;TCP
+<BR>
+sequence number.&quot;  However, assume predictable ISN's would have spammers
+<BR>
+relaying untraceable spam.  So what?  I've have and continue to do far
+<BR>
+more about email spam than the vast majority (I'm sure including you),
+<BR>
+but even I know relaying or even sending spam is not a serious enough
+<BR>
+problem to justify even one line of kernel code.
+<BR>
+<P><P><EM>&gt; Or they could abuse some CGI scripts, and you would not know who they
+</EM><BR>
+<EM>&gt; are.
+</EM><BR>
+<P>If you're smart enough to turn off .rhosts, then let's hope you have not
+<BR>
+made the gross blunder of using IP addresses as authenticators for your
+<BR>
+CGI scripts or the infinite number of similar stupid mistakes.
+<BR>
+<P><EM>&gt;       Or they could try exploits on your TCP services without an easy
+</EM><BR>
+<EM>&gt; way to learn who they were.
+</EM><BR>
+<P>Never mind that most of those who worry about bad guys trying exploits
+<BR>
+on their TCP services, often using misnamed (actually, fraudulently named)
+<BR>
+&quot;personal firewalls&quot; have been such pests with their silly false alarms
+<BR>
+that reports of attacks are now routinely ignored.
+<BR>
+Predictable ISN's do little or nothing to ensure that you can find or
+<BR>
+identify attackers.  Consider that the serious, real life attacks in the
+<BR>
+last year or two that have involved forged IP source addresses.
+<BR>
+<P><P><EM>&gt; Given the fact that good PRNGs are cheap (just some 50 cycles or so
+</EM><BR>
+<EM>&gt; per ISN), there's no excuse to not use them.
+</EM><BR>
+<P>No one is suggesting not using enough entropy and suitable software to
+<BR>
+generate ISN's that cannot in practice be guessed, because it is
+<BR>
+sufficiently cheap.  On the other hand, I suspect that 50 CPU cycles is
+<BR>
+ridiculously low for your Yarrow-160, what with its use of 3-DES and SHA.
+<BR>
+I don't think you can even meet 50 cycles by fetching the clock and running
+<BR>
+it and other secrets through MD5, or equivalents that I've coded and
+<BR>
+shipped.
+<BR>
+<P>I'm sorry to be raining on security audit expert parades (oh, not really),
+<BR>
+but predictable ISN's are not a major problem, no matter how many trade
+<BR>
+rag consultants, netnews experts, and salescritters tell their marks
+<BR>
+otherwise.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191910.e8JJAcK14478@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2355.html">Harald Koch: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2356">[ date ]</A>
+<A HREF="index.html#2356">[ thread ]</A>
+<A HREF="subject.html#2356">[ subject ]</A>
+<A HREF="author.html#2356">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 15:18:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

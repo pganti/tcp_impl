@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="Spencer Dawkins (sdawkins@nortelnetworks.com)">
+<META NAME="Subject" CONTENT="RE: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: slow-start bit</H1>
+<!-- received="Sat May 15 23:27:59 1999" -->
+<!-- isoreceived="19990516032759" -->
+<!-- sent="Sat, 15 May 1999 22:22:20 -0500" -->
+<!-- isosent="19990516032220" -->
+<!-- name="Spencer Dawkins" -->
+<!-- email="sdawkins@nortelnetworks.com" -->
+<!-- subject="RE: slow-start bit" -->
+<!-- id="7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com" -->
+<!-- inreplyto="slow-start bit" -->
+<STRONG>From:</STRONG> Spencer Dawkins (<A HREF="mailto:sdawkins@nortelnetworks.com?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;"><EM>sdawkins@nortelnetworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat May 15 1999 - 23:22:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1707.html">Jamal Hadi Salim: "Re: slow-start bit"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1708">[ date ]</A>
+<A HREF="index.html#1708">[ thread ]</A>
+<A HREF="subject.html#1708">[ subject ]</A>
+<A HREF="author.html#1708">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The I-D
+<BR>
+<A HREF="http://search.ietf.org/internet-drafts/draft-montenegro-pilc-ltn-01.txt">http://search.ietf.org/internet-drafts/draft-montenegro-pilc-ltn-01.txt</A>
+<BR>
+(soon to be 02, but hasn't made it onto the web site yet) talks about some
+<BR>
+aspects of larger initial windows and ACK-first/ACK-every strategies in
+<BR>
+4.3.1 and 4.3.2. The target environment for this draft isn't just HTTP, but
+<BR>
+we were thinking about HTTP, and it bothered us that the default was to do a
+<BR>
+delayed-ACK timeout at the server if the HTTP request is bigger than a
+<BR>
+single segment, followed by a delayed-ACK timeout at the client if the HTTP
+<BR>
+response is bigger than a single segment - as it almost certainly would be.
+<BR>
+<P>We were pretty sure that ACK-first was safe, because it doesn't increase the
+<BR>
+traffic level on the network (you send the ACK immediately instead of
+<BR>
+delaying it, but it's the same ACK).
+<BR>
+<P>This draft is being discussed in the PILC working group (although it won't
+<BR>
+be a WG output), but we would love to hear your thoughts as well.
+<BR>
+<P>Spencer 
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From:	David S. Miller [SMTP:<A HREF="mailto:davem@redhat.com?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;">davem@redhat.com</A>]
+</EM><BR>
+<EM>&gt; Sent:	Saturday, May 15, 1999 7:26 AM
+</EM><BR>
+<EM>&gt; To:	<A HREF="mailto:sm@bossette.engr.sgi.com?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;">sm@bossette.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Cc:	<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject:	Re: slow-start bit
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    From: <A HREF="mailto:sm@bossette.engr.sgi.com?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;">sm@bossette.engr.sgi.com</A> (Sam Manthorpe)
+</EM><BR>
+<EM>&gt;    Date: Fri, 14 May 1999 21:15:33 -0700 (PDT)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    Is there any reason why it wouldn't be a good idea to use one of
+</EM><BR>
+<EM>&gt;    the free bits in the TCP header as a `slow-start' bit to enable a
+</EM><BR>
+<EM>&gt;    sender to indicate to the receiver that it is sending the first
+</EM><BR>
+<EM>&gt;    packet of a slow-start phase?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I would first want to test to see if other implementations will not
+</EM><BR>
+<EM>&gt; have interoperability problems.  The bits are marked as reserved now,
+</EM><BR>
+<EM>&gt; but who knows what some TCP stack in a printer will do if they are not
+</EM><BR>
+<EM>&gt; zero.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Later,
+</EM><BR>
+<EM>&gt; David S. Miller
+</EM><BR>
+<EM>&gt; <A HREF="mailto:davem@redhat.com?Subject=RE:%20slow-start%20bit&In-Reply-To=&lt;7DF44F4DE801D31198620000F80930C10326CA@zrchb214.us.nortel.com&gt;">davem@redhat.com</A>
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1707.html">Jamal Hadi Salim: "Re: slow-start bit"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1709.html">Neal Cardwell: "RE: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1708">[ date ]</A>
+<A HREF="index.html#1708">[ thread ]</A>
+<A HREF="subject.html#1708">[ subject ]</A>
+<A HREF="author.html#1708">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

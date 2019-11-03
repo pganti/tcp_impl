@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP ack every other - perfor</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: TCP ack every other - performance issue?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP ack every other - performance issue?</H1>
+<!-- received="Fri Apr 17 17:26:41 1998" -->
+<!-- isoreceived="19980417212641" -->
+<!-- sent="Fri, 17 Apr 1998 20:22:35 -0400" -->
+<!-- isosent="19980418002235" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="Re: TCP ack every other - performance issue?" -->
+<!-- id="199804180022.UAA00576@guns.lerc.nasa.gov" -->
+<!-- inreplyto="TCP ack every other - performance issue?" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804180022.UAA00576@guns.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 17 1998 - 20:22:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1066.html">vijayaraghavan_jayanth: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1064.html">Vernon Schryver: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1065">[ date ]</A>
+<A HREF="index.html#1065">[ thread ]</A>
+<A HREF="subject.html#1065">[ subject ]</A>
+<A HREF="author.html#1065">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; 1) It will cause a burst of 4 segments to be sent by the sender
+</EM><BR>
+<EM>&gt; &gt; upon every ACK.
+</EM><BR>
+<P>And, five segments per ACK during slow start (at least after the
+<BR>
+window is larger than 4 segments).
+<BR>
+<P><EM>&gt; I fail to see how this would be any worse than alowing an IW of
+</EM><BR>
+<EM>&gt; four segments. Surely if allowing an IW of four is acceptable,
+</EM><BR>
+<EM>&gt; allowing an ACK for four segments should be acceptable too no? (Or
+</EM><BR>
+<EM>&gt; did I mis-interpret the minutes of the last meeting?)
+</EM><BR>
+<P>I think there IS a difference.  The initial window burst happens
+<BR>
+once per connection (OK, maybe more if it goes idle).  If you use an
+<BR>
+ACK interval of 4 segments the burst will happen much more often.
+<BR>
+Not saying I think the burstiness that would be caused by an ACK
+<BR>
+interval of 4 segments is acceptable or not, but I think it is
+<BR>
+sufficiently different from the larger initial window proposal.
+<BR>
+<P>I agree with Mohit's nice analysis of the impact of the delayed ACK
+<BR>
+timer when using an ACK interval of 4 segments.  But, it should also
+<BR>
+be noted that this also slows the growth of cwnd.  If you ACK every
+<BR>
+segment cwnd is doubled every RTT.  Using an ACK interval of 2
+<BR>
+segments halves the number of ACKs generated and therefore roughly
+<BR>
+doubles the time it takes to open cwnd.  Similarly, using an ACK
+<BR>
+interval of 4 segments will require 4 times as much time to open
+<BR>
+cwnd when compared to a ACKing every segment.
+<BR>
+<P>allman
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1066.html">vijayaraghavan_jayanth: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1064.html">Vernon Schryver: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1065">[ date ]</A>
+<A HREF="index.html#1065">[ thread ]</A>
+<A HREF="subject.html#1065">[ subject ]</A>
+<A HREF="author.html#1065">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

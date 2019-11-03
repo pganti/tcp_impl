@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="RE: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 18:38:13 1999" -->
+<!-- isoreceived="19990205233813" -->
+<!-- sent="Fri, 5 Feb 1999 16:34:06 -0700 (MST)" -->
+<!-- isosent="19990205233406" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="RE: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902052334.QAA26026@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052334.QAA26026@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 18:34:06 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1533.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1542.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1532">[ date ]</A>
+<A HREF="index.html#1532">[ thread ]</A>
+<A HREF="subject.html#1532">[ subject ]</A>
+<A HREF="author.html#1532">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Art Shelest &lt;<A HREF="mailto:artshel@microsoft.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052334.QAA26026@calcite.rhyolite.com&gt;">artshel@microsoft.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; This idea would effectively turn off Nagle for the most common (in my
+</EM><BR>
+<EM>&gt; &gt; experience) bad code, which loves write-write-read-write-write-read....
+</EM><BR>
+<EM>&gt; &gt; It would double the number of packets on the wire for such bad
+</EM><BR>
+<EM>&gt; &gt; applications.  I think that would be Not Good.  Would relaxing Nagle for
+</EM><BR>
+<EM>&gt; &gt; 2 send requests be much different from turning it off entirely?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; In the case above, present or draft-proposed Nagle will both generate 2
+</EM><BR>
+<EM>&gt; packets because first will be sent immediately. The performance, however,
+</EM><BR>
+<EM>&gt; will improve from 2 packets per 200ms to 2 packets per RTT (10+ times on
+</EM><BR>
+<EM>&gt; many LANs)
+</EM><BR>
+<P>True, Nagle does not reduce the number of packets per transaction from
+<BR>
+bad applications, but it reduces or at least strongly limits the number
+<BR>
+of packets per second from them.  As far as the rest of the network
+<BR>
+is concerned, the effect of Nagle is to reduce the number of packets.
+<BR>
+<P><P><EM>&gt; I don't agree with notion that W-W-R applications come from bad programmers,
+</EM><BR>
+<EM>&gt; application programmer should not be required a TCP expert when they simply
+</EM><BR>
+<EM>&gt; treat
+</EM><BR>
+<EM>&gt; socket as a file handle. For all they know, it may or may not be a network
+</EM><BR>
+<EM>&gt; device.
+</EM><BR>
+<EM>&gt; If W-W-R works well with fwrite, why shouldn't it work with send?
+</EM><BR>
+<P>NO!
+<BR>
+<P>&nbsp;&nbsp;- W-W-R does NOT work well with fwrite(), compared to a single write().
+<BR>
+<P>&nbsp;&nbsp;- when confronted with W-W-R, fwrite() will make as single write() 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system call, in the relevant, tiny-write cases.  That's why
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fwrite() and the rest of stdio were invented.
+<BR>
+<P>&nbsp;&nbsp;- mixing stdio writes and reads without any intervening fseek()s is not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the faint of heart.  Are such combinations now legal, eg. in POSIX?
+<BR>
+<P>&nbsp;&nbsp;- any programmer who doesn't design for the target media is incompetant.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Competant programmers do what is necessary to make their code work
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;well on all of their design-targeted media.  What works well on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network streams often does not work on other media, and vice versa.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No amount of CASE/OOP snake oil will make rewind work on a TCP stream,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nor does select() generally make much sense on disk files or tapes.
+<BR>
+<P><P><EM>&gt; Large sends is a more complex case. Both Nagle(2) and modified Nagle will
+</EM><BR>
+<EM>&gt; create 
+</EM><BR>
+<EM>&gt; extra packets with sends slightly bigger than MSS, which is bad for bulk
+</EM><BR>
+<EM>&gt; transfers, 
+</EM><BR>
+<EM>&gt; but good for interactive operations.
+</EM><BR>
+<P>Not so.  Extra packets are bad for interactive operations.  Extra packets
+<BR>
+cost both time and CPU cycles.  It is also true that longer delays while
+<BR>
+the wire is idle are worse for interactive applications.  More over, large
+<BR>
+transmissions are generally not involved in interactive applications, for
+<BR>
+obvious reasons.
+<BR>
+<P><P><EM>&gt; It almost sounds like Nagle needs it's own timer rather than being driven by
+</EM><BR>
+<EM>&gt; receiver's delayed ACK timer or RTT. This way, Nagle(T) could read:
+</EM><BR>
+<EM>&gt; &quot;Delay sending data until there's full MSS, but no longer than period T&quot;.
+</EM><BR>
+<EM>&gt; This will guarantee predictable Nagle delay, will not inhibit bulk
+</EM><BR>
+<EM>&gt; transfers,
+</EM><BR>
+<EM>&gt; improve interactive performance and not depend on the receiver's delayed ACK
+</EM><BR>
+<EM>&gt; policy.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Now we have 4 possible solutions: Nagle, modified Nagle, Nagle(N) and
+</EM><BR>
+<EM>&gt; Nagle(T)
+</EM><BR>
+<EM>&gt; it would be interesting to compare their behavior for the cases previously
+</EM><BR>
+<EM>&gt; described, from telnet to bulk transfer to MSS+1 sends.
+</EM><BR>
+<P>Adding yet another timer to TCP is an non-starter, since it fails the
+<BR>
+reasonable-implementation criterion.  The several timers that are now
+<BR>
+needed for every TCP stream are already a major burden in TCP
+<BR>
+implementations that care about speed, especially speed when dealing with
+<BR>
+lots of simultaneous streams, as on a large web server.  The gyrations
+<BR>
+required to make a large, fast multi-processor deal with the current
+<BR>
+zillions of TCP timers are painful to contemplate.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052334.QAA26026@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1533.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1542.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1532">[ date ]</A>
+<A HREF="index.html#1532">[ thread ]</A>
+<A HREF="subject.html#1532">[ subject ]</A>
+<A HREF="author.html#1532">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

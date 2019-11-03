@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep Alive size</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (hkchu@pacific-86.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Keep Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep Alive size</H1>
+<!-- received="Tue Mar 11 19:23:49 1997" -->
+<!-- isoreceived="19970312002349" -->
+<!-- sent="Tue, 11 Mar 1997 11:10:34 -0800" -->
+<!-- isosent="19970311191034" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="hkchu@pacific-86.Eng.Sun.COM" -->
+<!-- subject="Re: Keep Alive size" -->
+<!-- id="199703111910.LAA19164@taipei.eng.sun.com" -->
+<!-- inreplyto="Keep Alive size" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:hkchu@pacific-86.Eng.Sun.COM?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;"><EM>hkchu@pacific-86.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 11 1997 - 14:10:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0132.html">Smith, Allyn D: "Re: Keep Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#133">[ date ]</A>
+<A HREF="index.html#133">[ thread ]</A>
+<A HREF="subject.html#133">[ subject ]</A>
+<A HREF="author.html#133">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+This is my original reply to Vern and it looks like other people might
+<BR>
+be interested. Vern also pointed out not only packet reordering, but
+<BR>
+even just packet loss can cause it to happen.
+<BR>
+<P>The point is that I don't see any use of generating an ACK in response
+<BR>
+to such a packet here other than a remote possibility of triggerring
+<BR>
+a fast retransmission...
+<BR>
+<P>Jerry
+<BR>
+<P>----- Begin Included Message -----
+<BR>
+<P><EM>&gt;From hkchu Mon Mar 10 20:12:55 1997
+</EM><BR>
+To: <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;">vern@ee.lbl.gov</A>
+<BR>
+Subject: Re: Keep Alive size
+<BR>
+<P>The key is ack-only packets. They can start on the left edge of the
+<BR>
+window. But since they have zero-length, you can't say they have gone
+<BR>
+over the limit and violated TCP window. Consider this:
+<BR>
+<P>receive side:
+<BR>
+RCV.NXT = 10000
+<BR>
+RCV.WND = 5
+<BR>
+<P>send side:
+<BR>
+SND.NXT = 10000
+<BR>
+SND.UNA = 10000
+<BR>
+<P>A packet w/ seq = 10000 length = 5 is sent from the SND side.
+<BR>
+SND.NXT becomes 10005 and SND.UNA stays at 10000. Then something from
+<BR>
+the RCV side causes the SND to ack with an ack-only packet of
+<BR>
+seq = 10005 (use SND.NXT, not SND.UNA, right?) length = 0.
+<BR>
+<P>If the ack-only packet arrives before the first packet, it will
+<BR>
+fail the old test.
+<BR>
+<P>BTW, is the schedule for the tcp-impl WG decided on the upcoming
+<BR>
+IETF?
+<BR>
+<P>Jerry
+<BR>
+<P><EM>&gt; From <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;">vern@ee.lbl.gov</A>  Mon Mar 10 18:35:14 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:hkchu@pacific-86.eng.sun.com?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;">hkchu@pacific-86.eng.sun.com</A> (Hsiao-keng Jerry Chu)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@relay.engr.sgi.com?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;">tcp-impl@relay.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Keep Alive size
+</EM><BR>
+<EM>&gt; Date: Mon, 10 Mar 1997 18:35:10 PST
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703111910.LAA19164@taipei.eng.sun.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;            0      &gt;0     RCV.NXT =&lt; SEG.SEQ &lt; RCV.NXT+RCV.WND
+</EM><BR>
+<EM>&gt; &gt; 					      ^
+</EM><BR>
+<EM>&gt; &gt; 					should be &lt;=
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; A perfectly good tcp stack on both sides can hit this case due to packet
+</EM><BR>
+<EM>&gt; &gt; reordering (an ack-only packet got ahead of a data packet transmitted
+</EM><BR>
+<EM>&gt; &gt; earlier).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Are you sure?  RCV.NXT+RCV.WND is one beyond the upper edge of the offered
+</EM><BR>
+<EM>&gt; window.  So even in the presence of reordering, I don't see a mechanism for 
+</EM><BR>
+<EM>&gt; a sender legitimately sending such a packet.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Vern
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>----- End Included Message -----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0132.html">Smith, Allyn D: "Re: Keep Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#133">[ date ]</A>
+<A HREF="index.html#133">[ thread ]</A>
+<A HREF="subject.html#133">[ subject ]</A>
+<A HREF="author.html#133">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: DF and IP ID</TITLE>
+<META NAME="Author" CONTENT="Richard Wendland (richard@starburst.demon.co.uk)">
+<META NAME="Subject" CONTENT="Re: DF and IP ID">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: DF and IP ID</H1>
+<!-- received="Sat Oct 14 23:09:57 2000" -->
+<!-- isoreceived="20001015030957" -->
+<!-- sent="Sun, 15 Oct 2000 03:49:53 +0100 (BST)" -->
+<!-- isosent="20001015024953" -->
+<!-- name="Richard Wendland" -->
+<!-- email="richard@starburst.demon.co.uk" -->
+<!-- subject="Re: DF and IP ID" -->
+<!-- id="200010150249.DAA09567@starburst.demon.co.uk" -->
+<!-- inreplyto="200010141619.JAA27370@tardy.cup.hp.com" -->
+<STRONG>From:</STRONG> Richard Wendland (<A HREF="mailto:richard@starburst.demon.co.uk?Subject=Re:%20DF%20and%20IP%20ID&In-Reply-To=&lt;200010150249.DAA09567@starburst.demon.co.uk&gt;"><EM>richard@starburst.demon.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Oct 14 2000 - 22:49:53 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2384.html">Andi Kleen: "Re: DF and IP ID"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2382.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2381.html">Rick Jones: "Re: DF and IP ID"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2386.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2380.html">Casati, Alessio (Alessio): "RE: DF and IP ID"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2386.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2383">[ date ]</A>
+<A HREF="index.html#2383">[ thread ]</A>
+<A HREF="subject.html#2383">[ subject ]</A>
+<A HREF="author.html#2383">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; &gt; If an implementation of IP sets the DF bit in the header, does it need
+</EM><BR>
+<EM>&gt; &gt; &gt; to worry about using unique IP datagram identifiers? 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Are there any places where the DF bit might get cleared along the way?
+</EM><BR>
+<EM>&gt; Perhaps NAT or firewall or something?
+</EM><BR>
+<P>Clearing DF seems like the kind of thing some HTTP load balancers
+<BR>
+would do.  Though if they clear DF, hopefully they'd set their own ID
+<BR>
+as well, but I wouldn't always bet on it.
+<BR>
+<P>As an example of this kind of thing, look closely at HTTP traffic to
+<BR>
+www.drugstore.com, which appears to use some kind of load balancer.
+<BR>
+It looks like most of the conversation is mediated by some device which
+<BR>
+clears DF, but the FIN &amp; FIN ACK is left for NT4 to send unmediated so
+<BR>
+has DF set.
+<BR>
+<P>In this case, as this device seems to set its own ID, there wouldn't
+<BR>
+have been a problem had the web server OS set ID zero.  But it seems a
+<BR>
+good idea &quot;to be conservative in what you send&quot;, and follow traditional
+<BR>
+behaviour of always providing an ID that would work for fragmentation.
+<BR>
+<P><P>Here's some example tcpdump output:
+<BR>
+<P>client.1588 &gt; www.drugstore.com.80: S 993978469:993978469(0) win 16384 &lt;mss 1460,nop,wscale 0,nop,nop,timestamp 204461079 0&gt; (DF) (ttl 64, id 37921)
+<BR>
+www.drugstore.com.80 &gt; client.1588: S 1775436697:1775436697(0) ack 993978470 win 8192 &lt;mss 1460&gt; (ttl 45, id 56701)
+<BR>
+client.1588 &gt; www.drugstore.com.80: . ack 1 win 17520 (DF) (ttl 64, id 37923)
+<BR>
+client.1588 &gt; www.drugstore.com.80: P 1:45(44) ack 1 win 17520 (DF) (ttl 64, id 37924)
+<BR>
+www.drugstore.com.80 &gt; client.1588: P 1:576(575) ack 45 win 8192 (ttl 45, id 56745)
+<BR>
+<P># from now on www.drugstore.com sets DF,
+<BR>
+# with traffic direct from NT4 with a larger window and TTL
+<BR>
+<P>www.drugstore.com.80 &gt; client.1588: F 576:576(0) ack 45 win 8716 (DF) (ttl 108, id 62163)
+<BR>
+client.1588 &gt; www.drugstore.com.80: . ack 577 win 17520 (DF) (ttl 64, id 37928)
+<BR>
+client.1588 &gt; www.drugstore.com.80: F 45:45(0) ack 577 win 17520 (DF) (ttl 64, id 37929)
+<BR>
+www.drugstore.com.80 &gt; client.1588: . ack 46 win 8716 (DF) (ttl 108, id 3028)
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Richard
+<BR>
+<PRE>
+-- 
+Richard Wendland				<A HREF="mailto:richard@wendland.org.uk?Subject=Re:%20DF%20and%20IP%20ID&In-Reply-To=&lt;200010150249.DAA09567@starburst.demon.co.uk&gt;">richard@wendland.org.uk</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2384.html">Andi Kleen: "Re: DF and IP ID"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2382.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2381.html">Rick Jones: "Re: DF and IP ID"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2386.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2380.html">Casati, Alessio (Alessio): "RE: DF and IP ID"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2386.html">kuznet@ms2.inr.ac.ru: "Re: DF and IP ID"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2383">[ date ]</A>
+<A HREF="index.html#2383">[ thread ]</A>
+<A HREF="subject.html#2383">[ subject ]</A>
+<A HREF="author.html#2383">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sat Oct 14 2000 - 23:10:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

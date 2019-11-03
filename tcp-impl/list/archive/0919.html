@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 11:54:44 1998" -->
+<!-- isoreceived="19980112165444" -->
+<!-- sent="Mon, 12 Jan 1998 13:50:19 -0600 (CST)" -->
+<!-- isosent="19980112195019" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="199801121950.NAA00430@frantic.BSDI.COM" -->
+<!-- inreplyto="delayed ACKs" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121950.NAA00430@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 14:50:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0920.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0918.html">Jonathan M. Bresler: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0921.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0921.html">Alan Cox: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#919">[ date ]</A>
+<A HREF="index.html#919">[ thread ]</A>
+<A HREF="subject.html#919">[ subject ]</A>
+<A HREF="author.html#919">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Mon, 12 Jan 1998 11:13:34 -0800
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121950.NAA00430@frantic.BSDI.COM&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; OK, sitting here typing I think I may have figured-out one area you
+</EM><BR>
+<EM>&gt; might consider disabling Nagle. Were you alluding to pipelined requests?
+</EM><BR>
+<EM>&gt; I could see where three http requests sent on a single connection could
+</EM><BR>
+<EM>&gt; have the second and third delayed if they were smaller that MSS/2 (I
+</EM><BR>
+<EM>&gt; guess that generalizes to MSS/(N-1)?)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That being the case, should Nagle be disabled, or would it be better to
+</EM><BR>
+<EM>&gt; have the application tell the transport that there will be no more data
+</EM><BR>
+<EM>&gt; coming for a while - &quot;fflush&quot; for a TCP connection? 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Same question for the server.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; rick jones
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Even with Nagle on, I would think that pipelined requests &quot;degenerate&quot;
+</EM><BR>
+<EM>&gt; into nothing worse than one at a time, with the added connectoin
+</EM><BR>
+<EM>&gt; overhead, and sometimes have more than one at a time, so it is still
+</EM><BR>
+<EM>&gt; goodness right?
+</EM><BR>
+<P>There is no need to disable the Nagle algorithm.  With pipelined
+<BR>
+requests, the first one will be sent immediatly, and the next two
+<BR>
+buffered, because of Nagle.  But the first request is going to cause
+<BR>
+some data to come back, so the delayed ACK will be piggy-backed on
+<BR>
+the data.  When the ACK is received, there is no outstanding TCP data
+<BR>
+to send, so the TCP should then kick out the next two requests in a
+<BR>
+single packet.
+<BR>
+<P>Everything should work just fine.
+<BR>
+<P>The case where the interaction between Nagle and delayed ACKs
+<BR>
+becomes a problem is when the receiver can't do anything until
+<BR>
+it gets the data that hasn't been sent yet, defered by the Nagle
+<BR>
+algorithm.  The Nagle code is waiting for the ACK, and there is
+<BR>
+no return data on which to piggy-back the delayed ACK, so you
+<BR>
+wait for the delayed ACK timer to go off.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121950.NAA00430@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0920.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0918.html">Jonathan M. Bresler: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0921.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0921.html">Alan Cox: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#919">[ date ]</A>
+<A HREF="index.html#919">[ thread ]</A>
+<A HREF="subject.html#919">[ subject ]</A>
+<A HREF="author.html#919">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

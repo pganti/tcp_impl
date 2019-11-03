@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP keep-alives</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP keep-alives">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP keep-alives</H1>
+<!-- received="Thu May  1 11:51:45 1997" -->
+<!-- isoreceived="19970501155145" -->
+<!-- sent="Thu, 1 May 97 11:44:38 PDT" -->
+<!-- isosent="19970501184438" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: TCP keep-alives" -->
+<!-- id="9705011844.AA10699@can.isi.edu" -->
+<!-- inreplyto="TCP keep-alives" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu May 01 1997 - 14:44:38 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0404.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#405">[ date ]</A>
+<A HREF="index.html#405">[ thread ]</A>
+<A HREF="subject.html#405">[ subject ]</A>
+<A HREF="author.html#405">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">alan@lxorguk.ukuu.org.uk</A> Thu May  1 10:25:16 1997
+<BR>
+&nbsp;&nbsp;*&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+<BR>
+&nbsp;&nbsp;*&gt; Subject: Re: TCP keep-alives
+<BR>
+&nbsp;&nbsp;*&gt; To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">braden@ISI.EDU</A>
+<BR>
+&nbsp;&nbsp;*&gt; Date: Wed, 30 Apr 1997 23:27:08 +0100 (BST)
+<BR>
+&nbsp;&nbsp;*&gt; Cc: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>, <A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;*&gt; In-Reply-To: &lt;<A HREF="mailto:9704292326.AA08253@can.isi.edu?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">9704292326.AA08253@can.isi.edu</A>&gt; from &quot;<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;9705011844.AA10699@can.isi.edu&gt;">braden@ISI.EDU</A>&quot; at Apr 29, 97 04:26:53 pm
+<BR>
+&nbsp;&nbsp;*&gt; Content-Type  *&gt; :   *&gt; text  *&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Content-Length: 664
+<BR>
+&nbsp;&nbsp;*&gt; X-Lines: 15
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; Stateful router?  That is precisely why Internet routers do not have
+<BR>
+&nbsp;&nbsp;*&gt; &gt; per-flow state [[and why make RSVP-type reservations for TCP
+<BR>
+&nbsp;&nbsp;*&gt; &gt; connections is a bad idea]].  An idle TCP connection should tie up no
+<BR>
+&nbsp;&nbsp;*&gt; &gt; resources except at the end systems.  (This is one reason why I think
+<BR>
+&nbsp;&nbsp;*&gt; &gt; IPSEC is architecturally superior to application relays for firewalls.)
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Sometimes it is hard to avoid. The Linux masquerading firewall stuff
+<BR>
+&nbsp;&nbsp;*&gt; really has to keep state as it maps a whole network onto one IP address
+<BR>
+&nbsp;&nbsp;*&gt; (ie its not a NAT). Keepalive saves having to mod all the clients.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>Alan,
+<BR>
+<P>Sorry, I don't quite understand.  You mean that you are depending upon
+<BR>
+TCP keepalives to maintain firewall state?  How about other transport
+<BR>
+protocols?  How about UDP-based flows?
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0404.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0406.html">Alan Cox: "Re: TCP keep-alives"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#405">[ date ]</A>
+<A HREF="index.html#405">[ thread ]</A>
+<A HREF="subject.html#405">[ subject ]</A>
+<A HREF="author.html#405">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

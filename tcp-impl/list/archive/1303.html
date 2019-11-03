@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Tue Sep  8 10:10:11 1998" -->
+<!-- isoreceived="19980908141011" -->
+<!-- sent="Tue, 8 Sep 1998 11:08:33 -0600 (MDT)" -->
+<!-- isosent="19980908170833" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809081708.LAA05457@calcite.rhyolite.com" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809081708.LAA05457@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 08 1998 - 13:08:33 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1302.html">braden@ISI.EDU: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1303">[ date ]</A>
+<A HREF="index.html#1303">[ thread ]</A>
+<A HREF="subject.html#1303">[ subject ]</A>
+<A HREF="author.html#1303">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Charles M. Hannum&quot; &lt;<A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809081708.LAA05457@calcite.rhyolite.com&gt;">mycroft@mit.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I *think* we could actually fix this, by using some sort of exchange
+</EM><BR>
+<EM>&gt; in the first connection (which always does a full 3WHS to initialize
+</EM><BR>
+<EM>&gt; the connection count) and a hashing mechanism similiar to RFC-1948 to
+</EM><BR>
+<EM>&gt; ensure that future SYN-data-FIN packets came from the same source as
+</EM><BR>
+<EM>&gt; the initial connection request (or at worst a snooper in between).
+</EM><BR>
+<EM>&gt; This would effectively restore the `security' (in this case, really
+</EM><BR>
+<EM>&gt; the *accountability*) of normal TCP.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I haven't worked out the details, but it seems emminently doable.
+</EM><BR>
+<P>Yes, but why bother? Instead of inventing yet another mechanism to keep
+<BR>
+state above T/TCP, why not simply modify the application protocol to use
+<BR>
+TCP?  Why not arrange to pay the price of the 3-way handshake/A&amp;A once,
+<BR>
+and then re-use the TCP connection for several transactions?
+<BR>
+<P>I've long liked the idea of reducing the number of packets in the TCP
+<BR>
+3-way handshake.  (It was one of the selling points of XTP).  However,
+<BR>
+your point about the utility of delaying committing significant resources
+<BR>
+until at least one round-trip of packets has at least somewhat verified
+<BR>
+the identity of the peer is very interesting.
+<BR>
+<P>Besides your notion of some kind of hashing/pre-reservation, you might do
+<BR>
+something in you HTTP server example such as start the HTTP query for
+<BR>
+requests that arrived by T/TCP, but perpare to abandon it early.  Either:
+<BR>
+<P>&nbsp;&nbsp;1. respond to the initial T/TCP packet by both starting the query
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and sending a window-probe-style TCP segment to the client.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the client does not respond quickly (say &lt;1 sec), abort the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query.  Yes, this sounds like it would require violations of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;various layering religions.
+<BR>
+<P>&nbsp;&nbsp;2. limit the total number of processes doing work for T/TCP requests
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that have not been ACK'd.  If the system gets load, drop a random
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request, much like the random-drop defense to SYN attacks.  This
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;could not be distinguished by clients from ordinary packet losses,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so would be harmless, except for the work wasted before request
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is dropped.  I think this should not offend the layering priests
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;except in concept, since it would require no hacks in the stack.
+<BR>
+<P>Still, why bother?  Never mind newer versions of HTTP.  What benefit does
+<BR>
+T/TCP give, other than a speed-up by one RTT of the initial response?
+<BR>
+Since all HTTP clients now use more than one TCP connection, delays for
+<BR>
+3-way handshakes after the first are insignificant, aren't they?  Given
+<BR>
+commerical HTTP servers that can server more hits/second than you can buy
+<BR>
+Internet bandwidth no matter what your budget, there doesn't seem much
+<BR>
+that T/TCP can do for servers.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809081708.LAA05457@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1302.html">braden@ISI.EDU: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1303">[ date ]</A>
+<A HREF="index.html#1303">[ thread ]</A>
+<A HREF="subject.html#1303">[ subject ]</A>
+<A HREF="author.html#1303">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:01 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

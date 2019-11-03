@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 10:08:22 1998" -->
+<!-- isoreceived="19980820140822" -->
+<!-- sent="Thu, 20 Aug 1998 11:06:37 -0600 (MDT)" -->
+<!-- isosent="19980820170637" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201706.LAA09737@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201706.LAA09737@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 13:06:37 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1231.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1229.html">Steve Alexander: "RE: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1232.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1230">[ date ]</A>
+<A HREF="index.html#1230">[ thread ]</A>
+<A HREF="subject.html#1230">[ subject ]</A>
+<A HREF="author.html#1230">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201706.LAA09737@calcite.rhyolite.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;   *&gt; interval is &lt;&lt; 2 hours.  Sorry, but that's just the way it is.  If
+</EM><BR>
+<EM>&gt;   *&gt; anybody has reason to disagree, I'd really appreciate hearing about it.
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Actually, experience has shown that there are a lot of IETFers who have
+</EM><BR>
+<EM>&gt; reason to disagree.  As my earlier comment indicated, the clear
+</EM><BR>
+<EM>&gt; consensus of the 50 or so people actively involved with the Host
+</EM><BR>
+<EM>&gt; Requirements specification was a grudging admission that keep-alives
+</EM><BR>
+<EM>&gt; may be unavoidable in some cases, but the clear desire that they should
+</EM><BR>
+<EM>&gt; be avoided whenever possible, and kept minimal.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I believe the majority view was that keep-alives belong either in the
+</EM><BR>
+<EM>&gt; application layer or the link layer, not in the transport layer.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is an old problem and an old argument.  We have had 'dialup' lines
+</EM><BR>
+<EM>&gt; in the Internet since CSNET used X.25 encapsulation in the early 1980s.
+</EM><BR>
+<P>It might would be nice if all applications would do their own keepalives.
+<BR>
+That might invovle more bits on the wire, but maybe not.  Regardless, it
+<BR>
+cannot be argued that enough (or even many) applications implement
+<BR>
+their own keepalives.  Engineering ought to be concerned with reality
+<BR>
+before religion, particularly network layering religions.
+<BR>
+<P>Even if for those who accepted (as many did not) your position, 1988-1989
+<BR>
+was a long time ago, and things have radically changed.  Your &quot;50 or so
+<BR>
+people&quot; were doubtless like many of us now (specifically including me),
+<BR>
+and extremely atypical of users today.  Back in CSNET days (my then
+<BR>
+employer was a CSNET member, albeit joined before the dial-up push and
+<BR>
+used lease lines), many TCP connections lasted longer than 2 hours, and
+<BR>
+were often telnet or rlogin sessions that would go hours without any
+<BR>
+keystrokes or packets.  Then keepalives were objectionable overhead, and
+<BR>
+2 hours was more than quick enough.  Keepalives still are wasteful for
+<BR>
+those truely insignificantly few TCP connections like my xterm and rlogin
+<BR>
+windows. Most TCP connections now are short-lived, and at any reasonable
+<BR>
+keepalive interval, no keepalives are done on live connections, so that
+<BR>
+keepalives are not in the least wasteful.
+<BR>
+<P>For the majority of people running significant systems today, keepalives
+<BR>
+are vital.  I've experence with far more than 50 sites what need them to
+<BR>
+keep their systems from crashing.  Many absolutely require delays much
+<BR>
+less than 2 hours.  Consider a modestly busy site that gets 50,000,000
+<BR>
+HTTP hits per day, and assume that only 0.1% of those connections involve
+<BR>
+HTTP clients that disappear with no data un-ACK'ed.  How is the server
+<BR>
+ever supposed to clean out those dead connections?  You cannot reboot such
+<BR>
+systems.  To understate the problem, 0.1% of 50,000,000 TCP connections
+<BR>
+per day gets to be a hassle even for the largest system after only a few
+<BR>
+days.
+<BR>
+<P><P><EM>&gt; This is probably not the right list for this discussion.
+</EM><BR>
+<P>On the contrary, where else?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201706.LAA09737@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1231.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1229.html">Steve Alexander: "RE: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1232.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1230">[ date ]</A>
+<A HREF="index.html#1230">[ thread ]</A>
+<A HREF="subject.html#1230">[ subject ]</A>
+<A HREF="author.html#1230">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:50 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

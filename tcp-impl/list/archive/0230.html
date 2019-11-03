@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="Re: PSH">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH</H1>
+<!-- received="Mon Mar 24 13:15:49 1997" -->
+<!-- isoreceived="19970324181549" -->
+<!-- sent="Mon, 24 Mar 97 12:55:42 PST" -->
+<!-- isosent="19970324205542" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="Re: PSH" -->
+<!-- id="9703242055.AA00643@mentat.com" -->
+<!-- inreplyto="PSH" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=Re:%20PSH&In-Reply-To=&lt;9703242055.AA00643@mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 15:55:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0231.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0234.html">William Allen Simpson: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#230">[ date ]</A>
+<A HREF="index.html#230">[ thread ]</A>
+<A HREF="subject.html#230">[ subject ]</A>
+<A HREF="author.html#230">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; What problem would that be?  The only one I am aware of is a bug which
+</EM><BR>
+<EM>&gt; &gt; resulted in the PSH bit not getting set when the URG bit was on.  That has
+</EM><BR>
+<EM>&gt; &gt; been fixed.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; Great!  What version of OT?  OT 1.1.1 is shipping in MacOS 7.6, but I'm
+</EM><BR>
+<EM>&gt; still seeing the problem of improperly missing PSH in 1.1.2 (net update
+</EM><BR>
+<EM>&gt; distribution).
+</EM><BR>
+<P>I don't directly control our customers releases.  I would like to say that
+<BR>
+the URG-PSH problem should have been in 1.1.2, but I don't know for sure.  I'll
+<BR>
+try to find out.  Meanwhile, I get the feeling that you are complaining about
+<BR>
+something more than not setting the PSH bit when the URG bit is on, and I need
+<BR>
+to understand more specifically what else you are seeing.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; How do you set the PSH bit in OT?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>In our implementation, on which OT TCP/IP is based, the PSH bit is turned on
+<BR>
+whenever we are sending the last piece of data that TCP has seen.  If we
+<BR>
+already have additional unsent data queued at TCP, the PSH bit is not set.
+<BR>
+End of story.
+<BR>
+<P><EM>&gt; According to Vinnie Moscaritolo:
+</EM><BR>
+<EM>&gt; #   Date: 12 Jun 96 00:59 GMT
+</EM><BR>
+<EM>&gt; #   The push flag feature of MacTCP is not functional in the the OT MacTCP
+</EM><BR>
+<EM>&gt; #   implementation. Setting or resetting it does not ripple down to the OT TCP.
+</EM><BR>
+<EM>&gt; #   Futher there is no way to programmaticaly set the push flag (PSH bit in the
+</EM><BR>
+<EM>&gt; #   header).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We had to revert our Mac web servers to MacTCP, where PSH works.
+</EM><BR>
+<EM>&gt; Netscape hangs periodically when both ends of the connection are using
+</EM><BR>
+<EM>&gt; OT, but works better when the server is using MacTCP.
+</EM><BR>
+<P>The API associated with MacTCP included a mechanism for specifying that the
+<BR>
+PSH bit be set with a particular buffer.  As you know, RFC 1122 allows for,
+<BR>
+but does not require, such a facility.  I would be very happy to see this
+<BR>
+be explicitly discouraged.  The biggest problem with this capability is that
+<BR>
+application writers seem to think that by manipulating the PSH bit they can
+<BR>
+turn TCP into a low-rent messaging protocol.  This is an interoperability
+<BR>
+nightmare.  What is the upside?  If the sending and receiving TCPs are doing
+<BR>
+their job properly, then I don't see a good reason to allow the applications
+<BR>
+to get into the act.  Additionally, we, as protocol implementors, are often
+<BR>
+not in a postion to reinvent existing APIs regardless of what is &quot;required&quot;.
+<BR>
+<P>If your web servers don't respond properly given the simple PSH bit strategy
+<BR>
+described above, then I would very much like to get some actual details of the
+<BR>
+problem.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; FYI:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I also see no slow start when in the same /24, even tho not on the same
+</EM><BR>
+<EM>&gt; subnet (physically divided /27).
+</EM><BR>
+<P>Huh?  If you are saying that we don't do slow-start when connected to a machine
+<BR>
+on the same subnet, that is not true.  We do slow-start on every connection.
+<BR>
+If you have evidence to the contrary, let's see it.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I also see no slow start after idle.
+</EM><BR>
+<P>I understand the discussion on this point, and consider it fair game for
+<BR>
+recommendations by this group, but I need to understand why you are using it
+<BR>
+as criticism while this is not a requirement.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I also see no Nagle algorithm.
+</EM><BR>
+<P>This is an almost slanderous misrepresentation.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I also see Ack-only packets immediately followed by data packets.
+</EM><BR>
+<P>More of the same.  ACKs should be deferred only so long, and may occur just
+<BR>
+before new data is sent.  If you have something to show me that looks like
+<BR>
+a systematic problem, please send it along and I will be happy to look at it.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I also see about 10% retransmissions, when no packets were lost due to
+</EM><BR>
+<EM>&gt; congestion.  RTT algorithm needs work.
+</EM><BR>
+<P>OT 1.1.1 did include some serious RTT problems, which I take full
+<BR>
+responsibility for, that were very noticeable on slow links.  These have been
+<BR>
+resolved for some time, but did not make it into OT 1.1.2.  Apple has been
+<BR>
+promising to get these fixes out, but you will have to talk to them about
+<BR>
+when you will see them.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I expect that this group will document all these behaviours as
+</EM><BR>
+<EM>&gt; &quot;non-conforming&quot;.
+</EM><BR>
+<P>I'm happy to discuss and examine any problems reported with our implementation.
+<BR>
+I certainly hope that this group will document only complaints supported by
+<BR>
+facts.
+<BR>
+<P>jt
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0231.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0234.html">William Allen Simpson: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#230">[ date ]</A>
+<A HREF="index.html#230">[ thread ]</A>
+<A HREF="subject.html#230">[ subject ]</A>
+<A HREF="author.html#230">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

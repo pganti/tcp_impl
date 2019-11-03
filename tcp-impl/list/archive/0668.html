@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Tue Aug 19 15:15:04 1997" -->
+<!-- isoreceived="19970819191504" -->
+<!-- sent="Tue, 19 Aug 1997 15:10:19 -0700" -->
+<!-- isosent="19970819221019" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="199708192210.PAA02816@rum.isi.edu" -->
+<!-- inreplyto="does this qualify as a bug?" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Aug 19 1997 - 18:10:19 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0669.html">Craig Partridge: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0667.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0670.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#668">[ date ]</A>
+<A HREF="index.html#668">[ thread ]</A>
+<A HREF="subject.html#668">[ subject ]</A>
+<A HREF="author.html#668">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+----- Begin Included Message -----
+<BR>
+<P><EM>&gt; To: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:van@ee.lbl.gov?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;">van@ee.lbl.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: does this qualify as a bug?
+</EM><BR>
+<EM>&gt; Date: Tue, 19 Aug 1997 14:46:53 PDT
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I talked with Van about slow-start after idle issues.  His basic argument is:
+</EM><BR>
+<EM>&gt; any time you've lost the ack clock, you need to recover it, and the mechanism
+</EM><BR>
+<EM>&gt; for doing so is a slow-start.  So after 1 RTO (at which point you don't expect
+</EM><BR>
+<EM>&gt; any more feedback from the receiver), you need to begin a new slow-start, just
+</EM><BR>
+<EM>&gt; as though you were beginning a new connection.
+</EM><BR>
+<P><EM>&gt; So my leaning is that for the RFC 2001 revision, we add a description of
+</EM><BR>
+<EM>&gt; slow-start after 1 RTO idle, with a window the same as the initial connection
+</EM><BR>
+<EM>&gt; window.  The behavior you described is indeed a bug, probably one that's
+</EM><BR>
+<EM>&gt; very easy to make, and should be written up as such.  Clearly, we will need
+</EM><BR>
+<EM>&gt; to be careful in our description of what exactly &quot;1 RTO idle&quot; means.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Vern
+</EM><BR>
+<P>Agreed- there are separable issues:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- how to know when the clock is lost
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- what to do about it when you have new data to send
+<BR>
+<P>the bug is best aimed at the former; the latter is research (as you said)
+<BR>
+<P>however, 1 RTO idle may not be the best description of 'losing the ack
+<BR>
+clock'.  The clock is lost any time the window front moves forward
+<BR>
+without data to send.
+<BR>
+<P>For now, we can probably use the conservative 'if you've lost the
+<BR>
+clock for 1 RTO, then you _certainly_ have lost it'.
+<BR>
+<P>A better estimate would take into account the 'permission to send'.
+<BR>
+I would consider that a better fix to the bug, rather than 'research'
+<BR>
+per se.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708192210.PAA02816@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0669.html">Craig Partridge: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0667.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0670.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#668">[ date ]</A>
+<A HREF="index.html#668">[ thread ]</A>
+<A HREF="subject.html#668">[ subject ]</A>
+<A HREF="author.html#668">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

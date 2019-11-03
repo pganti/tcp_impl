@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: query: using two write() cal</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: query: using two write() calls in succession</H1>
+<!-- received="Wed Mar 28 08:41:06 2001" -->
+<!-- isoreceived="20010328134106" -->
+<!-- sent="Wed, 28 Mar 2001 08:28:44 -0500 (EST)" -->
+<!-- isosent="20010328132844" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: query: using two write() calls in succession" -->
+<!-- id="200103281328.IAA02478@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="query: using two write() calls in succession" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;200103281328.IAA02478@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 28 2001 - 08:28:44 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2488.html">Khurram Saeed: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2485">[ date ]</A>
+<A HREF="index.html#2485">[ thread ]</A>
+<A HREF="subject.html#2485">[ subject ]</A>
+<A HREF="author.html#2485">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I was under the impression that a blocking write (or send) call would
+</EM><BR>
+<EM>&gt; block until it has received an ACK or an RST for data sent and then
+</EM><BR>
+<EM>&gt; perform the 2nd write.
+</EM><BR>
+<P>This is not the way any implementation I've used works (unless the
+<BR>
+first write is larger than the buffering capacity of the socket).
+<BR>
+<P><EM>&gt; I have noticed that this happens even when I had made two write calls
+</EM><BR>
+<EM>&gt; by breaking the request (1+32) while making the first normal request
+</EM><BR>
+<EM>&gt; to the server.  (check the previous linuxdump.txt file).  I have
+</EM><BR>
+<EM>&gt; appended relevant parts of it here:
+</EM><BR>
+<P><EM>&gt; 17:31:17.186250 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 1:2(1) ack 1 win 32120 (DF) 
+</EM><BR>
+<EM>&gt; 17:31:17.233839 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 1:1(0) ack 2 win 8760 (DF) 
+</EM><BR>
+<EM>&gt; 17:31:17.233891 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 2:34(32) ack 1 win 32120 (DF) 
+</EM><BR>
+<P><EM>&gt; As you can see, when I make my first write call by sending 1 byte of
+</EM><BR>
+<EM>&gt; data, it  waits until it receives the ACK and then proceed with the
+</EM><BR>
+<EM>&gt; second write.
+</EM><BR>
+<P>You are confusing the timing of the write() calls with the timing of
+<BR>
+the data actually going out onto the wire.
+<BR>
+<P><EM>&gt; That means, in this case write call blocks until the server or peer
+</EM><BR>
+<EM>&gt; TCP ackowledges the data.
+</EM><BR>
+<P>No, it means that the TCP does not send the data until then.  It says
+<BR>
+nothing about when the write calls complete (except, of course, that
+<BR>
+the first write must have completed before the second write's data goes
+<BR>
+out).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;200103281328.IAA02478@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2486.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2484.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2488.html">Khurram Saeed: "Re: query: using two write() calls in succession"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2485">[ date ]</A>
+<A HREF="index.html#2485">[ thread ]</A>
+<A HREF="subject.html#2485">[ subject ]</A>
+<A HREF="author.html#2485">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Mar 28 2001 - 08:41:35 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

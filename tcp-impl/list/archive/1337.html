@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: NewReno and the 2001 Revision</TITLE>
+<META NAME="Author" CONTENT="Tom Henderson (tomh@raptor.CS.Berkeley.EDU)">
+<META NAME="Subject" CONTENT="Re: NewReno and the 2001 Revision">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: NewReno and the 2001 Revision</H1>
+<!-- received="Wed Sep 23 22:46:39 1998" -->
+<!-- isoreceived="19980924024639" -->
+<!-- sent="Wed, 23 Sep 1998 22:45:24 -0700 (PDT)" -->
+<!-- isosent="19980924054524" -->
+<!-- name="Tom Henderson" -->
+<!-- email="tomh@raptor.CS.Berkeley.EDU" -->
+<!-- subject="Re: NewReno and the 2001 Revision" -->
+<!-- id="Pine.BSI.3.95.980923224136.26134A-100000@raptor.CS.Berkeley.EDU" -->
+<!-- inreplyto="Roam.SIMCSD.2.0.4.906604282.18806.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Tom Henderson (<A HREF="mailto:tomh@raptor.CS.Berkeley.EDU?Subject=Re:%20NewReno%20and%20the%202001%20Revision&In-Reply-To=&lt;Pine.BSI.3.95.980923224136.26134A-100000@raptor.CS.Berkeley.EDU&gt;"><EM>tomh@raptor.CS.Berkeley.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 24 1998 - 01:45:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1339.html">Rick Jones: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1337">[ date ]</A>
+<A HREF="index.html#1337">[ thread ]</A>
+<A HREF="subject.html#1337">[ subject ]</A>
+<A HREF="author.html#1337">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Wed, 23 Sep 1998, Kacheong Poon wrote:
+<BR>
+<P><EM>&gt; Can you describe what you meant by SACK with Reno and SACK with NewReno? With
+</EM><BR>
+<P>First, let me define NewReno for the purpose of this discussion.  NewReno is 
+<BR>
+Reno with the following changes:
+<BR>
+i) define a variable (snd_recover) that is set to snd_max upon entering fast
+<BR>
+recovery.  When snd_una reaches snd_recover, the fast recovery phase is 
+<BR>
+considered to be over.
+<BR>
+ii) if a partial cumulative ack is received (ti_ack &lt; snd_recover), retransmit
+<BR>
+the next segment beyond ti_ack, deflate snd_cwnd by the amount of new
+<BR>
+data acknowledged, add back one segment to snd_cwnd, and send a new segment
+<BR>
+if permitted.
+<BR>
+iii) if a new ack is received with (ti_ack &gt;= snd_recover), set snd_cwnd to
+<BR>
+min(snd_ssthresh, amount of outstanding data in the network + 1 segment)
+<BR>
+and otherwise exit fast recovery as in Reno.
+<BR>
+iv) do not reset snd_recover upon a rtx timeout.  If three dupacks are received 
+<BR>
+and (ti_ack &lt; snd_recover), do not perform fast retransmit/fast recovery but 
+<BR>
+instead just advance snd_cwnd by one segment and send the next segment 
+<BR>
+(snd_nxt).  This is avoidance of false fast retransmission after a timeout.
+<BR>
+<P>When combining SACK with NewReno, the SACK information may permit you to
+<BR>
+identify segments that need to be retransmitted before you receive the 
+<BR>
+partial cumulative ack.  In our implementation, if the SACK information 
+<BR>
+indicates that the receiver is holding a segment sent at least 3 segments 
+<BR>
+beyond a given segment that is not SACKed, the given segment is eligible for 
+<BR>
+retransmission.  If we send such a retransmission ``early'' (i.e., before 
+<BR>
+partial cumulative ack), we decrement the inflated snd_cwnd by one segment to 
+<BR>
+account for this (in essence, we trade sending a new segment
+<BR>
+off the top of the window for the early retransmission).  If we later get a 
+<BR>
+partial cumulative ack, but the next segment has already been retransmitted,
+<BR>
+snd_cwnd is inflated by one segment.  In summary, in our implementation, SACK 
+<BR>
+information permits the substitution of an early retransmission for inflating 
+<BR>
+snd_cwnd by one segment, in a manner consistent with the allowable amount
+<BR>
+of outstanding data in the network under NewReno rules.  This reordering of
+<BR>
+retransmissions and new transmissions allows recovery to occur in fewer RTTs.
+<BR>
+<P>SACK with Reno also allows you to send retransmissions early (as defined 
+<BR>
+above), but suffers from the multiple window reductions in one window of data
+<BR>
+and false fast retransmission problems.
+<BR>
+<P>Tom
+<BR>
+<P>p.s.  I'd like to hear if my outline of what I called NewReno above is 
+<BR>
+consistent with the ``bug fix'' people had in mind, as I know the term 
+<BR>
+NewReno can mean different things to different people.  
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1338.html">David S. Miller: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1339.html">Rick Jones: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1337">[ date ]</A>
+<A HREF="index.html#1337">[ thread ]</A>
+<A HREF="subject.html#1337">[ subject ]</A>
+<A HREF="author.html#1337">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 12:48:17 1999" -->
+<!-- isoreceived="19990204174817" -->
+<!-- sent="Thu, 04 Feb 1999 09:42:14 -0800" -->
+<!-- isosent="19990204174214" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36B9DBF6.499265E4@cup.hp.com" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.918094477.28747.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36B9DBF6.499265E4@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 12:42:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1503.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1503.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1499">[ date ]</A>
+<A HREF="index.html#1499">[ thread ]</A>
+<A HREF="subject.html#1499">[ subject ]</A>
+<A HREF="author.html#1499">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Kacheong Poon wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; My understanding of &quot;the way things are supposed to work&quot; :) is that if
+</EM><BR>
+<EM>&gt; &gt; that one-and-a-fraction MSS-worth of data was presented to the TCP in a
+</EM><BR>
+<EM>&gt; &gt; single &quot;send&quot; that all of it should go out without delay. And yes, that
+</EM><BR>
+<EM>&gt; &gt; could mean a series of 1460,1,1460,1 segments traversing the network. I
+</EM><BR>
+<EM>&gt; &gt; demonstrated that being the case with a quick netperf TCP_RR test with
+</EM><BR>
+<EM>&gt; &gt; &quot;-r 1461,1&quot; - if the paragraphs description was correct, I should have
+</EM><BR>
+<EM>&gt; &gt; only gotten ~5 transactions per second (200 ms delayed ACK), but I got
+</EM><BR>
+<EM>&gt; &gt; several hundred.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is interesting.  So are you saying that the receiver did not delay acks
+</EM><BR>
+<EM>&gt; in your test case?  Assuming MSS is 1460 bytes.  After the sender sends the
+</EM><BR>
+<EM>&gt; first 1460 bytes of the 1461 bytes request (in a single send call), it cannot
+</EM><BR>
+<EM>&gt; send any more because of Nagle.  And if the receiver implements delay ack and
+</EM><BR>
+<EM>&gt; ack every other segment, it will not send back an ack immediately if the 1460
+</EM><BR>
+<EM>&gt; bytes segment happen to be the first of the 2 segments.  Have you looked at
+</EM><BR>
+<EM>&gt; the transfer trace to see what is going on?
+</EM><BR>
+<P>No, I'm saying that the last byte did not wait for the ack to go out -
+<BR>
+the Nagle check was applied to the &quot;send&quot; as a whole, not the individual
+<BR>
+segments that made up the &quot;send.&quot;
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1503.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1503.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1499">[ date ]</A>
+<A HREF="index.html#1499">[ thread ]</A>
+<A HREF="subject.html#1499">[ subject ]</A>
+<A HREF="author.html#1499">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

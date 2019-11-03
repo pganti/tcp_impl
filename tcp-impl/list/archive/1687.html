@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: alternative PMTU</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: alternative PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: alternative PMTU</H1>
+<!-- received="Tue Mar 23 00:17:38 1999" -->
+<!-- isoreceived="19990323051738" -->
+<!-- sent="Mon, 22 Mar 1999 22:06:55 -0700 (MST)" -->
+<!-- isosent="19990323050655" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: alternative PMTU" -->
+<!-- id="199903230506.WAA03533@calcite.rhyolite.com" -->
+<!-- inreplyto="alternative PMTU" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903230506.WAA03533@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 23 1999 - 00:06:55 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1688.html">Minghua.Lu@comsat.com: "Question about caching ssthresh in routing table"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1686.html">Eric A. Hall: "Re: alternative PMTU"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1687">[ date ]</A>
+<A HREF="index.html#1687">[ thread ]</A>
+<A HREF="subject.html#1687">[ subject ]</A>
+<A HREF="author.html#1687">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903230506.WAA03533@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; No, what I'm thinking is that instead of sending a series of recursive
+</EM><BR>
+<EM>&gt; probes through the network (which don't get returned, or which get eaten
+</EM><BR>
+<EM>&gt; by ICMP-hostile devices, or which don't provide any useful info), just
+</EM><BR>
+<EM>&gt; have the end-node return an option that says &quot;hey fragmentation has
+</EM><BR>
+<EM>&gt; occurred and this is the biggest fragment that I got.&quot;
+</EM><BR>
+<P>But once again, the biggest fragment that a host received has no useful
+<BR>
+relationship to the path MTU.  Please consider the implications of the
+<BR>
+8-byte granularity of IP fragments.  Because of the 8-byte granularity,
+<BR>
+it can be impossible for a router to generate a fragment that is as
+<BR>
+large as the MTU allows.
+<BR>
+<P>Consdier the possibility that the router with the smallest MTU in the path
+<BR>
+might not do not fragment stupidly.  What if the MSS is 2048, the PMTU is
+<BR>
+1500, and the largest fragment far host receives is 1024?  Your scheme
+<BR>
+would incorrectly declare the PMTU to be 1024.  
+<BR>
+<P>Consider load sharing a TCP connection with MSS=4312 (FDDI) over two paths,
+<BR>
+one with PMTU of 1500 (Ethernet) and the other with PMTU 4352 (FDDI).
+<BR>
+Your scheme would falsely declare the PMTU is 4352.
+<BR>
+<P>Also as I said before, your notion does not support UDP.
+<BR>
+In practice, UDP often needs PMTU discovery while TCP usually does not,
+<BR>
+because of the TCP MSS option.
+<BR>
+<P>All of those casees are handled correctly by the current mechansim RFC 1191.
+<BR>
+<P><P><EM>&gt; It is a lot easier to deal with the one message that is explicit than
+</EM><BR>
+<EM>&gt; trying to deal with many messages of many different flavors that don't
+</EM><BR>
+<EM>&gt; necessarily tell you anything even when they do succeed (the current
+</EM><BR>
+<EM>&gt; design of using DF and hoping for informative errors).
+</EM><BR>
+<P>Please take time to read RFC 1063 and RFC 1191, and see that there
+<BR>
+are not &quot;many messages of many different flavors&quot;, but only two.
+<BR>
+Please also notice that one of those two flavors contains the actual,
+<BR>
+accurate value, unlike the hopelessly inaccurate value of your proposal.
+<BR>
+<P>Consider the 1988 date of RFC 1063, and consider the likelihood that
+<BR>
+support for the second flavor that contains all of the accurate information
+<BR>
+is practically universal today in reasonable routers.
+<BR>
+<P><P><EM>&gt; One downside to the one-shot model is that the remote end-point HAS to
+</EM><BR>
+<EM>&gt; support the option if it is going to be relied upon. Otherwise you'd
+</EM><BR>
+<EM>&gt; just keep sending fragmentable data and never get a response saying &quot;got
+</EM><BR>
+<EM>&gt; frags.&quot;
+</EM><BR>
+<P>Yes, and that issue was one of the design constraints on RFC 1063
+<BR>
+and RFC 1191.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903230506.WAA03533@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1688.html">Minghua.Lu@comsat.com: "Question about caching ssthresh in routing table"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1686.html">Eric A. Hall: "Re: alternative PMTU"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1687">[ date ]</A>
+<A HREF="index.html#1687">[ thread ]</A>
+<A HREF="subject.html#1687">[ subject ]</A>
+<A HREF="author.html#1687">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

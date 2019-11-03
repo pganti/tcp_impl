@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: PILC BOF -- Orlando IETF</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman)">
+<META NAME="Subject" CONTENT="PILC BOF -- Orlando IETF">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>PILC BOF -- Orlando IETF</H1>
+<!-- received="Tue Nov 17 12:39:00 1998" -->
+<!-- isoreceived="19981117173900" -->
+<!-- sent="Tue, 17 Nov 1998 12:35:04 -0500 (EST)" -->
+<!-- isosent="19981117173504" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman" -->
+<!-- subject="PILC BOF -- Orlando IETF" -->
+<!-- id="199811171735.MAA22291@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman?Subject=Re:%20PILC%20BOF%20--%20Orlando%20IETF&In-Reply-To=&lt;199811171735.MAA22291@guns.lerc.nasa.gov&gt;"><EM>mallman</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 17 1998 - 12:35:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1400.html">Peter Ford: "RE: Last Call for TCP Congestion Control I-D (IW&gt;1)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1398.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-newreno-00.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1399">[ date ]</A>
+<A HREF="index.html#1399">[ thread ]</A>
+<A HREF="subject.html#1399">[ subject ]</A>
+<A HREF="author.html#1399">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+[I appologize if you receive more than one copy of this.]
+<BR>
+<P>A quick note to announce a BOF that will be held at the IETF meeting
+<BR>
+in Orlando.  This BOF will be to gauage the interest in (and scope
+<BR>
+of) possibly creating an IETF working group to document performance
+<BR>
+implications of various less-than-ideal link characteristics.
+<BR>
+Below is the BOF description.  At the bottom are instructions for
+<BR>
+getting on the PILC mailing list.  Please direct all discussions of
+<BR>
+the upcoming BOF to the PILC list.  Thanks!
+<BR>
+<P>allman
+<BR>
+<P><P><P><P>BOF Description:
+<BR>
+<P>Name: Performance Implications of Link Characteristics (PILC)
+<BR>
+Chairs: Aaron Falk and Mark Allman 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:adalk@mail.hac.com?Subject=Re:%20PILC%20BOF%20--%20Orlando%20IETF&In-Reply-To=&lt;199811171735.MAA22291@guns.lerc.nasa.gov&gt;">adalk@mail.hac.com</A>, <A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20PILC%20BOF%20--%20Orlando%20IETF&In-Reply-To=&lt;199811171735.MAA22291@guns.lerc.nasa.gov&gt;">mallman@lerc.nasa.gov</A>
+<BR>
+<P><P>Description:
+<BR>
+<P>The Internet network-layer and transport-layer protocols are
+<BR>
+designed to accommodate a very wide range of networking technologies
+<BR>
+and characteristics.  Nevertheless, experience has shown that the
+<BR>
+particular properties of different network links can have a
+<BR>
+significant impact on the performance of Internet protocols
+<BR>
+operating over those links, and on the performance of connections
+<BR>
+along paths that include such links.  Some examples of possibly
+<BR>
+problematic characteristics:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Long delay links.  Affects timer estimation, congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adaptation. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with high bandwidth-delay product.  Difficult to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fully utilize and still respond to congestion.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with variable bandwidth-delay products (such as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi-channel ISDN, or LEOs).  Difficult to track how much
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throughput a connection should try to attain.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with varying delay. Delays due to link level
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signalling may affect the accuracy of RTO estimation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with link layer flow control.  May have adverse
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interactions with congestion control.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with asymmetric bandwidth.  Can lead to throughput
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limitations such as ACK starvation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with unusually high error rates.  Can lead to loss
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of performance due to inappropriate perception of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion.  Can impair protocols that do not protect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;their data with strong checksums.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with inconsistent error rates.  Can defeat attempts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to distinguish between congestive loss and corruption
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loss. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with significant monetary, resource-scarcity, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delay cost for establishing connections and/or keeping
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections open.  These encourage not only
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bandwidth-efficient protocols, but also protocols that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cluster their packet exchanges together rather than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spacing them out in time, and can increase the cost of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using standard soft-state mechanisms such as periodic
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state refresh messages.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Significantly low bandwidth links.  Creates pressure for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mixing together otherwise separate elements (such as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transport and network layers, or multiple transport
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections) in an effort to reduce bandwidth requirements
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;via compression.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Unidirectional.  Can make link-layer request/response, such as ARP,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;impossible.  (UDLR already addresses the routing elements
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of this.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Non-transitive reachability (A can reach B, and B can reach C,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;but A can't reach C).  Breaks assumptions about subnet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;properties.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Shared-channel broadcast to huge numbers of receivers.  Such
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;links stress the notion of using them for unicast traffic
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the viability of protocols that require a backchannel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such as IGMP.  Such links also incur a danger of major
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;broadcast reply implosions.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links that reorder packets.  Can erroneously trigger TCP fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission.  Impairs protocols that adapt based on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timing analysis.  Can stress reassembly code if not well
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tuned.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Multipathing.  Can complicate protocol adaptation since there
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is no longer a single path property to estimate, but more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;than one.  Diminshes efficiency of header compression
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithms.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Links with intermittent outages.  Timers may fail to adapt
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to outage and either falsely signal lost connectivity, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;back off so far that response once the outage resolves is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;highly delayed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Small MTU links.  Can lead to &quot;black holes&quot; if PMTU
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discovery mechanism fails.
+<BR>
+<P>This BOF will explore the size of this problem space: what sort of
+<BR>
+link characteristics prove problematic, what sort of Internet
+<BR>
+protocols are adversely affected?
+<BR>
+<P>One goal is to assess the utility of forming a working group to
+<BR>
+produce informational document(s) detailing how link characteristics
+<BR>
+interact with different IETF protocols - what well-established and
+<BR>
+less-well-established steps can be taken to ameliorate these
+<BR>
+problems.
+<BR>
+<P>Another goal is to assess the utility forming a working group(s) to
+<BR>
+develop modifications or extensions to IETF protocols to address the
+<BR>
+most pressing performance issues.
+<BR>
+<P>Note that the BOF focusses on link *characteristics* and not on link
+<BR>
+layer *technologies* such as Frame Relay, ATM or Ethernet.
+<BR>
+Discussing particular characteristics present in some of these
+<BR>
+(e.g., capture effect) is in scope; discussing aspects of the
+<BR>
+technology as a whole (e.g., CIR) is out of scope.
+<BR>
+<P>A mailing list for discussing the issues related to this BOF has
+<BR>
+been setup.  Notes to the list should be sent to
+<BR>
+pilc@lerc.nasa.gov.  To subscribe to the mailing list, send a note
+<BR>
+to <A HREF="mailto:majordomo@lerc.nasa.gov?Subject=Re:%20PILC%20BOF%20--%20Orlando%20IETF&In-Reply-To=&lt;199811171735.MAA22291@guns.lerc.nasa.gov&gt;">majordomo@lerc.nasa.gov</A> with the words &quot;subscribe pilc&quot; in the
+<BR>
+body of the note.  The mailing list archive is available at
+<BR>
+<A HREF="http://pilc.lerc.nasa.gov/pilc/">http://pilc.lerc.nasa.gov/pilc/</A>.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1400.html">Peter Ford: "RE: Last Call for TCP Congestion Control I-D (IW&gt;1)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1398.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-newreno-00.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1399">[ date ]</A>
+<A HREF="index.html#1399">[ thread ]</A>
+<A HREF="subject.html#1399">[ subject ]</A>
+<A HREF="author.html#1399">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

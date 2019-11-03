@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Josh Cohen (josh@birdcage.mcom.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 20:26:00 1997" -->
+<!-- isoreceived="19970212012600" -->
+<!-- sent="Tue, 11 Feb 1997 12:08:48 -0800 (PST)" -->
+<!-- isosent="19970211200848" -->
+<!-- name="Josh Cohen" -->
+<!-- email="josh@birdcage.mcom.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702112008.MAA26403@birdcage.mcom.com" -->
+<!-- inreplyto="3300C4AE.B34@cup.hp.com" -->
+<STRONG>From:</STRONG> Josh Cohen (<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702112008.MAA26403@birdcage.mcom.com&gt;"><EM>josh@birdcage.mcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 15:08:48 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0083.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0084.html">Bill Fenner: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#61">[ date ]</A>
+<A HREF="index.html#61">[ thread ]</A>
+<A HREF="subject.html#61">[ subject ]</A>
+<A HREF="author.html#61">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; By sending a RST instead of the FIN to abort the connection, we can
+</EM><BR>
+<EM>&gt; &gt; cause both the server side and client side stacks to tear the connection
+</EM><BR>
+<EM>&gt; &gt; down immediately, and avoid the half-close where it gets caught.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; All this does is (unreliably) kludge around a bug in the transport
+</EM><BR>
+<EM>&gt; stack. There is no guarantee that RST will ever make it to the server
+</EM><BR>
+<EM>&gt; (witness all the connections that get waylaid in FIN_WAIT_2...) And
+</EM><BR>
+Yes, but its a much greater chance than zero, which is what happens now.
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; The most common manifestation of the problem on the server side is
+</EM><BR>
+<EM>&gt; &gt; that web server admins find that over time, their server threads or
+</EM><BR>
+<EM>&gt; &gt; processes become hung.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If the server's stack is not dropping the connection to RTX exhaustion,
+</EM><BR>
+<EM>&gt; that is a bug in the server stack. If it is indeed dropping the
+</EM><BR>
+No.  It the client window is full, the window probes will continue
+<BR>
+forever. 
+<BR>
+I think this statement is true:
+<BR>
+There will be no retransmit.  There cant be a retransmit if the window
+<BR>
+is closed.
+<BR>
+<P>In Stevens, TCP/IP Illustrated, page 325:
+<BR>
+&quot;The characteristic of the persist state that is different from the 
+<BR>
+retransmission timout in Chapter 21 is that TCP 'never' gives up sending
+<BR>
+window probes.  These window probes will continue to be sent at 60 sec 
+<BR>
+intervals until the window opens up or either of the applications
+<BR>
+using the connection is terminated.&quot;
+<BR>
+<P>I need to check if the bad stack is responding, at all, to the
+<BR>
+probes, and to find out:
+<BR>
+what happens to TCP if the probes are simply unacknowledged?
+<BR>
+<P>Ill get back on these issues.
+<BR>
+<P><EM>&gt; connection, then the admins are simply being too impatient. We are
+</EM><BR>
+<EM>&gt; likely talking several minutes here.
+</EM><BR>
+No, it appears to be forever.  
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So we should compound the problem by committing a second wrong? (liberal
+</EM><BR>
+<EM>&gt; use of abortive close)
+</EM><BR>
+Well, this is a tough issue.  if a connection is to be aborted, the
+<BR>
+only way to have the server discard data it wants to send, the only
+<BR>
+way appears to be via RST.  Yes, I know, this is the intent of the 
+<BR>
+half-close.  Unfortunately in HTTP, 'aborted connections' are so common.
+<BR>
+On top of which, HTTP seems to thwart almost every optimization in TCP
+<BR>
+altogether.
+<BR>
+<P>An idea I have bounced around is to suggest prohibiting the half-close in HTTP.
+<BR>
+By this I mean that before every write, you must check the read 
+<BR>
+status of the socket for EOF, and abort if so. 
+<BR>
+( makes half-close a full close )
+<BR>
+Dont flame me on that, Im still looking into what kind of sense it
+<BR>
+makes, if any.
+<BR>
+<P><PRE>
+-- 
+-----------------------------------------------------------------------------
+Josh Cohen				        Netscape Communications Corp.
+Netscape Fire Department	       
+Server Engineering
+<A HREF="mailto:josh@netscape.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702112008.MAA26403@birdcage.mcom.com&gt;">josh@netscape.com</A>                       <A HREF="http://home.netscape.com/people/josh/">http://home.netscape.com/people/josh/</A>
+-----------------------------------------------------------------------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0083.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0084.html">Bill Fenner: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#61">[ date ]</A>
+<A HREF="index.html#61">[ thread ]</A>
+<A HREF="subject.html#61">[ subject ]</A>
+<A HREF="author.html#61">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

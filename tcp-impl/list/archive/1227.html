@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 09:43:11 1998" -->
+<!-- isoreceived="19980820134311" -->
+<!-- sent="Thu, 20 Aug 1998 09:40:29 -0700" -->
+<!-- isosent="19980820164029" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201640.AA06671@gra.isi.edu" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 12:40:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1226.html">Barney Wolff: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1230.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1227">[ date ]</A>
+<A HREF="index.html#1227">[ thread ]</A>
+<A HREF="subject.html#1227">[ subject ]</A>
+<A HREF="author.html#1227">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Thu Aug 20 09:31:19 1998
+<BR>
+&nbsp;&nbsp;*&gt; From: Barney Wolff &lt;<A HREF="mailto:barney@databus.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;">barney@databus.com</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; Date: Thu, 20 Aug 1998 12:14 EDT
+<BR>
+&nbsp;&nbsp;*&gt; Subject: Re: Timeout in FIN-WAIT-2
+<BR>
+&nbsp;&nbsp;*&gt; Content-Type  *&gt; :   *&gt; text/plain  *&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Sender: <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; Precedence: bulk
+<BR>
+&nbsp;&nbsp;*&gt; Content-Length: 791
+<BR>
+&nbsp;&nbsp;*&gt; X-Lines: 24
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; In the dialup world, where the remote end disappears without notice
+<BR>
+&nbsp;&nbsp;*&gt; quite frequently, not only is TCP keepalive a lifesaver but the appropriate
+<BR>
+&nbsp;&nbsp;*&gt; interval is &lt;&lt; 2 hours.  Sorry, but that's just the way it is.  If
+<BR>
+&nbsp;&nbsp;*&gt; anybody has reason to disagree, I'd really appreciate hearing about it.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Barney Wolff  &lt;<A HREF="mailto:barney@databus.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201640.AA06671@gra.isi.edu&gt;">barney@databus.com</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>Barney,
+<BR>
+<P>Actually, experience has shown that there are a lot of IETFers who have
+<BR>
+reason to disagree.  As my earlier comment indicated, the clear
+<BR>
+consensus of the 50 or so people actively involved with the Host
+<BR>
+Requirements specification was a grudging admission that keep-alives
+<BR>
+may be unavoidable in some cases, but the clear desire that they should
+<BR>
+be avoided whenever possible, and kept minimal.
+<BR>
+<P>I believe the majority view was that keep-alives belong either in the
+<BR>
+application layer or the link layer, not in the transport layer.
+<BR>
+<P>This is an old problem and an old argument.  We have had 'dialup' lines
+<BR>
+in the Internet since CSNET used X.25 encapsulation in the early 1980s.
+<BR>
+<P>This is probably not the right list for this discussion.
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1226.html">Barney Wolff: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1230.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1227">[ date ]</A>
+<A HREF="index.html#1227">[ thread ]</A>
+<A HREF="subject.html#1227">[ subject ]</A>
+<A HREF="author.html#1227">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:49 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

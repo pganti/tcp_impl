@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT assasination imple</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT assasination implementations">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT assasination implementations</H1>
+<!-- received="Fri Nov 10 11:02:22 2000" -->
+<!-- isoreceived="20001110160222" -->
+<!-- sent="Fri, 10 Nov 2000 15:56:21 +0000" -->
+<!-- isosent="20001110155621" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: TIME-WAIT assasination implementations" -->
+<!-- id="20001110155621.A5790@malatesta.spider.com" -->
+<!-- inreplyto="200011101531.HAA29719@boreas.isi.edu" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20TIME-WAIT%20assasination%20implementations&In-Reply-To=&lt;20001110155621.A5790@malatesta.spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Nov 10 2000 - 10:56:21 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2406">[ date ]</A>
+<A HREF="index.html#2406">[ thread ]</A>
+<A HREF="subject.html#2406">[ subject ]</A>
+<A HREF="author.html#2406">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+hi Bob,
+<BR>
+<P>I meant the fix of ignoring RSTs in TIME-WAIT, which I
+<BR>
+assume FreeBSD 4.1 has done.  As you say, it was a discussion 
+<BR>
+document and not intended for standardisation. 
+<BR>
+<P>cheers
+<BR>
+ian
+<BR>
+<P>On Fri, Nov 10, 2000 at 07:31:14AM -0800, Bob Braden wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; hi,
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; I don't think it is widespread - it is not a standard.  I did
+</EM><BR>
+<EM>&gt;   *&gt; implement it as a compiler option on our stack.  It's a small
+</EM><BR>
+<EM>&gt;   *&gt; change.
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; Is there any interest in moving RFC 1337 onto the standards track?
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; Of course, there are wider issues with RSTs. I am putting together
+</EM><BR>
+<EM>&gt;   *&gt; a web page with references like RFC 1337.
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; cheers
+</EM><BR>
+<EM>&gt;   *&gt; ian
+</EM><BR>
+<EM>&gt;   *&gt;   
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Ian,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I am unsure what is meant by &quot;implement 1337&quot;.  The RFC describes 3
+</EM><BR>
+<EM>&gt; different possible solutions and only barely recommends one of them.
+</EM><BR>
+<EM>&gt; It was intended as a request for comments, not a proposal for a
+</EM><BR>
+<EM>&gt; particular fix.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Regards,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Bob Braden
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; &gt; Hi,
+</EM><BR>
+<EM>&gt;   *&gt; &gt; 
+</EM><BR>
+<EM>&gt;   *&gt; &gt; does anybody know how well spread the implementation of rfc1337 (TIME-WAIT
+</EM><BR>
+<EM>&gt;   *&gt; &gt; assasination hazards) is? I know that FreeBSD 4.1 has it, and it seems as
+</EM><BR>
+<EM>&gt;   *&gt; &gt; if Linux 2.2 has support for it as well (configurable through a sysctl).  
+</EM><BR>
+<EM>&gt;   *&gt; &gt; 
+</EM><BR>
+<EM>&gt;   *&gt; &gt; /adam
+</EM><BR>
+<EM>&gt;   *&gt; &gt; 
+</EM><BR>
+<EM>&gt;   *&gt; &gt; --
+</EM><BR>
+<EM>&gt;   *&gt; &gt; Adam Dunkels &lt;<A HREF="mailto:adam@sics.se?Subject=Re:%20TIME-WAIT%20assasination%20implementations&In-Reply-To=&lt;20001110155621.A5790@malatesta.spider.com&gt;">adam@sics.se</A>&gt;
+</EM><BR>
+<EM>&gt;   *&gt; &gt; <A HREF="http://www.sics.se/~adam">http://www.sics.se/~adam</A>
+</EM><BR>
+<EM>&gt;   *&gt; &gt; 
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<P><PRE>
+-- 
+Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20TIME-WAIT%20assasination%20implementations&In-Reply-To=&lt;20001110155621.A5790@malatesta.spider.com&gt;">ian@spider.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2406">[ date ]</A>
+<A HREF="index.html#2406">[ thread ]</A>
+<A HREF="subject.html#2406">[ subject ]</A>
+<A HREF="author.html#2406">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Nov 10 2000 - 11:02:50 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

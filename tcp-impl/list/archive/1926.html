@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Usage of packet returned in</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Usage of packet returned in ICMP error messages">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Usage of packet returned in ICMP error messages</H1>
+<!-- received="Tue Nov 16 18:21:30 1999" -->
+<!-- isoreceived="19991116232130" -->
+<!-- sent="Tue, 16 Nov 1999 16:13:13 -0700 (MST)" -->
+<!-- isosent="19991116231313" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Usage of packet returned in ICMP error messages" -->
+<!-- id="199911162313.QAA12936@calcite.rhyolite.com" -->
+<!-- inreplyto="Usage of packet returned in ICMP error messages" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Usage%20of%20packet%20returned%20in%20ICMP%20error%20messages&In-Reply-To=&lt;199911162313.QAA12936@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 16 1999 - 18:13:13 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1925.html">C. M. Heard/VVNET, Inc.: "Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1925.html">C. M. Heard/VVNET, Inc.: "Usage of packet returned in ICMP error messages"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1926">[ date ]</A>
+<A HREF="index.html#1926">[ thread ]</A>
+<A HREF="subject.html#1926">[ subject ]</A>
+<A HREF="author.html#1926">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;C. M. Heard/VVNET, Inc.&quot; &lt;<A HREF="mailto:heard@vvnet.com?Subject=Re:%20Usage%20of%20packet%20returned%20in%20ICMP%20error%20messages&In-Reply-To=&lt;199911162313.QAA12936@calcite.rhyolite.com&gt;">heard@vvnet.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; The IETF MPLS (multi-protocol label switching) working group is currently
+</EM><BR>
+<EM>&gt; discussing an internet draft &lt;draft-ietf-mpls-icmp-00.txt&gt; which proposes
+</EM><BR>
+<EM>&gt; some modifications to ICMP error messages that are not entirely backward
+</EM><BR>
+<EM>&gt; compatible with RFC 1812 (the router requirements document) and RFC 1122
+</EM><BR>
+<EM>&gt; (the host requirements document).  Specifically, the draft proposes
+</EM><BR>
+<EM>&gt; that when label-switching routers send an ICMP error message they will
+</EM><BR>
+<EM>&gt; put a data structure containing the MPLS shim header immediately after
+</EM><BR>
+<EM>&gt; the first 8 bytes of user data from the original datagram.  As most
+</EM><BR>
+<EM>&gt; readers of this list are probably aware, RFC 1812 and RFC 1122 permit
+</EM><BR>
+<EM>&gt; ICMP error message to contain more than 8 bytes of user data from the
+</EM><BR>
+<EM>&gt; original datagram, but both documents specify that any user data which
+</EM><BR>
+<EM>&gt; is returned will be copied from the original datagram without change.
+</EM><BR>
+<EM>&gt; Thus, an application implemented in accordance with those RFCs that
+</EM><BR>
+<EM>&gt; receives an ICMP error message formatted in accordance with the proposed
+</EM><BR>
+<EM>&gt; draft could misinterpret the shim header structure as returned user data.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The question arises whether there are, in fact, any applications which
+</EM><BR>
+<EM>&gt; make use of extra user data (beyond the first 8 bytes) that is returned
+</EM><BR>
+<EM>&gt; in ICMP error messages.  If the readers of this list are aware of any
+</EM><BR>
+<EM>&gt; such applications I would appreciate hearing about them.
+</EM><BR>
+<P>There are several such applications:
+<BR>
+<P>&nbsp;&nbsp;1. some versions of `ping` and `traceroute` decode the bad packet included
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the message..
+<BR>
+<P>&nbsp;&nbsp;2. doesn't any TCP host that handles Network or Port Unreachables,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Quenches, MTU discovery, need to have the orignal IP header follow
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the ICMP gateway address, parameter problem byte MAX MTU, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;other ICMP data?
+<BR>
+<P>&nbsp;&nbsp;3. how does a host understand a Port Unreachable if the original UDP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or TCP header is not where it usually is?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+One might blow off #1 or even #3, but surely not #2.  So I must not
+<BR>
+understand the proposal.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Usage%20of%20packet%20returned%20in%20ICMP%20error%20messages&In-Reply-To=&lt;199911162313.QAA12936@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1925.html">C. M. Heard/VVNET, Inc.: "Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1925.html">C. M. Heard/VVNET, Inc.: "Usage of packet returned in ICMP error messages"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1926">[ date ]</A>
+<A HREF="index.html#1926">[ thread ]</A>
+<A HREF="subject.html#1926">[ subject ]</A>
+<A HREF="author.html#1926">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

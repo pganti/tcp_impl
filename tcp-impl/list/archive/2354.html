@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="stanislav shalunov (shalunov@internet2.edu)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Tue Sep 19 13:14:25 2000" -->
+<!-- isoreceived="20000919171425" -->
+<!-- sent="19 Sep 2000 13:08:19 -0400" -->
+<!-- isosent="20000919170819" -->
+<!-- name="stanislav shalunov" -->
+<!-- email="shalunov@internet2.edu" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="878zsol37g.fsf@cain.internet2.edu" -->
+<!-- inreplyto="200009190346.XAA20908@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> stanislav shalunov (<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;878zsol37g.fsf@cain.internet2.edu&gt;"><EM>shalunov@internet2.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 13:08:19 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2355.html">Harald Koch: "Re: TCP sequence numbers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2354">[ date ]</A>
+<A HREF="index.html#2354">[ thread ]</A>
+<A HREF="subject.html#2354">[ subject ]</A>
+<A HREF="author.html#2354">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+der Mouse &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;878zsol37g.fsf@cain.internet2.edu&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt; writes:
+<BR>
+<P><EM>&gt; You may well believe it.  But what are your grounds?
+</EM><BR>
+<P>Unpredictability of output of counter mode is part of definition of
+<BR>
+cipher strength (secrecy).  Many hardware vendors like counter mode,
+<BR>
+because it is easy to parallelize.  If you have any reasons to believe
+<BR>
+that there's a systemic weakness in counter mode, it should be made
+<BR>
+public.
+<BR>
+<P><EM>&gt; &gt; And 128 bits Ought to be Enough for Everybody(TM).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; They said that about 640KB of RAM, too.  I've seen some disturbing
+</EM><BR>
+<EM>&gt; rumblings on the horizon that imply that we may have to worry about
+</EM><BR>
+<EM>&gt; nondeterminstic computers in the (so far only dimly) foreseeable
+</EM><BR>
+<EM>&gt; future.
+</EM><BR>
+<P>I hoped the pun would be obvious.  My next sentence even mentions 640
+<BR>
+bits to make it more obvious.
+<BR>
+<P>Of course, there are several differences that make the implied
+<BR>
+comparison invalid:
+<BR>
+<P>* 640KB is a resource.  Moore's law says it'll double every 18 months.
+<BR>
+&nbsp;&nbsp;128 bits is on top of an exponent.  Same law says one would add one
+<BR>
+&nbsp;&nbsp;to it every 18 months (we're in the vicinity of 60 or 70--depending
+<BR>
+&nbsp;&nbsp;on algorithm--now).
+<BR>
+<P>* Increasing the 128 number costs almost nothing performance-wise.
+<BR>
+&nbsp;&nbsp;It's implementor's choice.
+<BR>
+<P>* I said that you would continue to gather entropy even after you have
+<BR>
+&nbsp;&nbsp;satisfactory amount.
+<BR>
+<P><EM>&gt; My point is that you have to assume that the attacker *knows* exactly
+</EM><BR>
+<EM>&gt; how you're generating the ISNs; all you can keep secret (except in that
+</EM><BR>
+<EM>&gt; short term I mentioned), is the entropy you've accumulated.
+</EM><BR>
+<P>Oh.  What I meant is that there would be no practical way for the
+<BR>
+attacker to distinguish between the output of PRNG and true random
+<BR>
+source, if given two files: one with true random numbers and the other
+<BR>
+with PRNG output.
+<BR>
+<P><EM>&gt; Your phrasing sounds as though you intend this as some kind of attack
+</EM><BR>
+<EM>&gt; on me as a non-cryptographer.
+</EM><BR>
+<P>That was not intended as an attack on anybody.  Sorry if it sounded
+<BR>
+as such.
+<BR>
+<P><EM>&gt; If so, I consider it flawed, because I am making no claim to
+</EM><BR>
+<EM>&gt; producing any sort of PRNG; all I am pointing out is that if you
+</EM><BR>
+<EM>&gt; haven't got the entropy, you just haven't got it, and you *are* then
+</EM><BR>
+<EM>&gt; doing pseudo-random, rather than really random, values.
+</EM><BR>
+<P>Didn't I use the term &quot;pseudo-random&quot; all the way?
+<BR>
+<P><EM>&gt; I suppose it comes down to the difference between &quot;infeasible&quot; (which
+</EM><BR>
+<EM>&gt; is a moving target) and &quot;impossible&quot; (which isn't).
+</EM><BR>
+<P>That's right.  And performing 2^128 (complex) operations is off the
+<BR>
+radar screen.
+<BR>
+<P>My point is that you don't need a lot of entropy to generate good
+<BR>
+(unpredictable--in practical sense--by an adversary) ISNs.
+<BR>
+You need *a lot* less than 32 bits per ISN, whether you choose to use
+<BR>
+a block cipher in counter mode, one-way function to refine the state
+<BR>
+of entropy pool, a real stream cipher--like arcfour, or some other
+<BR>
+scheme.
+<BR>
+<P>Which scheme is the best (meets security requirements for ISN
+<BR>
+generation purposes and is the cheapest to implement on one's machine
+<BR>
+or embedded device) is a subject of interesting, but off-topic,
+<BR>
+discussion.
+<BR>
+<P>My claim only was that such schemes definitely exist.
+<BR>
+<P><EM>&gt; In any case, tcp-impl probably is not the right place for a crypto
+</EM><BR>
+<EM>&gt; discussion.
+</EM><BR>
+<P>I agree with that.  I only *responded* to (obviously incorrect, or at
+<BR>
+least very carelessly worded) cryptographic claims.  An earlier
+<BR>
+message by another author contained assertion that packet arrival
+<BR>
+times contain 5 or 6 bits of entropy (which seems over-optimistic to
+<BR>
+me) and that &quot;[e]ven [...] those 5 or 6 bits are valuable&quot;.
+<BR>
+<P>Of course, they're valuable.  They give one much more entropy than one
+<BR>
+could ever possibly want for a very good PRNG.  (I would prefer a more
+<BR>
+pessimistic estimate of the amount of entropy in packet arrival times,
+<BR>
+such as 0.01 bits per packet, but even that's more than enough.)
+<BR>
+<P>The actual &quot;how to do it&quot; is, of course, off-topic for tcp-impl.
+<BR>
+<P><PRE>
+-- 
+Stanislav Shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;878zsol37g.fsf@cain.internet2.edu&gt;">shalunov@internet2.edu</A>&gt;	Internet Engineer, Internet2
+<P>Documentation is like sex: when it is good, it is very, very good; and
+when it is bad, it is better than nothing.             -- Dick Brandon
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2355.html">Harald Koch: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2353.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2354">[ date ]</A>
+<A HREF="index.html#2354">[ thread ]</A>
+<A HREF="subject.html#2354">[ subject ]</A>
+<A HREF="author.html#2354">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 13:15:01 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

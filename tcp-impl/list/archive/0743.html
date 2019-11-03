@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep 30 22:32:30 1997" -->
+<!-- isoreceived="19971001023230" -->
+<!-- sent="Wed, 1 Oct 97 03:59:15 GMT" -->
+<!-- isosent="19971001035915" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="6608.wsimpson@greendragon.com" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6608.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 30 1997 - 23:59:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0744.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0742.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0744.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#743">[ date ]</A>
+<A HREF="index.html#743">[ thread ]</A>
+<A HREF="subject.html#743">[ subject ]</A>
+<A HREF="author.html#743">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6608.wsimpson@greendragon.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; I have seen IW=2 work badly on 28.8 when talking to SunOS (with POP3).
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; I consistently get a retransmit on the 4th (and sometimes 3rd) packet
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; So how is this significantly different from IW=1?  One RTT later, you're
+</EM><BR>
+<EM>&gt; in the same situation, cwnd=2.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+For whatever reason, when I tuned the code back to IW=1, the retransmits
+<BR>
+went away, even when delaying the first Ack.  I can guess that the SRTT
+<BR>
+backs off enough that the initial RTT smoothed with a longer 2nd packet
+<BR>
+RTT gives enough delay that the following timeout is long enough.  Just
+<BR>
+a guess.
+<BR>
+<P>But IW=2 gives noticable decreased thruput.  Particularly for POP3,
+<BR>
+where each message is only a few MSS.  Unnecessary retransmits are
+<BR>
+a real bandwidth hog on a 28.8 link.
+<BR>
+<P><P><EM>&gt; SunOS is Tahoe-derived and behaves in many ways like other BSD
+</EM><BR>
+<EM>&gt; implementations.  So if it was SunOS then what you're describing is
+</EM><BR>
+<EM>&gt; probably widespread.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+&quot;If&quot;?  I talk to this system daily.  I have this tendency to watch the
+<BR>
+SRTT bounce around as I FTP or POP3 from anywhere.  Just idle laziness,
+<BR>
+I suppose.  Nothing better to do.  ;-(
+<BR>
+<P>For jollies, here is a trace:
+<BR>
+<P>&nbsp;&nbsp;1: 141.211.7.31    pm035-20.dialip.mich.net. (1 ms) (1 ms) (1 ms)
+<BR>
+&nbsp;&nbsp;2: 141.211.7.10    pm035-aa.mich.net. (132 ms) (128 ms) (116 ms)
+<BR>
+&nbsp;&nbsp;3: 141.211.7.2     E-CCB-DIAL1.c-CCB2.UMNET.UMICH.EDU. (116 ms) (112 ms) (87 ms)
+<BR>
+&nbsp;&nbsp;4: 198.108.3.1     fdd3-0.michnet1.mich.net. (157 ms) (117 ms) (144 ms)
+<BR>
+&nbsp;&nbsp;5: 192.203.195.5   cpe3-fddi-1.WillowSprings.mci.net. (140 ms) (146 ms) (113 ms)
+<BR>
+&nbsp;&nbsp;6: 166.48.23.253   bordercore2-hssi1-0.WillowSprings.mci.net. (145 ms) (373 ms) (382 ms)
+<BR>
+&nbsp;&nbsp;7: 204.70.4.9      core3.Atlanta.mci.net. (174 ms) *** (156 ms)
+<BR>
+&nbsp;&nbsp;8: *** 206.157.77.50   ast-psi-nap.Atlanta.mci.net. (207 ms) (149 ms)
+<BR>
+&nbsp;&nbsp;9: 38.1.2.5        core.ithaca.ny.nsf.psi.net. (691 ms) (257 ms) (718 ms)
+<BR>
+&nbsp;10: 38.1.25.2       rc2.southeast.us.psi.net. (172 ms) (175 ms) (157 ms)
+<BR>
+&nbsp;11: 38.1.45.195     dublin.oh.southeast.us.psi.net. (176 ms) (221 ms) (172 ms)
+<BR>
+&nbsp;12: 38.1.45.195     dublin.oh.southeast.us.psi.net. (204 ms) (192 ms) (183 ms)
+<BR>
+&nbsp;13: 38.146.112.110  dublin.oh.isdn.psi.net. (190 ms) (195 ms) (215 ms)
+<BR>
+&nbsp;14: 137.175.1.1     mstar-gate.MorningStar.Com. (221 ms) (239 ms) (232 ms)
+<BR>
+&nbsp;15: 137.175.1.2     link-1.MorningStar.Com. (253 ms) (230 ms) (216 ms)
+<BR>
+&nbsp;16: 137.175.2.11    volitans.MorningStar.Com. (431 ms) (237 ms) (212 ms)
+<BR>
+<P>Note that the RTTs have quite a range.  That's why I don't trust the
+<BR>
+simulations where folks are reporting such nice numbers for IW=2.  They
+<BR>
+just don't match the real world experience shown by a simple trace.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6608.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6608.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0744.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0742.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0744.html">Vern Paxson: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#743">[ date ]</A>
+<A HREF="index.html#743">[ thread ]</A>
+<A HREF="subject.html#743">[ subject ]</A>
+<A HREF="author.html#743">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:01 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BOF Description</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: BOF Description">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BOF Description</H1>
+<!-- received="Sat Nov 23 00:49:53 1996" -->
+<!-- isoreceived="19961123054953" -->
+<!-- sent="Fri, 22 Nov 1996 16:39:15 PST" -->
+<!-- isosent="19961123003915" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: BOF Description" -->
+<!-- id="199611230039.QAA28732@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Fri, 22 Nov 1996 10:13:44 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611230039.QAA28732@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Nov 22 1996 - 19:39:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0006.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0004.html">Don Coolidge: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0008.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0008.html">Alan Cox: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#5">[ date ]</A>
+<A HREF="index.html#5">[ thread ]</A>
+<A HREF="subject.html#5">[ subject ]</A>
+<A HREF="author.html#5">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I would ask of anybody who is planning on attending the BOF and who has a
+</EM><BR>
+<EM>&gt; specific TCP implementation problem to discuss, that they bring it up, in
+</EM><BR>
+<EM>&gt; advance, on this mailing list.
+</EM><BR>
+<P>I agree.  In putting together the BOF we discussed the issue of identifying
+<BR>
+specific flaws.  We recognize that it is crucial that TCP implementors find
+<BR>
+the working group (if one is formed) useful and not hostile.  Implementors
+<BR>
+understandably don't want problems blown out of proportion, particularly
+<BR>
+ones that have already been fixed.  On the other hand, people inevitably
+<BR>
+want to know which TCP's exhibit which sorts of behavior, as this can save
+<BR>
+immense amounts of work in trying to debug networking problems.
+<BR>
+<P>I think the key distinction is between implementor &quot;bashing&quot; and implementor
+<BR>
+&quot;naming&quot;.  It will be vital for those participating in the working group
+<BR>
+to recognize that TCP implementation is very tricky - that's the whole reason
+<BR>
+why the BOF is valuable - and that the goal is to assist the process of
+<BR>
+improving the state of the art.  Related to this, it seems like one of the
+<BR>
+likely products of the working group will be a catalog of known implementation
+<BR>
+problems.  I would argue that this catalog should include implementation
+<BR>
+details, as well as notes discussing fixes in later or pending releases.
+<BR>
+<P>The agenda has me kicking off the BOF with a &quot;motivation&quot; presentation.
+<BR>
+I haven't put this together yet, but here's a sketch of some of the
+<BR>
+implementation problems I intend to talk about.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>- The Comer/Lin study on probing TCP implementations.  As I recall, the main
+<BR>
+&nbsp;&nbsp;implementation problems they found regard zero-window probes in SunOS
+<BR>
+&nbsp;&nbsp;4.0.3 and Solaris 2.1.  I don't know the status of whether these have
+<BR>
+&nbsp;&nbsp;been fixed (I would certainly guess they have), if someone knows, please
+<BR>
+&nbsp;&nbsp;let me know.  I may omit this because it's now fairly dated, or maybe I'll
+<BR>
+&nbsp;&nbsp;talk about it later in the BOF as one approach for identifying flaws.
+<BR>
+<P>- The Brakmo/Peterson study on problems in 4.4 BSD.  They found medium-serious
+<BR>
+&nbsp;&nbsp;header prediction and fast retransmit bugs, and suboptimal RTO estimation.
+<BR>
+&nbsp;&nbsp;This is not specific to a particular vendor, though many implementations
+<BR>
+&nbsp;&nbsp;are derived from 4.4 BSD.
+<BR>
+<P>- A recent study by Dawson, Jahanian, and Mitton (of eecs.umich.edu), not yet
+<BR>
+&nbsp;&nbsp;published, on testing TCP implementations using a &quot;fault injection tool&quot;.
+<BR>
+&nbsp;&nbsp;It's available from
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.eecs.umich.edu/~sdawson">http://www.eecs.umich.edu/~sdawson</A>
+<BR>
+<P>&nbsp;&nbsp;They look at SunOS 4.1.3, AIX 3.2.3, NeXT Mach, Solaris 2.3, OS/2, and
+<BR>
+&nbsp;&nbsp;Windows 95 TCP implementations, finding a number of flaws.  I haven't
+<BR>
+&nbsp;&nbsp;read the paper yet.
+<BR>
+<P>- Findings from a large-scale TCP dynamics study I'm close to finishing.
+<BR>
+&nbsp;&nbsp;These have not yet been published.  The ones I plan to talk about are:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Windows 3.1 with the Trumpet/Winsock 2.0B TCP stack doesn't do
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow start, and discards any packets that arrive above a sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hole, forcing go-back-N retransmission.  It also sometimes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generates only one ack for a large number of packets.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Linux 1.1 retransmits the entire unacknowledged window on loss
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rather than just the first unacknowledged packet.  Alan Cox tells
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;me this has been fixed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Solaris 2.3 and 2.4 can time out prematurely if the RTT is fairly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;large (since fixed).  Solaris 2.3 sometimes only acks if the segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has PSH set or if the delayed ack timer expires.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- A bug leading to slow start being skipped by a number of Reno-derived
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementations if the remote TCP doesn't send an MSS option in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;its SYN ack.
+<BR>
+<P>Some minor problems I may talk about if there's time:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Some Reno implementations are inconsistent about whether they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include the length of TCP options in determining the maximum segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size (Matt Mathis discussed this in the past, along with how to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fix it).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Solaris 2.3 does not recognize FIN's set on packets received out
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of sequence.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Windows NT 4.0 with the Microsoft TCP stack does not do
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fast retransmit.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- The duplicate-ack counter in HP/UX 9.0 is not cleared on a timeout.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- In HP/UX 9.0 and 10.0, after a timeout subsequent dup acks (rare)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;advance the congestion window if the timeout was for a packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;previously sent using fast retransmission.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- SunOS omits generating dup acks for packets received above a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence hole.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Solaris 2.3 and 2.4 have a bug in the fast recovery code so they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;don't send packets when they could.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0006.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0004.html">Don Coolidge: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0008.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0008.html">Alan Cox: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#5">[ date ]</A>
+<A HREF="index.html#5">[ thread ]</A>
+<A HREF="subject.html#5">[ subject ]</A>
+<A HREF="author.html#5">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

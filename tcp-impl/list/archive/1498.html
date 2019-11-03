@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 12:13:08 1999" -->
+<!-- isoreceived="19990204171308" -->
+<!-- sent="Thu, 4 Feb 1999 11:07:58 -0600 (CST)" -->
+<!-- isosent="19990204170758" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902041707.LAA02391@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041707.LAA02391@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 12:07:58 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1497.html">Jonathan Webb: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1507.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1498">[ date ]</A>
+<A HREF="index.html#1498">[ thread ]</A>
+<A HREF="subject.html#1498">[ subject ]</A>
+<A HREF="author.html#1498">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Greg,
+<BR>
+<P>(This message got a bit longer than I anticipated... Oh well.)
+<BR>
+<P>I like the proposed modification to the Nagle algorithm.  But I do
+<BR>
+have to say that I'm biased, because I implemented this in BSD/OS
+<BR>
+several years ago, as part of an overall effort to improve BSD/OS's
+<BR>
+performance when doing web traffic (BSD/OS 2.1, patch K210-019, August
+<BR>
+1996).  My goal was to eliminate any artificial delays in the TCP
+<BR>
+traffic, and to make the TCP packets as full as possible.
+<BR>
+<P>Basicly, I changed our TCP so that when an application does a single
+<BR>
+write, if there isn't any outstanding un-acked data, all the new data
+<BR>
+will go out (subject to constraints of the congestion window), including
+<BR>
+the trailing partial packet.  It has been working very well, and is
+<BR>
+basicly similar to the proposed text of:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if any previous less than full-sized packet has not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yet been acknowledged, do not transmit a packet.
+<BR>
+<P>My changes were well worth it.  Your suggestion of adding a SND_SML
+<BR>
+state might be a simpler implementation than what I did, though we
+<BR>
+were dealing with more issues than just the TCP Nagle issue.  In BSD,
+<BR>
+sosend() only copies down at most MCLBYTES (2K in BSD/OS) from the user
+<BR>
+to the kernel, and then hands that single piece down to tcp_output().
+<BR>
+<P>We were seeing problems on FDDI where TCP would get the initial 2K
+<BR>
+of the data, and it would send it out right away, even when there was
+<BR>
+more data that could have filled a 4K packet, it just hadn't been
+<BR>
+copied down from the user yet.  The next 2K would stall due to Nagle,
+<BR>
+and the successive 2K would then allow a 4K packet to be sent.
+<BR>
+<P>We were also seeing the problem you addressed, where a 2000 byte write
+<BR>
+would send the initial 1460 bytes, followed by a delay before sending
+<BR>
+the other 540 bytes, due to Nagle.
+<BR>
+<P>In a nutshell, our code does the Nagle decision once on the whole
+<BR>
+chunk of data written in a single write by the application.  So,
+<BR>
+the trailing partial packet goes out immediatly, because there was
+<BR>
+no outstanding data when the write call was issued.  We actually
+<BR>
+remember this state across successive calls to tcp_output(), since
+<BR>
+sosend() hands down the large write from the user in multiple pieces.
+<BR>
+The old code would generate:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User write 4096 -&gt; kernel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 (defer 588 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 (defer 1176 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1176
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+What we didn't want, and what we initially got, was:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User write 4096 -&gt; kernel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output()
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 588
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output()
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 (defer 588 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 588 bytes
+<BR>
+<P>After adding state across successive calls to tcp_output(), our
+<BR>
+code does:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;User write 4096 -&gt; kernel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output()
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460 (defer 588 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sosend 2048 -&gt; tcp_output()
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1460
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1080
+<BR>
+<P>(All the above examples assume the congestion window is large
+<BR>
+enough to allow all the data to go out...)
+<BR>
+<P>So, it is important to point out to implementors that with this
+<BR>
+change to Nagle, you need to keep track of whether or not there is
+<BR>
+more data waiting to be copied down from the user.
+<BR>
+<P>Another thought is that perhaps Nagle should only apply when you have
+<BR>
+successive small packets.  Then the text becomes something like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if the last insequence packet sent was less than a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;full-sized packet and has not yet been acknowledged, do
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not transmit a packet.
+<BR>
+<P>But then if the application did:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write(s, buf1, 1500);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write(s, buf2, 1500);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write(s, buf3, 1500);
+<BR>
+<P>You'd get:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+<P>whereas the current Nagle code would produce:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:	send 1460 bytes  (defer 40 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:	send 40 + 1420 = 1460 bytes (defer 80 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd write:	send 80 + 1380 = 1460 bytes  (defer 120 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 120 bytes
+<BR>
+<P>and the proposed Nagle (and the current BSD/OS) would produce:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:	send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:	send 1460 bytes (defer 40 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd write	send 40 + 1420 = 1460 bytes (defer 80 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 80 bytes
+<BR>
+<P>As long as the application is not doing multiple writes to send
+<BR>
+a single transaction request, the proposed code would work just
+<BR>
+fine.  In fact, my implementation was geared to optimize with the
+<BR>
+assumption that the application was smart enough to send the entire
+<BR>
+request in a single write system call.
+<BR>
+<P>As for sending multiple requests in a row, I think the additional
+<BR>
+idea about SO_EXPLICITPUSH could be used to fix the delay of the
+<BR>
+final packet.  I've bounced this idea around before, but never
+<BR>
+followed through on it.  My suggestion is to just add a MSG_PUSH
+<BR>
+flag that would be used on the last send to indicate that the
+<BR>
+application doesn't intend to send anymore data at this time.
+<BR>
+<P>I don't like SO_EXPLICITPUSH, because that means that the kernel
+<BR>
+is trusting the application to remember to tell it when it is
+<BR>
+done sending the data.  If the application forgets, then it could
+<BR>
+adversly affect the performance below what would have happened
+<BR>
+had SO_EXPLICITPUSH not been set.  I'd rather have the kernel
+<BR>
+continue to be as aggressive as normal in sending out data, but
+<BR>
+take the MSG_PUSH bit as a suggestion that it should be more
+<BR>
+aggessive and transmit any delayed data, since no more data will
+<BR>
+be written at this time.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041707.LAA02391@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1497.html">Jonathan Webb: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1507.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1498">[ date ]</A>
+<A HREF="index.html#1498">[ thread ]</A>
+<A HREF="subject.html#1498">[ subject ]</A>
+<A HREF="author.html#1498">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

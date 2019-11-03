@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Andi Kleen (ak@muc.de)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sat Sep 16 14:02:51 2000" -->
+<!-- isoreceived="20000916180251" -->
+<!-- sent="Sat, 16 Sep 2000 19:56:01 +0200" -->
+<!-- isosent="20000916175601" -->
+<!-- name="Andi Kleen" -->
+<!-- email="ak@muc.de" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="20000916195601.A12663@fred.muc.de" -->
+<!-- inreplyto="200009160428.e8G4SfT15409@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Andi Kleen (<A HREF="mailto:ak@muc.de?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;20000916195601.A12663@fred.muc.de&gt;"><EM>ak@muc.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Sep 16 2000 - 13:56:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2333.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2334">[ date ]</A>
+<A HREF="index.html#2334">[ thread ]</A>
+<A HREF="subject.html#2334">[ subject ]</A>
+<A HREF="author.html#2334">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sat, Sep 16, 2000 at 08:53:00AM +0200, Vernon Schryver wrote:
+<BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; Personally I feel, ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; S. Bellovin's discussion of the issues in RFC 1948 is good, except that
+</EM><BR>
+<EM>&gt; his discussion of the costs of MD5 hashing are dated.  CPU's are fast
+</EM><BR>
+<EM>&gt; enough that the cost of MD5 rarely matters.
+</EM><BR>
+<EM>&gt; I don't agree that MD5 hashes of secrets are always required....not
+</EM><BR>
+<EM>&gt; that he says that, but that's what the test authors tell their customers.
+</EM><BR>
+<P>There are much easier ways to attack the ISN computation in most OS
+<BR>
+anyways than attacking MD5:  you attack the secret generation.
+<BR>
+<P>On diskless devices you can usually just find out the initial secret because 
+<BR>
+they have no easy way to restore the entry pool of the random generator from 
+<BR>
+disk. Unless the vendors implemented a hardware random generator the secret
+<BR>
+should be not too hard to guess.
+<BR>
+<P>[The rest of the discussion is primarily about Linux's /dev/random device
+<BR>
+because I know its implementation, but I believe similar issues apply to
+<BR>
+/dev/random equivalents on other OS] 
+<BR>
+<P>On many non diskless systems the entropy pool of /dev/random is restored from
+<BR>
+disk _after_ the first TCP connection, which makes similar guesses possible 
+<BR>
+[Linux fetches the secret for the first few minutes on the first connection]
+<BR>
+<P>The amount of entropy gathered during bootup is usually very small and rather 
+<BR>
+predictible (unless the users moves the mouse, which is usually not the case 
+<BR>
+on a firewall in a rack). 
+<BR>
+<P>The only source of randomness before the random pool is restored are the
+<BR>
+CPU time stamp measurements of the ide disk interrupt. Although there are
+<BR>
+some variances you can make some good guesses of the end result when
+<BR>
+the disk/hardware configuration is known (e.g. the case with many
+<BR>
+ready configured &quot;firewall appliances&quot; or just using the default OS 
+<BR>
+installation of the vendor) 
+<BR>
+<P>Even when the bug of doing TCP before the entropy pool restoring is fixed
+<BR>
+there are still some vunerabilities, because many firewalls etc. do never
+<BR>
+any disk io (assuming a separate log server) and never get keyboard/mouse 
+<BR>
+input. This means that the entropy pool stays pretty constant over time
+<BR>
+and the window of vunerability after boot time extends over the whole uptime.
+<BR>
+<P>As soon as you can guess the entropy pool you can guess the secret and
+<BR>
+attacking the ISN is trivial.
+<BR>
+<P><P>-Andi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2333.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2334">[ date ]</A>
+<A HREF="index.html#2334">[ thread ]</A>
+<A HREF="subject.html#2334">[ subject ]</A>
+<A HREF="author.html#2334">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

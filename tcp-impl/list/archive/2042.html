@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 16:42:53 2000" -->
+<!-- isoreceived="20000227214253" -->
+<!-- sent="Mon, 28 Feb 2000 04:08:24 +1100" -->
+<!-- isosent="20000227170824" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="38B95A08.EF0D9124@cvs.com.au" -->
+<!-- inreplyto="C1256892.0037ED28.00@d12mta05.de.ibm.com" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 12:08:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2041.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2038.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2042">[ date ]</A>
+<A HREF="index.html#2042">[ thread ]</A>
+<A HREF="subject.html#2042">[ subject ]</A>
+<A HREF="author.html#2042">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:julian_satran@il.ibm.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">julian_satran@il.ibm.com</A> wrote:
+<BR>
+<P><EM>&gt; True. You can do everything by processing headers... but the you need to
+</EM><BR>
+<EM>&gt; understand all the protocols that are amased over TCP. To do it in silicon
+</EM><BR>
+<EM>&gt; it will probably make sense for a subset.
+</EM><BR>
+<EM>&gt; RDMA is a general purpose solution and the user decides what to do with it.
+</EM><BR>
+<EM>&gt; You can look at it as a simple way to enable the protocl stack and the
+</EM><BR>
+<EM>&gt; application to completely separate the protocol state machine (defined by
+</EM><BR>
+<EM>&gt; headers and/or trailers) from the payload.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; As for the vulnerability to attacks with a good size RDMAID and some
+</EM><BR>
+<EM>&gt; imagination
+</EM><BR>
+<P>Why not apply the imagination to the writing of a zero copy TCP stack based
+<BR>
+on the current standards? It would be a lot more general and a lot more useful
+<BR>
+as
+<BR>
+it would work against unmodified servers.
+<BR>
+<P><EM>&gt; you can get the same level of protection as with the TCP
+</EM><BR>
+<EM>&gt; sequence number (even a bit better because sequence numbers can be guessed
+</EM><BR>
+<EM>&gt; from context).
+</EM><BR>
+<P>Are you suggesting that the sequence number should no longer be used? Are you
+<BR>
+suggesting that the RDMAID and sequence number should be unrelated?
+<BR>
+<P>If the sequence number is still used then the RDMAIN is simple additional data
+<BR>
+that
+<BR>
+can be used by the attacker. Just another farmyard of potential bugs to be
+<BR>
+investigated
+<BR>
+and exploited?
+<BR>
+<P>If you are not going to use the sequence number, how does a system that doesn't
+<BR>
+<P>support this option receive the data? If your aim is  to design a system that
+<BR>
+isn't
+<BR>
+backward compatible, why would anyone in there right mind support it?
+<BR>
+<P>Aiming to keep the intellectual property rights, not backward compatible,
+<BR>
+dubious technical merit. ummm?
+<BR>
+<P>Regards.
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Julo
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">alan@lxorguk.ukuu.org.uk</A>&gt; on 25/02/2000 15:17:05
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Please respond to Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">alan@lxorguk.ukuu.org.uk</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; To:   <A HREF="mailto:julian_satran%25ibmil.RSCS@STUTVM1.DE.IBM.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">julian_satran%ibmil.RSCS@STUTVM1.DE.IBM.COM</A>
+</EM><BR>
+<EM>&gt; cc:   <A HREF="mailto:David.Robinson@EBay.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">David.Robinson@EBay.Sun.COM</A> (David Robinson), <A HREF="mailto:ips@ece.cmu.edu?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">ips@ece.cmu.edu</A>,
+</EM><BR>
+<EM>&gt;       <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;38B95A08.EF0D9124@cvs.com.au&gt;">tcp-impl@grc.nasa.gov</A> (bcc: Julian Satran/Haifa/IBM)
+</EM><BR>
+<EM>&gt; Subject:  Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; Gb/s it requires some innovation and lots of silicon. The RDMA option
+</EM><BR>
+<EM>&gt; makes
+</EM><BR>
+<EM>&gt; &gt; it possible at a far lower price. And the zero copy it enables might go
+</EM><BR>
+<EM>&gt; &gt; deep into the application space as it is only an annotation on packets.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I am not convinced the amount of silicon changes between the two. The
+</EM><BR>
+<EM>&gt; RDMA id make be faked by an attacker so must still be verified.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Va Jacobson proposed and to an extent implemented a system where the user
+</EM><BR>
+<EM>&gt; context does all the TCP work. In that sort of situation and with a more
+</EM><BR>
+<EM>&gt; sensible API than the BSD socket one you dont appear to need a lot of
+</EM><BR>
+<EM>&gt; silicon,
+</EM><BR>
+<EM>&gt; in fact the worst case is the wildcard.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Alan
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2041.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2038.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2042">[ date ]</A>
+<A HREF="index.html#2042">[ thread ]</A>
+<A HREF="subject.html#2042">[ subject ]</A>
+<A HREF="author.html#2042">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

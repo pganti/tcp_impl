@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="James Carlson (carlson@ironbridgenetworks.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 11:47:17 2000" -->
+<!-- isoreceived="20000227164717" -->
+<!-- sent="27 Feb 2000 11:42:04 -0500" -->
+<!-- isosent="20000227164204" -->
+<!-- name="James Carlson" -->
+<!-- email="carlson@ironbridgenetworks.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="863dqer40z.fsf@ironbridgenetworks.com" -->
+<!-- inreplyto="200002270025.QAA78952@clock.engr.sgi.com" -->
+<STRONG>From:</STRONG> James Carlson (<A HREF="mailto:carlson@ironbridgenetworks.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;863dqer40z.fsf@ironbridgenetworks.com&gt;"><EM>carlson@ironbridgenetworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 11:42:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2042.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2035.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2041">[ date ]</A>
+<A HREF="index.html#2041">[ thread ]</A>
+<A HREF="subject.html#2041">[ subject ]</A>
+<A HREF="author.html#2041">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;863dqer40z.fsf@ironbridgenetworks.com&gt;">zamsden@cthulhu.engr.sgi.com</A> (Zachary Amsden) writes:
+<BR>
+<EM>&gt; And enabled by a socket option to indicate the app is willing to accept the 
+</EM><BR>
+<EM>&gt; kernel placement of headers and data.  Still needs hardware support to 
+</EM><BR>
+<EM>&gt; separate header and payload, though.
+</EM><BR>
+<P>Actually, no, it doesn't require any special hardware support.  Who
+<BR>
+cares to separate the header and payload at all?  If it's not
+<BR>
+specifically NFS that we're talking about (which has its own problems
+<BR>
+due to demand-paging), then it's sufficient to map the entire received
+<BR>
+packet into user space -- headers and all.  All that's really needed
+<BR>
+at the application level is a list of data-start addresses and lengths
+<BR>
+(as would be present in a regular uio vector).  The standard recvmsg()
+<BR>
+call already provides an interface like this.  The extra bit of magic
+<BR>
+is that for zero-copy the user doesn't get to put his own buffers into
+<BR>
+msghdr.msg_iov; the kernel picks.  How about SO_RCVZCOPY to enable ...?
+<BR>
+<P><PRE>
+-- 
+James Carlson, System Architect                     &lt;<A HREF="mailto:carlson@ibnets.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;863dqer40z.fsf@ironbridgenetworks.com&gt;">carlson@ibnets.com</A>&gt;
+IronBridge Networks / 55 Hayden Avenue   71.246W   Vox:  +1 781 372 8132
+Lexington MA  02421-7996 / USA           42.423N   Fax:  +1 781 372 8090
+&quot;PPP Design and Debugging&quot; --- <A HREF="http://people.ne.mediaone.net/carlson/ppp">http://people.ne.mediaone.net/carlson/ppp</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2042.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2035.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2041">[ date ]</A>
+<A HREF="index.html#2041">[ thread ]</A>
+<A HREF="subject.html#2041">[ subject ]</A>
+<A HREF="author.html#2041">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

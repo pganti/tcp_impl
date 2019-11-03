@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RFC 2923 on TCP Problems with Pa</TITLE>
+<META NAME="Author" CONTENT="RFC Editor (rfc-ed@ISI.EDU)">
+<META NAME="Subject" CONTENT="RFC 2923 on TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RFC 2923 on TCP Problems with Path MTU Discovery</H1>
+<!-- received="Thu Sep 21 13:39:28 2000" -->
+<!-- isoreceived="20000921173928" -->
+<!-- sent="Thu, 21 Sep 2000 10:25:36 -0700" -->
+<!-- isosent="20000921172536" -->
+<!-- name="RFC Editor" -->
+<!-- email="rfc-ed@ISI.EDU" -->
+<!-- subject="RFC 2923 on TCP Problems with Path MTU Discovery" -->
+<!-- id="200009211725.KAA18282@boreas.isi.edu" -->
+<STRONG>From:</STRONG> RFC Editor (<A HREF="mailto:rfc-ed@ISI.EDU?Subject=Re:%20RFC%202923%20on%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;200009211725.KAA18282@boreas.isi.edu&gt;"><EM>rfc-ed@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 21 2000 - 13:25:36 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2374.html">der Mouse : "Re: TCP sequence numbers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2373">[ date ]</A>
+<A HREF="index.html#2373">[ thread ]</A>
+<A HREF="subject.html#2373">[ subject ]</A>
+<A HREF="author.html#2373">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A new Request for Comments is now available in online RFC libraries.
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 2923
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title:	    TCP Problems with Path MTU Discovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s):  K. Lahey
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status:     Informational
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:       September 2000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mailbox:    <A HREF="mailto:kml@bayarea.net?Subject=Re:%20RFC%202923%20on%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;200009211725.KAA18282@boreas.isi.edu&gt;">kml@bayarea.net</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages:      14
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Characters: 30976
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Updates/Obsoletes/SeeAlso:  None
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I-D Tag:    draft-ietf-tcpimpl-pmtud-04.txt
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL:        <A HREF="ftp://ftp.isi.edu/in-notes/rfc2923.txt">ftp://ftp.isi.edu/in-notes/rfc2923.txt</A>
+<BR>
+<P><P>This memo catalogs several known Transmission Control Protocol (TCP)
+<BR>
+implementation problems dealing with Path Maximum Transmission Unit
+<BR>
+Discovery (PMTUD), including the long-standing black hole problem,
+<BR>
+stretch acknowlegements (ACKs) due to confusion between Maximum
+<BR>
+Segment Size (MSS) and segment size, and MSS advertisement based on
+<BR>
+PMTU. 
+<BR>
+<P>This document is a product of the TCP Implementation Working Group of
+<BR>
+the IETF.  
+<BR>
+<P>This memo provides information for the Internet community.  It does
+<BR>
+not specify an Internet standard of any kind.  Distribution of this
+<BR>
+memo is unlimited.
+<BR>
+<P>This announcement is sent to the IETF list and the RFC-DIST list.
+<BR>
+Requests to be added to or deleted from the IETF distribution list
+<BR>
+should be sent to IETF-REQUEST@IETF.ORG.  Requests to be
+<BR>
+added to or deleted from the RFC-DIST distribution list should
+<BR>
+be sent to RFC-DIST-REQUEST@RFC-EDITOR.ORG.
+<BR>
+<P>Details on obtaining RFCs via FTP or EMAIL may be obtained by sending
+<BR>
+an EMAIL message to <A HREF="mailto:rfc-info@RFC-EDITOR.ORG?Subject=Re:%20RFC%202923%20on%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;200009211725.KAA18282@boreas.isi.edu&gt;">rfc-info@RFC-EDITOR.ORG</A> with the message body 
+<BR>
+help: ways_to_get_rfcs.  For example:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To: <A HREF="mailto:rfc-info@RFC-EDITOR.ORG?Subject=Re:%20RFC%202923%20on%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;200009211725.KAA18282@boreas.isi.edu&gt;">rfc-info@RFC-EDITOR.ORG</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject: getting rfcs
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;help: ways_to_get_rfcs
+<BR>
+<P>Requests for special distribution should be addressed to either the
+<BR>
+author of the RFC in question, or to RFC-Manager@RFC-EDITOR.ORG.  Unless
+<BR>
+specifically noted otherwise on the RFC itself, all RFCs are for
+<BR>
+unlimited distribution.echo 
+<BR>
+Submissions for Requests for Comments should be sent to
+<BR>
+RFC-EDITOR@RFC-EDITOR.ORG.  Please consult RFC 2223, Instructions to RFC
+<BR>
+Authors, for further information.
+<BR>
+<P><P>Joyce K. Reynolds and Sandy Ginoza
+<BR>
+USC/Information Sciences Institute
+<BR>
+<P>...
+<BR>
+<P>Below is the data which will enable a MIME compliant Mail Reader 
+<BR>
+implementation to automatically retrieve the ASCII version
+<BR>
+of the RFCs.
+<BR>
+<P><P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2374.html">der Mouse : "Re: TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2373">[ date ]</A>
+<A HREF="index.html#2373">[ thread ]</A>
+<A HREF="subject.html#2373">[ subject ]</A>
+<A HREF="author.html#2373">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Sep 21 2000 - 13:40:01 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

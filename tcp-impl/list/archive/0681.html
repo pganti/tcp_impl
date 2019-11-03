@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Source quench</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: Source quench">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Source quench</H1>
+<!-- received="Fri Aug 29 14:33:01 1997" -->
+<!-- isoreceived="19970829183301" -->
+<!-- sent="Fri, 29 Aug 1997 17:24:00 -0400" -->
+<!-- isosent="19970829212400" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: Source quench" -->
+<!-- id="199708292124.RAA00872@brookfield.ans.net" -->
+<!-- inreplyto="m0x4Z9e-0005FjC@lightning.swansea.linux.org.uk" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20Source%20quench&In-Reply-To=&lt;199708292124.RAA00872@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 29 1997 - 17:24:00 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0680.html">Alan Cox: "Re: Source quench"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0680.html">Alan Cox: "Re: Source quench"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#681">[ date ]</A>
+<A HREF="index.html#681">[ thread ]</A>
+<A HREF="subject.html#681">[ subject ]</A>
+<A HREF="author.html#681">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:m0x4Z9e-0005FjC@lightning.swansea.linux.org.uk?Subject=Re:%20Source%20quench&In-Reply-To=&lt;199708292124.RAA00872@brookfield.ans.net&gt;">m0x4Z9e-0005FjC@lightning.swansea.linux.org.uk</A>&gt;, Alan Cox writes:
+<BR>
+<EM>&gt; &gt; I've been looking over an old TCP stack wrt RFC2001, etc. Does anyone have 
+</EM><BR>
+<EM>&gt; any 
+</EM><BR>
+<EM>&gt; &gt; comments on how to treat source quench ICMP messages?  Should they trigger 
+</EM><BR>
+<EM>&gt; &gt; congestion avoidance, or is current thinking to ignore them and wait for pa
+</EM><BR>
+<EM>&gt; cket 
+</EM><BR>
+<EM>&gt; &gt; drop?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It seems to work well enough either way. The biggest problem I've had
+</EM><BR>
+<EM>&gt; playing with it has ironically been 3com kit and some older routers that
+</EM><BR>
+<EM>&gt; don't rate limit their source quenches. If you treat each one as a drop
+</EM><BR>
+<EM>&gt; and then you count the drops too (which is what I was doing) you end up
+</EM><BR>
+<EM>&gt; off the far end of the round trip timer very fast.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The other issue is that a lot of people firewall icmp to web servers and
+</EM><BR>
+<EM>&gt; the like, so you have to trust the drop anyway
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Alan
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>RFC1812 [Page 57]
+<BR>
+<P>&nbsp;&nbsp;4.3.3.3 Source Quench
+<BR>
+<P>&nbsp;&nbsp;&nbsp;A router SHOULD NOT originate ICMP Source Quench messages.  As
+<BR>
+&nbsp;&nbsp;&nbsp;specified in Section [4.3.2], a router that does originate Source
+<BR>
+&nbsp;&nbsp;&nbsp;Quench messages MUST be able to limit the rate at which they are
+<BR>
+&nbsp;&nbsp;&nbsp;generated.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;DISCUSSION
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Research seems to suggest that Source Quench consumes network
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bandwidth but is an ineffective (and unfair) antidote to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion.  See, for example, [INTERNET:9] and [INTERNET:10].
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Section [5.3.6] discusses the current thinking on how routers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ought to deal with overload and network congestion.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;A router MAY ignore any ICMP Source Quench messages it receives.
+<BR>
+<P>There has been discussion about the long time its been since RFC1122
+<BR>
+has been updated but when it does get updated it will almost certainly
+<BR>
+say that &quot;A host MAY ignore any ICMP Source Quench messages it
+<BR>
+receives&quot;.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0680.html">Alan Cox: "Re: Source quench"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0680.html">Alan Cox: "Re: Source quench"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#681">[ date ]</A>
+<A HREF="index.html#681">[ thread ]</A>
+<A HREF="subject.html#681">[ subject ]</A>
+<A HREF="author.html#681">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

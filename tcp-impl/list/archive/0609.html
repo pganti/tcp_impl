@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 07:34:11 1997" -->
+<!-- isoreceived="19970702113411" -->
+<!-- sent="Wed, 2 Jul 97 13:54:57 GMT" -->
+<!-- isosent="19970702135457" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="6176.wsimpson@greendragon.com" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6176.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 09:54:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#609">[ date ]</A>
+<A HREF="index.html#609">[ thread ]</A>
+<A HREF="subject.html#609">[ subject ]</A>
+<A HREF="author.html#609">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Excellent points!  And thanks for the ping data, Alan.
+<BR>
+<P><P><EM>&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6176.wsimpson@greendragon.com&gt;">Eric.Schenk@dna.lth.se</A>
+</EM><BR>
+<EM>&gt; &gt;&gt;	     - How long a sending pause merits a new slow-start
+</EM><BR>
+<EM>&gt; &gt;&gt;
+</EM><BR>
+<EM>&gt; &gt;Simple, use delayed-Ack TO (DATO)!  If you already released the channel
+</EM><BR>
+<EM>&gt; &gt;that long, you have to assume that someone else has begun to fill it, at
+</EM><BR>
+<EM>&gt; &gt;least with 1/2 DATO bandwidth worth of packets.  And it won't hurt as
+</EM><BR>
+<EM>&gt; &gt;much to slow start when there already has been your own delay.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Is this much different than the 1 RTO timeout currently used
+</EM><BR>
+<EM>&gt; in several implementations? And do you want to imply that DATO
+</EM><BR>
+<EM>&gt; is fixed (e.g. to 200ms) or should it be allowed to be a computed
+</EM><BR>
+<EM>&gt; quanitity?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+(As you opine later) DATO is always less than RTO, isn't it?  So, I'm
+<BR>
+suggesting a shorter time period than RTO.
+<BR>
+<P>My estimation is that, on average, 1/2 the bandwidth since the last data
+<BR>
+you sent (not received) could be used by someone else in your outgoing
+<BR>
+path.  And that value is reflected by the delayed Ack time, not the
+<BR>
+entire RTT.
+<BR>
+<P><P><EM>&gt; MinRTO must never be smaller than DATO, or you will fall over against
+</EM><BR>
+<EM>&gt; anything that does delayed ACKs. In practice this currently means that
+</EM><BR>
+<EM>&gt; you must not set MinRTO to less than 200ms.
+</EM><BR>
+<P>Hmmm, wouldn't the DATO of the peer be actually included in the RTT
+<BR>
+calculation, as the Ack shows up later?  So, even when DATO of the peer
+<BR>
+is longer, MinRTO won't be hit unless the peer was sending bidirectional
+<BR>
+data, and then suddenly quits.
+<BR>
+<P>I just looked and actually use MinRTO of 500 ms, but MinATO of 200 ms.
+<BR>
+<P><P><EM>&gt; If we allow DATO to vary,
+</EM><BR>
+<EM>&gt; e.g. as computed from packet interarrival times, then the issue
+</EM><BR>
+<EM>&gt; becomes even more cloudy. Ideally the DATO should be included in
+</EM><BR>
+<EM>&gt; the calculation of RTT, but it is not clear how to accomplish this,
+</EM><BR>
+<EM>&gt; since it is not easily determined which ACKs have been delayed and which
+</EM><BR>
+<EM>&gt; have not, and also it is not necessarily the case that the DATO will be
+</EM><BR>
+<EM>&gt; fixed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+I've been using:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uint32 dato = tcb-&gt;to.srtt / 2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ tcb-&gt;to.mdev;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dato = max( dato, 500 );
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dato = min( dato, 200 );
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6176.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26	DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6176.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3	59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#609">[ date ]</A>
+<A HREF="index.html#609">[ thread ]</A>
+<A HREF="subject.html#609">[ subject ]</A>
+<A HREF="author.html#609">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

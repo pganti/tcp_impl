@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: some random connection terminati</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="some random connection termination data">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>some random connection termination data</H1>
+<!-- received="Thu Aug 20 12:57:41 1998" -->
+<!-- isoreceived="19980820165741" -->
+<!-- sent="Thu, 20 Aug 1998 12:57:14 -0700" -->
+<!-- isosent="19980820195714" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="some random connection termination data" -->
+<!-- id="35DC7F9A.1AAA6A1@cup.hp.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20some%20random%20connection%20termination%20data&In-Reply-To=&lt;35DC7F9A.1AAA6A1@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 15:57:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1253.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1251.html">Sean Doran: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1252">[ date ]</A>
+<A HREF="index.html#1252">[ thread ]</A>
+<A HREF="subject.html#1252">[ subject ]</A>
+<A HREF="author.html#1252">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here is some &quot;random&quot; data on connections and how they have been dropped
+<BR>
+by a couple of the external web servers at hp:
+<BR>
+<P><P>hpcc925.external.hp.com:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4923339 connection requests
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;74264137 connection accepts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78934779 connections established (including accepts)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;79186491 connections closed (including 22096829 drops)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;65151 embryonic connections dropped
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;574398265 segments updated rtt (of 623801434 attempts)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;45897980 retransmit timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;58822 connections dropped by rexmit timeout
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2194748 persist timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20822757 keepalive timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17554752 keepalive probes sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;87816 connections dropped by keepalive
+<BR>
+<P>and some of the related settings:
+<BR>
+<P>hpcc925 $ nettune -l | grep -e keep -e retran
+<BR>
+tcp_keepstart = 300 default = 7200 min = 5 max = 12000 units = seconds
+<BR>
+tcp_keepfreq = 75 default = 75 min = 5 max = 2000 units = seconds
+<BR>
+tcp_keepstop = 600 default = 600 min = 10 max = 4000 units = seconds
+<BR>
+tcp_maxretrans = 12 default = 12 min = 4 max = 12
+<BR>
+<P>If I've done my math right, there were ~ 58822 * 12 = 705,864 packets
+<BR>
+sent to drop connections based on retransmission timeouts. Assuming (big
+<BR>
+assumption) that the RTT was less than 500 ms, and given that there is a
+<BR>
+max backoff of 6X in HP-UX 10.20 (what is the clip level in 4.4 or
+<BR>
+FreeBSD or whatever?) the 12 packets will have gone out at 
+<BR>
+<P>delta: 0.5   1   2   4    8   16   32    64    64    64    64    64
+<BR>
+total: 0.5 1.5 3.5 7.5 15.5 31.5 63.5 127.5 191.5 255.5 319.5 383.5
+<BR>
+<P>That RTT being less than 0.5 is probably a really big assumption...I
+<BR>
+don't have any data on Internet RTO's :(
+<BR>
+<P>So that is something like 12 packets in ~400 seconds. This would also be
+<BR>
+the behaviour (?) of an application-level keepalive probe to a &quot;it just
+<BR>
+ain't there no more&quot; host yes? I guess one has to add the time before
+<BR>
+tha application decides to fire its keepalive probe - I'll just take the
+<BR>
+current tcp_keepstart time of 300 seconds, so the total would be 700
+<BR>
+seconds. An average of a packet every 60 seconds or so.
+<BR>
+<P>The connections terminated by the keepalive mechansim took ~87816 * 8 =
+<BR>
+702,528 packets. Basically the same number of packets to terminate more
+<BR>
+connections, which makes some sense given the configuration.
+<BR>
+<P>As configured, the death by TCP keepalive path would have been 8 (or is
+<BR>
+it 9 or is it 7? I hate OBOB) packets over 600 seconds, each spaced 75
+<BR>
+seconds apart.
+<BR>
+<P>I'm not sure which is a heavier load on the network.
+<BR>
+<P>I'll not do the math, but here is hpcc949.external.hp.com:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;249507 connection requests
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9733556 connection accepts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9921594 connections established (including accepts)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10000526 connections closed (including 1877932 drops)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19352 embryonic connections dropped
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;29156602 segments updated rtt (of 30930665 attempts)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1664493 retransmit timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1848 connections dropped by rexmit timeout
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17607 persist timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1883445 keepalive timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3691 keepalive probes sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5931 connections dropped by keepalive
+<BR>
+hpcc949 $ nettune -l | grep -e retran -e keep
+<BR>
+tcp_keepstart = 300 default = 7200 min = 5 max = 12000 units = seconds
+<BR>
+tcp_keepfreq = 75 default = 75 min = 5 max = 2000 units = seconds
+<BR>
+tcp_keepstop = 600 default = 600 min = 10 max = 4000 units = seconds
+<BR>
+tcp_maxretrans = 12 default = 12 min = 4 max = 12
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1253.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1251.html">Sean Doran: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1252">[ date ]</A>
+<A HREF="index.html#1252">[ thread ]</A>
+<A HREF="subject.html#1252">[ subject ]</A>
+<A HREF="author.html#1252">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

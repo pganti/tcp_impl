@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Tue Aug 19 17:44:15 1997" -->
+<!-- isoreceived="19970819214415" -->
+<!-- sent="Tue, 19 Aug 1997 17:39:24 -0700" -->
+<!-- isosent="19970820003924" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="199708200039.RAA03302@rum.isi.edu" -->
+<!-- inreplyto="does this qualify as a bug?" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708200039.RAA03302@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Aug 19 1997 - 20:39:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0672.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#673">[ date ]</A>
+<A HREF="index.html#673">[ thread ]</A>
+<A HREF="subject.html#673">[ subject ]</A>
+<A HREF="author.html#673">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; A better estimate would take into account the 'permission to send'.
+</EM><BR>
+<EM>&gt; &gt; I would consider that a better fix to the bug, rather than 'research'
+</EM><BR>
+<EM>&gt; &gt; per se.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If I followed the thread right, the &quot;permission to send&quot; idea you outlined
+</EM><BR>
+<EM>&gt; includes potential per-ack window fiddling, for acks that advance by more
+</EM><BR>
+<EM>&gt; than a (so far unspecified) threshold.  This sounds like a potentially
+</EM><BR>
+<EM>&gt; complicated fix that will need research to flesh it out.  Is that right,
+</EM><BR>
+<EM>&gt; or are you referring above to a different fix?
+</EM><BR>
+<P>The check of 'when did ack clocking fail' is based on some
+<BR>
+trigger - either due to per-packet processing
+<BR>
+(just before send, during receive/ACK processing, etc), or
+<BR>
+due to a timer.
+<BR>
+<P>The check that is done at that trigger can be based on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle time since last send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle time since last receive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current window state
+<BR>
+<P>It seems that all solutions are points in that overall design space.
+<BR>
+In that case, there may be room to pick an 'appropriate' point,
+<BR>
+rather than a point which is an artifact (idle recv &gt; RTO, currently).
+<BR>
+<P><EM>&gt; I agree that the fundamental problem is recovering the ack clock whenever
+</EM><BR>
+<EM>&gt; it's lost, which can occur due to reasons other than running idle.  But I'm
+</EM><BR>
+<EM>&gt; reluctant to try to address the general problem in the 2001 update, because
+</EM><BR>
+<EM>&gt; I think doing so will be significantly harder than just firming up
+</EM><BR>
+<EM>&gt; slow-start-on-idle.
+</EM><BR>
+<P>Recovering vs. detecting.
+<BR>
+<P><EM>&gt; &gt; Can we postpone this new function as 'research to be determined later'??
+</EM><BR>
+<EM>&gt; &gt; (when IW &gt; 1 has been accepted?)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Part of the 2001 update is to put in hooks for IW &gt; 1 (we will initially
+</EM><BR>
+<EM>&gt; use IW=2, and edit the doc as needed down the line).  So it's appropriate
+</EM><BR>
+<EM>&gt; to adopt Craig's correction above.
+</EM><BR>
+<P>That being the case, I don't feel that detecting isn't 
+<BR>
+any more or less research than IW &gt; 1.
+<BR>
+<P><P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708200039.RAA03302@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0672.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#673">[ date ]</A>
+<A HREF="index.html#673">[ thread ]</A>
+<A HREF="subject.html#673">[ subject ]</A>
+<A HREF="author.html#673">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

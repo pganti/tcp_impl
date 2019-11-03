@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 18 13:22:16 1999" -->
+<!-- isoreceived="19990218182216" -->
+<!-- sent="Thu, 18 Feb 1999 10:16:42 -0800 (PST)" -->
+<!-- isosent="19990218181642" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902181816.KAA20959@rum.isi.edu" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902181816.KAA20959@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 18 1999 - 13:16:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1603.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-05.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1604">[ date ]</A>
+<A HREF="index.html#1604">[ thread ]</A>
+<A HREF="subject.html#1604">[ subject ]</A>
+<A HREF="author.html#1604">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902181816.KAA20959@rum.isi.edu&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902181816.KAA20959@rum.isi.edu&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: internet draft on suggested mod to the Nagle algorithm
+</EM><BR>
+...
+<BR>
+<EM>&gt; &gt; &gt; The problem is that there isn't really a required correlation between
+</EM><BR>
+<EM>&gt; &gt; &gt; send() calls and segments, regardless of NODELAY (or anything else I
+</EM><BR>
+<EM>&gt; &gt; &gt; can find, excepting _only_ the proposed flush bit, which might be
+</EM><BR>
+<EM>&gt; &gt; &gt; defined as guaranteeing that the last byte of the write is the last
+</EM><BR>
+<EM>&gt; &gt; &gt; byte of a segment).
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That sides steps my intended question.  As with previous rounds in this
+</EM><BR>
+<EM>&gt; discussion of the Nagle algorithm, what we think is a correct exegesis of
+</EM><BR>
+<EM>&gt; the (or a) standard is basically irrelevant.  Does it matter whether RFC
+</EM><BR>
+<EM>&gt; 896 talked about send() system calls, passages through tcp_output(), or
+</EM><BR>
+<EM>&gt; cycles of the RFC 793 state machine?  NO!--What really matters is what
+</EM><BR>
+<EM>&gt; happens in representative, currently deployed implementations.  First
+</EM><BR>
+<EM>&gt; figure out the problem, and after that choose an architecture, a layering,
+</EM><BR>
+<EM>&gt; and a religion.  That order is what made TCP, and the opposite is what
+</EM><BR>
+<EM>&gt; made TP0-TP4/CONS-CLNS.
+</EM><BR>
+<P>AOK - stated differently, current implementations do not guarantee
+<BR>
+any correlation between send() calls and segments.  There are more
+<BR>
+deployed implementations than just BSD. It makes more sense, as Sally Floyd
+<BR>
+has said in other threads, to keep the requirements as open and flexible
+<BR>
+as possible. We might be better less concerned with &quot;what would 
+<BR>
+OS X.Y.Z do with this mod&quot; than &quot;what's the best and worst a 'compliant' 
+<BR>
+system could do, given these requiremetns&quot;.
+<BR>
+<P><EM>&gt; ] From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902181816.KAA20959@rum.isi.edu&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; ]
+</EM><BR>
+<EM>&gt; ] &gt; &gt; TCP currently lacks a few things that would certainly be useful to
+</EM><BR>
+<EM>&gt; ] &gt; &gt; applications that want something other than a byte-stream, [...]
+</EM><BR>
+<EM>&gt; ] &gt; 
+</EM><BR>
+<EM>&gt; ] &gt; Um, yeah.  I'm not quite sure what your point is.  This sounds like
+</EM><BR>
+<EM>&gt; ] &gt; &quot;TCP isn't all things to all applications&quot;, which doesn't really sound
+</EM><BR>
+<EM>&gt; ] &gt; to me like something that is possible to fix, nor do I think it would
+</EM><BR>
+<EM>&gt; ] &gt; be desirable to try.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I was horrified by some of the ideas.  EOF and record markers particularly
+</EM><BR>
+<EM>&gt; bother me because they are so trivially implemented by the application
+</EM><BR>
+<P>Reliability is also trivially implemented at the app layer, but TCP/IP
+<BR>
+is preferred to TCP/UDP/IP. Some things are more effectively, efficiently,
+<BR>
+or consistently implemented in the transport layer. Granted, it's open
+<BR>
+to debate what that list is; I was giving examples, not requirements.
+<BR>
+<P><EM>&gt; On the third hand, was in it this mailinglist where Joe Touch and others
+</EM><BR>
+<EM>&gt; tonight mentioned Gbit/sec TCP for clusters?  Every minor optional feature
+</EM><BR>
+<EM>&gt; that you add to a protocol hurts enormously at the boundaries, on very
+</EM><BR>
+<EM>&gt; large and fast and on very small systems. 
+</EM><BR>
+<P>Not always - some can be disabled (such as disabling windowing for
+<BR>
+connections on the same subnet), others do not come into play unless
+<BR>
+triggered (e.g., some of the markings proposed could be implemented
+<BR>
+in options; there's only one check to see if there are &quot;no options&quot;, and
+<BR>
+it has to be performed anyway).
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1603.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-05.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1604">[ date ]</A>
+<A HREF="index.html#1604">[ thread ]</A>
+<A HREF="subject.html#1604">[ subject ]</A>
+<A HREF="author.html#1604">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

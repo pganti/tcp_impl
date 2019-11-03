@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Last Call for TCP Congestion Con</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 13:28:01 1998" -->
+<!-- isoreceived="19981110182801" -->
+<!-- sent="Tue, 10 Nov 1998 10:27:23 PST" -->
+<!-- isosent="19981110182723" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811101827.KAA18281@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811101827.KAA18281@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 13:27:23 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1388.html">Vern Paxson: "Last Call for Known Problems I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1391.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1389">[ date ]</A>
+<A HREF="index.html#1389">[ thread ]</A>
+<A HREF="subject.html#1389">[ subject ]</A>
+<A HREF="author.html#1389">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The -01 version of the TCP Congestion Control I-D has now come out.
+<BR>
+Mark &amp; I feel it's ready for publication as Proposed Standard, so we're
+<BR>
+holding a two-week last call for final comments, with the last call ending
+<BR>
+on Nov 24.
+<BR>
+<P>The main differences between this version and the -00 version are:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Changed acking-at-least-every-second-segment from a MUST to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a SHOULD.  This reflects the recent discussion on the mailing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list that presented arguments why it might indeed sometimes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make sense to generate ACKs at a lower rate.  Added a strong
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;caution that this should not be done lightly.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Clarified that the receiver doesn't know the true MSS and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so the ack-at-least-every-second-full-MSS-segment requirement
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;means in terms of its offered MSS.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Added that a TCP receiver SHOULD generate an immediate ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when an incoming segment fills a gap in the sequence space.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This reflects the recent discussion of how failure to do so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can lead to miserable performance.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Added discussion of &quot;FlightSize&quot;, the amount of outstanding
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data at the time of a loss.  On loss, ssthresh is set to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FlightSize/2 (or 2*MSS, whichever's larger).  This used
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to be &quot;min(cwnd,rwnd)&quot; but it was pointed out that you might
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;have less data in flight than either of those.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Removed proposed algorithm for recovering from multiple losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in a single flight, and replaced it with a general discussion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of congestion control requirements for loss recovery mechanisms.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Added a pointer to draft-ietf-tcpimpl-newreno-00.txt as one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example of Reno modifications for dealing with recovering from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple losses.  This I-D has been sent to the Internet Drafts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;editor and should be posted shortly.
+<BR>
+<P>The next message are context diffs between -00 and -01.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P><A HREF="ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-cong-control-01.txt">ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-cong-control-01.txt</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1388.html">Vern Paxson: "Last Call for Known Problems I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1391.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1389">[ date ]</A>
+<A HREF="index.html#1389">[ thread ]</A>
+<A HREF="subject.html#1389">[ subject ]</A>
+<A HREF="author.html#1389">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

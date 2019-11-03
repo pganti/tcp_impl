@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Narsimharao Nagampalli (NNARASIMHARAO@novell.com)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 09:09:49 2000" -->
+<!-- isoreceived="20000616130949" -->
+<!-- sent="Fri, 16 Jun 2000 07:01:56 -0600" -->
+<!-- isosent="20000616130156" -->
+<!-- name="Narsimharao Nagampalli" -->
+<!-- email="NNARASIMHARAO@novell.com" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="s949d0f4.025@prv-mail20.provo.novell.com" -->
+<!-- inreplyto="Intentional Host Reordering of TCP Fragments" -->
+<STRONG>From:</STRONG> Narsimharao Nagampalli (<A HREF="mailto:NNARASIMHARAO@novell.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;s949d0f4.025@prv-mail20.provo.novell.com&gt;"><EM>NNARASIMHARAO@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 09:01:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2155">[ date ]</A>
+<A HREF="index.html#2155">[ thread ]</A>
+<A HREF="subject.html#2155">[ subject ]</A>
+<A HREF="author.html#2155">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+QoS, Server Load Balancing Solutions, Filters  would be other examples where such a re-ordering would be a problem. 
+<BR>
+<P>I hope, the flow label in IPv6 will be some thing that will come to the rescue here. If the definition of the flow label can be driven to contain information from which the port numbers can be extracted, it would help L4 switches a lot.
+<BR>
+<P>-Narsi
+<BR>
+<P>Nabil Seddigh wrote:
+<BR>
+<P><EM>&gt; Recent discussions on this list focused on network
+</EM><BR>
+<EM>&gt; devices reordering packets. How about an end-host
+</EM><BR>
+<EM>&gt; that intentionally reorders some TCP packets?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; During testing of Packet Classification capability
+</EM><BR>
+<EM>&gt; on for Diffserv-capable routers, one of my colleagues
+</EM><BR>
+<EM>&gt; discovered that the Linux TCP sender intentionally
+</EM><BR>
+<EM>&gt; reorders fragments - the pkt containing the TCP port
+</EM><BR>
+<EM>&gt; number is the last pkt sent in a family (same ip_id)
+</EM><BR>
+<EM>&gt; of fragments.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The implication of such an implementation is that
+</EM><BR>
+<EM>&gt; Layer-4 packet classification of fragments
+</EM><BR>
+<EM>&gt; is virtually impossible - unless routers try to
+</EM><BR>
+<EM>&gt; cache packets....not a desirable solution.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Of course one could argue that most fragments on
+</EM><BR>
+<EM>&gt; the net are UDP and not TCP but nonetheless:
+</EM><BR>
+<EM>&gt; shouldn't end-hosts avoid intentional reordering?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; We checked out various RFCs and didn't find explicit
+</EM><BR>
+<EM>&gt; prohibitions on an end-host reordering the pkts
+</EM><BR>
+<EM>&gt; that it sends out.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Best,
+</EM><BR>
+<EM>&gt; ---
+</EM><BR>
+<EM>&gt; Nabil Seddigh
+</EM><BR>
+<EM>&gt; <A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;s949d0f4.025@prv-mail20.provo.novell.com&gt;">nseddigh@nortelnetworks.com</A> 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2155">[ date ]</A>
+<A HREF="index.html#2155">[ thread ]</A>
+<A HREF="subject.html#2155">[ subject ]</A>
+<A HREF="author.html#2155">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

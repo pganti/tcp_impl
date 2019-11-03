@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Why do large downloads fail ?</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Why do large downloads fail ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Why do large downloads fail ?</H1>
+<!-- received="Fri Oct 22 13:59:51 1999" -->
+<!-- isoreceived="19991022175951" -->
+<!-- sent="Fri, 22 Oct 1999 11:54:03 -0600 (MDT)" -->
+<!-- isosent="19991022175403" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Why do large downloads fail ?" -->
+<!-- id="199910221754.LAA22277@calcite.rhyolite.com" -->
+<!-- inreplyto="Why do large downloads fail ?" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910221754.LAA22277@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Oct 22 1999 - 13:54:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1905.html">Rahul Kasralikar: "RE: Why do large downloads fail ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1903.html">Arivu Mani: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1894.html">Martin Lorang: "Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1907.html">Keith Owens: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1907.html">Keith Owens: "Re: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1904">[ date ]</A>
+<A HREF="index.html#1904">[ thread ]</A>
+<A HREF="subject.html#1904">[ subject ]</A>
+<A HREF="author.html#1904">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Arivu Mani &lt;<A HREF="mailto:mani@ece.arizona.edu?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910221754.LAA22277@calcite.rhyolite.com&gt;">mani@ece.arizona.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; I have experienced the same problem here while downloading with Windows
+</EM><BR>
+<EM>&gt; NT. Start downloading a 3MB file using ftp.exe and it would time out.
+</EM><BR>
+<EM>&gt; While the same file is easily downloaded with Solaris.
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>I've made additional measurements that say that with a 300 ms RTT instead
+<BR>
+of the ~500 ms I reported yesterday, Windows 98 will give up after less
+<BR>
+than 30 seconds.  That's consistent with always giving up after 5
+<BR>
+retransmissions, binary exponentially backed off with the first at 3 times
+<BR>
+the RTT.  With the same path and at the same time, I found BSDI's BSD/OS
+<BR>
+4.1 keeps trying for about 600 seconds or 10 minutes.
+<BR>
+<P>If your connection happens to have a reasonable RTT of 50 or evey 100 ms
+<BR>
+instead of the very 300-500 ms. I'm testing at a pariticular site that
+<BR>
+uses modems, it seems likely that Windows would give up after only 5 or
+<BR>
+10 seconds.  It's easy to suffer a 5 or 10 second hiccup due to a routing
+<BR>
+flap or other bad thing, particularly between here and Microsoft.com.
+<BR>
+V.34, v.32bis, or v.32 modems seem to spend about 30 seconds &quot;retraining&quot;
+<BR>
+when they decide the phone line has change significantly.
+<BR>
+<P>If you ask me always givin up after 5 retransmissions violates at least
+<BR>
+the spirit of RFC 1122 and is a Bad Idea(tm).  What's worse, as far as I
+<BR>
+can tell, WINSOCK 2 has no provisions such as SO_RCVTIMEO.  (There are
+<BR>
+explicit words in the WINSOCK 2 document saing SO_RCVTIMEO is unsuported.)
+<BR>
+<P>In other words, it sounds like a Microsoft bug.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910221754.LAA22277@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1905.html">Rahul Kasralikar: "RE: Why do large downloads fail ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1903.html">Arivu Mani: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1894.html">Martin Lorang: "Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1907.html">Keith Owens: "Re: Why do large downloads fail ?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1907.html">Keith Owens: "Re: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1904">[ date ]</A>
+<A HREF="index.html#1904">[ thread ]</A>
+<A HREF="subject.html#1904">[ subject ]</A>
+<A HREF="author.html#1904">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

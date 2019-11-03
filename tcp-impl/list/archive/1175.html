@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problems</TITLE>
+<META NAME="Author" CONTENT="Cannara (cannara@ibm.net)">
+<META NAME="Subject" CONTENT="Re: New problems">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problems</H1>
+<!-- received="Fri Jul 17 22:11:40 1998" -->
+<!-- isoreceived="19980718021140" -->
+<!-- sent="Fri, 17 Jul 1998 22:06:19 -0700" -->
+<!-- isosent="19980718050619" -->
+<!-- name="Cannara" -->
+<!-- email="cannara@ibm.net" -->
+<!-- subject="Re: New problems" -->
+<!-- id="35B02D4B.75B1F486@ibm.net" -->
+<!-- inreplyto="199807172337.RAA00845@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Cannara (<A HREF="mailto:cannara@ibm.net?Subject=Re:%20New%20problems&In-Reply-To=&lt;35B02D4B.75B1F486@ibm.net&gt;"><EM>cannara@ibm.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jul 18 1998 - 01:06:19 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1176.html">Charles M. Hannum: "Gratuitous FINs again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1175">[ date ]</A>
+<A HREF="index.html#1175">[ thread ]</A>
+<A HREF="subject.html#1175">[ subject ]</A>
+<A HREF="author.html#1175">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Please excuse my interjection.  As a long time EE and network
+<BR>
+consultant, I've been amazed at how long some of the myths you mention
+<BR>
+have lasted (e.g., 37% is Enet's load limit).  It's common practice, for
+<BR>
+instance, in well-designed Ethernets, to run at 70% 24 hrs/day with no
+<BR>
+issue -- one of the most famous Wall St. trading companies has done that
+<BR>
+for years.  Part of the reason why this is not commonly understood is
+<BR>
+that in the '70s IBM was not about to license anything from Xerox.  Now,
+<BR>
+of course, they can't build Enet interfaces fast enough.  
+<BR>
+The problems with ring systems were discussed well in ACM papers around
+<BR>
+November 95/96, and ATM's problems are just becoming evident to its
+<BR>
+guinea pigs.  As a consultant, of course, that means money for me, but
+<BR>
+there is some disappointment that marketing at IBM, Fore and elsewhere
+<BR>
+over the years has been able to waste others' time and money on
+<BR>
+inappropriate technology.  
+<BR>
+<P>For those who've been mislead by Miller's and other texts, by authors
+<BR>
+who misread either each other or the original IEEE 802 committee's
+<BR>
+simulation results, I've attached the DEC Western Research Lab report
+<BR>
+from '88 (Postscript), where it was clearly demonstrated by one of
+<BR>
+Enet's inventors that 90% throughput (not just load), with minor
+<BR>
+collision levels, is quite easy.  Sorry for the size, but it's an
+<BR>
+important document -- show your children.  The earlier IEEE simulations
+<BR>
+actually demostrated, to the observant, that Enet gets better than ring
+<BR>
+systems as the number of nodes increases (see attached Powerpoint
+<BR>
+version) -- CSMA/CD is always quicker at resolving contention than is
+<BR>
+token passing.  We probably should have it right by now, after 20 years
+<BR>
+experience with a technology.  I hope these comments are useful to
+<BR>
+someone.  
+<BR>
+<P>Regards,
+<BR>
+<P>Alex
+<BR>
+<P>-----------------
+<BR>
+Dr. A. B. Cannara
+<BR>
+Network consulting services
+<BR>
+Menlo Park, Ca.
+<BR>
+<P><P>Vernon Schryver wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: Sean Doran &lt;<A HREF="mailto:smd@ebone.net?Subject=Re:%20New%20problems&In-Reply-To=&lt;35B02D4B.75B1F486@ibm.net&gt;">smd@ebone.net</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; | I agree completely with Constantinos concerns regarding non-adaptive traffic.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; At the risk of being screamed at for improperly Cc:-ing
+</EM><BR>
+<EM>&gt; &gt; two lists, I don't suppose anyone on either has any evidence
+</EM><BR>
+<EM>&gt; &gt; to support the assertion in Constantinos's first point?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It's the same evidence that has been around for decades.  More, it is the
+</EM><BR>
+<EM>&gt; same issue that is a root of the TLD DNS nonsense infesting the main IETF
+</EM><BR>
+<EM>&gt; list.  Many people are unable to conceive of a working distributed,
+</EM><BR>
+<EM>&gt; cooperative system, whether in politics, business, or network packets.
+</EM><BR>
+<EM>&gt; As a result, they either demand a central commission to run it or rush to
+</EM><BR>
+<EM>&gt; exploit its imagined weaknesses.  Thus, you get the ancient IBM token ring
+</EM><BR>
+<EM>&gt; claims that CSMA/CD does not work (e.g. the 30% silliness), because mere
+</EM><BR>
+<EM>&gt; statistics are in charge on an Ethernet.  Then came the FDDI claims that
+</EM><BR>
+<EM>&gt; CSMA/CD does not work, followed the 100VG-AnyLAN stories.  Those were
+</EM><BR>
+<EM>&gt; classic, since 100VG's claim to virtue was its central controller, and
+</EM><BR>
+<EM>&gt; its most telling characteristic was significantly lower throughput than
+</EM><BR>
+<EM>&gt; 100BT.  About the same time came the claims of ATM gurus and sundry
+</EM><BR>
+<EM>&gt; would-be politicians that IP and the Internet do not work technically or
+</EM><BR>
+<EM>&gt; politically.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; | &gt;1. The problem with congestion unresponsive traffic
+</EM><BR>
+<EM>&gt; &gt; | &gt;is becoming increasingly serious as people find
+</EM><BR>
+<EM>&gt; &gt; | &gt;smart ways to cheat the net.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That's not likely to be a problem for at least a while.  The vast majority
+</EM><BR>
+<EM>&gt; are prevented from play such games by their tiny, &lt;=128 kbit/sec
+</EM><BR>
+<EM>&gt; connections.  The few that have connections fat enough to do significant
+</EM><BR>
+<EM>&gt; harm would be noticed and handled administratively, if for some reason
+</EM><BR>
+<EM>&gt; they forget the tragedy of the commons.  Any PC users that want to break
+</EM><BR>
+<EM>&gt; slow-start can tell their browsers to use 40 instead of 2-4 connections
+</EM><BR>
+<EM>&gt; when talking to the typical web page with its gazillions of blinking ads
+</EM><BR>
+<EM>&gt; and banners.  They don't, because it does them no good, because they're
+</EM><BR>
+<EM>&gt; throttled by 30 kbps modem links.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ATM is no more required by the theoretical existance of naughty TCP
+</EM><BR>
+<EM>&gt; installations than analogous machinery is required by the proven existence
+</EM><BR>
+<EM>&gt; of SYN-bombing, echo-port attacks, etc.  If it makes sense to use ATM
+</EM><BR>
+<EM>&gt; because someone might cheat on slow-start, then it surely makes more sense
+</EM><BR>
+<EM>&gt; to have every router in the core detect and filter streams of SYNs, packets
+</EM><BR>
+<EM>&gt; from port 7 to port 7, or packets with surprising source addresses.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20New%20problems&In-Reply-To=&lt;35B02D4B.75B1F486@ibm.net&gt;">vjs@rhyolite.com</A>
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>application/x-zip-compressed attachment: <A HREF="att-1175/01-Decwrl.zip">Decwrl.zip</A>
+</UL>
+<!-- attachment="01-Decwrl.zip" -->
+
+<BR><HR NOSHADE>
+<UL>
+<LI>application/x-zip-compressed attachment: <A HREF="att-1175/02-Enetgrph.zip">Enetgrph.zip</A>
+</UL>
+<!-- attachment="02-Enetgrph.zip" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1176.html">Charles M. Hannum: "Gratuitous FINs again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1174.html">Vernon Schryver: "Re: New problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1175">[ date ]</A>
+<A HREF="index.html#1175">[ thread ]</A>
+<A HREF="subject.html#1175">[ subject ]</A>
+<A HREF="author.html#1175">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

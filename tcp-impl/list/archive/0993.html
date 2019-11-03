@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: I-D ACTION:draft-ietf-tcpimp</TITLE>
+<META NAME="Author" CONTENT="Jeff Semke (semke@psc.edu)">
+<META NAME="Subject" CONTENT="Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt</H1>
+<!-- received="Fri Mar 20 08:17:37 1998" -->
+<!-- isoreceived="19980320131737" -->
+<!-- sent="Fri, 20 Mar 1998 11:14:59 -0500" -->
+<!-- isosent="19980320161459" -->
+<!-- name="Jeff Semke" -->
+<!-- email="semke@psc.edu" -->
+<!-- subject="Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt" -->
+<!-- id="199803201614.LAA14643@italy.psc.edu" -->
+<!-- inreplyto="I-D ACTION:draft-ietf-tcpimpl-prob-03.txt" -->
+<STRONG>From:</STRONG> Jeff Semke (<A HREF="mailto:semke@psc.edu?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-prob-03.txt&In-Reply-To=&lt;199803201614.LAA14643@italy.psc.edu&gt;"><EM>semke@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 20 1998 - 11:14:59 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0994.html">Kevin M. Lahey: "TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0992.html">Mohit Aron: "measuring initial ssthresh"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0983.html">Internet-Drafts@ns.ietf.org: "I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#993">[ date ]</A>
+<A HREF="index.html#993">[ thread ]</A>
+<A HREF="subject.html#993">[ subject ]</A>
+<A HREF="author.html#993">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+If anyone is interested, here is a starting point for a writeup on the
+<BR>
+bug in which some BSD-based senders increase cwnd by 
+<BR>
+segsize*segsize/cwnd + segsize/8.
+<BR>
+<P>I'd be interested in hearing if people on the list think it should be
+<BR>
+included in the next revision of the I-D.
+<BR>
+<P>I have not been able to quickly obtain clean tcpdump traces that illustrate
+<BR>
+the symptom, although in theory it should be simple.  If anyone else
+<BR>
+is willing or able to collect traces, it would be appreciated.
+<BR>
+<P>-Jeff
+<BR>
+<P>------------------------------------------------------------------------------
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Incorrect increase of the congestion window by a fraction of a segment
+<BR>
+<P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 section 4.2.2.15 states that TCP MUST implement Van
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jacobson's &quot;congestion avoidance&quot; algorithm [Jacobson88].  This
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithm calls for increasing the congestion window, cwnd, by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segsize*segsize/cwnd for each ACK received for new data [RFC 2001].
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This has the effect of increasing cwnd by one segment in each
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;round trip time.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Some TCP implementations add an additional fraction of a segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(typically segsize/8) to cwnd for each ACK received for new data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Stevens94, Wright95].  These implementations exhibit &quot;Incorrect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase of the congestion window by a fraction of a segment&quot;.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In congested environments, may be detrimental to the performance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of other connections and to the connection itself.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Incorrect increase of the congestion window by a fraction of a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment allows a TCP to more aggressively open its congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window, increasing the loss rate experienced by all connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sharing a bottleneck with the aggressive TCP.  In particular,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reno TCP senders with this bug suffer significant performance 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;degradation through drop-tail routers when using sufficiently
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;large windows.
+<BR>
+<P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires the use of the &quot;congestion avoidance&quot; algorithm.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 2001 describes the &quot;congestion avoidance&quot; algorithm in detail.
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The problem can be detected by closely examining packet traces
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taken near the sender.  During congestion avoidance, cwnd will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase by an additional segment upon the receipt of [typically]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eight acknowledgements without a loss.  This increase is in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addition to the one segment increase per round trip time (or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;two round trip times if the receiver is using delayed ACKs).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Furthermore, graphs of the sequence number vs. time, taken
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from packet traces, are normally linear during congestion avoidance.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When viewing packet traces of transfers from senders exhibiting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this problem, the graphs appear parabolic instead of linear.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And finally, the traces will show that, at sufficiently large
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windows, nearly every loss event results in a timeout since the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;additional increase in cwnd causes drop-tail queues to overflow
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by more than the prescribed single-packet increase.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem may be corrected by removing the &quot;+ segsize/8&quot; term
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from the code that increases cwnd each time an ACK of new data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is received.
+<BR>
+<P>References
+<BR>
+<P>[Stevens94]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W. Richard Stevens, &quot;TCP/IP Illustrated, Volume 1&quot;, Addison-Wesley
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Publishing Company, Reading, Massachusetts, 1994.
+<BR>
+<P>[Wright95]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gary R. Wright and W. Richard Stevens, &quot;TCP/IP Illustrated, Volume 2&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addison-Wesley Publishing Compary, Reading Massachusetts, 1995.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0994.html">Kevin M. Lahey: "TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0992.html">Mohit Aron: "measuring initial ssthresh"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0983.html">Internet-Drafts@ns.ietf.org: "I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#993">[ date ]</A>
+<A HREF="index.html#993">[ thread ]</A>
+<A HREF="subject.html#993">[ subject ]</A>
+<A HREF="author.html#993">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

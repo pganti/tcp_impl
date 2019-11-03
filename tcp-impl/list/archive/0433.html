@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP: Brief Comment on cwnd Infla</TITLE>
+<META NAME="Author" CONTENT="Amr A. Awadallah (aaa@stanford.edu)">
+<META NAME="Subject" CONTENT="TCP: Brief Comment on cwnd Inflation during Fast Recovery.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP: Brief Comment on cwnd Inflation during Fast Recovery.</H1>
+<!-- received="Tue Jun  3 14:30:49 1997" -->
+<!-- isoreceived="19970603183049" -->
+<!-- sent="Tue, 3 Jun 1997 14:14:07 -0700 (PDT)" -->
+<!-- isosent="19970603211407" -->
+<!-- name="Amr A. Awadallah" -->
+<!-- email="aaa@stanford.edu" -->
+<!-- subject="TCP: Brief Comment on cwnd Inflation during Fast Recovery." -->
+<!-- id="Pine.GSO.3.96.970603125349.17878A-100000@tree2.Stanford.EDU" -->
+<STRONG>From:</STRONG> Amr A. Awadallah (<A HREF="mailto:aaa@stanford.edu?Subject=Re:%20TCP:%20Brief%20Comment%20on%20cwnd%20Inflation%20during%20Fast%20Recovery.&In-Reply-To=&lt;Pine.GSO.3.96.970603125349.17878A-100000@tree2.Stanford.EDU&gt;"><EM>aaa@stanford.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jun 03 1997 - 17:14:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0432.html">Vern Paxson: "dissertation available on end-to-end Internet dynamics"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#433">[ date ]</A>
+<A HREF="index.html#433">[ thread ]</A>
+<A HREF="subject.html#433">[ subject ]</A>
+<A HREF="author.html#433">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+All,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;For those of you who expressed interest in our comments on the effects
+<BR>
+of cwnd inflation. We added more comments/results on this subject at this
+<BR>
+URL ( <A HREF="http://www-leland.stanford.edu/~aaa/tcp">http://www-leland.stanford.edu/~aaa/tcp</A> ). We included the patch
+<BR>
+(diff file) for the current FreeBSD tcp_input.c. We would appreciate it if
+<BR>
+interested developers provide feedback to us about this change (in terms
+<BR>
+of observed throughput). The change is only a couple of lines of code and
+<BR>
+apparently leads to higher throughput TCP sources. 
+<BR>
+<P>&nbsp;&nbsp;We also provide arguments for and against the modification. The main
+<BR>
+argument for the modification is that with the current cwnd inflation,
+<BR>
+more packets are being sent into the network during the fast recovery
+<BR>
+period at the rate at which duplicate-ACKs are coming back. Which is
+<BR>
+counter intuitive to the fact that entering fast recovery means that the
+<BR>
+TCP source just lost a packet (indicated by the duplicate ACKs), hence the
+<BR>
+source should throttle back its sending rate. By continuing to send at the
+<BR>
+rate at which duplicate ACKs are coming back, the source may force the
+<BR>
+network to drop another one of its packets (e.g. due to RED gateways
+<BR>
+[Floyd and Jacobsen, IEEE Transactions on Networking, August 1993], or
+<BR>
+simple buffer overflow). This may lead to invoking another fast recovery
+<BR>
+cycle, or worse invoking slow-start (this can be clearly seen in the cwnd
+<BR>
+vs time plots on the web page). The modification we did provides the
+<BR>
+network a breathing period of less than 1 RTT which allows the network to
+<BR>
+catch up its breath by dequeuing congested buffers.  This avoids another
+<BR>
+packet loss, thus leading to a smoother cwnd vs time behavior. It still
+<BR>
+allows for packets to be sent during the fast recovery period but at a
+<BR>
+much lower rate. 
+<BR>
+<P>&nbsp;&nbsp;The main argument against the modification is that by using normal
+<BR>
+congestion avoidance cwnd-increase during the fast recovery period (rather
+<BR>
+than cwnd inflation), the source will not be able to keep the pipe full
+<BR>
+(thus violating VJ recommendations).  Hence this leads to a burst of
+<BR>
+back-to-back packets at the end of the fast recovery period. We note
+<BR>
+though that schemes like FACK [Mathis and Mahdavi SIGCOMM '96] allows for
+<BR>
+the regulation of such a burst (by pacing the burst). SACK [Floyd and Fall
+<BR>
+CCR paper] also tackles this problem. We also note that this burst of
+<BR>
+back-to-back packets is known to exist in current TCP implementations (at
+<BR>
+least we observed it rather frequently in FreeBSD 2.1.6, as shown on the
+<BR>
+web). The burst simply occurs due to cwnd sliding a considerable distance
+<BR>
+when the non-duplicate ACK arrives, hence opening up lots of space for new
+<BR>
+packets to be sent. The modification leads to a more aggressive TCP source
+<BR>
+since it starts with a larger window size at the end of the fast-recovery
+<BR>
+period.  It has also been pointed to us that most TCP researchers think
+<BR>
+the principles behind the current fast recovery algorithm works well.
+<BR>
+<P>&nbsp;&nbsp;One last comment, we stumbled on the cwnd inflation spikes during our
+<BR>
+research on TCP (which is on a totally different aspect). The spikes
+<BR>
+appeared strange to us at first because in most papers on TCP congestion
+<BR>
+avoidance (at least those that we read), one would rarely see a cwnd vs
+<BR>
+time plot showing the cwnd inflation spikes. This was the main reason why
+<BR>
+we were originally misled to believe that this was a bug in TCP, until
+<BR>
+others corrected us by pointing out that this is truly how fast recovery
+<BR>
+was designed to work (that is the spikes are a feature of TCP ! ).
+<BR>
+<P>Thanks for your interest and feedback,
+<BR>
+<P>Sincerely,
+<BR>
+<P>Amr A. Awadallah (<A HREF="mailto:aaa@stanford.edu?Subject=Re:%20TCP:%20Brief%20Comment%20on%20cwnd%20Inflation%20during%20Fast%20Recovery.&In-Reply-To=&lt;Pine.GSO.3.96.970603125349.17878A-100000@tree2.Stanford.EDU&gt;">aaa@stanford.edu</A>)
+<BR>
+Chetan Rai       (<A HREF="mailto:crai@cs.stanford.edu?Subject=Re:%20TCP:%20Brief%20Comment%20on%20cwnd%20Inflation%20during%20Fast%20Recovery.&In-Reply-To=&lt;Pine.GSO.3.96.970603125349.17878A-100000@tree2.Stanford.EDU&gt;">crai@cs.stanford.edu</A>)
+<BR>
+<P>-----------------------------------------------------
+<BR>
+<P>PS: Sorry if you receive this e-mail more than once, this means you are
+<BR>
+subscribed to too many mailing lists :)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0432.html">Vern Paxson: "dissertation available on end-to-end Internet dynamics"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#433">[ date ]</A>
+<A HREF="index.html#433">[ thread ]</A>
+<A HREF="subject.html#433">[ subject ]</A>
+<A HREF="author.html#433">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

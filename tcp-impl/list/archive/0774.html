@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Out Of Band and Nagle</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: Out Of Band and Nagle">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Out Of Band and Nagle</H1>
+<!-- received="Wed Oct 15 14:07:17 1997" -->
+<!-- isoreceived="19971015180717" -->
+<!-- sent="Wed, 15 Oct 1997 16:02:11 -0500 (CDT)" -->
+<!-- isosent="19971015210211" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: Out Of Band and Nagle" -->
+<!-- id="199710152102.QAA04811@frantic.BSDI.COM" -->
+<!-- inreplyto="Out Of Band and Nagle" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;199710152102.QAA04811@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Oct 15 1997 - 17:02:11 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0773.html">Vernon Schryver: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#774">[ date ]</A>
+<A HREF="index.html#774">[ thread ]</A>
+<A HREF="subject.html#774">[ subject ]</A>
+<A HREF="author.html#774">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@hpisrdq.cup.hp.com?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;199710152102.QAA04811@frantic.BSDI.COM&gt;">raj@hpisrdq.cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: Out Of Band and Nagle
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Jerry Toporek wrote:
+</EM><BR>
+<EM>&gt; &gt; The important point, that is not explict in RFC 1122, is that the URG flag
+</EM><BR>
+<EM>&gt; &gt; should be made visible to the receiving side without delay.  Forcing out a
+</EM><BR>
+<EM>&gt; &gt; segment with data that would not otherwise be sendable (which may or may not
+</EM><BR>
+<EM>&gt; &gt; include the data at the urgent pointer) is a way to accomplish this, but I am
+</EM><BR>
+<EM>&gt; &gt; not sure that it is a good idea to provide this back-door mechanism to bypass
+</EM><BR>
+<EM>&gt; &gt; all send controls.  I believe that the right thing to do when the sender TCP
+</EM><BR>
+<EM>&gt; &gt; is presented with outbound urgent data at a time when the send rules preclude
+</EM><BR>
+<EM>&gt; &gt; putting a segment on the wire is to generate a zero-length segment with the
+</EM><BR>
+<EM>&gt; &gt; URG flag on and the urgent pointer set.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; What is the value of the URG flag without the URG data being present?
+</EM><BR>
+<P>TCP does not have urgent data in the sense that seems to be being discussed
+<BR>
+here (at least my understanding of what is being said).  TCP has an urgent
+<BR>
+pointer and an URG flag.  In TCP the Urgent Data is all the data up to
+<BR>
+the Urgent pointer, and when a TCP sees the URG flag, it goes into urgent
+<BR>
+mode while processing the data up to the Urgent pointer.  This means that
+<BR>
+if an application has pending, unsent data and it sends more data in urgent
+<BR>
+mode, all the previous, unsent data becomes urgent data.  In fact, if
+<BR>
+the receiving TCP has accepted data that it hasn't yet presented to the
+<BR>
+user and it gets an URG, all that unread data becomes &quot;urgent data&quot; to
+<BR>
+the application.
+<BR>
+<P>Also remember that the urgent pointer is allowed to point beyond the
+<BR>
+packet that contains it, and even beyond the TCP window.
+<BR>
+<P><EM>&gt; Is there any concern about the legacy TCP's processing such a segment
+</EM><BR>
+<EM>&gt; correctly?
+</EM><BR>
+<P><EM>&gt;From other mail on this list, I seems so.  But the only hard reason
+</EM><BR>
+that a TCP can't send new data is if the window is closed.  And if it
+<BR>
+is closed, you can still send one byte of data as a window probe.
+<BR>
+So there is no need to send out a zero-length packet just to get out
+<BR>
+the urgent notification.
+<BR>
+<P><EM>&gt; Also, how is the proposed behaviour any greater a back door than
+</EM><BR>
+<EM>&gt; TCP_NODELAY, which is a huge, gaping door already?
+</EM><BR>
+<P>Setting TCP_NODELAY doesn't short-circuit any of the congestion control
+<BR>
+code.  In the BSD stack, on an idle connection the first write will
+<BR>
+always go out, no matter how small.  It is successive small writes that
+<BR>
+get delayed until an ACK is received or a full segments worth of data is
+<BR>
+accumulated.  Setting TCP_NODELAY says that if another small write is
+<BR>
+done while there is un-acked data, don't wait for the ack to come back
+<BR>
+before sending the data.
+<BR>
+<P>Sending data in urgent mode is the same as turning on TCP_NODELAY
+<BR>
+just before doing the write and turning it back off after the write.
+<BR>
+One additional thing about sending data in urgent mode is that in
+<BR>
+the BSD stack if the window is closed, it will force a one-byte
+<BR>
+window probe to be sent (which will have the urgent flag/pointer).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;199710152102.QAA04811@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0773.html">Vernon Schryver: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0775.html">Rick Jones: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#774">[ date ]</A>
+<A HREF="index.html#774">[ thread ]</A>
+<A HREF="subject.html#774">[ subject ]</A>
+<A HREF="author.html#774">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 21:08:20 1999" -->
+<!-- isoreceived="19990916010820" -->
+<!-- sent="Wed, 15 Sep 1999 18:06:01 -0700 (PDT)" -->
+<!-- isosent="19990916010601" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="199909160106.SAA29807@rum.isi.edu" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 21:06:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1817">[ date ]</A>
+<A HREF="index.html#1817">[ thread ]</A>
+<A HREF="subject.html#1817">[ subject ]</A>
+<A HREF="author.html#1817">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:alan@vauxhall.isi.net?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">alan@vauxhall.isi.net</A>  Wed Sep 15 17:58:27 1999
+</EM><BR>
+<EM>&gt; Delivery-Date: Wed, 15 Sep 1999 17:58:27 -0700
+</EM><BR>
+<EM>&gt; Return-Path: <A HREF="mailto:alan@vauxhall.isi.net?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">alan@vauxhall.isi.net</A>
+</EM><BR>
+<EM>&gt; Date: Wed, 15 Sep 1999 17:58:29 -0700
+</EM><BR>
+<EM>&gt; From: Alan Hannan &lt;<A HREF="mailto:alan@globalcenter.net?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">alan@globalcenter.net</A>&gt;
+</EM><BR>
+<EM>&gt; To: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>, <A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160106.SAA29807@rum.isi.edu&gt;">vjs@calcite.rhyolite.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP's handling of IP precedence
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; If this document proposes to change IP TOS and doesn't address
+</EM><BR>
+<EM>&gt; &gt; how it affects existing standards, it is _they_ who should have
+</EM><BR>
+<EM>&gt; &gt; read, understood, and addressed these problems _before_ going to
+</EM><BR>
+<EM>&gt; &gt; proposed draft.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   There's lots of good discussion going on, and I'm glad that people
+</EM><BR>
+<EM>&gt;   are giving this issue the focus it deserves.
+</EM><BR>
+...
+<BR>
+<EM>&gt;   Without this functionality, QOS w/ native IP is exceedingly
+</EM><BR>
+<EM>&gt;   more difficult.
+</EM><BR>
+...
+<BR>
+<EM>&gt;   I wonder about the actual meaning and interpretation of the RFC
+</EM><BR>
+<EM>&gt;   given the rare implementation.
+</EM><BR>
+<P>But what about the reason behind TCP's spec...
+<BR>
+<P>The idea behind TCP aborting the connection when
+<BR>
+the TOS bits change is that a property of the 
+<BR>
+connection has changed after being negotiated.
+<BR>
+<P>Is it the case that Diffserv:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- intends these bits to be used for TCP connections?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- intends that they change after a connection is established?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or would that constitute the need for 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a TCP extension to renegotiate?
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1817">[ date ]</A>
+<A HREF="index.html#1817">[ thread ]</A>
+<A HREF="subject.html#1817">[ subject ]</A>
+<A HREF="author.html#1817">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

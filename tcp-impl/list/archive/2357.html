@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Tue Sep 19 15:51:31 2000" -->
+<!-- isoreceived="20000919195131" -->
+<!-- sent="Tue, 19 Sep 2000 13:45:42 -0600 (MDT)" -->
+<!-- isosent="20000919194542" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009191945.e8JJjg415323@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191945.e8JJjg415323@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 15:45:42 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2358.html">Andi Kleen: "Re: TCP sequence numbers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2357">[ date ]</A>
+<A HREF="index.html#2357">[ thread ]</A>
+<A HREF="subject.html#2357">[ subject ]</A>
+<A HREF="author.html#2357">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: stanislav shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191945.e8JJjg415323@calcite.rhyolite.com&gt;">shalunov@internet2.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; My point is that you have to assume that the attacker *knows* exactly
+</EM><BR>
+<EM>&gt; &gt; how you're generating the ISNs; all you can keep secret (except in that
+</EM><BR>
+<EM>&gt; &gt; short term I mentioned), is the entropy you've accumulated.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Oh.  What I meant is that there would be no practical way for the
+</EM><BR>
+<EM>&gt; attacker to distinguish between the output of PRNG and true random
+</EM><BR>
+<EM>&gt; source, if given two files: one with true random numbers and the other
+</EM><BR>
+<EM>&gt; with PRNG output.
+</EM><BR>
+<P>As der Mouse said, that distinction is meaningless in this context.  You
+<BR>
+must assume that the attacker has a current copy of the source to your
+<BR>
+TCP code and local hardware for private experiments.  For decades, current
+<BR>
+commercial TCP source has been spread widely in universities and big
+<BR>
+customers.  Non-disclosure agreements are sufficient to protect trade
+<BR>
+secrets and useless against anyone guessing ISN's.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I agree with that.  I only *responded* to (obviously incorrect, or at
+</EM><BR>
+<EM>&gt; least very carelessly worded) cryptographic claims.  An earlier
+</EM><BR>
+<EM>&gt; message by another author contained assertion that packet arrival
+</EM><BR>
+<EM>&gt; times contain 5 or 6 bits of entropy (which seems over-optimistic to
+</EM><BR>
+<EM>&gt; me) and that &quot;[e]ven [...] those 5 or 6 bits are valuable&quot;.
+</EM><BR>
+<P>I think I made that claim.  What is my &quot;(obviously incorrect, or
+<BR>
+at least very carelessly worded) cryptographic claim&quot;?
+<BR>
+<P><EM>&gt; Of course, they're valuable.  They give one much more entropy than one
+</EM><BR>
+<EM>&gt; could ever possibly want for a very good PRNG.
+</EM><BR>
+<P>That is an obviously incorrect, or at least very carelessly worded
+<BR>
+cryptographic claim.  Even the best crypto PRNG can be trivially and
+<BR>
+extremely quickly reversed if you know all but 5 or 6 of its initial state.
+<BR>
+In this context, you must assume the bad guy knows which of the 5 or 6
+<BR>
+input bits are variable, because the bad guy has a copy of your source.
+<BR>
+<P><P><EM>&gt;                                                 (I would prefer a more
+</EM><BR>
+<EM>&gt; pessimistic estimate of the amount of entropy in packet arrival times,
+</EM><BR>
+<EM>&gt; such as 0.01 bits per packet, but even that's more than enough.)
+</EM><BR>
+<P>Your 0.01 bits/packet of entropy makes no sense to me.  If there were only
+<BR>
+0.01 or even 1 bit of entropy in packet arrival times, then we wouldn't
+<BR>
+need RTP and the many other ToS and QoS mechanisms.  Even the telco guys
+<BR>
+would have switched to packets 25 years ago.
+<BR>
+<P>Consider the 10 MHz Ethernet packets I was talking about.  They won't come
+<BR>
+more often than once every 64 microsecond slot time.  Their nanosecond
+<BR>
+arrival times within slot times will depend on the clocks of their senders
+<BR>
+and of any bridges and Ethernet repeaters in their paths, as well as many
+<BR>
+sources of hardware noise (e.g DRAM refresh, bus contention, interrupt
+<BR>
+latency, DMA state machine latency) in the senders, bridges, repeaters,
+<BR>
+and receiver.  Their nanosecond arrival times will have more than 8 bits
+<BR>
+of entropy.  Add the effects of other traffic on the Ethernet (including
+<BR>
+the SYN-ACK), that the average packet size on most LANs is 8 or more slot
+<BR>
+times instead of 1, and you clearly have 15 or 16 bits of entropy per
+<BR>
+packet with nanosecond clocks and 5 or 6 with microsecond clocks.
+<BR>
+<P>Then, since ISN attacks on LANs are silly, there is the entropy of packets
+<BR>
+arriving from wide area networks, which have another several bits of
+<BR>
+entropy, because their jitter is as much as 10's or 100's of milliseconds.
+<BR>
+<P><P><EM>&gt; The actual &quot;how to do it&quot; is, of course, off-topic for tcp-impl.
+</EM><BR>
+<P>How can &quot;how to do it&quot;, getting entropy and using it to generate ISN's
+<BR>
+be off-topic for the IETF's TCP implemenetor's list?  
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009191945.e8JJjg415323@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2358.html">Andi Kleen: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2357">[ date ]</A>
+<A HREF="index.html#2357">[ thread ]</A>
+<A HREF="subject.html#2357">[ subject ]</A>
+<A HREF="author.html#2357">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 15:52:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

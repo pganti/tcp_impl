@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Justin T. Gibbs (gibbs@freebsd.org)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 19:56:53 2000" -->
+<!-- isoreceived="20000225005653" -->
+<!-- sent="Thu, 24 Feb 2000 17:50:52 -0700" -->
+<!-- isosent="20000225005052" -->
+<!-- name="Justin T. Gibbs" -->
+<!-- email="gibbs@freebsd.org" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002250050.RAA01134@caspian.plutotech.com" -->
+<!-- inreplyto="200002250010.QAA16997@pizda.ninka.net" -->
+<STRONG>From:</STRONG> Justin T. Gibbs (<A HREF="mailto:gibbs@freebsd.org?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250050.RAA01134@caspian.plutotech.com&gt;"><EM>gibbs@freebsd.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 19:50:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1995.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1992">[ date ]</A>
+<A HREF="index.html#1992">[ thread ]</A>
+<A HREF="subject.html#1992">[ subject ]</A>
+<A HREF="author.html#1992">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;   In the case of a server response, RDMA benefits the client, not the
+</EM><BR>
+<EM>&gt;   server, so I fail to see why your example is problematic.  Zero
+</EM><BR>
+<EM>&gt;   copy send is not what this standard addresses.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;With client memory bus bandwidth in the multi-gigabyte per second
+</EM><BR>
+<EM>&gt;range, who needs to avoid the single copy?  How much NFS and web
+</EM><BR>
+<EM>&gt;surfing does one need to do before this is would really come into
+</EM><BR>
+<EM>&gt;play?
+</EM><BR>
+<P>This is a very different argument than the one you &quot;implied&quot; before.
+<BR>
+I can certainly say that I'd rather make use of my memory bandwidth,
+<BR>
+regardless of how much I happen to have, in a more constructive manner
+<BR>
+than copying data for no good reason.
+<BR>
+<P>RDMA is a general purpose feature.  Don't shoe horn it into just an
+<BR>
+option to accelerate a few protocols.
+<BR>
+<P><EM>&gt;And the bus speeds will just be faster by the time something like
+</EM><BR>
+<EM>&gt;this could be deployed widely.
+</EM><BR>
+<P>And the networks will be faster by then too and the demand for
+<BR>
+pulling more rich content will increase, etc.
+<BR>
+<P><EM>&gt;For example, look at SACK, only within the past year are there a
+</EM><BR>
+<EM>&gt;decent number of systems out there implementing it.  Now how many
+</EM><BR>
+<EM>&gt;years ago did it enter RFC state?  And there are still stacks out
+</EM><BR>
+<EM>&gt;there even in their current development sources not implementing any
+</EM><BR>
+<EM>&gt;form of it.
+</EM><BR>
+<P>The performance impact of RDMA is quite a bit larger than SACK, so
+<BR>
+I don't know that your example is relevant.  All the big vendors
+<BR>
+implement zero-copy in some shape or form and since RDMA is a scheme
+<BR>
+to make zero-copy work in more cases, I'm sure it will be picked up
+<BR>
+if the proposal is deemed sane.
+<BR>
+<P><EM>&gt;Later,
+</EM><BR>
+<EM>&gt;David S. Miller
+</EM><BR>
+<EM>&gt;<A HREF="mailto:davem@redhat.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250050.RAA01134@caspian.plutotech.com&gt;">davem@redhat.com</A>
+</EM><BR>
+<P><PRE>
+--
+Justin
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1995.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1992">[ date ]</A>
+<A HREF="index.html#1992">[ thread ]</A>
+<A HREF="subject.html#1992">[ subject ]</A>
+<A HREF="author.html#1992">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

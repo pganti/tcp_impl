@@ -1,0 +1,56 @@
+diff -U3 -r traceroute-1.4a5.orig/traceroute.c traceroute-1.4a5/traceroute.c
+--- traceroute-1.4a5.orig/traceroute.c	Mon May 10 12:41:39 1999
++++ traceroute-1.4a5/traceroute.c	Mon May 10 12:41:01 1999
+@@ -325,6 +325,8 @@
+ void	tvsub(struct timeval *, struct timeval *);
+ __dead	void usage(void);
+ int	wait_for_reply(int, struct sockaddr_in *, struct timeval *);
++void	adjustPMTU(const u_char *);
++
+ 
+ int
+ main(int argc, char **argv)
+@@ -796,8 +798,8 @@
+ 					break;
+ 
+ 				case ICMP_UNREACH_NEEDFRAG:
++					adjustPMTU(packet);
+ 					++unreachable;
+-					Printf(" !F");
+ 					break;
+ 
+ 				case ICMP_UNREACH_SRCFAIL:
+@@ -1306,3 +1308,33 @@
+ 	    prog);
+ 	exit(1);
+ }
++
++void 
++adjustPMTU (const u_char * packet) 
++{
++	struct ip * ip = (struct ip*)packet;
++	struct icmp* icp = (struct icmp*)(packet + (ip->ip_hl << 2));
++	int mtu = (ntohl(icp->icmp_void) & 0xffff);
++
++	Printf(" !F<=%d ", mtu);
++	if (mtu > packlen) {	
++		Fprintf(stderr, "\nPacket already smaller than %d!\n", mtu);
++		exit(1);
++	}
++	if (mtu < minpacket) {
++		Fprintf(stderr, "\nRequested MTU too small!\n");
++		exit(1);
++	}
++				
++	packlen = mtu;
++	Printf("Resending with %d byte packets:\n   ", packlen);
++#ifdef BYTESWAP_IP_LEN
++	outip->ip_len = htons(packlen);
++#else
++	outip->ip_len = packlen;
++#endif
++	if (!useicmp) 
++	      outudp->uh_ulen = htons((u_short)(packlen - (sizeof(*outip) + optlen)));
++}
++
++

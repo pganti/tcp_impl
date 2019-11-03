@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: larger initial cwnd window consi</TITLE>
+<META NAME="Author" CONTENT="eewechta@swansea.ac.uk (eewechta@swansea.ac.uk)">
+<META NAME="Subject" CONTENT="larger initial cwnd window considered harmful">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>larger initial cwnd window considered harmful</H1>
+<!-- received="Sun May 10 12:45:06 1998" -->
+<!-- isoreceived="19980510164506" -->
+<!-- sent="Sun, 10 May 1998 20:51:39 +0100 (BST)" -->
+<!-- isosent="19980510195139" -->
+<!-- name="eewechta@swansea.ac.uk" -->
+<!-- email="eewechta@swansea.ac.uk" -->
+<!-- subject="larger initial cwnd window considered harmful" -->
+<!-- id="ML-3.2.894829899.7419.eewechta@eeandes.swan.ac.uk" -->
+<!-- inreplyto="35533FFB.24BA98E0@erols.net" -->
+<STRONG>From:</STRONG> <A HREF="mailto:eewechta@swansea.ac.uk?Subject=Re:%20larger%20initial%20cwnd%20window%20considered%20harmful&In-Reply-To=&lt;ML-3.2.894829899.7419.eewechta@eeandes.swan.ac.uk&gt;"><EM>eewechta@swansea.ac.uk</EM></A><BR>
+<STRONG>Date:</STRONG> Sun May 10 1998 - 15:51:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1128.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt complete"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1129">[ date ]</A>
+<A HREF="index.html#1129">[ thread ]</A>
+<A HREF="subject.html#1129">[ subject ]</A>
+<A HREF="author.html#1129">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>Eric Travis wrote:
+<BR>
+<P><EM>&gt; &gt;You are of course correct indicating that the servers need to operate
+</EM><BR>
+<EM>&gt; &gt;with a TCP stack which operates with a larger initial cwnd window size.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;What's the incentive to make the change on a particular web server?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;    The web server looks a damn sight faster than others, particularly
+</EM><BR>
+<EM>&gt; &gt;    for short transactions.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Absolutely - unless it turns out that it makes things *worse* for a busy 
+</EM><BR>
+<EM>&gt; web server (or it's downstream path);  At this point, it's still a 
+</EM><BR>
+<EM>&gt; risky decision.
+</EM><BR>
+<P>Agreed. Furthermore, I think that this in not just a problem of busy web server
+<BR>
+but busy network as well. I hope everybody agrees that larger initial cwnd
+<BR>
+window allows to introduce more data to the network per time unit (RTT). 
+<BR>
+<P>In 'slow start' each ACK triggers two new data packets. There is no doubt that
+<BR>
+with increased initial window the window will open more rapidly (especially
+<BR>
+during so called 'slow start' which is not slow at all). Hence, the source
+<BR>
+offers data more rapidly to the network.
+<BR>
+<P>If already busy network is bombarded with twice (or more) amount of data, our
+<BR>
+data transfer will not be faster. On the contrary it could become much slower
+<BR>
+due to wasted bandwidth on dropped packets. 
+<BR>
+<P>So far the slow start (initial window=1 or 2 assuming window increase during
+<BR>
+the handshake) was used to control amount of data offered to the net. And this
+<BR>
+is the behaviour we know because we were able to observe it over the years. 
+<BR>
+<P>We blame the servers for slow data transfers and increase the speed of data
+<BR>
+being thrown to the net, that's fine. However, are we really sure that the
+<BR>
+servers are to blame for slow transfers and not our busy networks ?
+<BR>
+&nbsp;
+<BR>
+My point is that in some cases larger initial cwnd window will prove helpful
+<BR>
+(if the server has speared processing power and network has speared resources)
+<BR>
+while for busy web servers and busy networks it could turn out to be
+<BR>
+disastrous. Am I wrong ?
+<BR>
+<P>Jerzy
+<BR>
+<P>_____________________________
+<BR>
+Jerzy Wechta
+<BR>
+Communication Research Group
+<BR>
+University of Wales, Swansea
+<BR>
+UK
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1128.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt complete"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1130.html">Geoff Huston: "Re: larger initial cwnd window considered harmful"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1129">[ date ]</A>
+<A HREF="index.html#1129">[ thread ]</A>
+<A HREF="subject.html#1129">[ subject ]</A>
+<A HREF="author.html#1129">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

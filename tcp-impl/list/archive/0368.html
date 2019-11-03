@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP keep-alives &amp; Reality bi</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="TCP keep-alives &amp; Reality bites">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP keep-alives &amp; Reality bites</H1>
+<!-- received="Tue Apr 29 17:55:58 1997" -->
+<!-- isoreceived="19970429215558" -->
+<!-- sent="Tue, 29 Apr 1997 20:51:50 -0400" -->
+<!-- isosent="19970430005150" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="TCP keep-alives &amp; Reality bites" -->
+<!-- id="199704300051.UAA09796@MAILSERV-2HIGH-A.FTP.COM" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20TCP%20keep-alives%20&amp;%20Reality%20bites&In-Reply-To=&lt;199704300051.UAA09796@MAILSERV-2HIGH-A.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 29 1997 - 20:51:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0369.html">sparker@Eng.Sun.COM: "Proposed test for TCP initial slow start..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0367.html">braden@ISI.EDU: "From the historical record... Keepalive messages"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0373.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0373.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0403.html">Larry Backman: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#368">[ date ]</A>
+<A HREF="index.html#368">[ thread ]</A>
+<A HREF="subject.html#368">[ subject ]</A>
+<A HREF="author.html#368">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Now lets make it clear that I find keepalives as evil as the next person
+<BR>
+and wish they could be vaporized from the face of the earth.  However
+<BR>
+in Windows-Land (and perhaps some of the Microsoft watchers on the list
+<BR>
+might chime up also) we have all these somewhat shall we say - 
+<BR>
+network-inexperienced - application programmers who do not understand either
+<BR>
+network programming or the concept of multiple CPU synchronization.
+<BR>
+<P>For a variety of reasons in writing their client/server applications
+<BR>
+using winsock they think they have very good reasons for requiring 
+<BR>
+keep-alive, often for ridiculous periods like 60 or 90 seconds.So they
+<BR>
+use setsockopt to turn on keepalive and call us, telling us that keepalive
+<BR>
+doesn't work because nothing has gone out.
+<BR>
+<P>Many times their insistance on a shirt keepalive is to get instant
+<BR>
+feedback when one end of the connection has gone away.  We all know
+<BR>
+that there are better ways to determine this than keepalive and that
+<BR>
+short keepalives can provide false positives in complex networks.
+<BR>
+<P>We tell them our keepalive is 2 hr's and they protest.  Loudly.  Often
+<BR>
+a mutual customer is involved and competitive products with shorter
+<BR>
+keepalives are mentioned.
+<BR>
+<P>After a few years of this, perhaps 7 or 8 years back,we provided a
+<BR>
+configuration parameter by which a user could set our keepalive to
+<BR>
+any value they wanted.
+<BR>
+<P>So application vendor A now delivers with their sterling and well
+<BR>
+received application a readme that states something to the effect:
+<BR>
+<P>&quot;keepalives on the FTP stack take too darned long and adversely affect
+<BR>
+the throughput of our sterling app.  Simply twiddle the following
+<BR>
+parameter and the FTP stack will perform much better&quot;.
+<BR>
+<P>Lovely.  For that one app.
+<BR>
+<P>However, the user has now set a persistant and global parameter, which
+<BR>
+has set our keepalive down to a ridiculously low value so professional
+<BR>
+TCP types like you and I can take traces of a connection spewing keepalives
+<BR>
+and draw the wrong conclusion as to the culprit.
+<BR>
+<P>My point, which I perhaps have belaboured a bit too long, is that keepalive
+<BR>
+timers are not just a stack issue, but also an issue of educating application
+<BR>
+developers as to what keepalives are used for and what they should not
+<BR>
+be used for.
+<BR>
+<P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0369.html">sparker@Eng.Sun.COM: "Proposed test for TCP initial slow start..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0367.html">braden@ISI.EDU: "From the historical record... Keepalive messages"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0373.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0373.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0403.html">Larry Backman: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#368">[ date ]</A>
+<A HREF="index.html#368">[ thread ]</A>
+<A HREF="subject.html#368">[ subject ]</A>
+<A HREF="author.html#368">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

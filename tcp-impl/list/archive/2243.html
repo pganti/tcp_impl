@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (Volz@ipworks.com)">
+<META NAME="Subject" CONTENT="RE: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: keep RST data nonstandardized for the future!</H1>
+<!-- received="Wed Aug  2 09:43:58 2000" -->
+<!-- isoreceived="20000802134358" -->
+<!-- sent="Wed, 2 Aug 2000 09:33:29 -0400 " -->
+<!-- isosent="20000802133329" -->
+<!-- name="Bernie Volz" -->
+<!-- email="Volz@ipworks.com" -->
+<!-- subject="RE: keep RST data nonstandardized for the future!" -->
+<!-- id="63D30D6E10CFD11190A90000F805FE8602BEBFC3@lespaul.process.com" -->
+<!-- inreplyto="keep RST data nonstandardized for the future!" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:Volz@ipworks.com?Subject=RE:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFC3@lespaul.process.com&gt;"><EM>Volz@ipworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 09:33:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2244.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2234.html">David L. Nicol: "keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2243">[ date ]</A>
+<A HREF="index.html#2243">[ thread ]</A>
+<A HREF="subject.html#2243">[ subject ]</A>
+<A HREF="author.html#2243">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Well, it isn't difficult to deal with the backwards compatibility issue
+<BR>
+PROVIDED none of these messages start with a numeric value. If the n-digit
+<BR>
+code followed by the delimiter is not present, assume the entire message is
+<BR>
+text.
+<BR>
+<P>Using a TCP option is certainly an alternative.
+<BR>
+<P>Note that this data is intended for the RECEIVER of the RST. That end of the
+<BR>
+connection will typically still be attached to an application. It would
+<BR>
+require a new API call or other means to obtain the message and also
+<BR>
+changing the applications to call this new API. So, most applications
+<BR>
+already written would not get this information unless modified. Perhaps a
+<BR>
+'getsockopt' call of SO_RSTMSGTXT and SO_RSTMSGNUM or some such codes could
+<BR>
+be used.
+<BR>
+<P>- Bernie Volz
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Eric A. Hall [mailto:<A HREF="mailto:ehall@ehsco.com?Subject=RE:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFC3@lespaul.process.com&gt;">ehall@ehsco.com</A>]
+<BR>
+Sent: Tuesday, August 01, 2000 9:43 PM
+<BR>
+To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFC3@lespaul.process.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: keep RST data nonstandardized for the future!
+<BR>
+<P><P><P><EM>&gt; Perhaps an FTP/SMTP/... like response format would be useful - &lt;n&gt;
+</EM><BR>
+<EM>&gt; digit code followed by a delimiter (space) followed by human readable
+</EM><BR>
+<EM>&gt; text. That way, TCP itself and/or application can decode the numeric
+</EM><BR>
+<EM>&gt; code and understand it and the application could also display the
+</EM><BR>
+<EM>&gt; returned message for the human to read.
+</EM><BR>
+<P>I think it's pretty unlikely that applications will get the text if TCP
+<BR>
+is burning down the connection. Another problem with reverse
+<BR>
+standardization around data in the stream is that not everbody who does
+<BR>
+it already will be compliant with whatever approach is finished.
+<BR>
+<P>Getting explicit errors out of the data stream seems like the best way
+<BR>
+to go if there's real interest in this. Maybe a TCP option would be a
+<BR>
+better way to handle a standardized format (as opposed to the legacy ad
+<BR>
+hoc approach), since that would allow for explicit codes, types and
+<BR>
+text, the latter of which could be explicitly passed to the application.
+<BR>
+Another benefit of using an option is that it would be ignored by legacy
+<BR>
+implementations as a matter of course.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2244.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2234.html">David L. Nicol: "keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2243">[ date ]</A>
+<A HREF="index.html#2243">[ thread ]</A>
+<A HREF="subject.html#2243">[ subject ]</A>
+<A HREF="author.html#2243">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

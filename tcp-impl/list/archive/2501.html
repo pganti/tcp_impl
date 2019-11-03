@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: initial window size</TITLE>
+<META NAME="Author" CONTENT="David St. Germain (David@StGermain.com)">
+<META NAME="Subject" CONTENT="Re: initial window size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: initial window size</H1>
+<!-- received="Thu Mar 29 18:33:53 2001" -->
+<!-- isoreceived="20010329233353" -->
+<!-- sent="Thu, 29 Mar 2001 18:26:05 -0500" -->
+<!-- isosent="20010329232605" -->
+<!-- name="David St. Germain" -->
+<!-- email="David@StGermain.com" -->
+<!-- subject="Re: initial window size" -->
+<!-- id="007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com" -->
+<!-- inreplyto="3AC3B2E8.6C59C446@isi.edu" -->
+<STRONG>From:</STRONG> David St. Germain (<A HREF="mailto:David@StGermain.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com&gt;"><EM>David@StGermain.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 29 2001 - 18:26:05 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2502.html">Vernon Schryver: "RE: initial window size"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2500.html">David St. Germain: "Re: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2498.html">Joe Touch: "Re: initial window size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2501">[ date ]</A>
+<A HREF="index.html#2501">[ thread ]</A>
+<A HREF="subject.html#2501">[ subject ]</A>
+<A HREF="author.html#2501">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Although I agree with you that this is how one would tweak the window size,
+<BR>
+the OS still has to default to something.  With Windows NT 4.0, I know the
+<BR>
+default upon installation is 512 (I just recently saw that statistic), I'm
+<BR>
+not sure what the other OS's default to upon installation, but I believe the
+<BR>
+original RFC recommendation was to start with a default of 512 and use the
+<BR>
+slow start algorithm to ramp up.
+<BR>
+<P><P><P>Dave.
+<BR>
+<P><P><P>----- Original Message -----
+<BR>
+From: &quot;Joe Touch&quot; &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com&gt;">touch@ISI.EDU</A>&gt;
+<BR>
+To: &quot;Vernon Schryver&quot; &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+<BR>
+Cc: &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+<BR>
+Sent: Thursday, March 29, 2001 5:10 PM
+<BR>
+Subject: Re: initial window size
+<BR>
+<P><P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Vernon Schryver wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; From: Martin McSweeney &lt;<A HREF="mailto:mmcsween@hopper.math.uwaterloo.ca?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;007901c0b8a7$a169f960$23379ad1@crans1.ri.home.com&gt;">mmcsween@hopper.math.uwaterloo.ca</A>&gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Hmmm... &quot;a bit much&quot;, isn't 512K an extremely large window given any
+</EM><BR>
+<EM>&gt; &gt; &gt; circumstances?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; No, it is not so very large if we are not talking about the initial
+</EM><BR>
+window
+<BR>
+<EM>&gt; &gt; size and if you care about going fast.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; 512 KBytes is only 4 Mbits and a 45 Mbit/sec pipe for only 100 ms.
+</EM><BR>
+<EM>&gt; &gt; A 5,000 mile wire has an RTT of 100 ms. from the speed of light alone.
+</EM><BR>
+<EM>&gt; &gt; Assuming zero delay from routers or other bottlenecks, you cannot reach
+</EM><BR>
+<EM>&gt; &gt; full speed with a window of only 512K on a 5,000 mile T3.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Even in a 100 Mbit/sec local area network, a window of 512K is not very
+</EM><BR>
+<EM>&gt; &gt; large, since 40 ms is not a lot to cover the delays added by a few
+</EM><BR>
+routers
+<BR>
+<EM>&gt; &gt; or bridges and the scheduling and other delays in the hosts at the ends
+</EM><BR>
+<EM>&gt; &gt; of a TCP connection.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; You almost certainly don't want a tiny 8K window on a 100 Mbit/sec or
+</EM><BR>
+<EM>&gt; &gt; faster network, since 8KBytes occupies a 100 Mbit/sec wire for only
+</EM><BR>
+<EM>&gt; &gt; 640 microseconds.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; There are networks that are fast that 512K might be reasonable even
+</EM><BR>
+<EM>&gt; &gt; for an initial congestion window.  For example, what is the right
+</EM><BR>
+<EM>&gt; &gt; initial congestion window for a 10G Ethernet?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; That might depend on whether the connection is local or not. Local
+</EM><BR>
+<EM>&gt; connections (same subnet as an attached interface) ignore the congestion
+</EM><BR>
+<EM>&gt; window in some TCP implementations.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Joe
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2502.html">Vernon Schryver: "RE: initial window size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2500.html">David St. Germain: "Re: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2498.html">Joe Touch: "Re: initial window size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2501">[ date ]</A>
+<A HREF="index.html#2501">[ thread ]</A>
+<A HREF="subject.html#2501">[ subject ]</A>
+<A HREF="author.html#2501">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Mar 29 2001 - 18:34:23 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

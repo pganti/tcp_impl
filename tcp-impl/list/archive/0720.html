@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="Jason Thorpe (thorpej@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Wed Sep 10 09:27:09 1997" -->
+<!-- isoreceived="19970910132709" -->
+<!-- sent="Wed, 10 Sep 1997 09:17:40 -0700" -->
+<!-- isosent="19970910161740" -->
+<!-- name="Jason Thorpe" -->
+<!-- email="thorpej@nas.nasa.gov" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709101617.JAA11228@lestat.nas.nasa.gov" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> Jason Thorpe (<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101617.JAA11228@lestat.nas.nasa.gov&gt;"><EM>thorpej@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 10 1997 - 12:17:40 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0721.html">Bill Fenner: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0719.html">Curtis Villamizar: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#720">[ date ]</A>
+<A HREF="index.html#720">[ thread ]</A>
+<A HREF="subject.html#720">[ subject ]</A>
+<A HREF="author.html#720">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Wed, 10 Sep 1997 08:33:29 -0600 
+<BR>
+&nbsp;<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101617.JAA11228@lestat.nas.nasa.gov&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver) wrote:
+<BR>
+<P><EM> &gt; Note that the MTU-for-local-addresses-else-default-mss hack is not
+</EM><BR>
+<EM> &gt; relevant.  A pair of BSD systems will have negogated a MSS at the
+</EM><BR>
+<EM> &gt; beginning of the TCP connection that is no larger than the smallest of
+</EM><BR>
+<EM> &gt; their two local MTU's.
+</EM><BR>
+<P>In my mind, it is relevant, in that the size of the segment you want to send
+<BR>
+should be the min of the peer's advertised MSS and the discovered path MTU.
+<BR>
+If you can't determine the latter, you need to pick some &quot;safe&quot; segment
+<BR>
+size which, in traditional BSD systems, is tcp_mssdflt [512] (or the
+<BR>
+interface MTU, for local addresses or subnets if subnets-are-local is
+<BR>
+enabled).
+<BR>
+<P>You're right that it would not be relevant if one were to fall back on
+<BR>
+the traditional BSD behavior of _when_ this computation is performed.
+<BR>
+However, I'm not suggesting crippling MSS negotiation like traditional
+<BR>
+BSD systems do.
+<BR>
+<P>I'm suggesting doing a similar computation each time a segment is to be
+<BR>
+transmitted (I probably wan't clear on that); it's not that expensive to
+<BR>
+perform.
+<BR>
+<P>I think that this is a bit like Dave's Black Hole Detection, but picks a 
+<BR>
+quick and easy fallback in lieu of Dave's more complex algorithm.
+<BR>
+Pseudo-code:
+<BR>
+<P>int
+<BR>
+tcp_segsize(connection)
+<BR>
+{
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (path has associated MTU) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segsize = route's MTU;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else if (connection has a black hole) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segsize = default [small] mss;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segsize = interface MTU;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return (min(peer's advertised MSS, segsize));
+<BR>
+}
+<BR>
+<P>If done for every segment to be transmitted, this should also do the `right
+<BR>
+thing' in the event the path changes.  It might make sense to switch the
+<BR>
+order of the &quot;path MTU&quot; and &quot;black hole&quot; checks...
+<BR>
+<P>Jason R. Thorpe                                       <A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101617.JAA11228@lestat.nas.nasa.gov&gt;">thorpej@nas.nasa.gov</A>
+<BR>
+NASA Ames Research Center                            Home: +1 408 866 1912
+<BR>
+NAS: M/S 258-6                                       Work: +1 415 604 0935
+<BR>
+Moffett Field, CA 94035                             Pager: +1 415 428 6939
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0721.html">Bill Fenner: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0719.html">Curtis Villamizar: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#720">[ date ]</A>
+<A HREF="index.html#720">[ thread ]</A>
+<A HREF="subject.html#720">[ subject ]</A>
+<A HREF="author.html#720">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

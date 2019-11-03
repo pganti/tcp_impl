@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: I-D ACTION:draft-ietf-tcpimpl-ne</TITLE>
+<META NAME="Author" CONTENT="Internet-Drafts@ietf.org (Internet-Drafts@ietf.org)">
+<META NAME="Subject" CONTENT="I-D ACTION:draft-ietf-tcpimpl-newreno-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>I-D ACTION:draft-ietf-tcpimpl-newreno-02.txt</H1>
+<!-- received="Tue Feb 16 10:54:42 1999" -->
+<!-- isoreceived="19990216155442" -->
+<!-- sent="Tue, 16 Feb 1999 10:06:40 -0500" -->
+<!-- isosent="19990216150640" -->
+<!-- name="Internet-Drafts@ietf.org" -->
+<!-- email="Internet-Drafts@ietf.org" -->
+<!-- subject="I-D ACTION:draft-ietf-tcpimpl-newreno-02.txt" -->
+<!-- id="199902161506.KAA28279@ietf.org" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Internet-Drafts@ietf.org?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-newreno-02.txt&In-Reply-To=&lt;199902161506.KAA28279@ietf.org&gt;"><EM>Internet-Drafts@ietf.org</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Feb 16 1999 - 10:06:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1581.html">Vern Paxson: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1582">[ date ]</A>
+<A HREF="index.html#1582">[ thread ]</A>
+<A HREF="subject.html#1582">[ subject ]</A>
+<A HREF="author.html#1582">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A New Internet-Draft is available from the on-line Internet-Drafts
+<BR>
+directories.  This draft is a work item of the TCP Implementation
+<BR>
+Working Group of the IETF.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title           : The NewReno Modification to TCP's Fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recovery Algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s)	: S. Floyd, T. Henderson
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filename	: draft-ietf-tcpimpl-newreno-02.txt
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages		: 11
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date		: 15-Feb-99
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+RFC 2001 [RFC2001] documents the following four intertwined TCP
+<BR>
+congestion control algorithms: Slow Start, Congestion Avoidance, Fast
+<BR>
+Retransmit, and Fast Recovery.  RFC 2001-bis [RFC2001-bis] explicitly
+<BR>
+allows certain modifications of these algorithms, including
+<BR>
+modifications that use the TCP Selective Acknowledgement (SACK) option
+<BR>
+[MMFR96], and modifications that respond to &quot;partial acknowledgments&quot;
+<BR>
+(ACKs which cover new data, but not all the data outstanding when loss
+<BR>
+was detected) in the absence of SACK.  This document describes a
+<BR>
+specific algorithm for responding to partial acknowledgments, referred
+<BR>
+to as NewReno.  This response to partial acknowledgments was first
+<BR>
+proposed by Janey Hoe in [Hoe95].
+<BR>
+<P>A URL for this Internet-Draft is:
+<BR>
+<A HREF="http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-newreno-02.txt">http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-newreno-02.txt</A>
+<BR>
+<P>Internet-Drafts are also available by anonymous FTP. Login with the username
+<BR>
+&quot;anonymous&quot; and a password of your e-mail address. After logging in,
+<BR>
+type &quot;cd internet-drafts&quot; and then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;get draft-ietf-tcpimpl-newreno-02.txt&quot;.
+<BR>
+<P>A list of Internet-Drafts directories can be found in
+<BR>
+<A HREF="http://www.ietf.org/shadow.html">http://www.ietf.org/shadow.html</A> 
+<BR>
+or <A HREF="ftp://ftp.ietf.org/ietf/1shadow-sites.txt">ftp://ftp.ietf.org/ietf/1shadow-sites.txt</A>
+<BR>
+<P><P>Internet-Drafts can also be obtained by e-mail.
+<BR>
+<P>Send a message to:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mailserv@ietf.org.
+<BR>
+In the body type:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;FILE /internet-drafts/draft-ietf-tcpimpl-newreno-02.txt&quot;.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+NOTE:	The mail server at ietf.org can return the document in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIME-encoded form by using the &quot;mpack&quot; utility.  To use this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feature, insert the command &quot;ENCODING mime&quot; before the &quot;FILE&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command.  To decode the response(s), you will need &quot;munpack&quot; or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a MIME-compliant mail reader.  Different MIME-compliant mail readers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit different behavior, especially when dealing with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;multipart&quot; MIME messages (i.e. documents which have been split
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up into multiple messages), so check your local documentation on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;how to manipulate these messages.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Below is the data which will enable a MIME compliant mail reader
+<BR>
+implementation to automatically retrieve the ASCII version of the
+<BR>
+Internet-Draft.
+<BR>
+<P><P>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1581.html">Vern Paxson: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1582">[ date ]</A>
+<A HREF="index.html#1582">[ thread ]</A>
+<A HREF="subject.html#1582">[ subject ]</A>
+<A HREF="author.html#1582">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

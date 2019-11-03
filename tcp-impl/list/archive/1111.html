@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCPIMPL: Minutes from LA Mee</TITLE>
+<META NAME="Author" CONTENT="Michael Richardson (mcr@sandelman.ottawa.on.ca)">
+<META NAME="Subject" CONTENT="Re: TCPIMPL: Minutes from LA Meeting">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCPIMPL: Minutes from LA Meeting</H1>
+<!-- received="Sun Apr 26 17:21:45 1998" -->
+<!-- isoreceived="19980426212145" -->
+<!-- sent="Sun, 19 Apr 1998 02:18:51 -0400" -->
+<!-- isosent="19980419061851" -->
+<!-- name="Michael Richardson" -->
+<!-- email="mcr@sandelman.ottawa.on.ca" -->
+<!-- subject="Re: TCPIMPL: Minutes from LA Meeting" -->
+<!-- id="199804190618.CAA01601@morden.sandelman.ottawa.on.ca" -->
+<!-- inreplyto="199804151647.MAA22744@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Michael Richardson (<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20TCPIMPL:%20Minutes%20from%20LA%20Meeting&In-Reply-To=&lt;199804190618.CAA01601@morden.sandelman.ottawa.on.ca&gt;"><EM>mcr@sandelman.ottawa.on.ca</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Apr 19 1998 - 02:18:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1110.html">Chetan Kumar: "Call for Paper ISWCM98"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1060.html">Mark Allman: "TCPIMPL: Minutes from LA Meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1113.html">Alan Cox: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1111">[ date ]</A>
+<A HREF="index.html#1111">[ thread ]</A>
+<A HREF="subject.html#1111">[ subject ]</A>
+<A HREF="author.html#1111">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+-----BEGIN PGP SIGNED MESSAGE-----
+<BR>
+<P><P><EM>&gt;&gt;&gt;&gt;&gt; &quot;Mark&quot; == Mark Allman &lt;<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20TCPIMPL:%20Minutes%20from%20LA%20Meeting&In-Reply-To=&lt;199804190618.CAA01601@morden.sandelman.ottawa.on.ca&gt;">mallman@lerc.nasa.gov</A>&gt; writes:
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; question.  He further noted that MTU discovery should be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; done without ICMP due to security concerns (and, noted that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; this might fall under ``security problems'' rather than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; ``serious problems'').  Matt [Mathis] suggested that we note the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; problem and state that we do not yet know how to solve it.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; Ran Atkinson suggested that MTU discovery is not a security
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; problem as a host must be continuously jammed with ``too
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Mark&gt; small'' ICMP messages for an attack to be successful.  Matt
+<BR>
+<P>&nbsp;&nbsp;I will make a couple of comments about this.
+<BR>
+&nbsp;&nbsp;I do not wish to refute Ran's claim --- it is entirely correct. The
+<BR>
+question is what is the impact of it? 
+<BR>
+<P>&nbsp;&nbsp;Assume a TCP connection that traverses a network, and is carried
+<BR>
+with IPsec (perhaps just AH) in &quot;transport&quot; mode. If there is some
+<BR>
+reason to believe that AH (or ESP) is on that network path, then 
+<BR>
+I would suggest that is sufficient worry about attacks or flooding
+<BR>
+with ICMP. 
+<BR>
+&nbsp;&nbsp;IPsec AH around a TCP makes a lot of sense: it eliminates
+<BR>
+practically all the TCP based attacks, and converts the SYN flooding
+<BR>
+problem to an ISAKMP SA flooding problem. ISAKMP was designed from the
+<BR>
+beginning to deal with this. 
+<BR>
+<P>&nbsp;&nbsp;Except for ICMP packets. &quot;port unreachable&quot; would originate from the
+<BR>
+destination host, which could conceivably transit with IPsec
+<BR>
+protection, but all other useful ICMP packets relevant to TCP originate
+<BR>
+from intermediate hosts/routers: 
+<BR>
+<P>&nbsp;&nbsp;- dest unreachable (Frag Needed is the one for PMTU, but the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;others are also very important)
+<BR>
+&nbsp;&nbsp;- source quench  (I'm told that few this is seldom used at present)
+<BR>
+&nbsp;&nbsp;- redirect       (really an IP level info, but it affects TCP)
+<BR>
+&nbsp;&nbsp;- time exceeded  (I think that TCP doesn't do anything with this)
+<BR>
+<P>&nbsp;&nbsp;[are there others I've missed?]
+<BR>
+<P>&nbsp;&nbsp;What can a &quot;secured&quot; TCP connection ignore, and with what effect?
+<BR>
+<P>1. unreach/net unreach   
+<BR>
+&nbsp;&nbsp;&nbsp;unreach/host unreach 
+<BR>
+&nbsp;&nbsp;&nbsp;unreach/prot unreach 
+<BR>
+&nbsp;&nbsp;&nbsp;unreach/port unreach 
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;If we ignore these, then we retransmit a lot, and finally, after a
+<BR>
+long time, we give up. If this is the SYN packet, then no data flows.
+<BR>
+If this is after the SYN packet (a node goes down), then the
+<BR>
+connection just hangs, eventually timing out and exiting. If the node
+<BR>
+comes back up again (without its IPSEC SA's), then the corresponding
+<BR>
+node will get an ISAKMP &quot;Initial Contact&quot; message from the node that
+<BR>
+rebooted when the corresponding node sends another packet.
+<BR>
+&nbsp;&nbsp;One hopes eventually ISAKMP will be smart enough not to create a 
+<BR>
+new IPsec SA, so that the two nodes can send enough TCP RSTs!
+<BR>
+<P>2. source quench
+<BR>
+<P>&nbsp;&nbsp;If we ignore these, then we may get very poor performance when the
+<BR>
+router queues fill up. However, there are better, in-protocol ways
+<BR>
+to detect congestion and deal with it. Case closed IMHO.
+<BR>
+<P>3. redirect
+<BR>
+<P>&nbsp;&nbsp;This is not exclusively a TCP issue, but an IP one. In general, they
+<BR>
+can't be trusted, so we have to ignore them. This means that packets
+<BR>
+are not routed as efficiently as they might. Are there other
+<BR>
+repercussions of ignoring them?
+<BR>
+<P>4. unreach/need fragment
+<BR>
+<P>&nbsp;&nbsp;If we ignore this one, and we are setting the DF bit, we get no
+<BR>
+service. This is serious. If we disable PMTU for IPsec protected 
+<BR>
+TCP sessions, then, with IPv4, we simply get inefficient TCP. On very
+<BR>
+lossy links, however, that may result in no useful throughput. (And I
+<BR>
+suspect that these kinds of links may become more and more common)
+<BR>
+<P>&nbsp;&nbsp;On IPv6, we get no service, since DF is implicitely set.
+<BR>
+&nbsp;&nbsp;[I should note that there are some heuristics that might be used
+<BR>
+that are equivalent to &quot;ignore ICMP&quot;, but do gain some information
+<BR>
+from it.]
+<BR>
+<P>&nbsp;&nbsp;I wrote a draft on how to do PMTU with ICMPs from the *receiving*
+<BR>
+node. It should work with IPv4 easily. I have some ideas, and have
+<BR>
+read some other ideas on how to adapt this for IPv6. (The problem is
+<BR>
+essentially equivalent to the MTU Black Hole problem).
+<BR>
+<P>&nbsp;&nbsp;I would therefore like to second Matt's suggestion. 
+<BR>
+<P>&nbsp;&nbsp;I would further ask the question: does IPsec make all third party
+<BR>
+ICMP's obsolete? Does IPv6 add useful new ones? Or problematic new
+<BR>
+ones?
+<BR>
+<P>]     Network Security Consulting and Contract Programming      |  SSH IPsec  [
+<BR>
+]   Michael Richardson, Sandelman Software Works, Ottawa, ON    |international[
+<BR>
+] <A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20TCPIMPL:%20Minutes%20from%20LA%20Meeting&In-Reply-To=&lt;199804190618.CAA01601@morden.sandelman.ottawa.on.ca&gt;">mcr@sandelman.ottawa.on.ca</A> <A HREF="http://www.sandelman.ottawa.on.ca/">http://www.sandelman.ottawa.on.ca/</A> |strong crypto[
+<BR>
+] panic(&quot;Just another NetBSD/notebook using, kernel hacking, security guy&quot;);  [
+<BR>
+<P><P><P>&nbsp;&nbsp;
+<BR>
+- -----BEGIN PGP SIGNATURE-----
+<BR>
+Version: 2.6.3ia
+<BR>
+Charset: latin1
+<BR>
+Comment: Processed by Mailcrypt 3.4, an Emacs/PGP interface
+<BR>
+<P>iQBVAwUBNTmWAB4XQavxnHg9AQGcsgH9GEaoYQ4ZcpwcSPs+8cCXogCTAUTo14ay
+<BR>
+6UFYPCGYKlAxFO9I+OGxGlCAN/siZn5NKadYfa4lF8FYaLH5nBBniA==
+<BR>
+=u4q0
+<BR>
+- -----END PGP SIGNATURE-----
+<BR>
+<P>-----BEGIN PGP SIGNATURE-----
+<BR>
+Version: 2.6.3ia
+<BR>
+Charset: latin1
+<BR>
+Comment: Processed by Mailcrypt 3.4, an Emacs/PGP interface
+<BR>
+<P>iQBVAwUBNTmXRB4XQavxnHg9AQFCJgH/VA/yHMQ6iZEH8V2eccUlsNtPr3vXmSEE
+<BR>
+QPAfY4h42XuM9YkPcEIVk/81qjBCqCW0S+kQzPWVob15MSZk6aEZWQ==
+<BR>
+=kTaO
+<BR>
+-----END PGP SIGNATURE-----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1110.html">Chetan Kumar: "Call for Paper ISWCM98"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1060.html">Mark Allman: "TCPIMPL: Minutes from LA Meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1112.html">Michael C. Richardson: "ICMP and TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1113.html">Alan Cox: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1111">[ date ]</A>
+<A HREF="index.html#1111">[ thread ]</A>
+<A HREF="subject.html#1111">[ subject ]</A>
+<A HREF="author.html#1111">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

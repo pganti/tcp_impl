@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep-Alive size</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: Keep-Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep-Alive size</H1>
+<!-- received="Sat Mar  8 19:28:51 1997" -->
+<!-- isoreceived="19970309002851" -->
+<!-- sent="Sat, 8 Mar 1997 19:39:32 +0100 (MET)" -->
+<!-- isosent="19970308183932" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: Keep-Alive size" -->
+<!-- id="199703081839.TAA22453@labinfo.iet.unipi.it" -->
+<!-- inreplyto="199703081759.MAA21194@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199703081839.TAA22453@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 08 1997 - 13:39:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0116.html">Luigi Rizzo: "retransmit count ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0122.html">Casper Dik: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#115">[ date ]</A>
+<A HREF="index.html#115">[ thread ]</A>
+<A HREF="subject.html#115">[ subject ]</A>
+<A HREF="author.html#115">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt;&gt; This all seems to imply that Keep-Alive packets should contain at
+</EM><BR>
+<EM>&gt; &gt;&gt; least one byte of data.  However, there is at least one stack out
+</EM><BR>
+<EM>&gt; &gt;&gt; there which only sends zero length Keep-Alives and there is a stack
+</EM><BR>
+<EM>&gt; &gt;&gt; out there which does not ACK them.  Both stacks seem to be
+</EM><BR>
+<EM>&gt; &gt;&gt; conformant to rfc1122 but the behaviour is not the desired one at
+</EM><BR>
+<EM>&gt; &gt;&gt; all.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Basically all bets are off.  The best thing to do on the send side is
+</EM><BR>
+<EM>&gt; &gt; clearly to resend the last byte.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; What if there is no last byte (ie, if that direction has not sent any
+</EM><BR>
+<EM>&gt; data since the initial SYN/SYN-ACK/ACK exchange)?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Would it do any harm to invent a fictitious last byte and send it?  In
+</EM><BR>
+<EM>&gt; this condition it's guaranteed to be outside the receiver's idea of
+</EM><BR>
+<EM>&gt; valid sequence numbers, since it duplicates the SYN's sequence number.
+</EM><BR>
+<P>perhaps the correct wording should have been &quot;resend the item with the
+<BR>
+last acked sequence number -- be it a data byte or a SYN.
+<BR>
+<P>However another problem comes to mind -- the sender might not have the
+<BR>
+&quot;last byte&quot; available anymore since, once acked, data can be flushed
+<BR>
+(except in the case of a SYN of course). One can send a random byte of
+<BR>
+course, but then the receiver might really become suspicious....
+<BR>
+<P>This suggests that acking zero-sized Keep-Alives should be mandatory.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199703081839.TAA22453@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0116.html">Luigi Rizzo: "retransmit count ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0122.html">Casper Dik: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#115">[ date ]</A>
+<A HREF="index.html#115">[ thread ]</A>
+<A HREF="subject.html#115">[ subject ]</A>
+<A HREF="author.html#115">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

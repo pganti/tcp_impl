@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: gaps in a tcp flow</TITLE>
+<META NAME="Author" CONTENT="Murali Bashyam (mbashyam@cisco.com)">
+<META NAME="Subject" CONTENT="Re: gaps in a tcp flow">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: gaps in a tcp flow</H1>
+<!-- received="Wed Apr 30 19:13:26 2003" -->
+<!-- isoreceived="20030430231326" -->
+<!-- sent="Wed, 30 Apr 2003 15:58:33 -0700" -->
+<!-- isosent="20030430225833" -->
+<!-- name="Murali Bashyam" -->
+<!-- email="mbashyam@cisco.com" -->
+<!-- subject="Re: gaps in a tcp flow" -->
+<!-- id="3EB05519.393FBA5C@cisco.com" -->
+<!-- inreplyto="200304301936.PAA01712@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Murali Bashyam (<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB05519.393FBA5C@cisco.com&gt;"><EM>mbashyam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 2003 - 18:58:33 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2942.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2942.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2943">[ date ]</A>
+<A HREF="index.html#2943">[ thread ]</A>
+<A HREF="subject.html#2943">[ subject ]</A>
+<A HREF="author.html#2943">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mark Allman wrote:
+<BR>
+<P>Doesn't this cause  problems for the initial RTT estimate of the server ? And in
+<BR>
+the attached example the delay seems to be negligible so it's ok, but if the
+<BR>
+client is delaying the ACK by 70 ms  to piggyback
+<BR>
+the GET request, it seems like a  variant of stretch ack violation.
+<BR>
+<P>Murali
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ------- Forwarded Message
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Date: Wed, 30 Apr 2003 12:04:12 -0700
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:rick_jones2@hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB05519.393FBA5C@cisco.com&gt;">rick_jones2@hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Reply-To: <A HREF="mailto:raj@cup.hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB05519.393FBA5C@cisco.com&gt;">raj@cup.hp.com</A>
+</EM><BR>
+<EM>&gt; Organization: the Unofficial HP
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB05519.393FBA5C@cisco.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: gaps in a tcp flow
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; The ACK for the SYN-ACK should not be delayed at all, and certainly
+</EM><BR>
+<EM>&gt; &gt; not by 70 ms, there is no aspect of TCP protocol that specifies such a
+</EM><BR>
+<EM>&gt; &gt; behaviour. So i'd guess that it is either the implementation or the
+</EM><BR>
+<EM>&gt; &gt; network that's causing this behaviour, although network seems less
+</EM><BR>
+<EM>&gt; &gt; probable.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It is entirely possible that the ACK of a SYN|ACK could be delayed.
+</EM><BR>
+<EM>&gt; Particularly if the implementation is wanting to try to bundle the ACK
+</EM><BR>
+<EM>&gt; with the request data.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Here is a snippet of a netperf TCP_CRR test between an HP-UX 11 system
+</EM><BR>
+<EM>&gt; (tardy)  and an HP-UX 11.11 system (sweb156):
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 13:00:14.077265 tardy.43873 &gt; sweb156.54430: S 217593471:217593471(0)
+</EM><BR>
+<EM>&gt; win 32768 &lt;mss 1460,wscale 0,nop&gt; (DF)
+</EM><BR>
+<EM>&gt; 13:00:14.077399 sweb156.54430 &gt; tardy.43873: S 3147399939:3147399967(28)
+</EM><BR>
+<EM>&gt; ack 217593472 win 4096
+</EM><BR>
+<EM>&gt; 13:00:14.077583 tardy.43873 &gt; sweb156.54430: P 1:2(1) ack 1 win 32768
+</EM><BR>
+<EM>&gt; (DF)
+</EM><BR>
+<EM>&gt; 13:00:14.077806 sweb156.54430 &gt; tardy.43873: P 1:2(1) ack 2 win 4096
+</EM><BR>
+<EM>&gt; 13:00:14.077848 sweb156.54430 &gt; tardy.43873: F 2:2(0) ack 2 win 4096
+</EM><BR>
+<EM>&gt; 13:00:14.077888 tardy.43873 &gt; sweb156.54430: . ack 3 win 32768 (DF)
+</EM><BR>
+<EM>&gt; 13:00:14.077928 tardy.43873 &gt; sweb156.54430: F 2:2(0) ack 3 win 0 (DF)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Notice how the initial single byte request is piggy-backed on the ACK of
+</EM><BR>
+<EM>&gt; the SYN|ACK from sweb156.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If you examine some of IBM's AIX SPECweb99* submittals - for example:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; <A HREF="http://www.spec.org/osg/web99ssl/results/res2003q1/web99ssl-20030217-00046.html">http://www.spec.org/osg/web99ssl/results/res2003q1/web99ssl-20030217-00046.html</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; In the client notes you will see a setting that delays the ACK by the
+</EM><BR>
+<EM>&gt; client of the SYN|ACK from the server.  It does the same thing (HP-UX
+</EM><BR>
+<EM>&gt; does not it seems from above :) for the ACK of FINs (at least according
+</EM><BR>
+<EM>&gt; to the discussion).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; rick jones
+</EM><BR>
+<EM>&gt; - --
+</EM><BR>
+<EM>&gt; Wisdom Teeth are impacted, people are affected by the effects of events.
+</EM><BR>
+<EM>&gt; these opinions are mine, all mine; HP might not want them anyway... :)
+</EM><BR>
+<EM>&gt; feel free to post, OR email to raj in cup.hp.com  but NOT BOTH...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ------- End of Forwarded Message
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2942.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2942.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2943">[ date ]</A>
+<A HREF="index.html#2943">[ thread ]</A>
+<A HREF="subject.html#2943">[ subject ]</A>
+<A HREF="author.html#2943">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Apr 30 2003 - 19:13:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

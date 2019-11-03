@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 19:53:00 2000" -->
+<!-- isoreceived="20000228005300" -->
+<!-- sent="Sun, 27 Feb 2000 17:44:12 -0700 (MST)" -->
+<!-- isosent="20000228004412" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002280044.RAA02693@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280044.RAA02693@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 19:44:12 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2045">[ date ]</A>
+<A HREF="index.html#2045">[ thread ]</A>
+<A HREF="subject.html#2045">[ subject ]</A>
+<A HREF="author.html#2045">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;David R. Cheriton&quot; &lt;<A HREF="mailto:cheriton@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280044.RAA02693@calcite.rhyolite.com&gt;">cheriton@cisco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;   Clearly, data is being received from hardware and software does not
+</EM><BR>
+<EM>&gt; get to touch it until it has been stored to some memory.  My 
+</EM><BR>
+<EM>&gt; assumption is that the storage system memory is arranged in fixed
+</EM><BR>
+<EM>&gt; size pages of disk/file pages.  Without hardware RDMA to the storage
+</EM><BR>
+<EM>&gt; level, I believe one requires an extra copy, from whatever the
+</EM><BR>
+<EM>&gt; hardware delivers to what the storage system expects.  Either
+</EM><BR>
+<EM>&gt; you use twice the bandwidth in the storage system memory system or
+</EM><BR>
+<EM>&gt; or else you have a separate memory system for the network, and
+</EM><BR>
+<EM>&gt; have software/processor power adequate to copy between at wire
+</EM><BR>
+<EM>&gt; speed (with all the associated support facilities for this processor.)
+</EM><BR>
+<EM>&gt;  Unless there is something wrong with this reasoning,
+</EM><BR>
+<EM>&gt; it seems like a cost issue of providing the above hardware resources
+</EM><BR>
+<EM>&gt; vs. providing a NIC chip that can RDMA.  
+</EM><BR>
+<P>Depending on how you are counting copies, that reasoning has been wrong
+<BR>
+in commercial UNIX systems for more than 10 years.
+<BR>
+Do you use the RDMA bits before IP checksum, the TCP checksum, and the
+<BR>
+medium FCS or checksum have been checked?  If not, if you receive the
+<BR>
+entire link layer frame into some kind of temporary buffer or FIFO,
+<BR>
+probably in the &quot;network interface card/controller,&quot; to check the trailing
+<BR>
+FCS and before using the RDMA bits, then commercial UNIX systems have been
+<BR>
+doing as you say to save copies since the late 1980's.  As I said before,
+<BR>
+such systems were a part of what killed Protocol Engines Inc.
+<BR>
+<P>If you do use the RDMA bits in the TCP header after 50-60 bytes of
+<BR>
+the frame have arrived, but before the frame FCS, aren't you worried
+<BR>
+about bit rot in the RDMA?
+<BR>
+<P><EM>&gt; My guessitimate is that the software-only approach would be easily
+</EM><BR>
+<EM>&gt; 10 times more expensive here at the higher speed rates, of 10 Gbps.
+</EM><BR>
+<EM>&gt; If there is serious doubt about the merits of real hardware support,
+</EM><BR>
+<EM>&gt; we should try to quantify costs further at these speed ranges, IMHO.
+</EM><BR>
+<P>By &quot;expensive,&quot; are you talking about dollars or bits/second?
+<BR>
+<P>Regardless, if you look at the number of CPU cycles or gates in custom
+<BR>
+silicon required to support incoming page flipping in old, existing
+<BR>
+implementations, I bet you'll find that they are less &quot;expensive&quot; than
+<BR>
+any likely RDMA implementation.  Power of 2 modular arithmetic is awfully
+<BR>
+cheap compared to parsing and validating TCP options.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; It would help me to have a more careful definition of the types of
+</EM><BR>
+<EM>&gt; attacks you have in mind.  In an unsecure network with intruders,
+</EM><BR>
+<EM>&gt; presumably I can end up with bad data in the right buffer
+</EM><BR>
+<EM>&gt; or right data in the wrong buffer without using RDMA.
+</EM><BR>
+<EM>&gt; Do you view we have made things worse, and if so, how?
+</EM><BR>
+<EM>&gt; or are you objecting to us not making things better?
+</EM><BR>
+<P>Is it possible for a bad guy to use RDMA to put bad data into memory
+<BR>
+that is not a buffer?
+<BR>
+<P>If the RID does no more than choose from a safe list of buffers, then how
+<BR>
+does RDMA usefully differ from the old FDDI, ATM, and HIPPI implementations
+<BR>
+that put incoming page-flippable data in buffers that get into user space
+<BR>
+with the data having been seen on the system bus the absolute minimum
+<BR>
+number of times for any scheme, including RDMA, once?
+<BR>
+Systems I've worked on have done mbuf allocation in the network interface
+<BR>
+hardware, including putting page-flippable payloads into page-mbufs that
+<BR>
+can eventually be flipped into user space.  And of course, take care of
+<BR>
+the TCP or UDP checksum.
+<BR>
+<P>Given the recently described extensions to readv(), absolutely
+<BR>
+all data received by a system like that would be page-flippable,
+<BR>
+and without needing the silicon or CPU cycles to parse RDMA options
+<BR>
+or requiring the sender to send RDMA options or even know that the
+<BR>
+receiver is being fast.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280044.RAA02693@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2045">[ date ]</A>
+<A HREF="index.html#2045">[ thread ]</A>
+<A HREF="subject.html#2045">[ subject ]</A>
+<A HREF="author.html#2045">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

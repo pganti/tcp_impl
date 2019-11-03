@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="stanislav shalunov (shalunov@internet2.edu)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Tue Sep 19 21:27:39 2000" -->
+<!-- isoreceived="20000920012739" -->
+<!-- sent="19 Sep 2000 21:24:11 -0400" -->
+<!-- isosent="20000920012411" -->
+<!-- name="stanislav shalunov" -->
+<!-- email="shalunov@internet2.edu" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="87u2bbn9dw.fsf@cain.internet2.edu" -->
+<!-- inreplyto="200009191910.e8JJAcK14478@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> stanislav shalunov (<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87u2bbn9dw.fsf@cain.internet2.edu&gt;"><EM>shalunov@internet2.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 21:24:11 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2358.html">Andi Kleen: "Re: TCP sequence numbers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2359">[ date ]</A>
+<A HREF="index.html#2359">[ thread ]</A>
+<A HREF="subject.html#2359">[ subject ]</A>
+<A HREF="author.html#2359">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87u2bbn9dw.fsf@cain.internet2.edu&gt;">vjs@calcite.rhyolite.com</A>&gt; writes:
+<BR>
+<P><EM>&gt; I'm not sure I agree that predicting ISN's would be sufficient to
+</EM><BR>
+<EM>&gt; get through typical SMTP relay criteria.
+</EM><BR>
+<P>All real-life SMTP servers I know base their relay permission criteria
+<BR>
+on IP numbers (sometimes dynamically configured, as in
+<BR>
+SMTP-after-POP).  In any case, there's usually an easily guessable
+<BR>
+range of IPs that the server would relay for (dial-up numbers of a
+<BR>
+given provider, /24 of the server itself for small organization, etc.).
+<BR>
+<P>You must mean authenticated SMTP.  We have yet to see it widely used.
+<BR>
+<P><EM>&gt; I definitiely do not agree with &quot;untraceable,&quot; because of the
+</EM><BR>
+<EM>&gt; defenses that have evolved against other forged IP-source address
+</EM><BR>
+<EM>&gt; attacks.
+</EM><BR>
+<P>Technically, it's not harder or easier to trace than a UDP packet that
+<BR>
+came with bogus source address (and that's hard).  The significant
+<BR>
+non-technical distinction is that abuse desk personnel has been
+<BR>
+trained to trust Received lines their mail server has written.
+<BR>
+<P><EM>&gt; Then there is the fact that in most of a decade of trying, not one
+</EM><BR>
+<EM>&gt; spammer has been found that can forge a believable Received: line,
+</EM><BR>
+<EM>&gt; despite the absolutely trivial effort needed.
+</EM><BR>
+<P>I seem to be getting some spam with syntactically plausible forged
+<BR>
+Received lines (I cannot be sure since there's no way to figure out
+<BR>
+whether what seems to be a relay in South Dakota isn't actually the
+<BR>
+spammer's machine, cleverly putting itself into ORBS and generating
+<BR>
+bogus Received lines that point to Sprint dialup network).  That's not
+<BR>
+the point.  Spammers and other network abusers will learn only as fast
+<BR>
+as they need to--but not slower than that either.
+<BR>
+<P><EM>&gt; If you're smart enough to turn off .rhosts, then let's hope you have not
+</EM><BR>
+<EM>&gt; made the gross blunder of using IP addresses as authenticators for your
+</EM><BR>
+<EM>&gt; CGI scripts or the infinite number of similar stupid mistakes.
+</EM><BR>
+<P>IP numbers don't have to be used for authentication to be useful for
+<BR>
+tracking purposes.  Bogus complaints with doctored &quot;screenshots&quot; sent
+<BR>
+by &quot;personal firewalls&quot; nonwithstanding.
+<BR>
+<P><EM>&gt; Consider that the serious, real life attacks in the last year or two
+</EM><BR>
+<EM>&gt; that have involved forged IP source addresses.
+</EM><BR>
+<P>Forging source of TCP connections would be impossible if ISNs were
+<BR>
+unpredictable.  You're saying that forging sources of TCP traffic (or
+<BR>
+did you mean UDP and SYNs) was used in unspecified serious attacks.
+<BR>
+Evidently, prevention of such spoofing would make investigation
+<BR>
+easier.  At the same time, you place no value in this prevention.
+<BR>
+<P>Or did you mean DDoS &quot;attacks&quot;.  They're usually traced by the amount
+<BR>
+of traffic anyway, and this is simple enough.
+<BR>
+<P><EM>&gt; No one is suggesting not using enough entropy and suitable software to
+</EM><BR>
+<EM>&gt; generate ISN's that cannot in practice be guessed, because it is
+</EM><BR>
+<EM>&gt; sufficiently cheap.  On the other hand, I suspect that 50 CPU cycles is
+</EM><BR>
+<EM>&gt; ridiculously low for your Yarrow-160, what with its use of 3-DES and SHA.
+</EM><BR>
+<P>That's true, 3DES would be more expensive.  I didn't mean to say that
+<BR>
+the exact code with Yarrow with the exact primitives chosen by
+<BR>
+Counterpane should be used.  You can have much cheaper ciphers than
+<BR>
+3DES (and they would provide adequate security for the purposes of ISN
+<BR>
+generation).
+<BR>
+<P>AES candidates have much better cycles per byte than 3DES, which is
+<BR>
+very slow--but most researched, and thus most trusted--block cipher
+<BR>
+algorithm.  One doesn't even need to use block cipher, which I gave as
+<BR>
+an example.  Hardware implementations of stream ciphers will be faster.
+<BR>
+<P><PRE>
+-- 
+Stanislav Shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87u2bbn9dw.fsf@cain.internet2.edu&gt;">shalunov@internet2.edu</A>&gt;	Internet Engineer, Internet2
+<P>A large number of installed systems work by fiat.  That is, they work
+by being declared to work.                             -- Anatol Holt
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2360.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2358.html">Andi Kleen: "Re: TCP sequence numbers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2359">[ date ]</A>
+<A HREF="index.html#2359">[ thread ]</A>
+<A HREF="subject.html#2359">[ subject ]</A>
+<A HREF="author.html#2359">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 21:28:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Fri Apr 24 07:34:14 1998" -->
+<!-- isoreceived="19980424113414" -->
+<!-- sent="Fri, 24 Apr 1998 07:53:29 -0600 (MDT)" -->
+<!-- isosent="19980424135329" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804241353.HAA10445@calcite.rhyolite.com" -->
+<!-- inreplyto="Last Call for draft-floyd-incr-init-win-02.txt" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 24 1998 - 09:53:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1102.html">momuc98: "MoMuC'98: 2nd Call for Papers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1105.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1107.html">Scott Lawrence: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1103">[ date ]</A>
+<A HREF="index.html#1103">[ thread ]</A>
+<A HREF="subject.html#1103">[ subject ]</A>
+<A HREF="author.html#1103">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;David S. Miller&quot; &lt;<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">davem@dm.cobaltmicro.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">vjs@calcite.rhyolite.com</A>
+</EM><BR>
+<EM>&gt; CC: <A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">craig@aland.bbn.com</A>, <A HREF="mailto:vishnu@cs.ucr.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">vishnu@cs.ucr.edu</A>, <A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">mallman@lerc.nasa.gov</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:sob@harvard.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">sob@harvard.edu</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">vern@ee.lbl.gov</A>
+</EM><BR>
+<P><EM>&gt;    The main issue is that if your pipe to the Internet cannot carry 4
+</EM><BR>
+<EM>&gt;    TCP streams, then you would be wise to reduce the number of streams
+</EM><BR>
+<EM>&gt;    that that your WWW browser opens simultaneously.  The reason for 4
+</EM><BR>
+<EM>&gt;    TCP streams is in large part due to the initial start-up problem
+</EM><BR>
+<EM>&gt;    that the proposal is intended to help.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Firstly, it is not a configurable parameter for most browsers I know
+</EM><BR>
+<EM>&gt; of, and can't be changed unless you have the source to the browser.
+</EM><BR>
+<P>On the contrary, it is configurable in Netscape for both Unix and Win95.
+<BR>
+I can't see where to set it in Internet Explorer on Win95, but that
+<BR>
+probably proves more about me than IE.
+<BR>
+<P>Moreover, since the proposed change to the initial window size is not
+<BR>
+configurable, you would need new HTTP PC client to implement it, and it
+<BR>
+seems reasonable that when (and if) your browser vendor changes the initial
+<BR>
+window size in the TCP stack it ships, it will also change the default
+<BR>
+number of TCP streams.
+<BR>
+<P><P><EM>&gt; Secondly, I was under the impression that the 4 connections trick
+</EM><BR>
+<EM>&gt; employed by web browsers was classified by this working group as
+</EM><BR>
+<EM>&gt; incorrect behavior and one that provokes congestion in the internet?
+</EM><BR>
+<P>I've been watching the tcp-impl mailing list for some time, but do not
+<BR>
+recall any such simply statement.  There have been statements deprecating
+<BR>
+the 4 link trick (or higher--I've found larger numbers useful in some
+<BR>
+situations), but I do not recall any indication that there is consensus
+<BR>
+that the 4 line trick is bad given HTTP as currently deployed.
+<BR>
+<P><P><EM>&gt;    Also note that the change is NOT a factor of 4.  As has been noted
+</EM><BR>
+<EM>&gt;    repeatedly, one of the most common family of systems (particularly
+</EM><BR>
+<EM>&gt;    those used for WWW servers) has for years started with 2, so that
+</EM><BR>
+<EM>&gt;    the change is a factor of 2.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; And I was very happy when this working group finally pointed this out
+</EM><BR>
+<EM>&gt; in the known problems working draft, and classified it as a bug.
+</EM><BR>
+<P>That is a purely political statement given the proposal.
+<BR>
+<P>Why didn't you respond to the technical substance of my response to your
+<BR>
+objection?  Technically, just how is it that in your situation you would
+<BR>
+be losing 12KBytes given the proposed change, and why wouldn't you make
+<BR>
+the changes that are obviously necessary regardless of whether the proposal
+<BR>
+is implemented near you, especially to increase the buffering on the ISP
+<BR>
+side of your modems to 16KBytes?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804241353.HAA10445@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1102.html">momuc98: "MoMuC'98: 2nd Call for Papers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1104.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1105.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1107.html">Scott Lawrence: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1103">[ date ]</A>
+<A HREF="index.html#1103">[ thread ]</A>
+<A HREF="subject.html#1103">[ subject ]</A>
+<A HREF="author.html#1103">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: First SACK-permitted on &lt;</TITLE>
+<META NAME="Author" CONTENT="Richard Wendland (richard@starburst.demon.co.uk)">
+<META NAME="Subject" CONTENT="Re: First SACK-permitted on &lt;SYN,ACK&gt;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: First SACK-permitted on &lt;SYN,ACK&gt;</H1>
+<!-- received="Mon Aug 14 13:31:27 2000" -->
+<!-- isoreceived="20000814173127" -->
+<!-- sent="Mon, 14 Aug 2000 18:14:53 +0100 (BST)" -->
+<!-- isosent="20000814171453" -->
+<!-- name="Richard Wendland" -->
+<!-- email="richard@starburst.demon.co.uk" -->
+<!-- subject="Re: First SACK-permitted on &lt;SYN,ACK&gt;" -->
+<!-- id="200008141714.SAA08439@starburst.demon.co.uk" -->
+<!-- inreplyto="Pine.NEB.4.05.10008081858000.24896-100000@tesla.psc.edu" -->
+<STRONG>From:</STRONG> Richard Wendland (<A HREF="mailto:richard@starburst.demon.co.uk?Subject=Re:%20First%20SACK-permitted%20on%20&lt;SYN,ACK&gt;&In-Reply-To=&lt;200008141714.SAA08439@starburst.demon.co.uk&gt;"><EM>richard@starburst.demon.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Aug 14 2000 - 13:14:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2315.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2285.html">Matt Mathis: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2289.html">Bernie Volz: "RE: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2314">[ date ]</A>
+<A HREF="index.html#2314">[ thread ]</A>
+<A HREF="subject.html#2314">[ subject ]</A>
+<A HREF="author.html#2314">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; In my copious spare time I would love to run a semi-production web server that
+</EM><BR>
+<EM>&gt; always sent late experimental (unpublished) options to see if I could detect
+</EM><BR>
+<EM>&gt; any systems with bugs.  I would bet not, and would then consider proposing to
+</EM><BR>
+<EM>&gt; revise 1323 to allow and even encourage late TS options.  (In my spare time!)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I wish that somebody would actually try this experiment or reconstruct more
+</EM><BR>
+<EM>&gt; details of the history.
+</EM><BR>
+<P>Your wish has been partly granted!
+<BR>
+<P>A number of HTTP load balancing devices or firewalls do some odd (if
+<BR>
+not evil) things with TCP.
+<BR>
+<P>One particular device indeed seems particularly broken, in that it
+<BR>
+removes all TCP options from SYN-ACK, and then in-effect sends them on
+<BR>
+the next ACK!  Thus for example MSS or window-scale options are on a
+<BR>
+plain ACK; so although these aren't experimental options, they would be
+<BR>
+thoroughly unexpected, potentially breaking TCP stacks.
+<BR>
+<P>This particular device is in use on at least something like 30 IP
+<BR>
+addresses, running about 50 websites, worldwide.  I don't recognise
+<BR>
+any of these sites as especially well-known, but some do seem serious
+<BR>
+websites that probably have significant use.
+<BR>
+<P>So although this device isn't in widespread use, it probably has
+<BR>
+non-trivial use, fairly successfully we must assume.  However the
+<BR>
+operators of these sites aren't likely to be very TCP knowledgeable,
+<BR>
+so maybe there are problems with clients which they don't recognise
+<BR>
+and report.
+<BR>
+<P>A point to bear in mind though, as Alan Cox pointed out, is that Internet
+<BR>
+connected devices will often see odd TCP effects from hostile actions.
+<BR>
+But it may be that off-Internet devices will show significant problems
+<BR>
+with unexpected TCP options.  I recall that when FreeBSD enabled T/TCP
+<BR>
+by default, there were some reported problems with terminal servers,
+<BR>
+and maybe these intranet devices should be the area of most concern.
+<BR>
+<P>Some tcpdump output from websites using the above mentioned device are
+<BR>
+below.  Note another oddity of the device is a zero window on the SYN-ACK.
+<BR>
+<P><P>This isn't the only such odd device.  Another, in widespread use,
+<BR>
+seems in effect to remove all TCP options other than MSS from SYN-ACK.
+<BR>
+But later segments are allowed with all TCP options in place, so TCP
+<BR>
+stacks will see non-negotiated options, like late TS options; but these
+<BR>
+would only go to TCP stacks that knew about them as they would be in
+<BR>
+response to those offered on the SYN.
+<BR>
+<P><P>Both these devices seem to me, by removing window-scale on SYN-ACK, to
+<BR>
+have the potential to make the two ends think that different window-scale
+<BR>
+factors are agreed; but I have not demonstrated this.  So maybe they break
+<BR>
+TCP in this regard, even if they get away with the rest of what they do.
+<BR>
+<P><P>Here's some trimmed tcpdump output from the first-mentioned device.
+<BR>
+<P>www.allegiancehealth.com:
+<BR>
+<P>CLIENT1.6170 &gt; www.allegiance.net.http: S 420261394:420261394(0) win 512 &lt;mss 984&gt;
+<BR>
+www.allegiance.net.http &gt; CLIENT1.6170: S 2893365979:2893365979(0) ack 420261395 win 0
+<BR>
+CLIENT1.6170 &gt; www.allegiance.net.http: . ack 1 win 32472 (DF)
+<BR>
+www.allegiance.net.http &gt; CLIENT1.6170: . ack 1 win 8856 &lt;mss 1460&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^            ^^^^^^^^^^
+<BR>
+CLIENT1.6170 &gt; www.allegiance.net.http: P 1:18(17) ack 1 win 32472 (DF)
+<BR>
+www.allegiance.net.http &gt; CLIENT1.6170: . ack 18 win 8839 (DF)
+<BR>
+...
+<BR>
+<P><P>www.chuden-cs.co.jp:
+<BR>
+<P>CLIENT2.3355 &gt; ccsgw1.chuden-cs.co.jp.http: S 2013930150:2013930150(0) win 16384 &lt;mss 1460,nop,wscale 0,nop,nop,timestamp 5546525 0&gt; (DF)
+<BR>
+ccsgw1.chuden-cs.co.jp.http &gt; CLIENT2.3355: S 351095432:351095432(0) ack 2013930151 win 0
+<BR>
+CLIENT2.3355 &gt; ccsgw1.chuden-cs.co.jp.http: . ack 1 win 16384 (DF)
+<BR>
+ccsgw1.chuden-cs.co.jp.http &gt; CLIENT2.3355: . ack 1 win 10136 &lt;nop,nop,timestamp 591073401 5546525,nop,wscale 0,mss 1460&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<BR>
+CLIENT2.3355 &gt; ccsgw1.chuden-cs.co.jp.http: P 1:18(17) ack 1 win 16384 (DF)
+<BR>
+ccsgw1.chuden-cs.co.jp.http &gt; CLIENT2.3355: . ack 18 win 10220 (DF)
+<BR>
+...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Richard
+<BR>
+<PRE>
+-- 
+Richard Wendland				<A HREF="mailto:richard@wendland.org.uk?Subject=Re:%20First%20SACK-permitted%20on%20&lt;SYN,ACK&gt;&In-Reply-To=&lt;200008141714.SAA08439@starburst.demon.co.uk&gt;">richard@wendland.org.uk</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2315.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2285.html">Matt Mathis: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2289.html">Bernie Volz: "RE: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2314">[ date ]</A>
+<A HREF="index.html#2314">[ thread ]</A>
+<A HREF="subject.html#2314">[ subject ]</A>
+<A HREF="author.html#2314">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

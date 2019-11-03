@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 11:16:54 1998" -->
+<!-- isoreceived="19980820151654" -->
+<!-- sent="Thu, 20 Aug 1998 12:14:14 -0600 (MDT)" -->
+<!-- isosent="19980820181414" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201814.MAA10078@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201814.MAA10078@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 14:14:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1246.html">braden@ISI.EDU: "TCP KeepAlive Flame War revisited every 10 years, whether we need it or not..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1244.html">vijayaraghavan_jayanth: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1245">[ date ]</A>
+<A HREF="index.html#1245">[ thread ]</A>
+<A HREF="subject.html#1245">[ subject ]</A>
+<A HREF="author.html#1245">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201814.MAA10078@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<P><EM>&gt; &gt; today.  Isn't it true essentially all TCP traffic is HTTP, SMTP, FTP,
+</EM><BR>
+<EM>&gt; &gt; SNMP, DNS, and POP/IMAP?  Which of those has application-layer keepalives
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Most IMAP, POP3 has long idle periods, SMTP has idle periods - with the
+</EM><BR>
+<EM>&gt; connection cache in sendmail quite substantial ones
+</EM><BR>
+<P>How long are those IMAP/POP idle periods?  Are they ever 2 hours?
+<BR>
+If the keepalive interval were 15 minutes, what is the probability
+<BR>
+that a keepalive would be wasted bandwidth on an idle IMAP/POP connection
+<BR>
+and what is the probability that it would not be a waste by killing
+<BR>
+a dead connection?
+<BR>
+<P>How long is a sendmail connection cached?  I thought it was no more than
+<BR>
+a few minutes.  The default BSD keepalive interval is 2 hours.  I've never
+<BR>
+seen sendmail cache an SMTP connection for a fraction that long, but I
+<BR>
+have seen stale, dead STMP connections.  There is the non-standard sendmail
+<BR>
+application layer timeout.  If you set it to less than 2 hours, it will
+<BR>
+fire before the TCP keepalive.
+<BR>
+<P><P><EM>&gt; And the more you lower the timer the more applications fall into the
+</EM><BR>
+<EM>&gt; category of reasons not to do it.
+</EM><BR>
+<P>I do not understand that reasoning.  Yes, in the best of all possible
+<BR>
+worlds, it might be that all applications would have keepalives.  I'm not
+<BR>
+convinced that you would not then complain even more loudly about wasted
+<BR>
+bandwdith al la the complaints about such things as the Appletalk 15-second
+<BR>
+babble, but never mind.  The fact is that applications do not have
+<BR>
+keepalives.
+<BR>
+<P><P><EM>&gt; What Im hearing from you is 90% hot air and 10% &quot;http needs fixing&quot;. Fine
+</EM><BR>
+<EM>&gt; fix http
+</EM><BR>
+<P>How do you propose to fix the many existing HTTP clients to not croak
+<BR>
+when they receive your new HTTP keepalive?
+<BR>
+<P>As for hot air ... well ... what have you been telling the people you know
+<BR>
+who have been having trouble with stale, dead TCP connections for the last
+<BR>
+15+ years?  (since at least rlogin made keepalives handy)  How have the
+<BR>
+LINUX systems with merely 1,000,000 HTTP hits/day coped without TCP
+<BR>
+keepalives?  Since I trust you are not talking through your hat, you must
+<BR>
+have an effective alternative.  It would be swell to hear your alternative
+<BR>
+to setting the TCP keepalive interval to values even I find silly.
+<BR>
+<P><P>It is a fact is that applications today do not have keepalives.  It fits
+<BR>
+the definition of clinical insanity to act contrary to that fact.  Merely
+<BR>
+talking as if that fact did not exist is not nececssarily evidence of
+<BR>
+insanity, but it is not evidence of anything good.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201814.MAA10078@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1246.html">braden@ISI.EDU: "TCP KeepAlive Flame War revisited every 10 years, whether we need it or not..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1244.html">vijayaraghavan_jayanth: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1245">[ date ]</A>
+<A HREF="index.html#1245">[ thread ]</A>
+<A HREF="subject.html#1245">[ subject ]</A>
+<A HREF="author.html#1245">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

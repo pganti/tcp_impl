@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Wed Apr  2 11:41:08 1997" -->
+<!-- isoreceived="19970402164108" -->
+<!-- sent="Wed, 02 Apr 97 11:33:18 -0800" -->
+<!-- isosent="19970402193318" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704021933.LAA16021@aland.bbn.com" -->
+<!-- inreplyto="9704021637.AA03925@pachyderm.pa.dec.com" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704021933.LAA16021@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 14:33:18 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0315.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#299">[ date ]</A>
+<A HREF="index.html#299">[ thread ]</A>
+<A HREF="subject.html#299">[ subject ]</A>
+<A HREF="author.html#299">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;&nbsp;The reality of HTTP is that it is an interactive bulk transport
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;protocol; i.e. there are users, who often changes their minds as a result
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;of what they see on the screen, and then surf on to another page
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(or further down the screen, with a different set of embedded graphics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to fetch).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Control of latency by a browser is therefore important.  This isn't just
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;file transfer...
+<BR>
+<P>Jim:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Sanity check for me here.  I don't see how this affects window size
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;management by the client unless the client is severely CPU limited.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Let me go through the separate problems.  I assume in all cases the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;window is equal to the delay*bandwidth product (if it is smaller, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;problems get less bad, if it is bigger, it is never filled, so this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;seems the right spot to pick)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;1. Client goes to another page on same server
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- their request gets to sent to remote server immediately
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(the reverse traffic is small and completely under user control,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so failure to achieve immediate transmission is a client application
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;programming error if Nagle is turned off, nothing to do with window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- server gets request in 1/2 RTT and starts sending
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- meanwhile client discards all data up to new page
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- result is client sees new page in 1 RTT which is the goal.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Furthermore since client has been draining the window assiduously,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the page comes at full bandwidth.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;2. Client goes to another page on another server
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- TCP connection to new server established
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- request gets sent to new server
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- replies start back, subject to slow start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- bandwidth less than full until slow start over
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;3. Client is going through proxy (makes case 2 into case 1)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;4. Client goes further down page, another version of case 1.
+<BR>
+<P>What am I missing?
+<BR>
+<P>Thanks!
+<BR>
+<P>Craig
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0315.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#299">[ date ]</A>
+<A HREF="index.html#299">[ thread ]</A>
+<A HREF="subject.html#299">[ subject ]</A>
+<A HREF="author.html#299">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

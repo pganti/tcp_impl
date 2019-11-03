@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question about caching ssthr</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Question about caching ssthresh in routing table">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question about caching ssthresh in routing table</H1>
+<!-- received="Wed Mar 24 02:34:39 1999" -->
+<!-- isoreceived="19990324073439" -->
+<!-- sent="Tue, 23 Mar 1999 23:27:32 -0800 (PST)" -->
+<!-- isosent="19990324072732" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Question about caching ssthresh in routing table" -->
+<!-- id="Roam.SIMC.2.0.6.922260452.29839.kcpoon@jurassic" -->
+<!-- inreplyto="000FD9E9.003332@comsat.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Question%20about%20caching%20ssthresh%20in%20routing%20table&In-Reply-To=&lt;Roam.SIMC.2.0.6.922260452.29839.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 24 1999 - 02:27:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1691.html">vinayb@vinayb.engr.sgi.com: "ISN numbers and TIME_WAIT"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1689.html">Minghua Lu: "ssthresh"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1688.html">Minghua.Lu@comsat.com: "Question about caching ssthresh in routing table"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1690">[ date ]</A>
+<A HREF="index.html#1690">[ thread ]</A>
+<A HREF="subject.html#1690">[ subject ]</A>
+<A HREF="author.html#1690">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;      We assumed that the above problem was caused by caching the ssthresh 
+</EM><BR>
+<EM>&gt;      in the routing table. It seems that caching ssthresh might not always 
+</EM><BR>
+<EM>&gt;      be desired.
+</EM><BR>
+<P>If you are using Solaris 2.6, I don't believe caching is on by default.  Can
+<BR>
+you check with `ndd /dev/tcp tcp_rtt_updates` to see if the value is non-zero?
+<BR>
+Do you have a snoop trace for the connections you talked about?  Do you infer
+<BR>
+the ssthresh value from a trace?  Can you send a copy to me?  Thanks.
+<BR>
+<P><EM>&gt;      1) ssthresh is saved in the routing table when a tcp connection is 
+</EM><BR>
+<EM>&gt;      closed. A condition for saving the ssthresh is that there must be at 
+</EM><BR>
+<EM>&gt;      least a certain amount of data transferred during the connection. BSD 
+</EM><BR>
+<EM>&gt;      uses 16 times the high water mark of the send buffer. Solaris 2.6 does 
+</EM><BR>
+<EM>&gt;      not seem to be using the same value. Does anybody know what the 
+</EM><BR>
+<EM>&gt;      condition is for saving ssthresh in Solaris 2.6?
+</EM><BR>
+<P>tcp_rtt_updates controls when things like rtt_sa, rtt_sd, and ssthresh are
+<BR>
+cached.  You can set it to a value you like.  To be the same as BSD, set it
+<BR>
+to 16.  But in 2.6, it is 0 by default.  That means no caching is done.
+<BR>
+<P><EM>&gt;      2) I assumed that the ssthresh in the routing table will timeout 
+</EM><BR>
+<EM>&gt;      eventually if there are no more updates to it after some time. Does 
+</EM><BR>
+<EM>&gt;      anyone know what the timer is for this in Solaris 2.6?
+</EM><BR>
+<P>If a destination is not directly connected and not being used, its cache will
+<BR>
+be flushed in 30 seconds (ip_ire_cleanup_interval).  
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Question%20about%20caching%20ssthresh%20in%20routing%20table&In-Reply-To=&lt;Roam.SIMC.2.0.6.922260452.29839.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1691.html">vinayb@vinayb.engr.sgi.com: "ISN numbers and TIME_WAIT"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1689.html">Minghua Lu: "ssthresh"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1688.html">Minghua.Lu@comsat.com: "Question about caching ssthresh in routing table"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1690">[ date ]</A>
+<A HREF="index.html#1690">[ thread ]</A>
+<A HREF="subject.html#1690">[ subject ]</A>
+<A HREF="author.html#1690">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

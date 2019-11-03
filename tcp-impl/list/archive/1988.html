@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Erik Nordmark (Erik.Nordmark@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 18:06:35 2000" -->
+<!-- isoreceived="20000224230635" -->
+<!-- sent="Thu, 24 Feb 2000 14:59:38 -0800 (PST)" -->
+<!-- isosent="20000224225938" -->
+<!-- name="Erik Nordmark" -->
+<!-- email="Erik.Nordmark@Eng.Sun.COM" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="Roam.SIMC.2.0.6.951433178.19794.nordmark@jurassic" -->
+<!-- inreplyto="200002242156.NAA18955@csapuntz-u1.cisco.com" -->
+<STRONG>From:</STRONG> Erik Nordmark (<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Roam.SIMC.2.0.6.951433178.19794.nordmark@jurassic&gt;"><EM>Erik.Nordmark@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 17:59:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2015.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1988">[ date ]</A>
+<A HREF="index.html#1988">[ thread ]</A>
+<A HREF="subject.html#1988">[ subject ]</A>
+<A HREF="author.html#1988">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The TCP RDMA option reduces the overhead of receiving data over
+</EM><BR>
+<EM>&gt; TCP-based protocols such as NFS and HTTP.  
+</EM><BR>
+<P>Do you have any data (simulation, implementation) to back up this claim?
+<BR>
+Or did you mean to say &quot;provides a capbility which an implementation can
+<BR>
+use to try to reduce the overhead&quot;?
+<BR>
+&nbsp;
+<BR>
+<EM>&gt; It enables the construction of a simple hardware accelerator that
+</EM><BR>
+<EM>&gt; copies data directly from the incoming packet into application
+</EM><BR>
+<EM>&gt; buffers, avoiding expensive copies in the protocol stack.  Even
+</EM><BR>
+<EM>&gt; without hardware acceleration, the option enables the protocol stack
+</EM><BR>
+<EM>&gt; to decrease the number of copies it must do.
+</EM><BR>
+<P>This seems to be an overstatement as well. Are you saying that an
+<BR>
+implementation that currently has a single copy in its receive path
+<BR>
+(from kernel to user space) can &quot;reduce&quot; the number of copies without
+<BR>
+any hardware acceleration? That would imply that the number of
+<BR>
+copies could be reduces to zero which I have a hard time understanding
+<BR>
+(unless you add hardware acceleration).
+<BR>
+<P><EM>&gt; The TCP RDMA option is an annotation and requires no modifications to
+</EM><BR>
+<EM>&gt; higher layer protocols. It can be used with popular protocols such as 
+</EM><BR>
+<EM>&gt; HTTP, NFS, and CIFS, along with new protocols.
+</EM><BR>
+<P>How will the higher layer protocol peer know what RDMA offsets to use?
+<BR>
+For this to provide benefits to e.g. NFS it seems like you'd want the
+<BR>
+NFS peer to have offsets that would depend on which file is being written.
+<BR>
+Otherwise the only benefit would be for the NIC to be able to separate all
+<BR>
+the protocol headers from the data so that the data can be placed on 
+<BR>
+e.g. contigiuos pages in memory.
+<BR>
+<P><EM>&gt; The TCP option also provides a bit to indicate application-level
+</EM><BR>
+<EM>&gt; message boundaries. The bit enables out-of-order processing of the TCP
+</EM><BR>
+<EM>&gt; receive queue, potentially decreasing service times in the presence of
+</EM><BR>
+<EM>&gt; packet drops and improving performance on parallel systems.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>&gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<P>There is no DNS entry for ftpeng.cisco.com so I can't access the document.
+<BR>
+<P>Thanks,
+<BR>
+&nbsp;&nbsp;&nbsp;Erik
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2015.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1988">[ date ]</A>
+<A HREF="index.html#1988">[ thread ]</A>
+<A HREF="subject.html#1988">[ subject ]</A>
+<A HREF="author.html#1988">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

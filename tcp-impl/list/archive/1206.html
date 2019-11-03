@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revision RFC 2001 (draft-iet</TITLE>
+<META NAME="Author" CONTENT="Andi Kleen (ak@muc.de)">
+<META NAME="Subject" CONTENT="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)</H1>
+<!-- received="Wed Aug 12 19:54:32 1998" -->
+<!-- isoreceived="19980812235432" -->
+<!-- sent="Thu, 13 Aug 1998 04:50:30 +0200" -->
+<!-- isosent="19980813025030" -->
+<!-- name="Andi Kleen" -->
+<!-- email="ak@muc.de" -->
+<!-- subject="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<!-- id="19980813045030.A1120@kali.lrz-muenchen.de" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.902971866.24899.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Andi Kleen (<A HREF="mailto:ak@muc.de?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;19980813045030.A1120@kali.lrz-muenchen.de&gt;"><EM>ak@muc.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 12 1998 - 22:50:30 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1207.html">Vern Paxson: "draft agenda for Chicago tcpimpl meeting"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1204.html">Kacheong.Poon@eng.Sun.COM: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1208.html">Vern Paxson: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1206">[ date ]</A>
+<A HREF="index.html#1206">[ thread ]</A>
+<A HREF="subject.html#1206">[ subject ]</A>
+<A HREF="author.html#1206">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, Aug 13, 1998 at 03:31:06AM +0200, <A HREF="mailto:Kacheong.Poon@eng.Sun.COM?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;19980813045030.A1120@kali.lrz-muenchen.de&gt;">Kacheong.Poon@eng.Sun.COM</A> wrote:
+<BR>
+<EM>&gt; &gt; Most BSD implementation (at least Free/NetBSD) don't have the problem, 
+</EM><BR>
+<EM>&gt; &gt; because they simply send an ACK every second packet, no matter how big
+</EM><BR>
+<EM>&gt; &gt; the packets were (this means BSD will send more acks than linux in some
+</EM><BR>
+<EM>&gt; &gt; situations)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I just got the latest FreeBSD source.  The following part of code has not
+</EM><BR>
+<EM>&gt; changed.
+</EM><BR>
+<P>[...]
+<BR>
+<P>You're right, FreeBSD does not do this. I just looked at the NetBSD source
+<BR>
+and somehow believed FreeBSD did the same. Seems I was wrong.
+<BR>
+<P>In NetBSD the TCP_SETUP_ACK macro controls the ACK behaviour
+<BR>
+<P>#define	TCP_SETUP_ACK(tp, ti) \
+<BR>
+do { \
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((tp)-&gt;t_flags &amp; TF_DELACK || \
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tcp_ack_on_push &amp;&amp; (ti)-&gt;ti_flags &amp; TH_PUSH)) \
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_flags |= TF_ACKNOW; \
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else \
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_SET_DELACK(tp); \
+<BR>
+} while (0)
+<BR>
+<P><P>And then in the fast packet receive path:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_SETUP_ACK(tp, ti);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(void) tcp_output(tp);
+<BR>
+<P>This means FreeBSD has a similar problem to Linux when the path changes
+<BR>
+and the MTU shrinks during a connection then it'll go into delayed ACK
+<BR>
+mode even for bulk data. NetBSD fixed it. The FreeBSD algorithm seems to
+<BR>
+match the original 4.4BSD-Lite code as described in Stephens TCP/IP Ill. V.2
+<BR>
+<P>-Andi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1207.html">Vern Paxson: "draft agenda for Chicago tcpimpl meeting"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1204.html">Kacheong.Poon@eng.Sun.COM: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1208.html">Vern Paxson: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1206">[ date ]</A>
+<A HREF="index.html#1206">[ thread ]</A>
+<A HREF="subject.html#1206">[ subject ]</A>
+<A HREF="author.html#1206">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

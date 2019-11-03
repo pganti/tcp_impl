@@ -1,0 +1,527 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP KeepAlive Flame War revisite</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="TCP KeepAlive Flame War revisited every 10 years, whether we need it or not...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP KeepAlive Flame War revisited every 10 years, whether we need it or not...</H1>
+<!-- received="Thu Aug 20 11:17:01 1998" -->
+<!-- isoreceived="19980820151701" -->
+<!-- sent="Thu, 20 Aug 1998 11:14:37 -0700" -->
+<!-- isosent="19980820181437" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="TCP KeepAlive Flame War revisited every 10 years, whether we need it or not..." -->
+<!-- id="199808201814.AA06880@gra.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 14:14:37 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1245.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1246">[ date ]</A>
+<A HREF="index.html#1246">[ thread ]</A>
+<A HREF="subject.html#1246">[ subject ]</A>
+<A HREF="author.html#1246">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+This is one of those arguments that we don't have to actuall HAVE,
+<BR>
+we can just experience an earlier version!
+<BR>
+<P>Bob Braden
+<BR>
+<P>
+<BR>
+<P><EM>&gt;From @A.ISI.EDU:<A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Fri Mar 18 06:44:43 1988
+</EM><BR>
+Date: 15 Mar 88 08:58:00 GMT
+<BR>
+From: thumper!<A HREF="mailto:karn@faline.bellcore.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">karn@faline.bellcore.com</A>  (Phil R. Karn)
+<BR>
+Organization: Bell Communications Research, Inc
+<BR>
+Subject: Re: TCP Keep-alives, also push bit
+<BR>
+References: &lt;900@rlgvax.UUCP&gt;
+<BR>
+Sender: <A HREF="mailto:tcp-ip-request@sri-nic.arpa?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-request@sri-nic.arpa</A>
+<BR>
+To: <A HREF="mailto:tcp-ip@sri-nic.arpa?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip@sri-nic.arpa</A>
+<BR>
+Status: RO
+<BR>
+Content-Length: 2175
+<BR>
+X-Lines: 39
+<BR>
+<P>In BSD at least, keepalives are implemented by sending a TCP segment
+<BR>
+containing a single byte of &quot;garbage&quot;. However, the SEQ field is one
+<BR>
+less than the receiver is expecting, so it is not accepted as real data.
+<BR>
+<P>When the receiver sees an &quot;old&quot; data packet (i.e., a packet containing
+<BR>
+data that has already been acked, i.e., the sequence number in the
+<BR>
+header plus the length of its data is less than the receiver's RCV.NXT)
+<BR>
+it is required by the spec to send a segment with its next expected
+<BR>
+sequence number, i.e., RCV.NXT, in the ACK field.  (This is primarily
+<BR>
+intended to prevent deadlock in normal data transfer should an
+<BR>
+acknowledgment packet be lost.) The &quot;polling&quot; TCP uses this &quot;do-nothing
+<BR>
+ACK&quot; as the indication that the remote host is still there. So hosts
+<BR>
+that don't respond properly to BSD-style keepalives are most likely not
+<BR>
+following the spec.
+<BR>
+<P>Having said this, I should point out that keepalives are NOT a formal
+<BR>
+part of the TCP spec. I also think they're a very bad idea.  I didn't
+<BR>
+always feel this way. However, some long and frustrating experiences
+<BR>
+with slow, unreliable and often expensive network paths (amateur packet
+<BR>
+radio, as well as commercial X.25 networks that charge for every packet)
+<BR>
+have turned me into a crusader against keepalive pinging.  It simply
+<BR>
+isn't worth the cost, especially when there's no way for me to tell the
+<BR>
+other end to cease and desist.
+<BR>
+<P>Besides, the whole philosophy of TCP and the datagram approach to
+<BR>
+networking was supposed to be reliability and robustness in the face of
+<BR>
+network problems. Why should the system gratuitously close a connection
+<BR>
+just because the network path happens to go down for a few minutes? If
+<BR>
+the connection has been idle during the entire outage, the user wouldn't
+<BR>
+even know (or care) that there had been a problem, as long as it's back
+<BR>
+by the time he sends more data. But keepalive pinging will make SURE he
+<BR>
+knows in the most annoying way possible!
+<BR>
+<P>In the same category are TCPs that immediately close a connection when they
+<BR>
+get an ICMP Unreachable message. At most they should abort connections
+<BR>
+only before they are established; once established they should serve as
+<BR>
+diagnostic messages only.
+<BR>
+<P>Phil
+<BR>
+<P><EM>&gt;From <A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Sat Jun  3 03:07:16 1989
+</EM><BR>
+Date: 28 May 1989 14:23-EDT
+<BR>
+Sender: <A HREF="mailto:CERF@A.ISI.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">CERF@A.ISI.EDU</A>
+<BR>
+Subject: Re: SO_KEEPALIVE considered harmful?
+<BR>
+From: <A HREF="mailto:CERF@A.ISI.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">CERF@A.ISI.EDU</A>
+<BR>
+To: voder!pyramid!nsc!icldata!altos86!elxsi!beatnix!<A HREF="mailto:mre@UCBVAX.BERKELEY.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">mre@UCBVAX.BERKELEY.EDU</A>
+<BR>
+Cc: <A HREF="mailto:tcp-ip@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip@SRI-NIC.ARPA</A>
+<BR>
+In-Reply-To: &lt;2681@elxsi.UUCP&gt;
+<BR>
+Status: RO
+<BR>
+Content-Length: 1225
+<BR>
+X-Lines: 24
+<BR>
+<P>When TCP was first designed, and for all subsequent versions, it was
+<BR>
+thought inappropriate to impose any kind of semantics on the logical
+<BR>
+connections extablished by TCP. In particular, no sense of absolute
+<BR>
+timeout for the severing of a connection was desired. We thought that
+<BR>
+such notions of &quot;impatience&quot; or &quot;time to give up&quot; ought to be the
+<BR>
+choice of the upper level protocol using TCP as the basis merely for
+<BR>
+reliable delivery.
+<BR>
+<P>A part of this view stemmed from the fact that the networks over which
+<BR>
+TCP had to function, for the DoD applications we had in mind, were
+<BR>
+potentially very unpredictable as to loss and delay. Mobile packet
+<BR>
+radio systems had to function under jamming and radio shadow effects,
+<BR>
+for instance. TCP never unilaterally severed connections but only
+<BR>
+reported failure to achieve positive acknowledgement after a time
+<BR>
+which could be controlled by the application or upper-level protocol.
+<BR>
+It was up to the application to decide whether to sever the connection
+<BR>
+and, even then, the choice to do so gracefully or abruptly was also
+<BR>
+left to the application.
+<BR>
+<P>The use of a feature (X-level NOP) to test the liveness of a TCP
+<BR>
+connection is consonant with the model against which the TCP was
+<BR>
+designed. 
+<BR>
+<P>Vint Cerf
+<BR>
+<P><EM>&gt;From <A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Sun Jun  4 11:02:20 1989
+</EM><BR>
+Date: Tue, 30 May 89 11:59:13 EDT
+<BR>
+From: <A HREF="mailto:jas@proteon.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">jas@proteon.com</A> (John A. Shriver)
+<BR>
+To: xanth!nic.MR.NET!ns!<A HREF="mailto:jmh@g.ms.uky.edu?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">jmh@g.ms.uky.edu</A>
+<BR>
+Cc: <A HREF="mailto:tcp-ip@sri-nic.arpa?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip@sri-nic.arpa</A>
+<BR>
+In-Reply-To: (1606's message of 23 May 89 21:02:32 GMT &lt;<A HREF="mailto:1409@ns.network.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">1409@ns.network.com</A>&gt;
+<BR>
+Subject: keep-alive
+<BR>
+Status: RO
+<BR>
+Content-Length: 1657
+<BR>
+X-Lines: 37
+<BR>
+<P>I can detect loss of connectivity real easily.  Just type a character.
+<BR>
+If the connection won't work, it will time out, or get an immediate
+<BR>
+TCP reset. 
+<BR>
+<P>However, I have no desire to watch my Telnet windows just go *pop*
+<BR>
+just because there was a lack of connectivity for thirty seconds.
+<BR>
+This happens quite often in the real world, like when one route goes
+<BR>
+away, and the routing protocols have to re-settle.  In the interim,
+<BR>
+the keepalives will cause ICMP error messages to be sent (which
+<BR>
+routers *must* send to meet RFC 1009), and the connection will be
+<BR>
+gratuitously shot.
+<BR>
+<P>Keep-alives are, from my point of view, keep-deads.  They guaruntee
+<BR>
+that the my connection *will die* any time there is any momentary
+<BR>
+network outage.  Keep-alives are absolutely contrary to the robustness
+<BR>
+principle.  (See TCP RFC.)
+<BR>
+<P>In my experience, keep-alives kill far more live connections than dead
+<BR>
+ones. 
+<BR>
+<P>If we're going to retain the stupid idea of keep-alives, lets add a
+<BR>
+session protocol to TCP-IP to put the connection back together after
+<BR>
+the keep-alive kills it.  However, since I doubt many people want to
+<BR>
+add a session protocol to TCP, I'd rather kill keep-alives.
+<BR>
+<P>Let's quit trying to bend over backwards to make the TCP/IP specs
+<BR>
+match the 4.xBSD implementations.  They were experimental, and not
+<BR>
+fully conformant to the specs.  They were optimized for a local
+<BR>
+network, not an Internet.  The specs work, lets meet them.  Fix the
+<BR>
+code.
+<BR>
+<P><P>If you want the server Telnet host to be able to clean up your
+<BR>
+connection, many systems have inactivity timers, which can kill it for
+<BR>
+you.  Please don't break our TCP protocol because of a limitation in
+<BR>
+some other operating system.
+<BR>
+<P><P><EM>&gt;From <A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Thu Jun  8 21:18:35 1989
+</EM><BR>
+From: <A HREF="mailto:karels%25okeeffe.Berkeley.EDU@ucbvax.Berkeley.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">karels%okeeffe.Berkeley.EDU@ucbvax.Berkeley.EDU</A> (Mike Karels)
+<BR>
+To: <A HREF="mailto:karn@thumper.bellcore.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">karn@thumper.bellcore.com</A> (Phil R. Karn)
+<BR>
+Cc: <A HREF="mailto:tcp-ip@sri-nic.arpa?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip@sri-nic.arpa</A>
+<BR>
+Subject: Re: SO_KEEPALIVE considered harmful? 
+<BR>
+In-Reply-To: Your message of Fri, 26 May 89 19:47:25 EDT.
+<BR>
+Date: Thu, 08 Jun 89 16:28:37 PDT
+<BR>
+Status: RO
+<BR>
+Content-Length: 2079
+<BR>
+X-Lines: 39
+<BR>
+<P>Sorry, I can't let this go by without commenting on Phil's message
+<BR>
+and this discussion, even though the discussion has mostly died down.
+<BR>
+(I haven't been reading tcp-ip very often, but noticed this subject
+<BR>
+line going by.)
+<BR>
+<P>Last time Phil and I talked about keepalives in person, I asked him
+<BR>
+whether he had problems with telnet/rlogin servers accumulating on
+<BR>
+his systems if they didn't use keepalives.  We certainly accumulate
+<BR>
+junk, including xterm programs, waiting for input from a half-open
+<BR>
+connection.  Phil told me that he doesn't have problems, because
+<BR>
+he runs a &quot;wall&quot; every night to force output to all users, and of
+<BR>
+course breaking connections that time out.  In other words, Phil
+<BR>
+violently objects to servers requesting keepalives from TCP, but
+<BR>
+allows the system manager (himself) to force them above the application
+<BR>
+level.  And before people jump up to point out the difference in time
+<BR>
+scales, the current BSD code sends no keepalive packets until a connection
+<BR>
+has been idle for 2 hr, and that interval is easily changeable.
+<BR>
+One proposal for the Host Requirements document was to wait for 12 hr.
+<BR>
+I think that's a bit high, but the difference is only a factor of 6.
+<BR>
+Compare the number of keepalive packets with the number of packets
+<BR>
+exchanged by an xterm and an X server over the course of a week
+<BR>
+if used 4 hours a day!
+<BR>
+<P>Phil says:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... I'd go a little further, though,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and say that a REMOTE USER (not just the application code) must always
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be able to turn off keepalives, even on binary-only systems. It does no
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;good to say &quot;the application must be able to disable keepalives&quot; when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I'm having problems with a remote server that I have no administrative
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control over.
+<BR>
+<P>I'm sorry, Phil, but remote users have no more right to override system
+<BR>
+management policies than do local users (at least on *our* systems!).
+<BR>
+On some of the systems where I have guest accounts, local or remote
+<BR>
+users are logged off if they aren't active for two hours.  I don't like
+<BR>
+that, either, but I don't claim that the managers of those systems
+<BR>
+have no right to enforce such a policy.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mike
+<BR>
+<P><EM>&gt;From <A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Sat Jun 10 10:22:29 1989
+</EM><BR>
+Date: Sat, 10 Jun 89 08:34:23 PDT
+<BR>
+From: Dave Crocker &lt;<A HREF="mailto:dcrocker@ahwahnee.Stanford.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">dcrocker@ahwahnee.Stanford.EDU</A>&gt;
+<BR>
+Subject: Re: SO_KEEPALIVE considered harmful?
+<BR>
+To: <A HREF="mailto:dcrocker@ahwahnee.stanford.edu?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">dcrocker@ahwahnee.stanford.edu</A>, <A HREF="mailto:stev@vax.ftp.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">stev@vax.ftp.com</A>, <A HREF="mailto:tcp-ip@sri-nic.arpa?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">tcp-ip@sri-nic.arpa</A>
+<BR>
+Status: RO
+<BR>
+Content-Length: 1258
+<BR>
+X-Lines: 29
+<BR>
+<P>Steve,
+<BR>
+<P>Let me try, one last time:
+<BR>
+<P>If the application can direct TCP as to the periodicity and the action
+<BR>
+to be taken (notify application vs. abort connection) then the application
+<BR>
+will not abort your connection unless the application programmer decided
+<BR>
+to force that condition.  Under proper design, the programmer will give the
+<BR>
+user a switch to set, indicating something about the &quot;persistance&quot; that
+<BR>
+is desired.
+<BR>
+<P>With respect to having the mechanism in tcp or the application, I agree with
+<BR>
+you, philosophically, that the mechanism should be in the application (although
+<BR>
+I believe the OSI model would put it into the session layer, but that seems
+<BR>
+mostly to be part of the application process, these days.
+<BR>
+<P>The major issues, however, are kernel vs. user space, and additional
+<BR>
+complexity to the application protocol.
+<BR>
+<P>There is a remarkable economy that derives from puting this mechanism
+<BR>
+into the kernel/transport system.  It may be an accident that TCP does
+<BR>
+not have the mechanism but can be tricked into creating one, but it still
+<BR>
+is remarkably simple.
+<BR>
+<P>Most application protocols have very simple interaction styles and tend to
+<BR>
+be relatively easy to program.  To force time-based generation of action
+<BR>
+would complexify these protocols significantly.
+<BR>
+<P>Dave
+<BR>
+<P><EM>&gt;From <A HREF="mailto:ietf-hosts-request@NNSC.NSF.NET?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">ietf-hosts-request@NNSC.NSF.NET</A> Fri Mar 29 17:10:33 1991
+</EM><BR>
+Date: Fri, 29 Mar 91 11:12:59 PST
+<BR>
+From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">braden@ISI.EDU</A>
+<BR>
+To: <A HREF="mailto:fab@md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">fab@md.interlink.com</A>
+<BR>
+Subject: Re:  keep-alive wars
+<BR>
+Cc: <A HREF="mailto:cam@md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">cam@md.interlink.com</A>, <A HREF="mailto:ietf-hosts@NNSC.NSF.NET?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">ietf-hosts@NNSC.NSF.NET</A>
+<BR>
+Content-Length: 1414
+<BR>
+X-Lines: 35
+<BR>
+Status: RO
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From <A HREF="mailto:fab@md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">fab@md.interlink.com</A> Thu Mar 28 12:15:55 1991
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: Thu, 28 Mar 91 13:59:36 EST
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From: <A HREF="mailto:fab@md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">fab@md.interlink.com</A> (Fred Bohle)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">braden@ISI.EDU</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject: keep-alive wars
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cc: <A HREF="mailto:cam@md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">cam@md.interlink.com</A>
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bob,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I am losing a keep-alive war with a customer who wants me to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implement keep-alive in our tcp implementation (SNS/TCPaccess for MVS).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;My question is about the statement in Host Requirements RFC1122, section
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3.6, which says &quot;This interval MUST be configurable and MUST default
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to no less than two hours&quot;.  Does this suggest the idle interval may NOT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be configured to less than two hours?  Do you have some other suggestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for a minimum idle interval?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fred
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fred Bohle			EMAIL: <A HREF="mailto:fab@leo.md.interlink.com?Subject=Re:%20TCP%20KeepAlive%20Flame%20War%20revisited%20every%2010%20years,%20whether%20we%20need%20it%20or%20not...&In-Reply-To=&lt;199808201814.AA06880@gra.isi.edu&gt;">fab@leo.md.interlink.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interlink Computer Sciences	AT&amp;T : 301-317-6600 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9145 Guilford Road, Suite 175
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Columbia, MD 21046
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------------------------------------------------------
+<BR>
+<P>Fred,
+<BR>
+<P>I can only say, keep up the Good Fight!  No, it's OK to allow a customer
+<BR>
+to configure it to 10 seconds if he wants to!  It's just that the
+<BR>
+software &quot;out of the box&quot; must have a default of at least 2 hours.  If
+<BR>
+a customer wants to set it smaller, presumably he will not then complain
+<BR>
+to the world about a TCP reliablity problem, having caused the problem
+<BR>
+himself.   Well, maybe rational behavior is too much to hope for...
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1245.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1246">[ date ]</A>
+<A HREF="index.html#1246">[ thread ]</A>
+<A HREF="subject.html#1246">[ subject ]</A>
+<A HREF="author.html#1246">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

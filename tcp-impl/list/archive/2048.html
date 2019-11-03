@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: NFS Header/data parsing and RDMA</TITLE>
+<META NAME="Author" CONTENT="Costa Sapuntzakis (csapuntz@cisco.com)">
+<META NAME="Subject" CONTENT="NFS Header/data parsing and RDMA">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>NFS Header/data parsing and RDMA</H1>
+<!-- received="Mon Feb 28 03:49:13 2000" -->
+<!-- isoreceived="20000228084913" -->
+<!-- sent="Mon, 28 Feb 2000 00:42:27 -0800 (PST)" -->
+<!-- isosent="20000228084227" -->
+<!-- name="Costa Sapuntzakis" -->
+<!-- email="csapuntz@cisco.com" -->
+<!-- subject="NFS Header/data parsing and RDMA" -->
+<!-- id="Pine.GSO.4.10.10002272341340.19855-100000@csapuntz-u1.cisco.com" -->
+<!-- inreplyto="200002280044.RAA02693@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Costa Sapuntzakis (<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20NFS%20Header/data%20parsing%20and%20RDMA&In-Reply-To=&lt;Pine.GSO.4.10.10002272341340.19855-100000@csapuntz-u1.cisco.com&gt;"><EM>csapuntz@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 28 2000 - 03:42:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2048">[ date ]</A>
+<A HREF="index.html#2048">[ thread ]</A>
+<A HREF="subject.html#2048">[ subject ]</A>
+<A HREF="author.html#2048">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Ok, so doing NFSv2/v3 header/data splitting is easy on an in-order
+<BR>
+TCP stream because NFS has fixed-length trailers. Here's a little
+<BR>
+technique:
+<BR>
+<P>1) Assume that all READ/WRITE transfers are powers of 2
+<BR>
+2) Assume all RPCs larger than 4k are WRITE RPCs and all responses larger
+<BR>
+than 4k are READ responses
+<BR>
+3) Take the message size from the first 4 bytes of the RPC/TCP
+<BR>
+encapsulation
+<BR>
+4) Round the message size down to the nearest power of 2 (call this
+<BR>
+quantity data_size)
+<BR>
+5) The data is the last data_size bytes of the message. Put
+<BR>
+the last data_size bytes in a separate aligned buffer.
+<BR>
+<P>Note, to do this with NFS/TCP, your NIC has to do some primitive
+<BR>
+level of TCP processing (at least keep track of flows). It also
+<BR>
+needs to understand RPC/TCP message boundaries.
+<BR>
+<P>Are there significantly simpler approaches than this? 
+<BR>
+<P>NFSv4 doesn't seem to have fixed length trailers and neither
+<BR>
+does CIFS in all cases. And it looks like it will be costly to parse 
+<BR>
+NFSv4 headers. 
+<BR>
+<P>RDMA still has the following features:
+<BR>
+<P>- Per-packet (Works with arbitrary out-of-order reception of TCP
+<BR>
+segments)
+<BR>
+- Fixed header that's generic across all protocols (NFSv4, v5, AFS,
+<BR>
+DFS, CIFS, etc..) 
+<BR>
+- No page flipping necessary on solicited transfers
+<BR>
+- Message boundary bit (which is admittedly orthogonal to RDMA) allows
+<BR>
+out-of-order processing on TCP receive buffer. Decreases parsing latency,
+<BR>
+esp. in the face of packet drops.
+<BR>
+<P>The following measures should improve security/safety:
+<BR>
+<P>- NIC should ascertain that TCP segment is in receive window
+<BR>
+<P>- NIC needs to check that the RID is valid for a given TCP conn
+<BR>
+&nbsp;&nbsp;for safety/security reasons
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;If the NIC does header/data splitting, it needs to keep track of
+<BR>
+&nbsp;&nbsp;per-flow information because most file block transfesr will span
+<BR>
+&nbsp;&nbsp;multiple TCP segments. So the NIC will probably have a notion of
+<BR>
+&nbsp;&nbsp;a TCP flow #.
+<BR>
+<P>&nbsp;&nbsp;The brute force approach way to check RID validity is to use a CAM to
+<BR>
+&nbsp;&nbsp;map from (RID, TCP flow #) -&gt; buffer address.
+<BR>
+<P>&nbsp;&nbsp;If that's too expensive, then RIDs can be hashed and the flow # and
+<BR>
+&nbsp;&nbsp;buffer address stored in the bucket. The flow # is verified before
+<BR>
+&nbsp;&nbsp;using the buffer address.
+<BR>
+<P>-Costa
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2047.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2050.html">Vernon Schryver: "Re: NFS Header/data parsing and RDMA"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2048">[ date ]</A>
+<A HREF="index.html#2048">[ thread ]</A>
+<A HREF="subject.html#2048">[ subject ]</A>
+<A HREF="author.html#2048">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 13:32:55 1998" -->
+<!-- isoreceived="19980820173255" -->
+<!-- sent="Thu, 20 Aug 1998 14:30:50 -0600 (MDT)" -->
+<!-- isosent="19980820203050" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808202030.OAA10539@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808202030.OAA10539@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 16:30:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1252.html">Rick Jones: "some random connection termination data"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1253">[ date ]</A>
+<A HREF="index.html#1253">[ thread ]</A>
+<A HREF="subject.html#1253">[ subject ]</A>
+<A HREF="author.html#1253">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808202030.OAA10539@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; 5-sec?) concerned LANs.  Why would you be less offended by ~80 byte
+</EM><BR>
+<EM>&gt; &gt; HTTP/TCP/IP keepalives than by 40 byte TCP/IP keepalives, both at the same
+</EM><BR>
+<EM>&gt; &gt; rate?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Point conceeded.
+</EM><BR>
+<P>Then we agree on the significant issue.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; Why are TCP keepalives a problem out in the open?  Are you saying that an
+</EM><BR>
+<EM>&gt; &gt; HTTP keepalive would use less bandwidth than the current practice?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Im still dubious.
+</EM><BR>
+<P>Why are you dubious instead of not dubious?  I can't get worked up either
+<BR>
+way, except by religious statements from zealots flogging one sect or
+<BR>
+another of layering religion.
+<BR>
+<P><P><EM>&gt; I don't dispute that 
+</EM><BR>
+<EM>&gt; 	a) People want to do it
+</EM><BR>
+<EM>&gt; 	b) That whether it is good practice or not doesnt matter for
+</EM><BR>
+<EM>&gt; 	   internal network usage (ie non shared resource)
+</EM><BR>
+<EM>&gt; 	c) Given a &amp; b there should be a way to set the value by socket
+</EM><BR>
+<EM>&gt; 	   (or TLI) and that it should be specified in 1003.1g
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I dont think we however should look at this issue until someone has hard
+</EM><BR>
+<EM>&gt; figures on what the cost of a change from the status quo 
+</EM><BR>
+<P>I hope we agree that regardless of theoretical, religious, or other merit,
+<BR>
+the status quo is the use of TCP keepalives, and not at silly, red herring
+<BR>
+rates like 15 seconds.
+<BR>
+<P><EM>&gt;                                                          would be at
+</EM><BR>
+<EM>&gt; least in rough terms for packets/byte overheads on the existing internet
+</EM><BR>
+<EM>&gt; backbones. I'd like to see figures from a &quot;neutral&quot; source.
+</EM><BR>
+<P>The advantage of the new POSIX knob (thanks for the notes about it) is
+<BR>
+that it is cheaper and easier for the system to manage the timers and get
+<BR>
+them right than for applications.  The system must page-in or otherwise
+<BR>
+make ready to run and then run the application when its keepalive timer
+<BR>
+expires, while the system can do the usual economy-of-scale another hacks
+<BR>
+for a TCP keepalive.  Also, if you require that applications do their own
+<BR>
+keepalives, then most will use a simplisitic fixed interval instead of
+<BR>
+nice exponential or otherwise increasingly less frequent scheme.  I think
+<BR>
+that would be a significant problem.
+<BR>
+<P>The big disadvantage of a POSIX style knob is that applications that do
+<BR>
+not need it will turn it on, and/or use unnecessarily tiny values simply
+<BR>
+because it is there and easy to use.  I think this is already a valid
+<BR>
+concern.
+<BR>
+<P><P>] From: Sean Doran &lt;<A HREF="mailto:smd@ebone.net?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808202030.OAA10539@calcite.rhyolite.com&gt;">smd@ebone.net</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] | 5-sec?) concerned LANs.  Why would you be less offended by ~80 byte
+<BR>
+] | HTTP/TCP/IP keepalives than by 40 byte TCP/IP keepalives, both at the same
+<BR>
+] | rate?
+<BR>
+]
+<BR>
+] What happens, traffic wise, in each case when the keepalive segment
+<BR>
+] is lost to congestion?
+<BR>
+<P>I don't see any difference.  The same TCP retransmission timer will expire
+<BR>
+or not in either case, right?  One is more bytes and so would use more
+<BR>
+time on the wire and might (or might not) take more space in router queues
+<BR>
+and so might contribute more to congestion.  Neither should be involved
+<BR>
+when the TCP connection is itself suffering or contributing significantly
+<BR>
+to congestion.
+<BR>
+<P><P>] | Why are TCP keepalives a problem out in the open?  Are you saying that an
+<BR>
+] | HTTP keepalive would use less bandwidth than the current practice?
+<BR>
+]
+<BR>
+] Why do you want a keepalive for HTTP?  Is it bad simply to decide,
+<BR>
+] &quot;Hm, this connection has been idle an awfully long time, so I think
+<BR>
+] I'll close it down.&quot;?
+<BR>
+<P>There is often little difference between keepalives and idle timers.
+<BR>
+However, I have often been inconvenienced and quite irritated by WWW
+<BR>
+stockbrokers that kill my secure HTTP connections when I stop to ponder
+<BR>
+or look at other pages for literally a couple of minutes.  There is a real
+<BR>
+difference between an idle but alive connection and a dead connection.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808202030.OAA10539@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1252.html">Rick Jones: "some random connection termination data"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1254.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1253">[ date ]</A>
+<A HREF="index.html#1253">[ thread ]</A>
+<A HREF="subject.html#1253">[ subject ]</A>
+<A HREF="author.html#1253">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

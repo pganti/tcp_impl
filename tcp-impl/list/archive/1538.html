@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 21:25:20 1999" -->
+<!-- isoreceived="19990206022520" -->
+<!-- sent="Fri, 05 Feb 1999 18:20:38 -0800" -->
+<!-- isosent="19990206022038" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36BBA6F6.7297D2CC@cup.hp.com" -->
+<!-- inreplyto="199902052352.PAA02571@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36BBA6F6.7297D2CC@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 21:20:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1538">[ date ]</A>
+<A HREF="index.html#1538">[ thread ]</A>
+<A HREF="subject.html#1538">[ subject ]</A>
+<A HREF="author.html#1538">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I think it is reasonable to have the application buffer reasonable amounts of
+</EM><BR>
+<EM>&gt; data, but i'm not sure it is reasonable to say it must buffer 50Kbytes or
+</EM><BR>
+<P>I will go along with the statement that (while desirable :) it is not
+<BR>
+always reasonable to expect an application with a 50K response/request
+<BR>
+to provide that to TCP in one call. 
+<BR>
+<P>I will point-out thought that I regularly see (ok, ok, in benchmarking
+<BR>
+:) web servers handing the transport as much data as it will take in a
+<BR>
+&quot;send&quot; call and that being more than 50K often enough depending on the
+<BR>
+&quot;SO_SNDBUF&quot; setting. 
+<BR>
+<P>By the time we are talking about 50K request/responses are we really
+<BR>
+talking request/response any more, or are we back to (short)
+<BR>
+unidrectional streams? Another way to ask that is is there really a
+<BR>
+problem with applications sending across the net 50KB of data and then a
+<BR>
+single byte?
+<BR>
+<P><EM>&gt; 100Kbytes.  It seems to me (but, i agree, there is room here to differ) that
+</EM><BR>
+<EM>&gt; if the application is passing down its response (or request) in 4096 byte
+</EM><BR>
+<EM>&gt; chunks (to pick a popular size), TCP should &quot;work well&quot;.
+</EM><BR>
+<P>I would probably say &quot;work well enough&quot; :) I think that if data is given
+<BR>
+in 4096 byte chunks that well enough is (assuming a 1460 MSS) 1460,
+<BR>
+1460, 1176. I see that today in netperf TCP_RR tests over some
+<BR>
+transports, with no nagle/delayedack induced delays:
+<BR>
+<P>$ uname -a
+<BR>
+HP-UX loiter B.10.20 A 9000/735 2004221734 two-user license
+<BR>
+$ remsh hpisrdq &quot;uname -a&quot;
+<BR>
+HP-UX hpisrdq A.09.05 E 9000/725 2007119367 8-user license
+<BR>
+$ ./netperf -t TCP_RR -H hpisrdq -- -r 1,4096 -S 32K -s 32K
+<BR>
+TCP REQUEST/RESPONSE TEST to hpisrdq
+<BR>
+Local /Remote
+<BR>
+Socket Size   Request  Resp.   Elapsed  Trans.
+<BR>
+Send   Recv   Size     Size    Time     Rate         
+<BR>
+bytes  Bytes  bytes    bytes   secs.    per sec   
+<BR>
+<P>32768  32768  1        4096    10.00     151.95   
+<BR>
+32768  32768 
+<BR>
+$ ./netperf -t TCP_RR -H hpisrdq -- -r 4096,1 -S 32K -s 32K
+<BR>
+TCP REQUEST/RESPONSE TEST to hpisrdq
+<BR>
+Local /Remote
+<BR>
+Socket Size   Request  Resp.   Elapsed  Trans.
+<BR>
+Send   Recv   Size     Size    Time     Rate         
+<BR>
+bytes  Bytes  bytes    bytes   secs.    per sec   
+<BR>
+<P>32768  32768  4096     1       10.00     150.17   
+<BR>
+32768  32768 
+<BR>
+<P>here's some to include HP-UX 11 as a sender and to show it at something
+<BR>
+that might not be MCLBYTES in size :)
+<BR>
+<P># ./netperf -H hpisrdq -t TCP_RR -- -r 4097,1 -S 32K -s 32K
+<BR>
+TCP REQUEST/RESPONSE TEST to hpisrdq
+<BR>
+Local /Remote
+<BR>
+Socket Size   Request  Resp.   Elapsed  Trans.
+<BR>
+Send   Recv   Size     Size    Time     Rate         
+<BR>
+bytes  Bytes  bytes    bytes   secs.    per sec   
+<BR>
+<P>32768  32768  4097     1       10.01     107.13   
+<BR>
+32768  32768 
+<BR>
+# uname -a
+<BR>
+HP-UX hpntc11a B.11.00 A 9000/778 2011481613 two-user license
+<BR>
+<P>back to the 10.20 box...
+<BR>
+$ ./netperf -t TCP_RR -H hpisrdq -- -r 4097,1 -S 32K -s 32K
+<BR>
+TCP REQUEST/RESPONSE TEST to hpisrdq
+<BR>
+Local /Remote
+<BR>
+Socket Size   Request  Resp.   Elapsed  Trans.
+<BR>
+Send   Recv   Size     Size    Time     Rate         
+<BR>
+bytes  Bytes  bytes    bytes   secs.    per sec   
+<BR>
+<P>32768  32768  4097     1       10.00     146.46   
+<BR>
+32768  32768 
+<BR>
+<P>I'm even happy if that was 8192 bytes in two 4096 byte sends - unless of
+<BR>
+course I'm talking over a link with a 9000 byte MTU...which takes us
+<BR>
+into other territory :) 
+<BR>
+<P>I guess I would be in the camp that feels that interpreting nagle send
+<BR>
+by send is sufficient and the way to go and that we need to make sure
+<BR>
+app writers understand just what they are doing when they set
+<BR>
+TCP_NODELAY. A &quot;mantra&quot; along the lines of &quot;provide as much of the
+<BR>
+logically associated data as you can to the transport at one time&quot; or
+<BR>
+something...
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1538">[ date ]</A>
+<A HREF="index.html#1538">[ thread ]</A>
+<A HREF="subject.html#1538">[ subject ]</A>
+<A HREF="author.html#1538">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

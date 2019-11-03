@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Lite-2 TCP bug: Redundant FI</TITLE>
+<META NAME="Author" CONTENT="Charles M. Hannum (mycroft@netbsd.org)">
+<META NAME="Subject" CONTENT="Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution</H1>
+<!-- received="Thu Jul  9 17:19:53 1998" -->
+<!-- isoreceived="19980709211953" -->
+<!-- sent="09 Jul 1998 20:21:12 -0400" -->
+<!-- isosent="19980710002112" -->
+<!-- name="Charles M. Hannum" -->
+<!-- email="mycroft@netbsd.org" -->
+<!-- subject="Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution" -->
+<!-- id="el21zrur1xj.fsf@lunacity.ne.mediaone.net" -->
+<!-- inreplyto="Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution" -->
+<STRONG>From:</STRONG> Charles M. Hannum (<A HREF="mailto:mycroft@netbsd.org?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;"><EM>mycroft@netbsd.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 09 1998 - 20:21:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1160.html">S Chetan Kumar: "Testing please ignore.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1158.html">Shreyas Sarangan: "Re: Sniffer format specs available?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1156.html">Jason Thorpe: "Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1159">[ date ]</A>
+<A HREF="index.html#1159">[ thread ]</A>
+<A HREF="subject.html#1159">[ subject ]</A>
+<A HREF="author.html#1159">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jason apparently didn't see the patch I sent out last night before he
+<BR>
+sent his mail, so I reproduce it below.
+<BR>
+<P>A slight correction: I've been testing the patch pretty much since I
+<BR>
+sent this, and it seems to work okay.  I specifically checked the
+<BR>
+behaviour with tcpdump in a few cases, though I wasn't exhaustive.
+<BR>
+<P><P>From: Charles M. Hannum &lt;<A HREF="mailto:mycroft@netbsd.org?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;">mycroft@netbsd.org</A>&gt;
+<BR>
+To: W. Richard Stevens &lt;<A HREF="mailto:rstevens@noao.edu?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;">rstevens@noao.edu</A>&gt;
+<BR>
+To: David Borman &lt;<A HREF="mailto:dab@bsdi.com?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;">dab@bsdi.com</A>&gt;
+<BR>
+Cc: Jason Thorpe &lt;<A HREF="mailto:thorpej@netbsd.org?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;">thorpej@netbsd.org</A>&gt;
+<BR>
+Cc: Kevin Lahey &lt;<A HREF="mailto:kml@netbsd.org?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;el21zrur1xj.fsf@lunacity.ne.mediaone.net&gt;">kml@netbsd.org</A>&gt;
+<BR>
+Subject: Simultaneous close revisited
+<BR>
+<P><P>TCP/IP vol 2 (page 1005, exercise 29.5) points out that, in `Net/3', a
+<BR>
+simultaneous close exhanges 6 packets rather than 4.  This is because
+<BR>
+the transition to CLOSING state causes a redundant FIN to be sent, and
+<BR>
+in turn each side sends an extra ACK.  It then (page 1090, answer)
+<BR>
+suggests that the way to fix this is to remove the FIN from the output
+<BR>
+flags for CLOSING state.
+<BR>
+<P>While this fixes the observed suboptimal behaviour, it has the side
+<BR>
+effect of introducing a serious bug: retransmission of FINs during a
+<BR>
+simultaneous close no longer work at all, causing connections to hang
+<BR>
+forever.
+<BR>
+<P>I propose instead the following changes.  I'd appreciate any comments
+<BR>
+you may have on this.  (Note that I have not yet tested this.)
+<BR>
+<P><P>1) A retransmit timeout will have already caused snd_nxt to be pulled
+<BR>
+&nbsp;&nbsp;&nbsp;back to snd_una, so len &gt;= 0.  If len &lt; 0, we know that either the
+<BR>
+&nbsp;&nbsp;&nbsp;window shrank and there was no FIN pending, the FIN has been
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted already (causing snd_nxt to extend one past the
+<BR>
+&nbsp;&nbsp;&nbsp;window), or the window shrank so that the FIN is no longer inside
+<BR>
+&nbsp;&nbsp;&nbsp;it.  In any of these cases, it is safe to simply turn off TH_FIN,
+<BR>
+&nbsp;&nbsp;&nbsp;and let the retransmit or persist timer send it out later.
+<BR>
+<P>*** tcp_output.c	Mon Jun 15 09:58:24 1998
+<BR>
+--- tcp_output.c.new	Thu Jul  9 04:18:51 1998
+<BR>
+***************
+<BR>
+*** 269,274 ****
+<BR>
+--- 269,278 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* if it isn't already going.  If the window didn't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* close completely, just wait for an ACK.
+<BR>
++ 		 * If we have a pending FIN, either it has already
+<BR>
++ 		 * been transmitted or it is outside the window, so
+<BR>
++ 		 * drop it.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len = 0;
+<BR>
++ 		flags &amp;= ~TH_FIN;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (win == 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_TIMER_DISARM(tp, TCPT_REXMT);
+<BR>
+<P><P>2) Since we've now guaranteed that this is either a new FIN or a
+<BR>
+&nbsp;&nbsp;&nbsp;retransmission, we don't need to check that again.  This gives us a
+<BR>
+&nbsp;&nbsp;&nbsp;slight optimization.
+<BR>
+<P>***************
+<BR>
+*** 339,354 ****
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+! 	if (flags &amp; (TH_SYN|TH_RST))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_up, tp-&gt;snd_una))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+- 	/*
+<BR>
+- 	 * If our state indicates that FIN should be sent
+<BR>
+- 	 * and we have not yet done so, or we're retransmitting the FIN,
+<BR>
+- 	 * then we need to send.
+<BR>
+- 	 */
+<BR>
+- 	if (flags &amp; TH_FIN &amp;&amp;
+<BR>
+- 	    ((tp-&gt;t_flags &amp; TF_SENTFIN) == 0 || tp-&gt;snd_nxt == tp-&gt;snd_una))
+<BR>
+- 		goto send;
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+--- 343,350 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+! 	if (flags &amp; (TH_SYN|TH_FIN|TH_RST))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_up, tp-&gt;snd_una))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+<P><P>3) This case only happened when a gratuitous FIN was sent.  Since
+<BR>
+&nbsp;&nbsp;&nbsp;we've eliminated the gratuitous FINs, we don't need to bother with
+<BR>
+&nbsp;&nbsp;&nbsp;this check.
+<BR>
+<P>***************
+<BR>
+*** 529,540 ****
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+- 	 * Fill in fields, remembering maximum advertised
+<BR>
+- 	 * window for use in delaying messages about window sizes.
+<BR>
+- 	 * If resending a FIN, be sure not to use a new sequence number.
+<BR>
+- 	 */
+<BR>
+- 	if (flags &amp; TH_FIN &amp;&amp; tp-&gt;t_flags &amp; TF_SENTFIN &amp;&amp; 
+<BR>
+- 	    tp-&gt;snd_nxt == tp-&gt;snd_max)
+<BR>
+- 		tp-&gt;snd_nxt--;
+<BR>
+- 	/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* If we are doing retransmissions, then snd_nxt will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* not reflect the first unsent octet.  For ACK only
+<BR>
+--- 525,528 ----
+<BR>
+<P><P>4) As an interesting side effect of the above, all uses of TF_SENTFIN
+<BR>
+&nbsp;&nbsp;&nbsp;are gone, so we can just eliminate it.
+<BR>
+<P>***************
+<BR>
+*** 604,616 ****
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Advance snd_nxt over sequence space of this segment.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+! 		if (flags &amp; (TH_SYN|TH_FIN)) {
+<BR>
+! 			if (flags &amp; TH_SYN)
+<BR>
+! 				tp-&gt;snd_nxt++;
+<BR>
+! 			if (flags &amp; TH_FIN) {
+<BR>
+! 				tp-&gt;snd_nxt++;
+<BR>
+! 				tp-&gt;t_flags |= TF_SENTFIN;
+<BR>
+! 			}
+<BR>
+! 		}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_nxt += len;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_nxt, tp-&gt;snd_max)) {
+<BR>
+--- 592,600 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Advance snd_nxt over sequence space of this segment.
+<BR>
++ 		 * There are no states in which we send both a SYN and a FIN,
+<BR>
++ 		 * so we collapse the tests for these two states.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+! 		if (flags &amp; (TH_SYN|TH_FIN))
+<BR>
+! 			tp-&gt;snd_nxt++;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_nxt += len;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_nxt, tp-&gt;snd_max)) {
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1160.html">S Chetan Kumar: "Testing please ignore.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1158.html">Shreyas Sarangan: "Re: Sniffer format specs available?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1156.html">Jason Thorpe: "Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1159">[ date ]</A>
+<A HREF="index.html#1159">[ thread ]</A>
+<A HREF="subject.html#1159">[ subject ]</A>
+<A HREF="author.html#1159">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: tcpimpl meeting minutes</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="tcpimpl meeting minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>tcpimpl meeting minutes</H1>
+<!-- received="Sun Jan  3 10:16:48 1999" -->
+<!-- isoreceived="19990103151648" -->
+<!-- sent="Sun, 03 Jan 1999 10:14:24 -0500" -->
+<!-- isosent="19990103151424" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="tcpimpl meeting minutes" -->
+<!-- id="199901031514.KAA01022@tuvok.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20tcpimpl%20meeting%20minutes&In-Reply-To=&lt;199901031514.KAA01022@tuvok.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jan 03 1999 - 10:14:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1424.html">Eric A. Hall: "Re: gratuitous ARP conflicts"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1425">[ date ]</A>
+<A HREF="index.html#1425">[ thread ]</A>
+<A HREF="subject.html#1425">[ subject ]</A>
+<A HREF="author.html#1425">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+Below is a draft version of the tcpimpl meeting minutes from the
+<BR>
+December meeting.  We would appreciate any comments on these minutes
+<BR>
+(preferably by Wednesday when they are due to the IETF folks).
+<BR>
+<P>Thanks,
+<BR>
+allman
+<BR>
+<P><P><PRE>
+---
+TCPIMPL Meeting Minutes
+December 9, 1998
+<P>Report by: Joe Touch (<A HREF="mailto:touch@isi.edu?Subject=Re:%20tcpimpl%20meeting%20minutes&In-Reply-To=&lt;199901031514.KAA01022@tuvok.lerc.nasa.gov&gt;">touch@isi.edu</A>), Mark Allman
+           (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20tcpimpl%20meeting%20minutes&In-Reply-To=&lt;199901031514.KAA01022@tuvok.lerc.nasa.gov&gt;">mallman@lerc.nasa.gov</A>), Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20tcpimpl%20meeting%20minutes&In-Reply-To=&lt;199901031514.KAA01022@tuvok.lerc.nasa.gov&gt;">vern@ee.lbl.gov</A>)
+<P><P>The status of WG documents was reviewed, as follows:
+<P>    Known Problems document is now with the AD for submission to
+    the IESG for publication as Informational.
+<P>    NewReno draft is in WG last call period.  No major comments on
+    this document to date.  The plan is to submit it for Experimental
+    at the same time that 2001.bis goes for Proposed.
+<P>    2001.bis is under going several minor changes in response to
+    comments during the WG last call period.
+<P>    The re-start document is under heavy revision.
+<P>Peter Ford led a short discussion on raising the initial window size
+in 2001.bis (to be a proposed standard, as compared to RFC 2414
+which is an experimental RFC that raises the initial congestion
+window) from 1 segment to &quot;up to 2 segments&quot;.  The basic argument in
+favor was that when developing RFC 2414, the only aspects of it that
+the WG had found merited further experimentation were the larger
+windows of 3 or 4 segments; support for 2 segments had been strong.
+In the subsequent discussion at the meeting, several people
+commented that they thought this was a good idea, nobody disagreed
+with the change, and the sense of the room was one of enthused
+support.  The issue will also be discussed on the mailing list.
+<P>Jamshid Mahdavi presented a short report on the usefulness of the WG
+documents for debugging TCP stacks.  In addition, he outlined two
+new problems: slow start being too aggressive and RTO that were not
+long enough.  He also suggested that the known problems document
+would benefit from identifying problems as either &quot;sender&quot; or
+&quot;receiver&quot; bugs.  These were judged as probably appropriate for an
+update of the known problems document, as the current version is now
+already with the AD.
+<P>Joe Touch outlined a new algorithm for preventing TCP from sending
+large bursts into the network.  The algorithm needs to be documented
+in an internet-draft before the group considers it further.
+<P>Finally, Kevin Lahey led a short discussion on Path MTU Discovery
+issues.  Kevin outlined several issues with path MTU discovery:
+<P>    BUGS
+	using PMTU to determine MSS
+	determining MTU on per-conn basis
+    ACK frequency
+	every 2 packets
+	dynamic determination of segment size
+    multihoming
+    black-hole detection
+<P>Kevin outlined that an implementation can be within the
+specification, but still not optimal.  First, some implementations
+reuse PMTU to determine MSS. For example, if you reopen a connection
+to the same place and reuse the MTU, you won't probe for higher MTU
+sizes.  Second, some implementations rediscover the PMTU for each
+connection, which can induce high amounts of ICMP traffic and be
+inefficient, esp. for systems with high numbers of short connections
+(e.g. HTTP 1.0).
+<P>Kevin then outlined problems that arise when determining when to
+send a delayed ACK and how path MTU discovery complicates the
+situation.  Consider two FDDI hosts, where the rings are
+interconnected by an ethernet. The MSS is 4KB, and the receiver ACKs
+after 2 MSS's. PMTU squeezes the packets down to 1.5 KB, and
+therefore, the ACK really ACKs 6 packets, not 2. Some systems solve
+this by ACKing every other packet, rather than for 2 MSS's. Others
+determine the ACK frequency using per-connection information.
+<P>The problems caused by multihomed hosts were then outlined.
+Consider a host with multiple interfaces with different MTUs. That
+host should advertise the largest MTU available, so that if the path
+to that host changes, connections can take advantage of the largest
+PMTU available.
+<P>Finally, Kevin outlined problems caused by black holes.  RFC 1435
+first mentions it - some routers suppress the &quot;FRAGMENTATION NEEDED&quot;
+ICMP reply, e.g., misconfigured routers or firewalls. The result
+looks like a black-hole - full-size packets just get lost, but pings
+and other small packets work fine. In this case, PMTU just freezes.
+There is no description of how to handle this - there is one
+implementation of a check timer at the upper layer protocol, but no
+generalized description of how to solve the problem. We need a spec
+to do this.
+<P>A discussion ensued about whether the WG should generate a document
+on this topic.  Also, the floor was opened for other PMTU
+problems/issues.  The chairs indicated that they would like to see a
+document on some of these subtle problems.  However, the document
+needed to be expedited.  Also, it was noted that this topic is
+slightly out of our charter and therefore, the AD's approval would
+be needed before officially working on this topic.  It was also
+noted that IPv6 requires PMTU discovery and the ipng WG is having
+some related discussions, but has not yet solved the problem.
+<P>The consensus of the room was that a document on &quot;experience with
+PMTU&quot; would be useful &amp; appropriate, with the chairs specifying that
+they would require a draft by January since the WG has wound down.
+<P>The meeting was adjourned noting that we do not plan to hold any
+further face-to-face meetings, but that the mailing list will remain
+active.
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1424.html">Eric A. Hall: "Re: gratuitous ARP conflicts"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1425">[ date ]</A>
+<A HREF="index.html#1425">[ thread ]</A>
+<A HREF="subject.html#1425">[ subject ]</A>
+<A HREF="author.html#1425">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

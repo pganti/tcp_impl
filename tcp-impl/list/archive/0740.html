@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep 30 10:15:09 1997" -->
+<!-- isoreceived="19970930141509" -->
+<!-- sent="Tue, 30 Sep 97 16:18:07 GMT" -->
+<!-- isosent="19970930161807" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="6596.wsimpson@greendragon.com" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6596.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 30 1997 - 12:18:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0739.html">Steven Wass: "Fw:"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#740">[ date ]</A>
+<A HREF="index.html#740">[ thread ]</A>
+<A HREF="subject.html#740">[ subject ]</A>
+<A HREF="author.html#740">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; <A HREF="mailto:peterf@microsoft.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6596.wsimpson@greendragon.com&gt;">peterf@microsoft.com</A> (Peter Ford) opines:
+</EM><BR>
+<EM>&gt; &gt; There is a lot of empirical evidence that indicates IW=2 works.   There
+</EM><BR>
+<EM>&gt; &gt; also does not seem to be evidence that IW=2 is a bad thing.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6596.wsimpson@greendragon.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<EM>&gt; I know only one verified example - the 9600 baud half duplex radio link here.
+</EM><BR>
+<EM>&gt; On that IW=2 sucks badly (but in general stuff sucks pretty badly over it).
+</EM><BR>
+<EM>&gt; I've not found anything else it made worse (28.8,14.4 modem, 64K circuits
+</EM><BR>
+<EM>&gt; and ethernet)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+I have had similar experience to Alan at 9600 (and slower).  There is
+<BR>
+still a fair amount of that around here.  Merit just upgraded the 2400
+<BR>
+only last year -- I expect it will be awhile until all the 9600 will be
+<BR>
+replaced.
+<BR>
+<P>I have seen IW=2 work badly on 28.8 when talking to SunOS (with POP3).
+<BR>
+<P>I consistently get a retransmit on the 4th (and sometimes 3rd) packet
+<BR>
+coming back, which is probably the window opening just enough to send 4
+<BR>
+datagrams in response to my 1 plus Syn, and then timing out when the
+<BR>
+Acks are not fast enough.  I don't have a trace on both ends, so this is
+<BR>
+guesswork.
+<BR>
+<P>And there is a lot of SunOS still out there.  Folks don't upgrade (at
+<BR>
+Sun upgrade prices).  And look at how much W3.1 is still around at
+<BR>
+cheaper M$ upgrade prices!
+<BR>
+<P>So, I'm more in favor of recommending no delay on the first Ack after
+<BR>
+Syn+Ack, rather than IW=2.
+<BR>
+<P>How about _MUST_ no delay first Ack after idle, and _MAY_ IW=RW=2?
+<BR>
+<P>That will handle performance for new/upgraded systems, while not
+<BR>
+harming traffic with old ones unless deliberately configured.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6596.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;6596.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0739.html">Steven Wass: "Fw:"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0741.html">Rick Jones: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#740">[ date ]</A>
+<A HREF="index.html#740">[ thread ]</A>
+<A HREF="subject.html#740">[ subject ]</A>
+<A HREF="author.html#740">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:00 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

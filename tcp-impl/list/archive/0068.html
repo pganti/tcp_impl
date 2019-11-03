@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 21:36:14 1997" -->
+<!-- isoreceived="19970212023614" -->
+<!-- sent="Tue, 11 Feb 1997 16:31:14 -0400" -->
+<!-- isosent="19970211203114" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702112131.AA12732@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199702112054.MAA26884@birdcage.mcom.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702112131.AA12732@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 15:31:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0067.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#68">[ date ]</A>
+<A HREF="index.html#68">[ thread ]</A>
+<A HREF="subject.html#68">[ subject ]</A>
+<A HREF="author.html#68">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702112131.AA12732@ludwigia.raleigh.ibm.com&gt;">josh@birdcage.mcom.com</A> (Josh Cohen) writes:
+<BR>
+<P><EM>&gt; &gt; It doesn't make sense to have the client send out a reset, and yet
+</EM><BR>
+<EM>&gt; &gt; still be in FIN_WAIT_2 state. If it sends a reset, the server is
+</EM><BR>
+<EM>&gt; &gt; supposed to delete its end and stop sending anything else. What will
+</EM><BR>
+<EM>&gt; &gt; take the client out of the FIN_WAIT_2 state (normally, it is a FIN
+</EM><BR>
+<EM>&gt; &gt; from the server!)?
+</EM><BR>
+<P><EM>&gt; We're talking about two different things here.
+</EM><BR>
+<P>OK. I think I'm getting somewhat misled by terminology and
+<BR>
+nomenclature.
+<BR>
+<P><EM>&gt; The problem occurs when the client send a FIN to abort a connection
+</EM><BR>
+<EM>&gt; ie, user hits 'stop'.  In this case we go to FIN_WAIT_2 ( as well as
+</EM><BR>
+<EM>&gt; the other prior states ).
+</EM><BR>
+<P>I don't think it's quite correct to say &quot;abort a connection&quot; and at
+<BR>
+the same time send a FIN and go through the normal closing
+<BR>
+procedure. If you are going through the normal connection closing
+<BR>
+steps, the application (I would assume) remains &quot;attached&quot; to the
+<BR>
+socket, and the problematic scenario shouldn't arise. Right?
+<BR>
+<P>I've been assuming that &quot;abort a connection&quot; means sending a RST,
+<BR>
+i.e., the case where the application &quot;destroys&quot; the socket.
+<BR>
+<P><EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I really don't see this as a big issue. I'd venture that in the vast
+</EM><BR>
+<EM>&gt; &gt; majority of cases, at the exect time the client half-duplex closes a
+</EM><BR>
+<EM>&gt; &gt; connection, there will be no received data queued by TCP (at the
+</EM><BR>
+<EM>&gt; &gt; receiver), so this scenario won't happen frequently in practice. What
+</EM><BR>
+<EM>&gt; &gt; is absolutely critical, however, is that any subsequent TCP packets
+</EM><BR>
+<EM>&gt; &gt; that arrive for that connection cause a RST to be generated.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Actually, its a trememdously big issue, and it happens more often than
+</EM><BR>
+<EM>&gt; many peopl think, in terms of the web.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>I think my point didn't come through clearly (though Rich is correct
+<BR>
+to point out the my assumption is somewhat flawed). I think the issue
+<BR>
+of whether or not to send a RST if the connection is half-duplex
+<BR>
+closed AND there is queued data in the receive queue is not the main
+<BR>
+issue, with respect to keeping servers from hanging. If the server has
+<BR>
+unacknowledged data (including possibly a FIN), it will retransmit, at
+<BR>
+which point the reset will be generated.  So the server shouldn't hang
+<BR>
+forever, which is what started this long thread.
+<BR>
+<P>I agree that sending a RST may reduce the total number of packets
+<BR>
+that ultimately get sent, which is of course a good thing.
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0067.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0070.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#68">[ date ]</A>
+<A HREF="index.html#68">[ thread ]</A>
+<A HREF="subject.html#68">[ subject ]</A>
+<A HREF="author.html#68">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

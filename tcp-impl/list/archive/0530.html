@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="kennethw@VNET.IBM.COM (kennethw@VNET.IBM.COM)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 13:05:31 1997" -->
+<!-- isoreceived="19970620170531" -->
+<!-- sent="Fri, 20 Jun 97 15:58:28 EDT" -->
+<!-- isosent="19970620195828" -->
+<!-- name="kennethw@VNET.IBM.COM" -->
+<!-- email="kennethw@VNET.IBM.COM" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706202002.NAA15196@sgi.sgi.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202002.NAA15196@sgi.sgi.com&gt;"><EM>kennethw@VNET.IBM.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 15:58:28 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#530">[ date ]</A>
+<A HREF="index.html#530">[ thread ]</A>
+<A HREF="subject.html#530">[ subject ]</A>
+<A HREF="author.html#530">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Perry,
+<BR>
+<P><EM>&gt;If I were a security breaker, I'd love to have that list of information
+</EM><BR>
+<EM>&gt;available over the net. It would make cracking systems ever so much
+</EM><BR>
+<EM>&gt;easier. Having TCP sequence numbers handed to you without having to
+</EM><BR>
+<EM>&gt;guess would make hijacking connections far simpler than it is now, for
+</EM><BR>
+<EM>&gt;instance.
+</EM><BR>
+<P><EM>&gt;Indeed, I'd say you've just listed virtually everything I'd want to
+</EM><BR>
+<EM>&gt;know about the internal state of a remote machine's TCP to make it
+</EM><BR>
+<EM>&gt;easier for me to attack the system. I couldn't have drawn up a better
+</EM><BR>
+<EM>&gt;list if I'd been intentionally trying.
+</EM><BR>
+<P>You raise a good point that certainly needs to be addressed from
+<BR>
+several prospectives. First, the set of objects that I think
+<BR>
+you are referring to would be defined in an optional group and not
+<BR>
+mandatory. The objects in the mandatory groups are no worst off
+<BR>
+from a security prospective than those already defined in the current
+<BR>
+TCP Group. Our intent is not to obsolete the current TCP Group defined
+<BR>
+by RFC2012 but to define some useful extensions. All MIB internet-drafts
+<BR>
+must address security in a security section. Typically, remote creation
+<BR>
+and in general SET support is addressed by stating that implementers
+<BR>
+do not need to support these objects/functions in a insecure
+<BR>
+environment. I could add the recommendation that the optional group
+<BR>
+also not be supported in an insecure network.
+<BR>
+<P>The SNMPv3 Working Group is planning to come out with a set of standards
+<BR>
+by the end of this year to provide both a authentication and privacy
+<BR>
+(encryption) framework. An administrator can define object views
+<BR>
+with the security QoS defined as appropriate on that view. The
+<BR>
+security framework that is available to a platform implementing these
+<BR>
+objects would dictate what gets implemented with the internet-draft
+<BR>
+providing guidance. The implementation that I worked on has implemented
+<BR>
+SNMPv2u (RFC1909 and RFC1910) in order to provide some level of
+<BR>
+protection while waiting for SNMPv3.
+<BR>
+<P>The second prospective on the issue is exactly how useful this
+<BR>
+information would be to an entity attempting to steal or misuse
+<BR>
+a connection. Using SNMP to retrieve this information while
+<BR>
+looking at the data flow in real-time to attempt to steal or
+<BR>
+misuse a connection would be challenging for an active connection
+<BR>
+since I suspect that the data retrieved via SNMP would not
+<BR>
+correlate exactly to the current connection data flow.
+<BR>
+<P>Finally, I understand that there are various security layers that
+<BR>
+have and are being defined within the IETF. For example, IP
+<BR>
+Security. If the IP layer is protected does presentation of the
+<BR>
+objects in the optional group till make misuse easier? I haven't
+<BR>
+been following the security work so don't know. Regardless of
+<BR>
+this these objects would still fall within the SNMP Security
+<BR>
+Framework available to a platform implementing any of these
+<BR>
+objects. Does this address your concern?
+<BR>
+<P>Regards, Ken
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#530">[ date ]</A>
+<A HREF="index.html#530">[ thread ]</A>
+<A HREF="subject.html#530">[ subject ]</A>
+<A HREF="author.html#530">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

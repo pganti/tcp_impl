@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Multiple TCP source addresse</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Multiple TCP source addresses?</H1>
+<!-- received="Wed Dec 20 13:45:56 2000" -->
+<!-- isoreceived="20001220184556" -->
+<!-- sent="Wed, 20 Dec 2000 10:57:29 -0700 (MST)" -->
+<!-- isosent="20001220175729" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Multiple TCP source addresses?" -->
+<!-- id="200012201757.eBKHvTe29972@calcite.rhyolite.com" -->
+<!-- inreplyto="Multiple TCP source addresses?" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012201757.eBKHvTe29972@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Dec 20 2000 - 12:57:29 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2423.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2424">[ date ]</A>
+<A HREF="index.html#2424">[ thread ]</A>
+<A HREF="subject.html#2424">[ subject ]</A>
+<A HREF="author.html#2424">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012201757.eBKHvTe29972@calcite.rhyolite.com&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; In flavors of UNIX that make it reasonable to tell whether the host's
+</EM><BR>
+<EM>&gt; &gt; Ethernet or other interface is alive (e.g. more packets received and sent
+</EM><BR>
+<EM>&gt; &gt; than errors), that `routed` pays attention to the state of interfaces.
+</EM><BR>
+<P><EM>&gt; That works only if your interface is UP or DOWN. If it's malfunctioning
+</EM><BR>
+<EM>&gt; or there's a break somewhere else in the LAN (e.g., on the next wire in
+</EM><BR>
+<EM>&gt; a switched ethernet), there's no indication.
+</EM><BR>
+<P>On the contrary, what I wrote is accurate, based not only on my own testing
+<BR>
+of my code, but the quieting of some bug reports and other complaints.
+<BR>
+Flavors of UNIX that support the 4.4BSD style interface statistics and
+<BR>
+that do a reasonable job of noticing errors do talk to my version of
+<BR>
+`routed` and cause it to do the obvious right things, which in some cases
+<BR>
+includes switching the interface between UP and DOWN.  Of course, it is
+<BR>
+not a panacea.
+<BR>
+<P><P><EM>&gt; It's even worse if you can receive but not send. In that case,
+</EM><BR>
+<EM>&gt; you get RIP announcements and set your route accordingly, but
+</EM><BR>
+<EM>&gt; the packets drop on the floor...
+</EM><BR>
+<P>Ethernet drivers that notice missing 10BASE-T and 100BASE-T heartbeats or
+<BR>
+coax no-carrier errors such as are cause by partially disconnected cables
+<BR>
+cause my `routed` to do the right thing.  Of course, while those are the
+<BR>
+most common causes of receive-but-not-send, there are other causes.
+<BR>
+<P><P><EM>&gt; (it would be nice if there were a version that at least tests next-hop 
+</EM><BR>
+<EM>&gt; connectivity in the forward case after receiving an announcement - is
+</EM><BR>
+<EM>&gt; there one that does this??)
+</EM><BR>
+<P>That would be hard in RIP, RIPv2, or Router Discovery, although you might
+<BR>
+glue some periodic thing with ICMP on the outside.
+<BR>
+<P>Blackholes have always been hassles, which may be why they're
+<BR>
+mentioned so often in RFC's.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012201757.eBKHvTe29972@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2423.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2425.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2424">[ date ]</A>
+<A HREF="index.html#2424">[ thread ]</A>
+<A HREF="subject.html#2424">[ subject ]</A>
+<A HREF="author.html#2424">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Dec 20 2000 - 13:46:24 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

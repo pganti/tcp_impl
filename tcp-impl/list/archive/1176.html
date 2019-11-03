@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Gratuitous FINs again</TITLE>
+<META NAME="Author" CONTENT="Charles M. Hannum (mycroft@MIT.EDU)">
+<META NAME="Subject" CONTENT="Gratuitous FINs again">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Gratuitous FINs again</H1>
+<!-- received="Tue Jul 21 04:12:08 1998" -->
+<!-- isoreceived="19980721081208" -->
+<!-- sent="Tue, 21 Jul 1998 07:08:16 -0400 (EDT)" -->
+<!-- isosent="19980721110816" -->
+<!-- name="Charles M. Hannum" -->
+<!-- email="mycroft@MIT.EDU" -->
+<!-- subject="Gratuitous FINs again" -->
+<!-- id="199807211108.HAA27173@snorklewacker.mit.edu" -->
+<STRONG>From:</STRONG> Charles M. Hannum (<A HREF="mailto:mycroft@MIT.EDU?Subject=Re:%20Gratuitous%20FINs%20again&In-Reply-To=&lt;199807211108.HAA27173@snorklewacker.mit.edu&gt;"><EM>mycroft@MIT.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jul 21 1998 - 07:08:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1177.html">Eric Travis: "Final Call: Internets in Emerging Mixed-Environments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1175.html">Cannara: "Re: New problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1176">[ date ]</A>
+<A HREF="index.html#1176">[ thread ]</A>
+<A HREF="subject.html#1176">[ subject ]</A>
+<A HREF="author.html#1176">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Due to lack of response, and the lack of any obvious problems with the
+<BR>
+change I proposed earlier, I have started to deploy it a bit more
+<BR>
+widely.  I include a modified version of the patch below; the only
+<BR>
+difference being the addition of some more comments.
+<BR>
+<P>I note that this `problem' affects not just connections in CLOSING
+<BR>
+state, but also -- and perhaps more seriously -- FIN_WAIT_1 state.
+<BR>
+During the interim between a half-close and receipt of the ACK for our
+<BR>
+half-close FIN, all packets we send will contain a gratuitous FIN.
+<BR>
+This causes header prediction to fail, reducing performance of the
+<BR>
+receiving implementation.
+<BR>
+<P>Of course this only happens for one RTT, so on low b*d links it's not
+<BR>
+particularly worrisome.  I'd be more concerned with it on high b*d
+<BR>
+links and/or with applications that tend to do half-closes often
+<BR>
+(e.g. anything that uses T/TCP).
+<BR>
+<P><P>Index: tcp_output.c
+<BR>
+===================================================================
+<BR>
+RCS file: /cvsroot/src/sys/netinet/tcp_output.c,v
+<BR>
+retrieving revision 1.42
+<BR>
+diff -c -2 -r1.42 tcp_output.c
+<BR>
+*** tcp_output.c	1998/07/17 23:00:02	1.42
+<BR>
+--- tcp_output.c	1998/07/21 10:44:31
+<BR>
+***************
+<BR>
+*** 280,285 ****
+<BR>
+--- 280,295 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* if it isn't already going.  If the window didn't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* close completely, just wait for an ACK.
+<BR>
++ 		 *
+<BR>
++ 		 * If we have a pending FIN, either it has already been
+<BR>
++ 		 * transmitted or it is outside the window, so drop it.
+<BR>
++ 		 * If the FIN has been transmitted, but this is not a
+<BR>
++ 		 * retransmission, then len must be -1.  Therefore we also
+<BR>
++ 		 * prevent here the sending of `gratuitous FINs'.  This
+<BR>
++ 		 * eliminates the need to check for that case below (e.g.
+<BR>
++ 		 * to back up snd_nxt before the FIN so that the sequence
+<BR>
++ 		 * number is correct).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len = 0;
+<BR>
++ 		flags &amp;= ~TH_FIN;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (win == 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_TIMER_DISARM(tp, TCPT_REXMT);
+<BR>
+***************
+<BR>
+*** 350,365 ****
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+! 	if (flags &amp; (TH_SYN|TH_RST))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_up, tp-&gt;snd_una))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+- 	/*
+<BR>
+- 	 * If our state indicates that FIN should be sent
+<BR>
+- 	 * and we have not yet done so, or we're retransmitting the FIN,
+<BR>
+- 	 * then we need to send.
+<BR>
+- 	 */
+<BR>
+- 	if (flags &amp; TH_FIN &amp;&amp;
+<BR>
+- 	    ((tp-&gt;t_flags &amp; TF_SENTFIN) == 0 || tp-&gt;snd_nxt == tp-&gt;snd_una))
+<BR>
+- 		goto send;
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+--- 360,367 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+! 	if (flags &amp; (TH_SYN|TH_FIN|TH_RST))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_up, tp-&gt;snd_una))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+***************
+<BR>
+*** 540,551 ****
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+- 	 * Fill in fields, remembering maximum advertised
+<BR>
+- 	 * window for use in delaying messages about window sizes.
+<BR>
+- 	 * If resending a FIN, be sure not to use a new sequence number.
+<BR>
+- 	 */
+<BR>
+- 	if (flags &amp; TH_FIN &amp;&amp; tp-&gt;t_flags &amp; TF_SENTFIN &amp;&amp; 
+<BR>
+- 	    tp-&gt;snd_nxt == tp-&gt;snd_max)
+<BR>
+- 		tp-&gt;snd_nxt--;
+<BR>
+- 	/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* If we are doing retransmissions, then snd_nxt will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* not reflect the first unsent octet.  For ACK only
+<BR>
+--- 542,545 ----
+<BR>
+***************
+<BR>
+*** 615,627 ****
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Advance snd_nxt over sequence space of this segment.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+! 		if (flags &amp; (TH_SYN|TH_FIN)) {
+<BR>
+! 			if (flags &amp; TH_SYN)
+<BR>
+! 				tp-&gt;snd_nxt++;
+<BR>
+! 			if (flags &amp; TH_FIN) {
+<BR>
+! 				tp-&gt;snd_nxt++;
+<BR>
+! 				tp-&gt;t_flags |= TF_SENTFIN;
+<BR>
+! 			}
+<BR>
+! 		}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_nxt += len;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_nxt, tp-&gt;snd_max)) {
+<BR>
+--- 609,617 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Advance snd_nxt over sequence space of this segment.
+<BR>
++ 		 * There are no states in which we send both a SYN and a FIN,
+<BR>
++ 		 * so we collapse the tests for these flags.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+! 		if (flags &amp; (TH_SYN|TH_FIN))
+<BR>
+! 			tp-&gt;snd_nxt++;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_nxt += len;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (SEQ_GT(tp-&gt;snd_nxt, tp-&gt;snd_max)) {
+<BR>
+Index: tcp_var.h
+<BR>
+===================================================================
+<BR>
+RCS file: /cvsroot/src/sys/netinet/tcp_var.h,v
+<BR>
+retrieving revision 1.50
+<BR>
+diff -c -2 -r1.50 tcp_var.h
+<BR>
+*** tcp_var.h	1998/05/11 19:57:24	1.50
+<BR>
+--- tcp_var.h	1998/07/21 10:44:31
+<BR>
+***************
+<BR>
+*** 99,103 ****
+<BR>
+&nbsp;&nbsp;#define	TF_NODELAY	0x0004		/* don't delay packets to coalesce */
+<BR>
+&nbsp;&nbsp;#define	TF_NOOPT	0x0008		/* don't use tcp options */
+<BR>
+- #define	TF_SENTFIN	0x0010		/* have sent FIN */
+<BR>
+&nbsp;&nbsp;#define	TF_REQ_SCALE	0x0020		/* have/will request window scaling */
+<BR>
+&nbsp;&nbsp;#define	TF_RCVD_SCALE	0x0040		/* other side has requested scaling */
+<BR>
+--- 99,102 ----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1177.html">Eric Travis: "Final Call: Internets in Emerging Mixed-Environments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1175.html">Cannara: "Re: New problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1176">[ date ]</A>
+<A HREF="index.html#1176">[ thread ]</A>
+<A HREF="subject.html#1176">[ subject ]</A>
+<A HREF="author.html#1176">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

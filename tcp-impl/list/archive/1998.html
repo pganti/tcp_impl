@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@redhat.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 21:15:36 2000" -->
+<!-- isoreceived="20000225021536" -->
+<!-- sent="Thu, 24 Feb 2000 18:03:31 -0800" -->
+<!-- isosent="20000225020331" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@redhat.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002250203.SAA17132@pizda.ninka.net" -->
+<!-- inreplyto="200002250156.RAA71116@clock.engr.sgi.com" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@redhat.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250203.SAA17132@pizda.ninka.net&gt;"><EM>davem@redhat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 21:03:31 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1997.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1997.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1998">[ date ]</A>
+<A HREF="index.html#1998">[ thread ]</A>
+<A HREF="subject.html#1998">[ subject ]</A>
+<A HREF="author.html#1998">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;From: Zachary Amsden &lt;<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250203.SAA17132@pizda.ninka.net&gt;">zamsden@cthulhu.engr.sgi.com</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Date: Thu, 24 Feb 2000 17:56:26 -0800
+<BR>
+<P>&nbsp;&nbsp;&nbsp;With network bandwidth approaching memory bus bandwidth, it becomes
+<BR>
+&nbsp;&nbsp;&nbsp;an issue.  A single copy receive uses 3x the bus bandwidth of a
+<BR>
+&nbsp;&nbsp;&nbsp;zero copy implementation (or worse if not aligned properly), and
+<BR>
+&nbsp;&nbsp;&nbsp;also poisons many more cachelines.
+<BR>
+<P>Before we discuss this point further, does anyone have real hard
+<BR>
+evidence that cpu cycles on the client side are the issue for
+<BR>
+the vast majority of systems out there?
+<BR>
+<P>In my experience cpu cycles are abundant on client machines.  Server
+<BR>
+side is where getting precious cpu cycles back seems more important.
+<BR>
+Client side cpu cycles are typically being expent on tasks such as
+<BR>
+IDCT transforms to decode audio/visual streams, executing Java code,
+<BR>
+but not copying the data from the network.
+<BR>
+<P>Next, have any other implementors investigated the cpu usage gains
+<BR>
+obtainable from deferring TCP receive packet processing to user
+<BR>
+context?  I have seen it make significant improvements, and whats more
+<BR>
+this helps out all systems, this means old applications and
+<BR>
+unsophisticated hardware.  (I am referring to Jakobson's idea of
+<BR>
+nearly 10 years ago, and it appears once again he was right.)
+<BR>
+<P>Finally, what does RDMA do in the presence of SACK options?  Which
+<BR>
+set of options gets kicked out?  Should the RDMA options go in
+<BR>
+and we just drop the SACK blocks?  Or the other way around?
+<BR>
+<P>Later,
+<BR>
+David S. Miller
+<BR>
+<A HREF="mailto:davem@redhat.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250203.SAA17132@pizda.ninka.net&gt;">davem@redhat.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1997.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1997.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1998">[ date ]</A>
+<A HREF="index.html#1998">[ thread ]</A>
+<A HREF="subject.html#1998">[ subject ]</A>
+<A HREF="author.html#1998">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

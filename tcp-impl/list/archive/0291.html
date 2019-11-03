@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: scheduling and agenda for Memphis</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="scheduling and agenda for Memphis">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>scheduling and agenda for Memphis</H1>
+<!-- received="Wed Apr  2 00:18:04 1997" -->
+<!-- isoreceived="19970402051804" -->
+<!-- sent="Wed, 02 Apr 1997 00:06:14 PST" -->
+<!-- isosent="19970402080614" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="scheduling and agenda for Memphis" -->
+<!-- id="199704020806.AAA22100@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20scheduling%20and%20agenda%20for%20Memphis&In-Reply-To=&lt;199704020806.AAA22100@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 03:06:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0290.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0296.html">Steve Parker: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0296.html">Steve Parker: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0303.html">Kacheong Poon: "Re: scheduling and agenda for Memphis"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#291">[ date ]</A>
+<A HREF="index.html#291">[ thread ]</A>
+<A HREF="subject.html#291">[ subject ]</A>
+<A HREF="author.html#291">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It looks like our final slot is 1:30PM-3PM on *Monday*, April 7.  Note that
+<BR>
+this is different than I earlier indicated - sorry about that.  Also note that
+<BR>
+the slot in the schedule is shown as starting at 1PM, but we will instead be
+<BR>
+starting at 1:30PM, and going for 90 minutes instead of 2 hours.
+<BR>
+<P>I've been told that the room is one of the MBone rooms.
+<BR>
+<P>I've appended the proposed agenda.  One of the items is to briefly discuss
+<BR>
+implementation problems that need documenting.  This list is for sure
+<BR>
+incomplete, so bring suggestions or float them by the mailing list between
+<BR>
+now and Monday.  Note that I'll be out of town between now and the meeting,
+<BR>
+and I've already made up viewgraphs based on the stuff below - this doesn't
+<BR>
+mean we can't accommodate agenda changes, just that I might not be able to
+<BR>
+comment on them on the list or alter my viewgraphs to fit them.  Steve will
+<BR>
+be reading the list and can make up viewgraph tweaks through Friday, I believe.
+<BR>
+<P>See you next Monday ...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>Charter, scope &amp; milestones [15 min]
+<BR>
+&quot;Naming names&quot; policy [5 min]
+<BR>
+Problem description format [20 min]
+<BR>
+Problems documented in the I-D [10 min]
+<BR>
+Problems awaiting description (and email haggling) [20 min]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial RTO too low
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CWND uninitialized
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial slow-start with 2 packets (minor, maybe soon obsolete)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delay ack violations (esp., &gt; 2 MSS)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to set PSH when send buffer drains
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brakmo/Peterson header prediction bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brakmo/Peterson deflation fencepost bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fast retransmit w/ timestamp options sends 2 packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of keep-alives sent (Dawson et al paper)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Whether keep-alive is 0 bytes or 1 byte
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(acking below-sequence pure acks?)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failing to ack above-sequence data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predictable initial sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ameliorating SYN flooding
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nagle algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Performance: implementing fast retransmit &amp; recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replies to random ack frames (stealth scanning)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTO estimation on slow links
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ICMP handling
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Half-duplex close, ignoring subsequent traffic?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Urgent pointer confusion
+<BR>
+<P>Calling all testing tools [10 min]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Need to document
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encourage development of new tools
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maybe simple raw socket interface for testing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;particular problems?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(but how do you get the host TCP to shut up?)
+<BR>
+<P>Calling all volunteers ... [10 min]
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0290.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0296.html">Steve Parker: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0296.html">Steve Parker: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0303.html">Kacheong Poon: "Re: scheduling and agenda for Memphis"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#291">[ date ]</A>
+<A HREF="index.html#291">[ thread ]</A>
+<A HREF="subject.html#291">[ subject ]</A>
+<A HREF="author.html#291">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,388 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Lost connection</TITLE>
+<META NAME="Author" CONTENT="M B (moncef2@hotmail.com)">
+<META NAME="Subject" CONTENT="Re: Lost connection">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Lost connection</H1>
+<!-- received="Sun Apr  1 01:52:49 2001" -->
+<!-- isoreceived="20010401065249" -->
+<!-- sent="Sun, 01 Apr 2001 01:34:10 -0500" -->
+<!-- isosent="20010401063410" -->
+<!-- name="M B" -->
+<!-- email="moncef2@hotmail.com" -->
+<!-- subject="Re: Lost connection" -->
+<!-- id="F54VvLVKi3s1wsXZZTH00012b1e@hotmail.com" -->
+<!-- inreplyto="Lost connection" -->
+<STRONG>From:</STRONG> M B (<A HREF="mailto:moncef2@hotmail.com?Subject=Re:%20Lost%20connection&In-Reply-To=&lt;F54VvLVKi3s1wsXZZTH00012b1e@hotmail.com&gt;"><EM>moncef2@hotmail.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Apr 01 2001 - 01:34:10 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2515.html">Hal F. Gottfried: "Re: LOST CONNECTION"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2518.html">Jon Snader: "Re: Lost connection"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2516">[ date ]</A>
+<A HREF="index.html#2516">[ thread ]</A>
+<A HREF="subject.html#2516">[ subject ]</A>
+<A HREF="author.html#2516">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At the time the problem fall on my lap I had no access to any of the
+<BR>
+implicated servers! But I can answer your question: The Sun server is
+<BR>
+an E450 running Solaris 2.6. The client is an x86 running NT 4.
+<BR>
+<P>On Monday once I get access to these machines, I will put a sniffer
+<BR>
+on the NT side, then run a snoop on the Sun server. Here is all the
+<BR>
+information I have so far:
+<BR>
+<P>LAN1.....T1.....LAN2.....FR.....LAN3
+<BR>
+<P>. T1 = T1 link.
+<BR>
+. FR = Frame Relay.
+<BR>
+. LAN1 = Network where the NT machine resides.
+<BR>
+. LAN3 = Network where the Sun machine resides.
+<BR>
+. LAN2 = The network between the two Networks. LAN2 and LAN3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are privately connected. No other possible path from LAN1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to LAN3 other than LAN2.
+<BR>
+. LAN1, LAN2 and LAN 3 are 100Base-T.
+<BR>
+. FTP transfers between LAN1 and LAN2 succeed.
+<BR>
+. FTP transfers between LAN2 and LAN3 succeed.
+<BR>
+. FTP transfers between LAN1 and LAN3 fail.
+<BR>
+<P>1- Here is the log of a typical ftp session (look at the time stamps):
+<BR>
+&lt;BEGIN&gt;
+<BR>
+Mar 30 10:44:54 oh44ux01 ftpd[21340]: FTPD: connection from 172.28.2.7 at 
+<BR>
+Fri Mar 30 10:44:54 2001
+<BR>
+Mar 30 10:44:54 oh44ux01 ftpd[21340]: &lt;--- 220
+<BR>
+Mar 30 10:44:54 oh44ux01 ftpd[21340]: oh44ux01 FTP server (SunOS 5.6) ready.
+<BR>
+Mar 30 10:44:59 oh44ux01 ftpd[21340]: FTPD: command: USER test
+<BR>
+Mar 30 10:44:59 oh44ux01 ftpd[21340]: &lt;--- 331
+<BR>
+Mar 30 10:44:59 oh44ux01 ftpd[21340]: Password required for test.
+<BR>
+Mar 30 10:45:04 oh44ux01 ftpd[21340]: FTPD: command: PASS &lt;passwd&gt;
+<BR>
+Mar 30 10:45:04 oh44ux01 ftpd[21340]: &lt;--- 230
+<BR>
+Mar 30 10:45:04 oh44ux01 ftpd[21340]: User test logged in.
+<BR>
+Mar 30 10:45:14 oh44ux01 ftpd[21340]: FTPD: command: TYPE I
+<BR>
+Mar 30 10:45:14 oh44ux01 ftpd[21340]: &lt;--- 200
+<BR>
+Mar 30 10:45:14 oh44ux01 ftpd[21340]: Type set to I.
+<BR>
+Mar 30 10:45:22 oh44ux01 ftpd[21340]: FTPD: command: PORT 172,28,2,7,10,64
+<BR>
+Mar 30 10:45:22 oh44ux01 ftpd[21340]: &lt;--- 200
+<BR>
+Mar 30 10:45:22 oh44ux01 ftpd[21340]: PORT command successful.
+<BR>
+Mar 30 10:45:22 oh44ux01 ftpd[21340]: FTPD: command: STOR 00000100006002.pdf
+<BR>
+Mar 30 10:45:23 oh44ux01 ftpd[21340]: &lt;--- 150
+<BR>
+Mar 30 10:45:23 oh44ux01 ftpd[21340]: Binary data connection for 
+<BR>
+00000100006002.pdf (172.28.2.7,2624).
+<BR>
+Mar 30 12:56:51 oh44ux01 ftpd[21340]: lost connection
+<BR>
+&lt;END&gt;
+<BR>
+<P>2- Another session where several files were transfered then there was a time 
+<BR>
+out:
+<BR>
+<P>[cut]
+<BR>
+Mar 27 17:09:49 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:09:49 oh44ux01 ftpd[6915]: ASCII data connection for /bin/ls 
+<BR>
+(172.28.2.7,2115) (0 bytes).
+<BR>
+Mar 27 17:09:49 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:09:49 oh44ux01 ftpd[6915]: ASCII Transfer complete.
+<BR>
+Mar 27 17:12:49 oh44ux01 ftpd[6915]: FTPD: command: NOOP
+<BR>
+Mar 27 17:12:49 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:12:49 oh44ux01 ftpd[6915]: NOOP command successful.
+<BR>
+Mar 27 17:15:49 oh44ux01 ftpd[6915]: FTPD: command: NOOP
+<BR>
+Mar 27 17:15:49 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:49 oh44ux01 ftpd[6915]: NOOP command successful.
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,214
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:15:55 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000184159044.pdf
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000184159044.pdf (172.28.2.7,2262).
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,215
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000190101016.pdf
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:15:56 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000190101016.pdf (172.28.2.7,2263).
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,216
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000192097033.pdf
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:15:57 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000192097033.pdf (172.28.2.7,2264).
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,217
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000192213008.pdf
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:15:58 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000192213008.pdf (172.28.2.7,2265).
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,219
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000196271002.pdf
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:15:59 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000196271002.pdf (172.28.2.7,2267).
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,220
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000198177007.pdf
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:16:00 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000198177007.pdf (172.28.2.7,2268).
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,221
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000198191008.pdf
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:16:01 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000198191008.pdf (172.28.2.7,2269).
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: &lt;--- 226
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: Transfer complete.
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: FTPD: command: PORT 172,28,2,7,8,223
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: PORT command successful.
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: FTPD: command: STOR 00000199138008.pdf
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: &lt;--- 150
+<BR>
+Mar 27 17:16:02 oh44ux01 ftpd[6915]: Binary data connection for 
+<BR>
+00000199138008.pdf (172.28.2.7,2271).
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: &lt;--- 552
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: 00000199138008.pdf: Connection timed 
+<BR>
+out.
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: FTPD: command: TYPE I
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: &lt;--- 200
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: Type set to I.
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: &lt;--- 221
+<BR>
+Mar 27 19:27:28 oh44ux01 ftpd[6915]: You could at least say goodbye.
+<BR>
+&lt;END&gt;
+<BR>
+_________________________________________________________________
+<BR>
+Get your FREE download of MSN Explorer at <A HREF="http://explorer.msn.com">http://explorer.msn.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2515.html">Hal F. Gottfried: "Re: LOST CONNECTION"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2518.html">Jon Snader: "Re: Lost connection"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2516">[ date ]</A>
+<A HREF="index.html#2516">[ thread ]</A>
+<A HREF="subject.html#2516">[ subject ]</A>
+<A HREF="author.html#2516">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sun Apr 01 2001 - 01:53:18 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

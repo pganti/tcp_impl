@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 12 00:40:14 1999" -->
+<!-- isoreceived="19990212054014" -->
+<!-- sent="Thu, 11 Feb 1999 22:37:12 -0700 (MST)" -->
+<!-- isosent="19990212053712" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902120537.WAA28399@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120537.WAA28399@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 12 1999 - 00:37:12 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1568.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1573.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1573.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1569">[ date ]</A>
+<A HREF="index.html#1569">[ thread ]</A>
+<A HREF="subject.html#1569">[ subject ]</A>
+<A HREF="author.html#1569">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Kacheong Poon &lt;<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120537.WAA28399@calcite.rhyolite.com&gt;">Kacheong.Poon@Eng.Sun.COM</A>&gt;
+</EM><BR>
+<P><EM>&gt; Just for an exercise, suppose TCP does not delay an ack for a segment smaller
+</EM><BR>
+<EM>&gt; than MSS size if the segment received prior to that is a full MSS size
+</EM><BR>
+<EM>&gt; segment.  It still uses the current delay ack strategy for full MSS size
+</EM><BR>
+<EM>&gt; segments.  Will this solve the problem we are discussing when combined with
+</EM><BR>
+<EM>&gt; the Nagle modification on a per-send basis?
+</EM><BR>
+<P>Which Nagle modification is that?  The algorithm as classically described
+<BR>
+and widely implemented that mostly worries about application send requests
+<BR>
+instead of packets?  Or the new proposal with its intentional (and I think
+<BR>
+undesirable) ambiguity between application requests and packets?
+<BR>
+<P><P><EM>&gt; For telnet like traffic, TCP delays ack the same way as before.  For
+</EM><BR>
+<EM>&gt; request/response traffic, it will not delay ack for the last small segment. 
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Assuming there is a problem here that needs to be solved, and that the
+<BR>
+problem cannot be easily and cleanly solved with an explicit flush bit,
+<BR>
+then I think that's a good area to investigate.  The old delayed Ack is
+<BR>
+a badly aimed hammer that has mashed a lot of thumbs over the years.
+<BR>
+(E.g. the 10X performance hit taken by some commercial UNIX systems
+<BR>
+talking to some version of Sun's system.)
+<BR>
+<P><P><EM>&gt; This should be easy to implement, much easier than an adaptive delay ack
+</EM><BR>
+<EM>&gt; algorithm.  Will Vernon consider this as a bloat to OS?  Are those extra
+</EM><BR>
+<EM>&gt; acks in some situations acceptable to people on this list?  Note that this
+</EM><BR>
+<EM>&gt; is just an exercise on thinking what delay ack strategy should be.
+</EM><BR>
+<P>Maybe.
+<BR>
+<P>First we need some evidence of a problem that needs to be and can be
+<BR>
+solved, other than the familiar committee need to Publish Something. 
+<BR>
+I suspect there is real problem, but so far, there is no clear evidence.
+<BR>
+As far as I can recall, all of the proposed examples of problems that
+<BR>
+could only be solved with the various proposals have failed.
+<BR>
+It's hard to invent a solution to an unknown problem.
+<BR>
+<P>The HTTP/1.1 problem is interesting, but I suspect it has already been
+<BR>
+solved with NODELAY, smart use of select(), and so forth.  A handicap for
+<BR>
+any new idea is that it will not be widely implemented for a long time.
+<BR>
+Good programmers must and will continue to use the old solutions.  If
+<BR>
+you're writing portable code, if on some platforms you must use NODELAY,
+<BR>
+and if NODELAY always works as well as the new scheme, do you bloat your
+<BR>
+code with #ifdef's or runtime bytes to use the new scheme?  Or do you just
+<BR>
+use NODELAY and forget the new mechanism?
+<BR>
+<P><P><P>} From: Kacheong Poon &lt;<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120537.WAA28399@calcite.rhyolite.com&gt;">Kacheong.Poon@Eng.Sun.COM</A>&gt;
+<BR>
+<P>} ...
+<BR>
+} Yes, I have read the 2 RFCs.  The reason I suggested a draft on describing the
+<BR>
+} preferred way to write network application is that many application
+<BR>
+} programmers do not really understand how TCP works.  Reading those RFCs may 
+<BR>
+} just confuse them more, as those RFC assumes an understanding of how TCP
+<BR>
+} works.  And those RFCs do not provide a programming guide line.  By guide line
+<BR>
+} I mean actual example code.  To me, a document with example code and an
+<BR>
+} intuitive explanation on why the code is better in simple networking terms
+<BR>
+} is more suitable for most programmers.  I don't know if there is such a
+<BR>
+} document freely available on the Web.  If you know, please post a reference.
+<BR>
+<P>A document that would teach good programming sounds like a good thing.
+<BR>
+Such documents are often called textbooks.  Some good textbooks contain
+<BR>
+lots of example code.  However, as you basically say about the old RFCs,
+<BR>
+the IETF is not in the introductory** textbook business.  The IETF is a
+<BR>
+standards committee, not Addison-Wesley, John Wiley, or even The Microsoft
+<BR>
+Press.  Writing, printing, and distributing good textbooks is hard work.
+<BR>
+Textbook authors and publishers should be properly paid.  Regardless of
+<BR>
+anyone's intentions, I doubt that the profits for an RFC can buy more than
+<BR>
+the usual trade rag consutant blabbler and inter-ad filler, which is
+<BR>
+usually wrong, and always much less reliable than the ads.
+<BR>
+<P>**The technical issue is basic, no matter how many lazy people get it
+<BR>
+wrong.  As I said earlier about why fwrite()/stdio was invented--everyone
+<BR>
+competant knows that extra I/O requests are bad, whether on wires or to
+<BR>
+disks.  Would you feel good about hiring a programmer whose code does
+<BR>
+unnecessary multiple database access?--of course not, if you've ever heard
+<BR>
+about locking, commits, concurrency, disk latency, and so forth.
+<BR>
+The small TCP write problem is very much like writing single disk sectors
+<BR>
+instead of whole tracks or cylinders
+<BR>
+<P><P>] From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120537.WAA28399@calcite.rhyolite.com&gt;">raj@cup.hp.com</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] Would a PTMU smaller than the MSS interfere with the receiver's ability
+<BR>
+] to tell a full-sized segment from a small one? Especially in a
+<BR>
+] unidirectional case, or an assymetric route case.
+<BR>
+<P>It might be good enough to consider anything bigger than 512 bytes full
+<BR>
+size, and any segment smaller than its immediate predecessor.  Not that
+<BR>
+I'm advocating anything--just speculating.
+<BR>
+<P>] ...
+<BR>
+] Well, it is my belief that &quot;today&quot; an ACK costs just as many CPU cycles
+<BR>
+] as a data segment.
+<BR>
+<P>As Rick knows, I mostly agree with that.
+<BR>
+But the current issue is not CPU cycles, but 100 ms request-response latency.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120537.WAA28399@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1568.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1573.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1573.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1569">[ date ]</A>
+<A HREF="index.html#1569">[ thread ]</A>
+<A HREF="subject.html#1569">[ subject ]</A>
+<A HREF="author.html#1569">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

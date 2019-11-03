@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: discrepancy in TIME_WAIT sta</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Fri Jan  9 18:03:11 1998" -->
+<!-- isoreceived="19980109230311" -->
+<!-- sent="Sat, 10 Jan 1998 01:46:13 GMT" -->
+<!-- isosent="19980110014613" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: discrepancy in TIME_WAIT state handling" -->
+<!-- id="199801100146.BAA02403@rum.isi.edu" -->
+<!-- inreplyto="discrepancy in TIME_WAIT state handling" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801100146.BAA02403@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jan 09 1998 - 20:46:13 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0884.html">David Mosberger: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0885.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0885.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#883">[ date ]</A>
+<A HREF="index.html#883">[ thread ]</A>
+<A HREF="subject.html#883">[ subject ]</A>
+<A HREF="author.html#883">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Steps now numbered:
+<BR>
+<P><P>Step #1:
+<BR>
+<EM>&gt; The NT is in TIME_WAIT.
+</EM><BR>
+<P>Step #2: 
+<BR>
+<EM>&gt; The HP sends the SYN with old port numbers.
+</EM><BR>
+<P>Step #3:
+<BR>
+<EM>&gt; The NT responds with an ACK, and does nothing else.
+</EM><BR>
+<P>Step #4:
+<BR>
+<EM>&gt; The HP, receiving an ACK, sends a RST.
+</EM><BR>
+<EM>&gt; 	it is the HP's responsibility not to reuse 
+</EM><BR>
+<EM>&gt; 	the port numbers for 2*MSL from this time
+</EM><BR>
+<P>Step #5:
+<BR>
+<EM>&gt; The NT receives the RST, goes to LISTEN and deletes the TCB, and returns.
+</EM><BR>
+<P><EM>&gt; At this point, the HP would be in error if it issued a new SYN with the old port numbers,
+</EM><BR>
+<EM>&gt; if it did so before the 2*MSL timeout.
+</EM><BR>
+<P>Step #6 (new - this is the part that starts the cycle back to step #2, if it would occur
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;before 2*MSL after step #4)
+<BR>
+<P>The HP sends the SYN with the old port numbers.
+<BR>
+<P><P>--------------------------------------------
+<BR>
+<P><EM>&gt; Date: Fri, 9 Jan 1998 17:28:05 -0800 (PST)
+</EM><BR>
+<EM>&gt; From: Kacheong Poon &lt;<A HREF="mailto:kcpoon@jurassic.eng.Sun.COM?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801100146.BAA02403@rum.isi.edu&gt;">kcpoon@jurassic.eng.Sun.COM</A>&gt;
+</EM><BR>
+...
+<BR>
+<EM>&gt; &gt; The HP, receiving an ACK, sends a RST.
+</EM><BR>
+<EM>&gt; &gt; 	it is the HP's responsibility not to reuse 
+</EM><BR>
+<EM>&gt; &gt; 	the port numbers for 2*MSL from this time
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Unfortunately, NT does the active close, that's why it is in TIME-WAIT state. 
+</EM><BR>
+<EM>&gt; So applications on HP can reuse the same port as HP's TCP does not know about
+</EM><BR>
+<EM>&gt; the previous connection.  The previous connection's TCB is deleted when it
+</EM><BR>
+<EM>&gt; changes to CLOSED state
+</EM><BR>
+<P>That's the reason the HP sends the SYN with the old port numbers (step #2). That
+<BR>
+initial use is fine. After the HP sends the RST (step #4) it should not later
+<BR>
+resend a SYN with the same port numbers (step #6, added)
+<BR>
+<P><EM>&gt; &gt; The NT receives the RST, goes to LISTEN and deletes the TCB, and returns.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As the seq num of the RST from HP is outside the window, it is ignored.  So NT
+</EM><BR>
+<EM>&gt; will not terminate the TIME-WAIT TCB.
+</EM><BR>
+<P>The RST should be in response to the ACK from the NT.
+<BR>
+<P>(Wouldn't it have the seq number from the ACK, not from the original SYN?)
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801100146.BAA02403@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0884.html">David Mosberger: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0885.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0885.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#883">[ date ]</A>
+<A HREF="index.html#883">[ thread ]</A>
+<A HREF="subject.html#883">[ subject ]</A>
+<A HREF="author.html#883">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

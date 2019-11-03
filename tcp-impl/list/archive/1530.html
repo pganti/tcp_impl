@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="RE: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 17:38:09 1999" -->
+<!-- isoreceived="19990205223809" -->
+<!-- sent="Fri, 5 Feb 1999 15:32:20 -0700 (MST)" -->
+<!-- isosent="19990205223220" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="RE: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902052232.PAA24992@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052232.PAA24992@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 17:32:20 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1529.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1530">[ date ]</A>
+<A HREF="index.html#1530">[ thread ]</A>
+<A HREF="subject.html#1530">[ subject ]</A>
+<A HREF="author.html#1530">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Art Shelest &lt;<A HREF="mailto:artshel@microsoft.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052232.PAA24992@calcite.rhyolite.com&gt;">artshel@microsoft.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; How would you implement that?  
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It's a valid question, however I'd suggest that benefit of the
+</EM><BR>
+<EM>&gt; algorithm is discussed before perceived implementation complexity.
+</EM><BR>
+<P>In general, I strongly disagree.  Implementation costs are never merely
+<BR>
+perceived.  Good ideas are a subset of those that have reasonable
+<BR>
+implementations.  Without a good implementation, talk aobut the
+<BR>
+wonderfulness of any idea is no better than useless usenet jabber, of
+<BR>
+which there is no shortage.  Besides, the name of this mailing list
+<BR>
+is relevant.  That said, all that's necessary to make it reasonable to
+<BR>
+discuss an idea is a plausible hint that it can be reasonably implemented.
+<BR>
+<P><P><EM>&gt; If the recommended value for N is 2, the implementation is trivial,
+</EM><BR>
+<EM>&gt; consumes extra 2-4 bytes* per TCB and the overhead is 1-2 extra
+</EM><BR>
+<EM>&gt; instructions per send.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; *One can store beginning sequence number of the last packet (4 bytes),
+</EM><BR>
+<EM>&gt; or the size of the last segment (2 bytes). If storing last segment
+</EM><BR>
+<EM>&gt; size, then Nagle check would change:
+</EM><BR>
+<EM>&gt; N=1 (today):	SND.NXT &gt; SND.UNA
+</EM><BR>
+<EM>&gt; N=2:			SND.NXT -SND.SIZ &gt; SND.UNA 
+</EM><BR>
+<EM>&gt; where SND.SIZ is last segment size.
+</EM><BR>
+<P>&quot;Configurable&quot; implies that sometimes N=1 and other times N=2.  That means
+<BR>
+that the time costs are at least the following additional instructions,
+<BR>
+&nbsp;&nbsp;1   fetch of the switch
+<BR>
+&nbsp;&nbsp;2   test of the switch
+<BR>
+&nbsp;&nbsp;3   branch on the switch's value
+<BR>
+&nbsp;&nbsp;4   fetch SND.SIZ
+<BR>
+&nbsp;&nbsp;5   subtract 
+<BR>
+<P>Depending on the CPU, you might combine #1, #2, and #3 into 2 instructions,
+<BR>
+such as a test and a branch, or a fetch and a branch-zero.  The largest
+<BR>
+costs are probably not the instructions but the primary cache misses and
+<BR>
+dirtying.  The secondary tertiary cache misses probably don't matter since
+<BR>
+the entire TCB is likely to be faulted in and dirtied.  Overall, that
+<BR>
+sounds fairly cheap to me.
+<BR>
+<P><P><EM>&gt; Back to the real issue: would allowing N=2 unacknowledged segments 
+</EM><BR>
+<EM>&gt; resolve effects of Nagle/Delayed ACK interaction?
+</EM><BR>
+<P>How is this idea better than the idea of the draft?  
+<BR>
+<P>This idea would effectively turn off Nagle for the most common (in my
+<BR>
+experience) bad code, which loves write-write-read-write-write-read....
+<BR>
+It would double the number of packets on the wire for such bad
+<BR>
+applications.  I think that would be Not Good.  Would relaxing Nagle for
+<BR>
+2 send requests be much different from turning it off entirely?
+<BR>
+<P><P>Do we agree that I misread the following or it was not tightly phrased?
+<BR>
+I read it as a proposal for letting the application vary the value of N
+<BR>
+from 1 to some large number.
+<BR>
+<P><EM>&gt; &gt; Why not parametrize the Nagle?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Instead of &quot;allow only one unacknowledged segment&quot;
+</EM><BR>
+<EM>&gt; &gt; allow &quot;allow N unacknowledged segments/bytes&quot; and 
+</EM><BR>
+<EM>&gt; &gt; specify recommended range of values.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; The N=2 would be similar to current proposal and also
+</EM><BR>
+<EM>&gt; &gt; fix the case where application follows the 
+</EM><BR>
+<EM>&gt; &gt; &quot;small write, small write, read&quot; operation, 
+</EM><BR>
+<EM>&gt; &gt; which is not addressed by the proposed draft.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; The N=2 seems like a good choice, because receivers
+</EM><BR>
+<EM>&gt; &gt; typically ACK every other packet.
+</EM><BR>
+<P><P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902052232.PAA24992@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1529.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1530">[ date ]</A>
+<A HREF="index.html#1530">[ thread ]</A>
+<A HREF="subject.html#1530">[ subject ]</A>
+<A HREF="author.html#1530">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Andi Kleen (ak@muc.de)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sun Sep 17 20:00:44 2000" -->
+<!-- isoreceived="20000918000044" -->
+<!-- sent="Mon, 18 Sep 2000 01:54:48 +0200" -->
+<!-- isosent="20000917235448" -->
+<!-- name="Andi Kleen" -->
+<!-- email="ak@muc.de" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="20000918015448.A1088@fred.muc.de" -->
+<!-- inreplyto="200009171646.e8HGkt420858@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Andi Kleen (<A HREF="mailto:ak@muc.de?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;20000918015448.A1088@fred.muc.de&gt;"><EM>ak@muc.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Sep 17 2000 - 19:54:48 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2339">[ date ]</A>
+<A HREF="index.html#2339">[ thread ]</A>
+<A HREF="subject.html#2339">[ subject ]</A>
+<A HREF="author.html#2339">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sun, Sep 17, 2000 at 08:54:01PM +0200, Vernon Schryver wrote:
+<BR>
+<EM>&gt; I don't understand what is meant there.  &quot;Brute force&quot; here does not mean
+</EM><BR>
+<EM>&gt; the same as when you are searching for a key.  The ISN attacker gets only
+</EM><BR>
+<EM>&gt; a single guess for each initial sequence number attack.  If there are a
+</EM><BR>
+<EM>&gt; few thousand possible addresses for the buffer containing the SYN and if
+</EM><BR>
+<EM>&gt; the probability of the SYN landing in each buffer is uniform (yes, probably
+</EM><BR>
+<EM>&gt; false, but the reality is probably as good), then no matter how many times
+</EM><BR>
+<EM>&gt; the bad guy tries, the odds for each try are 1 in several thousand.
+</EM><BR>
+<P>When you can open a connection to the server you get as many guesses as you
+<BR>
+want for a secret refresh period (a few minutes). You know one ISN, the 
+<BR>
+algorithm to generate it and a lot of the input parameters (your IP, your
+<BR>
+port, etc.). Unknown is just the secret. When there are not too many 
+<BR>
+possibilities for the secret you can brute force it, checking it against 
+<BR>
+your single ISN. When you can make the brute force attack quicker than
+<BR>
+the secret refresh you win. When the server is handicaped in its secret
+<BR>
+generation (e.g. diskless or no disk io during normal operation, no 
+<BR>
+hardware rnd, no user keyboard input) like most servers you'll likely win 
+<BR>
+for a much longer time and you can extend the brute force attack over
+<BR>
+longer times.
+<BR>
+<P><EM>&gt; &gt; &gt; have a clock that ticks microseconds or better.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; iirc that was proposed but rejected because it could possible allow an
+</EM><BR>
+<EM>&gt; &gt; attacker with a sniffer on your local ethernet to maintain a copy of your
+</EM><BR>
+<EM>&gt; &gt; entropy pool.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &quot;Proposed but rejected&quot; by whom and with what authority over other
+</EM><BR>
+<EM>&gt; competent designers?  I doubt whoever rejected it understood the natures
+</EM><BR>
+<EM>&gt; of local ethernets, sniffers, clocks, local Ethernets, and pools of
+</EM><BR>
+<EM>&gt; entropy.  As I said before, if you have to worry about ISN's on
+</EM><BR>
+<EM>&gt; your LAN, then you're dead.
+</EM><BR>
+<P>entropy pools are usually not only used for ISNs, but for a lot of other
+<BR>
+things (like SSL or PGP session keys). For these I would worry even on my
+<BR>
+LAN. Splitting the entropy pool into less security critical (like ISNs) 
+<BR>
+and more security critical (like session keys) is probably not practical,
+<BR>
+so you have to design the entropy pool input for the worst case.
+<BR>
+<P><P>-Andi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2339">[ date ]</A>
+<A HREF="index.html#2339">[ thread ]</A>
+<A HREF="subject.html#2339">[ subject ]</A>
+<A HREF="author.html#2339">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

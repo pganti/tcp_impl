@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 10:44:32 1998" -->
+<!-- isoreceived="19980820144432" -->
+<!-- sent="Thu, 20 Aug 1998 11:42:26 -0600 (MDT)" -->
+<!-- isosent="19980820174226" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201742.LAA09914@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201742.LAA09914@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 13:42:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1238.html">braden@ISI.EDU: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1242.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1242.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1243.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1239">[ date ]</A>
+<A HREF="index.html#1239">[ thread ]</A>
+<A HREF="subject.html#1239">[ subject ]</A>
+<A HREF="author.html#1239">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201742.LAA09914@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<P><EM>&gt; &gt; Do you have (a pointer to) a list of those protocols/applications and
+</EM><BR>
+<EM>&gt; &gt; their timeouts?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Http servers are the most obvious one, apache has a time limit on how long
+</EM><BR>
+<EM>&gt; it will sit around on a connection.
+</EM><BR>
+<P>How short is that timer?
+<BR>
+<P>Isn't it not in HTTP but like the FTP idle-user timeout.  As such, it is
+<BR>
+arguably worse than a TCP keepalive.  Have you never been thrown off an
+<BR>
+FTP server by an idle-user timeout simply because you were trying to do
+<BR>
+two things at once and let your FTP window get stale? I have.  (Yes, I've
+<BR>
+also been thrown off when I'd forgotten a window and should have been
+<BR>
+thrown off.)
+<BR>
+<P><P><EM>&gt;                                     An active timer example is Sun RPC where
+</EM><BR>
+<EM>&gt; an RPC that vanished and leaves the connection in an idle state will still
+</EM><BR>
+<EM>&gt; be retried in time by the RPC layer back offs
+</EM><BR>
+<P>Are you sure you have not confused the RPC server with the RPC client?
+<BR>
+Maybe I've forgotten something critical, but I cannot think how a Sun RPC
+<BR>
+(or even the other brand of RPC) server can say anything to a client that
+<BR>
+appears to be hours or days slow in sending its request.  (of course,
+<BR>
+using the far less common rpc/xdr/TCP instead of UDP)
+<BR>
+<P><P><P>] &gt; Since people are divided on the subject of whether or not to provide
+<BR>
+] &gt; keepalives, wouldn't it be better to provide a socket option through which they
+<BR>
+] &gt; can be turned on rather than not providing them at all ?
+<BR>
+] 
+<BR>
+] That was done in the early 1980's too. Its called SO_KEEPALIVE
+<BR>
+<P>And to keep the zealots happy, it defaults to &quot;off&quot;.
+<BR>
+<P>What is now needed is a de facto standard way to set the interval
+<BR>
+on an individual connection, instead of the typical system-wide
+<BR>
+attack on the BSD default of 2 hours.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201742.LAA09914@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1238.html">braden@ISI.EDU: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1242.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1242.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1243.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1239">[ date ]</A>
+<A HREF="index.html#1239">[ thread ]</A>
+<A HREF="subject.html#1239">[ subject ]</A>
+<A HREF="author.html#1239">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

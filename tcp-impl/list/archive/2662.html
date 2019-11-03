@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 20:29:51 2002" -->
+<!-- isoreceived="20020406012951" -->
+<!-- sent="Fri, 05 Apr 2002 17:29:19 -0800" -->
+<!-- isosent="20020406012919" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TCP Checksum Interoperability" -->
+<!-- id="3CAE4F6F.3090701@isi.edu" -->
+<!-- inreplyto="200204060021.TAA24631@Sparkle.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;3CAE4F6F.3090701@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 20:29:19 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2661.html">Fred Baker: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2658.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2662">[ date ]</A>
+<A HREF="index.html#2662">[ thread ]</A>
+<A HREF="subject.html#2662">[ subject ]</A>
+<A HREF="author.html#2662">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+der Mouse wrote:
+<BR>
+<EM>&gt;&gt;The TCP (and IP) checksum is defined as &quot;the one's complement of the
+</EM><BR>
+<EM>&gt;&gt;one's-complement sum of the packet contents&quot; [...]
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;&gt;(The only way to get all 0's as a sum of a one's-complement addition
+</EM><BR>
+<EM>&gt;&gt;process is to to sum a series of zero's - which a real packet will
+</EM><BR>
+<EM>&gt;&gt;never contain.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ...huh?  It depends on how you implement one's-complement arithmetic.
+</EM><BR>
+<P>See RFC1624. The definition of 1's complement arithmetic is not 
+<BR>
+implementation dependent.
+<BR>
+<P><EM>&gt; Consider, for example, &quot;do two's-complement adds and reduce the result
+</EM><BR>
+<EM>&gt; mod 0xffff&quot;, which may be suitable on a machine with fast hardware mod,
+</EM><BR>
+<EM>&gt; and which can never produce 0xffff.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In 16-bit one's-complement arithmetic, 0x0000 and 0xffff are
+</EM><BR>
+<EM>&gt; equivalent, not only on input but also on output.  Trying to draw an
+</EM><BR>
+<EM>&gt; artificial distinction between them is not only unsupported by the
+</EM><BR>
+<EM>&gt; standard as far as I can tell but liable to break interoperability with
+</EM><BR>
+<EM>&gt; conformant implementations which don't draw that distinction.
+</EM><BR>
+<P>That issue is covered in RFC1624 and in RFC768.
+<BR>
+<P><EM>&gt;&gt;Note that if the packet's check sum (i.e. the sum with the checksum
+</EM><BR>
+<EM>&gt;&gt;field set to zero) happens to come out to zero (i.e. all one's,
+</EM><BR>
+<EM>&gt;&gt;before the complement), then *either* value of zero in the checksum
+</EM><BR>
+<EM>&gt;&gt;field of the packet will result in an all-1's sum when the packet is
+</EM><BR>
+<EM>&gt;&gt;checksummed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ...unless the packet checksumming is done in a way that generates
+</EM><BR>
+<EM>&gt; 0x0000 instead of 0xffff when the sum is (one's-complement) zero.
+</EM><BR>
+<P>Again, see RFC1624.
+<BR>
+<P><EM>&gt;&gt;I honestly don't understand why anyone's code even bothers to look at
+</EM><BR>
+<EM>&gt;&gt;the actual value in the checksum field of the incoming packet; just
+</EM><BR>
+<EM>&gt;&gt;do the checksum of the whole packet, and look at the result.
+</EM><BR>
+<P>Because there's a difference - see RFC768.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2661.html">Fred Baker: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2658.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2662">[ date ]</A>
+<A HREF="index.html#2662">[ thread ]</A>
+<A HREF="subject.html#2662">[ subject ]</A>
+<A HREF="author.html#2662">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 20:29:58 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

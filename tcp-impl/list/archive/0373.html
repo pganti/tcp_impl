@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP keep-alives &amp; Realit</TITLE>
+<META NAME="Author" CONTENT="Perry E. Metzger (perry@piermont.com)">
+<META NAME="Subject" CONTENT="Re: TCP keep-alives &amp; Reality bites">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP keep-alives &amp; Reality bites</H1>
+<!-- received="Wed Apr 30 07:37:52 1997" -->
+<!-- isoreceived="19970430113752" -->
+<!-- sent="Wed, 30 Apr 1997 10:30:03 -0400" -->
+<!-- isosent="19970430143003" -->
+<!-- name="Perry E. Metzger" -->
+<!-- email="perry@piermont.com" -->
+<!-- subject="Re: TCP keep-alives &amp; Reality bites" -->
+<!-- id="199704301430.KAA00905@jekyll.piermont.com" -->
+<!-- inreplyto="199704300051.UAA09796@MAILSERV-2HIGH-A.FTP.COM" -->
+<STRONG>From:</STRONG> Perry E. Metzger (<A HREF="mailto:perry@piermont.com?Subject=Re:%20TCP%20keep-alives%20&amp;%20Reality%20bites&In-Reply-To=&lt;199704301430.KAA00905@jekyll.piermont.com&gt;"><EM>perry@piermont.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 10:30:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0368.html">Larry Backman: "TCP keep-alives &amp; Reality bites"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#373">[ date ]</A>
+<A HREF="index.html#373">[ thread ]</A>
+<A HREF="subject.html#373">[ subject ]</A>
+<A HREF="author.html#373">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Larry Backman writes:
+<BR>
+<EM>&gt; Now lets make it clear that I find keepalives as evil as the next person
+</EM><BR>
+<EM>&gt; and wish they could be vaporized from the face of the earth.  However
+</EM><BR>
+<EM>&gt; in Windows-Land (and perhaps some of the Microsoft watchers on the list
+</EM><BR>
+<EM>&gt; might chime up also) we have all these somewhat shall we say - 
+</EM><BR>
+<EM>&gt; network-inexperienced - application programmers who do not understand either
+</EM><BR>
+<EM>&gt; network programming or the concept of multiple CPU synchronization.
+</EM><BR>
+[...]
+<BR>
+<EM>&gt; We tell them our keepalive is 2 hr's and they protest.  Loudly.  Often
+</EM><BR>
+<EM>&gt; a mutual customer is involved and competitive products with shorter
+</EM><BR>
+<EM>&gt; keepalives are mentioned.
+</EM><BR>
+<P>I've had several apps where it was critical to know a TCP connection
+<BR>
+was dead or jammed, and fast. This was for a trading floor application
+<BR>
+where the TCP connection was sending out quote updates -- a bad place
+<BR>
+to lose on getting information! If the TCP to one server went down, I
+<BR>
+wanted to know that I needed to switch to the other.
+<BR>
+<P>I had a simple way to do this. My application protocol included a &quot;are
+<BR>
+you there&quot; noop function. I'd send an &quot;are you there&quot; on a timer that
+<BR>
+got reset if I got traffic (i.e. I only sent &quot;are you there?&quot; queries
+<BR>
+if the line was idle), and if I got nothing back in a moment or two, I
+<BR>
+switched.
+<BR>
+<P>In other words, I did keepalives at the application layer, where,
+<BR>
+IMHO, they belonged.
+<BR>
+<P>I don't understand why people expect TCP to provide this for them. One
+<BR>
+size does *not* fit all for these things. I needed to switch in
+<BR>
+seconds if I got a network outage. Most people have no such
+<BR>
+requirement and would be hurt by switching in seconds.
+<BR>
+<P><EM>&gt; After a few years of this, perhaps 7 or 8 years back,we provided a
+</EM><BR>
+<EM>&gt; configuration parameter by which a user could set our keepalive to
+</EM><BR>
+<EM>&gt; any value they wanted.
+</EM><BR>
+<P>Yeah, and then you find yourself with some of the things on a machine
+<BR>
+taking too long to fail, and some gratuitously failing all the
+<BR>
+time. This doesn't work. One size does NOT fit all.
+<BR>
+<P>You want your network backup program to last through a midnight router
+<BR>
+reload. You want your network market quote service to switch off if
+<BR>
+you don't get data for seconds. These are NOT the same requirement.
+<BR>
+<P><EM>&gt; My point, which I perhaps have belaboured a bit too long, is that keepalive
+</EM><BR>
+<EM>&gt; timers are not just a stack issue, but also an issue of educating application
+</EM><BR>
+<EM>&gt; developers as to what keepalives are used for and what they should not
+</EM><BR>
+<EM>&gt; be used for.
+</EM><BR>
+<P>One of the reasons keepalives make me upset is because apps guys DO
+<BR>
+NOT understand them, and start to think the stack should take care of
+<BR>
+this for them, which it probably shouldn't.
+<BR>
+<P>Perry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0372.html">Scott Dawson: "Re: draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0368.html">Larry Backman: "TCP keep-alives &amp; Reality bites"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#373">[ date ]</A>
+<A HREF="index.html#373">[ thread ]</A>
+<A HREF="subject.html#373">[ subject ]</A>
+<A HREF="author.html#373">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

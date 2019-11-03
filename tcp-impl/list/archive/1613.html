@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Idle Restart Algorithms</TITLE>
+<META NAME="Author" CONTENT="Venkat Padmanabhan (padmanab@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: Idle Restart Algorithms">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Idle Restart Algorithms</H1>
+<!-- received="Wed Feb 24 14:30:14 1999" -->
+<!-- isoreceived="19990224193014" -->
+<!-- sent="Wed, 24 Feb 1999 11:21:41 -0800" -->
+<!-- isosent="19990224192141" -->
+<!-- name="Venkat Padmanabhan" -->
+<!-- email="padmanab@microsoft.com" -->
+<!-- subject="RE: Idle Restart Algorithms" -->
+<!-- id="3924E6A6E200D211BAC900805F6FC9E103CDFD07@RED-MSG-11" -->
+<!-- inreplyto="Idle Restart Algorithms" -->
+<STRONG>From:</STRONG> Venkat Padmanabhan (<A HREF="mailto:padmanab@microsoft.com?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;3924E6A6E200D211BAC900805F6FC9E103CDFD07@RED-MSG-11&gt;"><EM>padmanab@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 24 1999 - 14:21:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1613">[ date ]</A>
+<A HREF="index.html#1613">[ thread ]</A>
+<A HREF="subject.html#1613">[ subject ]</A>
+<A HREF="author.html#1613">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I think you've outlined the issues very well. Here are a few comments.
+<BR>
+<P><EM>&gt; The basic issue at hand is that the past performance of the network is
+</EM><BR>
+<EM>&gt; being used to predict the future. It is recognized that the longer the
+</EM><BR>
+<EM>&gt; interval between past input and the current decision time is, the less
+</EM><BR>
+<EM>&gt; reliable that data is for making the decision. However, traditional
+</EM><BR>
+<P>I am not convinced that there is a strong correlation between the
+<BR>
+length of the idle period and the reliability of old congestion
+<BR>
+information. Consider a bottleneck link that is shared by multiple
+<BR>
+connections. If one of them becomes idle, the others would soon
+<BR>
+(within several RTTs) ramp up and consume the bandwidth that the
+<BR>
+idle connection freed up. If the idle connection were to restart
+<BR>
+after this time and immediately start sending at its old rate, it
+<BR>
+may cause overload and packet loss. (This is even assuming that 
+<BR>
+packets are sent out smoothly.) So the appropriateness of having
+<BR>
+an idle connection restart without slow start dissipates within 
+<BR>
+(at most) several RTTs, a duration which is likely to be a much 
+<BR>
+shorter than the typical user &quot;think time&quot; in a Web browsing session.
+<BR>
+<P><P><EM>&gt; So for the sake of clarity, I want to remove the concept of burst
+</EM><BR>
+<EM>&gt; control from the discussion of restart algorithms. Perhaps a 'burst
+</EM><BR>
+<EM>&gt; window' or other such technique can be orthogonally implemented to
+</EM><BR>
+<EM>&gt; address the issue (something that would learn in a similar fashion
+</EM><BR>
+<EM>&gt; what the maximum allowable network burst would be).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>I couldn't agree with you more! Avoiding bursts, be it via timers,
+<BR>
+&quot;burst windows&quot;, etc., is the easy part. The hard part is figuring
+<BR>
+out what the congestion window and other variables should be set
+<BR>
+to after an idle period.
+<BR>
+<P><EM>&gt; Moving back to idle algorithms I would like to experiment with
+</EM><BR>
+<EM>&gt; something adaptive.. maybe a cwnd reduction of 20% (min 1 segment) for
+</EM><BR>
+<EM>&gt; every A-4D elapsed in the idle period (apply in a compounding
+</EM><BR>
+<EM>&gt; fashion).. This reverses the impact of the variance mentioned above
+</EM><BR>
+<EM>&gt; while providing more fine grained input into the 'trust' process.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>This may be worth investigating, but as I have outlined above, I
+<BR>
+don't intuitively understand why a gradual decay of the congestion
+<BR>
+window (over the timescale of interest -- 10s of seconds) would be
+<BR>
+appropriate. Given the current congestion window size, should we be
+<BR>
+more confident in estimating the appropriate window size after a
+<BR>
+1-minute idle period compared to a 2-minute idle period?
+<BR>
+<P><EM>&gt; While I intend to go ahead in looking at this, I'm soliciting any
+</EM><BR>
+<EM>&gt; helpful insights or 'been there done that' comments folks may have.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>The approach I took in my work on &quot;TCP Fast Start&quot; was to have an 
+<BR>
+explicit protocol mechanism to &quot;hedge&quot; any bets (guesses) we may 
+<BR>
+make about the appropriate window size after an idle period. With 
+<BR>
+such a mechanism in place, it may be okay to err on the side of being 
+<BR>
+too aggressive (i.e., using a larger window size than appropriate). 
+<BR>
+The mechanism I used was priority dropping -- i.e., packets sent 
+<BR>
+when the sender is unsure of the appropriateness of congestion window
+<BR>
+size are assigned a low drop priority. This would shield (to an extent)
+<BR>
+other traffic in the event of the guess being incorrect. While
+<BR>
+priority dropping is a simple mechanism and similar in spirit to
+<BR>
+some of the diffserv mechanisms being considered, the Internet is
+<BR>
+not quite ready for it yet. More information on this work is available
+<BR>
+from:
+<BR>
+<A HREF="http://www.cs.berkeley.edu/~padmanab/papers/gi98.ps">http://www.cs.berkeley.edu/~padmanab/papers/gi98.ps</A>
+<BR>
+<A HREF="http://www.cs.berkeley.edu/~padmanab/phd-thesis.html">http://www.cs.berkeley.edu/~padmanab/phd-thesis.html</A> (Chapter 8)
+<BR>
+<P>One final note: I believe the deployment of RED in routers would
+<BR>
+improve the chances of success for a fast start like scheme, because
+<BR>
+the router buffers would better be able to absorb the surge in
+<BR>
+load due to connections that are restarting.
+<BR>
+<P>-Venkat
+<BR>
+<P>Venkat Padmanabhan
+<BR>
+Microsoft Research
+<BR>
+<A HREF="mailto:padmanab@microsoft.com?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;3924E6A6E200D211BAC900805F6FC9E103CDFD07@RED-MSG-11&gt;">padmanab@microsoft.com</A>
+<BR>
+<A HREF="http://www.research.microsoft.com/~padmanab">http://www.research.microsoft.com/~padmanab</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1613">[ date ]</A>
+<A HREF="index.html#1613">[ thread ]</A>
+<A HREF="subject.html#1613">[ subject ]</A>
+<A HREF="author.html#1613">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

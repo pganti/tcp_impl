@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Natchu Vishnu Priya (vishnu@cs.ucr.edu)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 08:54:42 1998" -->
+<!-- isoreceived="19980423125442" -->
+<!-- sent="Thu, 23 Apr 1998 08:52:31 -0700 (PDT)" -->
+<!-- isosent="19980423155231" -->
+<!-- name="Natchu Vishnu Priya" -->
+<!-- email="vishnu@cs.ucr.edu" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="Pine.LNX.3.96.980423084412.22897B-100000@hill.ucr.edu" -->
+<!-- inreplyto="199804231540.LAA15325@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Natchu Vishnu Priya (<A HREF="mailto:vishnu@cs.ucr.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;Pine.LNX.3.96.980423084412.22897B-100000@hill.ucr.edu&gt;"><EM>vishnu@cs.ucr.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 11:52:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1077.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1079.html">Wu-chang Feng: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1076">[ date ]</A>
+<A HREF="index.html#1076">[ thread ]</A>
+<A HREF="subject.html#1076">[ subject ]</A>
+<A HREF="author.html#1076">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, 23 Apr 1998, Mark Allman wrote:
+<BR>
+<P><EM>&gt; I would say that the initial burst of data caused by a TCP
+</EM><BR>
+<EM>&gt; connection with an initial window of 4 segments is somewhat similar
+</EM><BR>
+<EM>&gt; to the initial burst of data caused by 4 parallel connections using
+</EM><BR>
+<EM>&gt; 1 segment initial windows.  But, that is where the similarities end.
+</EM><BR>
+<EM>&gt; One connection with an N segment initial window is N times more
+</EM><BR>
+<EM>&gt; aggressive in the first RTT.  N connections with an initial window
+</EM><BR>
+<EM>&gt; of 1 segment are N times more aggressive throughout the transfer.
+</EM><BR>
+<EM>&gt; For example, if we use 4 connections and we see a loss the effective
+</EM><BR>
+<EM>&gt; window is reduced to 7/8 of the effective window size before loss
+</EM><BR>
+<EM>&gt; occurred (i.e., one of the connections backed off).  If a single TCP
+</EM><BR>
+<EM>&gt; connection observed the same loss, the effective window size will be
+</EM><BR>
+<EM>&gt; 1/2 the window size when loss was detected (regardless of the
+</EM><BR>
+<EM>&gt; initial window).  The change proposed in the I-D alters a
+</EM><BR>
+<EM>&gt; _parameter_, not any of TCP's fundamental congestion control
+</EM><BR>
+<EM>&gt; algorithms.
+</EM><BR>
+true.. but it does impose a minimum window size..
+<BR>
+<P>and when the network is congested.. this minimum window size will
+<BR>
+effectively result in a increase in data in network till the rtt matches
+<BR>
+the available bandwidth and the window size of 4K...
+<BR>
+<P>This would result in 
+<BR>
+a) Increase in rtt.. bad for interactive traffic.
+<BR>
+b) if the buffer overflows fall in goodput.
+<BR>
+<P>For a concrete example....
+<BR>
+<P>I'm browsing over a 28.8 K modem link..
+<BR>
+<P>with 3 sim. connections thats a combined 12K of data in flight..
+<BR>
+<P>with 12K of data in flight and only about 4KBps available.. the rtt will
+<BR>
+have to be 3 seconds.....
+<BR>
+<P>vishnu
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1077.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1079.html">Wu-chang Feng: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1076">[ date ]</A>
+<A HREF="index.html#1076">[ thread ]</A>
+<A HREF="subject.html#1076">[ subject ]</A>
+<A HREF="author.html#1076">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

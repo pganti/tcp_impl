@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Wed Mar 26 12:43:15 1997" -->
+<!-- isoreceived="19970326174315" -->
+<!-- sent="Wed, 26 Mar 1997 15:24:52 -0500" -->
+<!-- isosent="19970326202452" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="199703262024.PAA05404@brookfield.ans.net" -->
+<!-- inreplyto="199703252135.QAA28771@MAILSERV-2HIGH.FTP.COM" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703262024.PAA05404@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 26 1997 - 15:24:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0264.html">Barney Wolff: "Re: delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0262.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0253.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0254.html">Jerry Toporek: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#263">[ date ]</A>
+<A HREF="index.html#263">[ thread ]</A>
+<A HREF="subject.html#263">[ subject ]</A>
+<A HREF="author.html#263">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199703252135.QAA28771@MAILSERV-2HIGH.FTP.COM?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703262024.PAA05404@brookfield.ans.net&gt;">199703252135.QAA28771@MAILSERV-2HIGH.FTP.COM</A>&gt;, Larry Backman writes
+<BR>
+:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ||The default deferred ACK interval in our implementation is 50ms.  The value
+</EM><BR>
+<EM>&gt;  is
+</EM><BR>
+<EM>&gt; ||tunable by vendors, and, in most cases, by the end user.  Where 50ms is les
+</EM><BR>
+<EM>&gt; s
+</EM><BR>
+<EM>&gt; ||than a tick (which is not the case in any of our production versions), you
+</EM><BR>
+<EM>&gt; ||are correct that the default should be larger.  In the case of the Mac, I
+</EM><BR>
+<EM>&gt; ||believe that a tick is 10ms, but I know that it is substantially smaller th
+</EM><BR>
+<EM>&gt; an
+</EM><BR>
+<EM>&gt; ||50ms.  Apple does not provide the ability for tuning by end-users in OT 1.1
+</EM><BR>
+<EM>&gt; .1.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; ||I'm more than happy to listen to comments from the group on what the defaul
+</EM><BR>
+<EM>&gt; t
+</EM><BR>
+<EM>&gt; ||deferred ACK interval ought to be.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; we use 55 msec. in our old stack and 200 msec. in our newer one.
+</EM><BR>
+<EM>&gt; Gievn the speed of modern CPU's, the 200 msec. is way too long
+</EM><BR>
+<EM>&gt; and the 55 msec. delayed ack is also too long.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Even slow, slow, slow PC clients in the old 286..386 days could turn 
+</EM><BR>
+<EM>&gt; 100 app-&gt;stack io's per second.  Seems to me that dinosaurs like the
+</EM><BR>
+<EM>&gt; Bsd 200 msec. fast timer and the PC 55 Msec clock should be left behind
+</EM><BR>
+<EM>&gt; and we should go to a much smaller delayed ACK.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'll argue for 10 msec as a stake in the ground.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; And am preparing to be buried by the response...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; L&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>If the RTT is much larger than 10 msec, there is no delayed ACK in
+<BR>
+that case.  RTT in the US (coast to coast) is roughly 70 msec with no
+<BR>
+queueing delay.  If there is congestion, it is often longer.
+<BR>
+Satellite links can have very long RTTs (250msec).
+<BR>
+<P>Delayed ACK is useful in bulk trasfer.  It is a problem when the
+<BR>
+window is 1.  Delayed ACK is always disabled after idle and the link
+<BR>
+is always considered initially idle.  10 msec is probably too short
+<BR>
+for a WAN.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0264.html">Barney Wolff: "Re: delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0262.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0253.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0254.html">Jerry Toporek: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#263">[ date ]</A>
+<A HREF="index.html#263">[ thread ]</A>
+<A HREF="subject.html#263">[ subject ]</A>
+<A HREF="author.html#263">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun 12 04:23:37 1997" -->
+<!-- isoreceived="19970612082337" -->
+<!-- sent="Thu, 12 Jun 1997 12:17:15 +0100" -->
+<!-- isosent="19970612111715" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="339FDABB.7F41@spider.com" -->
+<!-- inreplyto="199706051826.AA07116@ash.isi.edu" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 12 1997 - 07:17:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0526.html">message@marketcom2.com: "Web Site Visibility"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0435.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0436.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#527">[ date ]</A>
+<A HREF="index.html#527">[ thread ]</A>
+<A HREF="subject.html#527">[ subject ]</A>
+<A HREF="author.html#527">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;">touch@ISI.EDU</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From <A HREF="mailto:owner-tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;">owner-tcp-impl@relay.engr.SGI.COM</A> Thu Jun  5 11:22:20 1997
+</EM><BR>
+<EM>&gt; &gt; To: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; &gt; Subject: TIME-WAIT truncation
+</EM><BR>
+<EM>&gt; &gt; Date: Thu, 05 Jun 1997 11:03:08 PDT
+</EM><BR>
+<EM>&gt; &gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Someone passed along the following URL via private email:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;       <A HREF="http://www.microsoft.com/kb/articles/Q151/4/18.htm">http://www.microsoft.com/kb/articles/Q151/4/18.htm</A>
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; It discusses a TCP implementation problem in which a connection can leave
+</EM><BR>
+<EM>&gt; &gt; TIME-WAIT before the full 2 MSL interval has elapsed, because there are
+</EM><BR>
+<EM>&gt; &gt; a limited (albeit large) number of TCBs available for TIME-WAIT.  My
+</EM><BR>
+<EM>&gt; &gt; impression is that there are other implementations that truncate TIME-WAIT
+</EM><BR>
+<EM>&gt; &gt; before a full 2 MSL because they use a definition of MSL smaller than
+</EM><BR>
+<EM>&gt; &gt; the standard one.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Is there a volunteer interested in documenting this problem?  (Further
+</EM><BR>
+<EM>&gt; &gt; discussion of it is fine too, of course.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Yup - we have some work here that's related, so this
+</EM><BR>
+<EM>&gt; would be a fine place for me to volunteer...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>I think it would be good to identify clearly the separate TIME-WAIT
+<BR>
+issues since it is revisited fairly frequently.  There's at least the
+<BR>
+following issues:
+<BR>
+<P>Need for TW (port wraparound and SN wraparound)
+<BR>
+Adequacy of TIME-WAIT as a mechanism (MSL choice, TTL issues, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;T/TCP/HSE extensions)
+<BR>
+Implementation issues (port usage, memory and performance)
+<BR>
+Workarounds - pros and cons (MSL reduction, TCB reuse)
+<BR>
+TIME-WAIT and RSTs (RSTs are not a workaround to avoid TIME-WAIT).
+<BR>
+<P>Perhaps a section on TIME-WAIT in the draft?
+<BR>
+<P>ian
+<BR>
+<P><P><PRE>
+-- 
+Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;339FDABB.7F41@spider.com&gt;">ian@spider.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0526.html">message@marketcom2.com: "Web Site Visibility"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0435.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0436.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#527">[ date ]</A>
+<A HREF="index.html#527">[ thread ]</A>
+<A HREF="subject.html#527">[ subject ]</A>
+<A HREF="author.html#527">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

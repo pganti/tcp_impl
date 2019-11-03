@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: timeout value in TCP impleme</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="RE: timeout value in TCP implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: timeout value in TCP implementation</H1>
+<!-- received="Mon Apr 21 10:09:49 2003" -->
+<!-- isoreceived="20030421140949" -->
+<!-- sent="Mon, 21 Apr 2003 10:11:48 -0400" -->
+<!-- isosent="20030421141148" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="RE: timeout value in TCP implementation" -->
+<!-- id="200304211411.KAA89438@guns.lerc.nasa.gov" -->
+<!-- inreplyto="timeout value in TCP implementation" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 21 2003 - 10:11:48 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2938.html">Mark Allman: "INFOCOM 2004 Call for Papers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2936.html">kunchanl: "RE: timeout value in TCP implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2934.html">kunchanl: "timeout value in TCP implementation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2937">[ date ]</A>
+<A HREF="index.html#2937">[ thread ]</A>
+<A HREF="subject.html#2937">[ subject ]</A>
+<A HREF="author.html#2937">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+<P>------- Forwarded Message
+<BR>
+<P>From: Bogdan Ghita &lt;<A HREF="mailto:bodhi@jack.see.plymouth.ac.uk?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;">bodhi@jack.see.plymouth.ac.uk</A>&gt;
+<BR>
+To: &quot;'kunchanl '&quot; &lt;<A HREF="mailto:kunchanl@pollux.usc.edu?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;">kunchanl@pollux.usc.edu</A>&gt;
+<BR>
+Cc: &quot;'<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;">tcp-impl@lerc.nasa.gov</A>'&quot; &lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;">tcp-impl@lerc.nasa.gov</A>&gt;
+<BR>
+Subject: RE: timeout value in TCP implementation
+<BR>
+Date: Sun, 20 Apr 2003 18:45:56 +0100
+<BR>
+<P>Hello Kun-chan,
+<BR>
+<P>3 seconds is the recomended initial value for the TCP timeout timer (RTO).
+<BR>
+See RFC1122 (section 4.2.3.1) for details.
+<BR>
+<P>Cheers,
+<BR>
+Bogdan
+<BR>
+<P><P>- -----Original Message-----
+<BR>
+From: kunchanl
+<BR>
+To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;200304211411.KAA89438@guns.lerc.nasa.gov&gt;">tcp-impl@lerc.nasa.gov</A>
+<BR>
+Sent: 20/04/03 17:57
+<BR>
+Subject: timeout value in TCP implementation
+<BR>
+<P>Hi,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;I've observed quiet a few of connections in my tcpdump trace
+<BR>
+has the SYN packet re-transmitted after about 3 seconds (as
+<BR>
+the example below). I'm wondering if this 3-second is related
+<BR>
+some particular timeout value in some tcp implementaton. Can
+<BR>
+anybody shed me some light?
+<BR>
+<P>Thanks
+<BR>
+Kun-chan Lan
+<BR>
+<P>1036626828.477241 10.0.0.1.2355 &gt; 192.168.0.2.80: S 12193306:12193306(0)
+<BR>
+win 8192 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+<BR>
+1036626831.460768 10.0.0.1.2355 &gt; 192.168.0.2.80: S 12193306:12193306(0)
+<BR>
+win 8192 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+<BR>
+1036626831.784822 10.0.0.1.2355 &gt; 192.168.0.2.80: . ack 3335637810 win
+<BR>
+8760 (DF)
+<BR>
+1036626831.792048 10.0.0.1.2355 &gt; 192.168.0.2.80: P 0:758(758) ack 1 win
+<BR>
+8760 (DF)
+<BR>
+1036626831.852406 10.0.0.1.2355 &gt; 192.168.0.2.80: . ack 124 win 8638
+<BR>
+(DF)
+<BR>
+1036626831.852423 10.0.0.1.2355 &gt; 192.168.0.2.80: R 12194065:12194065(0)
+<BR>
+win 0 (DF)
+<BR>
+<P><P>------- End of Forwarded Message
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2938.html">Mark Allman: "INFOCOM 2004 Call for Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2936.html">kunchanl: "RE: timeout value in TCP implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2934.html">kunchanl: "timeout value in TCP implementation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2937">[ date ]</A>
+<A HREF="index.html#2937">[ thread ]</A>
+<A HREF="subject.html#2937">[ subject ]</A>
+<A HREF="author.html#2937">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Apr 21 2003 - 10:09:57 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

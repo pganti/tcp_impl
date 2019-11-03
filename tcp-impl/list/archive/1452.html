@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: fast booting &amp; 2*MSL</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="fast booting &amp; 2*MSL">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>fast booting &amp; 2*MSL</H1>
+<!-- received="Tue Jan  5 17:13:44 1999" -->
+<!-- isoreceived="19990105221344" -->
+<!-- sent="Tue, 5 Jan 1999 15:12:11 -0700 (MST)" -->
+<!-- isosent="19990105221211" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="fast booting &amp; 2*MSL" -->
+<!-- id="199901052212.PAA07375@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 05 1999 - 17:12:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1451.html">rames: "Re: Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1454.html">Rick Jones: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1456.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1452">[ date ]</A>
+<A HREF="index.html#1452">[ thread ]</A>
+<A HREF="subject.html#1452">[ subject ]</A>
+<A HREF="author.html#1452">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; All it really takes is switching an IP address from one system to
+</EM><BR>
+<EM>&gt; another in the event of failure. ...
+</EM><BR>
+<P><EM>&gt; Given the pressures on HA in certain markets, I think there is pressure
+</EM><BR>
+<EM>&gt; to have this detection and failover happen in &lt;&lt; TIME_WAIT. I am
+</EM><BR>
+<EM>&gt; reasonably confident that modulo icky things like DB recovery the
+</EM><BR>
+<EM>&gt; switchovers are happening &lt; 60 seconds today on a number of platforms.
+</EM><BR>
+<EM>&gt; Probably much less.
+</EM><BR>
+<P>That's a good point.  I but both SGI's and HP's HA offerings switch
+<BR>
+in less than 60 seconds at least some times.
+<BR>
+<P><P>] From: rames &lt;<A HREF="mailto:richard@ussw.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">richard@ussw.com</A>&gt;
+<BR>
+] To: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+<BR>
+] CC: <A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">Richard_Berke@troweprice.com</A>, <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">tcp-impl@lerc.nasa.gov</A>
+<BR>
+<P>] &gt; Which systems have you tested that break that rule?
+<BR>
+]
+<BR>
+] Embedded systems with TCP/IP stacks in ROM are up in a matter of
+<BR>
+] seconds. See, for example, the AMD Net186 Network Appliance demo board
+<BR>
+] at
+<BR>
+] ...
+<BR>
+<P>That's another good point.  One saving grace is that such systems are not
+<BR>
+likely to have WWW servers hit by zillions of clients.  They are also less
+<BR>
+likely to originate TCP connections, and so can hope their peers will
+<BR>
+honor TIME-WAIT and pick new port numbers.  They are also simpler and
+<BR>
+could be fixed more easily.  On the other hand, their designers are even
+<BR>
+more likely to take short cuts for speed over reliability and to feel
+<BR>
+pressures to start working sooner after a reboot.
+<BR>
+<P>] From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+<BR>
+<P>] &gt; &gt; Almost every OS that I've ever tested breaks this rule, unfortunately.
+<BR>
+]
+<BR>
+] &gt; Which systems have you tested that break that rule?
+<BR>
+]
+<BR>
+] I can get Linux and NT to boot in less than 120 seconds by thinning down
+<BR>
+] the number of services in use and using fast gear. I could probably boot
+<BR>
+] a Sun box in that same time frame if I tried hard enough.
+<BR>
+<P>I'd have to see Redhat 5.1, 5.2, or NT 4.0 boot in less than 120 seconds
+<BR>
+to believe it.  Even so, note that I wrote about the de facto standard
+<BR>
+2*MSL, which is less than 2 minutes.
+<BR>
+<P>]                                                           Big systems
+<BR>
+] (VMS, MPE) take longer, but that's mostly due to hardware.
+<BR>
+<P>That must involve a definition of &quot;hardware&quot; other than the one I use.
+<BR>
+<P>]                                                            Even Compaq
+<BR>
+] systems (with their overzealous POST tests) running DOS can take longer
+<BR>
+] than two minutes, but the OS doesn't care.
+<BR>
+<P>Yes, cold-start tests take far too long on many systems, and have for
+<BR>
+decades.  I figure that syndrome is another case of work expanding to fill
+<BR>
+the time available.  If power-on diagnostics don't take much time, then
+<BR>
+the organization responsible for them loses clout and can suffer.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;199901052212.PAA07375@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1451.html">rames: "Re: Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1454.html">Rick Jones: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1456.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1452">[ date ]</A>
+<A HREF="index.html#1452">[ thread ]</A>
+<A HREF="subject.html#1452">[ subject ]</A>
+<A HREF="author.html#1452">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

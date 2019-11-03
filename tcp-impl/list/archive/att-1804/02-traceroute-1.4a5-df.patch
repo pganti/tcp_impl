@@ -1,0 +1,16 @@
+diff -r -U5 traceroute-1.4a5.orig/traceroute.c traceroute-1.4a5/traceroute.c
+--- traceroute-1.4a5.orig/traceroute.c	Fri Jun 13 03:30:27 1997
++++ traceroute-1.4a5/traceroute.c	Mon May 10 12:31:18 1999
+@@ -504,11 +506,11 @@
+ #ifdef BYTESWAP_IP_LEN
+ 	outip->ip_len = htons(packlen);
+ #else
+ 	outip->ip_len = packlen;
+ #endif
+-	outip->ip_off = off;
++	outip->ip_off = htons(off);
+ 	outp = (u_char *)(outip + 1);
+ #ifdef HAVE_RAW_OPTIONS
+ 	if (lsrr > 0) {
+ 		register u_char *optlist;
+

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: put on your PMTU discovery think</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="put on your PMTU discovery thinking caps">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>put on your PMTU discovery thinking caps</H1>
+<!-- received="Fri Dec  4 02:51:38 1998" -->
+<!-- isoreceived="19981204075138" -->
+<!-- sent="Thu, 03 Dec 1998 23:43:57 PST" -->
+<!-- isosent="19981204074357" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="put on your PMTU discovery thinking caps" -->
+<!-- id="199812040743.XAA01294@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812040743.XAA01294@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 04 1998 - 02:43:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1406.html">Mark Allman: "notes for upcoming tcp-impl meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1414.html">Geert Jan de Groot: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1407">[ date ]</A>
+<A HREF="index.html#1407">[ thread ]</A>
+<A HREF="subject.html#1407">[ subject ]</A>
+<A HREF="author.html#1407">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+We've heard a number of people mention that it would be good to document
+<BR>
+some of the pitfalls &amp; problems of implementing PMTU discovery (something
+<BR>
+with a bit more meat than RFC 1435).  For example, one is that if an ATM
+<BR>
+switch doesn't have enough buffer to reassemble a bunch of cells into a
+<BR>
+really large packet, then it will necessarily discard the packet, and if
+<BR>
+the packet had DF set, it *won't* generate the necessary ICMP response
+<BR>
+(because it couldn't process the full packet at all), leading to a PMTU
+<BR>
+black hole.  (Matt Mathis pointed this one out a while back.)
+<BR>
+<P>Even though some of these problems aren't related to TCP implementation,
+<BR>
+some are, and it's not clear there's a better home for discussing them than
+<BR>
+tcpimpl.
+<BR>
+<P>So we've put on the Orlando agenda a discussion of PMTU discovery problems,
+<BR>
+to try to get a feel for the scope.  Neither of your esteemed WG chairs,
+<BR>
+though, is particularly familiar with these problems.  We'd therefore like
+<BR>
+to encourage discussion on the list over the next few days, so we can get
+<BR>
+things rolling in advance and figure out some of the common ground in order
+<BR>
+to cover it quickly at the meeting.  We'd also like to encourage tcpimpl'ers
+<BR>
+to come to the meeting prepared to discuss their favorite PMTU problems.
+<BR>
+<P>See you next week,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1406.html">Mark Allman: "notes for upcoming tcp-impl meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1414.html">Geert Jan de Groot: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1407">[ date ]</A>
+<A HREF="index.html#1407">[ thread ]</A>
+<A HREF="subject.html#1407">[ subject ]</A>
+<A HREF="author.html#1407">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

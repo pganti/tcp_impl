@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Tue Feb 17 12:20:33 1998" -->
+<!-- isoreceived="19980217172033" -->
+<!-- sent="Tue, 17 Feb 1998 15:18:39 -0500 (EST)" -->
+<!-- isosent="19980217201839" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="199802172018.PAA18614@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802172018.PAA18614@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 17 1998 - 15:18:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0946.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#947">[ date ]</A>
+<A HREF="index.html#947">[ thread ]</A>
+<A HREF="subject.html#947">[ subject ]</A>
+<A HREF="author.html#947">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; 	When an application closes a connection in such a way that it
+</EM><BR>
+<EM>&gt;&gt; 	can no longer read any received data, the TCP must assure that
+</EM><BR>
+<EM>&gt;&gt; 	it discards [any buffered] data and opens the receive window if
+</EM><BR>
+<EM>&gt;&gt; 	it was not open.
+</EM><BR>
+<EM>&gt; Why ?
+</EM><BR>
+<P>To prevent hung states, such as were described. :-)
+<BR>
+<P><EM>&gt; Suppose I have no resources left to commit to the close ?
+</EM><BR>
+<P>What resources would the described behavior require?  Just because the
+<BR>
+window is open doesn't mean you have to commit resources to buffering
+<BR>
+received data in circumstances - like these - where it's never going to
+<BR>
+be possible for anyone to read that data.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802172018.PAA18614@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0946.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0948.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#947">[ date ]</A>
+<A HREF="index.html#947">[ thread ]</A>
+<A HREF="subject.html#947">[ subject ]</A>
+<A HREF="author.html#947">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: more on TCP buffering</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: more on TCP buffering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: more on TCP buffering</H1>
+<!-- received="Fri Mar 21 11:05:31 1997" -->
+<!-- isoreceived="19970321160531" -->
+<!-- sent="Fri, 21 Mar 1997 13:58:41 -0400" -->
+<!-- isosent="19970321175841" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: more on TCP buffering" -->
+<!-- id="9703211858.AA15536@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199703211841.AA07769@ash.isi.edu" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;9703211858.AA15536@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 12:58:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0194.html">Vern Paxson: "PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#193">[ date ]</A>
+<A HREF="index.html#193">[ thread ]</A>
+<A HREF="subject.html#193">[ subject ]</A>
+<A HREF="author.html#193">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; I think you read a bit much into PSH. PSH means tell the TCP
+</EM><BR>
+<P><EM>&gt; I'm basing my statements on what was intended by PSH (from talking
+</EM><BR>
+<EM>&gt; with old-timers involved in the spec), rather than what is currently
+</EM><BR>
+<EM>&gt; implemented.
+</EM><BR>
+<P>I won't claim to be an old timer, but my previous note is based on
+<BR>
+what I've always understood PSH to be; this dates back to RFC 1122
+<BR>
+days. I've seen nothing in the last week's discussion suggesting that
+<BR>
+more than one implementation didn't get this right. I don't see a
+<BR>
+problem with the spec. Are we missing each other's point?
+<BR>
+<P><EM>&gt; I agree that this is a spec issue, not an impl issue.
+</EM><BR>
+<P>I don't see the issue at all. Where is ambiguity in the spec? Which
+<BR>
+implementations have interpreted the spec differently? If all
+<BR>
+implementations (save 1) have implemented the spec in the same way,
+<BR>
+and it hasn't caused operational problems (for those that implemented
+<BR>
+it that way), my take is the exception got it wrong, not that the spec
+<BR>
+needs revising in a way that causes all the other implementations to
+<BR>
+be non-conforming (which is what your suggested change appears to do).
+<BR>
+<P><EM>&gt; &gt; My take on this discussion is that some (sending) implementation
+</EM><BR>
+<EM>&gt; &gt; doesn't set the PSH bit when it should, so the reciver buffers data
+</EM><BR>
+<EM>&gt; &gt; forever (expecting data or a PSH to come along later if needed). That
+</EM><BR>
+<EM>&gt; &gt; is a bug in the sender TCP; the receiver is behaving correctly.
+</EM><BR>
+<P><EM>&gt; PSH wouldn't help in this case - the receiving TCP can dump
+</EM><BR>
+<EM>&gt; the data to the socket, but the app need not pick it up.
+</EM><BR>
+<P>And PSH won't fix the problem where the application refuses to read
+<BR>
+data. You *can't* force an application to read data. PSH is designed
+<BR>
+to deal with the case where the client has sent a 1-byte message (that
+<BR>
+gets buffered by tcp) the sender has issued a read, and there is true
+<BR>
+deadlock (i.e., both sender and receiver are hung, waiting for tcp to
+<BR>
+do something). If the read side of a tcp connection doesn't have an
+<BR>
+application hanging on a read, there is no deadlock (that TCP can
+<BR>
+solve).
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0194.html">Vern Paxson: "PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#193">[ date ]</A>
+<A HREF="index.html#193">[ thread ]</A>
+<A HREF="subject.html#193">[ subject ]</A>
+<A HREF="author.html#193">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

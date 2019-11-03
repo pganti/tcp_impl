@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SYN cookies</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@jenolan.rutgers.edu)">
+<META NAME="Subject" CONTENT="Re: SYN cookies">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SYN cookies</H1>
+<!-- received="Thu Jun  5 16:02:36 1997" -->
+<!-- isoreceived="19970605200236" -->
+<!-- sent="Thu, 5 Jun 1997 18:55:02 -0400" -->
+<!-- isosent="19970605225502" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@jenolan.rutgers.edu" -->
+<!-- subject="Re: SYN cookies" -->
+<!-- id="199706052255.SAA00895@jenolan.caipgeneral" -->
+<!-- inreplyto="199706052241.AA07640@ash.isi.edu" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@jenolan.rutgers.edu?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706052255.SAA00895@jenolan.caipgeneral&gt;"><EM>davem@jenolan.rutgers.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:55:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0475.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0473.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#474">[ date ]</A>
+<A HREF="index.html#474">[ thread ]</A>
+<A HREF="subject.html#474">[ subject ]</A>
+<A HREF="author.html#474">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706052255.SAA00895@jenolan.caipgeneral&gt;">touch@ISI.EDU</A>
+<BR>
+&nbsp;&nbsp;&nbsp;Date: Thu, 5 Jun 1997 15:41:02 -0700
+<BR>
+<P>&nbsp;&nbsp;&nbsp;PS - authentication cookies sound great until you run at rates in
+<BR>
+&nbsp;&nbsp;&nbsp;the 250 Mbps range - at which point, you may deny more connection
+<BR>
+&nbsp;&nbsp;&nbsp;attempts due to CPU overload than the SYN flooding you're trying to
+<BR>
+&nbsp;&nbsp;&nbsp;avoid.
+<BR>
+<P>This is an implementation misfeature then, we have demonstrated that
+<BR>
+even with a 100baseT pipe filled with SYN bombs, not only could new
+<BR>
+legitimate connections come successfully in over a LAN, the CPU
+<BR>
+utilization was very low, the attack could barely be noticed.
+<BR>
+Response times were also acceptable for the legitimate web client
+<BR>
+connections.  Only when the ether was brought to the point were 50%
+<BR>
+collisions were present, did the attack become noticable, at this
+<BR>
+point you are dealing with a denial of bandwidth attack, the attacker
+<BR>
+needs to be directly connected to your high speed LAN the server is on
+<BR>
+to even get to this point, and here you have other problems.
+<BR>
+<P>The biggest problem most implementations have, which could contribute
+<BR>
+to CPU overload during a SYN bomb, is that a SYN causes an entire new
+<BR>
+TCP control block to be allocated, this is not very intelligent and
+<BR>
+makes you more prone to SYN bomb's in the first place.  Under Linux we
+<BR>
+only allocate micro control blocks (perhaps 16 bytes or so in size) on
+<BR>
+the SYN, and only acquire a real TCP once established state is
+<BR>
+reached.
+<BR>
+<P>In more recent implementations a fast persistant storage allocator
+<BR>
+such as SLAB is used to make the allocation and overhead cost of the
+<BR>
+micro control blocks all lost in the noise.
+<BR>
+<P>So what is the problem with SYN/RST cookie based defense mechanisms
+<BR>
+again?
+<BR>
+<P>---------------------------------------------////
+<BR>
+Yow! 11.26 MB/s remote host TCP bandwidth &amp; ////
+<BR>
+199 usec remote TCP latency over 100Mb/s   ////
+<BR>
+ethernet.  Beat that!                     ////
+<BR>
+-----------------------------------------////__________  o
+<BR>
+David S. Miller, <A HREF="mailto:davem@caip.rutgers.edu?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706052255.SAA00895@jenolan.caipgeneral&gt;">davem@caip.rutgers.edu</A> /_____________/ / // /_/ &gt;&lt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0475.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0473.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#474">[ date ]</A>
+<A HREF="index.html#474">[ thread ]</A>
+<A HREF="subject.html#474">[ subject ]</A>
+<A HREF="author.html#474">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

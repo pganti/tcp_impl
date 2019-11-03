@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (Jerry.Chu@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Fri Jun  6 00:23:02 1997" -->
+<!-- isoreceived="19970606042302" -->
+<!-- sent="Fri, 6 Jun 1997 00:08:35 -0700" -->
+<!-- isosent="19970606070835" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="Jerry.Chu@Eng.Sun.COM" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706060708.AAA21677@taipei.eng.sun.com" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:Jerry.Chu@Eng.Sun.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060708.AAA21677@taipei.eng.sun.com&gt;"><EM>Jerry.Chu@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 06 1997 - 03:08:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0512.html">Alan Cox: "Re: SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0510.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#511">[ date ]</A>
+<A HREF="index.html#511">[ thread ]</A>
+<A HREF="subject.html#511">[ subject ]</A>
+<A HREF="author.html#511">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;  *&gt;
+</EM><BR>
+<EM>&gt;  *&gt; Rather than just tossing out the oldest time-waiter, it would be better
+</EM><BR>
+<EM>&gt;  *&gt; to grab the last sequence number information from that socket and make
+</EM><BR>
+<EM>&gt;  *&gt; sure to offer a sequence number just following that on the new connection.
+</EM><BR>
+<EM>&gt;  *&gt; If I recall correctly BSD boxes already do this if there is an incoming
+</EM><BR>
+<EM>&gt;  *&gt; connection to a specific port that is in TIME_WAIT, and recent Linux
+</EM><BR>
+<EM>&gt;  *&gt; releases (2.0 or older) do this as well.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;Eric,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;When you start messing with TCP's reliable delivery mechanism, you have
+</EM><BR>
+<EM>&gt;to be very careful.  I am not positive, but I think I recall that the
+</EM><BR>
+<EM>&gt;scheme you mention is in fact formally incorrect and can be
+</EM><BR>
+<EM>&gt;demonstrated in particular circumstances to allow corrupted data.
+</EM><BR>
+<EM>&gt;   
+</EM><BR>
+<EM>&gt;Bob Braden
+</EM><BR>
+<P>Not to mention even the simple scheme BSD code didn't get it right.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* If a new connection request is received
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* while in TIME_WAIT, drop the old connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* and start over if the sequence numbers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* are above the previous ones.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tiflags &amp; TH_SYN &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_state == TCPS_TIME_WAIT &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEQ_GT(ti-&gt;ti_seq, tp-&gt;rcv_nxt)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iss = tp-&gt;rcv_nxt + TCP_ISSINCR;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* should be snd_nxt, not rcv_nxt */
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp = tcp_close(tp);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto findpcb;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>Jerry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0512.html">Alan Cox: "Re: SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0510.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#511">[ date ]</A>
+<A HREF="index.html#511">[ thread ]</A>
+<A HREF="subject.html#511">[ subject ]</A>
+<A HREF="author.html#511">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

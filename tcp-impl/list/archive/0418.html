@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP performance in asymmetric ne</TITLE>
+<META NAME="Author" CONTENT="Subir Varma (subir@enterprise.hybrid.com)">
+<META NAME="Subject" CONTENT="TCP performance in asymmetric networks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP performance in asymmetric networks</H1>
+<!-- received="Thu May 22 11:52:13 1997" -->
+<!-- isoreceived="19970522155213" -->
+<!-- sent="Thu, 22 May 1997 11:40:30 -0700" -->
+<!-- isosent="19970522184030" -->
+<!-- name="Subir Varma" -->
+<!-- email="subir@enterprise.hybrid.com" -->
+<!-- subject="TCP performance in asymmetric networks" -->
+<!-- id="c=US%a=_%p=hybrid%l=ENTERPRISE-970522184030Z-14563@enterprise.hybrid.com" -->
+<STRONG>From:</STRONG> Subir Varma (<A HREF="mailto:subir@enterprise.hybrid.com?Subject=Re:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;c=US%25a=_%25p=hybrid%25l=ENTERPRISE-970522184030Z-14563@enterprise.hybrid.com&gt;"><EM>subir@enterprise.hybrid.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 22 1997 - 14:40:30 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0417.html">Larry Backman: "Re: No working group charter in http://www.ietf.org/html.charters/wg-dir.html"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0421.html">Kathleen Nichols: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0423.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0424.html">Subir Varma: "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0427.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0429.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#418">[ date ]</A>
+<A HREF="index.html#418">[ thread ]</A>
+<A HREF="subject.html#418">[ subject ]</A>
+<A HREF="author.html#418">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Most of the emerging broadband access networks are asymmetric in
+<BR>
+nature, i.e., high BW in the downstream direction and low BW in the
+<BR>
+upstream direction. Examples include HFC, ADSL, Satellite, Wireless
+<BR>
+access networks. In these systems, TCP Tahoe shows better performance as
+<BR>
+compared to TCP Reno. This problem has been analyzed by Lakshman et.al.
+<BR>
+in their paper &quot;Window based error recovery and flow control with a slow
+<BR>
+ack channel: A study of TCP/IP performance&quot;, available at
+<BR>
+<A HREF="http://tesla.csl.uiuc.edu/~madhow/publications.html">http://tesla.csl.uiuc.edu/~madhow/publications.html</A>. The reason for this
+<BR>
+is the following: A single packet loss in TCP Reno (due to buffer
+<BR>
+overflow or link error) leads to the subsequent loss of multiple
+<BR>
+packets. As has been well documented, this results in a timer expiry.
+<BR>
+The chain of events that lead to the loss of multiple packets from that
+<BR>
+of a single packet, is unique to the way the Fast Recovery algorithm
+<BR>
+interacts with asymmetric channels. Assuming that the initial packet
+<BR>
+loss occurs at a window size of W, in a symmetric network, TCP Reno is
+<BR>
+able to inflate its window size in the Fast Recovery phase and transmit
+<BR>
+about W/2 new packets. Thus at the start of the next cycle, when the
+<BR>
+window size is set to W/2, the network is not subjected to a burst of
+<BR>
+packets. In asymmetric networks on the other hand, due to the slow
+<BR>
+upstream link, TCP Reno is not able to inflate its window size
+<BR>
+sufficiently to transmit any new packets. This results in a burst of W/2
+<BR>
+packets into the network at the start of the next cycle, which leads to
+<BR>
+multiple packet losses and a timer expiry.
+<BR>
+This performance problem is of concern to us, and we would like some
+<BR>
+feedback on what can be done to alleviate it. In particular:
+<BR>
+&nbsp;- TCP SACK can solve this problem. Is the IETF close to agreeing on a
+<BR>
+SACK based TCP congestion control scheme? RFC 2018 defines the packet
+<BR>
+formats for relaying the SACK information to the sender, but it seems
+<BR>
+there are several proposals on how to modify the basic window
+<BR>
+increase/decrease algorithms in the presence of SACK.
+<BR>
+- What is the present state of migration of the major TCP stacks from
+<BR>
+Tahoe to Reno? In light of the fact that more and more end systems will
+<BR>
+be at the asymmetric links in the next few years, it may be a good idea
+<BR>
+to continue with TCP Tahoe until SACK is available.
+<BR>
+<P>Regards,
+<BR>
+Subir Varma
+<BR>
+<P>Hybrid Networks,
+<BR>
+Cupertino, CA
+<BR>
+www.hybrid.com
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0417.html">Larry Backman: "Re: No working group charter in http://www.ietf.org/html.charters/wg-dir.html"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0419.html">Curtis Villamizar: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0421.html">Kathleen Nichols: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0422.html">Larry Backman: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0423.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0424.html">Subir Varma: "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0427.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0429.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#418">[ date ]</A>
+<A HREF="index.html#418">[ thread ]</A>
+<A HREF="subject.html#418">[ subject ]</A>
+<A HREF="author.html#418">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

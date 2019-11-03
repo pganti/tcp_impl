@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Mar  3 16:23:48 1999" -->
+<!-- isoreceived="19990303212348" -->
+<!-- sent="Wed, 3 Mar 1999 14:15:22 -0700 (MST)" -->
+<!-- isosent="19990303211522" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199903032115.OAA16869@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032115.OAA16869@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 16:15:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1654.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1658.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1655">[ date ]</A>
+<A HREF="index.html#1655">[ thread ]</A>
+<A HREF="subject.html#1655">[ subject ]</A>
+<A HREF="author.html#1655">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032115.OAA16869@calcite.rhyolite.com&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; If an application makes an API call providing for transmission a
+</EM><BR>
+<EM>&gt; quantity of data greater than or equal to the MSS of the associated TCP
+</EM><BR>
+<EM>&gt; connection, all data provided to the API call is immediately transmitted
+</EM><BR>
+<EM>&gt; by TCP, subject to the constraints of the receiver and congestion
+</EM><BR>
+<EM>&gt; windows.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is a slightly formalized version of &quot;If an application calls send()
+</EM><BR>
+<EM>&gt; with at least an MSS's worth of data, its transmission will not be
+</EM><BR>
+<EM>&gt; delayed by the Nagle algorithm.&quot;
+</EM><BR>
+<P><P>I prefer the perhaps less formalized version.  It says what we all seem
+<BR>
+to mean and want (with the quibble that &quot;MSS's worth&quot; is not good).  The
+<BR>
+more formal versions invites other questions, such as whether silly window
+<BR>
+avoidance mechanisms, sender operating system scheduling or buffer
+<BR>
+management, and a myriad of other things might delay the data, with or
+<BR>
+without interaction with the Nagle algorithm.
+<BR>
+<P>I'd vote for the less formal but wordy &quot;If an application calls send()
+<BR>
+with at least 512 bytes or if it has turned off the Nagle algorithm, the
+<BR>
+transmission of the data will not be delayed by the Nagle algorithm either
+<BR>
+immediately or after other delays such as those caused by receiver or
+<BR>
+congestion windows.&quot;
+<BR>
+<P>Given something like the MORETOSEND hack in recent BSD code, don't the
+<BR>
+only undesirable Nagle delays occur after window delays?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032115.OAA16869@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1654.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1658.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1655">[ date ]</A>
+<A HREF="index.html#1655">[ thread ]</A>
+<A HREF="subject.html#1655">[ subject ]</A>
+<A HREF="author.html#1655">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

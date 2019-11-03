@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  ICMP must fragment and IPsec</H1>
+<!-- received="Wed Jun 25 17:31:29 1997" -->
+<!-- isoreceived="19970625213129" -->
+<!-- sent="Wed, 25 Jun 1997 18:29:26 -0600" -->
+<!-- isosent="19970626002926" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  ICMP must fragment and IPsec" -->
+<!-- id="199706260029.SAA02756@mica.denver.sgi.com" -->
+<!-- inreplyto=" ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706260029.SAA02756@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 20:29:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0598.html">Vern Paxson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0596.html">Larry Backman: "Re:  ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#597">[ date ]</A>
+<A HREF="index.html#597">[ thread ]</A>
+<A HREF="subject.html#597">[ subject ]</A>
+<A HREF="author.html#597">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706260029.SAA02756@mica.denver.sgi.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; Why not use an MSS of 65535? ...
+</EM><BR>
+<P><EM>&gt; Not a good idea.  If you loose one, you loose them all. ...
+</EM><BR>
+<P>True.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Another item is that if you send a huge TCP packet, nothing can be
+</EM><BR>
+<EM>&gt; acked until the whole thing arrives at the remote system.  That
+</EM><BR>
+<EM>&gt; can really kill VJ slowstart/congestion avoidance.
+</EM><BR>
+<P>True, but it sure helps if you're running MByte windows on local pipes.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; The reason I see to use a smaller MSS is safety or conservatism.  If
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Yes, I agree with that.  The only question is how conservative?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Old code said &quot;576, if not local&quot;, that is too conservative.
+</EM><BR>
+<P>There is a spectrum:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;1. MSS=576.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;2. MSS=MTU of interface.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;3. MSS=max(MTU's of non-local interfaces).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;4. MSS=9180, 16K, 32K, 65335 or some other special number.
+<BR>
+<P>We all agree #1 is too conservative and at least the 64K end of #4
+<BR>
+is too risky.
+<BR>
+<P><EM>&gt; Using the MTU of the outgoing interface is the best conservative
+</EM><BR>
+<EM>&gt; answer.
+</EM><BR>
+<P>It's also quick and easy to compute and more well defined than #3.
+<BR>
+<P><EM>&gt;          There are only two reasons why I'd argue for a larger
+</EM><BR>
+<EM>&gt; MSS:
+</EM><BR>
+<EM>&gt; 	1) The routing could change, and switch to a larger
+</EM><BR>
+<EM>&gt; 	   MTU path.  If you set MSS too small, you can't
+</EM><BR>
+<EM>&gt; 	   take advantage of it.
+</EM><BR>
+<EM>&gt; 	2) Asymetric routes.  If my path out goes through the
+</EM><BR>
+<EM>&gt; 	   ethernet, but his path back goes through the FDDI,
+</EM><BR>
+<EM>&gt; 	   then when I stick in 1500, he's hosed.
+</EM><BR>
+<P>True, but
+<BR>
+&nbsp;&nbsp;- when routing is subject to much change, performance is generally
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;less of an issue than having things work.
+<BR>
+&nbsp;&nbsp;- topologies complicated enough for assyemtric paths are usually
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(but not always) either missconfigured (e.g. interface metrics)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;or complicated enough to make working a bigger question than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;performance.
+<BR>
+<P><EM>&gt; &gt; PMTU discovery were perfect, there would be no reason to use anything
+</EM><BR>
+<EM>&gt; &gt; except MSS=64K.  In the real world, if you use a larger MSS than your
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hosts that don't support PMTUD aren't supposed to send packets larger
+</EM><BR>
+<EM>&gt; than 576 into the outside world, irregardless of what was received
+</EM><BR>
+<EM>&gt; in the MSS option.
+</EM><BR>
+<P>If that 576 were changed to something reasonable for 1990, such as
+<BR>
+1500, then that sentiment would be influential.  But since 576 is so
+<BR>
+tiny, that old injunction is and will be widely ignored.  Hosts that
+<BR>
+don't have PMTU discover use subnetsarelocal or allnetsarelocal=1.
+<BR>
+I think in the real world, there are 2 main choices, PMTU discovery
+<BR>
+or *arelocal.  The third, using 576, is minor.
+<BR>
+<P>Besides, 576 doesn't help the bridge problem.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; So you advocate hamstringing all of your FDDI connections, on the off
+</EM><BR>
+<EM>&gt; chance that some clueless person bridges FDDI&lt;-&gt;ethernet?  Gag.
+</EM><BR>
+<P>Of course I oppose using 1500 on FDDI.  Instead, I the persistently clue
+<BR>
+challenged about their personal problems.  (I also years ago added a
+<BR>
+ridiculous-MTU.switch so that they can make things work after we've
+<BR>
+discussed their foolishness.)
+<BR>
+<P><P><EM>&gt; So provide a switch, if you must, but at least default to allowing
+</EM><BR>
+<EM>&gt; FDDI to use FDDI size packets...
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Yes, at least when the path is known to start at 4352.
+<BR>
+<P>The question is whether it is reasonable to tell the TCP peer to use
+<BR>
+4352 when you know the peer's packets are likely to be fragmented onto
+<BR>
+your Ethernet (except when one of those wonderful bridges that neither
+<BR>
+fragment nor send ICMP messages is involved, so the packets are just
+<BR>
+dropped).
+<BR>
+<P>Those bridges are almost enough of a peeve of mine to advocate such a
+<BR>
+practice, since it would make them useless except when the those buy
+<BR>
+them configure their hosts to use 1500 instead of 4352 over FDDI.  You
+<BR>
+wouldn't want every TCP connection to suffer enough timeouts to invoke
+<BR>
+a PMTU Discovery blackhole mechanism.  I suspect that at most vendors,
+<BR>
+including SGI, I'd be overruled.
+<BR>
+<P><P><P>You'd be doing the world a favor if in the document said that any
+<BR>
+FDDI-Ethernet bridge that does not fragment is junk.  That would at
+<BR>
+least make it easier to argue with such the dupes of Cabletron and NPI
+<BR>
+salescritters that for years claimed that just dropping big IP/FDDI
+<BR>
+packets is just fine, causing neither performance nor interoperability
+<BR>
+problems.  (Yes, I understand NPI and Cabletron have started to do
+<BR>
+something to fix their products, but only after publishing a lot of
+<BR>
+'interesting' statements.)
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706260029.SAA02756@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0598.html">Vern Paxson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0596.html">Larry Backman: "Re:  ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#597">[ date ]</A>
+<A HREF="index.html#597">[ thread ]</A>
+<A HREF="subject.html#597">[ subject ]</A>
+<A HREF="author.html#597">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

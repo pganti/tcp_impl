@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revision RFC 2001 (draft-iet</TITLE>
+<META NAME="Author" CONTENT="Andi Kleen (ak@muc.de)">
+<META NAME="Subject" CONTENT="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)</H1>
+<!-- received="Wed Aug 12 12:44:12 1998" -->
+<!-- isoreceived="19980812164412" -->
+<!-- sent="12 Aug 1998 20:43:20 +0200" -->
+<!-- isosent="19980812184320" -->
+<!-- name="Andi Kleen" -->
+<!-- email="ak@muc.de" -->
+<!-- subject="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<!-- id="k2pve62g8n.fsf@zero.aec.at" -->
+<!-- inreplyto="Wed, 12 Aug 1998 13:40:37 -0500 (CDT)&quot;" -->
+<STRONG>From:</STRONG> Andi Kleen (<A HREF="mailto:ak@muc.de?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;k2pve62g8n.fsf@zero.aec.at&gt;"><EM>ak@muc.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 12 1998 - 14:43:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1202.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1200.html">Kacheong Poon: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1202.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1201">[ date ]</A>
+<A HREF="index.html#1201">[ thread ]</A>
+<A HREF="subject.html#1201">[ subject ]</A>
+<A HREF="author.html#1201">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In article &lt;<A HREF="mailto:199808121840.NAA10344@frantic.bsdi.com?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;k2pve62g8n.fsf@zero.aec.at&gt;">199808121840.NAA10344@frantic.bsdi.com</A>&gt;,
+<BR>
+David Borman &lt;<A HREF="mailto:dab@bsdi.com?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;k2pve62g8n.fsf@zero.aec.at&gt;">dab@bsdi.com</A>&gt; writes:
+<BR>
+<EM>&gt; Matt,
+</EM><BR>
+<EM>&gt;&gt; MSS is better described as a sender state variable, which may or may
+</EM><BR>
+<EM>&gt;&gt; not agree with the other end of the connection.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; As a consequence, algorithms that require the receiver to know the
+</EM><BR>
+<EM>&gt;&gt; senders segment size can not, in general, be implemented correctly.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; In the draft, the sentence &quot;Specifically, an ACK MUST be generated for
+</EM><BR>
+<EM>&gt;&gt; every second full-sized segment.&quot;, is not sufficient to assure correct
+</EM><BR>
+<EM>&gt;&gt; operation because the receiver can not identify segments which the
+</EM><BR>
+<EM>&gt;&gt; sender considers to be full sized.
+</EM><BR>
+<P><EM>&gt; Yes you can.  In the receiver, you implement a local state variable that
+</EM><BR>
+<EM>&gt; keeps track of the largest packet ever received from the peer, and use
+</EM><BR>
+<EM>&gt; that in determining how many full size packets you have received, instead
+</EM><BR>
+<EM>&gt; of the sending MSS.  I implemented this in UNICOS years ago, and it worked
+</EM><BR>
+<EM>&gt; fine for most cases.
+</EM><BR>
+<P>What happens when the routing changes and path mtu discovery on the sender
+<BR>
+lowers the MSS effectively? Then after the routing shift this variable will
+<BR>
+contain a too big value and the receiver will not send enough acks.
+<BR>
+<P>In Linux 2.1 this problem came up and got fixed with the following
+<BR>
+algorithm:
+<BR>
+<P>Initialize rcv_mss with the mss the other end announced.
+<BR>
+<P>If a packet arrives with len &gt; rcv_mss set rcv_mss to len.
+<BR>
+If two packets with SS &gt;= 536 arrive in a row set rcv_mss to this length.
+<BR>
+<P>Send an ack at least for every rcv_mss*2 data bytes.
+<BR>
+<P>The reason of the 536 rule is to make sure that delayed acks still work
+<BR>
+with interactive traffic. For paths with MTUs &lt; 576 [some packet radio links]
+<BR>
+it will break, but it is assumed that those fragment/defragment at a lower 
+<BR>
+layer.
+<BR>
+<P>So far this algorithm seems to work well to adapt to changing MSS. The 
+<BR>
+original reason for its implementation was the fact that a well-known 
+<BR>
+workstation OS announces 64k MSS on a HIPPI interface, but effectively
+<BR>
+only sends 48k packets - the result was that Linux already got into
+<BR>
+delayed ack mode and the data transfer was very slow.
+<BR>
+<P>So far this algorithm seems to work well, but I would be interested in a
+<BR>
+discussion about any shortcommings it may have.
+<BR>
+<P>-Andi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1202.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1200.html">Kacheong Poon: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1202.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1201">[ date ]</A>
+<A HREF="index.html#1201">[ thread ]</A>
+<A HREF="subject.html#1201">[ subject ]</A>
+<A HREF="author.html#1201">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

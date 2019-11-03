@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Charles M. Hannum (mycroft@mit.edu)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Tue Sep  8 16:31:53 1998" -->
+<!-- isoreceived="19980908203153" -->
+<!-- sent="Tue, 8 Sep 1998 19:31:10 -0400 (EDT)" -->
+<!-- isosent="19980908233110" -->
+<!-- name="Charles M. Hannum" -->
+<!-- email="mycroft@mit.edu" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809082331.TAA04039@lunacity.ne.mediaone.net" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Charles M. Hannum (<A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809082331.TAA04039@lunacity.ne.mediaone.net&gt;"><EM>mycroft@mit.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 08 1998 - 19:31:10 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1306.html">David Borman: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1306.html">David Borman: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1305">[ date ]</A>
+<A HREF="index.html#1305">[ thread ]</A>
+<A HREF="subject.html#1305">[ subject ]</A>
+<A HREF="author.html#1305">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; In case it wasn't blindingly obvious to everyone, the punchline is:
+</EM><BR>
+<EM>&gt;&gt; Because you're using T/TCP, I can submit these 1-packet probes with
+</EM><BR>
+<EM>&gt;&gt; totally random (or very pointedly non-random) source IP addresses, so
+</EM><BR>
+<EM>&gt;&gt; you can't filter them out by source.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; But these 1-packet probes with random source addresses are not passed
+</EM><BR>
+<EM>&gt; to the application *until* the 3WHS is completed, assuming that these
+</EM><BR>
+<EM>&gt; random source addresses have not had previous connections with this
+</EM><BR>
+<EM>&gt; server that have initialized the CC for this client.  And if you use
+</EM><BR>
+<EM>&gt; random source address, the 3WHS will never complete.  So to launch
+</EM><BR>
+<EM>&gt; these attacks you minimally have to come from a host that supports
+</EM><BR>
+<EM>&gt; T/TCP and you must use your own source IP.
+</EM><BR>
+<P>That turns out not to be the case, for two reasons:
+<BR>
+<P>1) The existing implementation creates the TAO cache before the first
+<BR>
+&nbsp;&nbsp;&nbsp;3WHS has completed.
+<BR>
+<P>2) C.f. `very pointedly non-random'.  Say I pick source addresses of
+<BR>
+&nbsp;&nbsp;&nbsp;known customers, or known data providers, instead.  With T/TCP, I
+<BR>
+&nbsp;&nbsp;&nbsp;don't have to know the port numbers they used in previous
+<BR>
+&nbsp;&nbsp;&nbsp;connections, because the TAO cache applies to all connections from
+<BR>
+&nbsp;&nbsp;&nbsp;that particular machine; all I have to know is that they're likely
+<BR>
+&nbsp;&nbsp;&nbsp;to be in the TAO cache.
+<BR>
+<P>There are some very subtle aspects to #2.  For example, say you have
+<BR>
+something that automatically detects this sort of attack and filters
+<BR>
+out that client.  Besides the potential for annoying real customers,
+<BR>
+this has other effects.  One such attack would be to get you to
+<BR>
+automatically filter out known search engine robots, so your site
+<BR>
+never appears on them.  It's likely that you wouldn't even notice
+<BR>
+this, and you'd just lose hits (read: potential revenue) without ever
+<BR>
+knowing why.  (And, of course, in most cases I could just keep
+<BR>
+round-robining between a number of known addresses.  You can't filter
+<BR>
+out everything; eventually you'd have to start doing aggregate
+<BR>
+filtering or timing out old entries...)
+<BR>
+<P>The idea may be digusting to some people (and I confess that it churns
+<BR>
+my own stomach a bit), but the 3WHS really does provide a certain
+<BR>
+amount of accountability that is important for maintaining a clean
+<BR>
+neighborhood.
+<BR>
+<P>I think a fix for this is as simple as:
+<BR>
+<P>* Send a random cookie in the CC.NEW.
+<BR>
+<P>* Return the cookie in the CC.
+<BR>
+<P>* If the received cookie doesn't match the cached (sent) cookie, fall
+<BR>
+&nbsp;&nbsp;back to a 3WHS and reinitialize the TAO cache.
+<BR>
+<P>This increases the size of the CC.NEW/CC options slightly, but should
+<BR>
+not have any significant impact on performance.  It is incompatible
+<BR>
+with the old CC.NEW/CC options, but it's not as if they're widely
+<BR>
+deployed anyway.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1306.html">David Borman: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1304.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1306.html">David Borman: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1305">[ date ]</A>
+<A HREF="index.html#1305">[ thread ]</A>
+<A HREF="subject.html#1305">[ subject ]</A>
+<A HREF="author.html#1305">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

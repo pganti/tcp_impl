@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Tue Jul  1 09:24:20 1997" -->
+<!-- isoreceived="19970701132420" -->
+<!-- sent="Tue, 1 Jul 1997 11:21:50 -0500 (CDT)" -->
+<!-- isosent="19970701162150" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707011621.LAA17249@frantic.BSDI.COM" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jul 01 1997 - 12:21:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0606.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#607">[ date ]</A>
+<A HREF="index.html#607">[ thread ]</A>
+<A HREF="subject.html#607">[ subject ]</A>
+<A HREF="author.html#607">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Tue Jul  1 10:51:38 1997
+</EM><BR>
+<EM>&gt; To: &quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">wsimpson@greendragon.com</A>&gt;
+</EM><BR>
+<EM>&gt; cc: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">Eric.Schenk@dna.lth.se</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">Eric.Schenk@dna.lth.se</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP research issues from a tcp-impl perspective 
+</EM><BR>
+<EM>&gt; Date: Tue, 01 Jul 1997 17:36:03 +0200
+</EM><BR>
+<EM>&gt; Precedence: bulk
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">wsimpson@greendragon.com</A>&gt; writes:
+</EM><BR>
+<EM>&gt; &gt;I'm marking the ones I care about:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;&gt;         - How to compute RTO when timing more than one packet per RTT
+</EM><BR>
+<EM>&gt; &gt;&gt;           (i.e., how to adjust the constants for the exponentially weighted
+</EM><BR>
+<EM>&gt; &gt;&gt;           moving average)
+</EM><BR>
+<EM>&gt; &gt;&gt;
+</EM><BR>
+<EM>&gt; &gt;Uh, sounds like it could be harmful.  Why?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;From memory, RFC1323 implies that timestamps allow this to be done,
+</EM><BR>
+<EM>&gt; and that some sort of aliasing effect in the RTO calculation would be 
+</EM><BR>
+<EM>&gt; removed if an RTT sample were taken on every packet. Looking
+</EM><BR>
+<EM>&gt; at a slightly old version of the BSD code reveals that when RFC1323
+</EM><BR>
+<EM>&gt; timestamps are used a sample will be taken on every packet.
+</EM><BR>
+<EM>&gt; This will mean that old data will decay out of the RTT much faster
+</EM><BR>
+<EM>&gt; than normal when using RFC1323. The open question appears to be,
+</EM><BR>
+<EM>&gt; to me, whether it should be mandated that RTT samples must only be
+</EM><BR>
+<EM>&gt; taken once per round trip, or if some adjusted VJ style filter
+</EM><BR>
+<EM>&gt; should be applied when taking one sample per packet.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In practice I suspect the coarse 500ms timer for RTO in BSD based
+</EM><BR>
+<EM>&gt; code means that any problem introduced by sampling on every packet
+</EM><BR>
+<EM>&gt; will be hidden on networks with a real RTT of less than 500ms
+</EM><BR>
+<EM>&gt; when the pipeline is full. 
+</EM><BR>
+<P>*sigh*... I'm behind on getting the revision to RFC1323 out, I'm
+<BR>
+trying to get the final editing done in the next week or so.  One
+<BR>
+addition to 1323+ will be a short discussion about the fact that
+<BR>
+when when using timestamps, you can get more than 1 RTT sample
+<BR>
+per RTT, and the code that figures out the SRTT needs to take
+<BR>
+this into account.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011621.LAA17249@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0606.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0608.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#607">[ date ]</A>
+<A HREF="index.html#607">[ thread ]</A>
+<A HREF="subject.html#607">[ subject ]</A>
+<A HREF="author.html#607">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

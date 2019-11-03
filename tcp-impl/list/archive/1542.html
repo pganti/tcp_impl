@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Feb  8 11:09:49 1999" -->
+<!-- isoreceived="19990208160949" -->
+<!-- sent="Mon, 8 Feb 1999 10:02:54 -0600 (CST)" -->
+<!-- isosent="19990208160254" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902081602.KAA05330@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 08 1999 - 11:02:54 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1541.html">Ramesh Nagarajan: "INFOCOM'2000: Advance Call for Papers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1546.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1542">[ date ]</A>
+<A HREF="index.html#1542">[ thread ]</A>
+<A HREF="subject.html#1542">[ subject ]</A>
+<A HREF="author.html#1542">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;">ehall@ehsco.com</A> Mon Feb  8 01:48:27 1999
+</EM><BR>
+<EM>&gt; Date: Fri, 05 Feb 1999 10:08:03 -0800
+</EM><BR>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<EM>&gt; Organization: EHS Company
+</EM><BR>
+<EM>&gt; X-Accept-Language: en
+</EM><BR>
+<EM>&gt; To: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; CC: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: internet draft on suggested mod to the Nagle algorithm
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; Also, I might not have said it, but this example was to show
+</EM><BR>
+<EM>&gt; &gt; 3 separate transaction requests, not 1 transaction done with
+</EM><BR>
+<EM>&gt; &gt; 3 writes.  If it was one request, it should really be done with
+</EM><BR>
+<EM>&gt; &gt; a single 4500 byte write, yeilding:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; You're not showing any response activity so it's hard to guess what's
+</EM><BR>
+<EM>&gt; really going on.
+</EM><BR>
+<P>Ok.  My example was for an application that is request/response
+<BR>
+oriented, but it does not necessarily wait for the preceeding
+<BR>
+response before sending the next request.  The point being that
+<BR>
+the first two requestes will get sent out, but there will be a
+<BR>
+delay in the 3rd request.
+<BR>
+<P>With the current Nagle code:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st request:	send 1460 bytes  (defer 40 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pause for some short period of time)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd request:	send 40 + 1420 = 1460 bytes (defer 80 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pause for some arbitrary period of time)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd request:	send 80 + 1380 = 1460 bytes  (defer 120 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK of 4380 bytes or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 120 bytes
+<BR>
+<P>With the new Nagle code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:      send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pause for some short period of time)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:      send 1460 bytes (defer 40 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pause for some short period of time)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3rd write       send 40 + 1420 = 1460 bytes (defer 80  bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(wait for ACK of first 1500 bytes or timeout)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 80 bytes
+<BR>
+<P>The difference is that with the new Nalge code, the whole initial
+<BR>
+request gets sent immediatly, whereas with the old code it is only
+<BR>
+the addition of the 2nd request that actually pushes out the rest
+<BR>
+of the 1st request.
+<BR>
+<P>Additionally, note that I've clarified that there is a difference in
+<BR>
+when the final piece gets sent, relative to when the ACKs arrive.
+<BR>
+With the old Nagle code, it will be waiting for an ACK of all the
+<BR>
+outstanding data before sending the final 120 bytes.  With the new
+<BR>
+Nagle code, once the first 40 byte packet has been acked, the trailing
+<BR>
+80 byte packet can go out because there is no longer any previous
+<BR>
+unacked small packets.
+<BR>
+<P>Also, you said, wrt to this example and the New Nagle code:
+<BR>
+<EM>&gt; Five sends. Better.
+</EM><BR>
+And the old Nagle:
+<BR>
+<EM>&gt; Four sends. Best.
+</EM><BR>
+<P>Not necessarily.  Though it is usually best to send as few packets
+<BR>
+as possible, strict packet count is not the only criteria.  In this
+<BR>
+situation we are also looking at how quickly the whole requests get
+<BR>
+sent out, and what artificial delays are introduced as an artifact
+<BR>
+of interaction between the Nagle algorithm and delayed acks.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902081602.KAA05330@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1541.html">Ramesh Nagarajan: "INFOCOM'2000: Advance Call for Papers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1546.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1542">[ date ]</A>
+<A HREF="index.html#1542">[ thread ]</A>
+<A HREF="subject.html#1542">[ subject ]</A>
+<A HREF="author.html#1542">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

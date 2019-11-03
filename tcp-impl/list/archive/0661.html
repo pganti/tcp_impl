@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Wed Aug 13 16:00:10 1997" -->
+<!-- isoreceived="19970813200010" -->
+<!-- sent="Wed, 13 Aug 1997 18:57:13 -0400" -->
+<!-- isosent="19970813225713" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="199708132257.SAA07090@brookfield.ans.net" -->
+<!-- inreplyto="199708122057.NAA09122@rum.isi.edu" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708132257.SAA07090@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 13 1997 - 18:57:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#661">[ date ]</A>
+<A HREF="index.html#661">[ thread ]</A>
+<A HREF="subject.html#661">[ subject ]</A>
+<A HREF="author.html#661">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199708122057.NAA09122@rum.isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708132257.SAA07090@brookfield.ans.net&gt;">199708122057.NAA09122@rum.isi.edu</A>&gt;, <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708132257.SAA07090@brookfield.ans.net&gt;">touch@ISI.EDU</A> writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; THere is a different way to solve the problem.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If the &quot;window allowed to send&quot; (snd_cwnd - (snd_nxt - snd_una))?
+</EM><BR>
+<EM>&gt; exceeds the &quot;current window size&quot; (snd_cwnd)?
+</EM><BR>
+<EM>&gt; by more than X% (for some X), then the slow-start restart should ensue,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; (can someone suggest the exact formula)?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I vaguely recall a similar mechanism, during ACK processing, though
+</EM><BR>
+<EM>&gt; I can't find it in the BSD code (?). When an ACK
+</EM><BR>
+<EM>&gt; arrives that slides the window forward by more than 1/2,
+</EM><BR>
+<EM>&gt; the window is reset and slow-start restart ensues (does anyone recall?)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Given that the intent is to avoid a line-rate burst, the clearly 
+</EM><BR>
+<EM>&gt; the best mechanism is &quot;monitor and limit the window allowed-to-send size&quot;.
+</EM><BR>
+<P><P>If you were previously in near steady state and near congestion, one
+<BR>
+TCP flow going idle would reduce the standing queue at the bottleneck.
+<BR>
+If the TCP flow that went idle was not a significant contributor to
+<BR>
+the bottleneck load, then the line rate burst would not be significant
+<BR>
+relative to other traffic.  If the TCP flow was a significant or among
+<BR>
+the dominant contributors than the idle period of one RTT would very
+<BR>
+likely allow the queue to drain.  The &lt;1 RTT idle would not result in
+<BR>
+a major increase in offerred load by the other TCP flows (assuming
+<BR>
+that most of them are not in initial slow start with no ssthresh).  If
+<BR>
+the single TCP flow was accounting for some portion of the bandwidth
+<BR>
+(1/Nth for small N) then a full window burst should be well under one
+<BR>
+to two delay bandwidth product for the link (the accepted minimum
+<BR>
+queueing requirement).
+<BR>
+<P>Going to slow start is a very drastic move for large window TCP.  It
+<BR>
+takes on the order of N RTTs to reach a window of 2^N (Jamshid argues
+<BR>
+that should be 1.5^N).  For a satellite link and a small transfer, that
+<BR>
+is a long time.
+<BR>
+<P>Sending large line rate bursts is bad but not terrible.
+<BR>
+<P>Slow starting large window TCPs is wasteful but not terrible.
+<BR>
+<P>There is a tradeoff and the BSD implementation currently is capable of
+<BR>
+sending full window bursts (idle slightly under RTO) or slow starting
+<BR>
+TCP (idle slightly over RTO).
+<BR>
+<P>It would be nice if pacing could be recovered without waiting multiple
+<BR>
+RTTs to do so.  Unfortunately, the only way to do that would be to
+<BR>
+clock out packets according to some estimate of pacing based on cwnd
+<BR>
+and RTO and that would involve using timers to clock out the packets.
+<BR>
+<P>I prefer the idea of reducing cwnd by some factor for given idle times
+<BR>
+so that the burst size is limited proportionally to the prior value of
+<BR>
+cwnd but it does not have to be limited to some small fixed integer.
+<BR>
+This does tend to reduce the worst case burst to 1/2 window, avoids
+<BR>
+slow start unless a lot of RTOs have elapsed, and reduces the burst
+<BR>
+and increased the tendency to go all the way back to slow start as the
+<BR>
+number of RTOs increase rather than have a sharp cutoff.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle = (tp-&gt;snd_max == tp-&gt;snd_una);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (idle) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* outer &quot;if&quot; avoids dividing if possible */
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idleshift = 2 * tp-&gt;t_idle / tp-&gt;t_rxtcur;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (idleshift &gt; 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd &gt;&gt;= idleshift;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;snd_cwnd &lt; tp-&gt;t_maxseg)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = tp-&gt;t_maxseg;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>I think the code above would implement the suggestion I made on
+<BR>
+end2end-interest early today.  If you wanted to be even more
+<BR>
+aggressive about limiting burst size, the 2 could be replaced with a
+<BR>
+large integer (4?).  Even then in cases where the variation in
+<BR>
+measured RTT was large compared to min RTT you might get a full window
+<BR>
+burst.  While far from perfect, this would be an improvement over
+<BR>
+current behavior short of clocking out packets on a timer.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#661">[ date ]</A>
+<A HREF="index.html#661">[ thread ]</A>
+<A HREF="subject.html#661">[ subject ]</A>
+<A HREF="author.html#661">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

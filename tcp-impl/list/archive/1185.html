@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft-ietf-tcpimpl-prob-04.txt</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="draft-ietf-tcpimpl-prob-04.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft-ietf-tcpimpl-prob-04.txt</H1>
+<!-- received="Fri Aug  7 09:33:54 1998" -->
+<!-- isoreceived="19980807133354" -->
+<!-- sent="Fri, 07 Aug 1998 09:32:13 PDT" -->
+<!-- isosent="19980807163213" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="draft-ietf-tcpimpl-prob-04.txt" -->
+<!-- id="199808071632.JAA02830@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft-ietf-tcpimpl-prob-04.txt&In-Reply-To=&lt;199808071632.JAA02830@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 07 1998 - 12:32:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1186.html">Vern Paxson: "new problems documented in Known Problems I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1184.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-00.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1188.html">Vern Paxson: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1185">[ date ]</A>
+<A HREF="index.html#1185">[ thread ]</A>
+<A HREF="subject.html#1185">[ subject ]</A>
+<A HREF="author.html#1185">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The -04 version of the Known Problems I-D was just submitted.  The
+<BR>
+substantive changes are the addition of 7 new problem descriptions:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uninitialized CWND
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Extra additive constant in congestion avoidance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial RTO too low
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure of window deflation after loss recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to back off retransmission timeout
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retransmission sends multiple packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options missing from TCP MSS calculation
+<BR>
+<P>These take care of all of the &quot;serious&quot; problems noted in
+<BR>
+draft-ietf-tcpimpl-needdoc-00.txt as needing documentation.
+<BR>
+<P>The remaining problems noted as needing documentation are:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Security:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predictable initial sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ameliorating SYN flooding
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Land attack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spoofed MTU discovery (not in the I-D, but pointed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out subsequently)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spoofed RSTs (not in the I-D, but mentioned in the past)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Less serious&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to set PSH when send buffer drains
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to ack above-sequence data
+<BR>
+<P>A new one that has since been mentioned is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sending RST in response to SYN when listen queue full
+<BR>
+<P>-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+<BR>
+<P>Bill Fisher has volunteered to work on a security problems I-D, though he
+<BR>
+won't have cycles for this for a few weeks so it will certainly miss
+<BR>
+tomorrow's I-D cutoff.  That should take care of the remaining serious
+<BR>
+pending problems.
+<BR>
+<P>Please review the new problem descriptions in the I-D (text for them in the
+<BR>
+next message).  Our view is that once those problem descriptions are ironed
+<BR>
+out, then we should call the Known Problems I-D as Done; or perhaps also
+<BR>
+document the &quot;sending RST in response to SYN ...&quot;, as that's a fairly
+<BR>
+serious one.  We don't see the above &quot;Less serious&quot; problems as worth
+<BR>
+holding up the document.  We'd certainly like to hear other opinions
+<BR>
+(and volunteers) regarding these.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mark &amp; Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1186.html">Vern Paxson: "new problems documented in Known Problems I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1184.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-00.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1188.html">Vern Paxson: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1185">[ date ]</A>
+<A HREF="index.html#1185">[ thread ]</A>
+<A HREF="subject.html#1185">[ subject ]</A>
+<A HREF="author.html#1185">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

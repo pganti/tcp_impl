@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 16:53:20 1998" -->
+<!-- isoreceived="19981110215320" -->
+<!-- sent="Tue, 10 Nov 1998 13:52:34 -0800" -->
+<!-- isosent="19981110215234" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="Re: Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811102152.NAA10021@gecko.nas.nasa.gov" -->
+<!-- inreplyto="199811102052.MAA18983@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102152.NAA10021@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 16:52:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1393">[ date ]</A>
+<A HREF="index.html#1393">[ thread ]</A>
+<A HREF="subject.html#1393">[ subject ]</A>
+<A HREF="author.html#1393">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199811102052.MAA18983@daffy.ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102152.NAA10021@gecko.nas.nasa.gov&gt;">199811102052.MAA18983@daffy.ee.lbl.gov</A>&gt;Vern Paxson writes
+<BR>
+<EM>&gt;&gt; Since increases in slow-start are defined in terms of MSS rather than
+</EM><BR>
+<EM>&gt;&gt; the number of segments, I guess the PMTU-equipped stacks wouldn't
+</EM><BR>
+<EM>&gt;&gt; pay a penalty versus non-PMTU-equipped stacks, but wouldn't they
+</EM><BR>
+<EM>&gt;&gt; be dumping large numbers of packets into the network?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;They will be dumping the same number of packets.  The packets may be
+</EM><BR>
+<EM>&gt;larger or smaller, depending on the path MTU.  We hope that they are
+</EM><BR>
+<EM>&gt;larger.  This is overall a Good Thing, we want to encourage use of
+</EM><BR>
+<EM>&gt;the largest non-fragmenting segment size.
+</EM><BR>
+<P>My worry here is that we could see a sender that does path MTU
+<BR>
+discovery and a naive receiver that does not.  Say the MSS is four
+<BR>
+times the PMTU.  The receiver will ACK after receiving 2 * MSS bytes,
+<BR>
+but this'll have been perhaps 8 segments.
+<BR>
+<P>The sender will get the ACK, and increase the congestion window by MSS,
+<BR>
+resulting in 4 new segments, plus the 8 segments acknowledged, for a
+<BR>
+total of 12 new segments.  Ouch!
+<BR>
+<P>OTOH, if the sender only increases the congestion window by the PMTU
+<BR>
+value (rather than MSS), then its slow-start would be really slow when
+<BR>
+coupled with the reduced number of ACKs...
+<BR>
+<P><EM>&gt;We're not trying to *change* how (most) current TCPs ack, just clarify
+</EM><BR>
+<EM>&gt;the requirement in the spec.
+</EM><BR>
+<P>Ouch, that's where I'm obviously slipping up.  I'd sure like to see
+<BR>
+these standards updated a bit to take PMTU and other advances into
+<BR>
+account, but I guess we're pretty much just trying to get folks to get
+<BR>
+the original stuff right...
+<BR>
+<P>Naively,
+<BR>
+<P>Kevin 
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102152.NAA10021@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1393">[ date ]</A>
+<A HREF="index.html#1393">[ thread ]</A>
+<A HREF="subject.html#1393">[ subject ]</A>
+<A HREF="author.html#1393">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

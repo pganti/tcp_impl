@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="Peter Ford (peterf@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: what IW is being used today?</H1>
+<!-- received="Mon Sep 15 09:18:40 1997" -->
+<!-- isoreceived="19970915131840" -->
+<!-- sent="Mon, 15 Sep 1997 09:16:12 -0700" -->
+<!-- isosent="19970915161612" -->
+<!-- name="Peter Ford" -->
+<!-- email="peterf@microsoft.com" -->
+<!-- subject="RE: what IW is being used today?" -->
+<!-- id="40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> Peter Ford (<A HREF="mailto:peterf@microsoft.com?Subject=RE:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com&gt;"><EM>peterf@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 15 1997 - 12:16:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#726">[ date ]</A>
+<A HREF="index.html#726">[ thread ]</A>
+<A HREF="subject.html#726">[ subject ]</A>
+<A HREF="author.html#726">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+There is a lot of empirical evidence that indicates IW=2 works.   There
+<BR>
+also does not seem to be evidence that IW=2 is a bad thing.
+<BR>
+<P>Sun's stated direction appears to be on the mark given this state of
+<BR>
+affairs:
+<BR>
+<P>&quot;Sun is actively participating in an effort in IETF to revise TCP
+<BR>
+specification to allow more packets to be sent initially. Once the
+<BR>
+revision is ratified, Sun will take the appropriate actions to upgrade
+<BR>
+Solaris TCP accordingly.&quot; 
+<BR>
+[<A HREF="http://www.sun.com/sun-on-net/performance/tcp.slowstart.html">http://www.sun.com/sun-on-net/performance/tcp.slowstart.html</A>]
+<BR>
+<P><P><P><P>Cheers,
+<BR>
+Peter
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----Original Message-----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From:	<A HREF="mailto:Jerry.Chu@Eng.Sun.COM?Subject=RE:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com&gt;">Jerry.Chu@Eng.Sun.COM</A> [SMTP:<A HREF="mailto:Jerry.Chu@Eng.Sun.COM?Subject=RE:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com&gt;">Jerry.Chu@Eng.Sun.COM</A>]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sent:	Monday, September 15, 1997 3:08 AM
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To:	<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=RE:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com&gt;">alan@lxorguk.ukuu.org.uk</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cc:	<A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=RE:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;40357F94775ECF118C2800805FD46CBD0292E0F4@RED-69-MSG.dns.microsoft.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject:	Re: what IW is being used today?
+<BR>
+<P><EM>	&gt; &gt; Sounds like IW=2 is more important for avoiding problems
+</EM><BR>
+with delayed
+<BR>
+<EM>	&gt; &gt; ACK (one clock tick can be 500 msec) than it is for getting
+</EM><BR>
+the window
+<BR>
+<EM>	&gt; &gt; fully open in one less RTT.
+</EM><BR>
+<EM>	&gt; 
+</EM><BR>
+<EM>	&gt; So should we fix the delayed ack timer policy on those systems
+</EM><BR>
+or use IW=2 ?
+<BR>
+<EM>	&gt; The former seems to work out on slow networks.
+</EM><BR>
+<EM>	&gt; 
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That's what Solaris has (not delaying the ack of the first data
+<BR>
+segment)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for years, and one of the reason why we didn't discover the IW=1
+<BR>
+vs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delayed-ack interoperability hiccup sooner (because we don't see
+<BR>
+this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on Solaris to Solaris testing).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We were compelled to add a new tcp tunable
+<BR>
+&quot;tcp_slow_start_initial&quot; in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solaris 2.6 in order to circumvent this problem. For a complete
+<BR>
+story,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;check out the following web page:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.sun.com/sun-on-net/performance/tcp.slowstart.html">http://www.sun.com/sun-on-net/performance/tcp.slowstart.html</A>
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jerry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0727.html">Alan Cox: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#726">[ date ]</A>
+<A HREF="index.html#726">[ thread ]</A>
+<A HREF="subject.html#726">[ subject ]</A>
+<A HREF="author.html#726">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

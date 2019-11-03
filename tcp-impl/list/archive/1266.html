@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Fri Aug 21 09:49:03 1998" -->
+<!-- isoreceived="19980821134903" -->
+<!-- sent="Fri, 21 Aug 1998 10:48:04 -0600 (MDT)" -->
+<!-- isosent="19980821164804" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808211648.KAA03595@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211648.KAA03595@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 21 1998 - 12:48:04 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1267.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1265.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1267.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1266">[ date ]</A>
+<A HREF="index.html#1266">[ thread ]</A>
+<A HREF="subject.html#1266">[ subject ]</A>
+<A HREF="author.html#1266">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: der Mouse  &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211648.KAA03595@calcite.rhyolite.com&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; It's also pretty much independent of whether keepalives should be
+</EM><BR>
+<EM>&gt; available.  One thing I have gotten quite clearly out of this thread is
+</EM><BR>
+<EM>&gt; that the community is divided on whether keepalives are good....
+</EM><BR>
+<P>I think that is wrong, and that the consensus is clearly that TCP
+<BR>
+keepalives are at least tolerable.  Furthermore, if you pin down anyone
+<BR>
+with more than ivory tower interests in making a particular application
+<BR>
+work on real computers on real networks, they'll likely prefer TCP instead
+<BR>
+of application layer keepalives for bandwidth, network congestion, 
+<BR>
+host and router resource worries, and general keep-it-simple-stupid
+<BR>
+engineering rules.
+<BR>
+<P>Contrary to other claims, RFC 1122 does not &quot;all but outlaw&quot; TCP
+<BR>
+keepalives.  It was doubtless as close to outlawing as those whose who
+<BR>
+are offended by them could achieve.  Read 4.2.3.6 to see the facts.
+<BR>
+&quot;MAY&quot; is not &quot;MUST NOT&quot; or even &quot;SHOULD NOT&quot;.   True, it is not &quot;SHOULD&quot;,
+<BR>
+but there are plenty of MAYs in RFC 1122/1123 that that we all agree are
+<BR>
+practical musts.  Would even the most rabid advocate of TCP keepalives
+<BR>
+demand any change to 4.2.3.6 more than changing the first &quot;MAY&quot; to
+<BR>
+&quot;SHOULD&quot;?  Given a default of off/2 hours, what more could you ask?
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; like have an initial idle time of five minutes, and if the peer
+</EM><BR>
+<EM>&gt; responds to that keepalive, goose the idle time up to two hours or so
+</EM><BR>
+<EM>&gt; for all future keepalives - the idea being that basically all
+</EM><BR>
+<EM>&gt; connections are either very transient (for which even five minutes is
+</EM><BR>
+<EM>&gt; perhaps a bit long) or reasonably long-lived (the sort of thing for
+</EM><BR>
+<EM>&gt; which the two-hour default was designed).
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>But isn't such exponential backing off still in NetBSD, derived
+<BR>
+from 1986's 4.3BSD?  Or do you mean to do a steeper ramp than the
+<BR>
+4.*BSD backoff from the initial probe interval?  If so, I think
+<BR>
+that's an interesting idea.  For many applications such as HTTP,
+<BR>
+the right probe interval is something like 0.5 minutes, 1 minute,
+<BR>
+2 minutes, 10 minutes, 50 minutes, 200 minutes, ...
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211648.KAA03595@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1267.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1265.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1267.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1266">[ date ]</A>
+<A HREF="index.html#1266">[ thread ]</A>
+<A HREF="subject.html#1266">[ subject ]</A>
+<A HREF="author.html#1266">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

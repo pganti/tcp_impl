@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Natchu Vishnu Priya (vishnu@cs.ucr.edu)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 14:06:16 1998" -->
+<!-- isoreceived="19980423180616" -->
+<!-- sent="Thu, 23 Apr 1998 14:02:07 -0700 (PDT)" -->
+<!-- isosent="19980423210207" -->
+<!-- name="Natchu Vishnu Priya" -->
+<!-- email="vishnu@cs.ucr.edu" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="Pine.LNX.3.96.980423135355.30691A-100000@hill.ucr.edu" -->
+<!-- inreplyto="199804231612.JAA18853@aland.bbn.com" -->
+<STRONG>From:</STRONG> Natchu Vishnu Priya (<A HREF="mailto:vishnu@cs.ucr.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;Pine.LNX.3.96.980423135355.30691A-100000@hill.ucr.edu&gt;"><EM>vishnu@cs.ucr.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 17:02:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1088.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1089">[ date ]</A>
+<A HREF="index.html#1089">[ thread ]</A>
+<A HREF="subject.html#1089">[ subject ]</A>
+<A HREF="author.html#1089">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, 23 Apr 1998, Craig Partridge wrote:
+<BR>
+<P><EM>&gt; &gt;and when the network is congested.. this minimum window size will
+</EM><BR>
+<EM>&gt; &gt;effectively result in a increase in data in network till the rtt matches
+</EM><BR>
+<EM>&gt; &gt;the available bandwidth and the window size of 4K...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; No, it says very clearly the minimum window size is 1 segment.
+</EM><BR>
+<P>I stand corrected.... minimum is 1 seg.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;For a concrete example....
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;I'm browsing over a 28.8 K modem link..
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;with 3 sim. connections thats a combined 12K of data in flight..
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You should never get 12K in flight -- your should have a small queue
+</EM><BR>
+<EM>&gt; size at the ingress to the modem link.  So you'll get, say 4K in flight
+</EM><BR>
+<EM>&gt; and 8K dropped, and then fall back to 1K window size -- per the simulations
+</EM><BR>
+<EM>&gt; Tim Shepard and I did.
+</EM><BR>
+let me get this one.. I use browser x which starts off 4
+<BR>
+connections..
+<BR>
+so that is 16K in flight from the server down my modem.. 4K comes through
+<BR>
+12K gets dropped..
+<BR>
+<P>So I drop around 12K of data which moved right throught the internet
+<BR>
+before I fall back to a 1 segment window size..
+<BR>
+and worse.. if all the connections do not have enough packets dropped.. I
+<BR>
+go one more round of this.. more packets dropped..
+<BR>
+<P>I do understand that it falls back to 1 segment but at what cost.. and
+<BR>
+this is not an obscure example.. all modem links will have this problem..
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Craig
+</EM><BR>
+<P>vishnu
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1088.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1089">[ date ]</A>
+<A HREF="index.html#1089">[ thread ]</A>
+<A HREF="subject.html#1089">[ subject ]</A>
+<A HREF="author.html#1089">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

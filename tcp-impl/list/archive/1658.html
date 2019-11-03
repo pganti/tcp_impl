@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Mar  3 18:58:28 1999" -->
+<!-- isoreceived="19990303235828" -->
+<!-- sent="Wed, 3 Mar 1999 17:48:10 -0600 (CST)" -->
+<!-- isosent="19990303234810" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199903032348.RAA02345@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032348.RAA02345@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 18:48:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1659.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1657.html">Bill Fenner: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1658">[ date ]</A>
+<A HREF="index.html#1658">[ thread ]</A>
+<A HREF="subject.html#1658">[ subject ]</A>
+<A HREF="author.html#1658">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Subject: Re: internet draft on suggested mod to the Nagle algorithm 
+</EM><BR>
+<EM>&gt; Date: Wed, 3 Mar 1999 13:53:55 PST
+</EM><BR>
+<EM>&gt; From: Bill Fenner &lt;<A HREF="mailto:fenner@parc.xerox.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032348.RAA02345@frantic.bsdi.com&gt;">fenner@parc.xerox.com</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I think a lot of the question of what applying Nagle on a per-send
+</EM><BR>
+<EM>&gt; basis means includes what happens when data is delayed due to cwnd
+</EM><BR>
+<EM>&gt; or the receive window.  My imagination says that you keep another
+</EM><BR>
+<EM>&gt; variable in the TCB that's the highest sequence number that has
+</EM><BR>
+<EM>&gt; passed Nagle (in order to not delay the last packet of a large
+</EM><BR>
+<EM>&gt; write), but I haven't particularly thought through exactly how this
+</EM><BR>
+<EM>&gt; variable is updated or used except in the obvious case.  In
+</EM><BR>
+<EM>&gt; particular, I don't know how it should be updated when you perform
+</EM><BR>
+<EM>&gt; a send() and there is still data outstanding.
+</EM><BR>
+<P>I've had similar thoughts.
+<BR>
+<P>The Nagle sequence number advances when:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o there is a large send() or TCP_NODELAY is set,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the end of the data.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o any data is actually sent, to the end of that data.
+<BR>
+It never retreats.
+<BR>
+<P>Decisions on whether or not to send based on TCP_NODELAY are
+<BR>
+changed to decide whether or not to send based upon if the
+<BR>
+send next sequence number is in front of the Nagle sequence number.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032348.RAA02345@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1659.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1657.html">Bill Fenner: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1658">[ date ]</A>
+<A HREF="index.html#1658">[ thread ]</A>
+<A HREF="subject.html#1658">[ subject ]</A>
+<A HREF="author.html#1658">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

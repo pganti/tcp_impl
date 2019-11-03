@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Wed Aug 13 17:31:32 1997" -->
+<!-- isoreceived="19970813213132" -->
+<!-- sent="Wed, 13 Aug 1997 20:27:59 -0400" -->
+<!-- isosent="19970814002759" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="199708140027.UAA07770@brookfield.ans.net" -->
+<!-- inreplyto="199708132018.NAA10410@rum.isi.edu" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708140027.UAA07770@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 13 1997 - 20:27:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0664.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#663">[ date ]</A>
+<A HREF="index.html#663">[ thread ]</A>
+<A HREF="subject.html#663">[ subject ]</A>
+<A HREF="author.html#663">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199708132018.NAA10410@rum.isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708140027.UAA07770@brookfield.ans.net&gt;">199708132018.NAA10410@rum.isi.edu</A>&gt;, <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708140027.UAA07770@brookfield.ans.net&gt;">touch@ISI.EDU</A> writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The request comes whenever the user clicks (we're talking
+</EM><BR>
+<EM>&gt; about user-created gaps in the stream at this point).
+</EM><BR>
+<P>Oh.  If the user can read a page in under 1 RTO that's a fast reader.
+<BR>
+So let is slow start.
+<BR>
+<P><EM>&gt; We've seen traces with gaps in the 5-second range. The last ACK
+</EM><BR>
+<EM>&gt; comes before the gap; the request arrives after the gap.
+</EM><BR>
+<EM>&gt; In this case, TCP blasts into the network - which is just as
+</EM><BR>
+<EM>&gt; bad as &quot;no slow-start&quot; - which is listed as a bug.
+</EM><BR>
+<P>That would be a bug.  The BSD code fragments I've seen would lead me
+<BR>
+to think that BSD doesn't do this unless RTO was above 5 seconds for
+<BR>
+some reason.  By the time you have a large window you should also have
+<BR>
+a reasonably accurate RTO.
+<BR>
+<P><EM>&gt; &gt; I would like to suggest that we condsider reducing cwnd by a factor of
+</EM><BR>
+<EM>&gt; &gt; 2 for every 1/2 RTO of idle time rather than go back to a window of 1,
+</EM><BR>
+<EM>&gt; &gt; where idle is measured from the last segment sent.  If cwnd drops
+</EM><BR>
+<EM>&gt; &gt; below ssthresh, it will quickly return to ssthresh.  
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There are several suggestions for a solution. I prefer one that
+</EM><BR>
+<EM>&gt; limits the &quot;transmission rights&quot; - preventing the window from
+</EM><BR>
+<EM>&gt; sliding forward far enough to enable a burst of more than a few
+</EM><BR>
+<EM>&gt; packets (4 or so).
+</EM><BR>
+<P>I think that is overkill but if you can do this in a simple way and
+<BR>
+still avoid the slow start delay, that's great.
+<BR>
+<P><EM>&gt; However, without an implementation (which we don't have either,
+</EM><BR>
+<EM>&gt; but we're working on), it's premature to pick a winner.
+</EM><BR>
+<P>Thanks for considering the code I posted earlier.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0664.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#663">[ date ]</A>
+<A HREF="index.html#663">[ thread ]</A>
+<A HREF="subject.html#663">[ subject ]</A>
+<A HREF="author.html#663">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

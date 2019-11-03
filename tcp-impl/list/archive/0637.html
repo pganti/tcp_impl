@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: E2E Feedback on TCP research iss</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="E2E Feedback on TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>E2E Feedback on TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Thu Jul 31 23:16:37 1997" -->
+<!-- isoreceived="19970801031637" -->
+<!-- sent="Thu, 31 Jul 1997 15:20:15 PDT" -->
+<!-- isosent="19970731222015" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="E2E Feedback on TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707312220.PAA10131@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20E2E%20Feedback%20on%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707312220.PAA10131@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 18:20:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0638.html">Erik Nordmark: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#637">[ date ]</A>
+<A HREF="index.html#637">[ thread ]</A>
+<A HREF="subject.html#637">[ subject ]</A>
+<A HREF="author.html#637">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here's a summary of the input I received on TCP research issues at the
+<BR>
+meeting earlier this month of the IRTF's End-to-End Research Group.
+<BR>
+The role of these comments is to help delineate the line between research
+<BR>
+issues and implementation issues.  The answers are not definitive in
+<BR>
+an IETF standardization sense, but carry significant weight with me
+<BR>
+for discussions of which issues are in scope for tcp-impl and which
+<BR>
+are out of scope because they are still active research areas.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>Q: Is the initial slow-start cwnd going to be increased, and if
+<BR>
+&nbsp;&nbsp;&nbsp;so, to what?
+<BR>
+A: Consensus in E2E that it can be increased to at least two packets,
+<BR>
+&nbsp;&nbsp;&nbsp;as TCP's send two back-to-back packets all the time anyway.  It may
+<BR>
+&nbsp;&nbsp;&nbsp;be increased to more, per a pending I-D by Sally Floyd and Mark Allman
+<BR>
+&nbsp;&nbsp;&nbsp;[and now Craig Partridge; more about this in the next message I send
+<BR>
+&nbsp;&nbsp;&nbsp;to tcp-impl].
+<BR>
+<P>Q: How can we keep the send window from expanding excessively once the
+<BR>
+&nbsp;&nbsp;&nbsp;maximum throughput has been attained?
+<BR>
+A: Deploy RED.
+<BR>
+<P>Q: SACK is a done deal, right?
+<BR>
+A: Yes.
+<BR>
+<P>Q: How to compute RTO when using high-resolution timings?
+<BR>
+Q: How to compute RTO when timing more than one packet per RTT
+<BR>
+&nbsp;&nbsp;&nbsp;(i.e., how to adjust the constants for the exponentially weighted
+<BR>
+&nbsp;&nbsp;&nbsp;moving average)?
+<BR>
+A: These are subtle, but Van Jacobson has worked them out.  He will
+<BR>
+&nbsp;&nbsp;&nbsp;write something up and Vern Paxson will help get it turned into an RFC.
+<BR>
+<P>Q: How long a sending pause merits a new slow-start?
+<BR>
+A: One RTO.  The thinking is that an RTO is an upper bound estimate
+<BR>
+&nbsp;&nbsp;&nbsp;on how long it takes to get feedback from the network.  Beyond
+<BR>
+&nbsp;&nbsp;&nbsp;this amount of time, you (1) have lost incoming acks for self-clocking,
+<BR>
+&nbsp;&nbsp;&nbsp;and (2) don't reliably know anything about the network's state, so you
+<BR>
+&nbsp;&nbsp;&nbsp;should be conservative and hunt for available bandwidth again.
+<BR>
+<P>Q: What about waiting for more than two packets before ack'ing on a LAN?
+<BR>
+A: No.  If this really buys you performance, you should scrutinize your
+<BR>
+&nbsp;&nbsp;&nbsp;TCP implementation to find out why it's so expensive to process an ack.
+<BR>
+<P>Q: Sharing cwnd across connections?
+<BR>
+A: A research issue.  The need for this is ameliorated with HTTP 1.1.
+<BR>
+<P>Q: Caching cwnd/ssthresh over time?
+<BR>
+A: cwnd, no.  ssthresh, perhaps, with a small time constant; but a
+<BR>
+&nbsp;&nbsp;&nbsp;research issue.
+<BR>
+<P>Q: How to defend against SYN flooding attacks?
+<BR>
+A: No near-term recommendation.  Longer term: ingress filtering.
+<BR>
+<P>Q: What about deploying Vegas?
+<BR>
+Q: What about deploying Janey Hoe's changes?
+<BR>
+A: These unfortunately slipped between the cracks during the discussion.
+<BR>
+&nbsp;&nbsp;&nbsp;To the extent that opinions were expressed, it is clear that significant
+<BR>
+&nbsp;&nbsp;&nbsp;elements of these are still viewed as research areas.
+<BR>
+<P>Q: Should below-sequence pure acks be acked (for keep-alives)?
+<BR>
+A: E2E consensus is that keep-alives belong at the application layer;
+<BR>
+&nbsp;&nbsp;&nbsp;no advice on addressing this problem further in TCP.
+<BR>
+<P>Q: What about fast retransmit on fewer than 3 dups, if no more dups
+<BR>
+&nbsp;&nbsp;&nbsp;are coming?
+<BR>
+A: If you use SACK, then you can reliably know when data has left
+<BR>
+&nbsp;&nbsp;&nbsp;the pipe.  On fewer than 3 dups, this lets you safely send new
+<BR>
+&nbsp;&nbsp;&nbsp;data.  Retransmitting on fewer than 3 is risky.
+<BR>
+<P>Q: What about the RST issues Ian Heavens has raised?
+<BR>
+A: It would be nice in principle to fix these, as they reveal a flaw
+<BR>
+&nbsp;&nbsp;&nbsp;in the proof of TCP's correctness.  However, in practice the
+<BR>
+&nbsp;&nbsp;&nbsp;corruption scenarios appear unlikely, so it's not clear it's worth
+<BR>
+&nbsp;&nbsp;&nbsp;going through the major procedural headaches necessary to fix this.
+<BR>
+&nbsp;&nbsp;&nbsp;[Ian notes that these issues might also be profitably studied in
+<BR>
+&nbsp;&nbsp;&nbsp;the context of designing a TCP successor.]
+<BR>
+<P>Q: What about Joe Touch / Ted Faber's scheme for shifting TIME-WAIT
+<BR>
+&nbsp;&nbsp;&nbsp;into the client?
+<BR>
+A: No, because this gives a disincentive for upgrading to HTTP 1.1.
+<BR>
+&nbsp;&nbsp;&nbsp;[Subsequently, Ted &amp; Joe told me that they have measurements showing
+<BR>
+&nbsp;&nbsp;&nbsp;that it's a win with both HTTP 1.0 and 1.1, so this issue will
+<BR>
+&nbsp;&nbsp;&nbsp;no doubt be revisited.  Clearly, right now it's research.]
+<BR>
+<P>Q: Is it time to revisit constants like MSL and initial RTO?
+<BR>
+A: No.  For MSL, it might be good to document ways of reducing dependence
+<BR>
+&nbsp;&nbsp;&nbsp;on it, such as by using PAWS.
+<BR>
+<P>Q: What about systematizing informational data sent in RSTs?
+<BR>
+A: This is actually an old idea, going back to the mid 1980's.  It
+<BR>
+&nbsp;&nbsp;&nbsp;appears that the benefit is only marginal, so it's not clear it's
+<BR>
+&nbsp;&nbsp;&nbsp;worth the major procedural headaches necessary to standardize on it.
+<BR>
+<P>Q: How to fix the MSS*MSS/cwnd granularity problem (Rich Stevens
+<BR>
+&nbsp;&nbsp;&nbsp;noted that if cwnd &gt; MSS*MSS, then due to integer arithmetic
+<BR>
+&nbsp;&nbsp;&nbsp;it'll never grow any larger)?
+<BR>
+A: Add 1.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0638.html">Erik Nordmark: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#637">[ date ]</A>
+<A HREF="index.html#637">[ thread ]</A>
+<A HREF="subject.html#637">[ subject ]</A>
+<A HREF="author.html#637">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

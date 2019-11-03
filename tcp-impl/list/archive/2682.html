@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Arun Prasad (arun@netlab.hcltech.com)">
+<META NAME="Subject" CONTENT="Re: ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ECN &amp; PMTU</H1>
+<!-- received="Wed Apr 10 00:23:20 2002" -->
+<!-- isoreceived="20020410042320" -->
+<!-- sent="Wed, 10 Apr 2002 09:53:51 +0530" -->
+<!-- isosent="20020410042351" -->
+<!-- name="Arun Prasad" -->
+<!-- email="arun@netlab.hcltech.com" -->
+<!-- subject="Re: ECN &amp; PMTU" -->
+<!-- id="3CB3BE57.2655E29C@netlab.hcltech.com" -->
+<!-- inreplyto="3CB3585A.7E7C670C@lucent.com" -->
+<STRONG>From:</STRONG> Arun Prasad (<A HREF="mailto:arun@netlab.hcltech.com?Subject=Re:%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB3BE57.2655E29C@netlab.hcltech.com&gt;"><EM>arun@netlab.hcltech.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 10 2002 - 00:23:51 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2684.html">Marcel Waldvogel: "Re: [e2e] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2682">[ date ]</A>
+<A HREF="index.html#2682">[ thread ]</A>
+<A HREF="subject.html#2682">[ subject ]</A>
+<A HREF="author.html#2682">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Srivathsa wrote:
+<BR>
+<P><EM>&gt; &gt;     Why cant we generalise this stuff.... ie.,  the need here is some way to
+</EM><BR>
+<EM>&gt; &gt; communicate between the intermediate router and the endpoint.... Not sure
+</EM><BR>
+<EM>&gt; &gt; which of the two ways is advantageous, but cant we use the same method for
+</EM><BR>
+<EM>&gt; &gt; both..... ie.,
+</EM><BR>
+<EM>&gt; &gt; As for the PMTU discovery, the intermediate router can send an ICMP message
+</EM><BR>
+<EM>&gt; &gt; to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+</EM><BR>
+<EM>&gt; &gt; endpoint will do all appropriate actions as it does when it receives the packet set
+</EM><BR>
+<EM>&gt; &gt; with ECN-ECHO flag (as in present ECN procedure...)
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+</EM><BR>
+<EM>&gt; &gt; that might be slighly tough, considering the Backward compatibility....)
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; You cant use a ECN-like-mechanism for PMTU discovery.   As soon as an
+</EM><BR>
+<EM>&gt; intermediate router discovers that the packet (with DontFragment bit set
+</EM><BR>
+<EM>&gt; ) is too large for one of its outbound interfaces,   it will have to
+</EM><BR>
+<EM>&gt; discard the packet.  I.e it cant relay the packet to the
+</EM><BR>
+<EM>&gt; destination.      In ECN scenario,  packet can still be relayed further.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ya, I agree that......  But the  method by which PMTU discovery is done
+<BR>
+can be changed to avoid packet drops (if dropping a packet is costly... I think
+<BR>
+yes, because it triggers Retransmissions....). We might rethink about implementing PMTU
+<BR>
+discovery like the ECN like mechanism, with this new proposal..... The idea is
+<BR>
+<P>there should be  someother bit like the DF bit, say IF bit (Inform on Fragmentation) in the
+<BR>
+IP header..... This IF bit will be set by the Transport layers if it is planning to do the PMTU
+<BR>
+discovery.....  The router upon receiving a packet of size greater than the MTU size of the
+<BR>
+Egress interface and the IF bit is set in the IP header... then IP layer there will go ahead
+<BR>
+&nbsp;fragmenting the packet and sending it to the destination..., but also send an ICMP
+<BR>
+&quot;Message too Long&quot; message to the Sender.....  The router also sets the DF bit, and
+<BR>
+unsets the IF bit in the IP header of the fragment packets (which ensure no more
+<BR>
+fragmentation is done on the packet....)  ..................The sender upon receiving the ICMP
+<BR>
+packet will just update his PMTU... Thus there is no Packet drops... so the procedure of
+<BR>
+PMTU discovery will not  trigger any Retransmissions.... (which is expensive, because
+<BR>
+the transport layer shrinks the Congestion window if it senses that a packe is dropped...)
+<BR>
+<P><P>Not sure whether this is already discussed or proposed etc...
+<BR>
+<P><P>Thanks
+<BR>
+-arun
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt; -Srivathsa
+</EM><BR>
+<P><PRE>
+--
+****************************************************************
+V.Arun Prasad
+HCL Technologies Ltd.
+51, Jawaharlal Nehru Road,
+Ekkattuthangal,
+Guindy Industrial Estate,
+Chennai - 600097.
+<P>Contact # : 9144 - 2334174
+            9144 - 2334181
+            extn : 233
+****************************************************************
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2684.html">Marcel Waldvogel: "Re: [e2e] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2682">[ date ]</A>
+<A HREF="index.html#2682">[ thread ]</A>
+<A HREF="subject.html#2682">[ subject ]</A>
+<A HREF="author.html#2682">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Apr 10 2002 - 00:23:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

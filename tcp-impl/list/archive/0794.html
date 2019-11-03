@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP SACK</TITLE>
+<META NAME="Author" CONTENT="Michael C. Richardson (mcr@sandelman.ottawa.on.ca)">
+<META NAME="Subject" CONTENT="Re: TCP SACK">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP SACK</H1>
+<!-- received="Sat Oct 18 11:55:42 1997" -->
+<!-- isoreceived="19971018155542" -->
+<!-- sent="Sat, 18 Oct 1997 14:58:12 -0400" -->
+<!-- isosent="19971018185812" -->
+<!-- name="Michael C. Richardson" -->
+<!-- email="mcr@sandelman.ottawa.on.ca" -->
+<!-- subject="Re: TCP SACK" -->
+<!-- id="199710181858.OAA00765@istari.sandelman.ottawa.on.ca" -->
+<!-- inreplyto="199710180453.FAA15282@labinfo.iet.unipi.it" -->
+<STRONG>From:</STRONG> Michael C. Richardson (<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710181858.OAA00765@istari.sandelman.ottawa.on.ca&gt;"><EM>mcr@sandelman.ottawa.on.ca</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Oct 18 1997 - 14:58:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0795.html">Chetan Kumar: "Silly Window avoidance"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0793.html">Vernon Schryver: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#794">[ date ]</A>
+<A HREF="index.html#794">[ thread ]</A>
+<A HREF="subject.html#794">[ subject ]</A>
+<A HREF="author.html#794">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+-----BEGIN PGP SIGNED MESSAGE-----
+<BR>
+<P><P><EM>&gt;&gt;&gt;&gt;&gt; &quot;Luigi&quot; == Luigi Rizzo &lt;<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710181858.OAA00765@istari.sandelman.ottawa.on.ca&gt;">luigi@labinfo.iet.unipi.it</A>&gt; writes:
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; For SACK you are probably right, but for RFC1323 support is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; widespread in OS typically used for servers. Yet I talked
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; once with some people who run a *big* server running
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; FreeBSD and they explicitly turned off RFC1323 because some
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; clients were negatively affected by TCP options. The net is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Luigi&gt; big and full of old equipment...
+<BR>
+<P>&nbsp;&nbsp;I'm really confused by this. rfc1323 says:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indicated that both sides understand the extension.  Furthermore,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an extension option will be sent in a &lt;SYN,ACK&gt; segment only if
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the corresponding option was received in the initial &lt;SYN&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment.
+<BR>
+<P>&nbsp;&nbsp;So, if this is a server, it should never initiate a connection. Or
+<BR>
+does this have to do with FTP and data ports?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;:!mcr!:            |  Network and security consulting/contract programming
+<BR>
+&nbsp;&nbsp;&nbsp;Michael Richardson |   I do IPsec policy code for SSH &lt;<A HREF="http://www.ssh.fi/">http://www.ssh.fi/</A>&gt;
+<BR>
+&nbsp;Personal: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html">http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html</A>&quot;&gt;<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710181858.OAA00765@istari.sandelman.ottawa.on.ca&gt;">mcr@sandelman.ottawa.on.ca</A>&lt;/A&gt;. PGP key available.
+<BR>
+&nbsp;Corporate: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/SSW/">http://www.sandelman.ottawa.on.ca/SSW/</A>&quot;&gt;<A HREF="mailto:sales@sandelman.ottawa.on.ca?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710181858.OAA00765@istari.sandelman.ottawa.on.ca&gt;">sales@sandelman.ottawa.on.ca</A>&lt;/A&gt;. 
+<BR>
+<P><P>-----BEGIN PGP SIGNATURE-----
+<BR>
+Version: 2.6.3ia
+<BR>
+Charset: latin1
+<BR>
+Comment: Processed by Mailcrypt 3.4, an Emacs/PGP interface
+<BR>
+<P>iQB1AwUBNEkGw6ZpLyXYhL+BAQHtRQMAunJ8/jqhIHVAcJzlM45sh/ElDt/POD0Y
+<BR>
+E0/CKaaDEfKJgpYnzkvrR4mQu28RIIKYZruATXaTk6kmlWMJr9UF3qMd7nyWEVpz
+<BR>
+skCSq8NVsJgz2Hu94tonWvo0trYHIb23
+<BR>
+=7SIg
+<BR>
+-----END PGP SIGNATURE-----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0795.html">Chetan Kumar: "Silly Window avoidance"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0793.html">Vernon Schryver: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#794">[ date ]</A>
+<A HREF="index.html#794">[ thread ]</A>
+<A HREF="subject.html#794">[ subject ]</A>
+<A HREF="author.html#794">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

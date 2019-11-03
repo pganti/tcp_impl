@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: revising RFC 2001 within tcp-impl</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 16:38:11 1997" -->
+<!-- isoreceived="19970731203811" -->
+<!-- sent="Thu, 31 Jul 1997 16:33:35 PDT" -->
+<!-- isosent="19970731233335" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="revising RFC 2001 within tcp-impl" -->
+<!-- id="199707312333.QAA10375@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199707312333.QAA10375@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 19:33:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0625.html">Alan Cox: "Re: RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0638.html">Erik Nordmark: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0640.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0647.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0649.html">Vern Paxson: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0650.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0651.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#626">[ date ]</A>
+<A HREF="index.html#626">[ thread ]</A>
+<A HREF="subject.html#626">[ subject ]</A>
+<A HREF="author.html#626">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+RFC 2001 is a proposed standard that defines TCP congestion control, namely
+<BR>
+the specifics of slow start, congestion avoidance, fast retransmit, and
+<BR>
+fast recovery.  We (meaning Allyn, Steve &amp; I) have been discussing the need
+<BR>
+to revise it and have agreed that (1) it needs revision, and (2) tcp-impl
+<BR>
+is an appropriate forum for developing the revision.  Rich Stevens (author
+<BR>
+of 2001) has agreed to do the necessary editing to revise it, based on
+<BR>
+input from tcp-impl.
+<BR>
+<P>The need for revision comes for two reasons.  The first is that, in its
+<BR>
+present form, 2001 standardizes on exactly the Reno algorithms.  For some
+<BR>
+aspects of congestion control, this is overly stringent.  For example,
+<BR>
+there are a number of TCPs that during congestion avoidance count how much
+<BR>
+data has been acked and increase cwnd by one segment after successfully
+<BR>
+sending cwnd's worth of data.  This differs from the &quot;cwnd += MSS*MSS/cwnd&quot;
+<BR>
+algorithm used by Reno, though the differences are minor.  We would not want
+<BR>
+to consider these TCPs as failing to be standard-compliant.
+<BR>
+<P>The other reason for revision is that there appears to be widespread
+<BR>
+support for increasing the initial value of cwnd beyond its present value
+<BR>
+of a single segment, up to two segments (at least; see below).  This
+<BR>
+improves performance, both by getting data sent more quickly, and by
+<BR>
+avoiding a potentially lengthy delay if the receiver only acks the first
+<BR>
+segment using a delayed ack.
+<BR>
+<P>Two pragmatic arguments that it's okay to start with two segments are:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) TCPs are constantly sending two back-to-back packets anyway -
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;whenever ack-every-other is used, and always during slow-start.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So the net already puts up with pretty much exactly this load
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anyway.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) Plenty of TCPs already start in some circumstances with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an initial window of two segments, due to bugs or design.
+<BR>
+<P>So starting with two rather than one is only a lose when the net is so
+<BR>
+loaded that it can only sustain a single packet in flight per connection;
+<BR>
+and you quickly get to that state anyway, when the second packet is lost,
+<BR>
+just as you would after one RTT if you started cwnd at one segment,
+<BR>
+<P>Note that the proposed change only affects the initial slow-start, not
+<BR>
+slow-start after loss.
+<BR>
+<P>Sally Floyd, Mark Allman and Craig Partridge have an I-D that discusses
+<BR>
+increasing the initial cwnd to two segments or possibly more (which is
+<BR>
+potentially more controversial).  I haven't seen an official announcement
+<BR>
+of it yet, but it's unofficially available from:
+<BR>
+<P><A HREF="http://gigahertz.lerc.nasa.gov/~mallman/papers/draft-floyd-incr-init-win-00.txt">http://gigahertz.lerc.nasa.gov/~mallman/papers/draft-floyd-incr-init-win-00.txt</A>
+<BR>
+<P>Our plan is to begin work on revising 2001 in tcp-impl in parallel with the
+<BR>
+development of their I-D.  For now, we will assume that the initial cwnd
+<BR>
+change will be to start with two segments.  If down the line the I-D
+<BR>
+successfully establishes a different initial value, it is straight-forward
+<BR>
+to amend the 2001 revision accordingly.
+<BR>
+<P>This will be an agenda topic at Munich.  I'm hoping that we can have some
+<BR>
+fruitful discussion of it beforehand on the mailing list.
+<BR>
+<P>A final comment: a key point is that our primary goal is to clarify RFC 2001,
+<BR>
+not to overhaul it.  For example, I'm predisposed against revising it so that
+<BR>
+during slow-start cwnd is opened by the amount of data acked, rather than
+<BR>
+one segment per ack (as we discussed earlier on the list), as this is a change
+<BR>
+that will significantly alter TCP burstiness compared to how it works in
+<BR>
+the net today.  I would also have considered increasing the initial cwnd
+<BR>
+out of scope, were it not that there appears widespread consensus that going
+<BR>
+to two segments is okay, and an I-D in the works thoroughly exploring the
+<BR>
+issues.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0625.html">Alan Cox: "Re: RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0638.html">Erik Nordmark: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0640.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0647.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0649.html">Vern Paxson: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0650.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0651.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#626">[ date ]</A>
+<A HREF="index.html#626">[ thread ]</A>
+<A HREF="subject.html#626">[ subject ]</A>
+<A HREF="author.html#626">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

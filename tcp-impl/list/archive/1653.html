@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP-offload on IBM mainframe</TITLE>
+<META NAME="Author" CONTENT="vijay singh (vijjus@rocketmail.com)">
+<META NAME="Subject" CONTENT="TCP-offload on IBM mainframe">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP-offload on IBM mainframe</H1>
+<!-- received="Wed Mar  3 15:32:33 1999" -->
+<!-- isoreceived="19990303203233" -->
+<!-- sent="Wed, 3 Mar 1999 12:01:14 -0800 (PST)" -->
+<!-- isosent="19990303200114" -->
+<!-- name="vijay singh" -->
+<!-- email="vijjus@rocketmail.com" -->
+<!-- subject="TCP-offload on IBM mainframe" -->
+<!-- id="19990303200114.20713.rocketmail@web4.rocketmail.com" -->
+<STRONG>From:</STRONG> vijay singh (<A HREF="mailto:vijjus@rocketmail.com?Subject=Re:%20TCP-offload%20on%20IBM%20mainframe&In-Reply-To=&lt;19990303200114.20713.rocketmail@web4.rocketmail.com&gt;"><EM>vijjus@rocketmail.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 15:01:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1654.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1652.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1662.html">Oleg Vishnepolsky: "Re: TCP-offload on IBM mainframe"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1653">[ date ]</A>
+<A HREF="index.html#1653">[ thread ]</A>
+<A HREF="subject.html#1653">[ subject ]</A>
+<A HREF="author.html#1653">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I wanted to put a question before the forum:
+<BR>
+<P>On an IBM mainframe, while offloading the TCP
+<BR>
+processing on a 3172 Controller, can we control the
+<BR>
+buffer allocation (mbufs) on the offload (not on the
+<BR>
+TCP MVS bufferpool). I face a problem where the
+<BR>
+offload runs out of mbufs and the server application
+<BR>
+come down and does not come up again as it fails in
+<BR>
+the BIND call. Or can we free some mbufs by dropping
+<BR>
+some connections through netstat.
+<BR>
+<P>Vijay
+<BR>
+E-MAIL: <A HREF="mailto:vijjus@rocketmail.com?Subject=Re:%20TCP-offload%20on%20IBM%20mainframe&In-Reply-To=&lt;19990303200114.20713.rocketmail@web4.rocketmail.com&gt;">vijjus@rocketmail.com</A>
+<BR>
+<P><P>---Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP-offload%20on%20IBM%20mainframe&In-Reply-To=&lt;19990303200114.20713.rocketmail@web4.rocketmail.com&gt;">vjs@calcite.rhyolite.com</A>&gt; wrote:
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; While it's clear there is little support for the
+</EM><BR>
+current proposal for
+<BR>
+<EM>&gt; modifying the Nagle algorithm, I think it is also
+</EM><BR>
+clear that there would
+<BR>
+<EM>&gt; be wide support for an ID that said that the Nagle
+</EM><BR>
+algorithm should be
+<BR>
+<EM>&gt; implemented according to the spirit of RFC 896.  We
+</EM><BR>
+seem to agree that
+<BR>
+<EM>&gt; the right way is to delay an application's send
+</EM><BR>
+request when the connection
+<BR>
+<EM>&gt; is not idle, but not delay any anything otherwise.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP-offload%20on%20IBM%20mainframe&In-Reply-To=&lt;19990303200114.20713.rocketmail@web4.rocketmail.com&gt;">vjs@rhyolite.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>_________________________________________________________
+<BR>
+DO YOU YAHOO!?
+<BR>
+Get your free @yahoo.com address at <A HREF="http://mail.yahoo.com">http://mail.yahoo.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1654.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1652.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1656.html">Rick Jones: "Re: TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1662.html">Oleg Vishnepolsky: "Re: TCP-offload on IBM mainframe"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1653">[ date ]</A>
+<A HREF="index.html#1653">[ thread ]</A>
+<A HREF="subject.html#1653">[ subject ]</A>
+<A HREF="author.html#1653">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

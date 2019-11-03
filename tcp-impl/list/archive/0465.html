@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@jenolan.rutgers.edu)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 15:34:50 1997" -->
+<!-- isoreceived="19970605193450" -->
+<!-- sent="Thu, 5 Jun 1997 18:26:56 -0400" -->
+<!-- isosent="19970605222656" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@jenolan.rutgers.edu" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052226.SAA00877@jenolan.caipgeneral" -->
+<!-- inreplyto="199706052150.PAA06270@mica.denver.sgi.com" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@jenolan.rutgers.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052226.SAA00877@jenolan.caipgeneral&gt;"><EM>davem@jenolan.rutgers.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:26:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0466.html">braden@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0460.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0483.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0483.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#465">[ date ]</A>
+<A HREF="index.html#465">[ thread ]</A>
+<A HREF="subject.html#465">[ subject ]</A>
+<A HREF="author.html#465">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;Date: Thu, 5 Jun 1997 15:50:54 -0600
+<BR>
+&nbsp;&nbsp;&nbsp;From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052226.SAA00877@jenolan.caipgeneral&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;SYN attacks do not involve TIME_WAIT.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&quot;Denying the connection attempts&quot; is a poor defense against a
+<BR>
+&nbsp;&nbsp;&nbsp;denial of service attack such as SYN bombing, since causing you to
+<BR>
+&nbsp;&nbsp;&nbsp;deny connection attemptss is the purpose for the SYM bombing.
+<BR>
+<P>Bullshit, if you can verify that the connection attempt is in fact
+<BR>
+coming from the attacker, denying the connection attempt is the
+<BR>
+perfect (and currently) the only known good solution to SYN bombing.
+<BR>
+<P>I kindly refer you to Dr. Bernstein's SYN cookies, and Eric Schenk's
+<BR>
+RST cookies in Linux to see how this can and is being done.  We have
+<BR>
+measured this to be effective up to and until the point where a
+<BR>
+100baseT ether was completely saturated with SYN packets, the system
+<BR>
+was barely affected, SYN/RST cookies make this possible.
+<BR>
+<P>At least the SYN cookies should be standardized and if anything
+<BR>
+recommended for an implementation, they turn SYN bomb's into some old
+<BR>
+protocol bug we laugh with our friends about and is no longer an issue.
+<BR>
+<P>All the other techniques are flawed in one way or another, and are not
+<BR>
+nearly as effective as the SYN/RST cookies, some of them require
+<BR>
+configuration changes in userland, SYN/RST cookies only require a
+<BR>
+new version of the OS to be booted.
+<BR>
+<P>---------------------------------------------////
+<BR>
+Yow! 11.26 MB/s remote host TCP bandwidth &amp; ////
+<BR>
+199 usec remote TCP latency over 100Mb/s   ////
+<BR>
+ethernet.  Beat that!                     ////
+<BR>
+-----------------------------------------////__________  o
+<BR>
+David S. Miller, <A HREF="mailto:davem@caip.rutgers.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052226.SAA00877@jenolan.caipgeneral&gt;">davem@caip.rutgers.edu</A> /_____________/ / // /_/ &gt;&lt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0466.html">braden@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0460.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0483.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0483.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#465">[ date ]</A>
+<A HREF="index.html#465">[ thread ]</A>
+<A HREF="subject.html#465">[ subject ]</A>
+<A HREF="author.html#465">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

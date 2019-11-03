@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 19:59:56 2000" -->
+<!-- isoreceived="20000225005956" -->
+<!-- sent="Thu, 24 Feb 2000 16:53:53 -0800 (PST)" -->
+<!-- isosent="20000225005353" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="Roam.SIMC.2.0.6.951440033.1084.kcpoon@jurassic" -->
+<!-- inreplyto="200002242357.PAA16973@pizda.ninka.net" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Roam.SIMC.2.0.6.951440033.1084.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 19:53:53 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1992.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1993">[ date ]</A>
+<A HREF="index.html#1993">[ thread ]</A>
+<A HREF="subject.html#1993">[ subject ]</A>
+<A HREF="author.html#1993">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; As an aside I think the RDMA proposal has a lot of holes too.  For
+</EM><BR>
+<EM>&gt; example, there are in-kernel HTTP accelerators that do the complete
+</EM><BR>
+<EM>&gt; client header parse and initial packet response in the hw interrupt
+</EM><BR>
+<EM>&gt; handler.  There are no user buffers involved, and static response
+</EM><BR>
+<EM>&gt; data is DMA'd directly from the filesystem page cache.
+</EM><BR>
+<P>Even without the above special acceleration, section 2 in the draft
+<BR>
+overestimates the number of copies involved in most OSes nowadays.
+<BR>
+<P><EM>&gt; In the case of a server response, RDMA benefits the client, not the
+</EM><BR>
+<EM>&gt; server, so I fail to see why your example is problematic.  Zero copy
+</EM><BR>
+<EM>&gt; send is not what this standard addresses.
+</EM><BR>
+<P>Even without RDMA, people have done zero copy receive with TCP/IP before. 
+<BR>
+What I see in RDMA is a way to provide message boundary in TCP so that apps
+<BR>
+do not need to spend time on that (I call them lazy apps). I don't see right
+<BR>
+away the other claims in the draft.  It seems to me that the authors should
+<BR>
+re-evaluate their claims and provide support to them.  I don't see any
+<BR>
+arguments in the draft.
+<BR>
+<P>If message boundary is the only benefit, I think the SCTP proposal is more
+<BR>
+interesting.  Check draft-ietf-sigtran-sctp-06.txt.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Roam.SIMC.2.0.6.951440033.1084.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1994.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1992.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1993">[ date ]</A>
+<A HREF="index.html#1993">[ thread ]</A>
+<A HREF="subject.html#1993">[ subject ]</A>
+<A HREF="author.html#1993">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

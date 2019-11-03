@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 08:43:56 1997" -->
+<!-- isoreceived="19970702124356" -->
+<!-- sent="Wed, 02 Jul 1997 17:39:47 +0200" -->
+<!-- isosent="19970702153947" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707021539.RAA08232@rekk.dna.lth.se" -->
+<!-- inreplyto="6176.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707021539.RAA08232@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 11:39:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#610">[ date ]</A>
+<A HREF="index.html#610">[ thread ]</A>
+<A HREF="subject.html#610">[ subject ]</A>
+<A HREF="author.html#610">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707021539.RAA08232@rekk.dna.lth.se&gt;">wsimpson@greendragon.com</A>&gt; writes:
+<BR>
+<EM>&gt;&gt; Is this much different than the 1 RTO timeout currently used
+</EM><BR>
+<EM>&gt;&gt; in several implementations? And do you want to imply that DATO
+</EM><BR>
+<EM>&gt;&gt; is fixed (e.g. to 200ms) or should it be allowed to be a computed
+</EM><BR>
+<EM>&gt;&gt; quanitity?
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;(As you opine later) DATO is always less than RTO, isn't it?  So, I'm
+</EM><BR>
+<EM>&gt;suggesting a shorter time period than RTO.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;My estimation is that, on average, 1/2 the bandwidth since the last data
+</EM><BR>
+<EM>&gt;you sent (not received) could be used by someone else in your outgoing
+</EM><BR>
+<EM>&gt;path.  And that value is reflected by the delayed Ack time, not the
+</EM><BR>
+<EM>&gt;entire RTT.
+</EM><BR>
+<P>This seems to make intuitive sense to me, but I would want to run
+<BR>
+a lot of testing with this change to see what the real effects are.
+<BR>
+<P><EM>&gt;&gt; MinRTO must never be smaller than DATO, or you will fall over against
+</EM><BR>
+<EM>&gt;&gt; anything that does delayed ACKs. In practice this currently means that
+</EM><BR>
+<EM>&gt;&gt; you must not set MinRTO to less than 200ms.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Hmmm, wouldn't the DATO of the peer be actually included in the RTT
+</EM><BR>
+<EM>&gt;calculation, as the Ack shows up later?  So, even when DATO of the peer
+</EM><BR>
+<EM>&gt;is longer, MinRTO won't be hit unless the peer was sending bidirectional
+</EM><BR>
+<EM>&gt;data, and then suddenly quits.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I just looked and actually use MinRTO of 500 ms, but MinATO of 200 ms.
+</EM><BR>
+<P>There are a few different issues mixed in here I think.
+<BR>
+First, ACKs are not always delayed, and we cannot easily tell
+<BR>
+which ACKs were delayed, and which were not. In fact, when data
+<BR>
+is streaming at full speed ACKs are never delayed, we just send immedate
+<BR>
+ACKs every second packet. When we stop sending the final ACK is likely
+<BR>
+to be delayed. This means that the computed RTT is almost always an
+<BR>
+underestimate of the real RTT + DATO, and we stand at risk of false
+<BR>
+retransmit of the final packet in any group of continously transmitted
+<BR>
+packets.
+<BR>
+<P>In the standard BSD implementation timers only have a 500ms
+<BR>
+granularity, and the DATO is fixed to 200ms. Also RFC1122 mandates
+<BR>
+that DATO never be more than 500ms. This means that the error is
+<BR>
+at most 1 tick of the retransmission timer, and the retransmission
+<BR>
+timer tends to be more than 1 tick overestimated in any case.
+<BR>
+(See details in Van Jacobson's original paper on this stuff).
+<BR>
+<P>But, if you have an implementation that uses higher accuracy timers
+<BR>
+we start to get into trouble since the DATO of the remote side
+<BR>
+cannot be determined by the sender, and the RTT calculation now
+<BR>
+has high enough accuracy that we will get a false retransmit
+<BR>
+on the last packet in a train. 
+<BR>
+<P><EM>&gt;&gt; If we allow DATO to vary,
+</EM><BR>
+<EM>&gt;&gt; e.g. as computed from packet interarrival times, then the issue
+</EM><BR>
+<EM>&gt;&gt; becomes even more cloudy. Ideally the DATO should be included in
+</EM><BR>
+<EM>&gt;&gt; the calculation of RTT, but it is not clear how to accomplish this,
+</EM><BR>
+<EM>&gt;&gt; since it is not easily determined which ACKs have been delayed and which
+</EM><BR>
+<EM>&gt;&gt; have not, and also it is not necessarily the case that the DATO will be
+</EM><BR>
+<EM>&gt;&gt; fixed.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;I've been using:
+</EM><BR>
+<EM>&gt;	uint32 dato = tcb-&gt;to.srtt / 2
+</EM><BR>
+<EM>&gt;			+ tcb-&gt;to.mdev;
+</EM><BR>
+<EM>&gt;	dato = max( dato, 500 );
+</EM><BR>
+<EM>&gt;	dato = min( dato, 200 );
+</EM><BR>
+<P>Shouldn't the max and min be exchanged in the above?
+<BR>
+<P>Anyway, I think we've been over this ground once before a few months back,
+<BR>
+but I'll say it again.
+<BR>
+<P>If we are going to go with a calculated DATO I favor something like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dato = average packet interarrival time
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dato = min(dato, 500)
+<BR>
+<P>The average packet interarrival time should be calculated in a way
+<BR>
+similar to the RTO, with the difference that extreme samples (say
+<BR>
+larger than RTO) should be thrown away. (We only want to sample
+<BR>
+time between packet arrivals in a continous stream. Note the time
+<BR>
+for pauses in sending.)
+<BR>
+<P>Here's my reasoning. We delay ACK's in the hope of reducing the
+<BR>
+total number of ACK's we send to every second packet, and in the hope
+<BR>
+off piggybacking the ACK on a data packet going the other way.
+<BR>
+However, we don't want to delay the ACK to much, since this messes up the
+<BR>
+RTO calculations on the remote side. In a stream of continous packets
+<BR>
+using the average packet interarrival time means we will normally
+<BR>
+never have an delayed ACK timeout event. This is the smallest
+<BR>
+estimator we can use that gives us this effect. The estimator
+<BR>
+you suggest is substantually more conservative, especially when
+<BR>
+the congestion window is large. This will probably peg the delayed
+<BR>
+ACK to 500ms in long/slow haul cases.
+<BR>
+<P>A fixed DATO of x ms means that the remote side must add in a bias of x ms
+<BR>
+to account for the DATO which it cannot measure. Generally because of
+<BR>
+the wide spread use of systems with a fixed 200ms DATO this means that
+<BR>
+RTO must never fall below 200ms, and perhaps should really be calculated
+<BR>
+RTO + 200ms (This is unclear to me, Vern Paxon suggested the additive
+<BR>
+calculation to me, and it makes sense, I'm just not sure it makes a
+<BR>
+real difference). If DATO varies in some relationship to RTT, then
+<BR>
+we need the RTO to be biased by that relationship. If we use your
+<BR>
+suggested DATO calculation the bias is easily calculated.
+<BR>
+I claim that the bais for my suggested DATO can similarly be calculated
+<BR>
+from the interarrival time of the ACKs, or alternatively by multiplying
+<BR>
+the RTO by (1+1/cwnd). In the Linux stack I take the second approach.
+<BR>
+<P>Of course, this whole discussion is meaningless if you aren't using
+<BR>
+high resolution timers for your TCP.
+<BR>
+<P>A few further related issues.
+<BR>
+<P>-   If the average packet interarrival time goes above 500ms,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;then an interesting question arises: is there still a benifit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to be had from delaying the ACK? It will cost us a timeout,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and we will always take that hit, since the next packet will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;never come before that timeout. In a one way stream it would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;be better to ACK immediately, and avoid the 500ms extra bias
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;being added to the RTO calculation on the remote side.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;On the other hand, if data is going two ways, then we really would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;like to wait a bit for a data packet to piggyback the ACK on.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;If we wanted to we could also start measuring the average time
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;until the system makes such a packet available, and when that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;exceeds 500ms, skip the delayed ACK all together.
+<BR>
+<P>-   The RFC's are not terribly clear on exactly how the RTO should
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;be used. There are two interpretations, which differ
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;quite substantually in their effect:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;(1) When a packet is sent at time T, we expect a reply for that packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by time T + RTO.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;(2) When a packet is sent at time T, we expect a reply for the earliest
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unacknowledge packet we have sent at time T + RTO.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;BSD derived stacks take interperation (2). However, just reading the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;RFC's interpetation (1) seems the most natural, and is quite simple
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to implement if the outgoing data is pre-packetized. In BSD style
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;implementations, where the packets are constructed from the send queue
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;on the fly every time a packet is needed, interpretation (1) would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;be fairly hard to implement, but (2) is a natural.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The difference between these two interperations is 1/2RTT on a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;symmetric path. In situations where the timers are accurate enough
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;for this to make a difference, interpretation (1) will kill fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;retransmit, since a timeout will often occur before fast retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;can take place.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707021539.RAA08232@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#610">[ date ]</A>
+<A HREF="index.html#610">[ thread ]</A>
+<A HREF="subject.html#610">[ subject ]</A>
+<A HREF="author.html#610">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

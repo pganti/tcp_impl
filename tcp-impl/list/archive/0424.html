@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP performance in asymmetri</TITLE>
+<META NAME="Author" CONTENT="Subir Varma (subir@enterprise.hybrid.com)">
+<META NAME="Subject" CONTENT="RE: TCP performance in asymmetric networks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP performance in asymmetric networks</H1>
+<!-- received="Fri May 23 09:54:21 1997" -->
+<!-- isoreceived="19970523135421" -->
+<!-- sent="Fri, 23 May 1997 09:47:44 -0700" -->
+<!-- isosent="19970523164744" -->
+<!-- name="Subir Varma" -->
+<!-- email="subir@enterprise.hybrid.com" -->
+<!-- subject="RE: TCP performance in asymmetric networks" -->
+<!-- id="c=US%a=_%p=hybrid%l=ENTERPRISE-970523164744Z-14991@enterprise.hybrid.com" -->
+<!-- inreplyto="TCP performance in asymmetric networks" -->
+<STRONG>From:</STRONG> Subir Varma (<A HREF="mailto:subir@enterprise.hybrid.com?Subject=RE:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;c=US%25a=_%25p=hybrid%25l=ENTERPRISE-970523164744Z-14991@enterprise.hybrid.com&gt;"><EM>subir@enterprise.hybrid.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri May 23 1997 - 12:47:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0425.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0423.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0427.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#424">[ date ]</A>
+<A HREF="index.html#424">[ thread ]</A>
+<A HREF="subject.html#424">[ subject ]</A>
+<A HREF="author.html#424">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Kathie,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You have raised a number of questions, some of which I answer
+<BR>
+below, but you have not covered the question of general interest which
+<BR>
+addressed the differences in performances of Reno and Tahoe in
+<BR>
+asymmetric networks.
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Subir,
+</EM><BR>
+<EM>&gt;Have you actually observed the problems mentioned in this paper in your
+</EM><BR>
+<EM>&gt;cable data systems? 
+</EM><BR>
+<P>As you point out this paper assumes a rather poorly designed system, I
+<BR>
+suspect the authors did so to make their analysis easier. Our system has
+<BR>
+been designed for large deployments taking real world constraints into
+<BR>
+account, and includes a number of optimizations that help to mitigate
+<BR>
+these kind of problems.
+<BR>
+<P><EM>&gt;I took a look at that paper and there seem to me
+</EM><BR>
+<EM>&gt;to be some assumptions made about the underlying MAC that would be
+</EM><BR>
+<EM>&gt;a poor design. Lakshman et al state that a solution is to control 
+</EM><BR>
+<EM>&gt;access to the upstream link. Com21's systems do this and it is
+</EM><BR>
+<EM>&gt;certainly possibly within the MCNS spec. 
+</EM><BR>
+<P>The Hybrid system also controls access to the upstream link. It should
+<BR>
+be clear from reading the paper that any vendor who does not do so will
+<BR>
+have a poorly performing system.
+<BR>
+<P><EM>&gt;It seems like most of the
+</EM><BR>
+<EM>&gt;buffer overflow problems could be solved with sufficiently large buffers.
+</EM><BR>
+<P>If this was always the case, then there would be no need for congestion
+<BR>
+control at all ;-). There is no way to avoid buffer overflows in real
+<BR>
+systems.
+<BR>
+<P><EM>&gt;The asymmetry problem appears somewhat overblown, too, as the downstream
+</EM><BR>
+<EM>&gt;bandwidth is the limiter for two-way cable modems and the telco return
+</EM><BR>
+<EM>&gt;is only return limited if there's no sharing of the downstream. 
+</EM><BR>
+<P>Our studies show that the downstream is the limiting factor in both type
+<BR>
+of systems.
+<BR>
+<P><EM>&gt;Admittedly,
+</EM><BR>
+<EM>&gt;there are still a lot of unknowns about cable data system performance,
+</EM><BR>
+<EM>&gt;but we haven't seen this sort of thing in detailed simulations or in
+</EM><BR>
+<EM>&gt;packet traces on our systems. 
+</EM><BR>
+<P>This depends on how extensive these tests have been.
+<BR>
+<P><EM>&gt;I'd be inclined to try to get the MAC
+</EM><BR>
+<EM>&gt;designed right before trying to change the implementation of a protocol
+</EM><BR>
+<EM>&gt;that runs on a lot more kinds of systems.
+</EM><BR>
+<P>I still think that the problem pointed out in the paper is a real one.
+<BR>
+It is true that the authors have over simplified the system so that it
+<BR>
+can be conveniently analyzed, but this is a common technique among
+<BR>
+academics. The problem may not occur if there are only a few users in
+<BR>
+the system, but as soon as there are a sufficiently large number of
+<BR>
+users, buffer shortages will occur, and TCP congestion control will kick
+<BR>
+in. I would also like to re-focus the discussion on the congestion
+<BR>
+control scheme, rather than specific vendor implementations.
+<BR>
+<P><EM>&gt;	Kathie
+</EM><BR>
+<EM>&gt;	<A HREF="mailto:nichols@com21.com?Subject=RE:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;c=US%25a=_%25p=hybrid%25l=ENTERPRISE-970523164744Z-14991@enterprise.hybrid.com&gt;">nichols@com21.com</A>
+</EM><BR>
+<P>Subir Varma
+<BR>
+Hybrid Networks.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0425.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0423.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0427.html">Henry Sanders (Exchange): "RE: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#424">[ date ]</A>
+<A HREF="index.html#424">[ thread ]</A>
+<A HREF="subject.html#424">[ subject ]</A>
+<A HREF="author.html#424">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

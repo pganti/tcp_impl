@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Chadi M. BARAKAT (Chadi.Barakat@sophia.inria.fr)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Tue Mar 16 03:17:11 1999" -->
+<!-- isoreceived="19990316081711" -->
+<!-- sent="Tue, 16 Mar 1999 09:04:50 +0100" -->
+<!-- isosent="19990316080450" -->
+<!-- name="Chadi M. BARAKAT" -->
+<!-- email="Chadi.Barakat@sophia.inria.fr" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="36EE10A2.2F0987A2@sophia.inria.fr" -->
+<!-- inreplyto="85256736.00231DBA.00@D51MTA03.pok.ibm.com" -->
+<STRONG>From:</STRONG> Chadi M. BARAKAT (<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;36EE10A2.2F0987A2@sophia.inria.fr&gt;"><EM>Chadi.Barakat@sophia.inria.fr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 16 1999 - 03:04:50 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1674">[ date ]</A>
+<A HREF="index.html#1674">[ thread ]</A>
+<A HREF="subject.html#1674">[ subject ]</A>
+<A HREF="author.html#1674">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+All you said Marcel is correct, the problem is one a loss appears at the
+<BR>
+end of the window (before the end by less than three packets) and you
+<BR>
+don't send enough new segments during Fast Recovery to make dupacks more
+<BR>
+than 3. Take this counterexemple
+<BR>
+<P>If the source transmits packets 
+<BR>
+<P>[1] 2 3 [4] 5
+<BR>
+<P>I use the same notation for lost packets. The source receives first
+<BR>
+three dup acks that correspond to the receipt of packets 2, 3 and 5.
+<BR>
+dupacks is then 3 and the source retransmits packet 1, sets its window
+<BR>
+to 2 and adds three to cwnd which becomes 5. Here no new segments are
+<BR>
+transmitted. When packet 1 arrives at the destination, an ack asking for
+<BR>
+packet 4 is transmitted. According to your proposal, when the source
+<BR>
+receives this ACK, it decrements dupacks by two which becomes 1. Here
+<BR>
+packets 4 cannot be retransmitted and a timeout is required. However
+<BR>
+with the current version of New Reno it is retransmitted directly. I
+<BR>
+think that it must be retransmitted because one Round trip time has
+<BR>
+passed since its transmission and it is very probable that it is lost.
+<BR>
+<P>Now for my proposal about stretching the Fast Recovery phase, I don't
+<BR>
+mean by stretching try to recover the new packets sent during the Fast
+<BR>
+Recovery phase without reducing further the window, I just want to
+<BR>
+profit from the information that these packets are sent long time ago
+<BR>
+(at least one Round trip time). As in current New Reno Fast Recovery
+<BR>
+must always end when all the packets in the window when it is called are
+<BR>
+acknowledged. Any loss in another round trip time is another congestion
+<BR>
+signal and the window must be reduced again. 
+<BR>
+<P>Let X and Y the lowest and the highest sequence numbers transmitted when
+<BR>
+Fast Recovery is called. X is lost. 
+<BR>
+<P>Let Z be the highest sequence number between X and Y that is also lost.
+<BR>
+When the source receives the partial ACK asking for packet Z, it has
+<BR>
+transmitted new packets until T whith T&gt;Y. 
+<BR>
+Here it retransmits Z and may be some new packets beyond T. Packet Z
+<BR>
+arrives at the destination which must ack all the packets till T if they
+<BR>
+are correctly received of course. Suppose that a packet between Y and T
+<BR>
+is also lost, call it U, we have the following figure
+<BR>
+<P>X  [Z]  Y  [U]  T    
+<BR>
+<P>Here the source receives an ACK asking for packet U. If it resets the
+<BR>
+dupacks counter after leaving fast recovery and if the number of
+<BR>
+segments sent after T is less than three, the detection of the loss of U
+<BR>
+requires a timeout. Recall that all the dupack of segments X till T have
+<BR>
+been already received when the ack asking for segment U arrived. However
+<BR>
+if the source uses the dupack counter as proposed by Marcel, it will
+<BR>
+consider the dup acks of packets sent between U and T with any dup ack
+<BR>
+for a packet sent after T. This may also cause a failure of Fast
+<BR>
+Retransmit if the number of these dup acks is less than three. However
+<BR>
+this proposition is better than resetting the counter because it takes
+<BR>
+account of dup acks for packets between U and T.
+<BR>
+<P>I propose here that the source should retransmit directly packet U
+<BR>
+without waiting for three dupack or timeout. At least one round trip
+<BR>
+time has passed since the transmission of U and it is very probable that
+<BR>
+it is lost. How to do this??
+<BR>
+<P>The source stores in a variable the highest sequence number sent and it
+<BR>
+updates this variable when it receives a partial ACK (less than Y). When
+<BR>
+it leaves Fast Recovery and receives an ACK asking for a packet less
+<BR>
+than this variable (T in our exemple), it retransmits this packet
+<BR>
+directly.
+<BR>
+<P>What do you think?
+<BR>
+<P>Chadi
+<BR>
+<P><P><P><P><PRE>
+-- 
+                    **  Chadi Mohamad BARAKAT  **
+           <A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+                                  /\
+PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;36EE10A2.2F0987A2@sophia.inria.fr&gt;">Chadi.Barakat@sophia.inria.fr</A>
+2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1674">[ date ]</A>
+<A HREF="index.html#1674">[ thread ]</A>
+<A HREF="subject.html#1674">[ subject ]</A>
+<A HREF="author.html#1674">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

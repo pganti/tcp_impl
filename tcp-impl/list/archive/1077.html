@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@dm.cobaltmicro.com)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 09:02:50 1998" -->
+<!-- isoreceived="19980423130250" -->
+<!-- sent="Thu, 23 Apr 1998 08:55:24 -0700" -->
+<!-- isosent="19980423155524" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@dm.cobaltmicro.com" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804231555.IAA11016@dm.cobaltmicro.com" -->
+<!-- inreplyto="199804231540.LAA15325@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804231555.IAA11016@dm.cobaltmicro.com&gt;"><EM>davem@dm.cobaltmicro.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 11:55:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1082.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1082.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1077">[ date ]</A>
+<A HREF="index.html#1077">[ thread ]</A>
+<A HREF="subject.html#1077">[ subject ]</A>
+<A HREF="author.html#1077">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;From: Mark Allman &lt;<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804231555.IAA11016@dm.cobaltmicro.com&gt;">mallman@lerc.nasa.gov</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Date: Thu, 23 Apr 1998 11:40:24 -0400
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I would say that the initial burst of data caused by a TCP
+<BR>
+&nbsp;&nbsp;&nbsp;connection with an initial window of 4 segments is somewhat similar
+<BR>
+&nbsp;&nbsp;&nbsp;to the initial burst of data caused by 4 parallel connections using
+<BR>
+&nbsp;&nbsp;&nbsp;1 segment initial windows.
+<BR>
+<P>Ok.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;But, that is where the similarities end.  One connection with an N
+<BR>
+&nbsp;&nbsp;&nbsp;segment initial window is N times more aggressive in the first RTT.
+<BR>
+&nbsp;&nbsp;&nbsp;N connections with an initial window of 1 segment are N times more
+<BR>
+&nbsp;&nbsp;&nbsp;aggressive throughout the transfer.
+<BR>
+<P>I totally agree, thanks for pointing this out.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The change proposed in the I-D alters a _parameter_, not any of
+<BR>
+&nbsp;&nbsp;&nbsp;TCP's fundamental congestion control algorithms.
+<BR>
+<P>Really?  It depends upon how you look at it.
+<BR>
+<P>The majority of the TCP connections seen on the real internet, are
+<BR>
+HTTP requests to some server.  For the large majority of these
+<BR>
+connections, this new initial CWND setting will be the entire data
+<BR>
+transfer from the server to the client.
+<BR>
+<P>I don't know, I just don't feel very comfortable with the proposals
+<BR>
+implicit statement that a flows lower bound should start at 4MSS.  If
+<BR>
+you haven't done a slow rampup probe of the network capacity and
+<BR>
+congestion when you start up, starting with 1 segment in flight as TCP
+<BR>
+does now, how can you know this?
+<BR>
+<P>I believe this change to be detrimental to the current internet,
+<BR>
+and as I've shown this problem can be dealt with satisfactorily on the
+<BR>
+client end via immediate ACK of the initial data segment received to
+<BR>
+speed up initial slow start, which many stacks are doing already.
+<BR>
+<P>Later,
+<BR>
+David S. Miller
+<BR>
+<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804231555.IAA11016@dm.cobaltmicro.com&gt;">davem@dm.cobaltmicro.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1078.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1082.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1082.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1077">[ date ]</A>
+<A HREF="index.html#1077">[ thread ]</A>
+<A HREF="subject.html#1077">[ subject ]</A>
+<A HREF="author.html#1077">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

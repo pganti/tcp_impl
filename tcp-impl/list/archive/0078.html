@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: The trace ( HTTP/RFC1122 )</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: The trace ( HTTP/RFC1122 )">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: The trace ( HTTP/RFC1122 )</H1>
+<!-- received="Wed Feb 12 15:31:58 1997" -->
+<!-- isoreceived="19970212203158" -->
+<!-- sent="Wed, 12 Feb 1997 15:11:14 +0000" -->
+<!-- isosent="19970212151114" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: The trace ( HTTP/RFC1122 )" -->
+<!-- id="3301DD92.520D@spider.com" -->
+<!-- inreplyto="9702121450.AA23128@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;3301DD92.520D@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 12 1997 - 10:11:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#78">[ date ]</A>
+<A HREF="index.html#78">[ thread ]</A>
+<A HREF="subject.html#78">[ subject ]</A>
+<A HREF="author.html#78">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thomas Narten wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Josh,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 6. When I say aborted connection I mean at the HTTP level.
+</EM><BR>
+<EM>&gt; &gt;       The client hits 'stop' or equivalent.
+</EM><BR>
+<EM>&gt; &gt;       If we handle this with a client FIN, we may allow this
+</EM><BR>
+<EM>&gt; &gt;       problem.(in the client)  If we do it with a RST, we have a
+</EM><BR>
+<EM>&gt; &gt;       better chance of avoiding it.
+</EM><BR>
+<EM>&gt; &gt;       (yes, the RST can be lost, but chances are itll make it
+</EM><BR>
+<EM>&gt; &gt;       more often than not.  Even if lost, we're in the same boat)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; And:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 1. Client does the http abort via a FIN (not our client)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Could you say a bit more about exactly how a client 'aborts' a
+</EM><BR>
+<EM>&gt; connection, in terms of library/API calls? The application doesn't
+</EM><BR>
+<EM>&gt; send FINs, it tells TCP to do so via an API call. I suspect that you
+</EM><BR>
+<EM>&gt; mean it issues a 'half-duplex close', which is *supposed* to send RSTs
+</EM><BR>
+<EM>&gt; and cause subsequent received data to trigger a RST.
+</EM><BR>
+<P>I think the close() call, or the Winsock equivalent, sends a FIN
+<BR>
+as normal, unless there is pending data to be read, in which
+<BR>
+case a RST is sent.  If data arrives after the FIN has been sent,
+<BR>
+a RST is sent (RFC1122).
+<BR>
+<P><EM>&gt; &gt; 2. Client *stack* doesnt send RSTs to the servers data when its in
+</EM><BR>
+<EM>&gt; &gt;       FIN_WAIT_X
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I actually think this is correct. The FIN_WAIT_x states imply that the
+</EM><BR>
+<EM>&gt; application is still using the socket, waiting for the peer to finish
+</EM><BR>
+<EM>&gt; sending data. If, on the other hand, the application had invoked
+</EM><BR>
+<EM>&gt; 'half-duplex close' (and has destroyed the socket), the client TCP
+</EM><BR>
+<EM>&gt; should go into some state other than FIN_WAIT_x.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Im not suggesting any hacks to the protocols.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But it seems to like you are. How is it that the client can send a RST
+</EM><BR>
+<EM>&gt; (the suggested workaround) without modifying the stack to do so? That
+</EM><BR>
+<EM>&gt; would be modifying the protocol implemented by the stack. But if you
+</EM><BR>
+<EM>&gt; have to modify the stack to get the desired behavior anyway, why not
+</EM><BR>
+<EM>&gt; just fix the actual problem, so the workaround isn't needed anymore?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>The client application sets SO_LINGER to zero before close(), and
+<BR>
+this sends a RST rather than a FIN.  So the application can generate
+<BR>
+a RST by itself.
+<BR>
+<P>Here, the stack is wrong, but one of my points is that the application
+<BR>
+use of SO_LINGER=0 is reasonable, even though abortive closes are in
+<BR>
+general a bad idea.  And RFC1122 RSTs for Half Duplex Close are vital.
+<BR>
+<P>ian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#78">[ date ]</A>
+<A HREF="index.html#78">[ thread ]</A>
+<A HREF="subject.html#78">[ subject ]</A>
+<A HREF="author.html#78">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

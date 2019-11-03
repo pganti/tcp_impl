@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="RE: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 19:08:01 1999" -->
+<!-- isoreceived="19990206000801" -->
+<!-- sent="Fri, 5 Feb 1999 16:05:16 -0800 (PST)" -->
+<!-- isosent="19990206000516" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="RE: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="Roam.SIMCSD.2.0.4.918259516.16235.kcpoon@jurassic" -->
+<!-- inreplyto="3FF8121C9B6DD111812100805F31FC0D0CAE8627@RED-MSG-59" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918259516.16235.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 19:05:16 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1532.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1535">[ date ]</A>
+<A HREF="index.html#1535">[ thread ]</A>
+<A HREF="subject.html#1535">[ subject ]</A>
+<A HREF="author.html#1535">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I don't agree with notion that W-W-R applications come from bad programmers,
+</EM><BR>
+<EM>&gt; application programmer should not be required a TCP expert when they simply
+</EM><BR>
+<EM>&gt; treat
+</EM><BR>
+<EM>&gt; socket as a file handle. For all they know, it may or may not be a network
+</EM><BR>
+<EM>&gt; device.
+</EM><BR>
+<EM>&gt; If W-W-R works well with fwrite, why shouldn't it work with send?
+</EM><BR>
+<P>I don't think that if application programmers know what value to set for
+<BR>
+your Nagle(N) proposal, they do not know that they are working with a
+<BR>
+network device.  If they do not know they are working with a network device,
+<BR>
+they'd better not use socket() directly and use some higher level libraries. 
+<BR>
+Let those libraries handle the network part.
+<BR>
+<P><EM>&gt; It almost sounds like Nagle needs it's own timer rather than being driven by
+</EM><BR>
+<EM>&gt; receiver's delayed ACK timer or RTT. This way, Nagle(T) could read:
+</EM><BR>
+<EM>&gt; &quot;Delay sending data until there's full MSS, but no longer than period T&quot;.
+</EM><BR>
+<EM>&gt; This will guarantee predictable Nagle delay, will not inhibit bulk
+</EM><BR>
+<EM>&gt; transfers,
+</EM><BR>
+<EM>&gt; improve interactive performance and not depend on the receiver's delayed ACK
+</EM><BR>
+<EM>&gt; policy.
+</EM><BR>
+<P>What value do you set for T?  First it cannot be larger than 200ms, the
+<BR>
+commonly used delay ack timer.  And T has to be dependent on RTT and the
+<BR>
+application.  TCP can measure RTT.  But how can TCP know when application
+<BR>
+will send?  I'd say TCP will guess wrongly most of the time.  And the most
+<BR>
+important question is what we gain for all these complicated work, as
+<BR>
+compared to the simple proposed change of Nagle algorithm.
+<BR>
+<P><EM>&gt; Now we have 4 possible solutions: Nagle, modified Nagle, Nagle(N) and
+</EM><BR>
+<EM>&gt; Nagle(T)
+</EM><BR>
+<EM>&gt; it would be interesting to compare their behavior for the cases previously
+</EM><BR>
+<EM>&gt; described, from telnet to bulk transfer to MSS+1 sends.
+</EM><BR>
+<P>IMHO, we should not even consider Nagle(T).  And for Nagle(N), I'd say the
+<BR>
+little, if any, gain when compared to the proposed change does not justify
+<BR>
+the extra code (although smaller than Nagle(T)) implementing it.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918259516.16235.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1531.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1532.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1535">[ date ]</A>
+<A HREF="index.html#1535">[ thread ]</A>
+<A HREF="subject.html#1535">[ subject ]</A>
+<A HREF="author.html#1535">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

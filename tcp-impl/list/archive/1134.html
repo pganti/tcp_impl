@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Initial value of ssthresh</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: Initial value of ssthresh">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Initial value of ssthresh</H1>
+<!-- received="Thu May 21 11:27:44 1998" -->
+<!-- isoreceived="19980521152744" -->
+<!-- sent="Thu, 21 May 1998 18:43:08 +0200 (MET DST)" -->
+<!-- isosent="19980521164308" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: Initial value of ssthresh" -->
+<!-- id="199805211643.SAA14365@labinfo.iet.unipi.it" -->
+<!-- inreplyto="199805211759.NAA19304@mailserv-2high" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20Initial%20value%20of%20ssthresh&In-Reply-To=&lt;199805211643.SAA14365@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 21 1998 - 12:43:08 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1133.html">Craig Buffinton: "Initial value of ssthresh"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1133.html">Craig Buffinton: "Initial value of ssthresh"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1134">[ date ]</A>
+<A HREF="index.html#1134">[ thread ]</A>
+<A HREF="subject.html#1134">[ subject ]</A>
+<A HREF="author.html#1134">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I am looking for a way to set the initial slow start threshold to an=20
+</EM><BR>
+<EM>&gt; appropreate value for the delay and bandwidth of the link.
+</EM><BR>
+...
+<BR>
+<EM>&gt; The &quot;Ongoing TCP Research Related to Satellites&quot; draft suggests:
+</EM><BR>
+<EM>&gt; &quot;Hoe [Hoe96] proposes using the packet-pai algorithmr [Kes91] to determine =
+</EM><BR>
+<EM>&gt; a more
+</EM><BR>
+<EM>&gt; appropriate value for ssthresh.&quot;
+</EM><BR>
+...
+<BR>
+<EM>&gt; Having consulted these documents it is still not clear to me exactly how=20
+</EM><BR>
+<EM>&gt; TCP should determine the bandwidth of the link. Could someone explain=20
+</EM><BR>
+<P>vern paxson's thesis (forget the pointer but vern should also be on
+<BR>
+this list) has a chapter on measuring bottleneck bandwidth, and it
+<BR>
+explains how packet-pair works and also its limitations.
+<BR>
+<P>&lt;PROMO&gt;
+<BR>
+if you want to make experiments on how bandwidth estimators work,
+<BR>
+the &quot;dummynet&quot; stuff at <A HREF="http://www.iet.unipi.it/~luigi/ip_dummynet/">http://www.iet.unipi.it/~luigi/ip_dummynet/</A>
+<BR>
+is quite appropriate. It has been recently integrated with a packet
+<BR>
+filter and it is much easier and flexible than it was 2 years ago.
+<BR>
+&lt;/PROMO&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20Initial%20value%20of%20ssthresh&In-Reply-To=&lt;199805211643.SAA14365@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1133.html">Craig Buffinton: "Initial value of ssthresh"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1133.html">Craig Buffinton: "Initial value of ssthresh"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1135.html">Mohit Aron: "Re: Initial value of ssthresh"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1134">[ date ]</A>
+<A HREF="index.html#1134">[ thread ]</A>
+<A HREF="subject.html#1134">[ subject ]</A>
+<A HREF="author.html#1134">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

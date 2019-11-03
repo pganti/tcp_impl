@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: initial window size</TITLE>
+<META NAME="Author" CONTENT="David St. Germain (David@StGermain.com)">
+<META NAME="Subject" CONTENT="Re: initial window size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: initial window size</H1>
+<!-- received="Thu Mar 29 18:15:37 2001" -->
+<!-- isoreceived="20010329231537" -->
+<!-- sent="Thu, 29 Mar 2001 18:09:04 -0500" -->
+<!-- isosent="20010329230904" -->
+<!-- name="David St. Germain" -->
+<!-- email="David@StGermain.com" -->
+<!-- subject="Re: initial window size" -->
+<!-- id="001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com" -->
+<!-- inreplyto="NEBBJFHFADLMLFEFPEHEKEMLDMAA.oleg@inforocket.com" -->
+<STRONG>From:</STRONG> David St. Germain (<A HREF="mailto:David@StGermain.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;"><EM>David@StGermain.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 29 2001 - 18:09:04 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2501.html">David St. Germain: "Re: initial window size"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2499.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2500">[ date ]</A>
+<A HREF="index.html#2500">[ thread ]</A>
+<A HREF="subject.html#2500">[ subject ]</A>
+<A HREF="author.html#2500">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+You are quite right of course, I meant 512 is what most OS's default to.
+<BR>
+<P><P><P>Dave.
+<BR>
+<P><P><P>----- Original Message -----
+<BR>
+From: &quot;Oleg Vishnepolsky&quot; &lt;<A HREF="mailto:oleg@inforocket.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">oleg@inforocket.com</A>&gt;
+<BR>
+To: &quot;David St. Germain&quot; &lt;<A HREF="mailto:David@StGermain.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">David@StGermain.com</A>&gt;; &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+<BR>
+Sent: Thursday, March 29, 2001 3:51 PM
+<BR>
+Subject: RE: initial window size
+<BR>
+<P><P><EM>&gt; 512K is a bit much for initial size, to say the least. In fact 512 bytes
+</EM><BR>
+(not kbytes) is what is used by a lot of
+<BR>
+<EM>&gt; tcp stacks when establishing connection with non-local hosts. 512 is
+</EM><BR>
+really conservative IMHO.
+<BR>
+<EM>&gt; Days when backbone MTUs were that small are gone long time ago.
+</EM><BR>
+<EM>&gt; For hosts on the local net, mileage varies depending on the stack. I used
+</EM><BR>
+8K in my stacks
+<BR>
+<EM>&gt; (OS/2 circa 1990, FlexOS circa 93). I found that given prevalent MTUs back
+</EM><BR>
+then of 1460,
+<BR>
+<EM>&gt; 8k gave me best performance.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Oleg Vishnepolsky
+</EM><BR>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">owner-tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; [mailto:<A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">owner-tcp-impl@lerc.nasa.gov</A>]On Behalf Of David St. Germain
+</EM><BR>
+<EM>&gt; Sent: Thursday, March 29, 2001 1:01 PM
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: initial window size
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It's always been my understanding that the default initial window size is
+</EM><BR>
+<EM>&gt; 512K for purposes of flow control (avoiding the overflow of sender's and
+</EM><BR>
+<EM>&gt; receiver's buffers) and to avoid fragmentation of the TCP PDU until the
+</EM><BR>
+<EM>&gt; MTU - and max receive window - can be negotiated.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Dave.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ----- Original Message -----
+</EM><BR>
+<EM>&gt; From: &quot;Bogdan Ghita&quot; &lt;<A HREF="mailto:b.ghita@jack.see.plym.ac.uk?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">b.ghita@jack.see.plym.ac.uk</A>&gt;
+</EM><BR>
+<EM>&gt; To: &quot;arun&quot; &lt;<A HREF="mailto:arun@netlab.hcltech.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">arun@netlab.hcltech.com</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;001c01c0b8a5$412c22a0$23379ad1@crans1.ri.home.com&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+</EM><BR>
+<EM>&gt; Sent: Thursday, March 29, 2001 6:53 AM
+</EM><BR>
+<EM>&gt; Subject: Re: initial window size
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; Hello arun,
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; The purpose of a small value for TCP initial window is to limit the
+</EM><BR>
+<EM>&gt; &gt; inital 'train' of packets. It is up to each TCP sender to decide the
+</EM><BR>
+<EM>&gt; &gt; value, but the higher this value the higher the possibility to end up
+</EM><BR>
+<EM>&gt; &gt; with a congestion, because the sender would transmit, without 'probing'
+</EM><BR>
+<EM>&gt; &gt; the network, all these packets back-to-back. The main problem is usually
+</EM><BR>
+<EM>&gt; &gt; not the TCP receiver not being able to cope with the data, but the path
+</EM><BR>
+<EM>&gt; &gt; betwen the sender and the receiver being congested.
+</EM><BR>
+<EM>&gt; &gt; This is why the initial window has, preferably, a low value
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Bogdan
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; arun wrote:
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; hi
+</EM><BR>
+<EM>&gt; &gt; &gt;  Iam new to this. My doubt is this. With what criteria the intial
+</EM><BR>
+window
+<BR>
+<EM>&gt; for TCP is calculated and set. From the tcp code of
+</EM><BR>
+<EM>&gt; &gt; &gt; linux, I can interpret that the allowable receive buffer is set to a
+</EM><BR>
+<EM>&gt; value 32767. The initial window should be less than this
+</EM><BR>
+<EM>&gt; &gt; &gt; value. Can any one of u explain me why the initial window is chosen
+</EM><BR>
+less
+<BR>
+<EM>&gt; than 32767 and how is that calculation go.
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Thanks
+</EM><BR>
+<EM>&gt; &gt; &gt; -arun
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2501.html">David St. Germain: "Re: initial window size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2499.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2500">[ date ]</A>
+<A HREF="index.html#2500">[ thread ]</A>
+<A HREF="subject.html#2500">[ subject ]</A>
+<A HREF="author.html#2500">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Mar 29 2001 - 18:16:07 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

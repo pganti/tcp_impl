@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 11 20:14:35 1999" -->
+<!-- isoreceived="19990212011435" -->
+<!-- sent="Thu, 11 Feb 1999 18:08:32 -0700 (MST)" -->
+<!-- isosent="19990212010832" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902120108.SAA23695@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120108.SAA23695@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 11 1999 - 20:08:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1566.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1564.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1565">[ date ]</A>
+<A HREF="index.html#1565">[ thread ]</A>
+<A HREF="subject.html#1565">[ subject ]</A>
+<A HREF="author.html#1565">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Henrik Frystyk Nielsen &lt;<A HREF="mailto:frystyk@w3.org?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120108.SAA23695@calcite.rhyolite.com&gt;">frystyk@w3.org</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt;Who is urging that applications be smart enough to see REQ2 before
+</EM><BR>
+<EM>&gt; &gt;finishing sending RES1?  It's nice to gobble all currently waiting input
+</EM><BR>
+<EM>&gt; &gt;before sending your output, but I think it's above and beyond the call of
+</EM><BR>
+<EM>&gt; &gt;duty, and edges into geewhiz freaping creaturism territory.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Welcome to HTTP/1.1 pipelining [1] :)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It's in Apache, Jigsaw, and possibly many other HTTP/1.1 servers.
+</EM><BR>
+<P>Didn't I also see a note from you saying the only existing HTTP/1.1 code
+<BR>
+that does it is yours?   If so, that sounds like nicer way to say about
+<BR>
+the same thing as I tried to.
+<BR>
+<P><P>I'm not enthused by the creaping featurism aspects of the explicit flush
+<BR>
+bit.  It all seems too much like the Winsock 2.0 mess.  (Don't take my
+<BR>
+word; go get the spec at <A HREF="http://www.stardust.com/wsresource/wsresrce.html">http://www.stardust.com/wsresource/wsresrce.html</A>)
+<BR>
+But an explict flush bit certainly sounds more useful, more flexible,
+<BR>
+easier to understand, possible to implement, possible to test standards
+<BR>
+compliance, and remotely possible to explain to the many people who code
+<BR>
+send-send-read applications.
+<BR>
+<P>If I had a nickle for every time I've tried to explain why it's not just
+<BR>
+obvious common sense to reduce the number sends per transaction ...
+<BR>
+&quot;Set the SO_SEGFLUSH bit&quot; sounds more likely to be understood than
+<BR>
+&quot;code it correctly.&quot;  It does a less harm to the net than &quot;turn off Nagle.&quot;
+<BR>
+<P><P>Again, what are the concrete example applications on real life systems
+<BR>
+where the proposed modification to Nagle are better?  I've just re-read
+<BR>
+the draft, and don't the advantages of the proposal, given that most
+<BR>
+systems (that care about performance) are doing as RFC 896 and 1122 say
+<BR>
+and operating on application send requests instead of on packets, and
+<BR>
+since most transaction applications either send a lot more than 2920 bytes
+<BR>
+or less than 1460.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902120108.SAA23695@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1566.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1564.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1570.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1565">[ date ]</A>
+<A HREF="index.html#1565">[ thread ]</A>
+<A HREF="subject.html#1565">[ subject ]</A>
+<A HREF="author.html#1565">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:29 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

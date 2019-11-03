@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: cleaning up TIME_WAIT states</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (iheavens@fore.co.uk)">
+<META NAME="Subject" CONTENT="Re: cleaning up TIME_WAIT states">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: cleaning up TIME_WAIT states</H1>
+<!-- received="Mon Jan 20 20:57:40 1997" -->
+<!-- isoreceived="19970121015740" -->
+<!-- sent="Mon, 20 Jan 1997 20:47:21 +0000 (WET)" -->
+<!-- isosent="19970120204721" -->
+<!-- name="Ian Heavens" -->
+<!-- email="iheavens@fore.co.uk" -->
+<!-- subject="Re: cleaning up TIME_WAIT states" -->
+<!-- id="9701202047.AA00148@fore.co.uk" -->
+<!-- inreplyto="199701182032.NAA05344@kohala.kohala.com_fore.ext.ietf.end2end" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:iheavens@fore.co.uk?Subject=Re:%20cleaning%20up%20TIME_WAIT%20states&In-Reply-To=&lt;9701202047.AA00148@fore.co.uk&gt;"><EM>iheavens@fore.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 20 1997 - 15:47:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0039.html">Scott Huddle: "More details of packet traces"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0044.html">Hsiao-keng Jerry Chu: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0045.html">Vern Paxson: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0046.html">braden@ISI.EDU: "Re: cleaning up TIME_WAIT states"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#40">[ date ]</A>
+<A HREF="index.html#40">[ thread ]</A>
+<A HREF="subject.html#40">[ subject ]</A>
+<A HREF="author.html#40">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+W. Richard Stevens wrote:
+<BR>
+<P>[ end of thread on moving the burden of TIME-WAIT from web servers to
+<BR>
+clients. I cc:ed this to the TCP implementors WG mailing list since it 
+<BR>
+seems appropriate ]
+<BR>
+<P><EM> &gt;
+</EM><BR>
+<EM>&gt; &gt; This has the effect of making the server-side active close convert into
+</EM><BR>
+<EM>&gt; &gt; 'active' at the client, and effectively distributed the storage
+</EM><BR>
+<EM>&gt; &gt; of old TCBs at heavily-loaded servers.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The problem with all of the suggestions so far is that they require
+</EM><BR>
+<EM>&gt; a change at the client end.  If this is really a problem (I recall a
+</EM><BR>
+<EM>&gt; Jeff Mogul paper not too long ago that actually plotted the number of
+</EM><BR>
+<EM>&gt; connections in the TIME_WAIT state on a busy Web server) then I think
+</EM><BR>
+<EM>&gt; it's better to work on the problem at the server.  Trying to get all the
+</EM><BR>
+<EM>&gt; different clients that are out there (most are PC stacks, I'd guess) to
+</EM><BR>
+<EM>&gt; implement something new sounds impossible.
+</EM><BR>
+<P>You make an interesting point - it's always easier to improve the
+<BR>
+quality of servers, which must be more robust, support more connections 
+<BR>
+etc.  On the other hand, the idea of the TCP implementors' WG is to improve TCP
+<BR>
+implementations; from the BOF it appears that it is the implementations 
+<BR>
+that generally act as clients that need the most improvement.  Sounds 
+<BR>
+like a dual approach of fixing the server side first if possible, but 
+<BR>
+making recommendations for the clients, might be a good idea.
+<BR>
+<P><EM>&gt; When BSDI upgraded their stack this past summer to make their Web server
+</EM><BR>
+<EM>&gt; &quot;faster&quot;, they moved all the connections in the TIME_WAIT state onto their
+</EM><BR>
+<EM>&gt; own queue, to get them out of the tcp_slowtimo() function.  I'd bet that's
+</EM><BR>
+<EM>&gt; the majority of the CPU savings right there.  (I've always thought that the
+</EM><BR>
+<EM>&gt; BSD tcp_{slow,fast}timo() functions must be one of the biggest bottlenecks
+</EM><BR>
+<EM>&gt; on a busy system.)
+</EM><BR>
+<P>I agree.  PCB lookup costs have been analysed (the Sequent paper on
+<BR>
+efficient demultiplexing &amp; Jeff Mogul's &quot;Case for Persistent HTTP&quot; and 
+<BR>
+&quot;Network Behaviour of a Busy Web Server and its Clients&quot;). I wonder about 
+<BR>
+the effect of timer traversals of thousands of PCBs, especially on the 
+<BR>
+cache.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; If memory is then a problem (I think the BSDI code still saves the inpcb{}
+</EM><BR>
+<EM>&gt; and the tcpcb{}; 384 bytes if my memory is right) then I'd bet you could
+</EM><BR>
+<EM>&gt; save a lot less state information for the TIME_WAIT state, similar to the
+</EM><BR>
+<EM>&gt; savings they obtained with the changes to help with the SYN flood attacks
+</EM><BR>
+<EM>&gt; this fall.  If you could reduce the amount of state information down to
+</EM><BR>
+<EM>&gt; 32 bytes, then you have increased by one order or magnitude the number of
+</EM><BR>
+<EM>&gt; these TIME_WAIT connections for a given amount of memory.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>Jeff Mogul's conclusions in his SIGCOMM paper were that memory occupancy
+<BR>
+was not a problem (less than a Mbyte of state for TIME-WAIT connections 
+<BR>
+in a busy web server) - at least for a web server.  I think you could get 
+<BR>
+the state down to about 13 bytes (1 address + 2 ports + some bits) and 
+<BR>
+reduce timer search costs at the same time, by reducing the granularity 
+<BR>
+of the TIME-WAIT expiry timeout. If the burden of TIME-WAIT is moved to 
+<BR>
+the client (or for applications where the client enters TIME-WAIT), this 
+<BR>
+might be an idea.  Certainly it is a fairly easy way to free up around 
+<BR>
+0.5 Mbyte on a web server.
+<BR>
+<P>The perceived costs of TIME-WAIT are still too high, if people are 
+<BR>
+reducing the MSL from the (low) 60 seconds down to 10 seconds, or zero; 
+<BR>
+in addition it looks like a lot of RSTs are being used to avoid it 
+<BR>
+(5-10% on the DEC election server: see <A HREF="ftp://ftp.digital.com/pub/DEC/traces/netstat">ftp://ftp.digital.com/pub/DEC/traces/netstat</A>).  
+<BR>
+I think this should be flagged as a concern of the TCP implementors' 
+<BR>
+working group.
+<BR>
+<P>ian
+<BR>
+<PRE>
+-- 
+Ian Heavens, Fore Systems.  email: <A HREF="mailto:iheavens@eu.fore.com?Subject=Re:%20cleaning%20up%20TIME_WAIT%20states&In-Reply-To=&lt;9701202047.AA00148@fore.co.uk&gt;">iheavens@eu.fore.com</A>  
+f
+<P>--------------6C217F964D81--
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0039.html">Scott Huddle: "More details of packet traces"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0041.html">Rick Jones: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0044.html">Hsiao-keng Jerry Chu: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0045.html">Vern Paxson: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0046.html">braden@ISI.EDU: "Re: cleaning up TIME_WAIT states"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#40">[ date ]</A>
+<A HREF="index.html#40">[ thread ]</A>
+<A HREF="subject.html#40">[ subject ]</A>
+<A HREF="author.html#40">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Impact of Receiver Window</TITLE>
+<META NAME="Author" CONTENT="Chadi M. BARAKAT (Chadi.Barakat@sophia.inria.fr)">
+<META NAME="Subject" CONTENT="Impact of Receiver Window">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Impact of Receiver Window</H1>
+<!-- received="Fri Jul 30 08:14:21 1999" -->
+<!-- isoreceived="19990730121421" -->
+<!-- sent="Fri, 30 Jul 1999 14:03:41 +0200" -->
+<!-- isosent="19990730120341" -->
+<!-- name="Chadi M. BARAKAT" -->
+<!-- email="Chadi.Barakat@sophia.inria.fr" -->
+<!-- subject="Impact of Receiver Window" -->
+<!-- id="37A1949D.3DDA9DB4@sophia.inria.fr" -->
+<STRONG>From:</STRONG> Chadi M. BARAKAT (<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Impact%20of%20Receiver%20Window&In-Reply-To=&lt;37A1949D.3DDA9DB4@sophia.inria.fr&gt;"><EM>Chadi.Barakat@sophia.inria.fr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jul 30 1999 - 08:03:41 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1781.html">Mark Allman: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1779">[ date ]</A>
+<A HREF="index.html#1779">[ thread ]</A>
+<A HREF="subject.html#1779">[ subject ]</A>
+<A HREF="author.html#1779">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>While simulating TCP, I found that the receiver window (rwnd) prevents
+<BR>
+sometimes the source from sending new packets during the recovery phase.
+<BR>
+This happens when the inflated congestion window (cwnd) exceeds rwnd.
+<BR>
+First, this causes bursts at the end of the recovery phase which
+<BR>
+overwhelms network buffers. Second, this causes low throughput during
+<BR>
+Fast Recovery. Third, in case of Reno, this may prohibit the source from
+<BR>
+correcting the second loss in a window (Reno cannot correct more than
+<BR>
+two losses).
+<BR>
+<P>It is true that when cwnd = rwnd (suppose that the source has enough
+<BR>
+data to fully utilize its window), the receiver buffer is full. But, we
+<BR>
+know that when the retransmission is received, some places will be
+<BR>
+emptied in this receiver. So we can follow the retransmission with some
+<BR>
+new packets (a kind of anticipation). If these packets find places in
+<BR>
+the buffer, our anticipation succeeds. Otherwise some packets will be
+<BR>
+rejected and we can simply suppose at the source that these packets are
+<BR>
+not transmitted.
+<BR>
+<P>Such anticipation requires to change the condition : take the minimum of
+<BR>
+cwnd and rwnd and try to transmit new data. Why to not inflate the rwnd
+<BR>
+along with cwnd during Fast Recovery? When a dupack is received, we
+<BR>
+increase rwnd by one segment as we do with cwnd. When a partial ACK is
+<BR>
+received, we deflate rwnd and set it again to the real window advertised
+<BR>
+by the receiver. Concerning the maximum sequence number transmitted, we
+<BR>
+set to it &quot; snd_unack + rwnd - 1 &quot; (of course if the actual maximum
+<BR>
+sequence number is larger than this quantity). 
+<BR>
+<P>snd_unack : the highest sequence number acked.
+<BR>
+<P>I think that transmitting more packets that the receiver window (during
+<BR>
+a short period) doesn't violate TCP congestion control. No more load is
+<BR>
+injected in the network than in the case of large rwnd.
+<BR>
+<P>Your feedback is very welcome
+<BR>
+<P>Chadi
+<BR>
+<P><PRE>
+-- 
+<A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1780.html">Bill Sommerfeld: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1781.html">Mark Allman: "Re: Impact of Receiver Window"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1782.html">Jamshid Mahdavi: "Re: Impact of Receiver Window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1779">[ date ]</A>
+<A HREF="index.html#1779">[ thread ]</A>
+<A HREF="subject.html#1779">[ subject ]</A>
+<A HREF="author.html#1779">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

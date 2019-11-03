@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sat Feb 26 14:10:35 2000" -->
+<!-- isoreceived="20000226191035" -->
+<!-- sent="Sat, 26 Feb 2000 12:02:31 -0700 (MST)" -->
+<!-- isosent="20000226190231" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002261902.MAA03209@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002261902.MAA03209@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Feb 26 2000 - 14:02:31 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2032.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2036.html">Bill Sommerfeld: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2033">[ date ]</A>
+<A HREF="index.html#2033">[ thread ]</A>
+<A HREF="subject.html#2033">[ subject ]</A>
+<A HREF="author.html#2033">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: James Carlson &lt;<A HREF="mailto:carlson@ironbridgenetworks.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002261902.MAA03209@calcite.rhyolite.com&gt;">carlson@ironbridgenetworks.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; The TCP RDMA option isn't proposing to only about accelerating servers.
+</EM><BR>
+<EM>&gt; &gt; It's about accelerating the receiver of data. In the case of NFS READ
+</EM><BR>
+<EM>&gt; &gt; RPCs, that's the NFS client.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If you want to go fast on NFS client (and server!) operations, why not
+</EM><BR>
+<EM>&gt; use the default UDP mode of operation?  You just set your receive
+</EM><BR>
+<EM>&gt; offset to PAGE_SIZE-sizeof(READ3resok)-28-sizeof(layer_two), and
+</EM><BR>
+<EM>&gt; you're all set to page flip.  If you want to get fancy, you build this
+</EM><BR>
+<EM>&gt; offsetting magic into the device DMA.
+</EM><BR>
+<P>There's a simpler and much better way, motivated by the observation that
+<BR>
+trailers are rare in IETF application and transport protocols.  Put the
+<BR>
+first packetsize(mod pagesize) bytes in one queue or buffer and the
+<BR>
+remaining multiple of pagesize bytes in another queue or buffer.  Notice
+<BR>
+that this trick automatically covers variable sized TCP/IP headers due to
+<BR>
+options.  Because the typical NFS/UDP/IP header contains 4(mod 8) bytes
+<BR>
+and IP fragments must be 0(mod 8), another more sublte kludge of a trick
+<BR>
+is needed if your MTU is less than 8K+about 200 and your NFS readsize is
+<BR>
+a multiple of page sizes larger than 4K.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; That of course depends strongly on system architecture.  In any event,
+</EM><BR>
+<EM>&gt; RDMA doesn't appear to help.  You could just as easily create a nifty
+</EM><BR>
+<EM>&gt; Ethernet driver that copies only (say) the first 54 bytes of memory
+</EM><BR>
+<EM>&gt; into main memory and leaves the rest in the queue until it determines
+</EM><BR>
+<EM>&gt; the exact destination for the payload (or hits an exception case that
+</EM><BR>
+<EM>&gt; requires harder work). ...
+</EM><BR>
+<P><EM>&gt; I hope describing the 54-bytes-first algorithm here stops anyone from
+</EM><BR>
+<EM>&gt; patenting the idea.  ;-}
+</EM><BR>
+<P>That's been shipped commercially for many years, as has the modulo pagesize
+<BR>
+trick.  Given the number of customers that bought proprietary UNIX source,
+<BR>
+there should be no problem proving prior art.  Commercial FDDI chipsets
+<BR>
+such as Motorola's CAMEL have supported the 54-btes-first idea for more
+<BR>
+than 5 years.  The CAMEL can be told to set asside the the first 64 bytes.
+<BR>
+That covers the usual 3-bytes of padding that does not appear on the wire,
+<BR>
+the 13 byte MAC header, the 8-byte LLC header, and 40 bytes of TCP/IP
+<BR>
+headers without any options.  The CAMEL can even put the pair of streams
+<BR>
+of headers and data into different ring buffers.  Unfortunately, we all
+<BR>
+know that the TCP/IP headers no longer have a fixed length of 40.
+<BR>
+That limits the utility of the idea.
+<BR>
+<P>The problem with page flipping for the last 6 or 7 years has not been
+<BR>
+teaching your DMA hardware to do it with the information already in the
+<BR>
+bit streams, but with increasing page sizes, and then only with input.
+<BR>
+16 KByte pages became too small for fast computers years ago, but there
+<BR>
+not many media that have 64 KByte frames, and then there's the IPv4 packet
+<BR>
+size problem and the TCP/IPv4 maximum segment size problem.
+<BR>
+That's why the letting the operating system pick the user-space address
+<BR>
+of input buffers such as was done in systems 30 years ago or using your
+<BR>
+IOVEC idea is necessary.
+<BR>
+<P>It's always been trivial (modulo paging system overhead, especially
+<BR>
+multi-processor locking and page table entry caching) to page flip on
+<BR>
+output.  The hassles have always been on input.  And yes, those paging
+<BR>
+system overheads can amount to many microseconds of latency and even
+<BR>
+computation, and that amounts to a big deal if you care about speed.
+<BR>
+<P><P>I think all of that is obvious to anyone who has ever looked seriously
+<BR>
+about making NFS or TCP go fast.  10 years ago it and related ideas were
+<BR>
+considered big deal trade secrets, but that was 10 years ago.  It is also
+<BR>
+obviously more effective, cheaper, easier, compatible, and interoperable
+<BR>
+than RDMA.  It is why I think the RDMA proposal is like most such that
+<BR>
+I've seen over the years, including the Motorola CAMEL header separating,
+<BR>
+based on having a cool idea for a solution instead actually looking at
+<BR>
+the problems.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002261902.MAA03209@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2032.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2036.html">Bill Sommerfeld: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2033">[ date ]</A>
+<A HREF="index.html#2033">[ thread ]</A>
+<A HREF="subject.html#2033">[ subject ]</A>
+<A HREF="author.html#2033">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

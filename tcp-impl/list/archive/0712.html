@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep  9 20:27:28 1997" -->
+<!-- isoreceived="19970910002728" -->
+<!-- sent="Tue, 9 Sep 1997 21:24:57 -0600" -->
+<!-- isosent="19970910032457" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709100324.VAA10397@mica.denver.sgi.com" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100324.VAA10397@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 09 1997 - 23:24:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0713.html">Kevin M. Lahey: "Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0711.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#712">[ date ]</A>
+<A HREF="index.html#712">[ thread ]</A>
+<A HREF="subject.html#712">[ subject ]</A>
+<A HREF="author.html#712">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100324.VAA10397@mica.denver.sgi.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<EM>&gt; To: vjs (Vernon Schryver)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100324.VAA10397@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<P><EM>&gt; &gt; What do you figure is the right response when an HTTP client sends a
+</EM><BR>
+<EM>&gt; &gt; few redundant ACKs and then a FIN?   Isn't that what your &quot;big name&quot;
+</EM><BR>
+<EM>&gt; &gt; server with MTU discovery on and ICMP blocked will see?   How is that
+</EM><BR>
+<EM>&gt; &gt; different from many other problems, starting with transient unidirectional
+</EM><BR>
+<EM>&gt; &gt; blackholes (e.g. routing problems) and continuing with data-dependent
+</EM><BR>
+<EM>&gt; &gt; packet loss?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; One approach is to be a bit smarter with MTU discovery - turn discovery off
+</EM><BR>
+<EM>&gt; on retransmits and if you see consistent cases of  transmit with DF, silence,
+</EM><BR>
+<EM>&gt; transmit without DF ack then to turn it off for good on that session.
+</EM><BR>
+<P>What does it mean to turn off MTU discovery on a session?  Do you mean
+<BR>
+to drop down to some random MSS that is smaller than both of the MSS's
+<BR>
+and the MTU's of the TCP peers?  Such as the old ~500, despite the
+<BR>
+performance hit?  Or some other ad hoc number such as 1500?
+<BR>
+<P>Do you do this on all retransmissions?  Do you do some kind of
+<BR>
+slow-increase on the MSS just in case misdiagnosed the problem?
+<BR>
+<P><P><EM>&gt; Im not sure of a good way to tell that from getting the rtt wrong however,
+</EM><BR>
+<EM>&gt; and I'd like to hear suggestions. The obvious answer is to educate the big
+</EM><BR>
+<EM>&gt; name site's firewall configuration folks. So far thats proving to be a
+</EM><BR>
+<EM>&gt; demonstration of the shortage of clueful people on the internet..
+</EM><BR>
+<P>I'm not sure of a good way to tell broken MTU discovery from the
+<BR>
+typical broken PC-web-surfer.  I bet a lot of HTTP sessions wind down
+<BR>
+into dup-ACK...dup-ACK... as some ISP's terminal server tries to cope
+<BR>
+with sick modems and lame PC PPP code.
+<BR>
+<P><P>There is another tactic, &quot;let 'em fix the network.&quot;  It's not as if
+<BR>
+broken MTU discovery is the biggest or most common problem on the net
+<BR>
+today.
+<BR>
+<P><P>I care a little about this problem because of a persistent trickle of
+<BR>
+complaints about access to www.sgi.com by a few (but not all distant)
+<BR>
+clients with local FDDI rings .  Based on probes around the Internet
+<BR>
+from www.sgi.com, things are working fine within a bunch of hops of the
+<BR>
+machine.  I suspect there are random routers throughout the Internet
+<BR>
+that do not generate ICMP errors.  Or FDDI-Ethernet bridges such as
+<BR>
+some models of Cabletron and NPI.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100324.VAA10397@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0713.html">Kevin M. Lahey: "Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0711.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#712">[ date ]</A>
+<A HREF="index.html#712">[ thread ]</A>
+<A HREF="subject.html#712">[ subject ]</A>
+<A HREF="author.html#712">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

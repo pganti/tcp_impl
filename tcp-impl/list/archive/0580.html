@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  ICMP must fragment and IPsec</H1>
+<!-- received="Wed Jun 25 12:12:38 1997" -->
+<!-- isoreceived="19970625161238" -->
+<!-- sent="Wed, 25 Jun 1997 13:09:13 -0600" -->
+<!-- isosent="19970625190913" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  ICMP must fragment and IPsec" -->
+<!-- id="199706251909.NAA01870@mica.denver.sgi.com" -->
+<!-- inreplyto=" ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251909.NAA01870@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 15:09:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0581.html">Mark Allman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0588.html">touch@ISI.EDU: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#580">[ date ]</A>
+<A HREF="index.html#580">[ thread ]</A>
+<A HREF="subject.html#580">[ subject ]</A>
+<A HREF="author.html#580">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251909.NAA01870@mica.denver.sgi.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:TCP-IMPL@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251909.NAA01870@mica.denver.sgi.com&gt;">TCP-IMPL@cthulhu.engr.sgi.com</A>, vjs, <A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251909.NAA01870@mica.denver.sgi.com&gt;">VOLZ@PROCESS.COM</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Vernon,
+</EM><BR>
+<EM>&gt; I disagree with you and agree with Bernie.  If you have both an
+</EM><BR>
+<EM>&gt; FDDI and and ethernet interface, it makes sense to use an MSS of 4352,
+</EM><BR>
+<EM>&gt; not 1500.  Then, if routing changes from the ethernet to the FDDI,
+</EM><BR>
+<EM>&gt; the Path MTU code can discover the larger MTU.  But if you sent a
+</EM><BR>
+<EM>&gt; 1500 MSS, you're stuck.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Most systems should be able to send an MSS of 65535, but it is
+</EM><BR>
+<EM>&gt; an optimization to use the MTU of the largest/outgoing interface.
+</EM><BR>
+<EM>&gt; And in the bad old days, hosts weren't smart enough to use
+</EM><BR>
+<EM>&gt; smaller packets when presented with a large MSS, so using the
+</EM><BR>
+<EM>&gt; MTU of the outing interface made much more sense.  But in todays
+</EM><BR>
+<EM>&gt; world, there's no reason to limit yourself to small MSS values.
+</EM><BR>
+<EM>&gt; The biggest problem with PMTU is all the hosts that still stick
+</EM><BR>
+<EM>&gt; in 576 in the MSS because the other host is not &quot;local&quot;.  Using
+</EM><BR>
+<EM>&gt; 1500 instead of 4352 when you have both FDDI and Ethernet is
+</EM><BR>
+<EM>&gt; the same sort of problem, only not as severe.
+</EM><BR>
+<P><P>Why not use an MSS of 65535?  What is being optimized by the choice of
+<BR>
+MSS?  I think most systems can IP fragment faster than they can TCP
+<BR>
+segment, so they are better off sending 64K TCP segments as a bunch of
+<BR>
+IP fragments.  (I've liked that idea ever since someone told me about
+<BR>
+using it in an FDDI adapter for a certain supercomputer company's bus
+<BR>
+to get what was then an impressive TCP/IP/FDDI speed.)
+<BR>
+<P>What if someone turns on that HIPPI interface with the 64K MTU that was
+<BR>
+turned off when the TCP connection was established?  (Those 700
+<BR>
+Mbit/sec TCP/IP/HIPPI numbers are a tad easier with a full size MSS.)
+<BR>
+<P>The reason I see to use a smaller MSS is safety or conservatism.  If
+<BR>
+PMTU discovery were perfect, there would be no reason to use anything
+<BR>
+except MSS=64K.  In the real world, if you use a larger MSS than your
+<BR>
+minimum MTU, then you risk fragmentation if PMTU discovery is not used
+<BR>
+or usable by the TCP peer.  If you use too small an MSS, you pay in
+<BR>
+performance.  (As Rick Jones and I keep saying, a good value for the
+<BR>
+cost of using an MTU of 1500 over FDDI is 4352/1500, and that aint hay.)
+<BR>
+<P>In the FDDI/Ethernet case and if you always use MSS=4352, what happenss if:
+<BR>
+<P>&nbsp;&nbsp;1. the peer could do PMTU discovery but it has been turned off
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;because some smart guy has installed some Cabletron or Network
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Peripherals FDDI-Ethernet bridges, or a DEC FDDI-Ethernet bridge
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and failed to set the bridge's IP address.
+<BR>
+<P>&nbsp;&nbsp;2. the peer is one of the many millions of boxes that either do
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;not support PMTU discovery at all or do not support it by default.
+<BR>
+<P>In #1, TCP will work for some stuff, but simply not work at all for big
+<BR>
+stuff.  At SGI we demonstrated that between a couple of major internal
+<BR>
+email systems, where small messages went just fine, but bigger messages
+<BR>
+started and then the TCP connection would mysteriously die as the
+<BR>
+bridges silently discarded packets with DF=1.
+<BR>
+<P>In #2, at best your routers will be IP fragmenting.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251909.NAA01870@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0581.html">Mark Allman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0588.html">touch@ISI.EDU: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#580">[ date ]</A>
+<A HREF="index.html#580">[ thread ]</A>
+<A HREF="subject.html#580">[ subject ]</A>
+<A HREF="author.html#580">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

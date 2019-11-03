@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Tue Aug 18 06:33:04 1998" -->
+<!-- isoreceived="19980818103304" -->
+<!-- sent="Tue, 18 Aug 1998 09:13:28 -0400 (EDT)" -->
+<!-- isosent="19980818131328" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808181313.JAA20698@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808181313.JAA20698@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 18 1998 - 09:13:28 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1219.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1217.html">CHRIS.BUCKMASTER@wemail.wisenergy.com: "unsubscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1219.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1218">[ date ]</A>
+<A HREF="index.html#1218">[ thread ]</A>
+<A HREF="subject.html#1218">[ subject ]</A>
+<A HREF="author.html#1218">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; Right.  But I think it can also start the 2MSL timer similarly when
+</EM><BR>
+<EM>&gt;&gt; the local side still can receive data.  Calling shutdown() to shut
+</EM><BR>
+<EM>&gt;&gt; down the send side of a socket that's already in FIN_WAIT_2 is
+</EM><BR>
+<EM>&gt;&gt; probably the simplest code path that can do this.
+</EM><BR>
+<P><EM>&gt; Here's an extract from tcp_input.c in 4.4BSD-Lite code.  I assume
+</EM><BR>
+<EM>&gt; NetBSD is using the same:
+</EM><BR>
+<P><EM>&gt;                                 if (so-&gt;so_state &amp; SS_CANTRCVMORE) {
+</EM><BR>
+<EM>&gt;                                         soisdisconnected(so);
+</EM><BR>
+<EM>&gt;                                         tp-&gt;t_timer[TCPT_2MSL] = tcp_maxidle;
+</EM><BR>
+<EM>&gt;                                 }
+</EM><BR>
+<P><EM>&gt; Please note that the 2MSL timer is only started when the sending side
+</EM><BR>
+<EM>&gt; *cannot* receive more data.
+</EM><BR>
+<P>...by that particular code path.  The code you quote is functionally
+<BR>
+similar to NetBSD's code for transitioning from FIN-WAIT-1 to
+<BR>
+FIN-WAIT-2 upon receiving the ACK for our FIN.
+<BR>
+<P><EM>&gt; The code for shutdown() will show you that the SS_CANTRCVMORE flag is
+</EM><BR>
+<EM>&gt; *not* set for shutdown().  Hence 2MSL timer wouldn't be started in
+</EM><BR>
+<EM>&gt; case of a shutdown().
+</EM><BR>
+<P>That doesn't follow (even reading &quot;shutdown()&quot; as &quot;shutdown() for send
+<BR>
+only&quot;).  It follows that the code you quote wouldn't start the 2MSL
+<BR>
+timer in that case, but I never claimed it would.  That particular code
+<BR>
+path is not a problem.
+<BR>
+<P>Follow the calls:
+<BR>
+<P>shutdown() -&gt; sys_shutdown [uipc_syscalls.c]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; soshutdown [uipc_socket.c]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; tcp_usrreq [tcp_usrreq.c], second arg PRU_SHUTDOWN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; tcp_usrclosed [tcp_usrreq.c]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt; if (tp &amp;&amp; tp-&gt;t_state &gt;= TCPS_FIN_WAIT_2) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;soisdisconnected(tp-&gt;t_inpcb-&gt;ip_socket);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_state == TCPS_FIN_WAIT_2)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_TIMER_ARM(tp, TCPT_2MSL, tcp_maxidle);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>Note that all calls are unconditional (except for uninteresting cases
+<BR>
+like shutdown() on a non-socket).  If the socket is already in
+<BR>
+FIN_WAIT_2, another shutdown()-for-sends will, as I read it, forcibly
+<BR>
+disconnect both directions (soisdisconnected) and start the 2MSL timer.
+<BR>
+(On another point, it seems like an abuse of the nomenclature to use a
+<BR>
+timer called 2MSL for something other than 2*TCPTV_MSL timeouts.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808181313.JAA20698@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1219.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1217.html">CHRIS.BUCKMASTER@wemail.wisenergy.com: "unsubscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1219.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1218">[ date ]</A>
+<A HREF="index.html#1218">[ thread ]</A>
+<A HREF="subject.html#1218">[ subject ]</A>
+<A HREF="author.html#1218">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

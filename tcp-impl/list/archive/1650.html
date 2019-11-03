@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP and/or sockets vs. the l</TITLE>
+<META NAME="Author" CONTENT="Henrik Frystyk Nielsen (frystyk@w3.org)">
+<META NAME="Subject" CONTENT="Re: TCP and/or sockets vs. the last message in full-duplex applications">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP and/or sockets vs. the last message in full-duplex applications</H1>
+<!-- received="Wed Mar  3 10:19:21 1999" -->
+<!-- isoreceived="19990303151921" -->
+<!-- sent="Wed, 03 Mar 1999 10:13:33 -0500" -->
+<!-- isosent="19990303151333" -->
+<!-- name="Henrik Frystyk Nielsen" -->
+<!-- email="frystyk@w3.org" -->
+<!-- subject="Re: TCP and/or sockets vs. the last message in full-duplex applications" -->
+<!-- id="3.0.5.32.19990303101333.02ed2100@localhost" -->
+<!-- inreplyto="99Mar1.114532pst.&quot;105927&quot;@augustus.parc.xerox.com" -->
+<STRONG>From:</STRONG> Henrik Frystyk Nielsen (<A HREF="mailto:frystyk@w3.org?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;3.0.5.32.19990303101333.02ed2100@localhost&gt;"><EM>frystyk@w3.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 10:13:33 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1651.html">Mike Spreitzer: "RE: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1649.html">Mike Spreitzer: "RE: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1640.html">spreitze@parc.xerox.com: "TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1661.html">Eric A. Hall: "Re: TCP and/or sockets vs. the last message in full-duplexapplications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1661.html">Eric A. Hall: "Re: TCP and/or sockets vs. the last message in full-duplexapplications"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1650">[ date ]</A>
+<A HREF="index.html#1650">[ thread ]</A>
+<A HREF="subject.html#1650">[ subject ]</A>
+<A HREF="author.html#1650">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 11:45 3/1/99 PST, <A HREF="mailto:spreitze@parc.xerox.com?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;3.0.5.32.19990303101333.02ed2100@localhost&gt;">spreitze@parc.xerox.com</A> wrote:
+<BR>
+<P><EM>&gt;The proposed fix is to make the server: send the clean shutdown,
+</EM><BR>
+<EM>&gt;close the sending half of the TCP connection, consume data until
+</EM><BR>
+<EM>&gt;EOF or timeout, then close the receiving half.  This seems like an
+</EM><BR>
+<EM>&gt;inappropriate amount of bother just to reliably send a message and
+</EM><BR>
+<EM>&gt;close.
+</EM><BR>
+<P>This is old news in HTTP world - in fact (although I can't find any mails
+<BR>
+in the HTTP archives to show this), I believe to have first found this
+<BR>
+problem in early 1995 when experimenting with cross-atlantic HTTP/1.0 PUT
+<BR>
+requests between MIT and CERN. The problem that I saw for HTTP/1.0 PUT is
+<BR>
+the following:
+<BR>
+<P>* Client A sends a PUT request with a large body to the server
+<BR>
+* The server B sends back a short 401 Access Denied response
+<BR>
+&nbsp;&nbsp;and closes the connection in both directions.
+<BR>
+* A receives the response but has already sent a large part of
+<BR>
+&nbsp;&nbsp;the body because of the RTT across the Atlantic
+<BR>
+* A ACK's the response but the ACK is pending behind the data
+<BR>
+&nbsp;&nbsp;already sent to B
+<BR>
+* B sees that data is still coming and sends a RST to A
+<BR>
+* A gets the RST and passes it up immediately to the application
+<BR>
+&nbsp;&nbsp;dropping the HTTP response because the seq counter hasn't
+<BR>
+&nbsp;&nbsp;been updated.
+<BR>
+* A gets a RST but no HTTP response - it doesn't know what happened.
+<BR>
+<P>At the time I talked with Dave Clark about it and he pointed out that it
+<BR>
+was not a bug but normal behavior.
+<BR>
+<P>The problem can also occur in HTTP/1.1 pipelining which we found when
+<BR>
+implementing this in the libwww HTTP code. This is described in an IETF
+<BR>
+draft by Jim Gettys and Alan Freier that was never finished [1], section 8:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;In simple request/response protocols (e.g. HTTP/1.0), a server can go
+<BR>
+&nbsp;&nbsp;&nbsp;ahead and close both receive and transmit sides of its connection
+<BR>
+&nbsp;&nbsp;&nbsp;simultaneously whenever it needs to. A pipelined or streaming
+<BR>
+&nbsp;&nbsp;&nbsp;protocol (e.g. HTTP/1.1) connection, is more complex [Frystyk et.
+<BR>
+&nbsp;&nbsp;&nbsp;al.], and an implementation which does so can create major problems.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The scenario is as follows: an HTTP/1.1 client talking to a HTTP/1.1
+<BR>
+&nbsp;&nbsp;&nbsp;server starts pipelining a batch of requests, for example 15 on an
+<BR>
+&nbsp;&nbsp;&nbsp;open TCP connection.  The server decides that it will not serve more
+<BR>
+&nbsp;&nbsp;&nbsp;than 5 requests per connection and closes the TCP connection in both
+<BR>
+&nbsp;&nbsp;&nbsp;directions after it successfully has served the first five requests.
+<BR>
+&nbsp;&nbsp;&nbsp;The remaining 10 requests that are already sent from the client will
+<BR>
+&nbsp;&nbsp;&nbsp;along with client generated TCP ACK packets arrive on a closed port
+<BR>
+&nbsp;&nbsp;&nbsp;on the server. This &quot;extra&quot; data causes the server's TCP to issue a
+<BR>
+&nbsp;&nbsp;&nbsp;reset which makes the client TCP stack pass the last ACK'ed packet to
+<BR>
+&nbsp;&nbsp;&nbsp;the client application and discard all other packets. This means that
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP responses that are either being received or already have been
+<BR>
+&nbsp;&nbsp;&nbsp;received successfully but haven't been ACK'ed will be dropped by the
+<BR>
+&nbsp;&nbsp;&nbsp;client TCP. In this situation the client does not have any means of
+<BR>
+&nbsp;&nbsp;&nbsp;finding out which HTTP messages were successful or even why the
+<BR>
+&nbsp;&nbsp;&nbsp;server closed the connection. The server may have generated a
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Connection: Close&quot; header in the 5th response but the header may
+<BR>
+&nbsp;&nbsp;&nbsp;have been lost due to the TCP reset. Servers must therefore close
+<BR>
+&nbsp;&nbsp;&nbsp;each half of the connection independently.
+<BR>
+<P>This has in HTTP/1.1 rev 6 [2] been moved to section 10.4
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the client is sending data, a server implementation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using TCP SHOULD be careful to ensure that the client
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acknowledges receipt of the packet(s) containing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response, before the server closes the input connection.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the client continues sending data to the server after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the close, the server's TCP stack will send a reset packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the client, which may erase the client's unacknowledged
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input buffers before they can be read and interpreted by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the HTTP application.
+<BR>
+<P>I believe that all modern HTTP servers in fact do the half-close. However,
+<BR>
+this is not without problems as the server also has to be able to protect
+<BR>
+itself. It therefore has to have some feeling of a &quot;reasonable lingering
+<BR>
+time&quot; for the connection.
+<BR>
+<P>Henrik
+<BR>
+<P>[1] <A HREF="http://www.ics.uci.edu/pub/ietf/http/draft-ietf-http-connection-00.txt">http://www.ics.uci.edu/pub/ietf/http/draft-ietf-http-connection-00.txt</A>
+<BR>
+[2] <A HREF="http://www.ics.uci.edu/pub/ietf/http/draft-ietf-http-v11-spec-rev-06.txt">http://www.ics.uci.edu/pub/ietf/http/draft-ietf-http-v11-spec-rev-06.txt</A>
+<BR>
+<PRE>
+--
+Henrik Frystyk Nielsen,
+World Wide Web Consortium
+<A HREF="http://www.w3.org/People/Frystyk">http://www.w3.org/People/Frystyk</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1651.html">Mike Spreitzer: "RE: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1649.html">Mike Spreitzer: "RE: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1640.html">spreitze@parc.xerox.com: "TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1661.html">Eric A. Hall: "Re: TCP and/or sockets vs. the last message in full-duplexapplications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1661.html">Eric A. Hall: "Re: TCP and/or sockets vs. the last message in full-duplexapplications"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1650">[ date ]</A>
+<A HREF="index.html#1650">[ thread ]</A>
+<A HREF="subject.html#1650">[ subject ]</A>
+<A HREF="author.html#1650">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: iss calculation during TIME_</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: iss calculation during TIME_WAIT ressurection ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: iss calculation during TIME_WAIT ressurection ?</H1>
+<!-- received="Fri Feb  5 15:57:56 1999" -->
+<!-- isoreceived="19990205205756" -->
+<!-- sent="Fri, 5 Feb 1999 14:55:15 -0600 (CST)" -->
+<!-- isosent="19990205205515" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: iss calculation during TIME_WAIT ressurection ?" -->
+<!-- id="199902052055.OAA01979@frantic.bsdi.com" -->
+<!-- inreplyto="iss calculation during TIME_WAIT ressurection ?" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20iss%20calculation%20during%20TIME_WAIT%20ressurection%20?&In-Reply-To=&lt;199902052055.OAA01979@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 15:55:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1528.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1526.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1510.html">Mohan Parthasarathy: "iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1527">[ date ]</A>
+<A HREF="index.html#1527">[ thread ]</A>
+<A HREF="subject.html#1527">[ subject ]</A>
+<A HREF="author.html#1527">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jayanth,
+<BR>
+<P><EM>&gt; The FreeBSD code and the 4.4BSD-Lite do not seem to have this fix.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Looking at BSD code, it used the &quot;rcv_nxt&quot; field to calculate the new
+</EM><BR>
+<EM>&gt; &gt; &gt; iss :
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; 			if (tiflags &amp; TH_SYN &amp;&amp;
+</EM><BR>
+<EM>&gt; &gt; &gt;                             tp-&gt;t_state == TCPS_TIME_WAIT &amp;&amp;
+</EM><BR>
+<EM>&gt; &gt; &gt;                             SEQ_GT(ti-&gt;ti_seq, tp-&gt;rcv_nxt)) {
+</EM><BR>
+<EM>&gt; &gt; &gt;                                 iss = tp-&gt;rcv_nxt + TCP_ISSINCR;
+</EM><BR>
+<EM>&gt; &gt; &gt;                                 tp = tcp_close(tp);
+</EM><BR>
+<EM>&gt; &gt; &gt;                                 goto findpcb;
+</EM><BR>
+<EM>&gt; &gt; &gt;                         }
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Is this a bug in the TCP code ? Should it not use snd_nxt ?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Yes.  This was fixed in the 4.4BSD code.
+</EM><BR>
+<P>I don't know about FreeBSD, but the fix is there in the 4.4BSD-Lite
+<BR>
+code:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tiflags &amp; TH_SYN &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_state == TCPS_TIME_WAIT &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEQ_GT(ti-&gt;ti_seq, tp-&gt;rcv_nxt)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iss = tp-&gt;snd_nxt + TCP_ISSINCR;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp = tcp_close(tp);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto findpcb;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>Note that setting iss now uses tp-&gt;snd_next instead of tp-&gt;rcv_nxt.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20iss%20calculation%20during%20TIME_WAIT%20ressurection%20?&In-Reply-To=&lt;199902052055.OAA01979@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1528.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1526.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1510.html">Mohan Parthasarathy: "iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1536.html">Bill Fenner: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1527">[ date ]</A>
+<A HREF="index.html#1527">[ thread ]</A>
+<A HREF="subject.html#1527">[ subject ]</A>
+<A HREF="author.html#1527">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

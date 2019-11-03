@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 17:09:08 1997" -->
+<!-- isoreceived="19970605210908" -->
+<!-- sent="Thu, 5 Jun 1997 17:03:48 -0700" -->
+<!-- isosent="19970606000348" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706060003.AA07811@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060003.AA07811@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 20:03:48 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0495.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0493.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0513.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#494">[ date ]</A>
+<A HREF="index.html#494">[ thread ]</A>
+<A HREF="subject.html#494">[ subject ]</A>
+<A HREF="author.html#494">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;    1. doesn't work when incoming requests can be from arbitrary sites
+</EM><BR>
+<EM>&gt; 	   e.g., web servers
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; False, I've specifically tested the effects of SYN/RST cookies over
+</EM><BR>
+<EM>&gt; 100BaseT on a web server with 8 thousand or so web connections, the
+</EM><BR>
+<EM>&gt; results were the same.  I've even lauched SYN bombs at a machine which
+</EM><BR>
+<P>Did you try probes over a firewall?
+<BR>
+<P>Did you try them through a NAT designed for the web traffic,
+<BR>
+but nothing else?
+<BR>
+<P><P><EM>&gt;    2. can consume other resources at the server (CPU, in particular)
+</EM><BR>
+<EM>&gt;       though you've shown it doesn't consume sufficient for 100 Mbps
+</EM><BR>
+<EM>&gt;       links
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Where is the CPU loss?  Again this can be implemented in such a way
+</EM><BR>
+<EM>&gt; that this does not even happen at all.  I mean seriously, what is the
+</EM><BR>
+<EM>&gt; code path for a well written SYN cookie implementation?  Could be made
+</EM><BR>
+<EM>&gt; to be nothing more than:
+</EM><BR>
+<P>You run code that doesn't consume CPU?
+<BR>
+<P><EM>&gt; Once you get a valid probe, the cost is one hash lookup for validation
+</EM><BR>
+<EM>&gt; on each SYN and perhaps 2 or 3 compare instructions in the new
+</EM><BR>
+<EM>&gt; connection code path.  Every validation timeout interval, one cookie
+</EM><BR>
+<EM>&gt; probe packet is sent and one received response must be verified. If you
+</EM><BR>
+<EM>&gt; think about it, for web client connection patterns to a server this is
+</EM><BR>
+<EM>&gt; should perform extremely well.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Where is all this CPU overhead you speak of?
+</EM><BR>
+<P>Right there...
+<BR>
+<P><EM>&gt; Where is this extra processing which becomes the bottleneck?  We don't
+</EM><BR>
+<EM>&gt; even setup the micro TCB if we know the source is invalid.
+</EM><BR>
+<P>The hash, the probe, etc.
+<BR>
+<P><EM>&gt; It doesn't happen in practice, I've run extensive tests and have
+</EM><BR>
+<EM>&gt; studied real web servers on the net running with our SYN/RST cookie
+</EM><BR>
+<EM>&gt; code dealing with large numbers of concurrent connections, the
+</EM><BR>
+<EM>&gt; problems you describe are not occurring in any of the situations I
+</EM><BR>
+<EM>&gt; have studied.
+</EM><BR>
+<P>I have a server providing info off a RAM disk over a gigabit network.
+<BR>
+It does happen in practice - just not yet.
+<BR>
+<P><EM>&gt; SYN cookies have a drop policy, if source never answers the probes,
+</EM><BR>
+<EM>&gt; drop connections sent by him.
+</EM><BR>
+<P>Why are the probes not just like SYN attacks? What if I don't want
+<BR>
+to answer probes, for security reasons? Why should TCP fail in those
+<BR>
+cases?
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060003.AA07811@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0495.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0493.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0513.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#494">[ date ]</A>
+<A HREF="index.html#494">[ thread ]</A>
+<A HREF="subject.html#494">[ subject ]</A>
+<A HREF="author.html#494">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

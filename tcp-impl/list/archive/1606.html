@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 18 17:17:24 1999" -->
+<!-- isoreceived="19990218221724" -->
+<!-- sent="Thu, 18 Feb 1999 14:09:06 -0800 (PST)" -->
+<!-- isosent="19990218220906" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902182209.OAA26759@rum.isi.edu" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902182209.OAA26759@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 18 1999 - 17:09:06 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1607.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1607.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1606">[ date ]</A>
+<A HREF="index.html#1606">[ thread ]</A>
+<A HREF="subject.html#1606">[ subject ]</A>
+<A HREF="author.html#1606">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vern et al,
+<BR>
+<P>Here are some clarifications; perhaps those who would like to continue
+<BR>
+the discussion can circulate remaining comments to Vernon and myself
+<BR>
+&quot;off-line&quot;... 
+<BR>
+<P><EM>&gt; So what are we supposed to do with the standards based non-answer?
+</EM><BR>
+<EM>&gt; Of course there is no guaranteed correlation between send() and segments,
+</EM><BR>
+<P>We appear to be tuning Nagle based on some very specific
+<BR>
+behaviors which are particular to an implementation.
+<BR>
+<P>Granted, this is (or was) tcp-impl, but that refers to &quot;places where
+<BR>
+implementations have bugs or stray from the desired behavior&quot;. It does
+<BR>
+not necessarily mean &quot;constrained to behave like a particular implementation&quot;.
+<BR>
+<P><EM>&gt; Let me try to state a pedantic proposition that does not admit standards
+</EM><BR>
+<EM>&gt; exegesis equivocation:
+</EM><BR>
+<EM>&gt;   - in RFC 793, 896, &amp; 1122 TCP conformant implementations which allow
+</EM><BR>
+<EM>&gt;      dynamic switching of the Nagle algorithm, turning off Nagle before
+</EM><BR>
+<EM>&gt;      a send() request and on afterwards MAY have identical results in
+</EM><BR>
+<EM>&gt;      segments on the wire as the proposed explicit flush bit.  Moreover,
+</EM><BR>
+<EM>&gt;      all existing implementations that allow dynamic control of the Nagle
+</EM><BR>
+<EM>&gt;      algorithm would have such identical results if the flush bit were
+</EM><BR>
+<EM>&gt;      added to their send() API's.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now, is that proposition true or false?
+</EM><BR>
+<EM>&gt; I do not know the answer; if I did, I'd say so.  I do suspect it's true.
+</EM><BR>
+<P>This is precisely where we differ. While I suspect it may be true
+<BR>
+for MOST implementations, I firmly claim that an entirely conformant
+<BR>
+TCP implementation could have different results, and that it would be
+<BR>
+inappropriate to claim either result as uniquely correct.
+<BR>
+Adapting Postel's motto and Floyd's position, I am advocating that
+<BR>
+(excepting bugs, which was where this WG started), we do not 
+<BR>
+overspecify the behavior of a TCP implementation.
+<BR>
+<P><EM>&gt; &gt; &gt; I was horrified by some of the ideas.  EOF and record markers particularly
+</EM><BR>
+<EM>&gt; &gt; &gt; bother me because they are so trivially implemented by the application
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Reliability is also trivially implemented at the app layer, but TCP/IP
+</EM><BR>
+<EM>&gt; &gt; is preferred to TCP/UDP/IP.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If you'd step aside from the heat of the rhetorical battle, I hope you'd
+</EM><BR>
+<EM>&gt; not like that statement.  Reliability requires timers and buffering for
+</EM><BR>
+<EM>&gt; retransmissions, but markers need require no more than a byte count at
+</EM><BR>
+<EM>&gt; the start of the file, record, or block, and never more than simple pattern
+</EM><BR>
+<EM>&gt; recognition (e.g. escaping) if you don't have the file, record or block
+</EM><BR>
+<EM>&gt; size a priori.
+</EM><BR>
+<P>If I don't know the sizes ahead of time, I have to do pattern recognition,
+<BR>
+which is computationally intensive (must examine each byte), and can
+<BR>
+cause the packet size to increase by up to 50% in the worse cases.
+<BR>
+Out-of-band indicators, i.e., in the transport protocol, avoid that.
+<BR>
+<P>The differences between out of band and in-band, application vs. kernel,
+<BR>
+are all just optimizations. Few, if any of the ones we've described
+<BR>
+are necessarily of one flavor or another.
+<BR>
+<P><EM>&gt; &gt;                             Some things are more effectively, efficiently,
+</EM><BR>
+<EM>&gt; &gt; or consistently implemented in the transport layer. 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; hmmm...I wrote &quot;in the application&quot; while you wrote &quot;at the app layer.&quot;
+</EM><BR>
+<P>OK. I stepped on a religion button somewhere. We're talking about
+<BR>
+the same thing - in the application. 
+<BR>
+<P><EM>&gt; I've noticed people with .edu addresses on the Southern Calif. coast tend
+</EM><BR>
+<EM>&gt; to have strong views on the sanctity of Architecture and Network Layers.
+</EM><BR>
+<P>Yes, we are minimalists about architecture, and some would claim
+<BR>
+that has helped, rather than hurt. 
+<BR>
+<P><EM>&gt; of their own.  The statement that something is more effective in a layer
+</EM><BR>
+<EM>&gt; makes little sense to me. 
+</EM><BR>
+<P>Would it be better to refer to it as in-band vs. out-of-band? Or &quot;restricted
+<BR>
+to a common, central implemenation&quot; vs &quot;per application program&quot;? These are
+<BR>
+the relevant differences to which I, and others using the term 'layer', usually
+<BR>
+refer.
+<BR>
+<P><EM>&gt; &gt; &gt; On the third hand, was in it this mailinglist where Joe Touch and others
+</EM><BR>
+<EM>&gt; &gt; &gt; tonight mentioned Gbit/sec TCP for clusters?  Every minor optional feature
+</EM><BR>
+<EM>&gt; &gt; &gt; that you add to a protocol hurts enormously at the boundaries, on very
+</EM><BR>
+<EM>&gt; &gt; &gt; large and fast and on very small systems. 
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Not always - some can be disabled (such as disabling windowing for
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; NO!  ALWAYS!  In the common case, &quot;disabling&quot; involves code in the critical
+</EM><BR>
+<EM>&gt; exection path. 
+</EM><BR>
+<P>See the Fast Sockets work at Berkeley. You can make almost all your decisions 
+<BR>
+at connection setup time, and run completely different implementations
+<BR>
+if you prefer. Even those decisions that are made while an implementation is
+<BR>
+running need not be made on a per-packet basis, necessarily.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1607.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1605.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1607.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1606">[ date ]</A>
+<A HREF="index.html#1606">[ thread ]</A>
+<A HREF="subject.html#1606">[ subject ]</A>
+<A HREF="author.html#1606">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

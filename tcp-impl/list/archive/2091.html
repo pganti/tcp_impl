@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Any successor to the sockets</TITLE>
+<META NAME="Author" CONTENT="Chuck Lever (cel@monkey.org)">
+<META NAME="Subject" CONTENT="Re: Any successor to the sockets APIs ???">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Any successor to the sockets APIs ???</H1>
+<!-- received="Tue May 23 10:46:27 2000" -->
+<!-- isoreceived="20000523144627" -->
+<!-- sent="Tue, 23 May 2000 10:39:41 -0400 (EDT)" -->
+<!-- isosent="20000523143941" -->
+<!-- name="Chuck Lever" -->
+<!-- email="cel@monkey.org" -->
+<!-- subject="Re: Any successor to the sockets APIs ???" -->
+<!-- id="Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org" -->
+<!-- inreplyto="Any successor to the sockets APIs ???" -->
+<STRONG>From:</STRONG> Chuck Lever (<A HREF="mailto:cel@monkey.org?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;"><EM>cel@monkey.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue May 23 2000 - 10:39:41 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2090.html">Alan Cox: "Re: Slow start question ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2085.html">Ramesh Shankar: "Any successor to the sockets APIs ???"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2091">[ date ]</A>
+<A HREF="index.html#2091">[ thread ]</A>
+<A HREF="subject.html#2091">[ subject ]</A>
+<A HREF="author.html#2091">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+hi ramesh &amp; al. -
+<BR>
+<P>our research shows that providing a more efficient poll() interface scales
+<BR>
+as well as the new RT signals.  niels provos implemented /dev/poll in
+<BR>
+Linux (see our Freenix track paper for Usenix 2000).  we benchmarked
+<BR>
+thttpd using /dev/poll against phhttpd, an experimental web server that
+<BR>
+uses Posix RT signals.
+<BR>
+<P>RT signals are still a young programming model, so there are issues with
+<BR>
+using them:  portability among operating systems, how to share them among
+<BR>
+libraries, lack of support for sharing signal queues among threads, and so
+<BR>
+on.  of great concern to us is the use of poll() for handling an RT signal
+<BR>
+queue overflow: poll() must be much more efficient to be an effective
+<BR>
+overflow remedy.
+<BR>
+<P>at this point, i don't think we understand how to use RT signals most
+<BR>
+effectively.  but poll is well-understood, so it's easy to change
+<BR>
+applications to use /dev/poll and see a significant scalability
+<BR>
+improvement.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Chuck Lever
+<BR>
+<PRE>
+--
+corporate:	&lt;<A HREF="mailto:chuckl@netscape.com?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;">chuckl@netscape.com</A>&gt;
+personal:	&lt;<A HREF="mailto:chucklever@bigfoot.com?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;">chucklever@bigfoot.com</A>&gt;
+<P>The Linux Scalability project:
+	<A HREF="http://www.citi.umich.edu/projects/linux-scalability/">http://www.citi.umich.edu/projects/linux-scalability/</A>
+<P>Date: Tue, 23 May 2000 10:28:31 +0200
+From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;">ak@muc.de</A>&gt;
+To: Ramesh Shankar &lt;<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;">RSHANKAR@novell.com</A>&gt;
+Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Any%20successor%20to%20the%20sockets%20APIs%20???&In-Reply-To=&lt;Pine.BSO.4.20.0005231027590.20580-100000@naughty.monkey.org&gt;">tcp-impl@grc.nasa.gov</A>
+Subject: Re: Any successor to the sockets APIs ???
+<P>On Tue, May 23, 2000 at 05:25:56AM +0200, Ramesh Shankar wrote:
+&gt; I am curious to know whether there is any work in progress on a successor to the BSD (or for that matter Winsock) sockets API. The following are the reasons for the question:
+&gt; 
+&gt; - The BSD sockets API does not have a really powerful interface for use with event driven programming. select() and poll() are available, but the performance issues associated with it have been known for sometime now. Winsock has some interesting APIs which seem to help somewhat better than BSD sockets APIs.
+<P>Single Unix defines a replacement: real time signals that carry fd event
+notifications. They unfortunately require a non standard extension to set
+the SIGIO signal for a fd to be really useful (or another non standard
+extension for queued SIGIO). At least in modern Linux it is supported.
+poll() is still needed as fallback when signals get lost.
+&gt;From first tests queued SIGIO with a sigwaitinfo() main loop scales
+very nicely for web servers.
+<P>- -Andi
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2090.html">Alan Cox: "Re: Slow start question ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2085.html">Ramesh Shankar: "Any successor to the sockets APIs ???"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2091">[ date ]</A>
+<A HREF="index.html#2091">[ thread ]</A>
+<A HREF="subject.html#2091">[ subject ]</A>
+<A HREF="author.html#2091">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 11:46:10 1997" -->
+<!-- isoreceived="19970801154610" -->
+<!-- sent="Fri, 1 Aug 1997 10:37:21 -0700" -->
+<!-- isosent="19970801173721" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708011737.KAA05917@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011737.KAA05917@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 13:37:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0641.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#642">[ date ]</A>
+<A HREF="index.html#642">[ thread ]</A>
+<A HREF="subject.html#642">[ subject ]</A>
+<A HREF="author.html#642">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@hpisrdq.cup.hp.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011737.KAA05917@rum.isi.edu&gt;">raj@hpisrdq.cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011737.KAA05917@rum.isi.edu&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Subject: Re: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011737.KAA05917@rum.isi.edu&gt;">touch@ISI.EDU</A> wrote:
+</EM><BR>
+<EM>&gt; &gt; &gt; Indeed. Instead of having to enumerate in a later draft, why not simply
+</EM><BR>
+<EM>&gt; &gt; &gt; state that after the three-way handshake is complete cwnd will be N and
+</EM><BR>
+<EM>&gt; &gt; &gt; leave it up to the implementation as to how it gets to N. (I am assuming
+</EM><BR>
+<EM>&gt; &gt; &gt; N &gt;= 2)
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Because the value of N is important and determines the group
+</EM><BR>
+<EM>&gt; &gt; congestion properties of the Internet. It should not be
+</EM><BR>
+<EM>&gt; &gt; 'left to the implementation'.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Oops. Mind going faster than fingers...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I should have said &quot;I'm assuming that for the document N will be
+</EM><BR>
+<EM>&gt; selected as some value, at least 2.&quot; In other words, we would all pick
+</EM><BR>
+<EM>&gt; some value. I didn't mean to leave the selection of that value as an
+</EM><BR>
+<EM>&gt; implementation choice.
+</EM><BR>
+<P>As Craig pointed out, current implementations have three
+<BR>
+values for N, for IW, LW, and RW. 
+<BR>
+<P>For most, LW = 1 as it should.
+<BR>
+<P>&quot;Leaving it to the implementer&quot;, we have current versions that
+<BR>
+end up with 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IW = 2 (because the window opened due to the SYN-ACK)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RW = 1 (explicitly)
+<BR>
+<P>Earlier e-mails (others and mine) make the case that IW=RW,
+<BR>
+and that both either start at 1 or 2.
+<BR>
+<P>Perhaps we require the following, regardless of 'how the
+<BR>
+implementer gets there' (as you say):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IW = RW = n (for some specific n, as you say)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LW = 1 
+<BR>
+<P>(this is a little more specific than just requiring IW = n, as
+<BR>
+you proposed, which is where I was going...)
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011737.KAA05917@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0641.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0643.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#642">[ date ]</A>
+<A HREF="index.html#642">[ thread ]</A>
+<A HREF="subject.html#642">[ subject ]</A>
+<A HREF="author.html#642">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

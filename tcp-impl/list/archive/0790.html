@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP SACK</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: TCP SACK">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP SACK</H1>
+<!-- received="Fri Oct 17 23:12:51 1997" -->
+<!-- isoreceived="19971018031251" -->
+<!-- sent="Sat, 18 Oct 1997 05:53:28 +0100 (MET)" -->
+<!-- isosent="19971018045328" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: TCP SACK" -->
+<!-- id="199710180453.FAA15282@labinfo.iet.unipi.it" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.877120562.24836.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710180453.FAA15282@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Oct 18 1997 - 00:53:28 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0791.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0792.html">Alan Cox: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0792.html">Alan Cox: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0794.html">Michael C. Richardson: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#790">[ date ]</A>
+<A HREF="index.html#790">[ thread ]</A>
+<A HREF="subject.html#790">[ subject ]</A>
+<A HREF="author.html#790">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; This might have to do with the fact that there are still stacks
+</EM><BR>
+<EM>&gt; &gt; around which do not like TCP options and popular servers tend to
+</EM><BR>
+<EM>&gt; &gt; disable SACK, RFC1323 and other options which might cause them to
+</EM><BR>
+<EM>&gt; &gt; lose clients.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Or there are just very few, if any, servers out there that are capable of
+</EM><BR>
+<EM>&gt; doing SACK, or RFC 1323.
+</EM><BR>
+<P>For SACK you are probably right, but for RFC1323 support is widespread
+<BR>
+in OS typically used for servers. Yet I talked once with some people
+<BR>
+who run a *big* server running FreeBSD and they explicitly turned
+<BR>
+off RFC1323 because some clients were negatively affected by TCP
+<BR>
+options. The net is big and full of old equipment...
+<BR>
+<P><EM>&gt; &gt; Note that there are other things which have a good impact on traffic
+</EM><BR>
+<EM>&gt; &gt; (at least for web-type traffic), such as lowering the threshold
+</EM><BR>
+<EM>&gt; &gt; for fast retransmit when there are too few packets in transit. As
+</EM><BR>
+<EM>&gt; &gt; an example, here is an excerpt of netstat -p tcp on our www proxy:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Lowering the threshold may not be safe.  This can lead to a lot of unnecessary
+</EM><BR>
+<EM>&gt; &quot;fast retransmissions.&quot;  I think it is safer to do the SACK way.  It is noted
+</EM><BR>
+<P>any choice you make might not be safe, it all depends on how it
+<BR>
+works in practice -- and still, what works now might not work next
+<BR>
+year.  E.g. when/if people will start using several ISDN channels
+<BR>
+in parallel, then the chance of massive reorderings of packets
+<BR>
+(being sent in parallel on all channels) becomes so high that even
+<BR>
+the 'fast rxmit after 3 dups' becomes risky. Check Vern's thesis for a
+<BR>
+description of the phenomenon with 2 channels -- where it looks at the
+<BR>
+'packet pair' technique to estimate bandwidth.
+<BR>
+<P>This is an area where there is almost no experience in the field. I
+<BR>
+just tried to give some data -- by no means conclusive -- which suggest
+<BR>
+this (_conditionally_ lowering the fast rxmit threshold) as an
+<BR>
+alternative to investigate. My data do not tell how many useless rxmit
+<BR>
+I made, just that I could reduce the number of timeouts by 15-20%, and
+<BR>
+that 75% of the timeouts on my server occur when there is only one
+<BR>
+packet in transit.
+<BR>
+<P>Increasing the window on dup acks is safer provided you have more
+<BR>
+traffic to transmit. But web traffic is made of short files -- median
+<BR>
+and mean 5 and 10K respectively -- so chances are that you will not
+<BR>
+have enough data to exploit the increased window size.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710180453.FAA15282@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0791.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0792.html">Alan Cox: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0792.html">Alan Cox: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0794.html">Michael C. Richardson: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#790">[ date ]</A>
+<A HREF="index.html#790">[ thread ]</A>
+<A HREF="subject.html#790">[ subject ]</A>
+<A HREF="author.html#790">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

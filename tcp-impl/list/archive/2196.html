@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Thu Jun 29 19:41:44 2000" -->
+<!-- isoreceived="20000629234144" -->
+<!-- sent="Thu, 29 Jun 2000 17:34:43 -0600" -->
+<!-- isosent="20000629233443" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="395BDD13.1E54F741@Novell.COM" -->
+<!-- inreplyto="200006291701.VAA15375@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395BDD13.1E54F741@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 29 2000 - 19:34:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2197.html">Scott Millward: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2195.html">Rick Jones: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2199.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2199.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2202.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2196">[ date ]</A>
+<A HREF="index.html#2196">[ thread ]</A>
+<A HREF="subject.html#2196">[ subject ]</A>
+<A HREF="author.html#2196">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The case of pure ACK segments (aka window updates) coming out of order
+<BR>
+is not handled by the last check.
+<BR>
+<P>Here is the one that I quoted:
+<BR>
+<P>Set SND.WND = SEG.WND: [Assuming Window scaling is correctly handled].
+<BR>
+if (SEG.SEQ &gt; SND.WL1) [Set SND.WL1 = SEG.SEQ]
+<BR>
+OR if (SEG.ACK &gt; SND.WL2) [Set SND.WL2 = SEG.WL2]
+<BR>
+OR if ((SND.WL2 == SEG.ACK) &amp;&amp; (SEG.WND &gt; SND.WND))
+<BR>
+<P>It is assumed that the segment has been already trimmed to be inside the
+<BR>
+window and the ACK satisfies the check:
+<BR>
+<P>SEG.ACK &lt;= SND.UNA &lt;= SND.MAX.
+<BR>
+<P>I still retain SND.WL2 as a &quot;local variable&quot; which contains the previous
+<BR>
+value of SND.UNA. [When these checks are done, SND.UNA would have been
+<BR>
+already set to SEG.ACK. You could save it in a local variable before the
+<BR>
+update and use it here. Doesn't matter].
+<BR>
+<P>The above correctly handles the following cases:
+<BR>
+<P>- Pure ACKs (aka window updates) coming out of order. These will have
+<BR>
+same SEG.SEQ, SEG.ACK and (legally) increasing window sizes.
+<BR>
+- ACK information sent in retransmitted segments. These will have
+<BR>
+SEG.SEQ &lt; SND.WL1, SEG.ACK &gt;= SND.WL2.
+<BR>
+- Window can be shrunk (even if strongly discouraged by RFC 1122) with
+<BR>
+SEG.SEQ &gt; SND.WL1, SEG.ACK &gt; SND.WL2, but NOT otherwise.
+<BR>
+- The case of segments coming out of order is anyway automatically
+<BR>
+handled as such a segment will have SEG.ACK &lt;= SND.WL2.
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P><A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395BDD13.1E54F741@Novell.COM&gt;">kuznet@ms2.inr.ac.ru</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hello!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; I am not sure what you mean by &quot;not accepted due to the first rule&quot;.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Seems, I understand source of misunderstanding. 8)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That guy, who fixed RFC algorithm old days, forgot to add one level
+</EM><BR>
+<EM>&gt; of parenthesis in hurry. 8)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         if (((tiflags &amp; TH_ACK) &amp;&amp; SEQ_LT(tp-&gt;snd_wl1, ti-&gt;ti_seq)) ||
+</EM><BR>
+<EM>&gt;             (tp-&gt;snd_wl1 == ti-&gt;ti_seq &amp;&amp; (SEQ_LT(tp-&gt;snd_wl2, ti-&gt;ti_ack)) ||
+</EM><BR>
+<EM>&gt;                                           ^
+</EM><BR>
+<EM>&gt;             (tp-&gt;snd_wl2 == ti-&gt;ti_ack &amp;&amp; tiwin &gt; tp-&gt;snd_wnd))) {
+</EM><BR>
+<EM>&gt;                                                                ^
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well, accepting window update with arbitrary seq _only_ from dupacks,
+</EM><BR>
+<EM>&gt; but ignoring it for real good acks is evident misprint. 8)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It does not change anything but adding more mess.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So, do you see something wrong in:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         if ((tiflags &amp; TH_ACK) &amp;&amp;
+</EM><BR>
+<EM>&gt;              (SEQ_LT(tp-&gt;snd_una, ti-&gt;ti_ack) ||
+</EM><BR>
+<EM>&gt;               SEQ_LT(tp-&gt;snd_wl1, ti-&gt;ti_seq) ||
+</EM><BR>
+<EM>&gt;               (tp-&gt;snd_wl1==ti-&gt;ti_seq &amp;&amp; tiwin &gt; tp-&gt;snd_wnd)))
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I.e.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1. new ACK always updates window.
+</EM><BR>
+<EM>&gt; 2. dupack updates window, if it advances SND.WL1,
+</EM><BR>
+<EM>&gt;    or its SEG.SEQ==SND.WL1, but advertised window increases.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SND.WL2 is not used, it is ==SND.UNA.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Alexey
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2196/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2197.html">Scott Millward: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2195.html">Rick Jones: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2191.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2199.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2199.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2202.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2196">[ date ]</A>
+<A HREF="index.html#2196">[ thread ]</A>
+<A HREF="subject.html#2196">[ subject ]</A>
+<A HREF="author.html#2196">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

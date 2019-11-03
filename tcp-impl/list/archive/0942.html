@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Doubt in fast recovery algo..</TITLE>
+<META NAME="Author" CONTENT="Chetan Kumar (chetan@protocol.ece.iisc.ernet.in)">
+<META NAME="Subject" CONTENT="Re: Doubt in fast recovery algo..">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Doubt in fast recovery algo..</H1>
+<!-- received="Wed Feb 11 04:59:52 1998" -->
+<!-- isoreceived="19980211095952" -->
+<!-- sent="Wed, 11 Feb 1998 18:10:09 +0000 (GMT)" -->
+<!-- isosent="19980211181009" -->
+<!-- name="Chetan Kumar" -->
+<!-- email="chetan@protocol.ece.iisc.ernet.in" -->
+<!-- subject="Re: Doubt in fast recovery algo.." -->
+<!-- id="Pine.LNX.3.95.980211175635.8692A-100000@protocol.ece.iisc.ernet.in" -->
+<!-- inreplyto="34E16997.6165@ftel.co.uk" -->
+<STRONG>From:</STRONG> Chetan Kumar (<A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20Doubt%20in%20fast%20recovery%20algo..&In-Reply-To=&lt;Pine.LNX.3.95.980211175635.8692A-100000@protocol.ece.iisc.ernet.in&gt;"><EM>chetan@protocol.ece.iisc.ernet.in</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 11 1998 - 13:10:09 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0941.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0941.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#942">[ date ]</A>
+<A HREF="index.html#942">[ thread ]</A>
+<A HREF="subject.html#942">[ subject ]</A>
+<A HREF="author.html#942">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Wed, 11 Feb 1998, Graham Cope wrote:
+<BR>
+<P>*&gt;Chetan Kumar wrote:
+<BR>
+<P>*&gt;&gt; 
+<BR>
+*&gt;&gt; Greetings,
+<BR>
+*&gt;&gt; 
+<BR>
+*&gt;&gt; 
+<BR>
+*&gt;
+<BR>
+*&gt;Sorry, no.
+<BR>
+*&gt;
+<BR>
+*&gt;Let us ignore delayed ACKs. Suppose that there are 10 segments in
+<BR>
+*&gt;transit, the first of which gets lost. The next 3 (I think NOT the 4th)
+<BR>
+<P>Hi,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I meant after TCP receive 3 dupack, it will enter fast recovery
+<BR>
+and 4th ack should cause TCP to start transmission of new data with new
+<BR>
+cnwind
+<BR>
+<P>*&gt;generate dup ACKs, and the lost one gets retransmitted. Suppose that the
+<BR>
+*&gt;sender goes back to step 1 again. Then after 3 (or 4?) more from the
+<BR>
+*&gt;original 10 arrive, then we get fast retransmit again.
+<BR>
+*&gt;
+<BR>
+*&gt;I guess there are 2 approached.
+<BR>
+*&gt;
+<BR>
+*&gt;Only go to step 1 after receiving 9 (in this example) dup ACKs for the
+<BR>
+<P>!! Why 9 dupack ? !!
+<BR>
+<P>*&gt;rest of the data that was in transit. This requires a bit counting,
+<BR>
+*&gt;(note that it does not need knowledge of the delayed ACK algorithm,
+<BR>
+*&gt;since all out of sequence segments should generate ACKs). Also fast
+<BR>
+*&gt;recovery should be speeding ahead for the other 6 dup ACKs.
+<BR>
+*&gt;
+<BR>
+*&gt;Second appraoch is to admit that Fast Recovery is now confused, and if
+<BR>
+*&gt;the retransmitted segment is lost, then rely on time-out / slow-start.
+<BR>
+<P>But this will cause TCP to slow down. 
+<BR>
+<P>Say assume as U said there are 10 packets in transit and first of which
+<BR>
+will get lost. So now next 3 packets will generate dupack, and TCP output
+<BR>
+will transmit the missing packet. But at the same time packet 5, 6 and 7
+<BR>
+will cause 3 more dupack( because dupack's should not be delayed rfc1122)
+<BR>
+and we may have to go to slowstart ( as you said Fast Recovery is now
+<BR>
+confused,).
+<BR>
+<P><P>*&gt;
+<BR>
+*&gt;I'm bot a SACK guru, but this might have a 3rd method of recovery.
+<BR>
+*&gt;
+<BR>
+*&gt;
+<BR>
+*&gt;&gt; 
+<BR>
+*&gt;&gt; II.)Next once an  ACK arrives that acknowledges new data, TCP will have to
+<BR>
+*&gt;&gt; set cwind to ssthresh and then the TCP should go to congestion avoidance.
+<BR>
+*&gt;&gt; 
+<BR>
+*&gt;&gt; The point to be noted here is once congestion is indicated by 3 dupacks we
+<BR>
+*&gt;&gt; are not reducing reducing the rate at which we are incrementing the
+<BR>
+*&gt;&gt; cwind, although the cwind itself is reduced to half,  the reason for this 3
+<BR>
+*&gt;&gt; dupacks tells more then just a packet is lost. 
+<BR>
+*&gt;
+<BR>
+*&gt;In particular, at tells us that at least 3 other segments got through.
+<BR>
+*&gt;
+<BR>
+*&gt;But on the other hand when
+<BR>
+*&gt;&gt; new ack arrives cwind is set to ssthresh and the rate of increase of cwind
+<BR>
+*&gt;&gt; is reduced more linear and only for every round trip time. I do not see
+<BR>
+*&gt;&gt; any justification for this.
+<BR>
+*&gt;
+<BR>
+*&gt;The assumption is that a segment was lost due to congestion, hence it
+<BR>
+*&gt;should slow down. If congestion was not the cause (e.g. a bit error on
+<BR>
+*&gt;a  DSL line), then slowing down is not necessary. But how does TCP know
+<BR>
+*&gt;the cause?
+<BR>
+*&gt;
+<BR>
+*&gt;Again SACK guru's might have another approach.
+<BR>
+*&gt;
+<BR>
+*&gt;
+<BR>
+*&gt;&gt; I would say not to reduce the cwind to ssthresh, since network still
+<BR>
+*&gt;&gt; capable of accepting the packets.
+<BR>
+*&gt;
+<BR>
+*&gt;That is the key question. Is it still capable? Other segments got
+<BR>
+*&gt;through, but at least one didn't.
+<BR>
+*&gt;
+<BR>
+*&gt;
+<BR>
+*&gt;
+<BR>
+*&gt;Graham Cope
+<BR>
+*&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0941.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0941.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#942">[ date ]</A>
+<A HREF="index.html#942">[ thread ]</A>
+<A HREF="subject.html#942">[ subject ]</A>
+<A HREF="author.html#942">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

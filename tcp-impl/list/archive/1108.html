@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Fri Apr 24 09:06:57 1998" -->
+<!-- isoreceived="19980424130657" -->
+<!-- sent="Fri, 24 Apr 1998 16:53:26 +0100 (BST)" -->
+<!-- isosent="19980424155326" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="m0ySkn0-000aNiC@the-village.bc.nu" -->
+<!-- inreplyto="199804241518.JAA00636@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;m0ySkn0-000aNiC@the-village.bc.nu&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 24 1998 - 11:53:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1107.html">Scott Lawrence: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1108">[ date ]</A>
+<A HREF="index.html#1108">[ thread ]</A>
+<A HREF="subject.html#1108">[ subject ]</A>
+<A HREF="author.html#1108">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; &gt; the changes that are obviously necessary regardless of whether the proposal
+</EM><BR>
+<EM>&gt; &gt; &gt; is implemented near you, especially to increase the buffering on the ISP
+</EM><BR>
+<EM>&gt; &gt; &gt; side of your modems to 16KBytes?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Having 16K of buffering each end of a modem link is really bad.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Please notice that I did not write &quot;each end&quot;.  That was not an
+</EM><BR>
+<EM>&gt; oversight.
+</EM><BR>
+<P>My 28.8 is about the same packet usage for both ends. So a 'which end' assumes
+<BR>
+some kind of ISP-client relationship which limits the nature. Unless you
+<BR>
+mean &quot;not 16K tx buffer to modem and 16K rx buffer after modem the other
+<BR>
+end ?&quot; - Can you clarify
+<BR>
+<P><EM>&gt; I disagree with your implication that reordering based on packet size
+</EM><BR>
+<EM>&gt; is a Purely Bad Thing.  My (SGI's) PPP and SLIP code did that for many
+</EM><BR>
+<EM>&gt; years without any reports of ill effects from customers or observations
+</EM><BR>
+<EM>&gt; of bad things by me.  In practice, that mechanism rarely reorders packets in
+</EM><BR>
+<EM>&gt; a single stream.  I changed the default setting of the hack only because
+</EM><BR>
+<EM>&gt; TOS bit setting became common, and the hack smells bad even if it does
+</EM><BR>
+<EM>&gt; no harm.
+</EM><BR>
+<P>I think RED is next to fiddle with
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I also disagree with your statement elsewhere that common TCP applications are
+</EM><BR>
+<EM>&gt; not setting the TOS bits appropriately.  For half a dozen years at least
+</EM><BR>
+<P>wingate ? plenty of NT ftp servers too. Its not so far the big people or
+<BR>
+the clueful doing it, its the accumulation of everyone else. 
+<BR>
+<P><EM>&gt; some major commercial outfits in both UNIX and PC worlds (e.g. FTP Software)
+</EM><BR>
+some is not all alas
+<BR>
+<P><EM>&gt; buffering in all of the routers in all paths I care about.  If you think
+</EM><BR>
+<EM>&gt; about it for a little, I hope you'll see why your solution of reducing
+</EM><BR>
+<EM>&gt; the buffering in a single router is not sufficient to fix the problems
+</EM><BR>
+<EM>&gt; you mention.  I've found a much better solution is to use smaller (2-4K)
+</EM><BR>
+<P>Its a fix that works in the convenient case of owning the bottle neck
+<BR>
+only yes. It does however work well for most victims simply because
+<BR>
+such nodes are normally the edge.
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1107.html">Scott Lawrence: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1108">[ date ]</A>
+<A HREF="index.html#1108">[ thread ]</A>
+<A HREF="subject.html#1108">[ subject ]</A>
+<A HREF="author.html#1108">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

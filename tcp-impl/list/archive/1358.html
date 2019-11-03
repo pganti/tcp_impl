@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs for retransmitt</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs for retransmitted packets: ouch!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs for retransmitted packets: ouch!</H1>
+<!-- received="Tue Nov  3 14:14:10 1998" -->
+<!-- isoreceived="19981103191410" -->
+<!-- sent="Tue, 3 Nov 1998 11:08:00 -0800 (PST)" -->
+<!-- isosent="19981103190800" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: delayed ACKs for retransmitted packets: ouch!" -->
+<!-- id="Roam.SIMCSD.2.0.4.910120080.27665.kcpoon@jurassic" -->
+<!-- inreplyto="Pine.LNX.4.02A.9811021421340.26785-100000@sake.cs.washington.edu" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20delayed%20ACKs%20for%20retransmitted%20packets:%20ouch!&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.910120080.27665.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 03 1998 - 14:08:00 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1359.html">Eric A. Hall: "MTU, MRU, and MSS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1357.html">braden@ISI.EDU: "Re: old TCP options"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1358">[ date ]</A>
+<A HREF="index.html#1358">[ thread ]</A>
+<A HREF="subject.html#1358">[ subject ]</A>
+<A HREF="author.html#1358">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The TCP congestion control draft (draft-ietf-tcpimpl-cong-control-00.txt)
+</EM><BR>
+<EM>&gt; specifies that &quot;Out-of-order data segments SHOULD be acknowledged
+</EM><BR>
+<EM>&gt; immediately, in order to trigger the fast retransmit algorithm.&quot; Many
+</EM><BR>
+<EM>&gt; implementations -- at least FreeBSD 3.0 and Linux 2.1, and probably most
+</EM><BR>
+<EM>&gt; others, i'm guessing -- interpret this by sending an immediate
+</EM><BR>
+<EM>&gt; acknowledgment only if a data segment they receive is above a hole in
+</EM><BR>
+<EM>&gt; their receive queue. That is, the ACK only if the sequence number is above
+</EM><BR>
+<EM>&gt; and not equal to rcv_next (see Figure 27.15 in Stevens vol 2 for the code
+</EM><BR>
+<EM>&gt; snippet that does this in Net/3 and FreeBSD).
+</EM><BR>
+<P>That is quite interesting.  Solaris sends an ACK immediately in this case.
+<BR>
+That is why we never saw this problem when we added NewReno to Solaris 2.6.
+<BR>
+Maybe you can try to use a Solaris 2.6 or 7 as the receiver and see what
+<BR>
+will happen.  Also compare the result using a Solaris sender.
+<BR>
+<P><EM>&gt; So what i'm asking is this: is it a good idea to clarify or extend the
+</EM><BR>
+<EM>&gt; notion of &quot;out-of-order&quot; data that should be ACKed immediately, in such a
+</EM><BR>
+<EM>&gt; way that data segments that fill in a hole in the receive queue should be
+</EM><BR>
+<EM>&gt; ACKed immediately? This would seem to alleviate this problem with New
+</EM><BR>
+<EM>&gt; Reno. Are there other scenarios where it would make things worse instead?
+</EM><BR>
+<P>Actually, I always think that a segment which fills a hole is an out of
+<BR>
+order segment.  IMHO, this looks like a bug in the implementation.  Maybe
+<BR>
+this can be another item in the known problem draft?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20delayed%20ACKs%20for%20retransmitted%20packets:%20ouch!&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.910120080.27665.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1359.html">Eric A. Hall: "MTU, MRU, and MSS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1357.html">braden@ISI.EDU: "Re: old TCP options"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1358">[ date ]</A>
+<A HREF="index.html#1358">[ thread ]</A>
+<A HREF="subject.html#1358">[ subject ]</A>
+<A HREF="author.html#1358">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

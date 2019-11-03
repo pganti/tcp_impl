@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Fri, 4 Feb 2000 13:33:24 -0600 (CST)" -->
+<!-- isoreceived="20000204193324" -->
+<!-- sent="Fri, 4 Feb 2000 13:33:24 -0600 (CST)" -->
+<!-- isosent="20000204193324" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="200002041933.NAA12219@frantic.bsdi.com" -->
+<!-- inreplyto="TCP MSS option value" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200002041933.NAA12219@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 04 2000 - 14:33:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1981.html">Luigi Rizzo: "new dummynet page"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1980">[ date ]</A>
+<A HREF="index.html#1980">[ thread ]</A>
+<A HREF="subject.html#1980">[ subject ]</A>
+<A HREF="author.html#1980">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Sigh, I *really* need to plow through and get the revision
+<BR>
+to RFC 1323 done.  It has a section in Appendix A addressing
+<BR>
+MSS, which I've attached.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200002041933.NAA12219@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P>&nbsp;&nbsp;&nbsp;TCP Options and MSS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There has been some confusion as to what value should be filled 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the TCP MSS option when using TCP options.  RFC-879
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Postel83] stated:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The MSS counts only data octets in the segment, it does not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count the TCP header or the IP header.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which is unclear about what to do about TCP options.  RFC-1122
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Braden89] attempted to clarify this in section 4.2.2.6, but 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there still seems to be confusion.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, the MSS value to be sent in an MSS option should be equal to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the effective MTU minus the fixed IP and TCP headers.  Since
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;both IP and TCP options are ignored when calculating the value
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the MSS option, if there are any IP or TCP options to be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sent in a packet, then the sender must decrease the size of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP data accordingly.  The reason for this can be seen in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;following table:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+--------------------+--------------------+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| MSS is adjusted    | MSS isn't adjusted |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| to include options | to include options |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------------+--------------------+--------------------+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| Sender adjusts | Packets are too    | Packets are the    |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| length for     | short              | correct length     |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| options        |                    |                    |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------------+--------------------+--------------------+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| Sender doesn't | Packets are the    | Packets are too    |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| adjust length  | correct length     | long.              |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| for options    |                    |                    |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+----------------+--------------------+--------------------+
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since the goal is to not send IP datagrams that have to be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fragmented, and packets sent with the constraints in the lower
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right of this grid will cause IP fragmentation, the only way to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guarantee that this doesn't happen is for the data sender to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrease the TCP data length by the size of the IP and TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options.  And since the sender will be adjusting the TCP data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length when sending IP and TCP options, there is no need to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include the IP and TCP option lengths in the MSS value.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1981.html">Luigi Rizzo: "new dummynet page"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1980">[ date ]</A>
+<A HREF="index.html#1980">[ thread ]</A>
+<A HREF="subject.html#1980">[ subject ]</A>
+<A HREF="author.html#1980">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

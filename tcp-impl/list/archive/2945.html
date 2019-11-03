@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: gaps in a tcp flow</TITLE>
+<META NAME="Author" CONTENT="Murali Bashyam (mbashyam@cisco.com)">
+<META NAME="Subject" CONTENT="Re: gaps in a tcp flow">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: gaps in a tcp flow</H1>
+<!-- received="Thu May  1 12:34:37 2003" -->
+<!-- isoreceived="20030501163437" -->
+<!-- sent="Thu, 01 May 2003 09:03:04 -0700" -->
+<!-- isosent="20030501160304" -->
+<!-- name="Murali Bashyam" -->
+<!-- email="mbashyam@cisco.com" -->
+<!-- subject="Re: gaps in a tcp flow" -->
+<!-- id="3EB14538.5A99B417@cisco.com" -->
+<!-- inreplyto="20030501025926.6F5166B2B7@lawyers.ir.bbn.com" -->
+<STRONG>From:</STRONG> Murali Bashyam (<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB14538.5A99B417@cisco.com&gt;"><EM>mbashyam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 01 2003 - 12:03:04 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2946.html">Lloyd Wood: "Re: gaps in a tcp flow"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2946.html">Lloyd Wood: "Re: gaps in a tcp flow"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2945">[ date ]</A>
+<A HREF="index.html#2945">[ thread ]</A>
+<A HREF="subject.html#2945">[ subject ]</A>
+<A HREF="author.html#2945">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mark Allman wrote:
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt; ------- Forwarded Message
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Date: Wed, 30 Apr 2003 16:14:16 -0700
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:rick_jones2@hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB14538.5A99B417@cisco.com&gt;">rick_jones2@hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Reply-To: <A HREF="mailto:raj@cup.hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB14538.5A99B417@cisco.com&gt;">raj@cup.hp.com</A>
+</EM><BR>
+<EM>&gt; Organization: the Unofficial HP
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;3EB14538.5A99B417@cisco.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: gaps in a tcp flow
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Murali Bashyam wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Mark Allman wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Doesn't this cause  problems for the initial RTT estimate of the
+</EM><BR>
+<EM>&gt; &gt; server ? And in the attached example the delay seems to be negligible
+</EM><BR>
+<EM>&gt; &gt; so it's ok, but if the client is delaying the ACK by 70 ms  to
+</EM><BR>
+<EM>&gt; &gt; piggyback the GET request, it seems like a  variant of stretch ack
+</EM><BR>
+<EM>&gt; &gt; violation.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I'll make the embarassing statement that I'm not familiar with &quot;stretch
+</EM><BR>
+<EM>&gt; ack violation&quot; and so a reference would be really nice.
+</EM><BR>
+<P>Refer to RFC2525 for this. Stretch ack is basically an ack that gets delayed
+<BR>
+by a huge amount either by the network or the receiver and ends up
+<BR>
+acknowledging a whole lot of segments as opposed to normal behaviour of 2
+<BR>
+segments, resulting in bursty traffic, and RTT jitter.
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Apart from that, it doesn't seem all that evil if the initial RTT is a
+</EM><BR>
+<EM>&gt; bit longer than it might be later.  If anything that would seem to be
+</EM><BR>
+<EM>&gt; &quot;conservative&quot; in the sense that it leads to a longer RTO and so less
+</EM><BR>
+<EM>&gt; likely to have a spurrious RTO. On top of that, most stacks start with
+</EM><BR>
+<EM>&gt; an intial RTO for the SYN or the SYN|ACK of something much larger than
+</EM><BR>
+<EM>&gt; the standalone ACK timer anyway.
+</EM><BR>
+<P>The initial RTO of 3s is only a conservative estimate in the absence of that
+<BR>
+ACK, so SYN retransmission is not an issue.
+<BR>
+I agree the higher 'RTT' estimate on the server is only brief and in this
+<BR>
+case it does  not affect the connection throughput in an adverse manner,
+<BR>
+since with the HTTP request-response transaction, the RTT should quickly
+<BR>
+converge in a few iterations when the ACK of the HTTP  response starts
+<BR>
+coming back,  to a much smaller
+<BR>
+and correct one.
+<BR>
+<P>Piggybacking GET requests with the ACK of a syn|ack is a common feature, but
+<BR>
+i haven't seen the ACK delayed by as much as 70 ms.
+<BR>
+<P>Murali
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; rick
+</EM><BR>
+<EM>&gt; - --
+</EM><BR>
+<EM>&gt; Wisdom Teeth are impacted, people are affected by the effects of events.
+</EM><BR>
+<EM>&gt; these opinions are mine, all mine; HP might not want them anyway... :)
+</EM><BR>
+<EM>&gt; feel free to post, OR email to raj in cup.hp.com  but NOT BOTH...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ------- End of Forwarded Message
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2946.html">Lloyd Wood: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2944.html">Mark Allman: "Re: gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2946.html">Lloyd Wood: "Re: gaps in a tcp flow"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2945">[ date ]</A>
+<A HREF="index.html#2945">[ thread ]</A>
+<A HREF="subject.html#2945">[ subject ]</A>
+<A HREF="author.html#2945">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu May 01 2003 - 12:34:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

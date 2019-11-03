@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="RE: draft description of &quot;No initial slow start&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: draft description of &quot;No initial slow start&quot;</H1>
+<!-- received="Wed Mar 19 09:09:42 1997" -->
+<!-- isoreceived="19970319140942" -->
+<!-- sent="Wed, 19 Mar 1997 11:58:15 -0500" -->
+<!-- isosent="19970319165815" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="RE: draft description of &quot;No initial slow start&quot;" -->
+<!-- id="c=US%a=_ATTMAIL%p=UNISYS%l=RV-EXCHANGE--970319165815Z-19181@pl_exchange_1.pl.unisys.com" -->
+<!-- inreplyto="draft description of &quot;No initial slow start&quot;" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;&In-Reply-To=&lt;c=US%25a=_ATTMAIL%25p=UNISYS%25l=RV-EXCHANGE--970319165815Z-19181@pl_exchange_1.pl.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 11:58:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0159.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0157.html">W. Richard Stevens: "Re: aggressive delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#158">[ date ]</A>
+<A HREF="index.html#158">[ thread ]</A>
+<A HREF="subject.html#158">[ subject ]</A>
+<A HREF="author.html#158">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;	After the third packet, the connection is established.  A, the
+</EM><BR>
+<EM>&gt;&gt;    connection responder, begins transmitting to B, the connection
+</EM><BR>
+<EM>&gt;&gt;	initiator.  A quickly sends 6 packets comprising 7812 bytes,
+</EM><BR>
+<EM>&gt;&gt;	even though the SYN exchange agreed upon an MSS of 1460 bytes
+</EM><BR>
+<EM>&gt;&gt;	and so A should have sent at most 1460 bytes.
+</EM><BR>
+<P>I would like to see the last sentence in the previous paragraph
+<BR>
+&nbsp;clarified to something like this:
+<BR>
+<P><EM>&gt;A quickly sends 6 packets comprising 7812 bytes,
+</EM><BR>
+<EM>&gt;even though the SYN exchange agreed upon an MSS of 1460 bytes
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(implying a congestion window of 1 segment or 1460 bytes)
+<BR>
+<EM>&gt;and so A should have sent at most 1460 bytes.
+</EM><BR>
+<P>As an aside, I observed in your examples that the sending TCP never 
+<BR>
+sets the PSH bit except in the first segment. I hope the PSH bit is 
+<BR>
+eventually set and is not shown in your traces because these are trace 
+<BR>
+fragments and not because the sender is behaving badly. This relates to
+<BR>
+an 
+<BR>
+issue I had lately with a TCP implementor that did not set the PSH bit
+<BR>
+correctly. 
+<BR>
+The misbehaving TCP did not always set the PSH bit in the last data
+<BR>
+segment 
+<BR>
+but still expected that data to be delivered to the application. Our TCP
+<BR>
+conforms 
+<BR>
+to RFC 1122 section 4.2.2.2 and stages data until either the PSH bit is
+<BR>
+set 
+<BR>
+or the applications receive buffer is filled. If the sender sends all of
+<BR>
+its data 
+<BR>
+and does not set the PSH bit, neither of these conditions is met and the
+<BR>
+connection is effectively hung. They had tested their product with 
+<BR>
+some UNIX boxes that always pass received data to the application
+<BR>
+regardless 
+<BR>
+of whether the PSH bit is set.
+<BR>
+<P>I do not know how wide spread this problem is but caused us some 
+<BR>
+considerable grief.
+<BR>
+<P>Al Smith
+<BR>
+UNISYS Corp.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0159.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0157.html">W. Richard Stevens: "Re: aggressive delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#158">[ date ]</A>
+<A HREF="index.html#158">[ thread ]</A>
+<A HREF="subject.html#158">[ subject ]</A>
+<A HREF="author.html#158">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

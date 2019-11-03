@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 17:23:24 1997" -->
+<!-- isoreceived="19970605212324" -->
+<!-- sent="Thu, 5 Jun 1997 18:21:09 -0600" -->
+<!-- isosent="19970606002109" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706060021.SAA07076@mica.denver.sgi.com" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060021.SAA07076@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 20:21:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0499.html">Eric.Schenk@dna.lth.se: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0497.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0501.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#498">[ date ]</A>
+<A HREF="index.html#498">[ thread ]</A>
+<A HREF="subject.html#498">[ subject ]</A>
+<A HREF="author.html#498">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060021.SAA07076@mica.denver.sgi.com&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; There is little you can do about bandwidth denial of service attacks,
+</EM><BR>
+<EM>&gt; &gt; except ensure that they use enough bit/sec to allow you to trace them
+</EM><BR>
+<EM>&gt; &gt; to their sources.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Or knock them out upstream (with an active filter), e.g., 
+</EM><BR>
+<EM>&gt; at the high-BW entry point to a LAN.
+</EM><BR>
+<P>True.
+<BR>
+<P><EM>&gt; &gt; Drop-oldest has been mentioned several times this afternoon, and most
+</EM><BR>
+<EM>&gt; &gt; people seem to agree that it is a useful and important tool.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Drop oldest doesn't deal with the sync problem - if I know
+</EM><BR>
+<EM>&gt; approximately when you're TCBs will free-up, I pulse the floods
+</EM><BR>
+<EM>&gt; to coincide. That's why I prefer some other drop - random or somesuch.
+</EM><BR>
+<P>There is no &quot;sync problem&quot; that I can see.  SYN bombing defenses must
+<BR>
+be and are based on worst case assumptions.  We all assume that the bad
+<BR>
+guy will send as many SYNs/sec as his connections allow all of the
+<BR>
+time.  If he could do any pulsing, it is assumed that he would make his
+<BR>
+pulse have the worst case duty cycle of 100%.  Whenever the bad guy
+<BR>
+pauses in his flood of SYNs, he is doing you a favor by relaxing the
+<BR>
+pressure.
+<BR>
+<P>I think that everyone agrees that drop-oldest does poorly when the SYN
+<BR>
+rate per RTT to the farthest good guy excedes your listen queue
+<BR>
+length.  That is when random-drop works well.  As long as the SYN rate
+<BR>
+is much less, then drop-oldest works very well.
+<BR>
+<P>When drop-oldest works (i.e. SYN rate &lt; L/RTT), it is cheapest of all,
+<BR>
+provided your system is already able to handle listen queue lengths
+<BR>
+necessary to excede 10,000,000 hits/day.  (A simple, single linked list
+<BR>
+of 1000 or more entries can be a little slow for the pruning done by
+<BR>
+the timers.)
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060021.SAA07076@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0499.html">Eric.Schenk@dna.lth.se: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0497.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0501.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#498">[ date ]</A>
+<A HREF="index.html#498">[ thread ]</A>
+<A HREF="subject.html#498">[ subject ]</A>
+<A HREF="author.html#498">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

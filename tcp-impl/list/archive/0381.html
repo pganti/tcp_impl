@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 09:33:38 1997" -->
+<!-- isoreceived="19970430133338" -->
+<!-- sent="Wed, 30 Apr 97 09:29:17 PDT" -->
+<!-- isosent="19970430162917" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="9704301629.AA08808@can.isi.edu" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;9704301629.AA08808@can.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 12:29:17 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0382.html">Fred Bohle: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0380.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0383.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#381">[ date ]</A>
+<A HREF="index.html#381">[ thread ]</A>
+<A HREF="subject.html#381">[ subject ]</A>
+<A HREF="author.html#381">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; &gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;9704301629.AA08808@can.isi.edu&gt;">jt@mentat.com</A> (Jerry Toporek)
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; &gt; On the other hand, maybe every system in the world can tolerate the option.
+<BR>
+&nbsp;&nbsp;*&gt; &gt; &gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; Well, this is the key question, isn't it?  Most &quot;modern&quot; TCP innovations have
+<BR>
+&nbsp;&nbsp;*&gt; &gt; been based on the assumption that we can add TCP options to SYN segments
+<BR>
+&nbsp;&nbsp;*&gt; &gt; without breaking implementations that do not recognize them.  We have never
+<BR>
+&nbsp;&nbsp;*&gt; &gt; seen any problem with this assumption, and add the window scale option to
+<BR>
+&nbsp;&nbsp;*&gt; &gt; every active connection request.  Has anyone had a problem with this?
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; My vague recollection from many years ago is that we did have
+<BR>
+&nbsp;&nbsp;*&gt; problems.  SGI has been shipping RFC 1323 support for a lot longer than
+<BR>
+&nbsp;&nbsp;*&gt; most other outfits.
+<BR>
+<P>Vernon,
+<BR>
+<P>I believe jt is correct; there have been no problems with SYN options.
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; I have some very clear memories of problems with systems that assumed
+<BR>
+&nbsp;&nbsp;*&gt; window sizes cannot be larger than 32765, and I don't mean only boxes
+<BR>
+&nbsp;&nbsp;*&gt; running flavors of UNIX.  One was a fancy 'scope/logic analyzer that
+<BR>
+&nbsp;&nbsp;*&gt; when crazy and sent one byte every couple of minutes in what looked
+<BR>
+&nbsp;&nbsp;*&gt; like some kind of window probe.  Such experiences tend to make you
+<BR>
+&nbsp;&nbsp;*&gt; conservative in what you send.
+<BR>
+<P>Yes, and that is exactly why large windows can only be used if BOTH
+<BR>
+sides indicate ability to deal with them.  Which is why a system that
+<BR>
+understands large windows but does not want to enlarge its own window
+<BR>
+should send a window option with zero.
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; I changed SGI's default window size to 60K because it improved
+<BR>
+&nbsp;&nbsp;*&gt; performance significantly in interesting cases, but is there a
+<BR>
+&nbsp;&nbsp;*&gt; significant harm to being conservative in sending the window shift
+<BR>
+&nbsp;&nbsp;*&gt; option?  Again, in how many applications does active-opener not set a
+<BR>
+&nbsp;&nbsp;*&gt; large SO_RCVBUF but the passive opener wants to receive big windows?
+<BR>
+&nbsp;&nbsp;*&gt; How many of those do not have the active-opener not set a large
+<BR>
+&nbsp;&nbsp;*&gt; SO_SNDBUF?
+<BR>
+<P>This is not a popularity contest.  But how about an FTP data connection?
+<BR>
+It has data flowing only one way, so only the receiver needs to use
+<BR>
+the large window size.  The sender does not want to tie up receive
+<BR>
+buffer space unnecessarily.  And some systems simply do not have
+<BR>
+enough buffering capacity to allow a large window at all.  An
+<BR>
+assymmetry of window sizes seems quite natural, to me.
+<BR>
+<P>Bob Braden
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;9704301629.AA08808@can.isi.edu&gt;">vjs@sgi.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0382.html">Fred Bohle: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0380.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0383.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#381">[ date ]</A>
+<A HREF="index.html#381">[ thread ]</A>
+<A HREF="subject.html#381">[ subject ]</A>
+<A HREF="author.html#381">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

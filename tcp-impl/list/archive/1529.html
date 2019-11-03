@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Art Shelest (artshel@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 17:10:12 1999" -->
+<!-- isoreceived="19990205221012" -->
+<!-- sent="Fri, 5 Feb 1999 14:06:41 -0800 " -->
+<!-- isosent="19990205220641" -->
+<!-- name="Art Shelest" -->
+<!-- email="artshel@microsoft.com" -->
+<!-- subject="RE: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Art Shelest (<A HREF="mailto:artshel@microsoft.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59&gt;"><EM>artshel@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 17:06:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1530.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1528.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1529">[ date ]</A>
+<A HREF="index.html#1529">[ thread ]</A>
+<A HREF="subject.html#1529">[ subject ]</A>
+<A HREF="author.html#1529">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver wrote:
+<BR>
+<P><EM>&gt; How would you implement that?  
+</EM><BR>
+<P>It's a valid question, however I'd suggest that benefit of the
+<BR>
+algorithm is discussed before perceived implementation complexity.
+<BR>
+<P>If the recommended value for N is 2, the implementation is trivial,
+<BR>
+consumes extra 2-4 bytes* per TCB and the overhead is 1-2 extra
+<BR>
+instructions per send.
+<BR>
+<P>*One can store beginning sequence number of the last packet (4 bytes),
+<BR>
+or the size of the last segment (2 bytes). If storing last segment
+<BR>
+size, then Nagle check would change:
+<BR>
+N=1 (today):	SND.NXT &gt; SND.UNA
+<BR>
+N=2:			SND.NXT -SND.SIZ &gt; SND.UNA 
+<BR>
+where SND.SIZ is last segment size.
+<BR>
+<P>Back to the real issue: would allowing N=2 unacknowledged segments 
+<BR>
+resolve effects of Nagle/Delayed ACK interaction?
+<BR>
+<P>Cheers,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;_Art Shelest.
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Vernon Schryver [mailto:<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59&gt;">vjs@calcite.rhyolite.com</A>]
+<BR>
+Sent: Friday, February 05, 1999 10:07 AM
+<BR>
+To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59&gt;">tcp-impl@lerc.nasa.gov</A>
+<BR>
+Subject: RE: internet draft on suggested mod to the Nagle algorithm
+<BR>
+<P><P><EM>&gt; From: Art Shelest &lt;<A HREF="mailto:artshel@microsoft.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59&gt;">artshel@microsoft.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; Why not parametrize the Nagle?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Instead of &quot;allow only one unacknowledged segment&quot;
+</EM><BR>
+<EM>&gt; allow &quot;allow N unacknowledged segments/bytes&quot; and 
+</EM><BR>
+<EM>&gt; specify recommended range of values.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The N=2 would be similar to current proposal and also
+</EM><BR>
+<EM>&gt; fix the case where application follows the 
+</EM><BR>
+<EM>&gt; &quot;small write, small write, read&quot; operation, 
+</EM><BR>
+<EM>&gt; which is not addressed by the proposed draft.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The N=2 seems like a good choice, because receivers
+</EM><BR>
+<EM>&gt; typically ACK every other packet.
+</EM><BR>
+<P>How would you implement that?  You could record not merely the sequence
+<BR>
+numbers of RFC 793 and the one additional sequence number of the draft,
+<BR>
+but the starting sequence number of each of the last M segments, where M
+<BR>
+is the maximum value of your N.  You'd probably want to record the sequence
+<BR>
+numbers corresponding to the starts of application write requests instead
+<BR>
+of segments on the wire.  On each write, you'd just cycle the stack of
+<BR>
+previous sequence numbers.  For likely values of M, you wouldn't need more
+<BR>
+than a couple 100 bytes for every TCB, and they could be maintained and
+<BR>
+used with only a few 100 instructions at start, another few 100
+<BR>
+instructions on every send.  However, we're not talking about typical
+<BR>
+GUI bloatware, where adding cycles to every keystroke does not matter.
+<BR>
+TCP/IP can now be done with a few dozen cycles total, so adding such
+<BR>
+overhead would not be good.  I don't see how to implement a parameterize
+<BR>
+Nagle algorithm in real life.
+<BR>
+<P>I am unhappy about the English descriptions of the current and modified
+<BR>
+Nagle algorithms in the draft.  As I read it, the English description of
+<BR>
+the modified Nagle algorithm is only slightly related to the later concrete
+<BR>
+description.  Like talk of a parameterized Nagle scheme, the English in
+<BR>
+the draft sounds nice until you try to figure out what it might really
+<BR>
+mean, and then you realize it is at best fuzzy.  That is a Bad Thing(tm).
+<BR>
+To fix this problem, I would delete the English description of the modified
+<BR>
+algorithm and stick to the concrete talk of sequence numbers.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE8620@RED-MSG-59&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1530.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1528.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1534.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1529">[ date ]</A>
+<A HREF="index.html#1529">[ thread ]</A>
+<A HREF="subject.html#1529">[ subject ]</A>
+<A HREF="author.html#1529">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

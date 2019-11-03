@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 11 15:36:02 1999" -->
+<!-- isoreceived="19990211203602" -->
+<!-- sent="Thu, 11 Feb 1999 12:32:09 -0800" -->
+<!-- isosent="19990211203209" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36C33E49.4F80B1AD@cup.hp.com" -->
+<!-- inreplyto="199902111935.LAA05403@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36C33E49.4F80B1AD@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 11 1999 - 15:32:09 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1553.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1552">[ date ]</A>
+<A HREF="index.html#1552">[ thread ]</A>
+<A HREF="subject.html#1552">[ subject ]</A>
+<A HREF="author.html#1552">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; separate send. I'm still not sure that is not an application bug for
+</EM><BR>
+<EM>&gt; &gt; not presenting the 4097 bytes of data in a writev() or the like.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Let's say a web server (httpd) is reading data from a CGI script, buffering
+</EM><BR>
+<EM>&gt; it, and passing it down to TCP to send out over an ethernet.  Buffering it in
+</EM><BR>
+<EM>&gt; 4096 byte chunks seems reasonable.  Let's say the CGI script writes 4096 bytes
+</EM><BR>
+<EM>&gt; (or, 5000 bytes, or ...).  Then the question is &quot;should the trailing bytes be
+</EM><BR>
+<EM>&gt; delayed by Nagle?&quot;.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I think the answer is &quot;no&quot;.  The application, in this case, is doing an
+</EM><BR>
+<EM>&gt; adequate job of buffering (larger than the MSS), and the trailing data should
+</EM><BR>
+<EM>&gt; be sent &quot;immediately&quot; (modulo windows stuff).
+</EM><BR>
+<P>Well, unless 2*MSS is an integral divisor (?) of the blessed application
+<BR>
+buffering size, the second, small send is going to be delayed anyway, in
+<BR>
+either nagle case - original or updated right? (and I suspect we do not
+<BR>
+want to go down the rathole of having apps getsockopt(TCP_MAXSEG)?-)
+<BR>
+<P>send(4096)
+<BR>
+&nbsp;&nbsp;transmit 1460
+<BR>
+&nbsp;&nbsp;transmit 1460
+<BR>
+&nbsp;&nbsp;transmit 1176  
+<BR>
+send(904)
+<BR>
+&nbsp;&nbsp;wait for ack
+<BR>
+<P>The only thing that will force that second, small send out would be an
+<BR>
+explicit flush, and if there is an explicit flush, is there any real
+<BR>
+need to change the interpretation of nagle?
+<BR>
+<P>Perhaps the thing to focus on and codify then is the explicit flush? I
+<BR>
+suspect that the explicit flush would be sufficient to reverse the trend
+<BR>
+of TCP_NODELAY usage. The app will always know better than TCP just what
+<BR>
+is and is not the end of a message no matter what naglesque heuristic we
+<BR>
+use, and even if apps started flushing on every send the behaviour on
+<BR>
+the net would be no worse than it is today with TCP_NODELAY.
+<BR>
+<P><EM>&gt; I think that by modifying the Nagle algorithm in the manner presented in the
+</EM><BR>
+<EM>&gt; draft, we can improve the performance for a percentage of the request/response
+</EM><BR>
+<EM>&gt; interactions for many internet applications (including the biggie, http) in a
+</EM><BR>
+<EM>&gt; way that is transparent to application developers.  I think this is a win.
+</EM><BR>
+<P>I do not think that just the interpretation change alone will make much
+<BR>
+of a difference because the internal application buffering such as you
+<BR>
+discuss will not align nicely with 2*MSS, or the applications will make
+<BR>
+a pair of sub-mss sends.
+<BR>
+<P>Also, it sounds like we have a number of stacks out there already which
+<BR>
+are implementing something very close to the proposed change to Nagle,
+<BR>
+and we still have rampant use of TCP_NODELAY.
+<BR>
+<P>So, we could go ahead with the codification of the change to nagle as
+<BR>
+being per-send/the draft, but unless explicit flush becomes reality I
+<BR>
+don't think there will be a significant impact on the use of
+<BR>
+TCP_NODELAY.
+<BR>
+<P>rick 
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1553.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1552">[ date ]</A>
+<A HREF="index.html#1552">[ thread ]</A>
+<A HREF="subject.html#1552">[ subject ]</A>
+<A HREF="author.html#1552">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

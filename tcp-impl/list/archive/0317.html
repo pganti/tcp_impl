@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (poon@cs.wisc.edu)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 12:47:45 1997" -->
+<!-- isoreceived="19970403174745" -->
+<!-- sent="Thu, 3 Apr 1997 14:43:37 -0600 (CST)" -->
+<!-- isosent="19970403204337" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="poon@cs.wisc.edu" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704032043.OAA06115@parmesan.cs.wisc.edu" -->
+<!-- inreplyto="TCP buffers" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704032043.OAA06115@parmesan.cs.wisc.edu&gt;"><EM>poon@cs.wisc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 15:43:37 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#317">[ date ]</A>
+<A HREF="index.html#317">[ thread ]</A>
+<A HREF="subject.html#317">[ subject ]</A>
+<A HREF="author.html#317">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from <A HREF="mailto:backman@ftp.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704032043.OAA06115@parmesan.cs.wisc.edu&gt;">backman@ftp.com</A> (Larry Backman):
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;I strongly disagree with this even though it makes sense TCP wise.
+</EM><BR>
+<EM>&gt;We've argued this a bunch and believe that if an app sets a window
+</EM><BR>
+<EM>&gt;size within the proper range, the application knows what its doing
+</EM><BR>
+<EM>&gt;and is responsible for its behavior and performance. Silently changing
+</EM><BR>
+<EM>&gt;window size on an app may affect thats app's behavior in unforseen ways.
+</EM><BR>
+<P>I agree that sometimes this may not be desirable.  But I guess there are
+<BR>
+many apps out there which does not know what they are doing and just set
+<BR>
+window size to large value hoping to get better throughput.  Suppose there
+<BR>
+is another app sharing the same slow link which uses a 2K window.  Should it
+<BR>
+be penalized by the clueless app?  A 24K window on a slow link is certainly
+<BR>
+not appropriate.  Should TCP change the size then?
+<BR>
+<P><EM>&gt;My belief is that this type of API, driver -&gt; stack -&gt; app is needed
+</EM><BR>
+<EM>&gt;to completely solve the slow or slow+lossy or wildly variable+lossy
+</EM><BR>
+<EM>&gt;link problem.
+</EM><BR>
+<P>Another question, is API implementation also within the scope of this WG?
+<BR>
+Suppose someone claims that a stack does not do keepalive.  And it turns out
+<BR>
+that one needs to call setsockopt(SO_KEEPALIVE) twice to enable it.  Is this
+<BR>
+a problem within the scope of this WG?  And how about a stack which does not
+<BR>
+allow setsockopt(SO_RCVBUF) to change the advertized window size?
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704032043.OAA06115@parmesan.cs.wisc.edu&gt;">poon@cs.wisc.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#317">[ date ]</A>
+<A HREF="index.html#317">[ thread ]</A>
+<A HREF="subject.html#317">[ subject ]</A>
+<A HREF="author.html#317">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep Alive size</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Keep Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep Alive size</H1>
+<!-- received="Mon Mar 10 20:28:01 1997" -->
+<!-- isoreceived="19970311012801" -->
+<!-- sent="Mon, 10 Mar 1997 12:15:21 PST" -->
+<!-- isosent="19970310201521" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: Keep Alive size" -->
+<!-- id="199703102015.MAA20843@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Mon, 10 Mar 1997 10:15:38 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Keep%20Alive%20size&In-Reply-To=&lt;199703102015.MAA20843@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 10 1997 - 15:15:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0127.html">Hsiao-keng Jerry Chu: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0130.html">Vern Paxson: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0132.html">Smith, Allyn D: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0133.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#128">[ date ]</A>
+<A HREF="index.html#128">[ thread ]</A>
+<A HREF="subject.html#128">[ subject ]</A>
+<A HREF="author.html#128">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Okay, it seems clear from the parts of RFC 793 and RFC 1122 that others pointed
+<BR>
+to that a zero-data, below-sequence packet is supposed to elicit an ack.
+<BR>
+In particular, the table on page 69 of RFC 793 says that a below-sequence
+<BR>
+pure ack fails the acceptability test and should be acked, and section 4.2.3.6
+<BR>
+of RFC 1122 is clear on saying that zero-length SHOULD be acceptable but
+<BR>
+a garbage octet MAY be sent for compatibility with broken implementations.
+<BR>
+<P>I have traces of some Reno-derived TCPs that don't ack below-sequence
+<BR>
+acks.  But these traces are for out-of-order acks that are more than one
+<BR>
+octet below sequence, due to out-of-order delivery.  So that doesn't mean
+<BR>
+zero-data keep-alives won't be acked, because there's special-case code in
+<BR>
+(at least our) Reno source for packets that are exactly one octet below
+<BR>
+sequence.
+<BR>
+<P>I'm now working on a draft doc cataloging implementations issues, which I'll
+<BR>
+be sending to the list next week.  I plan to add this one as something like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1)  Some TCPs don't in general ack below-sequence acks.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2)  Some TCPs don't ack zero-length data packets that are one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;octet below-sequence, which breaks &quot;keep-alive&quot; strategies
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(and is also non-conformant behavior, as in (1)).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3)  A workaround for keep-alives is, as already stated in RFC 1122,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to send a single byte of data that's one octet below-sequence.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I don't see a problem with this being a &quot;garbage&quot; byte,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as noted in 1122, as we haven't heard of a TCP that actually
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cares about the contents of below-sequence data.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4)  end2end should consider whether the 1122 successor (&quot;1122:NG&quot;)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be more explicit about keep-alive; for example, whether
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to change the SHOULD above to a MUST.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If end2end does this, then they might also consider whether
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to continue the requirement that TCPs ack below-sequence acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that are *not* possible keep-alives, because (1) de facto,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plenty of implementations don't do this, with no problems
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported [that I know of]; and (2) these will generate extraneous
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traffic in the presence of reordering, which along some paths
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is quite frequent.
+<BR>
+<P>Comments?  (Either to the list or privately ...)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0127.html">Hsiao-keng Jerry Chu: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0129.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0130.html">Vern Paxson: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0132.html">Smith, Allyn D: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0133.html">Hsiao-keng Jerry Chu: "Re: Keep Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0134.html">Vern Paxson: "Re: Keep Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#128">[ date ]</A>
+<A HREF="index.html#128">[ thread ]</A>
+<A HREF="subject.html#128">[ subject ]</A>
+<A HREF="author.html#128">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

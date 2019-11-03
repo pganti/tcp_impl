@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 12:08:26 1997" -->
+<!-- isoreceived="19970801160826" -->
+<!-- sent="Fri, 1 Aug 1997 12:00:50 -0700" -->
+<!-- isosent="19970801190050" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708011900.MAA08051@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011900.MAA08051@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 15:00:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0645.html">Scott Lawrence: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0645.html">Scott Lawrence: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0646.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#643">[ date ]</A>
+<A HREF="index.html#643">[ thread ]</A>
+<A HREF="subject.html#643">[ subject ]</A>
+<A HREF="author.html#643">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011900.MAA08051@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011900.MAA08051@rum.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+...
+<BR>
+<EM>&gt; Two pragmatic arguments that it's okay to start with two segments are:
+</EM><BR>
+...
+<BR>
+<EM>&gt; 	(2) Plenty of TCPs already start in some circumstances with
+</EM><BR>
+<EM>&gt; 	    an initial window of two segments, due to bugs or design.
+</EM><BR>
+<P>FYI, John Heideman, who works with me, pointed out that in SunOS,
+<BR>
+this occurs only for the side initiating the connection.
+<BR>
+<P>I.e., after the 2-way handshake:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN-issuer (active open)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IW = 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SYN-ACK is NOT treated as a data ACK,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the window is not increased)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN-receiver (passive open) 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IW = 2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACK (3rd packet in 2-way, of SYN, SYN-ACK, ACK)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is treated as if it were a data ACK, in a sense,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the window IS increased)
+<BR>
+<P>Thus the IW=2 case only occurs for the passive open side,
+<BR>
+so matters where the passive side has the data, e.g., HTTP.
+<BR>
+<P>In the case where the active open side has the data, IW = 1,
+<BR>
+e.g., FTP.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011900.MAA08051@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0645.html">Scott Lawrence: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0645.html">Scott Lawrence: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0646.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#643">[ date ]</A>
+<A HREF="index.html#643">[ thread ]</A>
+<A HREF="subject.html#643">[ subject ]</A>
+<A HREF="author.html#643">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

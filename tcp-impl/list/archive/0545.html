@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="kennethw@VNET.IBM.COM (kennethw@VNET.IBM.COM)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Sat Jun 21 08:11:05 1997" -->
+<!-- isoreceived="19970621121105" -->
+<!-- sent="Sat, 21 Jun 97 10:33:02 EDT" -->
+<!-- isosent="19970621143302" -->
+<!-- name="kennethw@VNET.IBM.COM" -->
+<!-- email="kennethw@VNET.IBM.COM" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706211509.IAA23527@sgi.sgi.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706211509.IAA23527@sgi.sgi.com&gt;"><EM>kennethw@VNET.IBM.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Sat Jun 21 1997 - 10:33:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0544.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#545">[ date ]</A>
+<A HREF="index.html#545">[ thread ]</A>
+<A HREF="subject.html#545">[ subject ]</A>
+<A HREF="author.html#545">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+William,
+<BR>
+<P><EM>&gt;&gt; From: <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706211509.IAA23527@sgi.sgi.com&gt;">kennethw@VNET.IBM.COM</A>
+</EM><BR>
+<EM>&gt;&gt; Andy Capella and would like to submit to this working group an
+</EM><BR>
+<EM>&gt;&gt; internet-draft defining groups of objects to extend those
+</EM><BR>
+<EM>&gt;&gt; objects defined by RFC2012.
+</EM><BR>
+<P><EM>&gt; Wrong Working Group.
+</EM><BR>
+<P><EM>&gt;&gt; We would prefer that this is done via a standard MIB as oppose
+</EM><BR>
+<EM>&gt;&gt; to Enterprise Specific MIB definition to enable interoperable Management
+</EM><BR>
+<EM>&gt;&gt; Application support. The following are the groups of objects
+</EM><BR>
+<EM>&gt;&gt; that we would define by function:
+</EM><BR>
+<EM>&gt;&gt;...
+</EM><BR>
+<EM>&gt;&gt; Is there an interest in this type of submission?
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;Count me as strongly opposed.  One of the objectives of the TCP MIB was
+</EM><BR>
+<EM>&gt;to narrow the list to be as small as possible.
+</EM><BR>
+<P>The TCP-MIB in RFC2012 has 19 objects where the first four:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcpRtoAlgorthim
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcpRtoMin
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcpRtoMax
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcpMaxConn
+<BR>
+<P>all allow an entity to see the configuration of a TCP. There are also
+<BR>
+10 global counters. All 14 of these objects are simple objects.
+<BR>
+The first part of the proposal consists of add 3 to 4 simple objects
+<BR>
+<P>&nbsp;&nbsp;&nbsp;tcpKeepAliveTimer
+<BR>
+&nbsp;&nbsp;&nbsp;tcpReceiveBufferSize
+<BR>
+&nbsp;&nbsp;&nbsp;tcpSendBufferSize
+<BR>
+&nbsp;&nbsp;&nbsp;tcpRestrictLowPorts
+<BR>
+<P>(tcpRestrictLowPorts may not be needed) to enhance configuration. I also
+<BR>
+believe that all of the configuration objects should be defined as
+<BR>
+read-write capable and not read-only to enable remote configuration. The
+<BR>
+amount of storage that this adds isn't an issue.
+<BR>
+<P><EM>&gt;Recent messages to this list talked about keeping small TCBs for Syn
+</EM><BR>
+<EM>&gt;attacks. Have you counted the number of bytes you just proposed adding?
+</EM><BR>
+<P>The TCP Connection Table contains 5 objects of which the first four
+<BR>
+are its indexes. The second part of the proposal attempted to
+<BR>
+define a small set of objects that could be added:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;tcpConnLastActivity
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnBytesIn
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnBytesOut
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnReXmt
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnRoundTripTime
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnRoundTripVariance
+<BR>
+<P>I claim that except for BytesIn and BytesOut that TCP needs
+<BR>
+to keep these values any way so that the actual storage increase is
+<BR>
+8 OCTETs per connection which isn't that significant compared to
+<BR>
+the total.
+<BR>
+<P><EM>&gt;The general rule for MIBs is:
+</EM><BR>
+<P><EM>&gt; Never add a variable unless more than 50% of the management stations
+</EM><BR>
+<EM>&gt;   will need to view it on a regular basis!
+</EM><BR>
+<P>I don't think that you mean this as an absolute since almost none
+<BR>
+of the transport MIB work (AToMMIB for example) work would be useful
+<BR>
+since I doubt that 50% or more of the current Management platforms
+<BR>
+are doing ATM Management. I think that this needs to be considered
+<BR>
+from the function being managed.
+<BR>
+<P>Adding a few objects to enhance configuration and added a hand full
+<BR>
+of objects to the TCP Connection table is the core of the proposal.
+<BR>
+I was never adamant that the TCP state information be included which
+<BR>
+was why they were listed as optional. I had thought that possibly
+<BR>
+a few of them should be included with the non-optional group
+<BR>
+and that by listing them all I could get that type of feedback.
+<BR>
+<P>Given that the TCP Connection Table exists and that it does allow
+<BR>
+a SET to tcpConnState the TCP Group also adds the capability to
+<BR>
+manage connections.
+<BR>
+<P><EM>&gt;Nota Bene: It is not SNMonitoringP.  SNMP is about MANAGING networks,
+</EM><BR>
+<EM>&gt;not debugging platforms.
+</EM><BR>
+<P>Regards, Ken
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0544.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#545">[ date ]</A>
+<A HREF="index.html#545">[ thread ]</A>
+<A HREF="subject.html#545">[ subject ]</A>
+<A HREF="author.html#545">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

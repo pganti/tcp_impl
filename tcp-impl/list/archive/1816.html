@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="RE: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 20:18:38 1999" -->
+<!-- isoreceived="19990916001838" -->
+<!-- sent="Wed, 15 Sep 1999 18:15:32 -0600 (MDT)" -->
+<!-- isosent="19990916001532" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="RE: TCP's handling of IP precedence" -->
+<!-- id="199909160015.SAA00852@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160015.SAA00852@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 20:15:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1817.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1815.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1816">[ date ]</A>
+<A HREF="index.html#1816">[ thread ]</A>
+<A HREF="subject.html#1816">[ subject ]</A>
+<A HREF="author.html#1816">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Smith, Allyn D&quot; &lt;<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160015.SAA00852@calcite.rhyolite.com&gt;">Al.Smith@UNISYS.com</A>&gt;
+</EM><BR>
+<P><EM>&gt;            ....   I understand that it's probably too late to change the
+</EM><BR>
+<EM>&gt; DiffServ spec now, but perhaps we can learn something from this.
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>If it is not too late to change RFC 793, then how can it be too late to
+<BR>
+change RFC 2474?  Does the fact that RFC 793 is about 10 times older
+<BR>
+and at least 10,000,000 times more widely implemented really mean that
+<BR>
+RFC 2474 is the one that cannot be changed?   SHEESH!
+<BR>
+<P>Let's agree that there is a problem, and set out to solve it with the
+<BR>
+minimum overall pain, but with the onus for bearing most of any unavoidable
+<BR>
+pain on DiffServ.
+<BR>
+<P><P><P>] From: Grenville Armitage &lt;<A HREF="mailto:gja@dnrc.bell-labs.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160015.SAA00852@calcite.rhyolite.com&gt;">gja@dnrc.bell-labs.com</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] Seems to me that the 'failure' is a TCP-based application believing
+<BR>
+] it is operating over a path that uses Precedence values e2e to
+<BR>
+] provide service differentiation, when in fact the path does not.
+<BR>
+<P>That confuses the new notion of DiffServ with the old TOS definition. 
+<BR>
+Under the old rules, it was perfectly reasonable for some routers in the
+<BR>
+path to pay attention to the TOS bits while other routers ignored them.
+<BR>
+<P><P>] There are also three 'solutions' that dont require TCP mods:
+<BR>
+]
+<BR>
+] 	- Apps dont get smart - leave precedence as 000, and DS
+<BR>
+] 	  regions default to re-mapping the lower 3 bits
+<BR>
+] 	  of the DSCP to 000 on egress.
+<BR>
+<P>That solution is impossible, because there are already &quot;smart,&quot;
+<BR>
+very widely deployed applications.  Please note again what you will
+<BR>
+find if you search the nearest BSD source tree for &quot;TOS_&quot;
+<BR>
+<P>That solution also does not help purely dumb applications whose TCP
+<BR>
+connections break because newfangled DiffServe routers in the path don't
+<BR>
+all agree on how to map 0x00, and the path varies as a result of dynamic
+<BR>
+routing.
+<BR>
+<P><P>] 	- Apps that want to be 'smart' take their chances.
+<BR>
+<P>That also doesn't help those dumb applications whose TCP connections
+<BR>
+break.  
+<BR>
+<P>It also seems unfair to smart applications that have been deployed in
+<BR>
+the last seven (7) years to use TOS queuing as suggested by RFC 1349.
+<BR>
+<P><P>] 	- Apps request 'precedence bits' that happen to be the same
+<BR>
+] 	  as lower 3 bits of the DSCP the DS region will assign on
+<BR>
+] 	  ingress.
+<BR>
+]
+<BR>
+] Although the third option begs some obvious questions, all in
+<BR>
+] all it might be easier to start with the above 'usage rules' than
+<BR>
+] to insist all TCP stacks are upgraded.
+<BR>
+<P>I'm not sure I understand what is meant by that.  The talk of PHB's and
+<BR>
+router TOS bits in RFC 2474 also makes little sense to me.  The words in
+<BR>
+RFC 2474 about mapping TOS values seems to be based on the obviously false
+<BR>
+notion that only 0 and the &quot;router&quot; TOS values were ever used.
+<BR>
+<P>If you mean something that includes the idea that 0x00, 0x10, and 0x08
+<BR>
+would be somehow carried unchange from host to host (but with possible
+<BR>
+intermediate changes to other values), then that's what I've been trying
+<BR>
+to say.
+<BR>
+<P><P>] There is also the ugly fourth option:
+<BR>
+]
+<BR>
+] 	- If a DS region sees packets arriving with non-zero
+<BR>
+] 	  precedence values, the packets are tunneled to the
+<BR>
+] 	  likely egress from the DS region, with only the outer
+<BR>
+] 	  header having its TOS/DS field twiddled.
+<BR>
+<P>Let's not, if only because that doesn't help dumb applications using
+<BR>
+0 whose TCP connections are broken when 0 is mapped to non-0.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160015.SAA00852@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1817.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1815.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1816">[ date ]</A>
+<A HREF="index.html#1816">[ thread ]</A>
+<A HREF="subject.html#1816">[ subject ]</A>
+<A HREF="author.html#1816">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

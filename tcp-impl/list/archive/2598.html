@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Connection Establishment</TITLE>
+<META NAME="Author" CONTENT="Bob Braden (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="RE: Connection Establishment">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Connection Establishment</H1>
+<!-- received="Wed Feb  6 15:08:31 2002" -->
+<!-- isoreceived="20020206200831" -->
+<!-- sent="Wed, 6 Feb 2002 20:01:18 GMT" -->
+<!-- isosent="20020206200118" -->
+<!-- name="Bob Braden" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="RE: Connection Establishment" -->
+<!-- id="200202062001.UAA20927@gra.isi.edu" -->
+<!-- inreplyto="Connection Establishment" -->
+<STRONG>From:</STRONG> Bob Braden (<A HREF="mailto:braden@ISI.EDU?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 06 2002 - 15:01:18 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2599.html">David Nicol: "Re: Connection Establishment"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2607.html">Sebastian Zimmermann: "T/TCP (was: Connection Establishment)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2598">[ date ]</A>
+<A HREF="index.html#2598">[ thread ]</A>
+<A HREF="subject.html#2598">[ subject ]</A>
+<A HREF="author.html#2598">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:owner-tcp-impl@grc.nasa.gov?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;">owner-tcp-impl@grc.nasa.gov</A>  Wed Feb  6 10:35:39 2002
+<BR>
+&nbsp;&nbsp;*&gt; Date: Wed, 6 Feb 2002 18:23:23 +0000 (GMT)
+<BR>
+&nbsp;&nbsp;*&gt; From: Jeremy Harris - Network Service Providers Division &lt;<A HREF="mailto:jgh@uk.sun.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;">jgh@uk.sun.com</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; Subject: RE: Connection Establishment
+<BR>
+&nbsp;&nbsp;*&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+&nbsp;&nbsp;*&gt; Cc: <A HREF="mailto:jgh@uk.sun.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;">jgh@uk.sun.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; MIME-Version: 1.0
+<BR>
+&nbsp;&nbsp;*&gt; Content-MD5: rDSuqNHi4wDEZ/GSrGfi8w==
+<BR>
+&nbsp;&nbsp;*&gt; X-AntiVirus: scanned by AMaViS 0.2.1
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; <A HREF="mailto:Venkata.Naidu@Marconi.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202062001.UAA20927@gra.isi.edu&gt;">Venkata.Naidu@Marconi.com</A> said:
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   As per TCP standard (not w.r.t. any API implementations, 
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   like sockets)
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   Machine A initiates a connection to machine B.
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   A sends a segment with ISN x, chosen according
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   A's clock, and with SYN bit set to 1, this is the
+<BR>
+&nbsp;&nbsp;*&gt; &gt;   connection request message.
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 	- the ACK flag is set to 0
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 	- this segment is still a regular TCP segment; it
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 	  can carry data too (piggyback 1)
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; I have implemented this; it works nicely.   However, the question
+<BR>
+&nbsp;&nbsp;*&gt; arises: how much data may be piggybacked on a SYN?  What window may
+<BR>
+&nbsp;&nbsp;*&gt; the sender assume?
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>Please see RFC 1644 on T/TCP (July 1994)/
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2599.html">David Nicol: "Re: Connection Establishment"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2607.html">Sebastian Zimmermann: "T/TCP (was: Connection Establishment)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2598">[ date ]</A>
+<A HREF="index.html#2598">[ thread ]</A>
+<A HREF="subject.html#2598">[ subject ]</A>
+<A HREF="author.html#2598">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 06 2002 - 15:08:38 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

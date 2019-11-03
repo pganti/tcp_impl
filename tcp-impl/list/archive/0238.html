@@ -1,0 +1,1009 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: OT 1.1.2 trace</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="OT 1.1.2 trace">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>OT 1.1.2 trace</H1>
+<!-- received="Mon Mar 24 22:51:18 1997" -->
+<!-- isoreceived="19970325035118" -->
+<!-- sent="Tue, 25 Mar 97 04:12:34 GMT" -->
+<!-- isosent="19970325041234" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="OT 1.1.2 trace" -->
+<!-- id="2255.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace&In-Reply-To=&lt;2255.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 23:12:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0237.html">Vern Paxson: "WG Scope [was Re: PSH]"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0240.html">Jerry Toporek: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0242.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#238">[ date ]</A>
+<A HREF="index.html#238">[ thread ]</A>
+<A HREF="subject.html#238">[ subject ]</A>
+<A HREF="author.html#238">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here's the trace I made, showing a number of problems.  The network
+<BR>
+(all 10Base2) looks like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;.21 -------------- .18/.65 --------------- .78
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;PowerMac 7100-66   486-20                  486-16
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;MacOS 7.6          NetBlazer               KA9Q
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;OT 1.1.2                                   (my version)
+<BR>
+<P>Recording done at KA9Q ethernet interface.
+<BR>
+<P><P>*** We start with an ARP exchange, since everything has expired:
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 sent:
+<BR>
+Ether: len 42 00:80:c7:5b:e8:a8-&gt;ff:ff:ff:ff:ff:ff type ARP
+<BR>
+ARP: len 28 hwtype 10 Mb Ethernet prot IP op REQUEST
+<BR>
+sender IPaddr 206.31.151.78 hwaddr 00:80:c7:5b:e8:a8
+<BR>
+target IPaddr 206.31.151.65 hwaddr 00:00:00:00:00:00
+<BR>
+0000  ff ff ff ff ff ff 00 80 c7 5b e8 a8 08 06 00 01  ........G[h(....
+<BR>
+0010  08 00 06 04 00 01 00 80 c7 5b e8 a8 ce 1f 97 4e  ........G[h(N..N
+<BR>
+0020  00 00 00 00 00 00 ce 1f 97 41                    ......N..A
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type ARP
+<BR>
+ARP: len 46 hwtype 10 Mb Ethernet prot IP op REPLY
+<BR>
+sender IPaddr 206.31.151.65 hwaddr 00:00:c0:74:36:20
+<BR>
+target IPaddr 206.31.151.78 hwaddr 00:80:c7:5b:e8:a8
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 06 00 01  ..G[h(..@t6 ....
+<BR>
+0010  08 00 06 04 00 02 00 00 c0 74 36 20 ce 1f 97 41  ........@t6 N..A
+<BR>
+0020  00 80 c7 5b e8 a8 ce 1f 97 4e 00 09 82 00 01 80  ..G[h(N..N......
+<BR>
+0030  00 09 82 00 0c 80 00 0f 82 75 6e 74              .........unt
+<BR>
+<P><P>*** Syn exchange:
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 sent:
+<BR>
+Ether: len 58 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 44 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 58 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7000 SYN Wnd 5840 MSS 1460
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 2c 00 00 00 00 3a 06 b6 29 ce 1f 97 4e ce 1f  .,....:.6)N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 00 00 00 00 00 60 02  .....n..p.....`.
+<BR>
+0030  16 d0 35 97 00 00 02 04 05 b4                    .P5......4
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 44 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 253 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b400 Ack xcae7001 ACK SYN Wnd 17520 MSS 1460
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 2c b7 5c 40 00 fd 06 fb cb ce 1f 97 15 ce 1f  .,7\@.}.{KN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 00 0c ae 70 01 60 12  .N.n....4...p.`.
+<BR>
+0030  44 70 c7 60 00 00 02 04 05 b4 0a 73              DpG`.....4.s
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7001 Ack x8c84b401 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 01 00 00 3b 06 b5 2c ce 1f 97 4e ce 1f  .(....;.5,N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 01 8c 84 b4 01 50 10  .....n..p...4.P.
+<BR>
+0030  16 d0 0c be 00 00                                .P.&gt;..
+<BR>
+<P><P>*** POP3 server:
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 154 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 139 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b401 Ack xcae7001 ACK PSH Wnd 17520 Data 99
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 8b b8 5d 40 00 fe 06 f9 6b ce 1f 97 15 ce 1f  ..8]@.~.ykN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 01 0c ae 70 01 50 18  .N.n....4...p.P.
+<BR>
+0030  44 70 f9 21 00 00 2b 4f 4b 20 67 72 65 65 6e 64  Dpy!..+OK greend
+<BR>
+0040  72 61 67 6f 6e 2e 63 6f 6d 20 72 75 6e 6e 69 6e  ragon.com runnin
+<BR>
+0050  67 20 41 70 70 6c 65 20 49 6e 74 65 72 6e 65 74  g Apple Internet
+<BR>
+0060  20 4d 61 69 6c 20 53 65 72 76 65 72 20 31 2e 31   Mail Server 1.1
+<BR>
+0070  2e 31 20 3c 31 33 35 34 39 37 36 36 37 35 2d 32  .1 &lt;1354976675-2
+<BR>
+0080  34 38 33 33 32 32 40 67 72 65 65 6e 64 72 61 67  483322@greendrag
+<BR>
+0090  6f 6e 2e 63 6f 6d 3e 0d 0a 00                    on.com&gt;...
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 sent:
+<BR>
+Ether: len 69 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 55 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7001 Ack x8c84b464 ACK PSH Wnd 5840 Data 15
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 37 00 02 00 00 3b 06 b5 1c ce 1f 97 4e ce 1f  .7....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 01 8c 84 b4 64 50 18  .....n..p...4dP.
+<BR>
+0030  16 d0 84 d0 00 00 55 53 45 52 20 77 73 69 6d 70  .P.P..USER wsimp
+<BR>
+0040  73 6f 6e 0d 0a                                   son..
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 40 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b464 Ack xcae7010 ACK Wnd 17520
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 28 b8 5e 40 00 fe 06 f9 cd ce 1f 97 15 ce 1f  .(8^@.~.yMN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 64 0c ae 70 10 50 10  .N.n....4d..p.P.
+<BR>
+0030  44 70 de ab 00 00 2b 4f 4b 20 67 72              Dp^+..+OK gr
+<BR>
+<P><P>*** Note that the Ack (above) with no data was immediately followed by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data (below).  Must not be using delayed Ack, or delay too short.
+<BR>
+<P>*** BTW, the tail of the minimum ethernet packet wasn't zeroed, leaving
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data from the previously sent buffer.  Security problem rather than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;TCP, but shows lack of attention to detail.
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 70 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 56 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b464 Ack xcae7010 ACK PSH Wnd 17520 Data 16
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 38 b8 5f 40 00 fe 06 f9 bc ce 1f 97 15 ce 1f  .88_@.~.y&lt;N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 64 0c ae 70 10 50 18  .N.n....4d..p.P.
+<BR>
+0030  44 70 79 eb 00 00 2b 4f 4b 20 75 73 65 72 20 6b  Dpyk..+OK user k
+<BR>
+0040  6e 6f 77 6e 0d 0a                                nown..
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 sent:
+<BR>
+Ether: len 68 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 54 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7010 Ack x8c84b474 ACK PSH Wnd 5840 Data 14
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 36 00 03 00 00 3b 06 b5 1c ce 1f 97 4e ce 1f  .6....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 10 8c 84 b4 74 50 18  .....n..p...4tP.
+<BR>
+0030  16 d0 25 41 00 00 50 41 53 53 20 ** ** ** ** **  .P%A..PASS *****
+<BR>
+(password deleted)
+<BR>
+<P>Fri Feb 28 22:00:24 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 40 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b474 Ack xcae701e ACK Wnd 17520
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 28 b8 60 40 00 fe 06 f9 cb ce 1f 97 15 ce 1f  .(8`@.~.yKN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 74 0c ae 70 1e 50 10  .N.n....4t..p.P.
+<BR>
+0030  44 70 de 8d 00 00 2b 4f 4b 20 75 73              Dp^...+OK us
+<BR>
+<P>*** Note that the Ack (above) with no data was immediately followed by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data (below).  Must not be using delayed Ack, or delay too short.
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 70 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 55 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b474 Ack xcae701e ACK PSH Wnd 17520 Data 15
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 37 b8 61 40 00 fe 06 f9 bb ce 1f 97 15 ce 1f  .78a@.~.y;N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 74 0c ae 70 1e 50 18  .N.n....4t..p.P.
+<BR>
+0030  44 70 96 55 00 00 2b 4f 4b 20 6c 6f 67 67 65 64  Dp.U..+OK logged
+<BR>
+0040  20 69 6e 0d 0a 2e                                 in...
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 sent:
+<BR>
+Ether: len 60 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 46 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae701e Ack x8c84b483 ACK PSH Wnd 5840 Data 6
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 2e 00 04 00 00 3b 06 b5 23 ce 1f 97 4e ce 1f  ......;.5#N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 1e 8c 84 b4 83 50 18  .....n..p...4.P.
+<BR>
+0030  16 d0 6a 5e 00 00 53 54 41 54 0d 0a              .Pj^..STAT..
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 40 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b483 Ack xcae7024 ACK Wnd 17520
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 28 b8 62 40 00 fe 06 f9 c9 ce 1f 97 15 ce 1f  .(8b@.~.yIN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 83 0c ae 70 24 50 10  .N.n....4...p$P.
+<BR>
+0030  44 70 de 78 00 00 2b 4f 4b 20 6c 6f              Dp^x..+OK lo
+<BR>
+<P><P>*** Note that the Ack (above) with no data was immediately followed by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data (below).  Must not be using delayed Ack, or delay too short.
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 70 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 55 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b483 Ack xcae7024 ACK PSH Wnd 17520 Data 15
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 37 b8 63 40 00 fe 06 f9 b9 ce 1f 97 15 ce 1f  .78c@.~.y9N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 83 0c ae 70 24 50 18  .N.n....4...p$P.
+<BR>
+0030  44 70 6a 0e 00 00 2b 4f 4b 20 39 34 20 34 30 39  Dpj...+OK 94 409
+<BR>
+0040  34 35 36 0d 0a 0a                                456...
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 sent:
+<BR>
+Ether: len 62 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 48 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7024 Ack x8c84b492 ACK PSH Wnd 5840 Data 8
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 30 00 05 00 00 3b 06 b5 20 ce 1f 97 4e ce 1f  .0....;.5 N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 24 8c 84 b4 92 50 18  .....n..p$..4.P.
+<BR>
+0030  16 d0 38 27 00 00 52 45 54 52 20 31 0d 0a        .P8'..RETR 1..
+<BR>
+<P>*** data packet #1
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b492 Ack xcae702c ACK PSH Wnd 17520 Data 31
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 47 b8 64 40 00 fe 06 f9 a8 ce 1f 97 15 ce 1f  .G8d@.~.y(N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 92 0c ae 70 2c 50 18  .N.n....4...p,P.
+<BR>
+0030  44 70 9a a7 00 00 2b 4f 4b 20 36 38 31 33 20 62  Dp.'..+OK 6813 b
+<BR>
+0040  79 74 65 20 6d 65 73 73 61 67 65 20 66 6f 6c 6c  yte message foll
+<BR>
+0050  6f 77 73 0d 0a 6c                                ows..l
+<BR>
+<P><P>*** No separate Ack here, but we see a PSH (above) on a short data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;packet, inexplicably followed by a full data packet (below).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;That PSH proves that the buffer was idle.  AIMS must call OT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;separately, but no Nagle algorithm!
+<BR>
+<P>*** BTW, spurious byte is added to odd length ethernet packets by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;intervening NetBlazer.
+<BR>
+<P>*** data packet #2
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b4b1 Ack xcae702c ACK Wnd 17520 Data 1460
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  05 dc b8 65 40 00 fe 06 f4 12 ce 1f 97 15 ce 1f  .\8e@.~.t.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 b1 0c ae 70 2c 50 10  .N.n....41..p,P.
+<BR>
+0030  44 70 f7 88 00 00 52 65 63 65 69 76 65 64 3a 20  Dpw...Received:
+<BR>
+(long data deleted)
+<BR>
+<P><P>*** At this point, there should be a pause awaiting my Ack during slow
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;start.  Instead, it has clocked up cwnd to the full snd.wnd.
+<BR>
+<P>*** data packet #3
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 354 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 340 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84ba65 Ack xcae702c ACK PSH Wnd 17520 Data 300
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  01 54 b8 66 40 00 fe 06 f8 99 ce 1f 97 15 ce 1f  .T8f@.~.x.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 ba 65 0c ae 70 2c 50 18  .N.n....:e..p,P.
+<BR>
+0030  44 70 4c 1f 00 00 69 64 20 57 41 41 30 37 33 35  DpL...id WAA0735
+<BR>
+(long data deleted)
+<BR>
+0140  6d 3e 0d 0a 54 6f 3a 20 77 73 69 6d 70 73 6f 6e  m&gt;..To: wsimpson
+<BR>
+0150  40 67 72 65 65 6e 64 72 61 67 6f 6e 2e 63 6f 6d  @greendragon.com
+<BR>
+0160  0d 0a                                            ..
+<BR>
+<P><P>*** Something odd has happened here.  The previous short packet has a PSH,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and is immediately followed by another full-sized packet.  The data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;shows this is the blank message line between the SMTP headers and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;body.  That PSH proves that the buffer was idle.  AIMS must call OT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;separately, but no Nagle algorithm!
+<BR>
+<P>*** data packet #4
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84bb91 Ack xcae702c ACK Wnd 17520 Data 1460
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  05 dc b8 67 40 00 fe 06 f4 10 ce 1f 97 15 ce 1f  .\8g@.~.t.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 bb 91 0c ae 70 2c 50 10  .N.n....;...p,P.
+<BR>
+0030  44 70 da c1 00 00 0d 0a 46 72 6f 6d 20 4d 41 49  DpZA....From MAI
+<BR>
+(long data deleted)
+<BR>
+<P>*** data packet #5
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84c145 Ack xcae702c ACK Wnd 17520 Data 1460
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  05 dc b8 68 40 00 fe 06 f4 0f ce 1f 97 15 ce 1f  .\8h@.~.t.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 c1 45 0c ae 70 2c 50 10  .N.n....AE..p,P.
+<BR>
+0030  44 70 e5 19 00 00 09 69 64 20 41 41 31 33 30 38  Dpe....id AA1308
+<BR>
+(long data deleted)
+<BR>
+<P><P>*** Not having received any Acks yet, retransmits the first PSH'd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;short message #1.  RTT is much too short.
+<BR>
+<P>*** The retransmitted message parts are not recombined, wasting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;bandwidth and packet processing time.
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84b492 Ack xcae702c ACK PSH Wnd 17520 Data 31
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 47 b8 69 40 00 fe 06 f9 a3 ce 1f 97 15 ce 1f  .G8i@.~.y#N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 b4 92 0c ae 70 2c 50 18  .N.n....4...p,P.
+<BR>
+0030  44 70 9a a7 00 00 2b 4f 4b 20 36 38 31 33 20 62  Dp.'..+OK 6813 b
+<BR>
+0040  79 74 65 20 6d 65 73 73 61 67 65 20 66 6f 6c 6c  yte message foll
+<BR>
+0050  6f 77 73 0d 0a 37                                ows..7
+<BR>
+<P><P>*** Finally, the flood subsides, and we get a chance to send our
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Ack for #1 and #2 packets:
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84ba65 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 06 00 00 3b 06 b5 27 ce 1f 97 4e ce 1f  .(....;.5'N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 ba 65 50 10  .....n..p,..:eP.
+<BR>
+0030  16 d0 06 2f 00 00                                .P./..
+<BR>
+<P><P>*** And, our Ack of #3 and #4 packets:
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84c145 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 07 00 00 3b 06 b5 26 ce 1f 97 4e ce 1f  .(....;.5&amp;N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 c1 45 50 10  .....n..p,..AEP.
+<BR>
+0030  16 d0 ff 4e 00 00                                .P.N..
+<BR>
+<P><P>*** And now, the Ack of #5 (caused by the retransmission):
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84c6f9 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 08 00 00 3b 06 b5 25 ce 1f 97 4e ce 1f  .(....;.5%N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 c6 f9 50 10  .....n..p,..FyP.
+<BR>
+0030  16 d0 f9 9a 00 00                                .Py...
+<BR>
+<P><P>*** Retransmission of #3, probably in response to our 1st Ack.
+<BR>
+<P>*** The retransmitted message parts are not recombined, wasting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;bandwidth and packet processing time.
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 354 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 340 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84ba65 Ack xcae702c ACK PSH Wnd 17520 Data 300
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  01 54 b8 6a 40 00 fe 06 f8 95 ce 1f 97 15 ce 1f  .T8j@.~.x.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 ba 65 0c ae 70 2c 50 18  .N.n....:e..p,P.
+<BR>
+0030  44 70 4c 1f 00 00 69 64 20 57 41 41 30 37 33 35  DpL...id WAA0735
+<BR>
+(long data deleted)
+<BR>
+0140  6d 3e 0d 0a 54 6f 3a 20 77 73 69 6d 70 73 6f 6e  m&gt;..To: wsimpson
+<BR>
+0150  40 67 72 65 65 6e 64 72 61 67 6f 6e 2e 63 6f 6d  @greendragon.com
+<BR>
+0160  0d 0a                                            ..
+<BR>
+<P><P>*** Retransmission of #5, probably in response to our 2nd Ack.
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84c145 Ack xcae702c ACK PSH Wnd 17520 Data 1460
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  05 dc b8 6b 40 00 fe 06 f4 0c ce 1f 97 15 ce 1f  .\8k@.~.t.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 c1 45 0c ae 70 2c 50 18  .N.n....AE..p,P.
+<BR>
+0030  44 70 e5 11 00 00 09 69 64 20 41 41 31 33 30 38  Dpe....id AA1308
+<BR>
+(long data deleted)
+<BR>
+<P><P>*** cwnd must be opened to 2 MSS, but there isn't enough send window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;left, so OT sends a partial MSS.  Silly window!
+<BR>
+<P>*** data packet #6
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1230 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1216 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84c6f9 Ack xcae702c ACK Wnd 17520 Data 1176
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  04 c0 b8 6c 40 00 fe 06 f5 27 ce 1f 97 15 ce 1f  .@8l@.~.u'N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 c6 f9 0c ae 70 2c 50 10  .N.n....Fy..p,P.
+<BR>
+0030  44 70 f7 54 00 00 2e 36 34 2f 54 65 6e 6f 6e 2d  DpwT...64/Tenon-
+<BR>
+(long data deleted)
+<BR>
+<P><P>*** Finally, having received our 3rd Ack, the silly window opens again,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and sends the final partial MSS of data.
+<BR>
+<P>*** data packet #7
+<BR>
+<P>Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+Ether: len 1014 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1000 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84cb91 Ack xcae702c ACK PSH Wnd 17520 Data 960
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  03 e8 b8 6d 40 00 fe 06 f5 fe ce 1f 97 15 ce 1f  .h8m@.~.u~N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 cb 91 0c ae 70 2c 50 18  .N.n....K...p,P.
+<BR>
+0030  44 70 b8 64 00 00 41 74 74 72 69 62 75 74 65 20  Dp8d..Attribute
+<BR>
+(long data deleted)
+<BR>
+<P><P>*** duplicate Ack, caused by retransmission of #3.
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84c6f9 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 09 00 00 3b 06 b5 24 ce 1f 97 4e ce 1f  .(....;.5$N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 c6 f9 50 10  .....n..p,..FyP.
+<BR>
+0030  16 d0 f9 9a 00 00                                .Py...
+<BR>
+<P><P>*** duplicate Ack, caused by retransmission of #5.
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84c6f9 ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 0a 00 00 3b 06 b5 23 ce 1f 97 4e ce 1f  .(....;.5#N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 c6 f9 50 10  .....n..p,..FyP.
+<BR>
+0030  16 d0 f9 9a 00 00                                .Py...
+<BR>
+<P><P>*** Ack of #7, combined with new command sequence.
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 62 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 48 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae702c Ack x8c84cf51 ACK PSH Wnd 5840 Data 8
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 30 00 0b 00 00 3b 06 b5 1a ce 1f 97 4e ce 1f  .0....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 2c 8c 84 cf 51 50 18  .....n..p,..OQP.
+<BR>
+0030  16 d0 33 6d 00 00 44 45 4c 45 20 31 0d 0a        .P3m..DELE 1..
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 84 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 69 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84cf51 Ack xcae7034 ACK PSH Wnd 17520 Data 29
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 45 b8 6e 40 00 fe 06 f9 a0 ce 1f 97 15 ce 1f  .E8n@.~.y N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 cf 51 0c ae 70 34 50 18  .N.n....OQ..p4P.
+<BR>
+0030  44 70 89 0f 00 00 2b 4f 4b 20 6d 65 73 73 61 67  Dp....+OK messag
+<BR>
+0040  65 20 77 69 6c 6c 20 62 65 20 64 65 6c 65 74 65  e will be delete
+<BR>
+0050  64 0d 0a 20                                      d..
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 62 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 48 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7034 Ack x8c84cf6e ACK PSH Wnd 5840 Data 8
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 30 00 0c 00 00 3b 06 b5 19 ce 1f 97 4e ce 1f  .0....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 34 8c 84 cf 6e 50 18  .....n..p4..OnP.
+<BR>
+0030  16 d0 1d 3a 00 00 52 45 54 52 20 32 0d 0a        .P.:..RETR 2..
+<BR>
+<P><P>*** And we get the same treatment again....
+<BR>
+<P>*** data packet #1
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84cf6e Ack xcae703c ACK PSH Wnd 17520 Data 31
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 47 b8 6f 40 00 fe 06 f9 9d ce 1f 97 15 ce 1f  .G8o@.~.y.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 cf 6e 0c ae 70 3c 50 18  .N.n....On..p&lt;P.
+<BR>
+0030  44 70 81 bb 00 00 2b 4f 4b 20 32 32 33 39 20 62  Dp.;..+OK 2239 b
+<BR>
+0040  79 74 65 20 6d 65 73 73 61 67 65 20 66 6f 6c 6c  yte message foll
+<BR>
+0050  6f 77 73 0d 0a 3b                                ows..;
+<BR>
+<P>*** data packet #2, no Nagle
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 1444 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 1430 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84cf8d Ack xcae703c ACK Wnd 17520 Data 1390
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  05 96 b8 70 40 00 fe 06 f4 4d ce 1f 97 15 ce 1f  ..8p@.~.tMN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 cf 8d 0c ae 70 3c 50 10  .N.n....O...p&lt;P.
+<BR>
+0030  44 70 6d 79 00 00 52 65 63 65 69 76 65 64 3a 20  Dpmy..Received:
+<BR>
+(long data deleted)
+<BR>
+05a0  6c 6b 0d 0a                                      lk..
+<BR>
+<P>*** This is even odder than before.  At line break between message
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;headers and body (above), short MSS; but unlike before, no PSH.
+<BR>
+<P>*** data packet #3, short MSS, silly window (below)
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 904 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 889 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84d4fb Ack xcae703c ACK PSH Wnd 17520 Data 849
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  03 79 b8 71 40 00 fe 06 f6 69 ce 1f 97 15 ce 1f  .y8q@.~.viN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 d4 fb 0c ae 70 3c 50 18  .N.n....T{..p&lt;P.
+<BR>
+0030  44 70 4b 7c 00 00 0d 0a 4f 6e 20 54 68 75 2c 20  DpK|....On Thu,
+<BR>
+(long data deleted)
+<BR>
+0380  63 6f 6d 0d 0a 0d 0a 65                          com....e
+<BR>
+<P>*** Ack of #1 and #2
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae703c Ack x8c84d4fb ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 0d 00 00 3b 06 b5 20 ce 1f 97 4e ce 1f  .(....;.5 N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 3c 8c 84 d4 fb 50 10  .....n..p&lt;..T{P.
+<BR>
+0030  16 d0 eb 88 00 00                                .Pk...
+<BR>
+<P>*** retransmission of #3
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 904 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 889 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84d4fb Ack xcae703c ACK PSH Wnd 17520 Data 849
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  03 79 b8 72 40 00 fe 06 f6 68 ce 1f 97 15 ce 1f  .y8r@.~.vhN...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 d4 fb 0c ae 70 3c 50 18  .N.n....T{..p&lt;P.
+<BR>
+0030  44 70 4b 7c 00 00 0d 0a 4f 6e 20 54 68 75 2c 20  DpK|....On Thu,
+<BR>
+(long data deleted)
+<BR>
+0380  63 6f 6d 0d 0a 0d 0a 38                          com....8
+<BR>
+<P>*** Ack of #3 (caused by the retransmission)
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 54 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 40 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae703c Ack x8c84d84c ACK Wnd 5840
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 28 00 0e 00 00 3b 06 b5 1f ce 1f 97 4e ce 1f  .(....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 3c 8c 84 d8 4c 50 10  .....n..p&lt;..XLP.
+<BR>
+0030  16 d0 e8 37 00 00                                .Ph7..
+<BR>
+<P>*** data packet #4, end silly window.  My favorite, as the silly window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;had only 3 more bytes to finish, when 591 was left in the #3 MSS!
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 43 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84d84c Ack xcae703c ACK PSH Wnd 17520 Data 3
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 2b b8 73 40 00 fe 06 f9 b5 ce 1f 97 15 ce 1f  .+8s@.~.y5N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 d8 4c 0c ae 70 3c 50 18  .N.n....XL..p&lt;P.
+<BR>
+0030  44 70 82 7f 00 00 2e 0d 0a 6e 20 54              Dp.......n T
+<BR>
+<P>*** Ack plus new command sequence
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 62 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 48 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae703c Ack x8c84d84f ACK PSH Wnd 5840 Data 8
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 30 00 0f 00 00 3b 06 b5 16 ce 1f 97 4e ce 1f  .0....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 3c 8c 84 d8 4f 50 18  .....n..p&lt;..XOP.
+<BR>
+0030  16 d0 2a 5e 00 00 44 45 4c 45 20 32 0d 0a        .P*^..DELE 2..
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+Ether: len 84 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+IP: len 69 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+TCP: 110-&gt;1024 Seq x8c84d84f Ack xcae7044 ACK PSH Wnd 17520 Data 29
+<BR>
+0000  00 80 c7 5b e8 a8 00 00 c0 74 36 20 08 00 45 00  ..G[h(..@t6 ..E.
+<BR>
+0010  00 45 b8 74 40 00 fe 06 f9 9a ce 1f 97 15 ce 1f  .E8t@.~.y.N...N.
+<BR>
+0020  97 4e 00 6e 04 00 8c 84 d8 4f 0c ae 70 44 50 18  .N.n....XO..pDP.
+<BR>
+0030  44 70 80 01 00 00 2b 4f 4b 20 6d 65 73 73 61 67  Dp....+OK messag
+<BR>
+0040  65 20 77 69 6c 6c 20 62 65 20 64 65 6c 65 74 65  e will be delete
+<BR>
+0050  64 0d 0a 65                                      d..e
+<BR>
+<P>Fri Feb 28 22:00:26 1997 - e0 sent:
+<BR>
+Ether: len 62 00:80:c7:5b:e8:a8-&gt;00:00:c0:74:36:20 type IP
+<BR>
+IP: len 48 206.31.151.78-&gt;206.31.151.21 ihl 20 ttl 59 prot TCP
+<BR>
+TCP: 1024-&gt;110 Seq xcae7044 Ack x8c84d86c ACK PSH Wnd 5840 Data 8
+<BR>
+0000  00 00 c0 74 36 20 00 80 c7 5b e8 a8 08 00 45 00  ..@t6 ..G[h(..E.
+<BR>
+0010  00 30 00 10 00 00 3b 06 b5 15 ce 1f 97 4e ce 1f  .0....;.5.N..NN.
+<BR>
+0020  97 15 04 00 00 6e 0c ae 70 44 8c 84 d8 6c 50 18  .....n..pD..XlP.
+<BR>
+0030  16 d0 14 2b 00 00 52 45 54 52 20 33 0d 0a        .P.+..RETR 3..
+<BR>
+<P>*** etc.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20OT%201.1.2%20trace&In-Reply-To=&lt;2255.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20OT%201.1.2%20trace&In-Reply-To=&lt;2255.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0237.html">Vern Paxson: "WG Scope [was Re: PSH]"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0240.html">Jerry Toporek: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0242.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#238">[ date ]</A>
+<A HREF="index.html#238">[ thread ]</A>
+<A HREF="subject.html#238">[ subject ]</A>
+<A HREF="author.html#238">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

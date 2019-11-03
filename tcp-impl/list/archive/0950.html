@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: question about Nagle algorithm</TITLE>
+<META NAME="Author" CONTENT="David Mosberger (davidm@hpl.hp.com)">
+<META NAME="Subject" CONTENT="question about Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>question about Nagle algorithm</H1>
+<!-- received="Tue Feb 17 18:01:47 1998" -->
+<!-- isoreceived="19980217230147" -->
+<!-- sent="Tue, 17 Feb 1998 16:49:06 -0800" -->
+<!-- isosent="19980218004906" -->
+<!-- name="David Mosberger" -->
+<!-- email="davidm@hpl.hp.com" -->
+<!-- subject="question about Nagle algorithm" -->
+<!-- id="199802180049.QAA06937@napali.hpl.hp.com" -->
+<STRONG>From:</STRONG> David Mosberger (<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;199802180049.QAA06937@napali.hpl.hp.com&gt;"><EM>davidm@hpl.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 17 1998 - 19:49:06 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0949.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#950">[ date ]</A>
+<A HREF="index.html#950">[ thread ]</A>
+<A HREF="subject.html#950">[ subject ]</A>
+<A HREF="author.html#950">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+RFC896 says:
+<BR>
+<P>[Solution 1:]
+<BR>
+&nbsp;&nbsp;The solution is to inhibit the sending of new TCP  segments  when
+<BR>
+&nbsp;&nbsp;new  outgoing  data  arrives  from  the  user  if  any previously
+<BR>
+&nbsp;&nbsp;transmitted data on the connection remains unacknowledged.
+<BR>
+<P>an alternative would be:
+<BR>
+<P>[Solution 2:]
+<BR>
+&nbsp;&nbsp;The solution is to inhibit the sending of new small TCP segments
+<BR>
+&nbsp;&nbsp;when new outgoing data arrives from the user if the previously
+<BR>
+&nbsp;&nbsp;transmitted data on the connection was small and remains
+<BR>
+&nbsp;&nbsp;unacknowledged (small == less than max. segment size).
+<BR>
+<P>It seems to me that solution 2 more directly addresses Nagle's concern
+<BR>
+while disturbing other traffic less.  E.g., consider the case of
+<BR>
+sending an HTTP reply that has a size of 1.5*mss.  Nagle's algorithm
+<BR>
+has the effect of sending the first segment immediately but delaying
+<BR>
+the sending of the second (half-full) segment until the first segment
+<BR>
+has been acknowledged.  This clearly is unacceptable for any
+<BR>
+application that uses request/response style communication over a
+<BR>
+single TCP connection.
+<BR>
+<P>Solution 2 would avoid this problem but is obviously a little harder
+<BR>
+to implement.  But apart from that, I don't see anything that's
+<BR>
+obviously wrong with it.  Of course, one could argue that it's easy
+<BR>
+enough to disable Nagle, so there might be no point in implementing
+<BR>
+Solution 2 but, on the other hand, why should we make TCP harder to
+<BR>
+use than (reasonably) necessary?  It's interesting to note that the
+<BR>
+description of Nagle's algorithm in Steven's TCP/IP Illustrated, Vol 1
+<BR>
+reads:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[The Nagle] algorithm says that a TCP connection can have only
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one outstanding small segment that has not yet been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acknowledged.
+<BR>
+<P>This is much closer to solution 2 than solution 1.
+<BR>
+<P>So, apart from implementation complexit/speed issues, are there any
+<BR>
+reasons not to use Solution 2?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--david
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0949.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#950">[ date ]</A>
+<A HREF="index.html#950">[ thread ]</A>
+<A HREF="subject.html#950">[ subject ]</A>
+<A HREF="author.html#950">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

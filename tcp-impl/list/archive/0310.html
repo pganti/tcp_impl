@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 03:08:25 1997" -->
+<!-- isoreceived="19970403080825" -->
+<!-- sent="Thu, 3 Apr 1997 05:59:29 -0500" -->
+<!-- isosent="19970403105929" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704031059.FAA01721@MAILSERV-2HIGH.FTP.COM" -->
+<!-- inreplyto="TCP buffers" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704031059.FAA01721@MAILSERV-2HIGH.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 05:59:29 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0311.html">Thomas Narten: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0309.html">Rick Jones: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#310">[ date ]</A>
+<A HREF="index.html#310">[ thread ]</A>
+<A HREF="subject.html#310">[ subject ]</A>
+<A HREF="author.html#310">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+First - I agree w/ Craig that the stack should try to be aware of what
+<BR>
+type of link it is running over and set its default window size
+<BR>
+accordingly.  A 2K to 4K window is optimal for a 9.6..28.8Baud link.
+<BR>
+That solves 75% of the problems being discussed as most slow link scenerios
+<BR>
+these days are a dialup client connected to a T1 or faster network; ie
+<BR>
+the slow link is at the end of the complete path as opposed to in the
+<BR>
+middle.
+<BR>
+<P>||As I mentioned in my mail, applications, like ftp, use setsockopt() to set
+<BR>
+||the buffer size to a large value.  That is why I asked the question &quot;what
+<BR>
+||should setsockopt(SO_RCVBUF) really mean to TCP?&quot;  If TCP knows that the
+<BR>
+||link is bandwidth dominated, can it just ignore the setsockopt()?  Here I
+<BR>
+||assume that setsockopt() affects the advertized window size, as in BSD.  One
+<BR>
+||can say that it is the application problem.  But, say, in a LAN environment,
+<BR>
+||a larger window is really needed.  And the application, like ftp, can
+<BR>
+||improve performance by calling setsockopt() instead of using the default
+<BR>
+||window size.  An application does not know the actual environment it runs
+<BR>
+||on.
+<BR>
+||
+<BR>
+||Does everyone agree that setsockopt() should not affect TCP's advertized
+<BR>
+||window size?  The window size should be determined by TCP &quot;intelligently&quot;
+<BR>
+||depending on the path and available buffer space instead of just using some
+<BR>
+||default value.  If this is the right thing to do, I guess people should start
+<BR>
+||thinking about how to do it.
+<BR>
+||
+<BR>
+I strongly disagree with this even though it makes sense TCP wise.
+<BR>
+We've argued this a bunch and believe that if an app sets a window
+<BR>
+size within the proper range, the application knows what its doing
+<BR>
+and is responsible for its behavior and performance. Silently changing
+<BR>
+window size on an app may affect thats app's behavior in unforseen ways.
+<BR>
+<P>In Windows/Winsock land some of us have been arguing for years that a
+<BR>
+stack should reflect driver characteristics upwards to an application
+<BR>
+such that an application can make intelligent decisions at its level.
+<BR>
+There was for one brief and shining moment a NetDev annex to Winsock-2,
+<BR>
+designed at that time for wireless connections, that was to have allowed
+<BR>
+an app to get link speed, link latency, link signal strength, link
+<BR>
+packet loss, etc. so the app could control its behavior.
+<BR>
+<P>My belief is that this type of API, driver -&gt; stack -&gt; app is needed
+<BR>
+to completely solve the slow or slow+lossy or wildly variable+lossy
+<BR>
+link problem.
+<BR>
+<P><P>||In my PPP case, the link layer can know the link bandwidth.  But how about a
+<BR>
+||machine connected to an Ethernet but the real link to the outside is a low
+<BR>
+||speed PPP link?  I guess my questions in previous mail are still unanswered.
+<BR>
+||
+<BR>
+as Craig also said; using RTT as an estimate is your best bet.
+<BR>
+<P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0311.html">Thomas Narten: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0309.html">Rick Jones: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#310">[ date ]</A>
+<A HREF="index.html#310">[ thread ]</A>
+<A HREF="subject.html#310">[ subject ]</A>
+<A HREF="author.html#310">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Costa Sapuntzakis (csapuntz@cisco.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 13:51:33 2000" -->
+<!-- isoreceived="20000225185133" -->
+<!-- sent="Fri, 25 Feb 2000 10:45:34 -0800 (PST)" -->
+<!-- isosent="20000225184534" -->
+<!-- name="Costa Sapuntzakis" -->
+<!-- email="csapuntz@cisco.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="Pine.GSO.4.10.10002251025290.19392-100000@csapuntz-u1.cisco.com" -->
+<!-- inreplyto="200002242357.PAA16973@pizda.ninka.net" -->
+<STRONG>From:</STRONG> Costa Sapuntzakis (<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Pine.GSO.4.10.10002251025290.19392-100000@csapuntz-u1.cisco.com&gt;"><EM>csapuntz@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 13:45:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2017.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2015.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2028.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2016">[ date ]</A>
+<A HREF="index.html#2016">[ thread ]</A>
+<A HREF="subject.html#2016">[ subject ]</A>
+<A HREF="author.html#2016">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>Your input on this is very much appreciated. I'd like to clarify a couple
+<BR>
+things, though. Some of these things may not need clarification. :)
+<BR>
+<P>The TCP RDMA option is not about accelerating sending of data. It's
+<BR>
+about speeding up the receiving of bulk data.
+<BR>
+<P>The TCP RDMA option isn't proposing to only about accelerating servers.
+<BR>
+It's about accelerating the receiver of data. In the case of NFS READ
+<BR>
+RPCs, that's the NFS client.
+<BR>
+<P>I agree that for specific problem domains, SCSI, NFS, HTTP, people may
+<BR>
+want to build specialized server hardware.
+<BR>
+<P>Perhaps explaining why I decided to explore this space will help.
+<BR>
+Today, you have specialized silicon that for simple bus protocols
+<BR>
+(SCSI parallel interface and ATA) will directly take transfer blocks
+<BR>
+between the device and the buffer cache. This is not currently done
+<BR>
+with TCP, to the best of my knowledge. The best TCP implementations
+<BR>
+do zero copy to a TCP receive buffer.
+<BR>
+<P>However, in the case of most storage protocols, you don't want
+<BR>
+the data in the receive buffer. You want it in the buffer cache, so
+<BR>
+there is a copy to the buffer cache.
+<BR>
+<P>So, NFS has a  CPU overhead hit as compared to optimized storage host bus
+<BR>
+adapters. The goal was to eliminate part of this hit, by getting rid of an
+<BR>
+extra copy.
+<BR>
+<P>Now, this proposal doesn't fix the interrupt overhead problem. 
+<BR>
+Optimized FC/SCSI NICs have one interrupt/transfer or less.
+<BR>
+<P>-Costa
+<BR>
+<P>On Thu, 24 Feb 2000, David S. Miller wrote:
+<BR>
+<P><EM>&gt;    Date: Thu, 24 Feb 2000 14:59:38 -0800 (PST)
+</EM><BR>
+<EM>&gt;    From: Erik Nordmark &lt;<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Pine.GSO.4.10.10002251025290.19392-100000@csapuntz-u1.cisco.com&gt;">Erik.Nordmark@Eng.Sun.COM</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As an aside I think the RDMA proposal has a lot of holes too.  For
+</EM><BR>
+<EM>&gt; example, there are in-kernel HTTP accelerators that do the complete
+</EM><BR>
+<EM>&gt; client header parse and initial packet response in the hw interrupt
+</EM><BR>
+<EM>&gt; handler.  There are no user buffers involved, and static response
+</EM><BR>
+<EM>&gt; data is DMA'd directly from the filesystem page cache.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    &gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>&gt;    &gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    There is no DNS entry for ftpeng.cisco.com so I can't access the
+</EM><BR>
+<EM>&gt;    document.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Here is what I get:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ? host -a ftpeng.cisco.com
+</EM><BR>
+<EM>&gt; Trying null domain
+</EM><BR>
+<EM>&gt; rcode = 0 (Success), ancount=1
+</EM><BR>
+<EM>&gt; The following answer is not authoritative:
+</EM><BR>
+<EM>&gt; The following answer is not verified as authentic by the server:
+</EM><BR>
+<EM>&gt; ftpeng.cisco.com        84574 IN        CNAME   ftp-eng.cisco.com
+</EM><BR>
+<EM>&gt; For authoritative answers, see:
+</EM><BR>
+<EM>&gt; cisco.com       38435 IN        NS      NS1.cisco.com
+</EM><BR>
+<EM>&gt; cisco.com       38435 IN        NS      NS2.cisco.com
+</EM><BR>
+<EM>&gt; Additional information:
+</EM><BR>
+<EM>&gt; NS1.cisco.com   78995 IN        A       192.31.7.92
+</EM><BR>
+<EM>&gt; NS2.cisco.com   67536 IN        A       192.135.250.69
+</EM><BR>
+<EM>&gt; rcode = 0 (Success), ancount=1
+</EM><BR>
+<EM>&gt; The following answer is not authoritative:
+</EM><BR>
+<EM>&gt; The following answer is not verified as authentic by the server:
+</EM><BR>
+<EM>&gt; ftp-eng.cisco.com       84574 IN        A       198.92.30.33
+</EM><BR>
+<EM>&gt; For authoritative answers, see:
+</EM><BR>
+<EM>&gt; CISCO.com       38435 IN        NS      NS1.CISCO.com
+</EM><BR>
+<EM>&gt; CISCO.com       38435 IN        NS      NS2.CISCO.com
+</EM><BR>
+<EM>&gt; Additional information:
+</EM><BR>
+<EM>&gt; NS1.CISCO.com   78995 IN        A       192.31.7.92
+</EM><BR>
+<EM>&gt; NS2.CISCO.com   67536 IN        A       192.135.250.69
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2017.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2015.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1989.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2028.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2016">[ date ]</A>
+<A HREF="index.html#2016">[ thread ]</A>
+<A HREF="subject.html#2016">[ subject ]</A>
+<A HREF="author.html#2016">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

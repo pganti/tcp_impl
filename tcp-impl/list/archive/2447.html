@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: time of queued connections if no</TITLE>
+<META NAME="Author" CONTENT="ravi reddy (Ravi.Reddy@iona.com)">
+<META NAME="Subject" CONTENT="time of queued connections if not reaped...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>time of queued connections if not reaped...</H1>
+<!-- received="Fri Feb  2 13:04:59 2001" -->
+<!-- isoreceived="20010202180459" -->
+<!-- sent="Fri, 2 Feb 2001 17:44:14 -0000" -->
+<!-- isosent="20010202174414" -->
+<!-- name="ravi reddy" -->
+<!-- email="Ravi.Reddy@iona.com" -->
+<!-- subject="time of queued connections if not reaped..." -->
+<!-- id="00c201c08d3f$c1d6cdb0$1703020a@lukeskywalker.dublin.iona.ie" -->
+<!-- inreplyto="200011101531.HAA29719@boreas.isi.edu" -->
+<STRONG>From:</STRONG> ravi reddy (<A HREF="mailto:Ravi.Reddy@iona.com?Subject=Re:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;00c201c08d3f$c1d6cdb0$1703020a@lukeskywalker.dublin.iona.ie&gt;"><EM>Ravi.Reddy@iona.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 02 2001 - 12:44:14 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2446.html">Andreas Pitsillides: "INFOCOM 2002 CALL FOR PAPERS"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2447">[ date ]</A>
+<A HREF="index.html#2447">[ thread ]</A>
+<A HREF="subject.html#2447">[ subject ]</A>
+<A HREF="author.html#2447">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;Hi all,
+<BR>
+<P>&nbsp;&nbsp;In the product that I'm currently working in, we have clients and servers.
+<BR>
+The server has a leader-follower pattern of threads which monitor the
+<BR>
+connections or data that come as the result of fds that fire from the select
+<BR>
+set. (the fd could be listener fd for which a new client connection comes
+<BR>
+when it fires or a old fd with some data).
+<BR>
+<P>&nbsp;&nbsp;Now the question is?.
+<BR>
+<P>&nbsp;&nbsp;When the server runs out of FDs, I remove the listener FD from the select
+<BR>
+set as I don't want to talk to any client. Coming to the TCP/IP internals, I
+<BR>
+believe any new client connections will queue up in the queue with backlog
+<BR>
+mentioned by listen() system call until reaped by accept() call. If queue is
+<BR>
+full, any new clients will timeout as they cannot contact the server. I
+<BR>
+believe the time in this case is 75 seconds which is the establishment
+<BR>
+timer. Now what I want to know is if the server never issues an accept()
+<BR>
+call to take these connections off the queue (this will happen because we
+<BR>
+pulled out the listener FD from the select set and so it won't fire), FOR
+<BR>
+HOW LONG will these connections stay in the queue. I presume any client that
+<BR>
+sends data to the connection which is in a ESTABLISHED state and queued at
+<BR>
+server, it starts a retransmission timer and no response after 5 or 9
+<BR>
+minutes (recommended default of 12 retrasmissions) will elicit a RST from
+<BR>
+the client side to the  server side. As a result of this, the server TCP/IP
+<BR>
+will remove the established connection from the queue.
+<BR>
+<P>&nbsp;&nbsp;So is the time related to retransmission timer?.
+<BR>
+<P>&nbsp;&nbsp;Any help greatly appreciated.
+<BR>
+<P>&nbsp;&nbsp;Have a nice day,
+<BR>
+&nbsp;&nbsp;Ravi.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2446.html">Andreas Pitsillides: "INFOCOM 2002 CALL FOR PAPERS"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2405.html">Bob Braden: "Re: TIME-WAIT assasination implementations"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2447">[ date ]</A>
+<A HREF="index.html#2447">[ thread ]</A>
+<A HREF="subject.html#2447">[ subject ]</A>
+<A HREF="author.html#2447">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Feb 02 2001 - 13:05:29 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

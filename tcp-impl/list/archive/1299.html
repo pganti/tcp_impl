@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Charles M. Hannum (mycroft@mit.edu)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Tue Sep  8 07:44:14 1998" -->
+<!-- isoreceived="19980908114414" -->
+<!-- sent="Tue, 8 Sep 1998 10:43:20 -0400 (EDT)" -->
+<!-- isosent="19980908144320" -->
+<!-- name="Charles M. Hannum" -->
+<!-- email="mycroft@mit.edu" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809081443.KAA02756@lunacity.ne.mediaone.net" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Charles M. Hannum (<A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809081443.KAA02756@lunacity.ne.mediaone.net&gt;"><EM>mycroft@mit.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 08 1998 - 10:43:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1300.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1298.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1300.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1299">[ date ]</A>
+<A HREF="index.html#1299">[ thread ]</A>
+<A HREF="subject.html#1299">[ subject ]</A>
+<A HREF="author.html#1299">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I think it's a shame that you have to get emotional about it, Bob.  My
+<BR>
+draft was not an emotional piece of work; it simply (and quite dryly)
+<BR>
+presents a number of ways to abuse T/TCP that are not possible with a
+<BR>
+normal TCP implementation, and points out an interoperability issue.
+<BR>
+Whether or not these concerns are truly significant wasn't the issue I
+<BR>
+was presenting when I wrote it.
+<BR>
+<P>I do, however, find it interesting that one of the holes was actually
+<BR>
+used to break into machines.  I believe this suggests that people
+<BR>
+should not simply turn up their noses (as you did) when someone
+<BR>
+publishes a paper that puts their pet project in a bad light.  Had you
+<BR>
+actually read the paper carefully and reviewed your implementation,
+<BR>
+that hole could have been fixed a long time before it was ever abused.
+<BR>
+Your response instead seemed childish and irresponsible.
+<BR>
+<P>As for your particular points:
+<BR>
+<P>1) There *are* cases in which the r-utilities are secure with TCP,
+<BR>
+&nbsp;&nbsp;&nbsp;where they are not with T/TCP.  This is basically any environment
+<BR>
+&nbsp;&nbsp;&nbsp;where only `internal' addresses are permitted to establish
+<BR>
+&nbsp;&nbsp;&nbsp;connections.  With normal TCP, the responses would never be routed
+<BR>
+&nbsp;&nbsp;&nbsp;to the outside world, and so it would be impossible to do anything;
+<BR>
+&nbsp;&nbsp;&nbsp;with T/TCP, you only need one packet.  So saying `T/TCP is no more
+<BR>
+&nbsp;&nbsp;&nbsp;insecure than TCP is already' is simply fallacious.
+<BR>
+<P>2) Denial of service attacks are a serious issue and cannot simply be
+<BR>
+&nbsp;&nbsp;&nbsp;ignored.  If you really believe you can dismiss this out of hand,
+<BR>
+&nbsp;&nbsp;&nbsp;tell that to all the service operators who were completely screwed
+<BR>
+&nbsp;&nbsp;&nbsp;by SYN flood attacks a year or so ago, and imagine it 10x worse.
+<BR>
+&nbsp;&nbsp;&nbsp;(There are also some more subtle and much more devastating denial
+<BR>
+&nbsp;&nbsp;&nbsp;of service attacks that I didn't mention in the draft.)
+<BR>
+<P>I never once said `this performance improvement is undesirable'; I did
+<BR>
+not in any way attack that (laudable) goal.  However, your arrogant
+<BR>
+dismissal of the issues seems to me to cast doubt on your credibility.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1300.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1298.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1300.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1299">[ date ]</A>
+<A HREF="index.html#1299">[ thread ]</A>
+<A HREF="subject.html#1299">[ subject ]</A>
+<A HREF="author.html#1299">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:00 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

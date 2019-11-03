@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RSTs and Half Duplex Close bug</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="RSTs and Half Duplex Close bug">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RSTs and Half Duplex Close bug</H1>
+<!-- received="Fri Nov 21 05:47:31 1997" -->
+<!-- isoreceived="19971121104731" -->
+<!-- sent="Fri, 21 Nov 1997 13:40:50 GMT" -->
+<!-- isosent="19971121134050" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="RSTs and Half Duplex Close bug" -->
+<!-- id="199711211340.NAA06505@malatesta." -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20RSTs%20and%20Half%20Duplex%20Close%20bug&In-Reply-To=&lt;199711211340.NAA06505@malatesta.&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Nov 21 1997 - 08:40:50 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0837.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0835.html">Graham Cope: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0838.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0838.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0839.html">sparker@Eng.Sun.COM: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0840.html">Hsiao-keng Jerry Chu: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0841.html">Joe Touch: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0846.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#836">[ date ]</A>
+<A HREF="index.html#836">[ thread ]</A>
+<A HREF="subject.html#836">[ subject ]</A>
+<A HREF="author.html#836">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I sent this to Vern for the Known Problems I-D
+<BR>
+<P>cheers
+<BR>
+<P>ian
+<BR>
+<P><P>Failure to send a RST after Half Duplex Close       
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability?
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;Description
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 4.2.2.13 mandates that TCP SHOULD send a RST if data is 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;received after &quot;half duplex close&quot;, i.e. if it cannot be delivered to 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the application.  Failure to do so can lead to permanently hung TCP 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections and has been demonstrated when HTTP clients abort 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections, common when users move on to a new page before the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current page has finished downloading.  The HTTP client closes by 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitting a FIN while the server is transmitting images, text, etc.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The server TCP receives the FIN,  but the application does not close 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;until all data has been queued for transmission (typically, a write() 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;call blocks), and the server does not transmit a FIN until all the data	
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has been transmitted.  The window decreases to zero, since it cannot 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass the data to the application, and the server sends probe segments.  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The client acknowledges the probe segments with a zero window. As mandated 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in RFC1122 4.2.2.17, the probe segments are transmitted forever.  Server 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection state remains in CLOSE_WAIT, and eventually server processes 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are exhausted.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that there are two bugs.  First, probe segments should be ignored 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the window can never subsequently increase.  Second, a RST should 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be sent when data is received after half duplex close.  Fixing the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first bug, but not the second, results in the probe segments eventually
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timing out the connection, but the server remains in CLOSE_WAIT for a 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;significant and unnecessary period.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious
+<BR>
+&nbsp;
+<BR>
+Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Web servers require frequent rebooting
+<BR>
+&nbsp;
+<BR>
+Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 sections 4.2.2.13 and 4.2.2.17
+<BR>
+<P>Trace file demonstrating the problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using an unknown network analyser
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: S 0:1(0) ack: 0 win: 2000 &lt;mss: 5b4&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: SA 8c01:8c02(0) ack: 1 win: 8000 &lt;mss:100&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 1:1c2(1c1) ack: 8c02 win: 2000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] PA 8c02:8cde(dc) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A 8cde:9292(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A 9292:9846(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A 9846:9dfa(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A 9dfa:a3ae(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A a3ae:a962(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A a962:af16(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A af16:b4ca(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A b4ca:ba7e(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A b4ca:ba7e(5b4) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A ba7e:bdfa(37c) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c2 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ HTTP client aborts and enters FIN_WAIT_1 ]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: FPA 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ server ACKs the FIN and enters CLOSE_WAIT ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ client enters FIN_WAIT_2 ]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c3 win: 8000
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ server continues to try to send its data ]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c3 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c3 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c3 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server.8080 &gt; client.1391: [DF] A bdfa:bdfb(1) ack: 1c3 win: 8000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ .. repeat ad nauseam .. ]
+<BR>
+<P>Trace file demonstrating correct behaviour
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using unknown network analyser 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Syn Seq=337 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.084 server &gt; client D=59500 S=80 Syn Ack=338 Seq=80153 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Ack=80154 Seq=338 Len=0 Win=8760
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[..  normal data ommitted ..]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Ack=14559 Seq=596 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.009 server &gt; client D=59500 S=80 Ack=596 Seq=114559 Len=1460 Win=8760
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[.. client closes connection ..]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.003 client &gt; server D=80 S=59500 Fin Seq=596 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.045 server &gt; client D=59500 S=80 Ack=597 Seq=116019 Len=1460 Win=8760
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[.. client sends RST (RFC1122 4.2.2.13) ]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.010 server &gt; client D=59500 S=80 Ack=597 Seq=117479 Len=1460 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.030 server &gt; client D=59500 S=80 Ack=597 Seq=118939 Len=1460 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.005 server &gt; client D=59500 S=80 Ack=597 Seq=120399 Len=892 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.012 server &gt; client D=59500 S=80 Ack=597 Seq=121291 Len=1460 Win=8760
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000 client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0837.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0835.html">Graham Cope: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0838.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0838.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0839.html">sparker@Eng.Sun.COM: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0840.html">Hsiao-keng Jerry Chu: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0841.html">Joe Touch: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0846.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#836">[ date ]</A>
+<A HREF="index.html#836">[ thread ]</A>
+<A HREF="subject.html#836">[ subject ]</A>
+<A HREF="author.html#836">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 20:14:08 1997" -->
+<!-- isoreceived="19970703001408" -->
+<!-- sent="Thu, 3 Jul 97 01:03:02 GMT" -->
+<!-- isosent="19970703010302" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="6181.wsimpson@greendragon.com" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6181.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 21:03:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0618.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-tools-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0616.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#617">[ date ]</A>
+<A HREF="index.html#617">[ thread ]</A>
+<A HREF="subject.html#617">[ subject ]</A>
+<A HREF="author.html#617">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6181.wsimpson@greendragon.com&gt;">Eric.Schenk@dna.lth.se</A>
+</EM><BR>
+<EM>&gt; &gt;I've been using:
+</EM><BR>
+<EM>&gt; &gt;	uint32 dato = tcb-&gt;to.srtt / 2
+</EM><BR>
+<EM>&gt; &gt;			+ tcb-&gt;to.mdev;
+</EM><BR>
+<EM>&gt; &gt;	dato = max( dato, 500 );
+</EM><BR>
+<EM>&gt; &gt;	dato = min( dato, 200 );
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Shouldn't the max and min be exchanged in the above?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Oops, my mistake in retyping the #defines.  Swap that 200 and 500 (or
+<BR>
+max and min).
+<BR>
+<P><P><EM>&gt; Anyway, I think we've been over this ground once before a few months back,
+</EM><BR>
+<EM>&gt; but I'll say it again.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If we are going to go with a calculated DATO I favor something like:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	dato = average packet interarrival time
+</EM><BR>
+<EM>&gt; 	dato = min(dato, 500)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The average packet interarrival time should be calculated in a way
+</EM><BR>
+<EM>&gt; similar to the RTO, with the difference that extreme samples (say
+</EM><BR>
+<EM>&gt; larger than RTO) should be thrown away. (We only want to sample
+</EM><BR>
+<EM>&gt; time between packet arrivals in a continous stream. Note the time
+</EM><BR>
+<EM>&gt; for pauses in sending.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Hmmm, I'm not sure that the sample time for a continuous stream is what
+<BR>
+we want at all.  Those are the times when the DATO _doesn't_ fire.
+<BR>
+Packets arrive in trains.  The times we want are the inter-packet-train
+<BR>
+intervals.  Otherwise, DATO will fire too soon.
+<BR>
+<P><P><EM>&gt; Here's my reasoning. We delay ACK's in the hope of reducing the
+</EM><BR>
+<EM>&gt; total number of ACK's we send to every second packet, and in the hope
+</EM><BR>
+<EM>&gt; off piggybacking the ACK on a data packet going the other way.
+</EM><BR>
+<P>Yes.
+<BR>
+<P><EM>&gt; However, we don't want to delay the ACK to much, since this messes up the
+</EM><BR>
+<EM>&gt; RTO calculations on the remote side. In a stream of continous packets
+</EM><BR>
+<EM>&gt; using the average packet interarrival time means we will normally
+</EM><BR>
+<EM>&gt; never have an delayed ACK timeout event.
+</EM><BR>
+<P>It seems to me that using packet interarrival means you will fire DATO
+<BR>
+at the end of _every_ packet train.
+<BR>
+<P>Using packet train interval instead, the DATO event will only _rarely_
+<BR>
+occur, at actual pauses in the traffic.
+<BR>
+<P><EM>&gt; This is the smallest
+</EM><BR>
+<EM>&gt; estimator we can use that gives us this effect. The estimator
+</EM><BR>
+<EM>&gt; you suggest is substantually more conservative, especially when
+</EM><BR>
+<EM>&gt; the congestion window is large. This will probably peg the delayed
+</EM><BR>
+<EM>&gt; ACK to 500ms in long/slow haul cases.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Yes, much more conservative.  I'm looking for the largest reasonable
+<BR>
+estimator, not the smallest.  My idea is that DATO will never fire
+<BR>
+except in already slow cases (when I argue, it doesn't matter as much).
+<BR>
+<P>Anyway, interesting points.  I think we've given the IRTF end2end their
+<BR>
+money's worth on this topic.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6181.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6181.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0618.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-tools-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0616.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#617">[ date ]</A>
+<A HREF="index.html#617">[ thread ]</A>
+<A HREF="subject.html#617">[ subject ]</A>
+<A HREF="author.html#617">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Art Shelest (artshel@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 11:17:57 1999" -->
+<!-- isoreceived="19990205161757" -->
+<!-- sent="Fri, 5 Feb 1999 08:16:04 -0800 " -->
+<!-- isosent="19990205161604" -->
+<!-- name="Art Shelest" -->
+<!-- email="artshel@microsoft.com" -->
+<!-- subject="RE: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="3FF8121C9B6DD111812100805F31FC0D0CAE860F@RED-MSG-59" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Art Shelest (<A HREF="mailto:artshel@microsoft.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE860F@RED-MSG-59&gt;"><EM>artshel@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 11:16:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1517.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1516">[ date ]</A>
+<A HREF="index.html#1516">[ thread ]</A>
+<A HREF="subject.html#1516">[ subject ]</A>
+<A HREF="author.html#1516">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Why not parametrize the Nagle?
+<BR>
+<P>Instead of &quot;allow only one unacknowledged segment&quot;
+<BR>
+allow &quot;allow N unacknowledged segments/bytes&quot; and 
+<BR>
+specify recommended range of values.
+<BR>
+<P>The N=2 would be similar to current proposal and also
+<BR>
+fix the case where application follows the 
+<BR>
+&quot;small write, small write, read&quot; operation, 
+<BR>
+which is not addressed by the proposed draft.
+<BR>
+<P>The N=2 seems like a good choice, because receivers
+<BR>
+typically ACK every other packet.
+<BR>
+<P><P>-----Original Message-----
+<BR>
+From: Kacheong Poon [mailto:<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE860F@RED-MSG-59&gt;">Kacheong.Poon@Eng.Sun.COM</A>]
+<BR>
+Sent: Thursday, February 04, 1999 6:34 PM
+<BR>
+To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE860F@RED-MSG-59&gt;">tcp-impl@lerc.nasa.gov</A>
+<BR>
+Subject: Re: internet draft on suggested mod to the Nagle algorithm
+<BR>
+<P><P><EM>&gt; This is at least one extra send operation, which can't be a good thing,
+</EM><BR>
+<EM>&gt; particularly when the network is over-utilized (or near to it) already.
+</EM><BR>
+<EM>&gt; While this isn't as bad as Rick's example (1461-byte writes), it is
+</EM><BR>
+<EM>&gt; still bad utilization. (I'd hate to own the network that did both.)
+</EM><BR>
+<P>Let's look at the problem from an application programmer's point of view.
+<BR>
+You
+<BR>
+are writing a network application, the transfer pattern can be anything. You
+<BR>
+notice a performance problem and find that by disabling Nagle algorithm, the
+<BR>
+problem goes away.  What will you do in the production code?
+<BR>
+<P>Now with the changed Nagle algorithm, for certain kind of transfer pattern,
+<BR>
+you do not notice any performance problem.  So you will not turn off Nagle
+<BR>
+algorithm.  But in fact, the Nagle algorithm may still kick in sometimes and
+<BR>
+help the network.  Just that you only see the little impact from time to
+<BR>
+time.
+<BR>
+<P>Nagle algorithm helps a lot in the case of telnet like traffic.  This we
+<BR>
+should not change.  But for some kind of transfer pattern, it helps a lot if
+<BR>
+we relax the algorithm.  By doing this, we encourage  application programmer
+<BR>
+not to disable the algorithm.  IMHO, this is what the  proposed draft is
+<BR>
+about.  We do not want the algorithm to be disabled in general.  We are
+<BR>
+making
+<BR>
+an incentive for programmers not to do that.  At the same time, we do not
+<BR>
+adversely affect the network.  Imagine what will happen if every application
+<BR>
+programmers disable the algorithm &quot;by default.&quot;
+<BR>
+<P><EM>&gt; I'd say that based on this info, it is better to just disable Nagle if
+</EM><BR>
+<EM>&gt; your application is going to be writing small (1.5 segments) chunks, and
+</EM><BR>
+<EM>&gt; leaving it enabled for applications that do large writes, rather than
+</EM><BR>
+<EM>&gt; introducing lots of new frames to the network.
+</EM><BR>
+<P>The problem is an application can turn the algorithm off any time,
+<BR>
+regardless
+<BR>
+of the transfer pattern.  And the proposed change is not to disable the
+<BR>
+algorithm, but to relax it in some cases.  I'd rather see a slight increase
+<BR>
+of network traffic in some cases than have most applications turn off the
+<BR>
+algorithm by default.
+<BR>
+<P>Solaris's TCP stack has some form of the proposed change for many years.  I
+<BR>
+have not heard of customer complaints because of it.  At the very least,
+<BR>
+there was no network meltdown...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=RE:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3FF8121C9B6DD111812100805F31FC0D0CAE860F@RED-MSG-59&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1517.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1516">[ date ]</A>
+<A HREF="index.html#1516">[ thread ]</A>
+<A HREF="subject.html#1516">[ subject ]</A>
+<A HREF="author.html#1516">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Lost connection</TITLE>
+<META NAME="Author" CONTENT="Jon Snader (jsnader@ix.netcom.com)">
+<META NAME="Subject" CONTENT="Re: Lost connection">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Lost connection</H1>
+<!-- received="Sun Apr  1 12:37:07 2001" -->
+<!-- isoreceived="20010401163707" -->
+<!-- sent="Sun, 1 Apr 2001 12:19:36 -0400" -->
+<!-- isosent="20010401161936" -->
+<!-- name="Jon Snader" -->
+<!-- email="jsnader@ix.netcom.com" -->
+<!-- subject="Re: Lost connection" -->
+<!-- id="20010401121936.B14978@ix.netcom.com" -->
+<!-- inreplyto="F54VvLVKi3s1wsXZZTH00012b1e@hotmail.com" -->
+<STRONG>From:</STRONG> Jon Snader (<A HREF="mailto:jsnader@ix.netcom.com?Subject=Re:%20Lost%20connection&In-Reply-To=&lt;20010401121936.B14978@ix.netcom.com&gt;"><EM>jsnader@ix.netcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Apr 01 2001 - 12:19:36 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2519.html">M B: "Re: Lost connection"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2516.html">M B: "Re: Lost connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2518">[ date ]</A>
+<A HREF="index.html#2518">[ thread ]</A>
+<A HREF="subject.html#2518">[ subject ]</A>
+<A HREF="author.html#2518">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sun, Apr 01, 2001 at 01:34:10AM -0500, M B wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; At the time the problem fall on my lap I had no access to any of the
+</EM><BR>
+<EM>&gt; implicated servers! But I can answer your question: The Sun server is
+</EM><BR>
+<EM>&gt; an E450 running Solaris 2.6. The client is an x86 running NT 4.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; On Monday once I get access to these machines, I will put a sniffer
+</EM><BR>
+<EM>&gt; on the NT side, then run a snoop on the Sun server. Here is all the
+</EM><BR>
+<EM>&gt; information I have so far:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; LAN1.....T1.....LAN2.....FR.....LAN3
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; . T1 = T1 link.
+</EM><BR>
+<EM>&gt; . FR = Frame Relay.
+</EM><BR>
+<EM>&gt; . LAN1 = Network where the NT machine resides.
+</EM><BR>
+<EM>&gt; . LAN3 = Network where the Sun machine resides.
+</EM><BR>
+<EM>&gt; . LAN2 = The network between the two Networks. LAN2 and LAN3
+</EM><BR>
+<EM>&gt;          are privately connected. No other possible path from LAN1
+</EM><BR>
+<EM>&gt;          to LAN3 other than LAN2.
+</EM><BR>
+<EM>&gt; . LAN1, LAN2 and LAN 3 are 100Base-T.
+</EM><BR>
+<EM>&gt; . FTP transfers between LAN1 and LAN2 succeed.
+</EM><BR>
+<EM>&gt; . FTP transfers between LAN2 and LAN3 succeed.
+</EM><BR>
+<EM>&gt; . FTP transfers between LAN1 and LAN3 fail.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1- Here is the log of a typical ftp session (look at the time stamps):
+</EM><BR>
+<EM>&gt; &lt;BEGIN&gt;
+</EM><BR>
+<EM>&gt; Mar 30 10:44:54 oh44ux01 ftpd[21340]: FTPD: connection from 172.28.2.7 at 
+</EM><BR>
+<EM>&gt; Fri Mar 30 10:44:54 2001
+</EM><BR>
+<EM>&gt; Mar 30 10:44:54 oh44ux01 ftpd[21340]: &lt;--- 220
+</EM><BR>
+<EM>&gt; Mar 30 10:44:54 oh44ux01 ftpd[21340]: oh44ux01 FTP server (SunOS 5.6) ready.
+</EM><BR>
+<EM>&gt; Mar 30 10:44:59 oh44ux01 ftpd[21340]: FTPD: command: USER test
+</EM><BR>
+<EM>&gt; Mar 30 10:44:59 oh44ux01 ftpd[21340]: &lt;--- 331
+</EM><BR>
+<EM>&gt; Mar 30 10:44:59 oh44ux01 ftpd[21340]: Password required for test.
+</EM><BR>
+<EM>&gt; Mar 30 10:45:04 oh44ux01 ftpd[21340]: FTPD: command: PASS &lt;passwd&gt;
+</EM><BR>
+<EM>&gt; Mar 30 10:45:04 oh44ux01 ftpd[21340]: &lt;--- 230
+</EM><BR>
+<EM>&gt; Mar 30 10:45:04 oh44ux01 ftpd[21340]: User test logged in.
+</EM><BR>
+<EM>&gt; Mar 30 10:45:14 oh44ux01 ftpd[21340]: FTPD: command: TYPE I
+</EM><BR>
+<EM>&gt; Mar 30 10:45:14 oh44ux01 ftpd[21340]: &lt;--- 200
+</EM><BR>
+<EM>&gt; Mar 30 10:45:14 oh44ux01 ftpd[21340]: Type set to I.
+</EM><BR>
+<EM>&gt; Mar 30 10:45:22 oh44ux01 ftpd[21340]: FTPD: command: PORT 172,28,2,7,10,64
+</EM><BR>
+<EM>&gt; Mar 30 10:45:22 oh44ux01 ftpd[21340]: &lt;--- 200
+</EM><BR>
+<EM>&gt; Mar 30 10:45:22 oh44ux01 ftpd[21340]: PORT command successful.
+</EM><BR>
+<EM>&gt; Mar 30 10:45:22 oh44ux01 ftpd[21340]: FTPD: command: STOR 00000100006002.pdf
+</EM><BR>
+<EM>&gt; Mar 30 10:45:23 oh44ux01 ftpd[21340]: &lt;--- 150
+</EM><BR>
+<EM>&gt; Mar 30 10:45:23 oh44ux01 ftpd[21340]: Binary data connection for 
+</EM><BR>
+<EM>&gt; 00000100006002.pdf (172.28.2.7,2624).
+</EM><BR>
+<EM>&gt; Mar 30 12:56:51 oh44ux01 ftpd[21340]: lost connection
+</EM><BR>
+<EM>&gt; &lt;END&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>[another example deleted]
+<BR>
+<P>I notice that in both cases the connection drops after about 2 hours into
+<BR>
+a data transfer, and that the control connection appears to be idle for
+<BR>
+that time.  I have seen examples where stateful firewalls or NAT devices
+<BR>
+will time out idle connections after time intervals that are typically
+<BR>
+in the 2 hour range.  Have you investigated this possibility?
+<BR>
+<P>Jon Snader
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2519.html">M B: "Re: Lost connection"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2517.html">Hal F. Gottfried: "Re: Lost connection"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2516.html">M B: "Re: Lost connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2518">[ date ]</A>
+<A HREF="index.html#2518">[ thread ]</A>
+<A HREF="subject.html#2518">[ subject ]</A>
+<A HREF="author.html#2518">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sun Apr 01 2001 - 12:37:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

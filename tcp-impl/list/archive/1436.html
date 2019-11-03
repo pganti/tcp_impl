@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 16:43:50 1999" -->
+<!-- isoreceived="19990104214350" -->
+<!-- sent="Mon, 4 Jan 1999 14:43:22 -0700 (MST)" -->
+<!-- isosent="19990104214322" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901042143.OAA03479@calcite.rhyolite.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 16:43:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1437.html">Vijay G. Bharadwaj: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1436">[ date ]</A>
+<A HREF="index.html#1436">[ thread ]</A>
+<A HREF="subject.html#1436">[ subject ]</A>
+<A HREF="author.html#1436">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">braden@ISI.EDU</A>, <A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">Richard_Berke@troweprice.com</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I have been reading RFCs 793, 1072, 1185, and 1323 expecially ...
+</EM><BR>
+<P><P>] From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+<BR>
+<P>]It seems somewhat dangerous and unneccessary. ...
+<BR>
+<P>] What most vendors Im aware of do is to compute the sequence space as
+<BR>
+]
+<BR>
+] 	counter+hash_function(src,dst{, port, port})
+<BR>
+] ...
+<BR>
+<P>Yes, RFC 1948 should be added to that list of RFC's.  Besides describing
+<BR>
+the New Offishal IETF method of generating initial sequence numbers,
+<BR>
+RFC 1948 talks about reasons to space them.
+<BR>
+<P>There is some distinctly lame Security Checking Software out there that
+<BR>
+the suckers--oops--network administrators and purchasers are using that
+<BR>
+purports to detect insecure initial sequence numbers.  Its documentation
+<BR>
+evidently mentions RFC 1948 and so has made RFC 1948 a check-list item
+<BR>
+around the world.  Never mind that according to its vendor, this wonderful
+<BR>
+software does not detect some dubious initial sequence numbers, nor that
+<BR>
+it's test apparently consists of sending a burst of back-to-back SYN's on
+<BR>
+the local LAN, and then looking for constant, non-zero deltas.  If the
+<BR>
+bad guy is on your LAN, then worrying that he might guess initial sequences
+<BR>
+numbers is as perceptive as worrying about getting fleas by petting a
+<BR>
+rabid wolf.
+<BR>
+<P>As far as I can see, there would be no problem (other than cost) with what
+<BR>
+Microsoft is alledged to be doing if they guarantee that all initial
+<BR>
+sequence numbers are &quot;sufficently far apart.&quot;   &quot;Smaller&quot; is as good as
+<BR>
+&quot;larger&quot;, provided the delta is large enough so the probability of
+<BR>
+collision is small enough.  Incrementing with a clock is one way to get
+<BR>
+&quot;far apart,&quot; but there are plenty of other permutations of the natural
+<BR>
+order of the most significant ~16 bits that would work just as well. 
+<BR>
+Of course, no one with a clue about the problem would bother with a simple
+<BR>
+permuation such as an LCRN.  You must assume the bad guy has access to
+<BR>
+your source and can get enough samples from any running system to solve
+<BR>
+any non-crypto random number generator.  However, if you were willing to
+<BR>
+keep enough state and spend enough cycles, you might use a dynamic mapping
+<BR>
+of the most significant bits.  You could be to keep cycling your secure
+<BR>
+random number generator until it delivers a number sufficiently different
+<BR>
+from recent choices.  It's not what I'd do, but maybe Microsoft is
+<BR>
+expecting faster computers than those I've written initial sequence number
+<BR>
+code for.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042143.OAA03479@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1437.html">Vijay G. Bharadwaj: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1436">[ date ]</A>
+<A HREF="index.html#1436">[ thread ]</A>
+<A HREF="subject.html#1436">[ subject ]</A>
+<A HREF="author.html#1436">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

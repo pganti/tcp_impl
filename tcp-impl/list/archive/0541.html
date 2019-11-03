@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="kennethw@VNET.IBM.COM (kennethw@VNET.IBM.COM)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 17:30:39 1997" -->
+<!-- isoreceived="19970620213039" -->
+<!-- sent="Fri, 20 Jun 97 20:16:21 EDT" -->
+<!-- isosent="19970621001621" -->
+<!-- name="kennethw@VNET.IBM.COM" -->
+<!-- email="kennethw@VNET.IBM.COM" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706210028.RAA01852@sgi.sgi.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706210028.RAA01852@sgi.sgi.com&gt;"><EM>kennethw@VNET.IBM.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 20:16:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0540.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#541">[ date ]</A>
+<A HREF="index.html#541">[ thread ]</A>
+<A HREF="subject.html#541">[ subject ]</A>
+<A HREF="author.html#541">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Alan,
+<BR>
+&nbsp;&nbsp;&nbsp;Thanks for your feedback.
+<BR>
+<P><EM>&gt;&gt; tcpRestrictLowPorts  INTEGER { false(0), true(1) }   DEFVAL { false }
+</EM><BR>
+<EM>&gt;&gt;    &quot;Indicates if TCP low ports are restricted to
+</EM><BR>
+<EM>&gt;&gt;     authorized servers/socket applications.&quot;
+</EM><BR>
+<P><EM>&gt;Some systems already let you set bitmasks of ports. So this doesnt work
+</EM><BR>
+<P>This object was intended to indicate weather the low ports are
+<BR>
+restricted on not. Some systems restrict low port usage to
+<BR>
+authorized applications. We allow the customer to remove this
+<BR>
+restriction. My view point on this was that the concept of
+<BR>
+low port restriction is a common concept. In our implementation we also
+<BR>
+have a PORT Table to specify which applications are allowed access
+<BR>
+to which ports. I wasn't sure about representing this in a common
+<BR>
+way. I assumed that it was more common for implementations to
+<BR>
+either restrict or not low port usage and that specification of
+<BR>
+which apps are being allocated to which ports to be too implementation
+<BR>
+dependent.
+<BR>
+<P><EM>&gt;&gt; tcpConnBytesIn  Integer32
+</EM><BR>
+<EM>&gt;&gt;   &quot;The number of bytes received from IP for this
+</EM><BR>
+<EM>&gt;&gt;    connection.&quot;
+</EM><BR>
+<P><EM>&gt;We wrap int32's of bytes on a connection in minutes over a fast network
+</EM><BR>
+<P>Good point. First both tcpConnBytesIn and BytesOut should be
+<BR>
+Counter32 not Integer32. Second, we could do something similar to
+<BR>
+what the new ifMib has done and define two new objects:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;tcpConnHCBytesIn   Counter64
+<BR>
+&nbsp;&nbsp;&nbsp;tcpConnHCBytesOut  Counter64
+<BR>
+<P>The ifMib states:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&quot;For interfaces that operate at 20,000,000 (20 million) bits per
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;second or less, 32-bit byte and packet counters MUST be used.  For
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;interfaces that operate faster than 20,000,000 bits/second, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;slower than 650,000,000 bits/second, 32-bit packet counters MUST
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;be used and 64-bit octet counters MUST be used.  For interfaces
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;that operate at 650,000,000 bits/second or faster, 64-bit packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;counters AND 64-bit octet counters MUST be used.&quot;
+<BR>
+<P>TCP doesn't have an equivalent to a fixed MTU and a packet count
+<BR>
+so we could just state that implementations that are designed
+<BR>
+to handle connections transferring at 20,000,000 bits per second or
+<BR>
+less would be required to only implement the 32 bit counters.
+<BR>
+Implementations that support connections that can handle data transfer
+<BR>
+rates faster than 20,000,000 bits/second must implement the 64-bit
+<BR>
+counters as well. I'm not a fan of Counter64 objects. I've done them
+<BR>
+for ATM Interfaces. The only benefit you get is that once you
+<BR>
+implement the 64 bit counters then the 32 bit ones are &quot;free&quot; since
+<BR>
+they are just the lower 32-bits of the 64-bit ones. Quoting from the
+<BR>
+ifMib the expect wrap conditions are:
+<BR>
+<P>&quot;(1) The cost of maintaining 64-bit counters is relatively high,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so minimizing the number of agents which must support them is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;desirable.  Common interfaces (such as 10Mbs Ethernet) should
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not require them.
+<BR>
+(2)  64-bit counters are a new feature, introduced in SNMPv2.  It
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is reasonable to expect that support for them will be spotty
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the immediate future.  Thus, we wish to limit them to as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;few systems as possible.  This, in effect, means that 64-bit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counters should be limited to higher speed interfaces.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ethernet (10,000,000 bps) and Token Ring (16,000,000 bps) are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fairly wide-spread so it seems reasonable to not require 64-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bit counters for these interfaces.
+<BR>
+(3)  The 32-bit octet counters will wrap in the following times,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the following interfaces (when transmitting maximum-sized
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets back-to-back):
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-   10Mbs Ethernet: 57 minutes,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-   16Mbs Token Ring: 36 minutes,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-   a US T3 line (45 megabits): 12 minutes,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-   FDDI: 5.7 minutes
+<BR>
+(4)  The 32-bit packet counters wrap in about 57 minutes when 64-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byte packets are transmitted back-to-back on a 650,000,000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bit/second link.
+<BR>
+As an aside, a 1-terabit/second (1,000 Gbs) link will cause a 64
+<BR>
+bit octet counter to wrap in just under 5 years.  Conversely, an
+<BR>
+81,000,000 terabit/second link is required to cause a 64-bit
+<BR>
+counter to wrap in 30 minutes.  We believe that, while technology
+<BR>
+rapidly marches forward, this link speed will not be achieved for
+<BR>
+at least several years, leaving sufficient time to evaluate the
+<BR>
+introduction of 96 bit counters.&quot;
+<BR>
+<P>Most of the TCP Connections in my environment won't ever wrap
+<BR>
+a Counter32 object. Most are Telnet sessions transferring
+<BR>
+relatively small amounts of data. Even the FTP sessions that I've
+<BR>
+seen don't get near to a wrap condition. In general wrapping
+<BR>
+32 bit counters is less likely at the TCP layer than at either the
+<BR>
+interface or the IP layers.
+<BR>
+<P>We may also want to consider adding an object to indicate when
+<BR>
+counter discontinuty occurs similar to ifCounterDiscontinutyTime:
+<BR>
+<P>&nbsp;&nbsp;tcpConnCounterDiscontinutyTime   TimeStamp
+<BR>
+<P>The question should be raised so I will raise it myself as to why
+<BR>
+keep track of byteIn and byteOut counts to begin with. I see two
+<BR>
+primary reasons:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;1. Accounting - Most customers that I have talked with want an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an accounting record of the amount of data transferred on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a TCP Connection basis. Agreement on a common set of objects
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that can be kept on a connection basis does get us closer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to enabling the development of a standard accounting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;application or at least identifying the data that should
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be kept on a connection basis that other methods than SNMP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are used to collect and store. To really perform accounting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;via SNMP would require definition of several more objects
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depending on the model implemented. I view TCP accounting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itself to be out of scope for consideration by this working
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;group but can see the need for a standard set of TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Connection statistics.
+<BR>
+&nbsp;&nbsp;&nbsp;2. Problem determination - seeing some indication of the amount of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data being transferred does help in problem determination.
+<BR>
+<P>Another object that we keep that is some what implementation
+<BR>
+dependent is an identification of the local application that the
+<BR>
+connection is going to.  This is also very useful
+<BR>
+in identifying FTP versus Telnet connections for example. Such
+<BR>
+and object if it exists could be as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;tcpConnLocalReceiverId  OCTET STRING(0..??)
+<BR>
+<P>An implementation that doesn't know this would just not implement the
+<BR>
+object or if they were kind return a null OCTET STRING.
+<BR>
+<P><EM>&gt;&gt; tcpConnRoundTripTime   Integer32
+</EM><BR>
+<EM>&gt;&gt;   &quot;The amount of time that has elapsed, measured in
+</EM><BR>
+<EM>&gt;&gt;    milliseconds, from when the last TCP segment was
+</EM><BR>
+<EM>&gt;&gt;    transmitted by the TCP Stack until the ACK was
+</EM><BR>
+<EM>&gt;&gt;    received.&quot;
+</EM><BR>
+<P><EM>&gt;But that isnt the round trip time the stack keeps
+</EM><BR>
+<P>Why not? Is there a better metric that should be represented?
+<BR>
+<P><EM>&gt;&gt; Is there an interest in this type of submission?
+</EM><BR>
+<P><EM>&gt;Several of your other values blindly assume VJ flow control. This may be
+</EM><BR>
+<EM>&gt;true now but not I suspect in the future.
+</EM><BR>
+<P>I'm only attempting to address what is not plan for potential changes.
+<BR>
+Thanks again for your comments.
+<BR>
+<P>Ken
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0540.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#541">[ date ]</A>
+<A HREF="index.html#541">[ thread ]</A>
+<A HREF="subject.html#541">[ subject ]</A>
+<A HREF="author.html#541">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

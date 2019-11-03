@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 13:49:29 1997" -->
+<!-- isoreceived="19970430174929" -->
+<!-- sent="Wed, 30 Apr 97 13:43:16 PDT" -->
+<!-- isosent="19970430204316" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="9704302043.AA09393@can.isi.edu" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;9704302043.AA09393@can.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 16:43:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0398.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0396.html">David Borman: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0398.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#397">[ date ]</A>
+<A HREF="index.html#397">[ thread ]</A>
+<A HREF="subject.html#397">[ subject ]</A>
+<A HREF="author.html#397">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; &gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; In general, we need to examine whether it is feasible to blackball any
+<BR>
+&nbsp;&nbsp;*&gt; &gt; implementation that can not swallow unrecognized options on SYN segments,
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Blackball implementations?  I don't know about your situation, but the
+<BR>
+&nbsp;&nbsp;*&gt; sales and support people I deal with say the funniest things whenever I
+<BR>
+&nbsp;&nbsp;*&gt; say something like &quot;that other vendor's system is broken junk; tell
+<BR>
+&nbsp;&nbsp;*&gt; the customer to throw it out and get something that works.&quot;
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; or do we have to provide a global switch to disable use of anything other
+<BR>
+&nbsp;&nbsp;*&gt; &gt; than the MSS option.  If the problem is sufficiently widespread, you then
+<BR>
+&nbsp;&nbsp;*&gt; &gt; have to ship with the global switch in the conservative position, to avoid
+<BR>
+&nbsp;&nbsp;*&gt; &gt; having system administrators everywhere going nuts discovering that they have
+<BR>
+&nbsp;&nbsp;*&gt; &gt; to throw the switch.  Few, if any, will then enable use of these options.
+<BR>
+&nbsp;&nbsp;*&gt; &gt; I do hope that we can decide that this approach is not neccessary.
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 
+<BR>
+<P>Sigh.  We went around on exactly this issue 10 years ago [!!] when we
+<BR>
+did Host Requirements.  My view, and I think the &quot;consensus&quot; of the
+<BR>
+Host Requirements WG, was something like the following:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sure, Vernon, the market place has its realities, and we
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;understand that you have to deal with it.  We expect that you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will do whatever you have to do.  But don't ask us to make the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;patently wrong protocol choices just to ease your conscience.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Strict conformance with the protocol spec should require
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the default configuration be the long-term-desirable
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one, e.g., to send options on SYN packets.  If your company
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chooses, for its own marketing reasons, to default your system
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to not sending SYN options, to accomodate broken systems, you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are breaking the rules.
+<BR>
+<P>Matt pointed out the dilemma; there is no other way to make progress.
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0398.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0396.html">David Borman: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0398.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#397">[ date ]</A>
+<A HREF="index.html#397">[ thread ]</A>
+<A HREF="subject.html#397">[ subject ]</A>
+<A HREF="author.html#397">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 17:54:02 1997" -->
+<!-- isoreceived="19970731215402" -->
+<!-- sent="Thu, 31 Jul 1997 16:51:01 -0700" -->
+<!-- isosent="19970731235101" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199707312351.QAA09844@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199707312351.QAA09844@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 19:51:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#629">[ date ]</A>
+<A HREF="index.html#629">[ thread ]</A>
+<A HREF="subject.html#629">[ subject ]</A>
+<A HREF="author.html#629">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199707312351.QAA09844@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; Date: Thu, 31 Jul 1997 16:33:35 PDT
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199707312351.QAA09844@rum.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; RFC 2001 is a proposed standard that defines TCP congestion control, namely
+</EM><BR>
+<EM>&gt; the specifics of slow start, congestion avoidance, fast retransmit, and
+</EM><BR>
+...
+<BR>
+<EM>&gt; The other reason for revision is that there appears to be widespread
+</EM><BR>
+<EM>&gt; support for increasing the initial value of cwnd beyond its present value
+</EM><BR>
+<EM>&gt; of a single segment, up to two segments (at least; see below).  This
+</EM><BR>
+<EM>&gt; improves performance, both by getting data sent more quickly, and by
+</EM><BR>
+<EM>&gt; avoiding a potentially lengthy delay if the receiver only acks the first
+</EM><BR>
+<EM>&gt; segment using a delayed ack.
+</EM><BR>
+...
+<BR>
+<EM>&gt; 	(2) Plenty of TCPs already start in some circumstances with
+</EM><BR>
+<EM>&gt; 	    an initial window of two segments, due to bugs or design.
+</EM><BR>
+<P>It may be important that the two design points be mutually exclusive,
+<BR>
+e.g.,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start with TWO packets and DO NOT increase the window for SYN-ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start with ONE packet and DO increaase the window for SYN-ACK (the bug)
+<BR>
+<P>doing both results in starting with a window of 4, double the current 
+<BR>
+value...
+<BR>
+<P><EM>&gt; Note that the proposed change only affects the initial slow-start, not
+</EM><BR>
+<EM>&gt; slow-start after loss.
+</EM><BR>
+<P>Seems like both are just as important, and there doesn't appear to
+<BR>
+be a reason for treating them differently, is there?
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199707312351.QAA09844@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0630.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0628.html">Hsiao-keng Jerry Chu: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#629">[ date ]</A>
+<A HREF="index.html#629">[ thread ]</A>
+<A HREF="subject.html#629">[ subject ]</A>
+<A HREF="author.html#629">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

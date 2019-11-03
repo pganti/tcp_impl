@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="Kevin Fall (kfall@CS.Berkeley.EDU)">
+<META NAME="Subject" CONTENT="Re: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start bit</H1>
+<!-- received="Sat May 15 12:50:20 1999" -->
+<!-- isoreceived="19990515165020" -->
+<!-- sent="Sat, 15 May 1999 09:49:51 -0700" -->
+<!-- isosent="19990515164951" -->
+<!-- name="Kevin Fall" -->
+<!-- email="kfall@CS.Berkeley.EDU" -->
+<!-- subject="Re: slow-start bit" -->
+<!-- id="199905151649.JAA00695@pushpak.CS.Berkeley.EDU" -->
+<!-- inreplyto="373DA0FB.EC414EC@ehsco.com" -->
+<STRONG>From:</STRONG> Kevin Fall (<A HREF="mailto:kfall@CS.Berkeley.EDU?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905151649.JAA00695@pushpak.CS.Berkeley.EDU&gt;"><EM>kfall@CS.Berkeley.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat May 15 1999 - 12:49:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1701.html">Eric A. Hall: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1701.html">Eric A. Hall: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1702">[ date ]</A>
+<A HREF="index.html#1702">[ thread ]</A>
+<A HREF="subject.html#1702">[ subject ]</A>
+<A HREF="author.html#1702">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; From:  &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905151649.JAA00695@pushpak.CS.Berkeley.EDU&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<EM>&gt; To:    Sam Manthorpe &lt;<A HREF="mailto:sm@bossette.engr.sgi.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905151649.JAA00695@pushpak.CS.Berkeley.EDU&gt;">sm@bossette.engr.sgi.com</A>&gt;
+</EM><BR>
+<EM>&gt; cc:    <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905151649.JAA00695@pushpak.CS.Berkeley.EDU&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: slow-start bit
+</EM><BR>
+<EM>&gt; Date:  Sat, 15 May 1999 09:29:47 PDT
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Is there any reason why it wouldn't be a good idea to use one of the
+</EM><BR>
+<EM>&gt; &gt; free bits in the TCP header as a `slow-start' bit to enable a sender
+</EM><BR>
+<EM>&gt; &gt; to indicate to the receiver that it is sending the first packet
+</EM><BR>
+<EM>&gt; &gt; of a slow-start phase?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I read this as &quot;what are the mechanisms for doing circuit-setup messages
+</EM><BR>
+<EM>&gt; with TCP, and is it a good idea?&quot; Right now, the only circuit-setup
+</EM><BR>
+<EM>&gt; message we have is the MSS option. I suppose that it would be possible
+</EM><BR>
+<EM>&gt; to add a flag that indicated that slow start was in effect, but why stop
+</EM><BR>
+<EM>&gt; there? Shouldn't we also add flags for congestion avoidance, current
+</EM><BR>
+<EM>&gt; retransmission timer, and so forth? All of these things will affect the
+</EM><BR>
+<EM>&gt; bi-directional exchange of data in some manner.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; One could define a set of bits or options that passed this info back and
+</EM><BR>
+<EM>&gt; forth.
+</EM><BR>
+<P>RFC2481 deals with this to some extent.  Basically, a sender can
+<BR>
+indicate it has &quot;reacted to congestion&quot; in some way.  This is useful
+<BR>
+in the scenario where a forward-traveling packet experiences ECN,
+<BR>
+the receiver needs to reflect this fact back in an ACK but the ACK
+<BR>
+may get lost, meaning the receiver actually echoes it back in each
+<BR>
+ack until it sees the sender's &quot;reacted to congestion&quot; bit.
+<BR>
+{thats the idea in a nutshell anyhow}.
+<BR>
+<P>- K
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1701.html">Eric A. Hall: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1701.html">Eric A. Hall: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1702">[ date ]</A>
+<A HREF="index.html#1702">[ thread ]</A>
+<A HREF="subject.html#1702">[ subject ]</A>
+<A HREF="author.html#1702">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

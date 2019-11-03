@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 09:00:44 1997" -->
+<!-- isoreceived="19970403140044" -->
+<!-- sent="Thu, 3 Apr 1997 17:37:49 +0200 (MET DST)" -->
+<!-- isosent="19970403153749" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704031537.RAA00270@labinfo.iet.unipi.it" -->
+<!-- inreplyto="9704031446.AA16468@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704031537.RAA00270@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 10:37:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0315.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0311.html">Thomas Narten: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#314">[ date ]</A>
+<A HREF="index.html#314">[ thread ]</A>
+<A HREF="subject.html#314">[ subject ]</A>
+<A HREF="author.html#314">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; This (obviously) goes beyond the scope of this WG, but it seems like
+</EM><BR>
+<EM>&gt; some of the results from TCP Vegas could be of use here. Vegas seems
+</EM><BR>
+<EM>&gt; to do a better job of keeping extra (i.e., queued) packets out of the
+</EM><BR>
+<EM>&gt; network. That is, if instantaneous throughput doesn't increase when
+</EM><BR>
+<EM>&gt; the send window is increased, the send window is made a bit smaller
+</EM><BR>
+<EM>&gt; (i.e., perhaps one segment smaller). In contrast, current TCPs simply
+</EM><BR>
+<EM>&gt; increase the windows until there is a loss (at this point there is too
+</EM><BR>
+<EM>&gt; much buffered in the network), and then decrease the window size by a
+</EM><BR>
+<EM>&gt; *large* amount (i.e., to 1/2 its previous value).
+</EM><BR>
+<P>My apologies if this is outside the scope of the group, but timings
+<BR>
+are extremely noisy on slow links and with few packets in transit.
+<BR>
+RTTs are dominated by the transmission times, and packets from
+<BR>
+competing flows might cause variations of up to 100% in your RTT
+<BR>
+samples.
+<BR>
+<P>To compensate for this you need averaging on many samples, but
+<BR>
+since you want small windows (otherwise your control does not work
+<BR>
+well) you also need many RTT's before being able to take a decision,
+<BR>
+and in the meantime...  competing flows will have already eaten up
+<BR>
+your share of bandwidth, causing queue overflows (one of which
+<BR>
+might hit you) and causing you to timeout.
+<BR>
+<P>Waiting for a loss to occur may be not the most efficient way to
+<BR>
+operate but at least it gives more uniform results in presence of
+<BR>
+widely different environments and &quot;background noise&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704031537.RAA00270@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0315.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0311.html">Thomas Narten: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#314">[ date ]</A>
+<A HREF="index.html#314">[ thread ]</A>
+<A HREF="subject.html#314">[ subject ]</A>
+<A HREF="author.html#314">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

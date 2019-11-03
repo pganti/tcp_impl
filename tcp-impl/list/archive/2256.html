@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Thu Aug  3 11:11:30 2000" -->
+<!-- isoreceived="20000803151130" -->
+<!-- sent="Thu, 03 Aug 2000 07:34:18 -0700" -->
+<!-- isosent="20000803143418" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="398982EA.D422FC8C@ehsco.com" -->
+<!-- inreplyto="63D30D6E10CFD11190A90000F805FE8602BEBFC9@lespaul.process.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;398982EA.D422FC8C@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 03 2000 - 10:34:18 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2257.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2255.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2256">[ date ]</A>
+<A HREF="index.html#2256">[ thread ]</A>
+<A HREF="subject.html#2256">[ subject ]</A>
+<A HREF="author.html#2256">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It would certainly work for advertising availability. But in cases where
+<BR>
+&quot;negotiation&quot; was required (your word), it would not work (SYN/RST/RST
+<BR>
+is one example).
+<BR>
+<P>I think the idea of an instrumentation option is a good one. I just
+<BR>
+wanted to point out that the act of negotiation would fail.
+<BR>
+<P>You were right the first time; I should have held off on comment.
+<BR>
+<P>Bernie Volz wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Eric:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You are wrong about that. Think about it.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If a SYN is RECEIVED with the option to enable this feature, then the RST
+</EM><BR>
+<EM>&gt; from the SYN can be set back with the option (since you know the sender of
+</EM><BR>
+<EM>&gt; the SYN is capable of supporting the option).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Bernie Volz
+</EM><BR>
+<EM>&gt;   IPWorks, Inc.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: Eric A. Hall [mailto:<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;398982EA.D422FC8C@ehsco.com&gt;">ehall@ehsco.com</A>]
+</EM><BR>
+<EM>&gt; Sent: Wednesday, August 02, 2000 3:14 PM
+</EM><BR>
+<EM>&gt; To: Bernie Volz
+</EM><BR>
+<EM>&gt; Cc: Ian Heavens; Jerry Toporek; <A HREF="mailto:david@kasey.umkc.edu?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;398982EA.D422FC8C@ehsco.com&gt;">david@kasey.umkc.edu</A>;
+</EM><BR>
+<EM>&gt; <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;398982EA.D422FC8C@ehsco.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: keep RST data nonstandardized for the future!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Likely, an option would be sent in a SYN to advertise the ability to
+</EM><BR>
+<EM>&gt; &gt; support the instrumentation option. Lack of a reply with a similar
+</EM><BR>
+<EM>&gt; &gt; option in the SYN/ACK would mean that the peer does not support the
+</EM><BR>
+<EM>&gt; &gt; option and hence it would not be used. (This is similar to how other
+</EM><BR>
+<EM>&gt; &gt; options, such as SACK, work.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In the case of RST being issued in response to the SYN request, there
+</EM><BR>
+<EM>&gt; would be no successful negotiation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+</EM><BR>
+<EM>&gt; Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</EM><BR>
+<P><PRE>
+-- 
+Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2257.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2255.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2256">[ date ]</A>
+<A HREF="index.html#2256">[ thread ]</A>
+<A HREF="subject.html#2256">[ subject ]</A>
+<A HREF="author.html#2256">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

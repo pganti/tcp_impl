@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: [Q] socket address vs. socket in</TITLE>
+<META NAME="Author" CONTENT="Yong-Woon Kim (qkim@pec.etri.re.kr)">
+<META NAME="Subject" CONTENT="[Q] socket address vs. socket interface">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>[Q] socket address vs. socket interface</H1>
+<!-- received="Thu Nov 20 02:55:15 1997" -->
+<!-- isoreceived="19971120075515" -->
+<!-- sent="Thu, 20 Nov 1997 19:38:39 +0900" -->
+<!-- isosent="19971120103839" -->
+<!-- name="Yong-Woon Kim" -->
+<!-- email="qkim@pec.etri.re.kr" -->
+<!-- subject="[Q] socket address vs. socket interface" -->
+<!-- id="3.0.5.32.19971120193839.00b4e5b0@pec.etri.re.kr" -->
+<STRONG>From:</STRONG> Yong-Woon Kim (<A HREF="mailto:qkim@pec.etri.re.kr?Subject=Re:%20[Q]%20socket%20address%20vs.%20socket%20interface&In-Reply-To=&lt;3.0.5.32.19971120193839.00b4e5b0@pec.etri.re.kr&gt;"><EM>qkim@pec.etri.re.kr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Nov 20 1997 - 05:38:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0827.html">Internet-Drafts@ns.ietf.org: "I-D ACTION:draft-ietf-tcpimpl-tools-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#828">[ date ]</A>
+<A HREF="index.html#828">[ thread ]</A>
+<A HREF="subject.html#828">[ subject ]</A>
+<A HREF="author.html#828">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm confusing the same word of socket.
+<BR>
+<P>According to RFC 793:
+<BR>
+<P>To allow for many processes within a single host to use communication 
+<BR>
+facilities simultaneously, TCP provides a set of ports. A host machine 
+<BR>
+can support multiple ports, and each port has its own unique port number 
+<BR>
+within the host. A socket is formed from a concatenation of the port 
+<BR>
+number and a network address. The socket is a unique identifier 
+<BR>
+throughout all networks connected together.
+<BR>
+<P>A pair of sockets specifies the two end points and uniquely identifies 
+<BR>
+each connection. That is, a socket may be simultaneously used in multiple 
+<BR>
+connections. Therefore a server is capable of handling many clients at 
+<BR>
+the same time. The server's unique socket address is accessed 
+<BR>
+simultaneously by all of its clients. Since data segments for 
+<BR>
+a particular transport connection is always identified by both network 
+<BR>
+addresses and both ports, it is easy for a server to keep track of multiple 
+<BR>
+client connections.
+<BR>
+<P>The binding of ports to processes is handled independently by each host. 
+<BR>
+However, it proves useful to attach frequently used processes to fixed 
+<BR>
+sockets which are made known to the public. These services can then be 
+<BR>
+accessed through the known addresses called well-known ports.
+<BR>
+<P>Therefore a socket number can be associated with multiple remote sockets.
+<BR>
+<P>------
+<BR>
+<P>But according to the socket interface, 
+<BR>
+<P>result = socket (pf, type, protocol)
+<BR>
+<P><P>My questions are 
+<BR>
+<P>1. the above socket number is the 'result' value?
+<BR>
+<P>2. do the same word of 'socket' have the same semantics?
+<BR>
+<P>3. when a server port is shared by multiple connections, 
+<BR>
+&nbsp;&nbsp;&nbsp;do corresponding server sockets in view of socket interface have
+<BR>
+&nbsp;&nbsp;&nbsp;the same 'result' value? or different 'result' values?
+<BR>
+<P>Please fix my confusions.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0827.html">Internet-Drafts@ns.ietf.org: "I-D ACTION:draft-ietf-tcpimpl-tools-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0829.html">David Borman: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#828">[ date ]</A>
+<A HREF="index.html#828">[ thread ]</A>
+<A HREF="subject.html#828">[ subject ]</A>
+<A HREF="author.html#828">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

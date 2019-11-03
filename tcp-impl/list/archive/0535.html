@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="kennethw@VNET.IBM.COM (kennethw@VNET.IBM.COM)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 14:24:30 1997" -->
+<!-- isoreceived="19970620182430" -->
+<!-- sent="Fri, 20 Jun 97 17:11:15 EDT" -->
+<!-- isosent="19970620211115" -->
+<!-- name="kennethw@VNET.IBM.COM" -->
+<!-- email="kennethw@VNET.IBM.COM" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706202120.OAA09482@sgi.sgi.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202120.OAA09482@sgi.sgi.com&gt;"><EM>kennethw@VNET.IBM.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 17:11:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0534.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#535">[ date ]</A>
+<A HREF="index.html#535">[ thread ]</A>
+<A HREF="subject.html#535">[ subject ]</A>
+<A HREF="author.html#535">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon,
+<BR>
+<P><EM>&gt;&gt; The second prospective on the issue is exactly how useful this
+</EM><BR>
+<EM>&gt;&gt; information would be to an entity attempting to steal or misuse
+</EM><BR>
+<EM>&gt;&gt; a connection. Using SNMP to retrieve this information while
+</EM><BR>
+<EM>&gt;&gt; looking at the data flow in real-time to attempt to steal or
+</EM><BR>
+<EM>&gt;&gt; misuse a connection would be challenging for an active connection
+</EM><BR>
+<EM>&gt;&gt; since I suspect that the data retrieved via SNMP would not
+</EM><BR>
+<EM>&gt;&gt; correlate exactly to the current connection data flow.
+</EM><BR>
+<P><EM>&gt;If the data are useful for the merely curious, then they are also
+</EM><BR>
+<EM>&gt;useful for those with &quot;practical&quot; goals.
+</EM><BR>
+<P><EM>&gt;More to the point, of what use are those values?  I've long had a
+</EM><BR>
+<EM>&gt;jandiced view of what many people call &quot;MIB Mania,&quot; but stuffing not
+</EM><BR>
+<EM>&gt;just the TCP state machine state into a MIB but also the de facto
+</EM><BR>
+<EM>&gt;congestion avoidance and other state seems over the top even if you
+</EM><BR>
+<EM>&gt;don't believe the IETF is suffering from MIB Mania.
+</EM><BR>
+<P>I placed the TCP State information in an optional group exactly
+<BR>
+because I was concerned with the cost and security issues with
+<BR>
+respect to this. I don't believe that those objects in the
+<BR>
+mandatory groups are as debatable but would appreciate some
+<BR>
+feed back on them as well as the optional group of TCP Connection
+<BR>
+Table objects.
+<BR>
+<P><EM>&gt;Never mind the non-trivial costs of keeping all of that information
+</EM><BR>
+<EM>&gt;where it can be gathered by your SNMP code.  Don't worry about the
+</EM><BR>
+<EM>&gt;costs of gathering it.  Never mind the Heisenberg effects of gathering
+</EM><BR>
+<EM>&gt;and reporting it (e.g. consider the effects on the RTT as all of those
+</EM><BR>
+<EM>&gt;SNMP packets stack up in router queues).  What are you going to do when
+</EM><BR>
+<EM>&gt;we implement more knobs and buttons?
+</EM><BR>
+<P>I was thinking that the two groups that AUGMENT the TCP Connection
+<BR>
+Table would be implemented in separate tables to make it easier
+<BR>
+for a management application. I can visualize a management application
+<BR>
+performing a GET-BULK of the entire mandatory group but not the
+<BR>
+optional group. The optional group of objects are of use in
+<BR>
+problem determination. You would retrieve a single row in this table
+<BR>
+as oppose to the whole table. Perhaps some of the objects in the
+<BR>
+optional group should move to the mandatory one like tcpConnMaxSndWnd
+<BR>
+for example.
+<BR>
+<P>As a MIB implementer the cost of implementation is some what
+<BR>
+invariant with respect to the number of objects. If you have access
+<BR>
+to the TCP connection information than doing 1 or 50 objects
+<BR>
+is not that much more. I do agree that the modeling of the data
+<BR>
+presented needs to be carefully thought out and that use of the
+<BR>
+data being presented debated.
+<BR>
+<P><EM>&gt;Sometimes it is necessary to determine details the state of a system.
+</EM><BR>
+<EM>&gt;However, I think that is best done other than with SNMP.  SNMP is not a
+</EM><BR>
+<EM>&gt;replacement for all other debugging and remote-access tools.
+</EM><BR>
+<P>I agree that SNMP is not the only tool that can nor should be used.
+<BR>
+It is however the management protocol of the IETF. Weather or not
+<BR>
+SNMP is used to retrieve management information in particular
+<BR>
+circumstances is in my opinion implementation dependent and doesn't
+<BR>
+preclude modeling as MIB objects.
+<BR>
+<P>What is your opinion with respect to the objects in the mandatory
+<BR>
+groups? Are there other objects that should be added? Are there
+<BR>
+objects in the optional group that should move to a mandatory
+<BR>
+group? Should the optional group be split into categories of objects?
+<BR>
+Perhaps not all are as controversial.
+<BR>
+<P>My original posting of objects was not intended to present a
+<BR>
+final list of objects and their groupings but to determine if there
+<BR>
+is interest in defining sets of objects to extend the TCP Group.
+<BR>
+<P>Thanks, Ken
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0534.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#535">[ date ]</A>
+<A HREF="index.html#535">[ thread ]</A>
+<A HREF="subject.html#535">[ subject ]</A>
+<A HREF="author.html#535">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

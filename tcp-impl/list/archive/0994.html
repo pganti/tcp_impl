@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP problems with IP options and</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="TCP problems with IP options and path MTU discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP problems with IP options and path MTU discovery</H1>
+<!-- received="Sat Mar 21 13:48:12 1998" -->
+<!-- isoreceived="19980321184812" -->
+<!-- sent="Sat, 21 Mar 1998 13:46:24 -0800" -->
+<!-- isosent="19980321214624" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="TCP problems with IP options and path MTU discovery" -->
+<!-- id="199803212146.NAA13683@gecko.nas.nasa.gov" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;199803212146.NAA13683@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 21 1998 - 16:46:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0993.html">Jeff Semke: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0996.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0997.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0998.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1001.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1002.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1003.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1004.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#994">[ date ]</A>
+<A HREF="index.html#994">[ thread ]</A>
+<A HREF="subject.html#994">[ subject ]</A>
+<A HREF="author.html#994">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bill Fenner and I discovered an interesting TCP problem recently
+<BR>
+involving the interaction of TCP segment size and IP options.
+<BR>
+Using netcat (<A HREF="ftp://coast.cs.purdue.edu:/pub/tools/unix/netcat/nc110.tgz">ftp://coast.cs.purdue.edu:/pub/tools/unix/netcat/nc110.tgz</A>)
+<BR>
+I found that I could run bulk transfers and interactive sessions 
+<BR>
+between two hosts on my test network.  However, when I tried to
+<BR>
+use source routing, I found that I could connect and type 
+<BR>
+interactively with no problem, but bulk transfers would just freeze.
+<BR>
+Checking this out with tcpdump, I could see that the three-way
+<BR>
+handshake would complete, but no more packets would flow.
+<BR>
+<P>Bill pointed out that this could be happening because TCP passes
+<BR>
+as large a packet as possible down to IP with DF set, whereupon IP
+<BR>
+adds in the IP options, making the packet too large.  Since DF is
+<BR>
+set, it can't fragment the packet, and even if IP notified the
+<BR>
+upper layer, chances are that the path MTU discovery code did
+<BR>
+not include IP options in its calculations.  I certainly observed
+<BR>
+something like this in NetBSD.
+<BR>
+<P>While IP options seem to be gradually disappearing, I still thought that
+<BR>
+this was an interesting enough bug to pass along, especially
+<BR>
+as I found it in all but one (Solaris 2.5.1) of the six different
+<BR>
+OSes I checked...
+<BR>
+<P>Thanks,
+<BR>
+<P>Kevin Lahey
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;199803212146.NAA13683@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0993.html">Jeff Semke: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0995.html">braden@ISI.EDU: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0996.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0997.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0998.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1001.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1002.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1003.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1004.html">Jason Thorpe: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#994">[ date ]</A>
+<A HREF="index.html#994">[ thread ]</A>
+<A HREF="subject.html#994">[ subject ]</A>
+<A HREF="author.html#994">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

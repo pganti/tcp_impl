@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Doubletree RST 'BOF' meeting</TITLE>
+<META NAME="Author" CONTENT="Tom Lane (tgl@sss.pgh.pa.us)">
+<META NAME="Subject" CONTENT="Re: Doubletree RST 'BOF' meeting notes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Doubletree RST 'BOF' meeting notes</H1>
+<!-- received="Wed Aug  2 18:56:45 2000" -->
+<!-- isoreceived="20000802225645" -->
+<!-- sent="Wed, 02 Aug 2000 18:41:52 -0400" -->
+<!-- isosent="20000802224152" -->
+<!-- name="Tom Lane" -->
+<!-- email="tgl@sss.pgh.pa.us" -->
+<!-- subject="Re: Doubletree RST 'BOF' meeting notes" -->
+<!-- id="1826.965256112@sss.pgh.pa.us" -->
+<!-- inreplyto="200008022007.QAA05076@wired-128-112.ietf.marconi.com" -->
+<STRONG>From:</STRONG> Tom Lane (<A HREF="mailto:tgl@sss.pgh.pa.us?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;1826.965256112@sss.pgh.pa.us&gt;"><EM>tgl@sss.pgh.pa.us</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 18:41:52 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2253.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2258.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2252">[ date ]</A>
+<A HREF="index.html#2252">[ thread ]</A>
+<A HREF="subject.html#2252">[ subject ]</A>
+<A HREF="author.html#2252">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Ian Heavens wrote:
+<BR>
+<EM>&gt; Tom Lane has highlighted a usage of RSTs that conflicts with RFC 1122
+</EM><BR>
+<EM>&gt; half duplex close recommendation (and emphasised in RFC 2525 -
+</EM><BR>
+<EM>&gt; contributed by me).  Bernie Volz and Tom discussed this after so I
+</EM><BR>
+<EM>&gt; don't know whether the conclusion was that the application should
+</EM><BR>
+<EM>&gt; avoid sockets close() and use shutdown() - thereby circumventing RFC
+</EM><BR>
+<EM>&gt; 1122 completely (it only applying to use of APIs that close in both
+</EM><BR>
+<EM>&gt; directions ).  To be pursued on the list if appropriate, with possible
+</EM><BR>
+<EM>&gt; clarification of RFC 1122 and RFC 2525.
+</EM><BR>
+<P>[ Hi folks.  I just joined the list --- am not a TCP implementor,
+<BR>
+but got interested in this particular issue for reasons about to be
+<BR>
+stated. ]
+<BR>
+<P>The situation that I am interested in is an application where data can
+<BR>
+flow asynchronously in both directions.  Actually, it's mostly a client
+<BR>
+request/server response protocol, but the server can also send
+<BR>
+unsolicited messages at any time.  In particular the server application
+<BR>
+can send an error message and immediately close the connection (indeed,
+<BR>
+it quits completely) without waiting around for the far-end app to get
+<BR>
+that message.  Question for the list is, is this application misusing
+<BR>
+the TCP protocol, and if so why?  Seems to me that once the TCP stack
+<BR>
+has accepted data to be sent, it ought to make a reasonable effort to
+<BR>
+deliver that data, whether the sending app is holding the connection
+<BR>
+open or not.
+<BR>
+<P>The problem case arises when the far-end app is busy sending a new
+<BR>
+request just as the near-end app emits its final message and closes
+<BR>
+its socket FD.  RFC 1122 (4.2.2.13) says
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A host MAY implement a &quot;half-duplex&quot; TCP close sequence, so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that an application that has called CLOSE cannot continue to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read data from the connection.  If such a host issues a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLOSE call while received data is still pending in TCP, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if new data is received after CLOSE is called, its TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD send a RST to show that data was lost.
+<BR>
+<P>(See also 2.16 and 2.17 in RFC 2525.)
+<BR>
+<P>Some, but not all, stacks appear to issue such an RST when they see
+<BR>
+incoming data from the far end, *even though they still have un-acked
+<BR>
+outbound data to transmit*.  This results in loss of the outbound data.
+<BR>
+A variant is that even if the data has been transmitted and acked but
+<BR>
+not actually delivered to the far-end client app, the far-end TCP may
+<BR>
+discard the data from its buffer upon receiving the RST.  Still a third
+<BR>
+variant (which seems to be what the current Linux stack does, at least
+<BR>
+when both ends are on the same machine) is that the far-end client may
+<BR>
+receive an ECONNRESET error from its next read() attempt, though not
+<BR>
+all the data has been delivered to it.  If the client is loony enough
+<BR>
+to think that ECONNRESET is a soft error, it will indeed discover that
+<BR>
+it can read more data by trying again!
+<BR>
+<P>I claim that all these behaviors are broken, and that the right thing
+<BR>
+to do if the TCP has noplace to deliver incoming data to is to ack and
+<BR>
+discard the data.  It would be OK to send an RST to discourage the other
+<BR>
+end from sending more data *only* if there is no un-ACKed data remaining
+<BR>
+to be sent from this end.  Without this, half-duplex connections are
+<BR>
+useless.  TCPs should also be dissuaded from dropping buffered inbound
+<BR>
+data when they see inbound RST or delivering a report of incoming RST
+<BR>
+out-of-sequence from the data.
+<BR>
+<P>The discussion at the Doubletree mostly focused on whether the app
+<BR>
+should deal with this situation by holding open its socket for some
+<BR>
+timeout period after sending its final outgoing message, so as to
+<BR>
+read and discard any data that might happen to arrive.  That is
+<BR>
+certainly the only available answer if one needs an answer today,
+<BR>
+but I still think that it's a workaround for broken TCP behavior.
+<BR>
+Essentially, this is asking the app to take on the connection-shutdown
+<BR>
+duties that TCP ought to handle for it.  (To take just one example,
+<BR>
+how should the app know what an appropriate timeout is?  Seems like
+<BR>
+that's a concern the TCP layer should deal with, not the app.  The app
+<BR>
+will also be unable to detect when the last outbound data has been
+<BR>
+ACKed, and will therefore have to hold the connection open much longer
+<BR>
+than would otherwise be necessary in most cases.)
+<BR>
+<P>Anyway, that's my story.  Is my app broken, or is the recommendation
+<BR>
+for issuing an RST in this scenario misguided?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regards, tom lane
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2253.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2258.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2252">[ date ]</A>
+<A HREF="index.html#2252">[ thread ]</A>
+<A HREF="subject.html#2252">[ subject ]</A>
+<A HREF="author.html#2252">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

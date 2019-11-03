@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: MTU, MRU, and MSS</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: MTU, MRU, and MSS">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: MTU, MRU, and MSS</H1>
+<!-- received="Wed Nov  4 13:38:50 1998" -->
+<!-- isoreceived="19981104183850" -->
+<!-- sent="Wed, 04 Nov 1998 10:37:56 -0800" -->
+<!-- isosent="19981104183756" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="Re: MTU, MRU, and MSS" -->
+<!-- id="199811041837.KAA21781@gecko.nas.nasa.gov" -->
+<!-- inreplyto="36407877.43D48BA3@ehsco.com" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20MTU,%20MRU,%20and%20MSS&In-Reply-To=&lt;199811041837.KAA21781@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Nov 04 1998 - 13:37:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1367.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1365.html">braden@ISI.EDU: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1359.html">Eric A. Hall: "MTU, MRU, and MSS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1369.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1369.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1366">[ date ]</A>
+<A HREF="index.html#1366">[ thread ]</A>
+<A HREF="subject.html#1366">[ subject ]</A>
+<A HREF="author.html#1366">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:36407877.43D48BA3@ehsco.com?Subject=Re:%20MTU,%20MRU,%20and%20MSS&In-Reply-To=&lt;199811041837.KAA21781@gecko.nas.nasa.gov&gt;">36407877.43D48BA3@ehsco.com</A>&gt;&quot;Eric A. Hall&quot; writes
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Question about PPP MTU/MRU sizes and how they affect the MSS being
+</EM><BR>
+<EM>&gt;advertised in various implementations:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;RFC 793 states unequivocably that the local network's MRU should be used
+</EM><BR>
+<EM>&gt;for the value that is advertised in the MSS:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;        Maximum Segment Size Option Data:  16 bits
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;          If this option is present, then it communicates the maximum
+</EM><BR>
+<EM>&gt;          receive segment size at the TCP which sends this segment.
+</EM><BR>
+<P>Doesn't this mean the largest segment that can be reassembled on
+<BR>
+that host, rather than the largest frame that can be received over
+<BR>
+that link?
+<BR>
+<P>RFC1191 (Path MTU Discovery) suggests:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The MSS option should be 40 octets less than the
+<BR>
+&nbsp;&nbsp;&nbsp;size of the largest datagram the host is able to reassemble (MMS_R,
+<BR>
+&nbsp;&nbsp;&nbsp;as defined in [1]); in many cases, this will be the architectural
+<BR>
+&nbsp;&nbsp;&nbsp;limit of 65495 (65535 - 40) octets.  A host MAY send an MSS value
+<BR>
+&nbsp;&nbsp;&nbsp;derived from the MTU of its connected network (the maximum MTU over
+<BR>
+&nbsp;&nbsp;&nbsp;its connected networks, for a multi-homed host); this should not
+<BR>
+&nbsp;&nbsp;&nbsp;cause problems for PMTU Discovery, and may dissuade a broken peer
+<BR>
+&nbsp;&nbsp;&nbsp;from sending enormous datagrams.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: At the moment, we see no reason to send an MSS greater
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;than the maximum MTU of the connected networks, and we
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recommend that hosts do not use 65495.  It is quite possible
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that some IP implementations have sign-bit bugs that would be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tickled by unnecessary use of such a large MSS.
+<BR>
+<P>Given the number of asymetric routes out there, it seems to make
+<BR>
+some sense to send the maximum of the MRUs of the interfaces
+<BR>
+on the host.  This is what we do in NetBSD right now, although
+<BR>
+I've heard reasonable arguments for using the MRU of the interface.
+<BR>
+<P>Given the number of run-time configurable network interfaces out there,
+<BR>
+I wonder how useful the MSS is at all?  What if I boot my system on the
+<BR>
+Ethernet, establish a connection, and then fire up my [mythical]
+<BR>
+PPP-over-SONET interface?  It'd be nice for the connection to adjust to
+<BR>
+use all of the available MTU.  Wouldn't this be useful for mobile
+<BR>
+applications as well?
+<BR>
+<P>Kevin
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20MTU,%20MRU,%20and%20MSS&In-Reply-To=&lt;199811041837.KAA21781@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1367.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1365.html">braden@ISI.EDU: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1359.html">Eric A. Hall: "MTU, MRU, and MSS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1369.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1369.html">Eric A. Hall: "Re: MTU, MRU, and MSS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1366">[ date ]</A>
+<A HREF="index.html#1366">[ thread ]</A>
+<A HREF="subject.html#1366">[ subject ]</A>
+<A HREF="author.html#1366">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

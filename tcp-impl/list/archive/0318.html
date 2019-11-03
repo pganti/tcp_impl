@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 14:11:57 1997" -->
+<!-- isoreceived="19970403191157" -->
+<!-- sent="Thu, 03 Apr 1997 17:04:14 -0500" -->
+<!-- isosent="19970403220414" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704032204.RAA12759@brookfield.ans.net" -->
+<!-- inreplyto="9704022025.AA09973@pachyderm.pa.dec.com" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704032204.RAA12759@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 17:04:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0317.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#318">[ date ]</A>
+<A HREF="index.html#318">[ thread ]</A>
+<A HREF="subject.html#318">[ subject ]</A>
+<A HREF="author.html#318">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Long tutorial followed by something that might be a TCP issue, but
+<BR>
+still out of scope for tcp-impl.
+<BR>
+<P>Appologies in advance for out of scope message.  Delete now if you're
+<BR>
+busy.
+<BR>
+<P>In message &lt;<A HREF="mailto:9704022025.AA09973@pachyderm.pa.dec.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704032204.RAA12759@brookfield.ans.net&gt;">9704022025.AA09973@pachyderm.pa.dec.com</A>&gt;, Jim Gettys writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The question is how much data gets queued in the final router driving 
+</EM><BR>
+<EM>&gt; the PPP link to the end user.  This is where most of the delay occurs, 
+</EM><BR>
+<EM>&gt; and where the packets congregate.  The question is: how many packets can 
+</EM><BR>
+<EM>&gt; congregate in this final router?  There is no way for a client to discard 
+</EM><BR>
+<EM>&gt; them, once they have been sent (and the client wouldn't want to in any 
+</EM><BR>
+<EM>&gt; case; he'd just as soon put the data in its cache).  Any packets sent 
+</EM><BR>
+<EM>&gt; will accumulate there.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now, the question is therefore how many packets might get queued in this
+</EM><BR>
+<EM>&gt; router.  With current browser behavior, a client might have 4 times as much
+</EM><BR>
+<EM>&gt; data in flight (over 4 separate connections; that is how the current browsers
+</EM><BR>
+<EM>&gt; work).  With HTTP/1.1, things might be better, as a good client might be
+</EM><BR>
+<EM>&gt; using just one connection.
+</EM><BR>
+<P><P>You need to keep data in flight.  Think of the data as being &quot;in the
+<BR>
+wire&quot; (or fiber) not in the queue if things are working right.
+<BR>
+<P>Clairvoyant TCP (doesn't exist) might be able to guess the perfect
+<BR>
+window size for a connection.  That window size would be the effective
+<BR>
+bandwidth that could be acheived by that flow times the round trip
+<BR>
+delay.  The packets would go through the bottleneck at a fixed pace, a
+<BR>
+neglecting ACK compression, the ACKs would come back at a relatively
+<BR>
+constant pace.
+<BR>
+<P>The speed of light is finite so from the time a packet is sent to when
+<BR>
+the ACK comes back is the round trip time (RTT).  If you keep a full
+<BR>
+window in flight, the bottleneck won't run dry.  If the pacing isn't
+<BR>
+impacted by ACK compression no queue will form.  The packets in flight
+<BR>
+are litterally &quot;in the wire&quot;.
+<BR>
+<P>In practive, ACKs are delayed by getting stuck in a small standing
+<BR>
+queue in the reverse direction, the size of which is highly variable.
+<BR>
+If you really wanted full utilization you'd have to compensate by
+<BR>
+making the window slightly larger and forming a small queue behind the
+<BR>
+bottleneck.
+<BR>
+<P>The problem is that it is really not possible to set the window to an
+<BR>
+ideal value.  If you err on the side of too large, a queue somewhere
+<BR>
+will overflow and TCP will automatically find a near optimal window
+<BR>
+(getting the details right are the topic of this WG).
+<BR>
+<P>If you have a good idea what an upper bound would be, you can improve
+<BR>
+performance somewhat and reduce delay by not setting the window way
+<BR>
+too large.  The classic example is if you have a 28.8 modem, you are
+<BR>
+never going to get a connection to go faster than 28.8.  It takes
+<BR>
+almost 150 msec to get one 512 byte packet through the 28.8 link, so
+<BR>
+you will never see an RTT lower than 50 msec with compression.  The
+<BR>
+bandwidth delay product for 200 msec is 720 bytes, so making the
+<BR>
+window very small is a good idea.  In this case you have no choice but
+<BR>
+to make the window larger than optimal and force a queue to form.
+<BR>
+<P>It helps to keep more than 4 packets in flight to allow fast
+<BR>
+retransmit to work, so I usually suggest 3KB, 4KB at the most.  3KB
+<BR>
+would give you a delay of about 850 msec.  Four flows would make it
+<BR>
+3.4 seconds and overflow the queue on the other side and reduce
+<BR>
+performance significantly.
+<BR>
+<P>The most common error is to set a window size to 32KB on a modem and
+<BR>
+then also use multiple flows.  A lot of packets (about 10-15%) get
+<BR>
+sent across the WAN only to overflow the queue in front on the modem
+<BR>
+and get dropped.  Fixing this is just a matter of setting the recv
+<BR>
+buffer to a reasonable size if you are behind a modem.
+<BR>
+<P>It takes only 170 msec to move 32KB through a T1, so that window size
+<BR>
+is fine for T1.
+<BR>
+<P>Here's the TCP relevant part:
+<BR>
+<P>The only thing that TCP could do in the case where the window is
+<BR>
+radically too large is for the sender to keep track of the approximate
+<BR>
+throughput and the shortest delay recently experienced and not set the
+<BR>
+window greater than twice that.  The throughput can be estimated by
+<BR>
+cwnd/rtt.  The window would never be increased beyond
+<BR>
+cwnd*rtt_min/rtt.  Initially rtt_min is approximately equal to rtt, so
+<BR>
+the wouldn't affect initial slow start.  If the queue had drained it
+<BR>
+also wouldn't affect a subsequent slow start but it tend to cap the
+<BR>
+window without incurring loss.  [a trivial filter would be needed to
+<BR>
+keep the rtt_min estimate.]
+<BR>
+<P>This is more relevant to end2end-interest than tcp-impl.
+<BR>
+<P>Again, I appologize for an out of scope message.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0319.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0317.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#318">[ date ]</A>
+<A HREF="index.html#318">[ thread ]</A>
+<A HREF="subject.html#318">[ subject ]</A>
+<A HREF="author.html#318">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

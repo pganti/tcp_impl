@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Tue Mar 25 10:06:19 1997" -->
+<!-- isoreceived="19970325150619" -->
+<!-- sent="Tue, 25 Mar 97 17:35:57 GMT" -->
+<!-- isosent="19970325173557" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="5722.wsimpson@greendragon.com" -->
+<!-- inreplyto="OT 1.1.2 trace -- delayed Ack" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5722.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 25 1997 - 12:35:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0248.html">Vern Paxson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0246.html">William Allen Simpson: "OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#247">[ date ]</A>
+<A HREF="index.html#247">[ thread ]</A>
+<A HREF="subject.html#247">[ subject ]</A>
+<A HREF="author.html#247">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Scott Dawson &lt;<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5722.wsimpson@greendragon.com&gt;">sdawson@eecs.umich.edu</A>&gt;
+</EM><BR>
+<EM>&gt;    1.  The implementation doesn't do delayed ACKs, or
+</EM><BR>
+<EM>&gt;    2.  The implementation uses delayed ACKs, but violates the spec
+</EM><BR>
+<EM>&gt;        which states that the delay should be .5 sec or less.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The ACK is indeed delayed, but since it was delayed by less than 1
+</EM><BR>
+<EM>&gt; second, you read the delay as 0.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+I made no reading or prediction of the size of the delay, or whether a
+<BR>
+delay occured.  I offered an explanation of the two reasons that these
+<BR>
+particular packets could be seen.  I make the judgment, based on actual
+<BR>
+data, that the delay (if present) is &quot;too short&quot;.  That is a relative,
+<BR>
+not an absolute, judgment based on clear repeatable data (dozens of
+<BR>
+times in this trace).
+<BR>
+<P><P><EM>&gt; &gt; Can you provide a trace with a better time resolution?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Can you?  It seems like you are the one saying that there's a problem.
+</EM><BR>
+<P>What a silly question.  Did you read any of the substance of my postings
+<BR>
+or just skim?  The answer is: I cannot.
+<BR>
+<P><P><EM>&gt; The burden of proof ought to be on you to try to produce evidence of
+</EM><BR>
+<EM>&gt; the problem.  It's not fair for you to say, &quot;X's implementation is
+</EM><BR>
+<EM>&gt; broken unless someone from X proves that it's not.&quot;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+The burden of proof has already been established, that on 2 unloaded
+<BR>
+machines, the delay is not long enough, since the packets _do_ occur.
+<BR>
+<P>Meanwhile, the issue for this WG is what the minimum SHOULD be, and what
+<BR>
+good implementations SHOULD do.
+<BR>
+<P>I was asked to provide traces.  The traces are sufficient to show the
+<BR>
+packets occurring.
+<BR>
+<P>If you need prettier traces, please supply them.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5722.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5722.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0248.html">Vern Paxson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0246.html">William Allen Simpson: "OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#247">[ date ]</A>
+<A HREF="index.html#247">[ thread ]</A>
+<A HREF="subject.html#247">[ subject ]</A>
+<A HREF="author.html#247">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

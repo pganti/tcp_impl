@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: detecting loss of retransmitted</TITLE>
+<META NAME="Author" CONTENT="Mohit Aron (aron@cs.rice.edu)">
+<META NAME="Subject" CONTENT="detecting loss of retransmitted packets in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>detecting loss of retransmitted packets in TCP</H1>
+<!-- received="Thu Nov 20 10:34:05 1997" -->
+<!-- isoreceived="19971120153405" -->
+<!-- sent="Thu, 20 Nov 1997 12:21:10 -0600 (CST)" -->
+<!-- isosent="19971120182110" -->
+<!-- name="Mohit Aron" -->
+<!-- email="aron@cs.rice.edu" -->
+<!-- subject="detecting loss of retransmitted packets in TCP" -->
+<!-- id="199711201821.MAA21360@mrsclaus.cs.rice.edu" -->
+<STRONG>From:</STRONG> Mohit Aron (<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;199711201821.MAA21360@mrsclaus.cs.rice.edu&gt;"><EM>aron@cs.rice.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Nov 20 1997 - 13:21:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0834.html">S. Keshav: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0835.html">Graham Cope: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0857.html">Sally Floyd: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#831">[ date ]</A>
+<A HREF="index.html#831">[ thread ]</A>
+<A HREF="subject.html#831">[ subject ]</A>
+<A HREF="author.html#831">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have a question concerning TCP behaviour. Current TCP implementations
+<BR>
+resort to a timeout when a retransmitted packet is lost. Consider the following
+<BR>
+behaviour for TCP Reno:
+<BR>
+<P>Sender transmits packets 1, 2, ... 10. Packet 1 gets lost. The retransmission
+<BR>
+of packet 1 upon getting 3 duplicate ACKs also gets lost. The duplicate ACKs
+<BR>
+generated due to packets 5 - 10 cause the sender to send new packets (11
+<BR>
+- 15). These packets would generate duplicate ACKs again in response to which
+<BR>
+the sender would send packets 16 - 20.  This would go on till the advertised
+<BR>
+window is exhausted and then the sender waits for a retransmission timeout.
+<BR>
+<P>There are some other observations that can be made here wrt congestion control.
+<BR>
+If any of the new packets generated also get lost, then the number of duplicate
+<BR>
+ACKs received by the sender get correspondingly reduced. The sender would
+<BR>
+correspondingly send less number of new segments. Thus further losses during
+<BR>
+fast recovery cause the injected data to be reduced &quot;linearly&quot; and not
+<BR>
+&quot;multiplicatively&quot;. Secondly, the long wait for retransmission timeouts can be
+<BR>
+detrimental for performance on high bandwidth networks.
+<BR>
+<P>The sender can easily detect loss of a retransmitted segment by counting the
+<BR>
+number of duplicate ACKs received (if more than 9 are received, then the
+<BR>
+sender can assume that the retransmitted packet was also lost). The sender
+<BR>
+can immediately go over to slow start rather than waiting for a retransmission
+<BR>
+timeout. The purpose of a retransmission timeout - clearing packets in the
+<BR>
+network - can also be achieved by slow-start.
+<BR>
+<P>I'd be glad to know opinions about this.
+<BR>
+<P><P><P><P>- Mohit Aron
+<BR>
+&nbsp;&nbsp;<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;199711201821.MAA21360@mrsclaus.cs.rice.edu&gt;">aron@cs.rice.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0832.html">David Borman: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0834.html">S. Keshav: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0835.html">Graham Cope: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0857.html">Sally Floyd: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#831">[ date ]</A>
+<A HREF="index.html#831">[ thread ]</A>
+<A HREF="subject.html#831">[ subject ]</A>
+<A HREF="author.html#831">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

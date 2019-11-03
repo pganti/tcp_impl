@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: NewReno and the 2001 Revision</TITLE>
+<META NAME="Author" CONTENT="Spencer Dawkins (Spencer.Dawkins.sdawkins@nt.com)">
+<META NAME="Subject" CONTENT="RE: NewReno and the 2001 Revision">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: NewReno and the 2001 Revision</H1>
+<!-- received="Fri Sep 11 06:40:19 1998" -->
+<!-- isoreceived="19980911104019" -->
+<!-- sent="Fri, 11 Sep 1998 09:35:58 -0400" -->
+<!-- isosent="19980911133558" -->
+<!-- name="Spencer Dawkins" -->
+<!-- email="Spencer.Dawkins.sdawkins@nt.com" -->
+<!-- subject="RE: NewReno and the 2001 Revision" -->
+<!-- id="11622C999F23D111BA620000F8662EB7027066D0@zrchb152.us.nortel.com" -->
+<!-- inreplyto="NewReno and the 2001 Revision" -->
+<STRONG>From:</STRONG> Spencer Dawkins (<A HREF="mailto:Spencer.Dawkins.sdawkins@nt.com?Subject=RE:%20NewReno%20and%20the%202001%20Revision&In-Reply-To=&lt;11622C999F23D111BA620000F8662EB7027066D0@zrchb152.us.nortel.com&gt;"><EM>Spencer.Dawkins.sdawkins@nt.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 11 1998 - 09:35:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1311.html">previdso: "Sexual Harassment Video - Best Seller"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1312.html">Tom Henderson: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1310">[ date ]</A>
+<A HREF="index.html#1310">[ thread ]</A>
+<A HREF="subject.html#1310">[ subject ]</A>
+<A HREF="author.html#1310">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I would like to see this bug fix (multiple cwnd reductions in a single
+<BR>
+window) included. It seems to me that the TCPSAT guys are spending lots of
+<BR>
+time and effort trying to keep their pipes full, and backing off by half in
+<BR>
+a single window of data (when we built this up at one segment per window of
+<BR>
+data) is already aggressive congestion avoidance - agressive enough to avoid
+<BR>
+congestion oscillation.
+<BR>
+<P>Spencer 
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From:	Mark Allman [SMTP:<A HREF="mailto:mallman@lerc.nasa.gov?Subject=RE:%20NewReno%20and%20the%202001%20Revision&In-Reply-To=&lt;11622C999F23D111BA620000F8662EB7027066D0@zrchb152.us.nortel.com&gt;">mallman@lerc.nasa.gov</A>]
+</EM><BR>
+<EM>&gt; Sent:	Friday, September 11, 1998 8:07 AM
+</EM><BR>
+<EM>&gt; To:	<A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=RE:%20NewReno%20and%20the%202001%20Revision&In-Reply-To=&lt;11622C999F23D111BA620000F8662EB7027066D0@zrchb152.us.nortel.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Cc:	Vern Paxson
+</EM><BR>
+<EM>&gt; Subject:	NewReno and the 2001 Revision
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We would like to hear some feedback on what sorts of loss recovery
+</EM><BR>
+<EM>&gt; mechanisms the working group thinks are appropriate for inclusion in
+</EM><BR>
+<EM>&gt; the revision of RFC 2001.  As Sally outlined in Chicago, there are
+</EM><BR>
+<EM>&gt; several improvements we can make to Reno style TCP (i.e., TCP
+</EM><BR>
+<EM>&gt; without SACK).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Our current opinion is that some form of the NewReno changes (as was
+</EM><BR>
+<EM>&gt; obvious in the meeting, there are a number of permutations of
+</EM><BR>
+<EM>&gt; NewReno) should be included in a seperate experimental document.
+</EM><BR>
+<EM>&gt; However, as Sally outlined in the meeting and it her note to this
+</EM><BR>
+<EM>&gt; list shortly after, there is also a seperate issue of fixing a
+</EM><BR>
+<EM>&gt; fairly well known TCP bug (misfeature?).  The bug occurs when
+</EM><BR>
+<EM>&gt; multiple fast retransmits happen for multiple lost segments within a
+</EM><BR>
+<EM>&gt; window of data and consequently cwnd is halved multiple times for
+</EM><BR>
+<EM>&gt; one ``congestion event''.  We would like to hear comments on whether
+</EM><BR>
+<EM>&gt; or not such a bug fix should be included in the 2001 revision.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks,
+</EM><BR>
+<EM>&gt; Mark and Vern
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1311.html">previdso: "Sexual Harassment Video - Best Seller"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1312.html">Tom Henderson: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1310">[ date ]</A>
+<A HREF="index.html#1310">[ thread ]</A>
+<A HREF="subject.html#1310">[ subject ]</A>
+<A HREF="author.html#1310">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

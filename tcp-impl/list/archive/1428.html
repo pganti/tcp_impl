@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Initial TCP seq numbers - di</TITLE>
+<META NAME="Author" CONTENT="Manish Patel(x67071) (mpatel@BayNetworks.COM)">
+<META NAME="Subject" CONTENT="Re: Initial TCP seq numbers - dispute w/ Microsoft">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Initial TCP seq numbers - dispute w/ Microsoft</H1>
+<!-- received="Mon Jan  4 13:26:51 1999" -->
+<!-- isoreceived="19990104182651" -->
+<!-- sent="Mon, 04 Jan 1999 13:21:24 -0500" -->
+<!-- isosent="19990104182124" -->
+<!-- name="Manish Patel(x67071)" -->
+<!-- email="mpatel@BayNetworks.COM" -->
+<!-- subject="Re: Initial TCP seq numbers - dispute w/ Microsoft" -->
+<!-- id="369106A4.63DECDAD@baynetworks.com" -->
+<!-- inreplyto="md5:DBF9162839810E5AFBC5F93536E20E98" -->
+<STRONG>From:</STRONG> Manish Patel(x67071) (<A HREF="mailto:mpatel@BayNetworks.COM?Subject=Re:%20Initial%20TCP%20seq%20numbers%20-%20dispute%20w/%20Microsoft&In-Reply-To=&lt;369106A4.63DECDAD@baynetworks.com&gt;"><EM>mpatel@BayNetworks.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 13:21:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1432.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1428">[ date ]</A>
+<A HREF="index.html#1428">[ thread ]</A>
+<A HREF="subject.html#1428">[ subject ]</A>
+<A HREF="author.html#1428">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Richard Berke wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Bob Braden-
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have been reading RFCs 793, 1072, 1185, and 1323 expecially regarding initial TCP sequence numbers, wrapping of the sequence numbers, and session boundaries.   I ran into a dispute with Microsoft over their TCP stack behavior, and am trying to cite the RFCs.   I hope you can help, or point me in the right direction.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As I glean from the RFCs, the initial TCP sequence number of a session must be selected in a way that eliminates confusion whether subsequent packets belong to a previous session.   The old way was to use increasing sequence numbers, driven by clock cycles.   As higher transmission rates became possible, the lifetime of the TCP sequence number space decreased until it became under 3 minutes for 100 Mbps.   The maximum segment lifetime is the key factor here.   A proposed extension to the algorit
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In a packet trace of a recent session with a Microsoft server and a client, I saw a TCP session finish normally with a FIN/ACK.  About a minute later, the client requested a new session, during which it pulled a data file from the server.  The client and server used the same TCP ports as in the previous session.  The server indicated in its  SYN ACK a TCP sequence number of 2+million LOWER than the sequence number it had used to send data at the end of the previous session.  The rest of the sequ
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Microsoft asserts this behavior is okay.  In fact, they tell me that in the near future they will be selecting initial TCP sequence numbers at random as a technique to thwart hijacking of TCP sessions.   Microsoft asserts that there is no regard in the client for the prior session TCP once the FINish process completes successfully.  I don't find support for this position in the RFC's; I find the reverse.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is Microsoft lucky that it works?  Are they non-compliant, but in a benign way?
+</EM><BR>
+<EM>&gt; Am I misunderstanding the requirement for increasing TCP sequence numbers for new sessions?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I do not think that there is any requirement for initial sequence
+<BR>
+number.
+<BR>
+It could be anywhere between 0 &amp; 4,294,967,295(2^32).
+<BR>
+<P>Apparently, if the connection uses the same ports and IP addresses, it
+<BR>
+should not
+<BR>
+matter if the sequence number is recycled because the previous control
+<BR>
+block is
+<BR>
+already gone and it does not remember to create any conflict.
+<BR>
+<P><P><EM>&gt; Thanks for your patience and sharing your understanding,
+</EM><BR>
+<EM>&gt; Richard Berke
+</EM><BR>
+<EM>&gt; RPM Consulting
+</EM><BR>
+<EM>&gt; <A HREF="mailto:rberke@rpm.com?Subject=Re:%20Initial%20TCP%20seq%20numbers%20-%20dispute%20w/%20Microsoft&In-Reply-To=&lt;369106A4.63DECDAD@baynetworks.com&gt;">rberke@rpm.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ----- End Included Message -----
+</EM><BR>
+<P><PRE>
+-- 
+__            __
+__Manish Patel__
+ ____________________________________________________________________
+| mailto:<A HREF="mailto:mpatel@baynetworks.com?Subject=Re:%20Initial%20TCP%20seq%20numbers%20-%20dispute%20w/%20Microsoft&In-Reply-To=&lt;369106A4.63DECDAD@baynetworks.com&gt;">mpatel@baynetworks.com</A> (978) 916 7071    _____            ® |
+|____/|\__/|\_______/|\_______/|\___/|____/|____/|     |___/|___/|___|
+    / | \/ | \     / |_\     / | \ / |   / |   /_|___ _|  / |__/ |
+   /  /\/  /\/|   / |  /|   /  /\ /  /  /  /   |    /|   / |  /  /
+  /  / /  / / |  /  |_/ |  /  /  /  /  /  /   _|___/ |  /  |_/  /
+  | /  | /  | /  | /  | /  | /   | /   | /   |     | /  | /  | /
+  |/   |/   |/   |/   |/   |/    |/    |/    |_____|/   |/   |/
+ ____________________________________________________________________
+| Bay Networks Inc., 600 Technology Park, Billerica, MA 01821.       |
+|____________________________________________________________________|
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1429.html">braden@ISI.EDU: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1432.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1428">[ date ]</A>
+<A HREF="index.html#1428">[ thread ]</A>
+<A HREF="subject.html#1428">[ subject ]</A>
+<A HREF="author.html#1428">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

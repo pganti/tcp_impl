@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RTT estimation - a retraction</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: RTT estimation - a retraction">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RTT estimation - a retraction</H1>
+<!-- received="Thu Aug  7 11:15:10 1997" -->
+<!-- isoreceived="19970807151510" -->
+<!-- sent="Thu, 7 Aug 1997 11:12:47 -0700" -->
+<!-- isosent="19970807181247" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: RTT estimation - a retraction" -->
+<!-- id="199708071812.LAA09346@rum.isi.edu" -->
+<!-- inreplyto="RTT estimation - a retraction" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Aug 07 1997 - 14:12:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0654.html">Greg Minshall: "Re: RTT estimation - a retraction"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0622.html">Craig Partridge: "RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#655">[ date ]</A>
+<A HREF="index.html#655">[ thread ]</A>
+<A HREF="subject.html#655">[ subject ]</A>
+<A HREF="author.html#655">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Thu Aug  7 10:46:17 1997
+</EM><BR>
+<EM>&gt; To: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:van@ee.lbl.gov?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">van@ee.lbl.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: RTT estimation - a retraction 
+</EM><BR>
+<EM>&gt; Date: Thu, 07 Aug 1997 10:42:08 -0700
+</EM><BR>
+<EM>&gt; From: Greg Minshall &lt;<A HREF="mailto:minshall@ipsilon.com?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">minshall@ipsilon.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Craig, and all,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; (Just to say a word or so before you all get together in Munich.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You want your long-running RTT estimator (which you use to drive 
+</EM><BR>
+<EM>&gt; retransmissions) to &quot;remember&quot; the past, rather than be dominated by all the 
+</EM><BR>
+<EM>&gt; packets in this window (the &quot;recent&quot; past).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You can certainly *measure* the RTT as many times per window as you'd like.  
+</EM><BR>
+<EM>&gt; What you don't want to do is fold more than one measurement (or estimation) 
+</EM><BR>
+<EM>&gt; into your long-running estimator, since that would cause your long-running 
+</EM><BR>
+<EM>&gt; estimator to &quot;forget&quot; older measurements.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; (Now, one could take the *average* of measured RTTs during a window, or, more 
+</EM><BR>
+<EM>&gt; conservatively, the MAX of measured RTTs during a window, as the estimate of 
+</EM><BR>
+<EM>&gt; the RTT to plug into the long-running RTT estimator once per window.)
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R-est[t] = estimated RTT at time t
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R-mes[t] = measured RTT at time t
+<BR>
+<P>The current algorithm uses an inverse-exponential decay, 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R-est[t] = R-est[t-1] * alpha + R-mes[t] * beta
+<BR>
+<P>where alpha + beta = 1.
+<BR>
+<P>The net effect is that:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R-est[t] = R-mes[t] * beta 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ R-mes[t-1] * beta * alpha
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ R-mes[t-2] * beta * alpha^2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+<P>(I may be getting the names for alpha and beta switched, here).
+<BR>
+<P><P>There are other predictors, such as:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sliding average over a window (window = 10x largest RTT, e.g.)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for windowed-averages, another equation is required
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to estimate the window, e.g., a constant, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10 * max(R-mes[t]) over the last window, etc.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weighted average over a window
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max over a window
+<BR>
+<P>I don't know which of these has been tested in a real system.
+<BR>
+It might be worth re-examining, given the nature of satellite
+<BR>
+channels and web traffic, though.
+<BR>
+<P>Joe
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20RTT%20estimation%20-%20a%20retraction&In-Reply-To=&lt;199708071812.LAA09346@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0654.html">Greg Minshall: "Re: RTT estimation - a retraction"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0622.html">Craig Partridge: "RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#655">[ date ]</A>
+<A HREF="index.html#655">[ thread ]</A>
+<A HREF="subject.html#655">[ subject ]</A>
+<A HREF="author.html#655">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

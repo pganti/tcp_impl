@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Doubt in fast recovery algo..</TITLE>
+<META NAME="Author" CONTENT="Graham Cope (G.Cope@ftel.co.uk)">
+<META NAME="Subject" CONTENT="Re: Doubt in fast recovery algo..">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Doubt in fast recovery algo..</H1>
+<!-- received="Wed Feb 11 01:10:00 1998" -->
+<!-- isoreceived="19980211061000" -->
+<!-- sent="Wed, 11 Feb 1998 09:04:23 +0000" -->
+<!-- isosent="19980211090423" -->
+<!-- name="Graham Cope" -->
+<!-- email="G.Cope@ftel.co.uk" -->
+<!-- subject="Re: Doubt in fast recovery algo.." -->
+<!-- id="34E16997.6165@ftel.co.uk" -->
+<!-- inreplyto="Pine.LNX.3.95.980210111635.12735A-100000@protocol.ece.iisc.ernet.in" -->
+<STRONG>From:</STRONG> Graham Cope (<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20Doubt%20in%20fast%20recovery%20algo..&In-Reply-To=&lt;34E16997.6165@ftel.co.uk&gt;"><EM>G.Cope@ftel.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 11 1998 - 04:04:23 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0940.html">Chetan Kumar: "Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0940.html">Chetan Kumar: "Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#941">[ date ]</A>
+<A HREF="index.html#941">[ thread ]</A>
+<A HREF="subject.html#941">[ subject ]</A>
+<A HREF="author.html#941">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Chetan Kumar wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Greetings,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I.) I fast recovery, according to rfc2001, after receiving 3 dupacks and
+</EM><BR>
+<EM>&gt; setting ssthresh to cwind/2 and inflating cwind to cwind+3, TCP output
+</EM><BR>
+<EM>&gt; will transmit the lost segment and on the 4th dupack TCP output will
+</EM><BR>
+<EM>&gt; transmit with the new cwind, after increments the cwind. This will
+</EM><BR>
+<EM>&gt; continue.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now my doubt is if the retransmitted segment is lost.. then  we have to
+</EM><BR>
+<EM>&gt; count for 3 dupacks, and once again back to step 1 of the fast recovery
+</EM><BR>
+<EM>&gt; algorithm right ?
+</EM><BR>
+<P>Sorry, no.
+<BR>
+<P>Let us ignore delayed ACKs. Suppose that there are 10 segments in
+<BR>
+transit, the first of which gets lost. The next 3 (I think NOT the 4th)
+<BR>
+generate dup ACKs, and the lost one gets retransmitted. Suppose that the
+<BR>
+sender goes back to step 1 again. Then after 3 (or 4?) more from the
+<BR>
+original 10 arrive, then we get fast retransmit again.
+<BR>
+<P>I guess there are 2 approached.
+<BR>
+<P>Only go to step 1 after receiving 9 (in this example) dup ACKs for the
+<BR>
+rest of the data that was in transit. This requires a bit counting,
+<BR>
+(note that it does not need knowledge of the delayed ACK algorithm,
+<BR>
+since all out of sequence segments should generate ACKs). Also fast
+<BR>
+recovery should be speeding ahead for the other 6 dup ACKs.
+<BR>
+<P>Second appraoch is to admit that Fast Recovery is now confused, and if
+<BR>
+the retransmitted segment is lost, then rely on time-out / slow-start.
+<BR>
+<P>I'm bot a SACK guru, but this might have a 3rd method of recovery.
+<BR>
+<P><P><EM>&gt; 
+</EM><BR>
+<EM>&gt; II.)Next once an  ACK arrives that acknowledges new data, TCP will have to
+</EM><BR>
+<EM>&gt; set cwind to ssthresh and then the TCP should go to congestion avoidance.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The point to be noted here is once congestion is indicated by 3 dupacks we
+</EM><BR>
+<EM>&gt; are not reducing reducing the rate at which we are incrementing the
+</EM><BR>
+<EM>&gt; cwind, although the cwind itself is reduced to half,  the reason for this 3
+</EM><BR>
+<EM>&gt; dupacks tells more then just a packet is lost. 
+</EM><BR>
+<P>In particular, at tells us that at least 3 other segments got through.
+<BR>
+<P>But on the other hand when
+<BR>
+<EM>&gt; new ack arrives cwind is set to ssthresh and the rate of increase of cwind
+</EM><BR>
+<EM>&gt; is reduced more linear and only for every round trip time. I do not see
+</EM><BR>
+<EM>&gt; any justification for this.
+</EM><BR>
+<P>The assumption is that a segment was lost due to congestion, hence it
+<BR>
+should slow down. If congestion was not the cause (e.g. a bit error on
+<BR>
+a  DSL line), then slowing down is not necessary. But how does TCP know
+<BR>
+the cause?
+<BR>
+<P>Again SACK guru's might have another approach.
+<BR>
+<P><P><EM>&gt; I would say not to reduce the cwind to ssthresh, since network still
+</EM><BR>
+<EM>&gt; capable of accepting the packets.
+</EM><BR>
+<P>That is the key question. Is it still capable? Other segments got
+<BR>
+through, but at least one didn't.
+<BR>
+<P><P><P>Graham Cope
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0940.html">Chetan Kumar: "Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0940.html">Chetan Kumar: "Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#941">[ date ]</A>
+<A HREF="index.html#941">[ thread ]</A>
+<A HREF="subject.html#941">[ subject ]</A>
+<A HREF="author.html#941">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

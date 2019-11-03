@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;No initial slow start&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;No initial slow start&quot;</H1>
+<!-- received="Wed Mar 19 02:31:50 1997" -->
+<!-- isoreceived="19970319073150" -->
+<!-- sent="Wed, 19 Mar 1997 10:29:31 +0100 (MET)" -->
+<!-- isosent="19970319092931" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: draft description of &quot;No initial slow start&quot;" -->
+<!-- id="199703190929.KAA02363@labinfo.iet.unipi.it" -->
+<!-- inreplyto="199703182321.PAA20942@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;&In-Reply-To=&lt;199703190929.KAA02363@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 04:29:31 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0153.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0158.html">Smith, Allyn D: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#154">[ date ]</A>
+<A HREF="index.html#154">[ thread ]</A>
+<A HREF="subject.html#154">[ subject ]</A>
+<A HREF="author.html#154">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Name of problem: No initial slow start
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Category: Congestion control
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Description:
+</EM><BR>
+<EM>&gt; 	When a TCP begins transmitting data, it is required by RFC 1122,
+</EM><BR>
+<EM>&gt; 	4.2.2.15, to engage in a &quot;slow start&quot; by initializing its congestion
+</EM><BR>
+<EM>&gt; 	window, cwnd, to one packet (one segment of the maximum size).
+</EM><BR>
+<EM>&gt; 	It subsequently increases cwnd by one packet for each ack it receives
+</EM><BR>
+<EM>&gt; 	for new data.  A TCP that fails to do so exhibits &quot;No initial slow
+</EM><BR>
+<EM>&gt; 	start&quot;.
+</EM><BR>
+<P>FreeBSD 2.1 (and up to 2.1.7 at least) by default disable slow-start
+<BR>
+on the &quot;local&quot; network. The relevant code in tcp_input.c FreeBSD 2.1.7
+<BR>
+<P>&nbsp;*      $Id: tcp_input.c,v 1.25.4.7 1996/11/20 18:25:30 pst Exp $
+<BR>
+<P>around line 2111:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Don't force slow-start on local network.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!in_localaddr(inp-&gt;inp_faddr))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = mss;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+I don't know if this is an acceptable behaviour.
+<BR>
+<P>To make thing worse, the default definition of &quot;local&quot;, controlled
+<BR>
+by the macro SUBNETSARELOCAL in file in.c,  extends to the whole
+<BR>
+CLASS_A, CLASS_B or CLASS_C network.
+<BR>
+<P>Although this can be overridden by redefining SUBNETSARELOCAL=0 in
+<BR>
+the kernel config file, this is not the default in the kernels as
+<BR>
+shipped.
+<BR>
+<P>The problem might be common to other *BSD releases.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;&In-Reply-To=&lt;199703190929.KAA02363@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0153.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0158.html">Smith, Allyn D: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#154">[ date ]</A>
+<A HREF="index.html#154">[ thread ]</A>
+<A HREF="subject.html#154">[ subject ]</A>
+<A HREF="author.html#154">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

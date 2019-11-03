@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Steve Alexander (stevea@shastanets.com)">
+<META NAME="Subject" CONTENT="RE: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 09:59:57 1998" -->
+<!-- isoreceived="19980820135957" -->
+<!-- sent="Thu, 20 Aug 1998 09:58:25 -0700" -->
+<!-- isosent="19980820165825" -->
+<!-- name="Steve Alexander" -->
+<!-- email="stevea@shastanets.com" -->
+<!-- subject="RE: Timeout in FIN-WAIT-2" -->
+<!-- id="000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com" -->
+<!-- inreplyto="m0z9YeY-000aNGC@the-village.bc.nu" -->
+<STRONG>From:</STRONG> Steve Alexander (<A HREF="mailto:stevea@shastanets.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com&gt;"><EM>stevea@shastanets.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 12:58:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1230.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1231.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1229">[ date ]</A>
+<A HREF="index.html#1229">[ thread ]</A>
+<A HREF="subject.html#1229">[ subject ]</A>
+<A HREF="author.html#1229">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I've seen two major classes of customers that want keepalives and want
+<BR>
+them to take place at frequent intervals:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- trading firms that want to detect failure immediately; they don't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;care about the traffic; they could do it in the app, but they don't
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- web sites trying to deal w/ Lame-o-matic(TM) clients that don't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;terminate correctly and would otherwise suffer heavy memory usage
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;due to kernel state; I suspect I'm not the only person on this list
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to have encountered such sites
+<BR>
+<P>This just confirms Alexander's Law of Network Marketing, to wit: If you
+<BR>
+want to know what features to implement in a networking product for it to
+<BR>
+be successful, just ask your networking experts what things they think are
+<BR>
+stupid and do those first.
+<BR>
+<P>-- Steve
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com&gt;">alan@lxorguk.ukuu.org.uk</A> [mailto:<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com&gt;">alan@lxorguk.ukuu.org.uk</A>]
+</EM><BR>
+<EM>&gt; Sent: Thursday, August 20, 1998 10:38 AM
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:barney@databus.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com&gt;">barney@databus.com</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=RE:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;000301bdcc5b$bfcf3540$a31d1fd1@stevea-pc.shastanets.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Timeout in FIN-WAIT-2
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; In the dialup world, where the remote end disappears without notice
+</EM><BR>
+<EM>&gt; &gt; quite frequently, not only is TCP keepalive a lifesaver but 
+</EM><BR>
+<EM>&gt; the appropriate
+</EM><BR>
+<EM>&gt; &gt; interval is &lt;&lt; 2 hours.  Sorry, but that's just the way it is.  If
+</EM><BR>
+<EM>&gt; &gt; anybody has reason to disagree, I'd really appreciate 
+</EM><BR>
+<EM>&gt; hearing about it.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Take the number of dialup ports active on the internet. 
+</EM><BR>
+<EM>&gt; Multiply by 60%
+</EM><BR>
+<EM>&gt; to reflect the fact not all will be used. Multiply by the 
+</EM><BR>
+<EM>&gt; number of bytes
+</EM><BR>
+<EM>&gt; in a keepalive packet....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now explain why you want to fill the internet with that 
+</EM><BR>
+<EM>&gt; magnitude of junk.
+</EM><BR>
+<EM>&gt; Keepalive is rarely needed. When there is active data flow 
+</EM><BR>
+<EM>&gt; the data flow
+</EM><BR>
+<EM>&gt; will discover the host loss, when there is not then most high level 
+</EM><BR>
+<EM>&gt; protocols have their own timeouts.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Alan
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1230.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1228.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1231.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1229">[ date ]</A>
+<A HREF="index.html#1229">[ thread ]</A>
+<A HREF="subject.html#1229">[ subject ]</A>
+<A HREF="author.html#1229">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:49 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

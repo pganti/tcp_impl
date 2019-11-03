@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="Perry E. Metzger (perry@piermont.com)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 11:51:51 1997" -->
+<!-- isoreceived="19970620155151" -->
+<!-- sent="Fri, 20 Jun 1997 14:44:16 -0400" -->
+<!-- isosent="19970620184416" -->
+<!-- name="Perry E. Metzger" -->
+<!-- email="perry@piermont.com" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706201844.OAA15435@jekyll.piermont.com" -->
+<!-- inreplyto="199706201810.LAA14749@sgi.sgi.com" -->
+<STRONG>From:</STRONG> Perry E. Metzger (<A HREF="mailto:perry@piermont.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706201844.OAA15435@jekyll.piermont.com&gt;"><EM>perry@piermont.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 14:44:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#529">[ date ]</A>
+<A HREF="index.html#529">[ thread ]</A>
+<A HREF="subject.html#529">[ subject ]</A>
+<A HREF="author.html#529">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+If I were a security breaker, I'd love to have that list of information
+<BR>
+available over the net. It would make cracking systems ever so much
+<BR>
+easier. Having TCP sequence numbers handed to you without having to
+<BR>
+guess would make hijacking connections far simpler than it is now, for
+<BR>
+instance.
+<BR>
+<P>Indeed, I'd say you've just listed virtually everything I'd want to
+<BR>
+know about the internal state of a remote machine's TCP to make it
+<BR>
+easier for me to attack the system. I couldn't have drawn up a better
+<BR>
+list if I'd been intentionally trying.
+<BR>
+<P>Perry
+<BR>
+<P><A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706201844.OAA15435@jekyll.piermont.com&gt;">kennethw@VNET.IBM.COM</A> writes:
+<BR>
+<EM>&gt; Andy Capella and would like to submit to this working group an
+</EM><BR>
+<EM>&gt; internet-draft defining groups of objects to extend those
+</EM><BR>
+<EM>&gt; objects defined by RFC2012. We would base the initial submission
+</EM><BR>
+<EM>&gt; on a set of objects that we have implemented for our TCP
+</EM><BR>
+<EM>&gt; implementation in an Enterprise Specific MIB. We feel that there
+</EM><BR>
+<EM>&gt; is need to extend the group of objects defined by the current
+</EM><BR>
+<EM>&gt; TCP Group of objects from both a TCP Configuration prospective
+</EM><BR>
+<EM>&gt; and to provide useful information for a particular TCP Connection
+</EM><BR>
+<EM>&gt; by AUGMENTation of the TCP Connection Table.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We would prefer that this is done via a standard MIB as oppose
+</EM><BR>
+<EM>&gt; to Enterprise Specific MIB definition to enable interoperable Management
+</EM><BR>
+<EM>&gt; Application support. The following are the groups of objects
+</EM><BR>
+<EM>&gt; that we would define by function:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; TCP CONFIGURATION OBJECTS &lt;= These objects would be mandatory
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; tcpKeepAliveTimer  Integer32 (0..35791)     DEFVAL { 20 }
+</EM><BR>
+<EM>&gt;    &quot;TCP Keepalive timer, expressed in minutes.
+</EM><BR>
+<EM>&gt;     A value of 0 deactivates the timer.&quot;
+</EM><BR>
+<EM>&gt; tcpReceiveBufferSize  Integer32 (256..262144)  DEFVAL { 16384 }
+</EM><BR>
+<EM>&gt;    &quot;TCP Receive buffer size, expressed in OCTETs.&quot;
+</EM><BR>
+<EM>&gt; tcpSendBufferSize  Integer32 (256..262144)  DEFVAL { 16384 }
+</EM><BR>
+<EM>&gt;    &quot;TCP Send buffer size, expressed in bytes.&quot;
+</EM><BR>
+<EM>&gt; tcpRestrictLowPorts  INTEGER { false(0), true(1) }   DEFVAL { false }
+</EM><BR>
+<EM>&gt;    &quot;Indicates if TCP low ports are restricted to
+</EM><BR>
+<EM>&gt;     authorized servers/socket applications.&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; TCP CONNECTION TABLE AUGMENTATION &lt;= Mandatory. I am working with
+</EM><BR>
+<EM>&gt;    a few others in the TN3270E working group on Response Time
+</EM><BR>
+<EM>&gt;    Measurement and I believe that from an application prospective
+</EM><BR>
+<EM>&gt;    that the following set of objects would be useful from at least
+</EM><BR>
+<EM>&gt;    a problem determination prospective.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; tcpConnLastActivity  TimeTicks
+</EM><BR>
+<EM>&gt;   &quot;The number of 100ths of seconds  since  this  entry
+</EM><BR>
+<EM>&gt;    was last used.&quot;
+</EM><BR>
+<EM>&gt; tcpConnBytesIn  Integer32
+</EM><BR>
+<EM>&gt;   &quot;The number of bytes received from IP for this
+</EM><BR>
+<EM>&gt;    connection.&quot;
+</EM><BR>
+<EM>&gt; tcpConnBytesOut  Integer32
+</EM><BR>
+<EM>&gt;   &quot;The number of bytes sent to IP for this connection.&quot;
+</EM><BR>
+<EM>&gt; tcpConnReXmt  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Number of retransmissions&quot;
+</EM><BR>
+<EM>&gt; tcpConnRoundTripTime   Integer32
+</EM><BR>
+<EM>&gt;   &quot;The amount of time that has elapsed, measured in
+</EM><BR>
+<EM>&gt;    milliseconds, from when the last TCP segment was
+</EM><BR>
+<EM>&gt;    transmitted by the TCP Stack until the ACK was
+</EM><BR>
+<EM>&gt;    received.&quot;
+</EM><BR>
+<EM>&gt; tcpConnRoundTripVariance  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Round trip time variance.&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; TCP CONNECTION TABLE AUGMENTATION &lt;= optional
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; tcpConnActiveOpen  Integer32
+</EM><BR>
+<EM>&gt;   &quot;The number of times that this connection has made a
+</EM><BR>
+<EM>&gt;    direct transition to the SYN-RCVD state from the
+</EM><BR>
+<EM>&gt;    listen state.&quot;
+</EM><BR>
+<EM>&gt; tcpConnOptions   OCTET STRING (SIZE(1..40))
+</EM><BR>
+<EM>&gt;   &quot;IP options (see RFC 791)&quot;
+</EM><BR>
+<EM>&gt; tcpConnOutBuffered  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Number of outgoing bytes buffered&quot;
+</EM><BR>
+<EM>&gt; tcpConnUsrSndNxt  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Sequence number of next byte for user&quot;
+</EM><BR>
+<EM>&gt; tcpConnSndNxt  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Sequence number of next byte for TCP&quot;
+</EM><BR>
+<EM>&gt; tcpConnSndUna  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Sequence number of sent/unacked byte&quot;
+</EM><BR>
+<EM>&gt; tcpConnOutgoingPush  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Sequence number of last pushed byte&quot;
+</EM><BR>
+<EM>&gt; tcpConnOutgoingUrg  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Sequence number of last urg byte&quot;
+</EM><BR>
+<EM>&gt; tcpConnOutgoingWinSeq  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Last sequence number in snd window&quot;
+</EM><BR>
+<EM>&gt; tcpConnSendWindowSeq  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Last sequence number used, win update&quot;
+</EM><BR>
+<EM>&gt; tcpConnSendWindowAck   Integer32
+</EM><BR>
+<EM>&gt;    &quot;Last Ack number used, win update&quot;
+</EM><BR>
+<EM>&gt; tcpConnInBuffered  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Number of incoming bytes buffered&quot;
+</EM><BR>
+<EM>&gt; tcpConnRcvNxt  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Sequence number of next byte for TCP&quot;
+</EM><BR>
+<EM>&gt; tcpConnUsrRcvNxt  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Sequence number of next byte for user&quot;
+</EM><BR>
+<EM>&gt; tcpConnIncomingPush  Integer32
+</EM><BR>
+<EM>&gt;    &quot;Sequence number of last pushed byte&quot;
+</EM><BR>
+<EM>&gt; tcpConnIncomingUrg  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Sequence number of 'urgent' byte received&quot;
+</EM><BR>
+<EM>&gt; tcpConnIncomingWinSeq   Integer32
+</EM><BR>
+<EM>&gt;   &quot;Last sequence number in receive window&quot;
+</EM><BR>
+<EM>&gt; tcpConnMaxSndWnd   Integer32
+</EM><BR>
+<EM>&gt;   &quot;Maximum send window seen&quot;
+</EM><BR>
+<EM>&gt; tcpConnReXmtCount  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Current retransmission count&quot;
+</EM><BR>
+<EM>&gt; tcpConnCongestionWnd  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Congestion window&quot;
+</EM><BR>
+<EM>&gt; tcpConnSSThresh  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Slow start threshold&quot;
+</EM><BR>
+<EM>&gt; tcpConnInitSndSeq  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Initial Send Sequence Number&quot;
+</EM><BR>
+<EM>&gt; tcpConnInitRcvSeq  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Initial Receive Sequence Number&quot;
+</EM><BR>
+<EM>&gt; tcpConnSendMSS   Integer32
+</EM><BR>
+<EM>&gt;   &quot;Maximum Segment Size we can send&quot;
+</EM><BR>
+<EM>&gt; tcpConnSndWl1  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Sequence of last window&quot;
+</EM><BR>
+<EM>&gt; tcpConnSndWl2   Integer32
+</EM><BR>
+<EM>&gt;   &quot;Ack of last window&quot;
+</EM><BR>
+<EM>&gt; tcpConnSndWnd   Integer32
+</EM><BR>
+<EM>&gt;   &quot;Send Window size&quot;
+</EM><BR>
+<EM>&gt; tcpConnPendTcpRecv  Integer32
+</EM><BR>
+<EM>&gt;   &quot;TCP non_block read flag&quot;
+</EM><BR>
+<EM>&gt; tcpConnRcvBufSize  Integer32
+</EM><BR>
+<EM>&gt;   &quot;Receive buffer size&quot;
+</EM><BR>
+<EM>&gt; tcpConnRttSeq   Integer32
+</EM><BR>
+<EM>&gt;   &quot;4 byte value for the TCP sequence number&quot;
+</EM><BR>
+<EM>&gt; tcpConnBackoffCount  Integer32
+</EM><BR>
+<EM>&gt;   &quot;The value of this object will always be zero since
+</EM><BR>
+<EM>&gt;    it currently isn't reported.&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is there an interest in this type of submission?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks, Ken White
+</EM><BR>
+<EM>&gt; IBM Networking Systems
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#529">[ date ]</A>
+<A HREF="index.html#529">[ thread ]</A>
+<A HREF="subject.html#529">[ subject ]</A>
+<A HREF="author.html#529">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

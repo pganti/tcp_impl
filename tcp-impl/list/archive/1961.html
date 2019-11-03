@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="brittone@us.ibm.com (brittone@us.ibm.com)">
+<META NAME="Subject" CONTENT="TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP MSS option value</H1>
+<!-- received="Fri, 21 Jan 2000 14:34:19 -0500" -->
+<!-- isoreceived="20000121193419" -->
+<!-- sent="Fri, 21 Jan 2000 14:34:19 -0500" -->
+<!-- isosent="20000121193419" -->
+<!-- name="brittone@us.ibm.com" -->
+<!-- email="brittone@us.ibm.com" -->
+<!-- subject="TCP MSS option value" -->
+<!-- id="8525686D.006B83AF.00@d54mta05.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:brittone@us.ibm.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;8525686D.006B83AF.00@d54mta05.raleigh.ibm.com&gt;"><EM>brittone@us.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jan 21 2000 - 14:34:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1960.html">Zachary Amsden: "Re: TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1964.html">der Mouse: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1967.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1961">[ date ]</A>
+<A HREF="index.html#1961">[ thread ]</A>
+<A HREF="subject.html#1961">[ subject ]</A>
+<A HREF="author.html#1961">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Please help me understand what RFC2581 intends regarding the value
+<BR>
+advertised in the MSS option when other options (e.g., Timestamp) are going
+<BR>
+to be used.
+<BR>
+<P>Suppose the MTU is 1500 bytes, and after the 3-way handshake a host is
+<BR>
+going to be sending on each segment 12 bytes of TCP options:  Timestamp
+<BR>
+plus two NOPs.  RFC879, &quot;TCP Maximum Segment Size,&quot; says &quot;THE TCP MAXIMUM
+<BR>
+SEGMENT SIZE IS THE IP MAXIMUM DATAGRAM SIZE MINUS FORTY&quot; (all capital
+<BR>
+letters in  RFC879).  This implies that the host should advertise MSS=1460,
+<BR>
+but as  RFC 879 notes, when it was written there were &quot;no TCP header
+<BR>
+options ... defined that would normally be sent at the same time as data
+<BR>
+segments.&quot;  RFC 1011 states &quot;The TCP Maximum Segment Size is the IP Maximum
+<BR>
+Datagram Size minus forty,&quot; but sending TCP options with data segments was
+<BR>
+still an obscure subject when that was written.   Section 4.2.2.6, &quot;Maximum
+<BR>
+Segment Size Option,&quot; of RFC1122, &quot;Host Requirements -- Communications
+<BR>
+Layers,&quot;  does not explicitly say what value to advertise in the MSS
+<BR>
+option, but it gives a formula for Eff.snd.MSS, &quot;the maximum size of a
+<BR>
+segment that TCP really sends,&quot; that is based on SendMSS, &quot;the MSS value
+<BR>
+received from the remote host,&quot; and the TCPhdrsize.  If one solves that
+<BR>
+formula for SendMSS, and notes the RFC's comment that &quot;TCPhdrsize is the
+<BR>
+size of the TCP header; this is normally 20, but may be larger if TCP
+<BR>
+options are to be sent,&quot;  then it seems to say for a 1500 byte MTU the MSS
+<BR>
+option value should be 1460, and each segment will carry 1448 byte of data
+<BR>
+in addition to the 12 bytes of options.  Section 2.18, &quot;Options missing
+<BR>
+from TCP MSS calculation,&quot; of RFC 2525, &quot;Known TCP Implementation
+<BR>
+Problems,&quot; reiterates that RFC1122's formula for effective send MSS should
+<BR>
+be applied in order to avoid fragmentation (or worse problems if Path MTU
+<BR>
+is being used).  Most of the implementations with which I am familiar do
+<BR>
+indeed send MSS option value of 1460 when the MTU is 1500 and Timestamp
+<BR>
+option is being used.  Similarly, section 18.4, &quot;Maximum Segment Size,&quot; of
+<BR>
+W. Richard Stevens's &quot;TCP/IP Illustrated, Vol. 1&quot; says, &quot;When TCP sends a
+<BR>
+SYN segment ... it can send an MSS value up to the outgoing interface's
+<BR>
+MTU, minus the size of the fixed TCP and IP headers.&quot;
+<BR>
+<P>However, RFC2581, &quot;TCP Congestion Control,&quot; says &quot;RECEIVER MAXIMUM SEGMENT
+<BR>
+SIZE (RMSS):  The RMSS is the size of the largest segment the receiver is
+<BR>
+willing to accept.  This is the value specified in the MSS option sent by
+<BR>
+the receiver during connection startup.  ...  The size does not include the
+<BR>
+TCP/IP headers and options.&quot;  This seems to say that if the MTU is 1500
+<BR>
+bytes, the IP header is 20, the TCP header is 20, and the TCP option field
+<BR>
+is 12, then the RMSS (and therefore the MSS option value to advertise)
+<BR>
+should be 1448.  Furthermore, RFC2581 also says &quot;SENDER MAXIMUM SEGMENT
+<BR>
+SIZE (SMSS):  The SMSS is the size of the largest segment that the sender
+<BR>
+can transmit.  This value can be based on the maximum transmission unit of
+<BR>
+the network, the path MTU discovery [MD90] algorithm, RMSS ... , or other
+<BR>
+factors.  The size does not include the TCP/IP headers and options.&quot;  Is
+<BR>
+SMSS the same as RFC1122's Eff.snd.MSS?  If so, then if the received MSS
+<BR>
+advertisement is 1448, wouldn't the SMSS be 1436 (i.e., min
+<BR>
+(1448+20,1480)-32)?
+<BR>
+<P>If I understand correctly that RFC2851 says TCP should advertise MSS opt
+<BR>
+value of 1448 when MTU=1500 and TCPoptionLength=12, then I have some
+<BR>
+further questions about how to calculate Eff.snd.MSS, the number of data
+<BR>
+bytes to send in a segment along with the headers and options:
+<BR>
+<P>1) Does the effective send MSS calculation of RFC1122 still apply?  If so,
+<BR>
+then when the local host advertises MSS option value of 1448, the remote
+<BR>
+host will calculate an effective send MSS of 1436 (=min(1448+20,1480)--32),
+<BR>
+and therefore send segments with 1436 bytes of data even though the local
+<BR>
+host can handle segments of 1448 bytes of data.  While I heartily agree
+<BR>
+with the suggestion later in RFC2851 that implementations should be liberal
+<BR>
+in interpreting what constitutes two full-sized segments when deciding when
+<BR>
+to ACK, I am concerned that existing implementations are not so liberal and
+<BR>
+that hosts sending 1436 bytes of data to them will get into the
+<BR>
+Nagel-DelayedAck standoff described on page 204 of Stevens's second edition
+<BR>
+of UNIX Network Programming.
+<BR>
+<P>2) If the effective send MSS calculation of RFC1122 no longer should be
+<BR>
+used, and the remote host has an old implementation that calculates the MSS
+<BR>
+value to advertise by merely subtracting 40 from its MTU, then the local
+<BR>
+host could wind up sending datagrams larger than the remote host's MTU.
+<BR>
+For example, suppose the local host has MTU=2000 and the remote host has
+<BR>
+MTU=1500.  If the remote host advertises MSS option=1460 (i.e., MTU-40,
+<BR>
+ignoring the TCP option bytes),  and the local host interprets that
+<BR>
+received MSS option value of 1460 per RFC2581, i.e., as if it did not
+<BR>
+include TCP header and TCP option bytes, then the local host would send
+<BR>
+datagrams 1512 bytes long (20 for IPheader + 20 for TCPfixedHeader+12 for
+<BR>
+TCPoptions+1460 for data).  That of course can lead to performance-reducing
+<BR>
+fragmentation or even complete communication failure.
+<BR>
+<P>I hope I have misinterpreted RFC2581's intentions regarding MSS option
+<BR>
+value.  If not, can you give me any advice on how to interoperate with the
+<BR>
+existing implementations that calculate MSS option value by subtracting 40
+<BR>
+from the MTU even when other TCP options are going to be used.
+<BR>
+<P>Regards,
+<BR>
+Ed Britton
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1960.html">Zachary Amsden: "Re: TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1962.html">Bob Braden: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1964.html">der Mouse: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1967.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1961">[ date ]</A>
+<A HREF="index.html#1961">[ thread ]</A>
+<A HREF="subject.html#1961">[ subject ]</A>
+<A HREF="author.html#1961">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

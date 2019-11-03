@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Sat Jun 10 08:32:58 2000" -->
+<!-- isoreceived="20000610123258" -->
+<!-- sent="Sat, 10 Jun 2000 08:23:25 -0400" -->
+<!-- isosent="20000610122325" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="200006101223.IAA07080@aland.bbn.com" -->
+<!-- inreplyto="20000610031256.29184.qmail@web2004.mail.yahoo.com" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;200006101223.IAA07080@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jun 10 2000 - 08:23:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2119.html">Vernon Schryver: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2117.html">Alan Cox: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2121.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2121.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2118">[ date ]</A>
+<A HREF="index.html#2118">[ thread ]</A>
+<A HREF="subject.html#2118">[ subject ]</A>
+<A HREF="author.html#2118">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+There's no RFC that says it.
+<BR>
+<P>However, Jon Bennett, Nick Shectman and I published a paper showing how
+<BR>
+packet reordering really trashes TCP performance in IEEE/ACM Trans. on
+<BR>
+Networking last year.
+<BR>
+<P>Craig
+<BR>
+<P>In message &lt;<A HREF="mailto:20000610031256.29184.qmail@web2004.mail.yahoo.com?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;200006101223.IAA07080@aland.bbn.com&gt;">20000610031256.29184.qmail@web2004.mail.yahoo.com</A>&gt;, sankar ramamoor
+<BR>
+thi writes:
+<BR>
+<P><EM>&gt;Hi,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Is there a reference in any rfc's which says
+</EM><BR>
+<EM>&gt;to the equivalent of 
+</EM><BR>
+<EM>&gt;'Thou shall not reorder packets in a flow' by a
+</EM><BR>
+<EM>&gt;network device like router or a switch.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I am trying to make a case that a parralel
+</EM><BR>
+<EM>&gt;network-device (a device with a lot of parallel
+</EM><BR>
+<EM>&gt;engines inside it) should make effort to ensure that
+</EM><BR>
+<EM>&gt;packets inside a tcp flow are not reordered - but am
+</EM><BR>
+<EM>&gt;losing the argument. Without any effot the device has
+</EM><BR>
+<EM>&gt;the potential to reorder packets inside tcp flows
+</EM><BR>
+<EM>&gt;because of the parallism.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Also what would be the effect of such reordering on
+</EM><BR>
+<EM>&gt;TCP timers? What is the effect on SACK?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Any input on this point is welcome.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Thanks,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;-- sankar ramamoorthi --
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;__________________________________________________
+</EM><BR>
+<EM>&gt;Do You Yahoo!?
+</EM><BR>
+<EM>&gt;Yahoo! Photos -- now, 100 FREE prints!
+</EM><BR>
+<EM>&gt;<A HREF="http://photos.yahoo.com">http://photos.yahoo.com</A>
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2119.html">Vernon Schryver: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2117.html">Alan Cox: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2121.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2121.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2118">[ date ]</A>
+<A HREF="index.html#2118">[ thread ]</A>
+<A HREF="subject.html#2118">[ subject ]</A>
+<A HREF="author.html#2118">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="mrosu@us.ibm.com (mrosu@us.ibm.com)">
+<META NAME="Subject" CONTENT="Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Counting ACKs in NewReno</H1>
+<!-- received="Fri Mar 12 19:31:44 1999" -->
+<!-- isoreceived="19990313003144" -->
+<!-- sent="Fri, 12 Mar 1999 19:25:28 -0500" -->
+<!-- isosent="19990313002528" -->
+<!-- name="mrosu@us.ibm.com" -->
+<!-- email="mrosu@us.ibm.com" -->
+<!-- subject="Counting ACKs in NewReno" -->
+<!-- id="85256733.0002563A.00@D51MTA03.pok.ibm.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;85256733.0002563A.00@D51MTA03.pok.ibm.com&gt;"><EM>mrosu@us.ibm.com</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Mar 12 1999 - 19:25:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1668">[ date ]</A>
+<A HREF="index.html#1668">[ thread ]</A>
+<A HREF="subject.html#1668">[ subject ]</A>
+<A HREF="author.html#1668">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>I've a question regarding your draft (draft-ietf-tcpimpl-newreno-02):
+<BR>
+<P>I believe that the NewReno draft/RFC should be more specific about the
+<BR>
+handling of the duplicate ACKs counter (dupacks) in step 5.
+<BR>
+<P>For both partial and full ACKs, I propose that dupacks should be
+<BR>
+decremented by the number of segments acknowledged minus one. This is
+<BR>
+similar to the draft's recommendation for updating cwnd upon receiving
+<BR>
+a partial ACK. The proposed change will only affect the retransmissions
+<BR>
+of segments 'around' the right edge of the window, i.e., segments with
+<BR>
+sequence numbers 'around' recover.
+<BR>
+<P>The draft is unclear about dupacks handling when a partial ACK is
+<BR>
+received. If dupacks is left unchanged upon receiving a partial ACK,
+<BR>
+unnecessary transmissions may occur (see Example 1). Instead,
+<BR>
+decrementing dupacks, as I propose, delays the retransmission of
+<BR>
+a segment until there is enough evidence that three segments sent
+<BR>
+after it were received (see Examples 1 and 2).
+<BR>
+<P>The draft recommends dupacks to be reset upon receiving a full ACK.
+<BR>
+Example 3 shows how resetting dupacks prevents a useful retransmision to
+<BR>
+happen. In addition, Example 3 shows how information useful for segment
+<BR>
+retransmission is preserved upon exiting fast recovery if dupacks
+<BR>
+is updated as I propose.
+<BR>
+<P>I've checked the tcp-impl archive and didn't find any discussion on
+<BR>
+this issue. If this has already been discussed in the WG, please let
+<BR>
+me know.
+<BR>
+<P>Looking forward to your comments.
+<BR>
+Regards,
+<BR>
+Marcel
+<BR>
+<P><P>The partial ACK case is described first, followed by the full ACK
+<BR>
+case. I'll assume that ACK messages are never lost. Lost ACKs will
+<BR>
+only make the proposed scheme more conservative...
+<BR>
+<P>A. The partial ACKs case:
+<BR>
+<EM>&gt;From draft-ietf-tcpimpl-newreno, February 1999, page 4, step 5:
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If this ACK does *not* acknowledge all of the data up to and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including &quot;recover&quot;, then this is a partial ACK.  In this case,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmit the first unacknowledged segment.  Deflate the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window by the amount of new data acknowledged, then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add back one MSS and send a new segment if permitted by the new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value of cwnd.  This &quot;partial window deflation&quot; attempts to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ensure that, when Fast Recovery eventually ends, approximately
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssthresh amount of data will be outstanding in the network.
+<BR>
+<P><EM>       &gt;&gt; Do not clear the counter recording the number of duplicate
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acknowledgements (i.e., do not exit the Fast Recovery procedure).&lt;&lt;
+<BR>
+<P>Should we understand that dupacks should not be changed upon receiving
+<BR>
+a partial ACK?  If this is the case, the next example shows a situation
+<BR>
+in which the draft recommends retransmitting a segment too early.
+<BR>
+<P>Example 1.
+<BR>
+Consider the following sequence of eight segments, with an initial
+<BR>
+congestion window (cwnd) of 8.  The 1st and the 7th segment in the
+<BR>
+sequence are lost:
+<BR>
+[1] 2 3 4 5 6 [7] 8    ([ ] =  lost segments)
+<BR>
+<P>After sending segments 1-8, the source receives three duplicate acks,
+<BR>
+and it retransmits segment 1. Immediately before receiving the partial
+<BR>
+ACK, which acknowledges segment 6, cwnd is 10 = 4 (initial cwnd = 8/2) +
+<BR>
+6 (duplicate ACKs generated by segments 2-6, 8).
+<BR>
+<P>When the partial ack arrives, dupacks is 6 and the draft says only
+<BR>
+that it shouldn't be reset.  As dupacks &gt;= 3, should segment 7 be
+<BR>
+retransmitted immediately?
+<BR>
+<P>Since only two segments sent after 7 (segment 8 and the retransmission
+<BR>
+of 1) were acked by the destination, it is probably too early to
+<BR>
+retransmit segment 7.
+<BR>
+<P>I believe that, upon receiving a partial ACK, the sender should
+<BR>
+decrement dupacks by the number of segments acknowledged minus one.
+<BR>
+In this example, the resulting dupacks is 1. If we want to be more
+<BR>
+aggressive and count the retransmission of segment 1 as a segment sent
+<BR>
+after 7 but acked before 7, then the new value of dupacks should be 2.
+<BR>
+Either way, I don't think that segment 7 shouldn't be retransmitted
+<BR>
+at this time.
+<BR>
+<P>According to the draft, upon receiving the partial ack, cwnd is
+<BR>
+deflated by 6 (the amount of data acknowledged) and inflated by 1. The
+<BR>
+new congestion window is 5 (10 - 6 + 1). Based on the new value of
+<BR>
+cwnd, the source will sends three new segments. It is probably closer
+<BR>
+to the spirit of the &quot;Fast Retransmit&quot; algorithm to retransmit segment
+<BR>
+7 only after (if ever) two acks (or one ack if we count the retransmission
+<BR>
+of 1) for segment 6 are received. Alternatively, if an ACK for segments
+<BR>
+7, 8, 9, or 10 is received before dupacks becomes 3, the proposed rule
+<BR>
+for updating dupacks eliminates an unnecessary retransmission.
+<BR>
+<P>The next example shows that the proposed rule for updating the dupacks
+<BR>
+counter doesn't prevent partial ACKs from generating retransmissions.
+<BR>
+<P>Example 2.
+<BR>
+Consider an initial cwnd of 10, message 1 and 7 are lost, messages
+<BR>
+2-6, 8-10 are received. If dupacks is decremented upon receiving a partial
+<BR>
+ack (for segment 6), then dupacks is updated to 8 - 5 = 3. You can think
+<BR>
+of the new value of dupacks as representing the three duplicate ACKs
+<BR>
+generated by the receipt of segments 8, 9, and 10. As the new value
+<BR>
+of dupacks is &gt;= 3, segment 7 is retransmitted immediately.
+<BR>
+<P>B. The full ACK case:
+<BR>
+<EM>&gt;From draft-ietf-tcpimpl-newreno, February 1999, page 4, step 5:
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If this ACK acknowledges all of the data up to and including
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;recover&quot;, then the ACK acknowledges all the intermediate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments sent between the original transmission of the lost
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment and the receipt of the third duplicate ACK.  Set cwnd to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;either (1) min (ssthresh, FlightSize + MSS); or (2) ssthresh,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where ssthresh is the value set in step 1; this is termed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;deflating&quot; the window.  (We note that &quot;FlightSize&quot; in step 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;referred to the amount of data outstanding in step 1, when Fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recovery was entered, while &quot;FlightSize&quot; in step 5 refers to the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amount of data outstanding in step 5, when Fast Recovery is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exited.) If the second option is selected, the implementation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should take measures to avoid a possible burst of data, in case
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the amount of data outstanding in the network was much less than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the new congestion window allows [HTH98].  &gt;&gt; Clear the counter
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recording the number of duplicate acknowledgements, exiting the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fast Recovery procedure. &lt;&lt;
+<BR>
+<P><P>Example 3.
+<BR>
+Consider an initial cwnd of 9, message 1 and 7 are lost, messages 2-6,
+<BR>
+8, and 9 are received. recover is set to 9 and ssthresh to 4. If we update
+<BR>
+dupacks as in example 1, upon receiving a partial ack for segment 6,
+<BR>
+segment 7 is not retransmitted immediately because the new value of
+<BR>
+dupacks is 2. However, the new cwnd is 6 and three new  data segments
+<BR>
+(10, 11, 12) are sent. Lets assume segment 10 is dropped:
+<BR>
+[1] 2 3 4 5 6 [7] 8 9 [10] 11 12 13   ([ ] = lost segments)
+<BR>
+<P>The sender receives two additional ACKs for segment 6 (dupacks == 4),
+<BR>
+retransmits 7, and gets an ACK for segment 9. As recover is 9, this last
+<BR>
+ACK is a full ACK.
+<BR>
+<P>According to the draft, upon receiving a full ACK, the source sets
+<BR>
+dupacks to zero. In addition, the source sets cwnd to ssthresh (= 4)
+<BR>
+and it sends a new data segment, 13. The receipt of segment 13 generates
+<BR>
+a second ACK for segment 9 and dupacks is incremented from 0 to 1.
+<BR>
+<P>Clearing dupacks erases all the information the source has recorded
+<BR>
+on segments 10, 11, and 12. Ideally, dupacks should be reset to 2
+<BR>
+in order to count for segments 11 and 12.
+<BR>
+<P>If we apply the proposed rule for updating dupacks and decrement it
+<BR>
+by the number of segments acknowledged minus one, the resulting value
+<BR>
+is 2 (= 4 - 2).  After the second ACK for 9 is received (the ACK generated
+<BR>
+by segment 13), segment 10 can be retransmitted.
+<BR>
+<P>Please correct me if I am wrong.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1667.html">Vernon Schryver: "Re: Nagle on send"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1672.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1673.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1668">[ date ]</A>
+<A HREF="index.html#1668">[ thread ]</A>
+<A HREF="subject.html#1668">[ subject ]</A>
+<A HREF="author.html#1668">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

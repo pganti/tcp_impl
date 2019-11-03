@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: addendum to last message</TITLE>
+<META NAME="Author" CONTENT="Wu-chang Feng (wuchang@proxinet.com)">
+<META NAME="Subject" CONTENT="addendum to last message">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>addendum to last message</H1>
+<!-- received="Wed Feb 16 21:25:21 2000" -->
+<!-- isoreceived="20000217022521" -->
+<!-- sent="Wed, 16 Feb 2000 18:21:44 -0800" -->
+<!-- isosent="20000217022144" -->
+<!-- name="Wu-chang Feng" -->
+<!-- email="wuchang@proxinet.com" -->
+<!-- subject="addendum to last message" -->
+<!-- id="38AB5B38.101706E@proxinet.com" -->
+<STRONG>From:</STRONG> Wu-chang Feng (<A HREF="mailto:wuchang@proxinet.com?Subject=Re:%20addendum%20to%20last%20message&In-Reply-To=&lt;38AB5B38.101706E@proxinet.com&gt;"><EM>wuchang@proxinet.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 16 2000 - 21:21:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1986.html">fred@iprg.nokia.com: "INFOCOM 2000: Last week for early registration"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1984.html">Wu-chang Feng: "Palm TCP stack"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1985">[ date ]</A>
+<A HREF="index.html#1985">[ thread ]</A>
+<A HREF="subject.html#1985">[ subject ]</A>
+<A HREF="author.html#1985">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The situation gets worse when the connection is closed with
+<BR>
+shutdown(fd,2).  Data segments continue to be sent to the Palm at the
+<BR>
+exponential backoff interval.  (Note that shutdown maps to
+<BR>
+NetLibSocketShutdown).  Am I looking at a NetLib bug?
+<BR>
+<P>Thanks in advance,
+<BR>
+Wu
+<BR>
+
+<P>
+18:03:00.056635 166.137.17.102.9492 &gt; mynetra.8005: . ack 1609 win 1876
+<BR>
+18:03:00.056660 mynetra.8005 &gt; 166.137.17.102.9492: . 2681:3217(536) ack 57 win 9112 (DF)
+<BR>
+18:03:00.348836 166.137.17.102.9492 &gt; mynetra.8005: . ack 2145 win 1876
+<BR>
+18:03:00.348856 mynetra.8005 &gt; 166.137.17.102.9492: . 3217:3753(536) ack 57 win 9112 (DF)
+<BR>
+18:03:00.732199 166.137.17.102.9492 &gt; mynetra.8005: . ack 2681 win 1876
+<BR>
+18:03:00.732218 mynetra.8005 &gt; 166.137.17.102.9492: . 3753:4289(536) ack 57 win 9112 (DF)
+<BR>
+18:03:01.119171 166.137.17.102.9492 &gt; mynetra.8005: . ack 3217 win 1876
+<BR>
+18:03:01.119195 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 57 win 9112 (DF)
+<BR>
+18:03:01.608295 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 3753 win 1340
+<BR>
+18:03:01.608314 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:01.900139 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:01.900160 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:02.381615 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:02.381651 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:02.396155 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:02.396171 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:02.480053 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:02.480070 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:02.961498 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:02.961519 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:02.976078 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:02.976096 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.085505 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:03.085524 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.446604 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:03.446624 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.457563 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:03.457578 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.639940 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:03.639958 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.833246 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:03.833264 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:03.946807 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+18:03:04.026944 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:04.026961 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:04.220244 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:04.220263 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:04.231195 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:04.231215 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:04.439152 166.137.17.102.9492 &gt; mynetra.8005: F 57:57(0) ack 4289 win 0
+<BR>
+18:03:04.439174 mynetra.8005 &gt; 166.137.17.102.9492: . ack 58 win 9112 (DF)
+<BR>
+18:03:05.088229 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:05.095516 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:05.183051 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:05.380049 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:05.390995 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:09.607223 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+18:03:10.885047 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:20.938099 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+18:03:27.245048 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:03:43.609735 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+18:03:44.723327 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:04:28.952961 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+18:04:30.047417 166.137.17.102.9492 &gt; mynetra.8005: . ack 4289 win 0
+<BR>
+18:05:28.957296 mynetra.8005 &gt; 166.137.17.102.9492: . 4289:4825(536) ack 58 win 9112 (DF)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1986.html">fred@iprg.nokia.com: "INFOCOM 2000: Last week for early registration"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1984.html">Wu-chang Feng: "Palm TCP stack"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1985">[ date ]</A>
+<A HREF="index.html#1985">[ thread ]</A>
+<A HREF="subject.html#1985">[ subject ]</A>
+<A HREF="author.html#1985">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

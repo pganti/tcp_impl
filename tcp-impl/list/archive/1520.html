@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 14:48:14 1999" -->
+<!-- isoreceived="19990205194814" -->
+<!-- sent="Fri, 05 Feb 1999 11:46:45 -0800" -->
+<!-- isosent="19990205194645" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902051946.LAA01285@red.mtv.siara.com" -->
+<!-- inreplyto="36B8B9A5.4BBBEA81@ehsco.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902051946.LAA01285@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 14:46:45 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1519.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1476.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1480.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1520">[ date ]</A>
+<A HREF="index.html#1520">[ thread ]</A>
+<A HREF="subject.html#1520">[ subject ]</A>
+<A HREF="author.html#1520">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+All and sundry,
+<BR>
+<P>I'm going to try to respond to several people in one (or more?) message(s).
+<BR>
+<P>Eric Hall and Joe Touch both ask, quite reasonably, why not just go ahead and 
+<BR>
+disable Nagle and be done with it.
+<BR>
+<P>The reason is that Nagle is very effective at protecting the network from 
+<BR>
+hordes of small packets.  One of the main reasons i am proposing this 
+<BR>
+modification is to keep people from being tempted to disable Nagle.
+<BR>
+<P>I've seen a lot of cases where people wanted to turn off Nagle, but most of 
+<BR>
+them have been because of not really understanding what is going on, 
+<BR>
+especially with respect to buffering.
+<BR>
+<P>As an example, some colleagues of mine recently turned off Nagle on a Usenet 
+<BR>
+server.  They saw article retrieval latency drop substantially, which was a 
+<BR>
+good thing.  However, at first they did not notice that the number of packets 
+<BR>
+being transmitted (for the same request stream) increased an order of 
+<BR>
+magnitude (with the average packet size dropping from, basically, MSS to 140 
+<BR>
+bytes!).  (It turned out that when they went back in, turned Nagle *back on*, 
+<BR>
+and improved the buffering of the Usenet server, they got the reduced 
+<BR>
+latencies *without* introducing any more load into the network.)
+<BR>
+<P>Thus, turning off Nagle is a very dangerous thing to do.  I wouldn't want lots 
+<BR>
+of applications running with Nagle turned off; in fact, i wouldn't want any 
+<BR>
+more applications turning off Nagle than already do.
+<BR>
+<P>Again, my hope is that by introducing this change, there will be less of a 
+<BR>
+tendency for application writers to think &quot;bad performance?  oh, i know, i'll 
+<BR>
+disable Nagle!&quot;.
+<BR>
+<P><P>Eric Hall also asks (basically) could changing the Nagle algorithm in this way 
+<BR>
+either make things worse for existing applications, or increase the load on 
+<BR>
+the network for existing applications.  Here is about all i know how to say 
+<BR>
+about that:  if an application is dribbling out data to TCP at a little over 1 
+<BR>
+MSS worth of data per RTT, then with the original Nagle (and assuming the 
+<BR>
+timing is exactly right) you might see one ``small'' packet, then a stream of 
+<BR>
+big packets (about one per RTT), whereas with the modified Nagle (again, 
+<BR>
+assuming the timing is exactly right) you might see one ``small'' packet and 
+<BR>
+one big packet each RTT.
+<BR>
+<P><P>In a later mail, you say:
+<BR>
+<P><EM>&gt; the idea here is to avoid waiting for a timer right? specifically, the
+</EM><BR>
+<EM>&gt; standalone ACK timer.
+</EM><BR>
+<P>Actually, in some cases the RTT that Nagle imposes may be as significant as 
+<BR>
+the delayed ACK timer.
+<BR>
+<P><EM>&gt; that would seem to indicate that if one allowed up to 2MSS of unacked,
+</EM><BR>
+<EM>&gt; &quot;small&quot; sends and _then_ stopped one could be reasonably sure that an
+</EM><BR>
+<EM>&gt; ACK would be arriving within one RTT of the 2MSSth byte being sent.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; it would allow a &quot;pathological&quot; application to put up to 2MSS packets
+</EM><BR>
+<EM>&gt; out there, but I'm guessing it would be cleaner than simply disabling
+</EM><BR>
+<EM>&gt; nagle entirely?
+</EM><BR>
+<P>This would probably be cleaner than disabling Nagle entirely, but i don't 
+<BR>
+think this is a good idea.  Imagine 2*MSS of 1 byte packets!
+<BR>
+<P>The point is to get the entire request or response to the other side with as 
+<BR>
+few packets as possible (each as large as possible).  Once it is there, then 
+<BR>
+the other side can respond or send another request.
+<BR>
+<P>Greg Minshall
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1521.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1519.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1476.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1480.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1520">[ date ]</A>
+<A HREF="index.html#1520">[ thread ]</A>
+<A HREF="subject.html#1520">[ subject ]</A>
+<A HREF="author.html#1520">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: viewgraphs on revisions to RFC 2</TITLE>
+<META NAME="Author" CONTENT="Sally Floyd (floyd@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="viewgraphs on revisions to RFC 2001">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>viewgraphs on revisions to RFC 2001</H1>
+<!-- received="Sat Aug 29 18:31:46 1998" -->
+<!-- isoreceived="19980829223146" -->
+<!-- sent="Sat, 29 Aug 1998 18:30:03 PDT" -->
+<!-- isosent="19980830013003" -->
+<!-- name="Sally Floyd" -->
+<!-- email="floyd@ee.lbl.gov" -->
+<!-- subject="viewgraphs on revisions to RFC 2001" -->
+<!-- id="199808300130.SAA19711@owl.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Sally Floyd (<A HREF="mailto:floyd@ee.lbl.gov?Subject=Re:%20viewgraphs%20on%20revisions%20to%20RFC%202001&In-Reply-To=&lt;199808300130.SAA19711@owl.ee.lbl.gov&gt;"><EM>floyd@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Aug 29 1998 - 21:30:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1284.html">joanne4484@yahoo.com: "re your web site"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1287.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1334.html">Kacheong Poon: "Re: viewgraphs on revisions to RFC 2001"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1285">[ date ]</A>
+<A HREF="index.html#1285">[ thread ]</A>
+<A HREF="subject.html#1285">[ subject ]</A>
+<A HREF="author.html#1285">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+My viewgraphs on Reno, NewReno, and the bugfix to
+<BR>
+avoid multiple fast retransmits, from the Friday tcpimpl
+<BR>
+meeting in Chicago, are available as follows:
+<BR>
+<P>&nbsp;&nbsp;<A HREF="ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.ps">ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.ps</A>
+<BR>
+and:
+<BR>
+&nbsp;&nbsp;<A HREF="ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.pdf">ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.pdf</A>
+<BR>
+<P>The description of the NewReno and avoiding-multiple-fast-retransmit
+<BR>
+changes illustrated in those viewgraphs is given below.
+<BR>
+<P>These tests can be run with &quot;./test-all-newreno&quot; in directory
+<BR>
+tcl/test in the ns simulator (starting with the daily snapshop
+<BR>
+that will be available tonight).
+<BR>
+<P>- Sally
+<BR>
+--------------------------------
+<BR>
+<A HREF="http://www-nrg.ee.lbl.gov/floyd/">http://www-nrg.ee.lbl.gov/floyd/</A>
+<BR>
+--------------------------------
+<BR>
+<P>Draft text for revising the five steps in Section 3.3 on Fast
+<BR>
+Retransmit/Fast Recovery in &quot;TCP Congestion Control&quot;,
+<BR>
+draft-ietf-tcpimpl-cong-control-00.txt, URL
+<BR>
+&quot;<A HREF="http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-cong-control-00.txt">http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-cong-control-00.txt</A>&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Implementing fast retransmit/fast recovery in this manner (often
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;referred to as Reno congestion control) allows the fast retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;algorithm to repair multiple dropped segments from a single
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;window of data in some cases [FF96].  However, Reno congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;control has several well-documented problems.  First, for *most*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;cases of multiple dropped segments from a single window of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data, Reno congestion control is unable to recover without a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;retransmit timeout [H96, FF96].  A second well-documented
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;problem with both Tahoe and Reno congestion control algorithms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;is that multiple segment losses from a single window of data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;can sometimes result in unnecessary multiple fast retransmits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(and multiple reductions of the congestion window) [Flo94].
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;The following two changes (sometimes referred to as NewReno
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and &quot;avoiding multiple fast retransmits&quot;) MAY be taken to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;address the first and second problems listed above.  These two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;changes are orthogonal - one could implement one without the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;other.  For simplicity, the steps below illustrate the two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;changes implemented together.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;1A.  After the third duplicate ACK is received, check to see
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if those duplicate ACKs cover send_high.  If they do, then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;follow steps 1 and 2 above, and also record the highest
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence number transmitted (send_high and recover).  If
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the duplicate ACKs don't cover send_high, then do nothing.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(This is &quot;avoiding multiple fast retransmits&quot;.) That is,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not change ssthresh or cwnd, and do not retransmit the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;lost&quot; segment.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Steps 3 and 4 remain unchanged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;5A.  When a non-duplicate ACK arrives that covers &quot;recover&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;follow step 5 above.  When a non-duplicate ACK arrives
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that does not cover &quot;recover&quot; (i.e., a &quot;partial ack&quot;),
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmit the first unacknowledged segment.  (This is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;NewReno&quot;.) Do not change cwnd or ssthresh, but deflate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the congestion window by removing the additive term with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the count of duplicate acknowledgements.  For the first
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial ACK that arrives, also reset the retransmit timer.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;6.  After a retransmit timeout, record the highest sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitted (send_high).
+<BR>
+<P>----------------------------------------------------------------
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;This is the NewReno change by itself:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;1A.  After the third duplicate ACK is received, follow steps
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 and 2 above, and also record the highest sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitted (&quot;recover&quot;).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Steps 3 and 4 remain unchanged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;5A.  This is the same as step 5A above.
+<BR>
+<P>----------------------------------------------------------------
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;This is the &quot;avoiding multiple fast retransmits&quot; change by itself,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;*without* NewReno:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;1A.  After the third duplicate ACK is received, check to see
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if those duplicate ACKs cover send_high.  If they do, then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;follow steps 1 and 2 above.  (If this was implemented *with*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NewReno, this step would also include recording the highest
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence number transmitted in send_high.)  If the duplicate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACKs don't cover send_high, then do nothing.  That is, do not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change ssthresh or cwnd, and do not retransmit the &quot;lost&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Steps 3, 4, and 5 remain unchanged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;6.  After a retransmit timeout, record the highest sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitted (send_high).
+<BR>
+<P>--------------------------------------------------------------------
+<BR>
+<P>New References:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;[H96] J. Hoe, &quot;Improving the Start-up Behavior of a Congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Control Scheme for TCP&quot;, SIGCOMM 96, August 1996.  URL
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&quot;<A HREF="http://www.acm.org/sigcomm/sigcomm96/papers/hoe.html">http://www.acm.org/sigcomm/sigcomm96/papers/hoe.html</A>&quot;.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1284.html">joanne4484@yahoo.com: "re your web site"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1286.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1287.html">eewechta@swansea.ac.uk: "RFC 1016 - source quench"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1334.html">Kacheong Poon: "Re: viewgraphs on revisions to RFC 2001"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1285">[ date ]</A>
+<A HREF="index.html#1285">[ thread ]</A>
+<A HREF="subject.html#1285">[ subject ]</A>
+<A HREF="author.html#1285">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

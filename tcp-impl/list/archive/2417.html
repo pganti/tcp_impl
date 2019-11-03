@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Multiple TCP source addresse</TITLE>
+<META NAME="Author" CONTENT="Harald Koch (chk@pobox.com)">
+<META NAME="Subject" CONTENT="Re: Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Multiple TCP source addresses?</H1>
+<!-- received="Mon Dec 18 12:52:02 2000" -->
+<!-- isoreceived="20001218175202" -->
+<!-- sent="Mon, 18 Dec 2000 12:34:56 -0500" -->
+<!-- isosent="20001218173456" -->
+<!-- name="Harald Koch" -->
+<!-- email="chk@pobox.com" -->
+<!-- subject="Re: Multiple TCP source addresses?" -->
+<!-- id="200012181734.MAA28331@ve3tla.ampr.org" -->
+<!-- inreplyto="200012151803.NAA04141@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> Harald Koch (<A HREF="mailto:chk@pobox.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012181734.MAA28331@ve3tla.ampr.org&gt;"><EM>chk@pobox.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Dec 18 2000 - 12:34:56 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2420.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2420.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2421.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2417">[ date ]</A>
+<A HREF="index.html#2417">[ thread ]</A>
+<A HREF="subject.html#2417">[ subject ]</A>
+<A HREF="author.html#2417">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Of all the gin joints in all the towns in all the world, der Mouse
+<BR>
+had to walk into mine and say:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; How is a routing protocol supposed to deal with this?  Remember, my
+</EM><BR>
+<EM>&gt; house LAN doesn't have its own AS.
+</EM><BR>
+<P>In modern UNIX kernels, the TCP source address is chosen by doing a
+<BR>
+routing table lookup, finding the *outgoing* interface, and using its
+<BR>
+address.
+<BR>
+<P>If you run a dynamic routing protocol (even RIP will do with the right
+<BR>
+configuration files), then you can set the default route based on which
+<BR>
+gateway is up and/or primary.
+<BR>
+<P>If the primary gateway goes down, the default route will switch to the
+<BR>
+other gateway. At that point, *new* connections will get the new source
+<BR>
+IP address.
+<BR>
+<P>The details of &quot;appropriate configuration files&quot; are left as an exercise
+<BR>
+to the reader; IIRC, both zebra and gated have a way to prefer one of
+<BR>
+two equal-cost gateways; this would allow you to set the
+<BR>
+primary/secondary gateway separately on each host on your LAN.
+<BR>
+<P><P>Now, if you wanted to still advertise one of your LAN address when its
+<BR>
+gateway was down, *then* you'd need your own AS and a BGP connection to
+<BR>
+each of your providers. For most situations, that's overkill; you can
+<BR>
+handle it with multiple MX and IP address records in the DNS, for
+<BR>
+example.
+<BR>
+<P><PRE>
+-- 
+Harald Koch     &lt;<A HREF="mailto:chk@pobox.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012181734.MAA28331@ve3tla.ampr.org&gt;">chk@pobox.com</A>&gt;
+<P>&quot;It takes a child to raze a village.&quot;
+		-Michael T. Fry
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2420.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2420.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2421.html">Joe Touch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2417">[ date ]</A>
+<A HREF="index.html#2417">[ thread ]</A>
+<A HREF="subject.html#2417">[ subject ]</A>
+<A HREF="author.html#2417">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Dec 18 2000 - 12:52:28 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

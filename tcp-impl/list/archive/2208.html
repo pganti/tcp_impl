@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Fri Jun 30 18:06:42 2000" -->
+<!-- isoreceived="20000630220642" -->
+<!-- sent="Fri, 30 Jun 2000 14:59:29 -0700 (PDT)" -->
+<!-- isosent="20000630215929" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="Roam.SIMC.2.0.6.962402369.23143.kcpoon@jurassic" -->
+<!-- inreplyto="395D091C.B4068F76@Novell.COM" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962402369.23143.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 30 2000 - 17:59:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2212.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2208">[ date ]</A>
+<A HREF="index.html#2208">[ thread ]</A>
+<A HREF="subject.html#2208">[ subject ]</A>
+<A HREF="author.html#2208">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Isn't it possible for a receiver who is retransmitting to us to send
+</EM><BR>
+<EM>&gt; window updates (when the application at the receiving side picked up new
+</EM><BR>
+<EM>&gt; data)? Also, when the receiver is retransmitting, not every segment
+</EM><BR>
+<EM>&gt; needs to ACK new data (perhaps we stopped temporarily, perhaps our data
+</EM><BR>
+<EM>&gt; didn't make it to the receiver), even if it were bidirectional. 
+</EM><BR>
+<P>What I was trying to say is that without ack'ing new data, the receiver
+<BR>
+of the segment does not know whether it is the original segment A or a
+<BR>
+retransmission of segment A.  That's what I was asking.  I am not saying
+<BR>
+that a retransmitted segment cannot have a window update.  If A is somehow
+<BR>
+delayed but received and the retransmitted segment is lost, shall TCP use
+<BR>
+the window update info in the original segment A?  I think this case can
+<BR>
+confuse TCP, thus we may not want the window update.  This is the question
+<BR>
+I tried to ask you.  Your answer can be yes, TCP should take it.
+<BR>
+<P><EM>&gt; Here is a solid example. Bidirectional data transfer, receiver
+</EM><BR>
+<EM>&gt; advertised zero window, as we filled receiver's window, receiver timed
+</EM><BR>
+<EM>&gt; out and retransmitted (SEG.SEQ &lt; SND.WL1) and then when the application
+</EM><BR>
+<EM>&gt; at the receiver picked up the data, it sent a window update, with
+</EM><BR>
+<EM>&gt; SEG.ACK = SND.WL2. Note that we will be doing window probes (and getting
+</EM><BR>
+<EM>&gt; 0 window responses until application at receiver picks up enough data).
+</EM><BR>
+<EM>&gt; Remember that SEG.SEQ for this window update would be less than SND.WL1.
+</EM><BR>
+<EM>&gt; Hence, if we ignore this window update (or use the 3rd check mentioned
+</EM><BR>
+<EM>&gt; by Alexy), until the receiver retransmits all lost data and its SEG.SEQ
+</EM><BR>
+<EM>&gt; crosses SND.WL1, we won't ever be able to send anything.
+</EM><BR>
+<P>The above assertion is not correct.  Since the sender is sending window
+<BR>
+probe, if the receiver can open up the window, it also means that it will
+<BR>
+take that 1 byte window probe.  This means that it will ack that 1 byte.  So
+<BR>
+Alexey's check will take the window update in the retransmitted segment
+<BR>
+since it ack's new data.
+<BR>
+<P><EM>&gt; I don't know what you mean by &quot;old&quot; segments. The basic check of SND.UNA
+</EM><BR>
+<EM>&gt; &lt;= SEG.ACK &lt;= SND.MAX must have been already made when we do the send
+</EM><BR>
+<EM>&gt; window update check. Hence, If the receiver sent an ACK which got
+</EM><BR>
+<EM>&gt; delayed, and during retransmit sent another plain ACK (with a higher ACK
+</EM><BR>
+<EM>&gt; #), and we updated SND.WL2 and the ACK which got delayed is received,
+</EM><BR>
+<EM>&gt; then we would not be accepting that old ack as SEG.ACK &lt; SND.UNA (and
+</EM><BR>
+<EM>&gt; essentially SND.WL2).
+</EM><BR>
+<P>The higher ack # assertion is not correct.  I think you've pointed that out
+<BR>
+in your first paragraph above.  Not every segments, even retransmitted
+<BR>
+segments, needs to ack new data.  It really depends on the traffic pattern.
+<BR>
+So TCP cannot really distinguish between the original &quot;old&quot; segment and a
+<BR>
+retransmitted segment.  This is the question I tried to ask...
+<BR>
+<P><EM>&gt; The original algorithm accepts window updates if:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SEG.SEQ &gt; SND.WL1
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; OR if ((SEG.SEQ == SND.WL1) AND (SEG.ACK &gt; SND.WL2))
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; OR if ((SEG.ACK == SND.WL2) AND (SEG.WND &gt; SND.WND))
+</EM><BR>
+<P>I don't think the above is the original BSD checks.  Where did you get it
+<BR>
+from?  The BSD check (from actual freebsd code) is
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SEQ_LT(tp-&gt;snd_wl1, ti-&gt;ti_seq) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;snd_wl1 == ti-&gt;ti_seq &amp;&amp; (SEQ_LT(tp-&gt;snd_wl2, ti-&gt;ti_ack) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;snd_wl2 == ti-&gt;ti_ack &amp;&amp; tiwin &gt; tp-&gt;snd_wnd))))
+<BR>
+<P>Note that the third check is 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SND.WL1 == SEG.SEQ &amp;&amp; SND.WL2 == SEG.ACK &amp;&amp; SEG.WND &gt; SND.WND
+<BR>
+<P>This is what Alexey pointed out is the difference I missed in your revised
+<BR>
+suggestion and Alexey's suggestion.  I originally thought that they were the
+<BR>
+same.  But actually, I missed that fact that you missed the above SND.WL1 ==
+<BR>
+SEG.SEQ check.  I guess you also missed this difference C:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962402369.23143.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2207.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2209.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2212.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2208">[ date ]</A>
+<A HREF="index.html#2208">[ thread ]</A>
+<A HREF="subject.html#2208">[ subject ]</A>
+<A HREF="author.html#2208">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

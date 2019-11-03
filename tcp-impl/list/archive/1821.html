@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Problems with Path MTU D</TITLE>
+<META NAME="Author" CONTENT="Geert Jan de Groot (GeertJan.deGroot@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Problems with Path MTU Discovery</H1>
+<!-- received="Wed Sep 15 22:47:11 1999" -->
+<!-- isoreceived="19990916024711" -->
+<!-- sent="Thu, 16 Sep 1999 04:39:42 +0200" -->
+<!-- isosent="19990916023942" -->
+<!-- name="Geert Jan de Groot" -->
+<!-- email="GeertJan.deGroot@bsdi.com" -->
+<!-- subject="Re: TCP Problems with Path MTU Discovery" -->
+<!-- id="199909160241.EAA04722@berserkly.bsdi.com" -->
+<!-- inreplyto="199909140202.WAA01162@tuvok.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Geert Jan de Groot (<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909160241.EAA04722@berserkly.bsdi.com&gt;"><EM>GeertJan.deGroot@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 22:39:42 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1826.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1821">[ date ]</A>
+<A HREF="index.html#1821">[ thread ]</A>
+<A HREF="subject.html#1821">[ subject ]</A>
+<A HREF="author.html#1821">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Mon, 13 Sep 1999 22:02:28 -0400  Mark Allman wrote:
+<BR>
+<EM>&gt; Vern and I believe the pmtud I-D is nearing the point where we can
+</EM><BR>
+<EM>&gt; issue a last call and boot it up to the IESG.  
+</EM><BR>
+<P>I sent a list of comments on May 28 to tcp-impl but didn't see them
+<BR>
+reflected in the -02 draft (nor responses that they shouldn't be
+<BR>
+changed). I'm appending my original message below for your convienence.
+<BR>
+<P>I realise that the draft says 'configuration errors' but really would
+<BR>
+like to make a case for listing them more explicitely, this is an
+<BR>
+operational rather than an implementation matter and it just happens
+<BR>
+too often...
+<BR>
+<P>Geert Jan
+<BR>
+<P><P><PRE>
+----
+<P>Date:    Fri, 28 May 1999 00:58:11 +0200
+To:      <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909160241.EAA04722@berserkly.bsdi.com&gt;">tcp-impl@grc.nasa.gov</A>
+From:    Geert Jan de Groot &lt;<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909160241.EAA04722@berserkly.bsdi.com&gt;">GeertJan.deGroot@bsdi.com</A>&gt;
+Subject: Comments on draft-ietf-tcpimpl-pmtud-01.txt
+<P><P>I would like to make a couple of comments on the Path MTU Discovery 
+Problems draft, and perhaps have a little discussion on it.
+<P>First, a quicky at the end of the document:
+<P>&gt;3.3.   Determining MSS from PMTU
+...
+&gt;     The MSS advertised at the start of a connection should be based on
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&gt;     determined values to determine the MSS to advertise.
+&gt;     This results in an advertised MSS that is smaller than the largest
+&gt;     MTU the system can receive.
+<P>I would like to change the marked sentence with:
+The MSS advertised at the start of a connection should be based on
+the largest MTU of all interfaces on the system.
+<P>Rationale: assume a TCP connect happens over an ethernet interface.
+While the TCP session is alive, routing changes and the session is
+now routed over an FDDI interface. If mss would have been 1460 (ethernet),
+we would see micrograms on the FDDI interface unneccesary.
+I just want to make the original text more explicit, that's all.
+<P>Then the real issue:
+&gt;3.1.     Black Hole Detection
+...
+&gt;     Path MTU Discovery (PMTUD) works by sending out as large a packet
+&gt;     as possible, with the Don't Fragment (DF) bit set in the IP header.
+&gt;     If the packet is too large for a router to forward on to a particu-
+&gt;     lar link, the router must send an ICMP Destination Unreachable --
+&gt;     Fragmentation Needed message to the source address.
+&gt;
+&gt;     As was pointed out in [RFC1435], routers don't always do this cor-
+&gt;     rectly -- many routers fail to send the ICMP messages, for a vari-
+&gt;     ety of reasons ranging from kernel bugs to configuration problems.
+&gt;     Firewalls are often misconfigured to supress all ICMP messages.
+&gt;
+&gt;     PMTUD, as documented in [RFC1191], fails when confronted with this
+&gt;     problem.  The upper-layer protocol continues to try to send large
+&gt;     packets and, without the ICMP messages, never discovers that it
+&gt;     needs to reduce the size of those packets.  Its packets are disap-
+&gt;     pearing into a PMTUD black hole.
+<P>I would like to make things more explicit by adding another scenario,
+one that I'm seeing every few weeks, and which IMHO warrants either
+explicit mentioning in an RFC. This is a typical scenario:
+- Many ISP's now run with MTU~4470 in their cloud, also on serial
+  lines to their customers;
+- An uncreasing number of webfarms apperently allow this large an MTU
+  all the way to the web server;
+- Assume a typical customer of such an ISP, using a Cisco box with
+  Cisco-HDLC framing (which apperently doesn't catch MTU mismatches).
+  Customer has a cache box with ethernet (to the Cisco), and FDDI
+  (to the internal network), and hence MSS = 4352 - 40 = 4312 bytes.
+- Note that the default MTU on Cisco serial lines is 1500 bytes.
+<P>If the customer surfs to such a high-MTU site, we see the SYN exchange,
+the HTTP request gets sent, but data never arrives at the cache.
+Investigation reveals that large packets are sent on the serial line
+to the customer router, however because it's configured for smaller MTU,
+this packet overruns the input buffer, so the packet is dropped
+(and the giants error counter is bumped up).
+It is important to note that, since the packet is not received correctly,
+no ICMP message is sent, and therefore we have a blackhole scenario.
+<P>In defense I must mention that if the ISP sets up the customer router, 
+the serial line is configured with the correct MTU, however chances
+are that the customer sets up the router himself, the configuration
+is lost at an upgrade or otherwise.
+<P>We see this kind of problem as a support case every few weeks; I have poked 
+a bit around and there are numerous places where this potential problem
+currently exists (but is masked in practive by a 1500-MTU hop
+somewhere in the field).
+<P>&gt;Implications
+&gt;     This failure is especially difficult to debug, as pings and some
+&gt;     interactive TCP connections to the destination host work.  Bulk
+&gt;     transfers fail with the first large packet and the connection even-
+&gt;     tually times out.
+<P>Note however, that it is possible to diagnose this by pinging with 
+large packets: from the customer, try to ping the Cisco, then ping with
+32K packets. If this all succeeds, repeat both tests with the ISP end
+of the serial line. If the large packet ping test fails, you have the 
+problem (though for completeness, the test should be run from both ends)
+<P>&gt;     TCP should notice that the connection is timing out.  After several
+&gt;     timeouts, TCP should attempt to send smaller packets, perhaps turn-
+&gt;     ing off the DF flag for each packet.  If this succeeds, it should
+&gt;     continue to turn off PMTUD for the connection for some reasonable
+&gt;     period of time, after which it should probe again to try to deter-
+&gt;     mine if the path has changed.
+<P>I am not sure if I agree with this. First, there is a huge performance
+impact; second, there is ambiguity between packets dropped because of
+MTU problems and packets dropped because of congestion. The side effect
+of the suggestion above is that congestion might lead to sending
+micrograms unneccesary.
+Second, this requires changes in the web server config, while it's
+the _client_ path that's broken. I see no big incentive for webserver
+maintainers to install this workaround if it becomes available.
+<P>So, my questions are:
+- Is it appropiate to document the scenario above explicitely?
+- Should it be documented in a tcpimpl document (it's not a tcpimpl issue!)
+- I don't agree with the blackhole workaround, and believe it should
+  not be recommended.
+<P>Comments?
+<P>Geert Jan
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1826.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1821">[ date ]</A>
+<A HREF="index.html#1821">[ thread ]</A>
+<A HREF="subject.html#1821">[ subject ]</A>
+<A HREF="author.html#1821">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

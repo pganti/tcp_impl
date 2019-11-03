@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;No slow start after timeout&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;No slow start after timeout&quot;</H1>
+<!-- received="Fri Mar 21 17:07:39 1997" -->
+<!-- isoreceived="19970321220739" -->
+<!-- sent="Fri, 21 Mar 1997 19:59:53 -0500" -->
+<!-- isosent="19970322005953" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: draft description of &quot;No slow start after timeout&quot;" -->
+<!-- id="199703220059.TAA16073@brookfield.ans.net" -->
+<!-- inreplyto="199703200328.TAA24981@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20draft%20description%20of%20&quot;No%20slow%20start%20after%20timeout&quot;&In-Reply-To=&lt;199703220059.TAA16073@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 19:59:53 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0211.html">Raj Yavatkar: "Re: IP TOS ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#210">[ date ]</A>
+<A HREF="index.html#210">[ thread ]</A>
+<A HREF="subject.html#210">[ subject ]</A>
+<A HREF="author.html#210">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199703200328.TAA24981@daffy.ee.lbl.gov?Subject=Re:%20draft%20description%20of%20&quot;No%20slow%20start%20after%20timeout&quot;&In-Reply-To=&lt;199703220059.TAA16073@brookfield.ans.net&gt;">199703200328.TAA24981@daffy.ee.lbl.gov</A>&gt;, Vern Paxson writes:
+<BR>
+<EM>&gt; &gt; Counting bytes always gives Rlog2(W). It appears to be contributing
+</EM><BR>
+<EM>&gt; &gt; to the burstiness of the traffic because it helps to get out of
+</EM><BR>
+<EM>&gt; &gt; slow-start quicker, which should be considered a merit, not fault (IMHO).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It is a merit from the perspective of performance.  It is a potential fault
+</EM><BR>
+<EM>&gt; from the perspective of burstiness.  There's a constant tension between
+</EM><BR>
+<EM>&gt; performance and congestion avoidance.  My observation is that if counting
+</EM><BR>
+<EM>&gt; bytes for slow start were deployed in today's Internet, traffic would get
+</EM><BR>
+<EM>&gt; significantly burstier - it's not clear that this is a good thing.  There
+</EM><BR>
+<EM>&gt; was recently a lot of haggling on end2end-interest over increasing the
+</EM><BR>
+<EM>&gt; initial value of cwnd, and that's just a one-time burst, rather than the
+</EM><BR>
+<EM>&gt; ongoing (for the duration of slow start) burstiness that counting bytes
+</EM><BR>
+<EM>&gt; would lead to.
+</EM><BR>
+<P><P>With delayed ACK you get 1 ACK for every 2 segments sent.  If you
+<BR>
+count ACKs, you pace packets conservatively:
+<BR>
+<P>&nbsp;&nbsp;RTT1		send  --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  ack	(first one is not delayed)
+<BR>
+&nbsp;&nbsp;RTT2		send  --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send  --&gt;			(adv one seg, add one to cwnd)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--  delay
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  ack
+<BR>
+&nbsp;&nbsp;RTT3		send  --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send  --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send  --&gt;			(adv 2 seg, add one to cwnd)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--  delay
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--  delay
+<BR>
+&nbsp;&nbsp;RTT4		send --&gt;			(adv 2 seg, add one)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--  delay
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  ack
+<BR>
+&nbsp;&nbsp;RT5		send --&gt;			(adv 2 seg, add one)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;			(adv 2 seg, add one)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--  etc
+<BR>
+<P>By not counting the two segment separately, TCP will just take more
+<BR>
+time to reach the initial drop which will put it in congestion
+<BR>
+avoidance and will tend to start pacing data.  Its only in congestion
+<BR>
+avoidance that packets can begin to spread out in time, with only one
+<BR>
+segment being added per RTT, rather than one or two per ACK.  On the
+<BR>
+positive side, the chances of a multiple drop when the first drop
+<BR>
+occurs ould probably be reduced.
+<BR>
+<P>Counting ACKs is exactly equivalent to counting segments and adding
+<BR>
+1/2 segment per ACKed segment during slow start.  This would mean
+<BR>
+spending a lot more time in slow start for bulk transfers over LFNs.
+<BR>
+It now takes log_2(N) RTTs to reach a cwnd of N segments.  With this
+<BR>
+change it would take log_1.5(N).  For a segment size of 1024, a T1
+<BR>
+satelite link with an RTT of 250msec, you'd want to reach a cwnd of
+<BR>
+(1.54/8)*(.250)*1000000/1024 or about 47 packets.  You now need 6
+<BR>
+RTTs, or 1.5 seconds to come to full speed.  This would be increased
+<BR>
+to 10 RTTs or 2.5 seconds.  This isn't so bad.  A DS3 speed connection
+<BR>
+US over satelite or US to Europe (a DS3 speed single TCP flow) would
+<BR>
+need to reach over 1200 segments, but if FDDI MTU was used (almost a
+<BR>
+requirement) this would be only about 300, reached in about 15 RTTs.
+<BR>
+Reachig full window of 1.5MB in under 4 seconds isn't too bad.
+<BR>
+<P>While the idea of making slow start is certainly interesting and might
+<BR>
+even be a good idea, isn't it a bit out of scope for the current
+<BR>
+discussion?
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0211.html">Raj Yavatkar: "Re: IP TOS ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0209.html">touch@ISI.EDU: "Re: more on TCP buffering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#210">[ date ]</A>
+<A HREF="index.html#210">[ thread ]</A>
+<A HREF="subject.html#210">[ subject ]</A>
+<A HREF="author.html#210">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

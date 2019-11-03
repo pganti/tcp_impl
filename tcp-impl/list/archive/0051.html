@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 17:13:36 1997" -->
+<!-- isoreceived="19970211221336" -->
+<!-- sent="Tue, 11 Feb 1997 12:08:20 -0400" -->
+<!-- isosent="19970211160820" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702111708.AA20950@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199702110807.IAA14919@malatesta." -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702111708.AA20950@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 11:08:20 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0050.html">Ian Heavens: "HTTP  and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0050.html">Ian Heavens: "HTTP  and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0064.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0075.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0085.html">Richard Fox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0095.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0098.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0099.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#51">[ date ]</A>
+<A HREF="index.html#51">[ thread ]</A>
+<A HREF="subject.html#51">[ subject ]</A>
+<A HREF="author.html#51">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I don't quite follow some of the details here:
+<BR>
+<P><EM>&gt; It relates to user abort of web page download (more and more frequent as
+</EM><BR>
+<EM>&gt; people follow more interesting links - up to 40% of connections abort,
+</EM><BR>
+<EM>&gt; according to Vern Paxson's logs at LBL).  The web server blocks on a
+</EM><BR>
+<EM>&gt; write() if there is unacknowledged data in the pipe - there usually is
+</EM><BR>
+<EM>&gt; - and the client does a close.
+</EM><BR>
+<P>I don't quite follow the above. Do you really mean:
+<BR>
+<P>a) the server blocks on a close() if there is unacknowledged data in
+<BR>
+the pipe (this would be independent of whether the client has closed
+<BR>
+its end of the connection)?
+<BR>
+<P>b) the server blocks on a write() if a send window's worth of data is
+<BR>
+unacknowledged.
+<BR>
+<P>c) Some TCP implementations actually block the caller on a write() if
+<BR>
+there is *any* unacknowledged data in the pipe. (These stacks using
+<BR>
+stop-and-wait must get really great throughput :-)
+<BR>
+<P>I don't see the problem with the first two behaviors. I'd argue that
+<BR>
+the third case is a broken stack on the server, and there is little
+<BR>
+the client can/should do.
+<BR>
+<P>At the same time, if the client has &quot;closed&quot; its end of the connection
+<BR>
+and couldn't care less to receive any more data from the server, then
+<BR>
+it should do a &quot;half duplex&quot; close as outlined in RFC 1122 which would
+<BR>
+cause any subsequent traffic from the server to trigger a RST back to
+<BR>
+the server.
+<BR>
+<P><EM>&gt; RFC1122 says that as it is a half duplex
+</EM><BR>
+<EM>&gt; close and there is unread data, a RST should be sent.  And it is needed
+</EM><BR>
+<EM>&gt; to flush the data and unblock the write - there is a PC stack out there
+</EM><BR>
+<EM>&gt; that doesn't do this, and the server process hangs for ever.
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^
+<BR>
+<P>What exactly does the &quot;this&quot; refer to? After the client has issued a
+<BR>
+&quot;half-duplex&quot; close, it silently ignores any additional traffic from
+<BR>
+the server (including retransmissions)? That would be majorly broken
+<BR>
+(since the &quot;blocked&quot; server will eventually retransmit, which should
+<BR>
+trigger the RST, preventing the server from hanging/deadlocking).
+<BR>
+<P><EM>&gt; To get round this, Netscape (but not all web browsers) sets
+</EM><BR>
+<EM>&gt; SO_LINGER to zero, i.e. the application forces the RST.
+</EM><BR>
+<P>But this would only send out a single RST, which might get lost. What
+<BR>
+happens if the RST is lost and the server retransmits? Aren't we now
+<BR>
+back in the same situation described in the first paragraph, which
+<BR>
+presumably can lead to hung servers too, right?
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0050.html">Ian Heavens: "HTTP  and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0050.html">Ian Heavens: "HTTP  and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0064.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0075.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0085.html">Richard Fox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0095.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0098.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0099.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0104.html">jg@zorch.w3.org: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#51">[ date ]</A>
+<A HREF="index.html#51">[ thread ]</A>
+<A HREF="subject.html#51">[ subject ]</A>
+<A HREF="author.html#51">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

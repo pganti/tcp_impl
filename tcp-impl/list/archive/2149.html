@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RTO calcuation in NetBSD/Fre</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: RTO calcuation in NetBSD/FreeBSD">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RTO calcuation in NetBSD/FreeBSD</H1>
+<!-- received="Thu Jun 15 19:44:01 2000" -->
+<!-- isoreceived="20000615234401" -->
+<!-- sent="Thu, 15 Jun 2000 17:33:43 -0600" -->
+<!-- isosent="20000615233343" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: RTO calcuation in NetBSD/FreeBSD" -->
+<!-- id="394967D7.9613F0F1@Novell.COM" -->
+<!-- inreplyto="3948DB59.5BEAA29C@Novell.COM" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20RTO%20calcuation%20in%20NetBSD/FreeBSD&In-Reply-To=&lt;394967D7.9613F0F1@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 15 2000 - 19:33:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2148.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2148.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2149">[ date ]</A>
+<A HREF="index.html#2149">[ thread ]</A>
+<A HREF="subject.html#2149">[ subject ]</A>
+<A HREF="author.html#2149">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Some more info:
+<BR>
+<P>The modified FreeBSD/NetBSD implementation is described in Brakmo and
+<BR>
+Peterson's paper, &quot;Performance problems in BSD4.4 TCP&quot;. I read it long
+<BR>
+back and probably forgot about it. Just in case anyone is interested ...
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P>Ramesh Shankar wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I guess I found the answer :-#. The final computation for RTO:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; RTO = t_srtt/8 + t_rttvar
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; in the TCP/IP Illustrated vol2 has now become in NetBSD and FreeBSD:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; RTO = (t_srtt/8 + t_rttvar)/4
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This would probably offset the initial multiplication by 4 of the RTT.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; S.R.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Ramesh Shankar wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; It appears that NetBSD and FreeBSD's RTO calculation (from SRTT and
+</EM><BR>
+<EM>&gt; &gt; RTTVAR) is different from the Van Jacbson's paper and the code described
+</EM><BR>
+<EM>&gt; &gt; in TCP/IP Illustrated vol2.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; TCP/IP illustrated vol 2 has the calculation for delta as:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; delta = rtt - 1 - (tp-&gt;t_srtt &gt;&gt; TCP_RTT_SHIFT);
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; where TCP_RTT_SHIFT is 3.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; whereas NetBSD/FreeBSD have an equivalent of:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; delta = ((rtt - 1) &lt;&lt; 2 ) - (t_srtt &gt;&gt; 2);
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Are the reasons for this change explained in detail in some paper or
+</EM><BR>
+<EM>&gt; &gt; something like that?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Thanks,
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; S.R.
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2149/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2148.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2148.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2149">[ date ]</A>
+<A HREF="index.html#2149">[ thread ]</A>
+<A HREF="subject.html#2149">[ subject ]</A>
+<A HREF="author.html#2149">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

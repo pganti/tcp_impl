@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Wed Mar 17 23:19:51 1999" -->
+<!-- isoreceived="19990318041951" -->
+<!-- sent="Wed, 17 Mar 1999 20:09:37 -0800 (PST)" -->
+<!-- isosent="19990318040937" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="Roam.SIMC.2.0.6.921730177.22721.kcpoon@jurassic" -->
+<!-- inreplyto="85256737.00221895.00@D51MTA03.pok.ibm.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;Roam.SIMC.2.0.6.921730177.22721.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 17 1999 - 23:09:37 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1679">[ date ]</A>
+<A HREF="index.html#1679">[ thread ]</A>
+<A HREF="subject.html#1679">[ subject ]</A>
+<A HREF="author.html#1679">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Enter in fast retransmit phase and retransmit if dupacks &gt;= 3.
+</EM><BR>
+<EM>&gt; Upon receiving a partial ACK, always decrement dupacks by (# segs_acked - 1)
+</EM><BR>
+<EM>&gt; and:
+</EM><BR>
+<EM>&gt; if this would be the 2nd fast retransmit, then retransmit if dupacks &gt;= 2,
+</EM><BR>
+<EM>&gt; or if this would be the 3rd fast retransmit, then retransmit if dupacks &gt;= 1,
+</EM><BR>
+<EM>&gt; otherwise, retransmit unconditionally.
+</EM><BR>
+<P>It seems to me that you agree that applying your idea during fast retransmit
+<BR>
+phase is probably &quot;too safe.&quot;  Note that when implementors add code to the
+<BR>
+common path of TCP, we want the benefits outweigh the complexity.  Let's skip
+<BR>
+this part and look more closely at the other part, and from an implementation
+<BR>
+point of view.
+<BR>
+<P><EM>&gt; I believe that if you filter window updates correctly, a positive value
+</EM><BR>
+<EM>&gt; of dupacks upon leaving the fast retransmit is a pretty safe indication of
+</EM><BR>
+<EM>&gt; a lost segment.
+</EM><BR>
+<EM>&gt; If ACKs are lost on their way back to the source, dupacks underestimates
+</EM><BR>
+<EM>&gt; the number of segments received out of order.
+</EM><BR>
+<EM>&gt; Why do you say 'probably'?
+</EM><BR>
+<P>The question here is how you are going to implement it.  We can think in terms
+<BR>
+of distinct segments.  But in implementation, we cannot do that.  While we can
+<BR>
+keep track of dup acks, we don't really know how many segments a partial or
+<BR>
+complete ack acknowledges.  TCP does not need to send full MSS size segments.
+<BR>
+(Look at recent thread of modifying Nagle algorithm in tcp-impl.)   That means
+<BR>
+an ack for 2920 bytes may actually ack 3 segments, 1 1460 bytes large and 2
+<BR>
+730 bytes large.  What an implementation can do efficiently is to guess.  If
+<BR>
+MSS is 1460 byes and TCP gets an ack for 2920 byes, assume that it is for 2
+<BR>
+segments.  This means that when doing the subtraction in your idea, TCP is
+<BR>
+probably going to subtract fewer than it actually should.  Thus a positive
+<BR>
+dup_ack_cnt may not really indicate a drop.
+<BR>
+<P>If you have an idea of how your counting can be achieved efficiently, please
+<BR>
+send it to the mailing list and we can discuss it.  The above is just what I
+<BR>
+think your idea can be implemented.  It does not mean that it has to be done
+<BR>
+this way.
+<BR>
+<P><EM>&gt; Comparing against the current value of the 'recover' variable will do the
+</EM><BR>
+<EM>&gt; same. I assume that 'recover' is never cleared; only set when fast
+</EM><BR>
+<EM>&gt; retransmit starts.
+</EM><BR>
+<P>As I said repeatedly, dup_ack_cnt is just an implementation detail.  Note that
+<BR>
+TCP cannot just compare recover with any ack.  TCP needs to know that it
+<BR>
+really needs to compare an ack with recover.  The variable dup_ack_cnt serves
+<BR>
+this purpose.  If dup_ack_cnt is &gt;= 3, it means that TCP is in fast retransmit
+<BR>
+mode and the seq number stored in recover is valid.  TCP needs to compare the
+<BR>
+ack number with recover.  Reseting dup_ack_cnt means that TCP does not need to
+<BR>
+do any comparison.  Note that you can introduce a state variable to indicate
+<BR>
+that TCP is in fast retransmit mode and need to check recover.  Or using
+<BR>
+various other methods.  They are just implementation details.
+<BR>
+<P><EM>&gt; You stop the current retransmit phase upon receiving a full ACK. Adjust cwnd
+</EM><BR>
+<EM>&gt; as the draft says and adjust dupacks as I suggested. If updated dupacks &gt;= 3,
+</EM><BR>
+<EM>&gt; start a new retransmit phase; follow steps 1 and 2 in the draft. Clear
+</EM><BR>
+<EM>&gt; dupacks only if negative (if ACKs are lost, my algorithm for adjusting
+</EM><BR>
+<EM>&gt; dupacks can yield negative values).
+</EM><BR>
+<P>This is what I like you to specify clearly.  Now you've done that, we can look
+<BR>
+further to see how this can be implemented.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;Roam.SIMC.2.0.6.921730177.22721.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1678.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1679">[ date ]</A>
+<A HREF="index.html#1679">[ thread ]</A>
+<A HREF="subject.html#1679">[ subject ]</A>
+<A HREF="author.html#1679">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

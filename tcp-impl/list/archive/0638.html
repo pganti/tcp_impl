@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Erik Nordmark (Erik.Nordmark@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 09:04:08 1997" -->
+<!-- isoreceived="19970801130408" -->
+<!-- sent="Fri, 1 Aug 1997 09:01:38 -0700" -->
+<!-- isosent="19970801160138" -->
+<!-- name="Erik Nordmark" -->
+<!-- email="Erik.Nordmark@Eng.Sun.COM" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708011601.JAA20427@bobo.eng.sun.com" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> Erik Nordmark (<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011601.JAA20427@bobo.eng.sun.com&gt;"><EM>Erik.Nordmark@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 12:01:38 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0637.html">Vern Paxson: "E2E Feedback on TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#638">[ date ]</A>
+<A HREF="index.html#638">[ thread ]</A>
+<A HREF="subject.html#638">[ subject ]</A>
+<A HREF="author.html#638">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Now consider two cases for IW, large or small:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; more than 10-20 packets in the connection (from open to close,
+</EM><BR>
+<EM>&gt; approx.):
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; 	the connection will take (best case, 'order' estimates):
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		1 RTT to open
+</EM><BR>
+<EM>&gt; 		log2(numpackets) RTTs to transmit the data (approx)
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; 	If IW is 1, 2, or 4 we save 0, 1, or 2 RTTs out of a total
+</EM><BR>
+<EM>&gt; 	of 5 or more, i.e., the connection saves 25% or less time
+</EM><BR>
+<P>There is one other factor that is missing from the above.
+<BR>
+A large number of TCP implementation ack every other packet (as they
+<BR>
+should) but do this even in the beginning of the TCP connection.
+<BR>
+If the sender uses IW = 1 you will incur another delay ack timer
+<BR>
+(200 ms) per when sending to such receivers.
+<BR>
+<P>The correct answer here might to fix the receive side of TCP to
+<BR>
+not delay acks for the first data packet in the connection but
+<BR>
+it seems like folks have been fixing the sending TCP to use IW = 2
+<BR>
+instead.
+<BR>
+<P><EM>&gt; So either it doesn't help or it hurts.
+</EM><BR>
+<P>But how much does it really hurt?
+<BR>
+If the path can only handle 1 packet per RTT with IW = 1
+<BR>
+the sender will do this:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1 packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 2 packet - one is dropped
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive ack for one packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time out for lost packet - retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 1 packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;repeat&gt;
+<BR>
+<P>With IW = 2 the above pattern changes from 1,2,1,2,... to 2,1,2,1,...
+<BR>
+For a long connection this doesn't really matter.
+<BR>
+Thus I think this only gets worse when
+<BR>
+&nbsp;- the path can only handle 1 packet per RTT, AND
+<BR>
+&nbsp;- the amount of data sent is more than 1 packet but less than 3 packets
+<BR>
+<P>In the 2 packet case with IW = 1 there will be no loss but
+<BR>
+with IW = 2 one of the packets will be dropped and retransmitted.
+<BR>
+<P>How important is this case compared to the benefits?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Erik
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0637.html">Vern Paxson: "E2E Feedback on TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0644.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#638">[ date ]</A>
+<A HREF="index.html#638">[ thread ]</A>
+<A HREF="subject.html#638">[ subject ]</A>
+<A HREF="author.html#638">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

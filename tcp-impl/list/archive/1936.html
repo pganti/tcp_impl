@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Anomalous TCP behaviour?</TITLE>
+<META NAME="Author" CONTENT="Anupama Sundaresan (anu@ittc.ukans.edu)">
+<META NAME="Subject" CONTENT="Anomalous TCP behaviour?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Anomalous TCP behaviour?</H1>
+<!-- received="Mon, 24 Jan 2000 21:08:14 -0600 (CST)" -->
+<!-- isoreceived="20000125030814" -->
+<!-- sent="Mon, 24 Jan 2000 21:08:14 -0600 (CST)" -->
+<!-- isosent="20000125030814" -->
+<!-- name="Anupama Sundaresan" -->
+<!-- email="anu@ittc.ukans.edu" -->
+<!-- subject="Anomalous TCP behaviour?" -->
+<!-- id="Pine.SO4.4.02.10001242107230.18622-100000@mill.ittc.ukans.edu" -->
+<STRONG>From:</STRONG> Anupama Sundaresan (<A HREF="mailto:anu@ittc.ukans.edu?Subject=Re:%20Anomalous%20TCP%20behaviour?&In-Reply-To=&lt;Pine.SO4.4.02.10001242107230.18622-100000@mill.ittc.ukans.edu&gt;"><EM>anu@ittc.ukans.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 24 2000 - 22:08:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1937.html">jonas.haggard.ljungquist@teracom.se: "SV: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1935.html">Peter Lewis: "SIP 2000 Call for Paper"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1938.html">Vern Paxson: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1938.html">Vern Paxson: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1942.html">Yoganandhini Janarthanan: "Re: Anomalous TCP behaviour?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1936">[ date ]</A>
+<A HREF="index.html#1936">[ thread ]</A>
+<A HREF="subject.html#1936">[ subject ]</A>
+<A HREF="author.html#1936">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Is it normal for TCP to skip a certain number of bytes and send
+<BR>
+them later when it receives dup acks?
+<BR>
+<P>The following tcpdump o/p illustrates that TCP sends packets in sequence
+<BR>
+upto a certain point but suddenly skips a certain number of bytes and
+<BR>
+after receiving 5 duplicate acks transmits not 'retransmits' the missing
+<BR>
+bytes...
+<BR>
+<P># comments inline.
+<BR>
+<P>testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 1:1449(1448) ack
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 1449:2897(1448) ack
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 1449
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 5793:7241(1448) ack
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 7241:8689(1448) ack
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 8689:10137(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 10137:11585(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 11585:13033(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 2897:4345(1448) ack
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 4345:5793(1448) ack
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 2897
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 4345
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 13033
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 13033:14481(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 14481:15929(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 15929:17377(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 17377:18825(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 15929
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 18825
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 18825:20273(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 20273:21721(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 21721:23169(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 21721
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 23169
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 23169:24617(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 24617:26065(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 26065
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 26065:27513(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 27513:28961(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+<P>## till now it was Txing it in sequence but now after 28961 it
+<BR>
+goes off to 30409 so it starts getting dup acks...
+<BR>
+<P>testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 30409:31857(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 31857:33305(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 33305:34753(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 34753:36201(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 36201:37649(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 28961
+<BR>
+<P>## again after 5 dupacks (if u leave out the original ack) it transmits NOT
+<BR>
+retransmits that block between 28961 and 30409. This happens many times...
+<BR>
+Is this normal TCP behaviour?
+<BR>
+<P>testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 28961:30409(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 37649
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 40545:41993(1448)
+<BR>
+<P>## Also it is obvious from the tcpdump o/p that the Fast retransmit
+<BR>
+mechanism doesnt get kicked off after 3 dup acks - is this normal
+<BR>
+behaviour?
+<BR>
+<P>Here, the segment from 53577 to 55025 is not transmitted so we start
+<BR>
+getting dup acks for 53577
+<BR>
+<P>testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 52129:53577(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 46337:47785(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 55025:56473(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 56473:57921(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 57921:59369(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 1
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 2
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 3
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 4
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 59369:60817(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 60817:62265(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 62265:63713(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 63713:65161(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 5
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 6
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 7
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 8
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 65161:66609(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 66609:68057(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 68057:69505(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 9
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 10
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 11
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 70953:72401(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 72401:73849(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 73849:75297(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 12
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 13
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 14
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 69505:70953(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 75297:76745(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 76745:78193(1448)
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 78193:79641(1448)
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 15
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 16
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 17
+<BR>
+testbed4.ittc.ukans.edu.5002 testbed5.ittc.ukans.edu.1178: ack 53577 - 18
+<BR>
+testbed5.ittc.ukans.edu.1178 testbed4.ittc.ukans.edu.5002: 53577:55025(1448)
+<BR>
+<P>Around 18 dup acks are received before that segment is transmitted. again
+<BR>
+this is a case of out of order packets
+<BR>
+<P><P>tcptrace o/p for the same tcpdump o/p
+<BR>
+&nbsp;&nbsp;&nbsp;a-&gt;b:                              b-&gt;a:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total packets:         22457           total packets:          7601      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack pkts sent:         22456           ack pkts sent:          7601      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pure acks sent:            1           pure acks sent:         7599      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unique bytes sent:  30000000           unique bytes sent:         0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actual data pkts:      22455           actual data pkts:          0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actual data bytes:  30000000           actual data bytes:         0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rexmt data pkts:           0           rexmt data pkts:           0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rexmt data bytes:          0           rexmt data bytes:          0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outoforder pkts:           9           outoforder pkts:           0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pushed data pkts:      15067           pushed data pkts:          0      
+<BR>
+<P>Infact the outoforder packets is pretty large in some cases. 
+<BR>
+Is this normal?
+<BR>
+<P>Thanks,
+<BR>
+-anu.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1937.html">jonas.haggard.ljungquist@teracom.se: "SV: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1935.html">Peter Lewis: "SIP 2000 Call for Paper"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1938.html">Vern Paxson: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1938.html">Vern Paxson: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1942.html">Yoganandhini Janarthanan: "Re: Anomalous TCP behaviour?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1936">[ date ]</A>
+<A HREF="index.html#1936">[ thread ]</A>
+<A HREF="subject.html#1936">[ subject ]</A>
+<A HREF="author.html#1936">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

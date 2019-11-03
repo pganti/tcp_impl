@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: using RST to indicate busy</TITLE>
+<META NAME="Author" CONTENT="Doug Drew (floop@cisco.com)">
+<META NAME="Subject" CONTENT="using RST to indicate busy">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>using RST to indicate busy</H1>
+<!-- received="Tue Mar 24 12:53:00 1998" -->
+<!-- isoreceived="19980324175300" -->
+<!-- sent="Tue, 24 Mar 1998 14:52:13 -0600" -->
+<!-- isosent="19980324205213" -->
+<!-- name="Doug Drew" -->
+<!-- email="floop@cisco.com" -->
+<!-- subject="using RST to indicate busy" -->
+<!-- id="F96684A2CC2FD111BD8A00A0C92A1A145D26@gisg-bdc.cisco.com" -->
+<STRONG>From:</STRONG> Doug Drew (<A HREF="mailto:floop@cisco.com?Subject=Re:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;F96684A2CC2FD111BD8A00A0C92A1A145D26@gisg-bdc.cisco.com&gt;"><EM>floop@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 24 1998 - 15:52:13 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1016.html">Vern Paxson: "Draft agenda for TCPIMPL WG meeting in LA"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1019.html">Bernie Volz: "RE: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1020.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1021.html">W. Richard Stevens: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1022.html">Oleg Vishnepolsky: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1024.html">Vern Paxson: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1026.html">sparker@Eng.Sun.COM: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1027.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1029.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1032.html">Larry Backman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1033.html">Mark S. Edwards: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1017">[ date ]</A>
+<A HREF="index.html#1017">[ thread ]</A>
+<A HREF="subject.html#1017">[ subject ]</A>
+<A HREF="author.html#1017">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I have seen a network trace of the following scenario:
+<BR>
+<P>An HTTP client sends a SYN to port 80 on a server.  The server
+<BR>
+returns a RST.  The client waits half a second, then sends another
+<BR>
+SYN with the same sequence number.  The server returns a
+<BR>
+SYN-ACK, and the conversation proceeds as normal.
+<BR>
+<P>Did I miss a meeting?  Is the server using the RST to
+<BR>
+indicate &quot;I'm busy, try again soon&quot; to the client?  Is this behavior
+<BR>
+a) documented and 2) permitted?
+<BR>
+<P>I found that the most recent stack that I have from a large
+<BR>
+software company near Seattle does indeed retransmit SYNs
+<BR>
+at half second intervals when it receives a RST.  It does this
+<BR>
+three times before giving up.
+<BR>
+<P>It is much more complicated to experimentally reproduce
+<BR>
+the server behavior, which is what I'm really asking about.
+<BR>
+<P>Doug Drew - <A HREF="mailto:floop@cisco.com?Subject=Re:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;F96684A2CC2FD111BD8A00A0C92A1A145D26@gisg-bdc.cisco.com&gt;">floop@cisco.com</A>
+<BR>
+Software Engineer - Centri Engineering Group - Cisco Systems, Inc.
+<BR>
+Champaign, IL voice: (217) 363-4514 fax: (217) 363-4599
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1016.html">Vern Paxson: "Draft agenda for TCPIMPL WG meeting in LA"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1018.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1019.html">Bernie Volz: "RE: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1020.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1021.html">W. Richard Stevens: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1022.html">Oleg Vishnepolsky: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1024.html">Vern Paxson: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1026.html">sparker@Eng.Sun.COM: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1027.html">David Borman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1029.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1032.html">Larry Backman: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1033.html">Mark S. Edwards: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1017">[ date ]</A>
+<A HREF="index.html#1017">[ thread ]</A>
+<A HREF="subject.html#1017">[ subject ]</A>
+<A HREF="author.html#1017">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

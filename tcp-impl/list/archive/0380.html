@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 09:11:20 1997" -->
+<!-- isoreceived="19970430131120" -->
+<!-- sent="Wed, 30 Apr 1997 10:09:56 -0600" -->
+<!-- isosent="19970430160956" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301609.KAA17273@mica.denver.sgi.com" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301609.KAA17273@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 12:09:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0381.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0379.html">Matt Mathis: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0381.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#380">[ date ]</A>
+<A HREF="index.html#380">[ thread ]</A>
+<A HREF="subject.html#380">[ subject ]</A>
+<A HREF="author.html#380">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301609.KAA17273@mica.denver.sgi.com&gt;">jt@mentat.com</A> (Jerry Toporek)
+</EM><BR>
+<P><EM>&gt; &gt; On the other hand, maybe every system in the world can tolerate the option.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well, this is the key question, isn't it?  Most &quot;modern&quot; TCP innovations have
+</EM><BR>
+<EM>&gt; been based on the assumption that we can add TCP options to SYN segments
+</EM><BR>
+<EM>&gt; without breaking implementations that do not recognize them.  We have never
+</EM><BR>
+<EM>&gt; seen any problem with this assumption, and add the window scale option to
+</EM><BR>
+<EM>&gt; every active connection request.  Has anyone had a problem with this?
+</EM><BR>
+<P>My vague recollection from many years ago is that we did have
+<BR>
+problems.  SGI has been shipping RFC 1323 support for a lot longer than
+<BR>
+most other outfits.
+<BR>
+<P>I have some very clear memories of problems with systems that assumed
+<BR>
+window sizes cannot be larger than 32765, and I don't mean only boxes
+<BR>
+running flavors of UNIX.  One was a fancy 'scope/logic analyzer that
+<BR>
+when crazy and sent one byte every couple of minutes in what looked
+<BR>
+like some kind of window probe.  Such experiences tend to make you
+<BR>
+conservative in what you send.
+<BR>
+<P>I changed SGI's default window size to 60K because it improved
+<BR>
+performance significantly in interesting cases, but is there a
+<BR>
+significant harm to being conservative in sending the window shift
+<BR>
+option?  Again, in how many applications does active-opener not set a
+<BR>
+large SO_RCVBUF but the passive opener wants to receive big windows?
+<BR>
+How many of those do not have the active-opener not set a large
+<BR>
+SO_SNDBUF?
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301609.KAA17273@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0381.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0379.html">Matt Mathis: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0381.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#380">[ date ]</A>
+<A HREF="index.html#380">[ thread ]</A>
+<A HREF="subject.html#380">[ subject ]</A>
+<A HREF="author.html#380">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

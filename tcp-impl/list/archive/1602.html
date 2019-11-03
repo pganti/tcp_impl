@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 18 00:43:24 1999" -->
+<!-- isoreceived="19990218054324" -->
+<!-- sent="Wed, 17 Feb 1999 22:38:10 -0700 (MST)" -->
+<!-- isosent="19990218053810" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902180538.WAA20674@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180538.WAA20674@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 18 1999 - 00:38:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1603.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-05.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1601.html">der Mouse : "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1604.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1602">[ date ]</A>
+<A HREF="index.html#1602">[ thread ]</A>
+<A HREF="subject.html#1602">[ subject ]</A>
+<A HREF="author.html#1602">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: der Mouse  &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180538.WAA20674@calcite.rhyolite.com&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt;&gt; What's the difference [on the wire] between a flush bit in the
+</EM><BR>
+<EM>&gt; &gt;&gt; send() system call, and explicit setsockopt()'s turning off
+</EM><BR>
+<EM>&gt; &gt;&gt; TCP_NODELAY off before a send() and on afterwards?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; None that I can see.
+</EM><BR>
+<P>I couldn't think of one either, but the issue is slippery.
+<BR>
+<P><EM>&gt; &gt; The problem is that there isn't really a required correlation between
+</EM><BR>
+<EM>&gt; &gt; send() calls and segments, regardless of NODELAY (or anything else I
+</EM><BR>
+<EM>&gt; &gt; can find, excepting _only_ the proposed flush bit, which might be
+</EM><BR>
+<EM>&gt; &gt; defined as guaranteeing that the last byte of the write is the last
+</EM><BR>
+<EM>&gt; &gt; byte of a segment).
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>That sides steps my intended question.  As with previous rounds in this
+<BR>
+discussion of the Nagle algorithm, what we think is a correct exegesis of
+<BR>
+the (or a) standard is basically irrelevant.  Does it matter whether RFC
+<BR>
+896 talked about send() system calls, passages through tcp_output(), or
+<BR>
+cycles of the RFC 793 state machine?  NO!--What really matters is what
+<BR>
+happens in representative, currently deployed implementations.  First
+<BR>
+figure out the problem, and after that choose an architecture, a layering,
+<BR>
+and a religion.  That order is what made TCP, and the opposite is what
+<BR>
+made TP0-TP4/CONS-CLNS.
+<BR>
+<P><P><P>] From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902180538.WAA20674@calcite.rhyolite.com&gt;">touch@ISI.EDU</A>&gt;
+<BR>
+]
+<BR>
+] &gt; &gt; TCP currently lacks a few things that would certainly be useful to
+<BR>
+] &gt; &gt; applications that want something other than a byte-stream, [...]
+<BR>
+] &gt; 
+<BR>
+] &gt; Um, yeah.  I'm not quite sure what your point is.  This sounds like
+<BR>
+] &gt; &quot;TCP isn't all things to all applications&quot;, which doesn't really sound
+<BR>
+] &gt; to me like something that is possible to fix, nor do I think it would
+<BR>
+] &gt; be desirable to try.
+<BR>
+<P>I was horrified by some of the ideas.  EOF and record markers particularly
+<BR>
+bother me because they are so trivially implemented by the application
+<BR>
+and there are so many more kinds of markers than any of us would dream
+<BR>
+of putting into a kernel (or so I would like to think).  You would need
+<BR>
+at the very least all of ANSI magnetic tape markers, including &quot;my summer
+<BR>
+vacation&quot; naratives optionally associated with every mark.
+<BR>
+<P>On the other hand, the notion of &quot;delay sending these low priority bits
+<BR>
+until I find some more or you really have nothing better to do&quot; and
+<BR>
+&quot;send this glob&quot; immediately sound very enticing.  I think they might
+<BR>
+finally be an improvement on Nagle.
+<BR>
+<P>On the third hand, was in it this mailing list where Joe Touch and others
+<BR>
+tonight mentioned Gbit/sec TCP for clusters?  Every minor optional feature
+<BR>
+that you add to a protocol hurts enormously at the boundaries, on very
+<BR>
+large and fast and on very small systems.  It wouldn't take more than a
+<BR>
+smidgeon more improvements to transform the TCP/IP of 1985 that buried
+<BR>
+TP0-TP4/CONS-CLNS into a monster that makes those poor guys look agile
+<BR>
+and svelte.  The necessary but so far small and subtle changes including
+<BR>
+header prediction, fast retransmission, fast recovery, slow start, double
+<BR>
+initial MSS, window scaling and SAK, etc. are a long way down that road
+<BR>
+paved with good intentions.  Start adding neat knobs to the API, and TCP
+<BR>
+will instantly flash under the lintel with the damning motto.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1603.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-05.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1601.html">der Mouse : "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1604.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1602">[ date ]</A>
+<A HREF="index.html#1602">[ thread ]</A>
+<A HREF="subject.html#1602">[ subject ]</A>
+<A HREF="author.html#1602">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

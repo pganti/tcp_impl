@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Michael C. Richardson (mcr@sandelman.ottawa.on.ca)">
+<META NAME="Subject" CONTENT="Re: ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ICMP must fragment and IPsec</H1>
+<!-- received="Sun Jun 22 19:20:55 1997" -->
+<!-- isoreceived="19970622232055" -->
+<!-- sent="Sun, 22 Jun 1997 22:20:22 -0400" -->
+<!-- isosent="19970623022022" -->
+<!-- name="Michael C. Richardson" -->
+<!-- email="mcr@sandelman.ottawa.on.ca" -->
+<!-- subject="Re: ICMP must fragment and IPsec" -->
+<!-- id="199706230220.WAA24200@istari.sandelman.ottawa.on.ca" -->
+<!-- inreplyto="199706222333.RAA23828@mica.denver.sgi.com" -->
+<STRONG>From:</STRONG> Michael C. Richardson (<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230220.WAA24200@istari.sandelman.ottawa.on.ca&gt;"><EM>mcr@sandelman.ottawa.on.ca</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jun 22 1997 - 22:20:22 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0556.html">Vernon Schryver: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0554.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0554.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#555">[ date ]</A>
+<A HREF="index.html#555">[ thread ]</A>
+<A HREF="subject.html#555">[ subject ]</A>
+<A HREF="author.html#555">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+-----BEGIN PGP SIGNED MESSAGE-----
+<BR>
+<P><P>&nbsp;&nbsp;[I'm hesitant about continuing to post this to both lists, but I'm
+<BR>
+not sure where else it should go. I know that it doesn't really fit
+<BR>
+into either charter, since we aren't documenting TCP bugs that need
+<BR>
+fixing, and aren't discussing the things that we REALLY need to finish
+<BR>
+to terminate the IPsec group. 
+<BR>
+&nbsp;&nbsp;Please give me advice by private email. Maybe I should write this up
+<BR>
+as a draft, since I can see it getting more fleshed out in my mind.]
+<BR>
+<P><EM>&gt;&gt;&gt;&gt;&gt; &quot;Vernon&quot; == Vernon Schryver &lt;<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230220.WAA24200@istari.sandelman.ottawa.on.ca&gt;">vjs@mica.denver.sgi.com</A>&gt; writes:
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; What is this &quot;other end&quot;?  If talking to the other end of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; a TCP connection were enough, then the MSS negotiation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; would be enough and the Path MTU Discovery mechanism would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; not be needed.  In fact, the MSS negotiation is often not
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;I am assuming that packets that are sent that are too big, or become
+<BR>
+too big due to n-levels of ESP/AH transport/tunnels will be
+<BR>
+fragmented if the DF bit is not set.
+<BR>
+<P>&nbsp;&nbsp;How much the packet gets fragmented can be determined by the
+<BR>
+receiving host and/or tunnel end-point: it can observe the largest
+<BR>
+fragment that was successfully received and participated in
+<BR>
+reassembly. This information can be relayed to the sending host via an
+<BR>
+ICMP Datagram Too Big message that can be put into the tunnel.
+<BR>
+<P>&nbsp;&nbsp;This appears to screwed up by multiple paths with different
+<BR>
+MTUs. However, it is easily fixed by only taking PMTU information from
+<BR>
+packets that were fragmented: a larger packet that arrives intact
+<BR>
+clearly took a different route, so it doesn't matter. Eventually, if 
+<BR>
+the correspondant nodes can adjust their PMTU appropriately, all
+<BR>
+packets arrive unfragmented. Clearly, the rate that ICMP's are sent
+<BR>
+needs to be limited to not more than one per RTT.
+<BR>
+<P>&nbsp;&nbsp;This works well on the end system that reassembles the packets. So,
+<BR>
+getting an estimate of the PMTU from a transport mode, or tunnel mode
+<BR>
+terminating on the end node is easy.
+<BR>
+&nbsp;&nbsp;If the tunnel doesn't terminate on the end node (but on a security
+<BR>
+gateway), then one observes that the gateway must reassemble the ESP
+<BR>
+or AH packets to terminate the tunnel. The gateway node can there 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) send an ICMP (in transport? or tunnel?) to the originating
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gateway, informing it of the PMTU that it sees, and the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;originating gateway will send an ICMP to nodes that set the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DF bit when they do normal PMTU.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) alternatively, the PMTU between gateways could be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;communicated with an ISAKMP message.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) send an ICMP through the tunnel, to the TCP originating
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(TLO in the terminology of my traversal draft) node. The TLO
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sees this packet just like it would when it got ICMP messages
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when security wasn't present. However, it never sees the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;routes that were tunnelled through, but the far end tunnel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point would collect all that info for it anyway.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;BTW: not all current IPsec implementations do the right thing with
+<BR>
+the DF flag. In theory, a DF flag on a packet going into a tunnel
+<BR>
+should cause the tunnel wrapper to have the DF bit set, and the ICMP
+<BR>
+Datagram Too Big messages adjusted in size and passed back to the
+<BR>
+originating host. This assumes we can trust them. At least one
+<BR>
+implementation in Detroit dropped the packets immediately, since the
+<BR>
+new packet size didn't fit the outgoing interface's MTU, so the ICMP
+<BR>
+would have been trusted in that case. My recommendation is to never
+<BR>
+set the DF bit on the outside packet until you can deal with the
+<BR>
+ICMP. That is, the problem is punted for a future working group, but
+<BR>
+it means that IPsec VPN tunnels become non-compliant routers since
+<BR>
+they don't honour the DF bit.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; The trouble with authenticating path MTU information
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; (regardless of its form) is key distribution.  How would
+<BR>
+<P>&nbsp;&nbsp;My position is that you can't distribute the keys. Please see my
+<BR>
+draft for another place where it appears the intermediate security
+<BR>
+gateways need the keys.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; The only response to worries about path MTU messages, as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; well as source quences, port, net, and host Unreachables,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; and many other such indications is to be to cross your
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; fingers and ignore any that would have serious
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; consequences, such as an message telling you to use an MTU
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; of 68.
+<BR>
+<P>&nbsp;&nbsp;I think we can do better than that.
+<BR>
+<P><EM>    &gt;&gt; ...  I can't think of many cases in the current deployed
+</EM><BR>
+<EM>    &gt;&gt; internet where the MTU might change during a
+</EM><BR>
+<EM>    &gt;&gt; connection. Usually, the smallest MTU is on the edges at that
+</EM><BR>
+<EM>    &gt;&gt; 28.8 (or that 2400 baud modem) link, and that isn't likely to
+</EM><BR>
+<EM>    &gt;&gt; change suddendly. I can see mobileip possibly changing
+</EM><BR>
+<EM>    &gt;&gt; this. If/when mobileip is deployed en-mass, it will definitely
+</EM><BR>
+<EM>    &gt;&gt; include IPsec.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; There is a vast amount of topology on the edges, what with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; ATM (9180), FDDI (4352), Ethernet (1500 or 1492), PPP (256
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; to more than 1500), and Frame Relay.
+<BR>
+<P>&nbsp;&nbsp;But, do any of these things *change* during the course of a TCP
+<BR>
+connection?
+<BR>
+&nbsp;&nbsp;While the routing on the backbone might change, my guess is that the
+<BR>
+MTU between backbone nodes is almost always going to be more than the
+<BR>
+1500 typical of a T1. I guess, two networks, that do ATM with their
+<BR>
+supplier could get a much lower MTU if the supplier's ATM backbone
+<BR>
+goes down, and the move their backup T1s. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; Besides, if you stay away from the edges and in the center
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; where routes don't flap among links with different MTU's,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; you may as well fix your MTU=1500 and forget Path MTU
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; discover.
+<BR>
+<P>&nbsp;&nbsp;Yes, there is this option.
+<BR>
+<P><EM>    &gt;&gt; Getting Path MTU information back to the sending TCP is not an
+</EM><BR>
+<EM>    &gt;&gt; unsurmountable challenge to VPN uses of IPsec, but it isn't
+</EM><BR>
+<EM>    &gt;&gt; easy.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; On the contrary, I think the key distribution problem is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; insurmountable and makes authenticated path MTU
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vernon&gt; information impossible.  For example, look at any real
+<BR>
+<P>&nbsp;&nbsp;I agree: trying to get the ICMP Datagram Too Big messages
+<BR>
+authenticated is not possible. 
+<BR>
+&nbsp;&nbsp;I don't agree that getting authenticated PMTU information is
+<BR>
+impossible. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;:!mcr!:            |  Network security programming, currently
+<BR>
+&nbsp;&nbsp;&nbsp;Michael Richardson | on contract with DataFellows F-Secure IPSec
+<BR>
+&nbsp;WWW: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html">http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html</A>&quot;&gt;<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230220.WAA24200@istari.sandelman.ottawa.on.ca&gt;">mcr@sandelman.ottawa.on.ca</A>&lt;/A&gt;. PGP key available.
+<BR>
+<P><P>-----BEGIN PGP SIGNATURE-----
+<BR>
+Version: 2.6.3ia
+<BR>
+Charset: latin1
+<BR>
+Comment: Processed by Mailcrypt 3.4, an Emacs/PGP interface
+<BR>
+<P>iQB1AwUBM63dYaZpLyXYhL+BAQEYaQL/fWe8YzpkZAGRKsGTEv8PJ0sQyM1Jlx4I
+<BR>
+NmJCIj8Y9y1+giyg1ZZeLhmh0x15nYQnt/0dH1I3sf+KXZRIYz00LfPVq13MLAkP
+<BR>
+5uijiFUS3c6UddKCTwOrR08uqwhydSG/
+<BR>
+=1PJL
+<BR>
+-----END PGP SIGNATURE-----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0556.html">Vernon Schryver: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0554.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0554.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#555">[ date ]</A>
+<A HREF="index.html#555">[ thread ]</A>
+<A HREF="subject.html#555">[ subject ]</A>
+<A HREF="author.html#555">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

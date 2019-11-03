@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 09:53:45 1999" -->
+<!-- isoreceived="19990217145345" -->
+<!-- sent="Wed, 17 Feb 1999 07:48:28 -0700 (MST)" -->
+<!-- isosent="19990217144828" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902171448.HAA03396@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902171448.HAA03396@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 09:48:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1587">[ date ]</A>
+<A HREF="index.html#1587">[ thread ]</A>
+<A HREF="subject.html#1587">[ subject ]</A>
+<A HREF="author.html#1587">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902171448.HAA03396@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; On a lark I did a search for +&quot;nagle algorithm&quot; on AltaVista, and almost
+</EM><BR>
+<EM>&gt; all references to it are things that explain what it is and then
+</EM><BR>
+<EM>&gt; admonish the programmer from using it. I'm starting to wonder too if
+</EM><BR>
+<EM>&gt; anybody actually disables it for non-interactive, non-realtime stuff.
+</EM><BR>
+<P>Why would anyone care, since you're talking about &quot;non-interactive,
+<BR>
+non-realtime stuff&quot;, and the worst effect of Nagle on bulk transfers is
+<BR>
+an extra 0.1 second delay in sending the FIN?
+<BR>
+<P><P><EM>&gt; Apple's OT devsite: <A HREF="http://developer.apple.com/qa/nw/nw26.html">http://developer.apple.com/qa/nw/nw26.html</A>
+</EM><BR>
+<EM>&gt; Winsock FAQ:
+</EM><BR>
+<EM>&gt; <A HREF="http://telin.rug.ac.be/~sid/Netwerken/Winsock/advanced.html#q15">http://telin.rug.ac.be/~sid/Netwerken/Winsock/advanced.html#q15</A>
+</EM><BR>
+<P>That talks about an especially weak reason to turn off the Nagle
+<BR>
+algorithm, to try to retain packet boundaries on the wire, presumably
+<BR>
+so that application receive requests get the same block boundaries
+<BR>
+as sent by the sender.
+<BR>
+<P><P><EM>&gt; WinSock API:
+</EM><BR>
+<EM>&gt; <A HREF="http://www.medusa.uni-bremen.de/intern/knowhow/winsock/winsock4.htm">http://www.medusa.uni-bremen.de/intern/knowhow/winsock/winsock4.htm</A>
+</EM><BR>
+<P>That's a nice ASCII version of the Winsock 1 spec.  Thanks.
+<BR>
+I see it mentions RCVBUF and SNDBUF
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; <A HREF="http://www.isi.edu/lsam/publications/phttp_tcp_interactions/">http://www.isi.edu/lsam/publications/phttp_tcp_interactions/</A>
+</EM><BR>
+<P><EM>&gt; In this particular test, disabling Nagle helped a lot since the data
+</EM><BR>
+<EM>&gt; being returned from the HTTP server was sent as two writes (one for the
+</EM><BR>
+<EM>&gt; MIME header and another for the data).
+</EM><BR>
+<P>The following sentence in that paper is interesting:
+<BR>
+<P>|   Apache supports keep-alive connections, an early implementation
+<BR>
+|   of P-HTTP.  When handling a keep-alive connection, Apache sends
+<BR>
+|   its headers as a separate segment. (It does so to work around
+<BR>
+|   a bug in a popular browser.)
+<BR>
+<P>That seems to me to imply that of the two reasons to turn off the Nagle
+<BR>
+algorithm in Apache, broken writes like those and what they call the
+<BR>
+&quot;Odd/Short-Final-Segment Problem&quot;, the first forces them to turn off Nagle
+<BR>
+regardless.  That means that while the second would be helped by the
+<BR>
+proposed modification to Nagle, it is moot.  In other words, it's
+<BR>
+consistent with my claim that the proposed modification to Nagle won't
+<BR>
+gain anything in the real world.
+<BR>
+<P>(I am puzzled by that work-around for the browser bug.  Apache cannot
+<BR>
+guarantee that its segments won't be combined by the sending kernel.
+<BR>
+Oh well, maybe it works often enough to be worthwhile.)
+<BR>
+<P><P><EM>&gt; <A HREF="http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html">http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html</A> also
+</EM><BR>
+<EM>&gt; discusses the issue some, suggesting that Nagle made no effect on some
+</EM><BR>
+<EM>&gt; pipelined transactions, while it did have an effect in others.
+</EM><BR>
+<P>They're talking about turning off Nagle regardless because sometimes doing
+<BR>
+so helps a lot.  That again makes the proposed modification moot.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902171448.HAA03396@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1588.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1587">[ date ]</A>
+<A HREF="index.html#1587">[ thread ]</A>
+<A HREF="subject.html#1587">[ subject ]</A>
+<A HREF="author.html#1587">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

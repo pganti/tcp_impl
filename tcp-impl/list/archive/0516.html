@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SYN cookies</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: SYN cookies">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SYN cookies</H1>
+<!-- received="Fri Jun  6 01:08:00 1997" -->
+<!-- isoreceived="19970606050800" -->
+<!-- sent="Fri, 06 Jun 1997 10:02:48 +0200" -->
+<!-- isosent="19970606080248" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: SYN cookies" -->
+<!-- id="199706060802.KAA12627@rekk.dna.lth.se" -->
+<!-- inreplyto="m0wZtg1-0005FfC@lightning.swansea.linux.org.uk" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706060802.KAA12627@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 06 1997 - 04:02:48 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0517.html">Vernon Schryver: "Re: SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0515.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0512.html">Alan Cox: "Re: SYN cookies"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0484.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#516">[ date ]</A>
+<A HREF="index.html#516">[ thread ]</A>
+<A HREF="subject.html#516">[ subject ]</A>
+<A HREF="author.html#516">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+(trimmed the CC list, everyone here is on the mailing list).
+<BR>
+<P>Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706060802.KAA12627@rekk.dna.lth.se&gt;">alan@lxorguk.ukuu.org.uk</A>&gt; writes:
+<BR>
+<EM>&gt;Begin at the beginning and end at the end. I know several RST cookie problems
+</EM><BR>
+<EM>&gt;- notably a lot of &quot;smart&quot; firewalls say &quot;ooh I wonder what this is I think
+</EM><BR>
+<EM>&gt;I'll drop it&quot;
+</EM><BR>
+<P>Indeed. This is the one flaw in what I think is otherwise probably the best
+<BR>
+scheme (in terms of questions of whether or not it changes TCP semantics).
+<BR>
+The specific problem is that some firewalls drop RST frames.
+<BR>
+The way RST cookies work is to send a SYNACK that is guaranteed to
+<BR>
+elicit an RST from the client. When the RST is received this is taken
+<BR>
+as a sign that the client actually exists, and further attempts by
+<BR>
+the client to connect will be permitted (and no further cookies
+<BR>
+will be sent until the current permission expires).
+<BR>
+<P><EM>&gt;SYN cookies have some interesting sequence space issues and like the other
+</EM><BR>
+<EM>&gt;dropping techniques and time wait queue shortening techniques Im not convinced
+</EM><BR>
+<EM>&gt;they follow all the formal requirements we ought to have.
+</EM><BR>
+<P>I think the sequence space issues in SYN cookies are mostly taken care of,
+<BR>
+however I have just noticed one case where things are a bit dicey.
+<BR>
+In particular, there is a transition problem between sequence numbers
+<BR>
+generated in the usual secure sequence number way, and SYN cookie
+<BR>
+sequence numbers. Either one used consistently generates proper monotone
+<BR>
+increasing sequences that don't clock over too fast. However, they don't
+<BR>
+generate the same sequences, and switching from one mode to the other might
+<BR>
+result in a backwards jump in the sequence space. Off hand I do not know
+<BR>
+if this issue can be resolved, I would have to think about this a bit.
+<BR>
+<P><EM>&gt;As to performance
+</EM><BR>
+<EM>&gt;that one is a red herring - indeed the secure sequence number takes longer
+</EM><BR>
+<EM>&gt;to compute 
+</EM><BR>
+<P>Well, that's not quite true. The secure sequence number costs about the
+<BR>
+same to compute as a SYN cookie, perhaps a bit more, depending on your
+<BR>
+specific secure sequence number hash. In fact the algorithms are
+<BR>
+suspiciously similar. The major difference is that the clock portion
+<BR>
+of the calculation is taken from the remote sides sequence number
+<BR>
+in the case of a SYN cookie.
+<BR>
+<P>However, the main point you make stands. The cost of generating a
+<BR>
+cookie is the same as the cost of generating a SYNACK frame.
+<BR>
+In a random or tail drop scheme you must look for a TCB to drop,
+<BR>
+and you must generate a new TCB for the incoming frame.
+<BR>
+In a cookie scheme you don't do anything extra at this point,
+<BR>
+you don't even have to create a TCB for the incoming frame at this point.
+<BR>
+In both schemes we do send out a response to every incoming SYN packet.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706060802.KAA12627@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0517.html">Vernon Schryver: "Re: SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0515.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0512.html">Alan Cox: "Re: SYN cookies"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0484.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#516">[ date ]</A>
+<A HREF="index.html#516">[ thread ]</A>
+<A HREF="subject.html#516">[ subject ]</A>
+<A HREF="author.html#516">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

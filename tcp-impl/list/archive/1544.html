@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Feb  8 20:33:26 1999" -->
+<!-- isoreceived="19990209013326" -->
+<!-- sent="Mon, 08 Feb 1999 17:27:34 -0800" -->
+<!-- isosent="19990209012734" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902090127.RAA01497@red.mtv.siara.com" -->
+<!-- inreplyto="199902041707.LAA02391@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902090127.RAA01497@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 08 1999 - 20:27:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1544">[ date ]</A>
+<A HREF="index.html#1544">[ thread ]</A>
+<A HREF="subject.html#1544">[ subject ]</A>
+<A HREF="author.html#1544">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Dave,
+<BR>
+<P>If i understand what you did several years ago:
+<BR>
+<P><EM>&gt; I changed our TCP so that when an application does a single write, if
+</EM><BR>
+<EM>&gt; there isn't any outstanding un-acked data, all the new data will go
+</EM><BR>
+<EM>&gt; out (subject to constraints of the congestion window), including the
+</EM><BR>
+<EM>&gt; trailing partial packet.
+</EM><BR>
+<P>you are doing what various other people (Rick Jones, most notably) have said 
+<BR>
+they are doing.  I.e., Nagle sort of at the output of send() rather than in 
+<BR>
+tcp_output().  (The BSD code i have, from FreeBSD 2.2.x, does Nagle on *input* 
+<BR>
+to tcp_output(), rather than as tcp_output() emits packets to ip_output(); 
+<BR>
+this seems sort of an approximation [possibly less than ideal] to what you are 
+<BR>
+doing.)
+<BR>
+<P>I think this is a fine thing to do.  However, i don't think (as you seem to) 
+<BR>
+that this is the same as what the I-D is proposing.
+<BR>
+<P>According to the I=D (or, at least the *intent* of the I-D, as Vernon points 
+<BR>
+out that the english description may not be ideal!; see below for some 
+<BR>
+pseudo-code), if an application calls send() with 20 bytes, and some MSS-sized 
+<BR>
+packets are not acknowledged, but no packets &lt; MSS are unacknowledged, then 
+<BR>
+(consistent with windows) a packet with a TCP payload of 20 bytes will be 
+<BR>
+transmitted.
+<BR>
+<P>I think that is *not* what your modification would do.  (Correct me if i am 
+<BR>
+wrong!)
+<BR>
+<P>So, the $64,000 question is: now that you (hopefully, if i'm getting better at 
+<BR>
+explaining it!) know what the modification is, what are your thoughts about it?
+<BR>
+<P>Thanks,  Greg
+<BR>
+<PRE>
+----
+(eff.snd.mss is RFC1122 terminology.)
+<P>Current Nagle:
+<P>	if ((available_data &lt; eff.snd.mss) &amp;&amp; (snd.una != snd.nxt))
+		don't send;
+<P>New Nagle:
+<P>	if ((available_data &lt; eff.snd.mss) &amp;&amp; (snd.una &lt; snd.sml))
+		don't send;
+	else
+		snd.sml = snd.nxt+available_data;
+<P>(and, code to &quot;pull&quot; snd.sml along, so that it doesn't get left behind if the 
+sequence space wraps.)
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1544">[ date ]</A>
+<A HREF="index.html#1544">[ thread ]</A>
+<A HREF="subject.html#1544">[ subject ]</A>
+<A HREF="author.html#1544">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

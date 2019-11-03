@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Fast retransmit/recovery (RFC 25</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Fast retransmit/recovery (RFC 2581) ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Fast retransmit/recovery (RFC 2581) ...</H1>
+<!-- received="Sat Jul  1 14:28:59 2000" -->
+<!-- isoreceived="20000701182859" -->
+<!-- sent="Sat, 01 Jul 2000 12:21:59 -0600" -->
+<!-- isosent="20000701182159" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Fast retransmit/recovery (RFC 2581) ..." -->
+<!-- id="395E36C7.ADEE042E@Novell.COM" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Fast%20retransmit/recovery%20(RFC%202581)%20...&In-Reply-To=&lt;395E36C7.ADEE042E@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jul 01 2000 - 14:21:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2214.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2215">[ date ]</A>
+<A HREF="index.html#2215">[ thread ]</A>
+<A HREF="subject.html#2215">[ subject ]</A>
+<A HREF="author.html#2215">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Okay, this time it is related to RFC 2581 (&quot;Reno&quot;) style fast retransmit
+<BR>
+recovery :-)).
+<BR>
+<P>Clearing of t_dupacks in FreeBSD/NetBSD:
+<BR>
+<P>Assume that we have started getting dup ACKs. We may or may not have
+<BR>
+done a fast retransmit and we may or may not be in fast recovery.
+<BR>
+t_dupacks is cleared in the following cases:
+<BR>
+<P>CASE 1: When a partial or a full ACK is received.
+<BR>
+CASE 2: On a retransmit timeout.
+<BR>
+CASE 3: Got a dup ACK [SEG.ACK == SND.UNA], but has a window update
+<BR>
+[SEG.WND != SND.WND]. 
+<BR>
+CASE 4: Dup ACK, but has data.
+<BR>
+CASE 5: SEG.ACK &lt; SND.UNA.
+<BR>
+<P>RFC 2581, page 6 says, &quot;The retransmit algorithm uses the arrival of 3
+<BR>
+duplicate ACKs (4 identical ACKs *without* the arrival of any other
+<BR>
+intervening packets) as an indication that a segment has been lost&quot;.
+<BR>
+<P>Interpreting the RFC strictly, CASES 3, 4 and 5 seem okay. However, it
+<BR>
+is not entirely clear why these cases have to reset t_dupacks. I can
+<BR>
+understand if t_dupacks doesn't get bumped up by such segments, but why
+<BR>
+clear it? Is there any specific reason for this or just plain paranoia?
+<BR>
+<P>The issue, however, is that this would cause grief during bidirectional
+<BR>
+data transfer (here we go again!). Between the time the first dup ACK
+<BR>
+comes in and a partial or full ACK is received, if CASE 3, 4, or 5 is
+<BR>
+encountered, we reset t_dupacks. Interestingly, CWND doesn't get
+<BR>
+deflated! There is a break statement which skips the CWND deflation in
+<BR>
+CASES 3,4 and 5.
+<BR>
+<P>The second confusion is related to Peterson and Brakmo's fix to the
+<BR>
+header prediction code to deflate the window. It is not clear to me what
+<BR>
+happens when t_dupacks != 0, but t_dupacks &lt; tcprexmtthresh. The header
+<BR>
+prediction code handles such an ACK, but doesn't seem to set t_dupacks
+<BR>
+to 0. Isn't possible that we may end up doing a false fast retransmit
+<BR>
+sometime later? It is hard to see from the code whether this case is
+<BR>
+correctly handled or not.
+<BR>
+<P>Any clarification would be greatly appreciated.
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2215/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2214.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2216.html">Mark Allman: "Re: Fast retransmit/recovery (RFC 2581) ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2215">[ date ]</A>
+<A HREF="index.html#2215">[ thread ]</A>
+<A HREF="subject.html#2215">[ subject ]</A>
+<A HREF="author.html#2215">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

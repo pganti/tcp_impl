@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 13:17:13 1997" -->
+<!-- isoreceived="19970801171713" -->
+<!-- sent="Fri, 1 Aug 1997 13:14:24 -0700" -->
+<!-- isosent="19970801201424" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708012014.NAA09926@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 16:14:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0646.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#647">[ date ]</A>
+<A HREF="index.html#647">[ thread ]</A>
+<A HREF="subject.html#647">[ subject ]</A>
+<A HREF="author.html#647">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Fri Aug  1 12:54:36 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; Date: Fri, 01 Aug 1997 15:52:01 -0400
+</EM><BR>
+<EM>&gt; From: &quot;Scott Lawrence&quot; &lt;<A HREF="mailto:lawrence@agranat.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;">lawrence@agranat.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;&gt;&gt;&gt;&gt; &quot;JT&quot; == Joe Touch &lt;<A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;">touch@isi.edu</A>&gt; writes:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; JT&gt; FYI, John Heideman, who works with me, pointed out that in SunOS,
+</EM><BR>
+<EM>&gt; JT&gt; this occurs only for the side initiating the connection.
+</EM><BR>
+<EM>&gt; JT&gt; ...
+</EM><BR>
+<EM>&gt; JT&gt; Thus the IW=2 case only occurs for the passive open side,
+</EM><BR>
+<EM>&gt; JT&gt; so matters where the passive side has the data, e.g., HTTP.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   HTTP connections are always initiated by the client, which must send
+</EM><BR>
+<EM>&gt;   the request before the server will have anything to say, so HTTP is
+</EM><BR>
+<EM>&gt;   not a good example.
+</EM><BR>
+<P>Why not?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;syn----&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;---syn+ack
+<BR>
+client window is 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---ack-&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server window is 2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---req-&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server can now send *2* packets of data back
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;-ack--
+<BR>
+client window is 2 but who cares? (client isn't really sending much)
+<BR>
+<P><P><P>I was trying to indicate that HTTP _could_ take advantage of the
+<BR>
+passive-side window starting at 2, but FTP could not. Is that not the case?
+<BR>
+<P>Joe
+<BR>
+<P><P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708012014.NAA09926@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0646.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0648.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#647">[ date ]</A>
+<A HREF="index.html#647">[ thread ]</A>
+<A HREF="subject.html#647">[ subject ]</A>
+<A HREF="author.html#647">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Retransmissions without expl</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Retransmissions without explanation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Retransmissions without explanation</H1>
+<!-- received="Thu May 20 16:21:39 1999" -->
+<!-- isoreceived="19990520202139" -->
+<!-- sent="Thu, 20 May 1999 13:15:59 PDT" -->
+<!-- isosent="19990520201559" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: Retransmissions without explanation" -->
+<!-- id="199905202015.NAA00424@daffy.ee.lbl.gov" -->
+<!-- inreplyto="19 May 1999 09:14:39 PDT" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;199905202015.NAA00424@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 20 1999 - 16:15:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1721.html">Steve Nice: "Test"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1722">[ date ]</A>
+<A HREF="index.html#1722">[ thread ]</A>
+<A HREF="subject.html#1722">[ subject ]</A>
+<A HREF="author.html#1722">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Here are some issues which I think are unresolved, or could use better
+</EM><BR>
+<EM>&gt; documentation:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - How to modify the RTO calculation when doing 1323 timestamps.  The
+</EM><BR>
+<EM>&gt;   idea here is that you are getting measurements more quickly, so you
+</EM><BR>
+<EM>&gt;   might want to adjust the moving average calculation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Running with fine-grained clocks.
+</EM><BR>
+<EM>&gt;   1.  Should you?
+</EM><BR>
+<EM>&gt;   2.  Are adjustments to the computations needed?  (Remember delayed
+</EM><BR>
+<EM>&gt;       ack might tack on 200msec).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Always time the RTO from the last packet in flight.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Should there be a minimum RTO?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Should there be a minimum deviation?
+</EM><BR>
+<P>Mark Allman and I are just finishing final copy for a paper to appear in
+<BR>
+SIGCOMM '99 that looks in detail at a number of these tradeoffs.  We'll send
+<BR>
+an announcement to the list within a couple of days.  The brief version is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) The moving average coefficients don't matter, so even though
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you're running a lot more measurements through it with RTTM
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;than previously, that has little effect on the effectiveness of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the RTO computation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) Finer granularity clocks are a win primarily because there's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;less chance of the deviation being computed as 0 ticks (your
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last point above).  Below 100 msec you get diminishing benefit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as you make the granularity finer.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) You don't really have to worry about things like timing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last packet in flight because RTO has an implicit last-RTT term
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;added into it (because the timer is restarted as new data is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sent; pointed out by Reiner Ludwig).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(4) The #1 biggest effect on how well the estimator performs is its
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minimum value - there definitely should be a minimum RTO.
+<BR>
+<P>- Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1721.html">Steve Nice: "Test"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1722">[ date ]</A>
+<A HREF="index.html#1722">[ thread ]</A>
+<A HREF="subject.html#1722">[ subject ]</A>
+<A HREF="author.html#1722">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

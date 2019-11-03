@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 18:05:14 1999" -->
+<!-- isoreceived="19990204230514" -->
+<!-- sent="Thu, 4 Feb 1999 17:00:01 -0600 (CST)" -->
+<!-- isosent="19990204230001" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902042300.RAA00547@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042300.RAA00547@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 18:00:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1507.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1508">[ date ]</A>
+<A HREF="index.html#1508">[ thread ]</A>
+<A HREF="subject.html#1508">[ subject ]</A>
+<A HREF="author.html#1508">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Thu, 4 Feb 1999 13:21:33 -0700 (MST)
+</EM><BR>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042300.RAA00547@frantic.bsdi.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042300.RAA00547@frantic.bsdi.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] Yes. Your definition of MSG_PUSH seems to exactly match the PUSH bit in
+</EM><BR>
+<EM>&gt; ] the TCP spec (FINALLY!!!!!!!).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; As I tried to say earlier, it's almost 20 years too late for such
+</EM><BR>
+<EM>&gt; considerations.  The PUSH bit irrevocably means what it now means,
+</EM><BR>
+<EM>&gt; as useless as that might be.  Or in other words, you can't starting
+</EM><BR>
+<EM>&gt; tommorrow saying that a write without the MSG_PUSH option will be
+</EM><BR>
+<EM>&gt; arbitrarily delayed.
+</EM><BR>
+<P>I think there is a mis-understanding here.  Setting MSG_PUSH means
+<BR>
+push this data through (and set the PUSH flag when it gets to TCP).
+<BR>
+Lack of the MSG_PUSH does not mean that the data is not sent, nor
+<BR>
+that the PUSH flag will not be set.  At least that's my thinking.
+<BR>
+But this may just be support for your agument to call it something
+<BR>
+else than MSG_PUSH.
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; First, the combination of modifying Nagle and adding MSG_PUSH
+</EM><BR>
+<EM>&gt; &gt; is what I would recommend, not just MSG_PUSH.  The combination
+</EM><BR>
+<EM>&gt; &gt; of the two would eliminate most of the need for TCP_NODELAY.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Maybe so, but I've doubts.   My current application would still need
+</EM><BR>
+<EM>&gt; TCP_NODELAY or would set MSG_NDELAY on every write, which I think amount
+</EM><BR>
+<EM>&gt; the same thing on the wire.
+</EM><BR>
+<P>Well, I've tossed around the idea of MSG_PUSH off and on for many years,
+<BR>
+and the fact that I haven't done anything about it sort of says that I
+<BR>
+haven't even convinced myself that it is really needed.
+<BR>
+<P>I do think the change to Nagle is good (supported by the fact that
+<BR>
+I implemented it in BSD/OS over 2 years ago).
+<BR>
+<P><EM>&gt;...
+</EM><BR>
+<EM>&gt; I agree that the MSG_NDELAY bit would be a nice supplement for writev(),
+</EM><BR>
+<EM>&gt; when where it is hard to get all of the buffers together for a writev().
+</EM><BR>
+<EM>&gt; It would also be a better way than TCP_NODELAY to patch code from the many
+</EM><BR>
+<EM>&gt; people that don't realize why write-write is a bad idea.   TCP_NODELAY is
+</EM><BR>
+<EM>&gt; a big hammer unless you really know there are no write-write sequences in
+</EM><BR>
+<EM>&gt; which the first write should be delayed.
+</EM><BR>
+<P>The question is are there enough real-world situations where this
+<BR>
+would be worth-while.
+<BR>
+<P><EM>&gt; &gt; The point is that rather than bypassing Nagle in all instances,
+</EM><BR>
+<EM>&gt; &gt; using MSG_PUSH you can bypass Nagle at the specific points where
+</EM><BR>
+<EM>&gt; &gt; you need to.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I really like the Nagle algorithm, but how many applications really need
+</EM><BR>
+<EM>&gt; it today?  Among carefully written applications (i.e. use writev or at
+</EM><BR>
+<EM>&gt; least never more than 1 write/request) that might use MSG_NDELAY, how
+</EM><BR>
+<EM>&gt; many would not get exactly the same results by TCP_NODELAY?
+</EM><BR>
+<P>A other question is, if you have the modification to Nagle, how
+<BR>
+many of those carefully written applications that use TCP_NODELAY
+<BR>
+could drop use of it?  Or would they still need TCP_NODELAY/MSG_NDELAY
+<BR>
+because they send multiple requests without waiting for a response
+<BR>
+to the first request?
+<BR>
+<P><EM>&gt; The biggest trouble with MSG_NDELAY is the same as with writev().
+</EM><BR>
+<EM>&gt; You'd have it where you don't really needed it (e.g. BSD systems)
+</EM><BR>
+<EM>&gt; but not where you do need it (e.g. winsock).
+</EM><BR>
+<P>Patient: Doctor, it hurts when I do this.
+<BR>
+Doctor: Then don't do that.
+<BR>
+:-)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042300.RAA00547@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1507.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1508">[ date ]</A>
+<A HREF="index.html#1508">[ thread ]</A>
+<A HREF="subject.html#1508">[ subject ]</A>
+<A HREF="author.html#1508">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

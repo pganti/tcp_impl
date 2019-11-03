@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP problems with IP options</TITLE>
+<META NAME="Author" CONTENT="Bill Fenner (fenner@parc.xerox.com)">
+<META NAME="Subject" CONTENT="Re: TCP problems with IP options and path MTU discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP problems with IP options and path MTU discovery</H1>
+<!-- received="Sun Mar 22 23:43:33 1998" -->
+<!-- isoreceived="19980323044333" -->
+<!-- sent="Sun, 22 Mar 1998 23:41:39 PST" -->
+<!-- isosent="19980323074139" -->
+<!-- name="Bill Fenner" -->
+<!-- email="fenner@parc.xerox.com" -->
+<!-- subject="Re: TCP problems with IP options and path MTU discovery" -->
+<!-- id="98Mar22.234146pst.177482@crevenia.parc.xerox.com" -->
+<!-- inreplyto="199803220519.VAA06235@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Bill Fenner (<A HREF="mailto:fenner@parc.xerox.com?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;98Mar22.234146pst.177482@crevenia.parc.xerox.com&gt;"><EM>fenner@parc.xerox.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 23 1998 - 02:41:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1006.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1006.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1010.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1007">[ date ]</A>
+<A HREF="index.html#1007">[ thread ]</A>
+<A HREF="subject.html#1007">[ subject ]</A>
+<A HREF="author.html#1007">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;98Mar22.234146pst.177482@crevenia.parc.xerox.com&gt;">vern@ee.lbl.gov</A>&gt; wrote:
+<BR>
+<EM>&gt;The local IP *does* generate the ICMP_UNREACH_NEEDFRAG (I verified this in
+</EM><BR>
+<EM>&gt;the 4.4 BSD sources).
+</EM><BR>
+<P>Actually, I believe that ip_output returns EMSGSIZE to tcp_output.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Too large for interface; fragment if possible.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Must be able to put at least 8 bytes per fragment.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/     
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ip-&gt;ip_off &amp; IP_DF) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error = EMSGSIZE;
+<BR>
+<P>The problem, as stated before, is simply that TCP uses the IP MTU minus
+<BR>
+the size of standard TCP and IP headers, minus the size of any TCP
+<BR>
+options, to calculate the allowable size of a given segment.  The size
+<BR>
+of any IP options needs to be included in this calculation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*              
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Adjust data length if insertion of options will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* bump the packet length beyond the t_maxseg length.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (len &gt; tp-&gt;t_maxseg - optlen) {
+<BR>
+<P>An additional adjustment of the length to handle IP options is required.
+<BR>
+<P>(Don't forget that IP options can be added and removed in the middle of
+<BR>
+a connection, so it's not necessarily sufficient to base the MSS on the
+<BR>
+IP options at a given point in time)
+<BR>
+<P>&nbsp;&nbsp;Bill
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1006.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1006.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1008.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1010.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1007">[ date ]</A>
+<A HREF="index.html#1007">[ thread ]</A>
+<A HREF="subject.html#1007">[ subject ]</A>
+<A HREF="author.html#1007">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

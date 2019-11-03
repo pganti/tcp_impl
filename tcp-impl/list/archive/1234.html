@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 10:27:49 1998" -->
+<!-- isoreceived="19980820142749" -->
+<!-- sent="Thu, 20 Aug 1998 13:25:55 -0400 (EDT)" -->
+<!-- isosent="19980820172555" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201725.NAA06529@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201725.NAA06529@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 13:25:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1235.html">Vernon Schryver: "RE: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1233.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1234">[ date ]</A>
+<A HREF="index.html#1234">[ thread ]</A>
+<A HREF="subject.html#1234">[ subject ]</A>
+<A HREF="author.html#1234">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+(Goodness, my note seems to have provoked more traffic on this list in
+<BR>
+the last week than I saw on it in the previous month! :-)
+<BR>
+<P><EM>&gt; I've seen two major classes of customers that want keepalives and
+</EM><BR>
+<EM>&gt; want them to take place at frequent intervals:  [...]
+</EM><BR>
+<P>I don't know about either of those; all I know is the reason *I* wanted
+<BR>
+keepalives.  (Actually, what I want is the idle time and the probe
+<BR>
+interval to be short, but the number of probes before the connection is
+<BR>
+killed high, so that keepalives are sent soon and relatively
+<BR>
+frequently, but connections don't die on short network outages.)
+<BR>
+<P>So what is that reason?  Connections through a stateful firewall that
+<BR>
+drops state if it sees no traffic for a relatively short period.  (I
+<BR>
+think the firewall in question has its timeout set to 5 minutes.)  I
+<BR>
+used to lose connecctions regularly until I realized what was going on
+<BR>
+and hacked run-time tuning for those keepalive values into the kernel I
+<BR>
+was using.
+<BR>
+<P>Yes, I would much prefer to get rid of the firewall.  Unfortunately, it
+<BR>
+ain't gonna go away; to get it out of my hair would mean getting rid of
+<BR>
+that job.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201725.NAA06529@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1235.html">Vernon Schryver: "RE: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1233.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1240.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1234">[ date ]</A>
+<A HREF="index.html#1234">[ thread ]</A>
+<A HREF="subject.html#1234">[ subject ]</A>
+<A HREF="author.html#1234">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:50 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

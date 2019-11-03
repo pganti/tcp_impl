@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SYN/RST cookies (was Re: a q</TITLE>
+<META NAME="Author" CONTENT="Perry E. Metzger (perry@piermont.com)">
+<META NAME="Subject" CONTENT="Re: SYN/RST cookies (was Re: a quick clarification...)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SYN/RST cookies (was Re: a quick clarification...)</H1>
+<!-- received="Fri Jun  6 12:25:35 1997" -->
+<!-- isoreceived="19970606162535" -->
+<!-- sent="Fri, 06 Jun 1997 15:18:16 -0400" -->
+<!-- isosent="19970606191816" -->
+<!-- name="Perry E. Metzger" -->
+<!-- email="perry@piermont.com" -->
+<!-- subject="Re: SYN/RST cookies (was Re: a quick clarification...)" -->
+<!-- id="199706061918.PAA08377@jekyll.piermont.com" -->
+<!-- inreplyto="m0wa4Fk-0005FdC@lightning.swansea.linux.org.uk" -->
+<STRONG>From:</STRONG> Perry E. Metzger (<A HREF="mailto:perry@piermont.com?Subject=Re:%20SYN/RST%20cookies%20(was%20Re:%20a%20quick%20clarification...)&In-Reply-To=&lt;199706061918.PAA08377@jekyll.piermont.com&gt;"><EM>perry@piermont.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 06 1997 - 15:18:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0526.html">message@marketcom2.com: "Web Site Visibility"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0524.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0524.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#525">[ date ]</A>
+<A HREF="index.html#525">[ thread ]</A>
+<A HREF="subject.html#525">[ subject ]</A>
+<A HREF="author.html#525">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Alan Cox writes:
+<BR>
+<EM>&gt; &gt; I disagree. The approach outlined by Vern and essentially in use in
+</EM><BR>
+<EM>&gt; &gt; BSDI has very wide support and should be implemented by most
+</EM><BR>
+<EM>&gt; &gt; vendors. The SYN cookie approach is at very best (I'll be very very
+</EM><BR>
+<EM>&gt; &gt; charitable here) experimental.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You have failed to provide reasons, logic or justification.
+</EM><BR>
+<P>I haven't re-done flame wars done elsewhere, yes. I'm not that
+<BR>
+interested in them.
+<BR>
+<P>Here, though, is a starter: the TCP sequence number etc. isn't big
+<BR>
+enough to provide enough space to encode port/source info and all the
+<BR>
+rest of the TCP state you need, let alone encode them AND provide
+<BR>
+enough room for cryptographic authentication. Too much of the space is
+<BR>
+meaningful -- would be recognised by a host as &quot;valid&quot;. Writing a
+<BR>
+program to burn a machine running SYN cookie code to the floor doesn't
+<BR>
+look particularly hard. It is, in fact, far worse, since I can induce
+<BR>
+fake state on many hosts that WILL NOT GO AWAY -- the machines will
+<BR>
+think that a SYN-SYNACK exchange has happened after just getting a
+<BR>
+single packet. Do a little creative guessing, and you can tie the
+<BR>
+machine in knots -- worse knots than you could tie it in without SYN
+<BR>
+cookies. Given this, why bother with the exercise? The whole thing
+<BR>
+protects NOTHING.
+<BR>
+<P>The &quot;cookie&quot; idea was not invented by Dan. It was invented by me and
+<BR>
+several other people on a private mailing list formed immediately
+<BR>
+after the SYN flood thing first appeared. We rejected our own idea --
+<BR>
+as well as variations on the theme like PING state probes -- because
+<BR>
+they DON'T WORK. Dan came along, re-invented it, and has gotten lots
+<BR>
+of people to adopt the concept.
+<BR>
+<P>I mean, I really loved my ping state probe idea. It was simple and
+<BR>
+elegant, and just plain won't work on a real internet where things
+<BR>
+filter ICMP.
+<BR>
+<P><EM>&gt; I don't think you have a leg to stand on in any such argument other
+</EM><BR>
+<EM>&gt; than as proof that all should be documented.
+</EM><BR>
+<P>Whatever, Alan. I must admit that I haven't done much on this topic
+<BR>
+because I frankly don't care about the security of Linux boxes and
+<BR>
+they are the only ones adopting this thing. Call me callous, but after
+<BR>
+flames I got in the past trying to point out problems to linux types I
+<BR>
+just decided &quot;let 'em burn -- doesn't hurt me or my clients&quot;.
+<BR>
+<P>However, that doesn't mean its going to get into an RFC.
+<BR>
+<P>Perry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0526.html">message@marketcom2.com: "Web Site Visibility"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0524.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0524.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#525">[ date ]</A>
+<A HREF="index.html#525">[ thread ]</A>
+<A HREF="subject.html#525">[ subject ]</A>
+<A HREF="author.html#525">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

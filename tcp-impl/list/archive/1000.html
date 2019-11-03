@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP problems with IP options</TITLE>
+<META NAME="Author" CONTENT="Marc Slemko (marcs@znep.com)">
+<META NAME="Subject" CONTENT="Re: TCP problems with IP options and path MTU discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP problems with IP options and path MTU discovery</H1>
+<!-- received="Sat Mar 21 20:10:28 1998" -->
+<!-- isoreceived="19980322011028" -->
+<!-- sent="Sat, 21 Mar 1998 21:09:45 -0700 (MST)" -->
+<!-- isosent="19980322040945" -->
+<!-- name="Marc Slemko" -->
+<!-- email="marcs@znep.com" -->
+<!-- subject="Re: TCP problems with IP options and path MTU discovery" -->
+<!-- id="Pine.BSF.3.95.980321210539.4890Q-100000@alive.znep.com" -->
+<!-- inreplyto="199803220352.TAA05940@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Marc Slemko (<A HREF="mailto:marcs@znep.com?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;Pine.BSF.3.95.980321210539.4890Q-100000@alive.znep.com&gt;"><EM>marcs@znep.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 21 1998 - 23:09:45 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1001.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0998.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1000">[ date ]</A>
+<A HREF="index.html#1000">[ thread ]</A>
+<A HREF="subject.html#1000">[ subject ]</A>
+<A HREF="author.html#1000">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sat, 21 Mar 1998, Vern Paxson wrote:
+<BR>
+<P><EM>&gt; &gt;  Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;Pine.BSF.3.95.980321210539.4890Q-100000@alive.znep.com&gt;">vern@ee.lbl.gov</A>&gt; wrote:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;  &gt; I'm confused - why doesn't the sender keep trying progressively
+</EM><BR>
+<EM>&gt; &gt;  &gt; smaller segment sizes until it finds one that works?  It may not
+</EM><BR>
+<EM>&gt; &gt;  &gt; be optimal because it's not figuring the IP header size correctly,
+</EM><BR>
+<EM>&gt; &gt;  &gt; but it ought to find *something*, shouldn't it?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I guess it depends on whether or not the TCP code is getting an error
+</EM><BR>
+<EM>&gt; &gt; message back.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So I'm still confused.  Either the TCP gets error messages back, in
+</EM><BR>
+<EM>&gt; which case MTU discovery should work (though perhaps picking a suboptimal
+</EM><BR>
+<EM>&gt; size because the size of the IP header isn't correctly determined); or
+</EM><BR>
+<EM>&gt; it doesn't get error messages back, in which case MTU discovery is busted
+</EM><BR>
+<EM>&gt; regardless of whether or not there are IP options.  I don't still don't
+</EM><BR>
+<EM>&gt; see a mechanism for causing the problem that Kevin described.  What am
+</EM><BR>
+<EM>&gt; I missing?
+</EM><BR>
+<P>What if it is getting the ICMP fragmentation required, but since it has a
+<BR>
+next-hop MTU in the ICMP message, it assumes that number is correct and
+<BR>
+doesn't even bother checking to see if the previous segment was already
+<BR>
+using that size?
+<BR>
+<P>This is similar to if you had a router lying about the next-hop MTU.
+<BR>
+Probably a good implementation practice to not blindly listen, but verify
+<BR>
+that it makes sense in the context of previous segments.
+<BR>
+<P>(I haven't looked at code to see if this appears to be what happens in any
+<BR>
+implementations, just taking a wild guess...)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1001.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0998.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0999.html">Bernie Volz: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1000">[ date ]</A>
+<A HREF="index.html#1000">[ thread ]</A>
+<A HREF="subject.html#1000">[ subject ]</A>
+<A HREF="author.html#1000">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

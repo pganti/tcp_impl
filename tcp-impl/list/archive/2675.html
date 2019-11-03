@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: [Tsvwg] ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Jacob Heitz (jheitz@lucent.com)">
+<META NAME="Subject" CONTENT="Re: [Tsvwg] ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: [Tsvwg] ECN &amp; PMTU</H1>
+<!-- received="Tue Apr  9 02:10:31 2002" -->
+<!-- isoreceived="20020409061031" -->
+<!-- sent="Mon, 08 Apr 2002 23:09:56 -0700" -->
+<!-- isosent="20020409060956" -->
+<!-- name="Jacob Heitz" -->
+<!-- email="jheitz@lucent.com" -->
+<!-- subject="Re: [Tsvwg] ECN &amp; PMTU" -->
+<!-- id="3CB285B4.9E8FBBA4@lucent.com" -->
+<!-- inreplyto="3CB27092.7680BC16@netlab.hcltech.com" -->
+<STRONG>From:</STRONG> Jacob Heitz (<A HREF="mailto:jheitz@lucent.com?Subject=Re:%20[Tsvwg]%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB285B4.9E8FBBA4@lucent.com&gt;"><EM>jheitz@lucent.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 09 2002 - 02:09:56 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2677.html">Arun Prasad: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2675">[ date ]</A>
+<A HREF="index.html#2675">[ thread ]</A>
+<A HREF="subject.html#2675">[ subject ]</A>
+<A HREF="author.html#2675">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+One reason: sending extra packets in the face
+<BR>
+of congestion will worsen the congestion.
+<BR>
+Congestion collapse could be a very serious possible
+<BR>
+consequence of sending extra packets.
+<BR>
+Notice the ECN does not go towards the sender,
+<BR>
+but in the other direction. I think the intention
+<BR>
+is to have the upper layer (transport) in the
+<BR>
+receiver withhold acknowledgements to cause the
+<BR>
+sender to back off. I'm making this up, so please
+<BR>
+correct me if I'm wrong.
+<BR>
+<P>PMTU discovery does not face this problem. It's ok to send
+<BR>
+an extra packet back to the sender in this case.
+<BR>
+<P>Arun Prasad wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi all,
+</EM><BR>
+<EM>&gt;     Some doubts on the procedure followed for PMTU (Path mtu) discovery and
+</EM><BR>
+<EM>&gt; ECN method.....
+</EM><BR>
+<EM>&gt;     The doubt is not related to the procedure as such, but the relation between the
+</EM><BR>
+<EM>&gt; two procedures stated above......
+</EM><BR>
+<EM>&gt; Tcp and Sctp uses ICMP message to handle the PMTU discovery procedure....
+</EM><BR>
+<EM>&gt; ie., the intermediate router will send an ICMP messge of &quot;Message too Long&quot;
+</EM><BR>
+<EM>&gt; to the end point sending the data packet of size greater than the MTU size of some
+</EM><BR>
+<EM>&gt; intermediate path to the destination.....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; For ECN, the intermediate router should set the appropriate bits in the IP header
+</EM><BR>
+<EM>&gt; (if it supports ECN ....) whenever there is congestion and risk of packet drops
+</EM><BR>
+<EM>&gt; is high....... The endpoints then correct their Congestion window accordingly and
+</EM><BR>
+<EM>&gt; help in reducing the Congestion in the intermediate router.....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Why, we adopt two different methods to carry out similar (in the sense, both are
+</EM><BR>
+<EM>&gt; related to the Intermediate routers....)?????
+</EM><BR>
+<EM>&gt;     Why cant we generalise this stuff.... ie.,  the need here is some way to
+</EM><BR>
+<EM>&gt; communicate between the intermediate router and the endpoint.... Not sure
+</EM><BR>
+<EM>&gt; which of the two ways is advantageous, but cant we use the same method for
+</EM><BR>
+<EM>&gt; both..... ie.,
+</EM><BR>
+<EM>&gt; As for the PMTU discovery, the intermediate router can send an ICMP message
+</EM><BR>
+<EM>&gt; to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+</EM><BR>
+<EM>&gt; endpoint will do all appropriate actions as it does when it receives the packet set
+</EM><BR>
+<EM>&gt; with ECN-ECHO flag (as in present ECN procedure...)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+</EM><BR>
+<EM>&gt; that might be slighly tough, considering the Backward compatibility....)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     What we can achieve by this is the simplicity  in the router implementation,
+</EM><BR>
+<EM>&gt; which doesnt need to do different procedure for different features of the Transport
+</EM><BR>
+<EM>&gt; layer..... and by maintaining this uniformity, the future extentions which demands a
+</EM><BR>
+<EM>&gt; similar requirement can use the same way......
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I could have missed some points....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Any comments on this????
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks
+</EM><BR>
+<EM>&gt; -arun
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; ****************************************************************
+</EM><BR>
+<EM>&gt; V.Arun Prasad
+</EM><BR>
+<EM>&gt; HCL Technologies Ltd.
+</EM><BR>
+<EM>&gt; 51, Jawaharlal Nehru Road,
+</EM><BR>
+<EM>&gt; Ekkattuthangal,
+</EM><BR>
+<EM>&gt; Guindy Industrial Estate,
+</EM><BR>
+<EM>&gt; Chennai - 600097.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Contact # : 9144 - 2334174
+</EM><BR>
+<EM>&gt;             9144 - 2334181
+</EM><BR>
+<EM>&gt;             extn : 233
+</EM><BR>
+<EM>&gt; ****************************************************************
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; _______________________________________________
+</EM><BR>
+<EM>&gt; tsvwg mailing list
+</EM><BR>
+<EM>&gt; <A HREF="mailto:tsvwg@ietf.org?Subject=Re:%20[Tsvwg]%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB285B4.9E8FBBA4@lucent.com&gt;">tsvwg@ietf.org</A>
+</EM><BR>
+<EM>&gt; https://www1.ietf.org/mailman/listinfo/tsvwg
+</EM><BR>
+<P><PRE>
+-- 
+// Jacob Heitz. Tel:510-747-2917
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2677.html">Arun Prasad: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2675">[ date ]</A>
+<A HREF="index.html#2675">[ thread ]</A>
+<A HREF="subject.html#2675">[ subject ]</A>
+<A HREF="author.html#2675">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Apr 09 2002 - 02:10:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

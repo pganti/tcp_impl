@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP SACK</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: TCP SACK">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP SACK</H1>
+<!-- received="Fri Oct 17 06:19:05 1997" -->
+<!-- isoreceived="19971017101905" -->
+<!-- sent="Fri, 17 Oct 1997 12:59:45 +0100 (MET)" -->
+<!-- isosent="19971017115945" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: TCP SACK" -->
+<!-- id="199710171159.MAA13754@labinfo.iet.unipi.it" -->
+<!-- inreplyto="199710170102.SAA02951@offshore.eng.sun.com" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710171159.MAA13754@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Oct 17 1997 - 07:59:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0786.html">Urs Beda Hengartner: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0785.html">Allyn Romanow: "TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#787">[ date ]</A>
+<A HREF="index.html#787">[ thread ]</A>
+<A HREF="subject.html#787">[ subject ]</A>
+<A HREF="author.html#787">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Folks,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It's been awhile now that TCP SACK implementations have been available -
+</EM><BR>
+<EM>&gt; see <A HREF="http://www.psc.edu/networking/tcp.html">http://www.psc.edu/networking/tcp.html</A> for a list -
+</EM><BR>
+<EM>&gt; and I'm wondering what experience folks have had with the protocol.
+</EM><BR>
+<EM>&gt; What are the behavioral effects on the TCPs using SACK, 
+</EM><BR>
+<EM>&gt; TCPs not using SACK, and the overall effects on the network traffic?
+</EM><BR>
+<P>i doubt that there are numbers to draw any conclusion. In last
+<BR>
+september i enabled SACK on our www proxy (50-100K request per day,
+<BR>
+for maybe 500..1000 different clients) and I have rarely seen any
+<BR>
+access from clients requesting SACK (I log them).
+<BR>
+<P>After a few months I disabled SACK (see below), although I still
+<BR>
+log incoming SACK options: in the last few days there is only one
+<BR>
+client who tries to negotiate the use of SACK (except my own machines
+<BR>
+of course).
+<BR>
+<P>It is noticeable that only once I have encountered a server with
+<BR>
+SACK enabled, and this was the machine of some other guy who also
+<BR>
+implemented SACK.
+<BR>
+<P>This might have to do with the fact that there are still stacks
+<BR>
+around which do not like TCP options and popular servers tend to
+<BR>
+disable SACK, RFC1323 and other options which might cause them to
+<BR>
+lose clients.
+<BR>
+<P>Note that there are other things which have a good impact on traffic
+<BR>
+(at least for web-type traffic), such as lowering the threshold
+<BR>
+for fast retransmit when there are too few packets in transit. As
+<BR>
+an example, here is an excerpt of netstat -p tcp on our www proxy:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;tcp:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21485459 packets sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9066382 data packets (-1186795353 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;273802 data packets (293684047 bytes) retransmitted
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20507038 packets received
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7930285 acks (for -1243676530 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1083212 duplicate acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;846742 out-of-order packets (387268097 bytes)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1328417 connections established (including accepts)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1428952 connections closed (including 390569 drops)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;369509 retransmit timeouts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;57191 retransmit timeout on syn
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;297393 retransmit timeout with 0 dup acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10908 retransmit timeout with 1 dup acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4705 retransmit timeout with 2 dup acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;86724 fast retransmits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;60120 with 1 dup ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14233 with 2 dup ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12371 with 3 dup ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;35570 newreno retrans
+<BR>
+<P>from the above you can see that we prevent a lot of timeouts at
+<BR>
+the receivers without changing the overall behaviour of TCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;199710171159.MAA13754@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0786.html">Urs Beda Hengartner: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0785.html">Allyn Romanow: "TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0788.html">Kacheong Poon: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#787">[ date ]</A>
+<A HREF="index.html#787">[ thread ]</A>
+<A HREF="subject.html#787">[ subject ]</A>
+<A HREF="author.html#787">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

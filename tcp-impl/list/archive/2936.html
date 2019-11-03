@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: timeout value in TCP impleme</TITLE>
+<META NAME="Author" CONTENT="kunchanl (kunchanl@pollux.usc.edu)">
+<META NAME="Subject" CONTENT="RE: timeout value in TCP implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: timeout value in TCP implementation</H1>
+<!-- received="Sun Apr 20 14:09:40 2003" -->
+<!-- isoreceived="20030420180940" -->
+<!-- sent="Sun, 20 Apr 2003 11:15:00 -0700 (PDT)" -->
+<!-- isosent="20030420181500" -->
+<!-- name="kunchanl" -->
+<!-- email="kunchanl@pollux.usc.edu" -->
+<!-- subject="RE: timeout value in TCP implementation" -->
+<!-- id="Pine.GSO.4.33.0304201104150.21717-100000@pollux.usc.edu" -->
+<!-- inreplyto="3D47C08B02B6E146AA36789FE62BE9207398@jack.see.plym.ac.uk" -->
+<STRONG>From:</STRONG> kunchanl (<A HREF="mailto:kunchanl@pollux.usc.edu?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;Pine.GSO.4.33.0304201104150.21717-100000@pollux.usc.edu&gt;"><EM>kunchanl@pollux.usc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Apr 20 2003 - 14:15:00 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2937.html">Mark Allman: "RE: timeout value in TCP implementation"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2935.html">kunchanl: "long delay before closing connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2936">[ date ]</A>
+<A HREF="index.html#2936">[ thread ]</A>
+<A HREF="subject.html#2936">[ subject ]</A>
+<A HREF="author.html#2936">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thanks! Bogdan.
+<BR>
+<P>Another question: I've also observed quite a number of http
+<BR>
+connections where the client waits for about 60 seconds
+<BR>
+to send out RST packet like the following example.
+<BR>
+This 60-second looks like another timeout value to
+<BR>
+me. Do you have any idea where I might be able to
+<BR>
+find some pointer for it?
+<BR>
+<P>Regards,
+<BR>
+Kun-chan
+<BR>
+<P>16:42:11.722789 10.0.0.1.2214 &gt; 192.168.0.2.80: S 53128904:53128904(0) win
+<BR>
+65535 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+<BR>
+16:42:11.723963 192.168.0.2.80 &gt; 10.0.0.1.2214: S 695356871:695356871(0)
+<BR>
+ack 53128905 win 64240 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+<BR>
+16:42:11.948538 10.0.0.1.2214 &gt; 192.168.0.2.80: . ack 1 win 65535 (DF)
+<BR>
+16:42:11.976663 10.0.0.1.2214 &gt; 192.168.0.2.80: P 1:361(360) ack 1 win
+<BR>
+65535 (DF)
+<BR>
+16:42:11.978416 192.168.0.2.80 &gt; 10.0.0.1.2214: P 1:142(141) ack 361 win
+<BR>
+63880 (DF)
+<BR>
+16:42:12.161741 10.0.0.1.2214 &gt; 192.168.0.2.80: . ack 142 win 65394 (DF)
+<BR>
+16:42:14.141897 10.0.0.1.2214 &gt; 192.168.0.2.80: P 361:721(360) ack 142 win
+<BR>
+65394 (DF)
+<BR>
+16:42:14.143285 192.168.0.2.80 &gt; 10.0.0.1.2214: P 142:283(141) ack 721 win
+<BR>
+63520 (DF)
+<BR>
+16:42:14.369179 10.0.0.1.2214 &gt; 192.168.0.2.80: . ack 283 win 65253 (DF)
+<BR>
+16:43:14.813957 10.0.0.1.2214 &gt; 192.168.0.2.80: R 53129625:53129625(0) win
+<BR>
+0 (DF)
+<BR>
+<P><P><P><P><P><P>On Sun, 20 Apr 2003, Bogdan Ghita wrote:
+<BR>
+<P><EM>&gt; Hello Kun-chan,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 3 seconds is the recomended initial value for the TCP timeout timer (RTO).
+</EM><BR>
+<EM>&gt; See RFC1122 (section 4.2.3.1) for details.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Cheers,
+</EM><BR>
+<EM>&gt; Bogdan
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: kunchanl
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20timeout%20value%20in%20TCP%20implementation&In-Reply-To=&lt;Pine.GSO.4.33.0304201104150.21717-100000@pollux.usc.edu&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Sent: 20/04/03 17:57
+</EM><BR>
+<EM>&gt; Subject: timeout value in TCP implementation
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;     I've observed quiet a few of connections in my tcpdump trace
+</EM><BR>
+<EM>&gt; has the SYN packet re-transmitted after about 3 seconds (as
+</EM><BR>
+<EM>&gt; the example below). I'm wondering if this 3-second is related
+</EM><BR>
+<EM>&gt; some particular timeout value in some tcp implementaton. Can
+</EM><BR>
+<EM>&gt; anybody shed me some light?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thanks
+</EM><BR>
+<EM>&gt; Kun-chan Lan
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 1036626828.477241 10.0.0.1.2355 &gt; 192.168.0.2.80: S 12193306:12193306(0)
+</EM><BR>
+<EM>&gt; win 8192 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+</EM><BR>
+<EM>&gt; 1036626831.460768 10.0.0.1.2355 &gt; 192.168.0.2.80: S 12193306:12193306(0)
+</EM><BR>
+<EM>&gt; win 8192 &lt;mss 1460,nop,nop,sackOK&gt; (DF)
+</EM><BR>
+<EM>&gt; 1036626831.784822 10.0.0.1.2355 &gt; 192.168.0.2.80: . ack 3335637810 win
+</EM><BR>
+<EM>&gt; 8760 (DF)
+</EM><BR>
+<EM>&gt; 1036626831.792048 10.0.0.1.2355 &gt; 192.168.0.2.80: P 0:758(758) ack 1 win
+</EM><BR>
+<EM>&gt; 8760 (DF)
+</EM><BR>
+<EM>&gt; 1036626831.852406 10.0.0.1.2355 &gt; 192.168.0.2.80: . ack 124 win 8638
+</EM><BR>
+<EM>&gt; (DF)
+</EM><BR>
+<EM>&gt; 1036626831.852423 10.0.0.1.2355 &gt; 192.168.0.2.80: R 12194065:12194065(0)
+</EM><BR>
+<EM>&gt; win 0 (DF)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2937.html">Mark Allman: "RE: timeout value in TCP implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2935.html">kunchanl: "long delay before closing connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2936">[ date ]</A>
+<A HREF="index.html#2936">[ thread ]</A>
+<A HREF="subject.html#2936">[ subject ]</A>
+<A HREF="author.html#2936">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sun Apr 20 2003 - 14:09:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Wed Sep 20 15:25:17 2000" -->
+<!-- isoreceived="20000920192517" -->
+<!-- sent="Wed, 20 Sep 2000 10:14:24 -0400" -->
+<!-- isosent="20000920141424" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="200009201414.KAA28367@lawyers.grc.nasa.gov" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009201414.KAA28367@lawyers.grc.nasa.gov&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 20 2000 - 10:14:24 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2363.html">nile333@kadet.co.uk: "So, How in the heck have you been?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2364.html">der Mouse : "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2362">[ date ]</A>
+<A HREF="index.html#2362">[ thread ]</A>
+<A HREF="subject.html#2362">[ subject ]</A>
+<A HREF="author.html#2362">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+The following was caught by the mailing list filters...
+<BR>
+<P>allman
+<BR>
+<P><P><P><EM>&gt; Date: Wed, 20 Sep 2000 02:37:30 +1000
+</EM><BR>
+<EM>&gt; From: Charles Esson &lt;<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009201414.KAA28367@lawyers.grc.nasa.gov&gt;">charlese@cvs.com.au</A>&gt;
+</EM><BR>
+<EM>&gt; CC: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009201414.KAA28367@lawyers.grc.nasa.gov&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP sequence numbers
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have a question also. After you have received the first packet; you know
+</EM><BR>
+<EM>&gt; the sequence number of the next? The person receiving the initial sequence
+</EM><BR>
+<EM>&gt; number has no idea what the sender is going to send anyway.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So if you want to trick the receiver you can use anything. If you want to
+</EM><BR>
+<EM>&gt; trick the sender I would have thought you needed to know; the sender was
+</EM><BR>
+<EM>&gt; going to send;  the initial packet would be a good way to work that out and
+</EM><BR>
+<EM>&gt; get the ISN.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Why is guessing the sequence number of the first packet before it arrives
+</EM><BR>
+<EM>&gt; such a big deal?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Unless there is a good answer to that question; the rest is just rubbish.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; der Mouse wrote:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; Question 1:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Recently, there has been talk on the tcp-impl mailing list that ISN
+</EM><BR>
+<EM>&gt; &gt; &gt; can be random. If so, how can it be guaranteed that an old duplicate
+</EM><BR>
+<EM>&gt; &gt; &gt; will be rejected during a reincarnation?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; It can't; this is one of the problems with making the whole ISN random.
+</EM><BR>
+<EM>&gt; &gt; A better approach might be to (say) make the high 16 bits count and the
+</EM><BR>
+<EM>&gt; &gt; low 16 bits random - there are details, such as dealing with multiple
+</EM><BR>
+<EM>&gt; &gt; transient connections in a small interval of time, but something like
+</EM><BR>
+<EM>&gt; &gt; this could probably be made to work.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Question 2:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Can circumstances arise such that TCP pumps the connection's data
+</EM><BR>
+<EM>&gt; &gt; &gt; into the network at such a high rate, that subsequent sequence
+</EM><BR>
+<EM>&gt; &gt; &gt; numbers increase at the same rate as ISNs?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; ...or faster.  Yes.  If the ISN comes from a counter that ticks every 4
+</EM><BR>
+<EM>&gt; &gt; microseconds, that corresponds to 250000 bytes/sec; I routinely see
+</EM><BR>
+<EM>&gt; &gt; transfer rates over twice that even on 10Mbps Ethernet - and I've seen
+</EM><BR>
+<EM>&gt; &gt; over 32 times it, over eight MB/sec, when running at 100Mbps.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Also, at 4 us per tick, the counter will wrap every 4.77+ hours.  I
+</EM><BR>
+<EM>&gt; &gt; routinely have connections which stay up for days, transferring on the
+</EM><BR>
+<EM>&gt; &gt; order of kilobytes, which means that the ISN counter wraps around and
+</EM><BR>
+<EM>&gt; &gt; catches up to the connection's sequence numbers over and over again.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; These are (among the reasons) why TIME-WAIT is so important.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;                                         der Mouse
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;                                <A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009201414.KAA28367@lawyers.grc.nasa.gov&gt;">mouse@rodents.montreal.qc.ca</A>
+</EM><BR>
+<EM>&gt; &gt;                      7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2363.html">nile333@kadet.co.uk: "So, How in the heck have you been?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2364.html">der Mouse : "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2362">[ date ]</A>
+<A HREF="index.html#2362">[ thread ]</A>
+<A HREF="subject.html#2362">[ subject ]</A>
+<A HREF="author.html#2362">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Sep 20 2000 - 15:25:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

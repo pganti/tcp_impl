@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Port reuse related ...</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RSHANKAR@novell.com)">
+<META NAME="Subject" CONTENT="Re: TCP Port reuse related ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Port reuse related ...</H1>
+<!-- received="Thu, 27 Jan 2000 17:37:55 -0700" -->
+<!-- isoreceived="20000128003755" -->
+<!-- sent="Thu, 27 Jan 2000 17:37:55 -0700" -->
+<!-- isosent="20000128003755" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RSHANKAR@novell.com" -->
+<!-- subject="Re: TCP Port reuse related ..." -->
+<!-- id="s890827c.067@prv-mail20.provo.novell.com" -->
+<!-- inreplyto="TCP Port reuse related ..." -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s890827c.067@prv-mail20.provo.novell.com&gt;"><EM>RSHANKAR@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jan 27 2000 - 19:37:55 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1951.html">Ramesh Shankar: "TCP Port reuse related ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1955">[ date ]</A>
+<A HREF="index.html#1955">[ thread ]</A>
+<A HREF="subject.html#1955">[ subject ]</A>
+<A HREF="author.html#1955">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hmm, looks like I was considering only the &quot;passive mode&quot; FTP cases and trying to figure out what the comments meant wrt it :-)).
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P><EM>&gt;&gt;&gt; Kacheong Poon &lt;<A HREF="mailto:Kacheong.Poon@eng.sun.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s890827c.067@prv-mail20.provo.novell.com&gt;">Kacheong.Poon@eng.sun.com</A>&gt; 01/27/00 04:46PM &gt;&gt;&gt;
+</EM><BR>
+<EM>&gt; Well, if one is talking about well known ports, (0 - 1024), then you have
+</EM><BR>
+<EM>&gt; the standard protection that comes with it: only super user can bind to such
+</EM><BR>
+<EM>&gt; ports.
+</EM><BR>
+<P>For example, nfsd is not listening on the above &quot;well known&quot; ports.  It
+<BR>
+is listening on 2049, which is still well known to nfs clients.  There are
+<BR>
+more well known services than the above 1-1024 port range can allow.  Anyway,
+<BR>
+the kernel should provide a way to allow an app to make sure that all
+<BR>
+requests to the port it bind() to should be sent to it only.
+<BR>
+<P><EM>&gt; In *any case*,  if I had done this:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; socket1: bind(*, port #) (SO_REUSEADDR)
+</EM><BR>
+<EM>&gt; socket2: bind(*, port #) (SO_REUSEADDR)
+</EM><BR>
+<EM>&gt; listen(socket1)
+</EM><BR>
+<P>Yup, this is a hole a server app can make.  It should not set SO_REUSEADDR
+<BR>
+before doing a listen() if it wants to prevent this from happening.  But this
+<BR>
+does not mean that the kernel should not enforce such a rule.  What the kernel
+<BR>
+provides is a mechanism for apps to use.  Use it or not depends on what the
+<BR>
+app wants to do.
+<BR>
+<P><EM>&gt; Then the sequence would have succeeded. Nothing prevents this from
+</EM><BR>
+<EM>&gt; happening. Also, the standard behaviour is to allow the reuse of ports as
+</EM><BR>
+<EM>&gt; long as SO_REUSEADDR has been used (i.e. it works this way in BSD, Winsock).
+</EM><BR>
+<EM>&gt; With the UNIX variants, every one using a port has to use SO_REUSEADDR.
+</EM><BR>
+<EM>&gt; Hence, if the first server that started off didn't use SO_REUSEADDR, this
+</EM><BR>
+<EM>&gt; port stealing can't happen anyway. (With Winsock, only the later bind()ers
+</EM><BR>
+<EM>&gt; have to specify SO_REUSEADDR, the first one doesn't have to).
+</EM><BR>
+<P>Correct me if I am wrong.  Last time I checked FreeBSD code, it did not
+<BR>
+check whether the original socket has SO_REUSEADDR set or not.  I think
+<BR>
+what you mentioned above was not the way it worked.  Is it changed?  I
+<BR>
+think it uses the user id to prevent the port stealing problem.  I am not
+<BR>
+sure about Winsock.  Anyway, different OSes use different mechanisms to fill
+<BR>
+this hole.
+<BR>
+<P><EM>&gt; What I don't get it is the comments about O(1) allocation for FTP servers
+</EM><BR>
+<EM>&gt; etc. The implementation there seems to be related to standard SO_REUSEADDR
+</EM><BR>
+<EM>&gt; case and I don't understand how an FTP server fits into this picture. (I
+</EM><BR>
+<EM>&gt; even tried to check whether the Linux FTP server gives the same passive port
+</EM><BR>
+<EM>&gt; # to multiple FTP clients, it doesn't seem to).
+</EM><BR>
+<P>I think ftp server needs to create a data (port 20) connection.  So it has
+<BR>
+to bind to port 20 repeatedly and it has to set SO_REUSEADDR.  Think of it
+<BR>
+if there are a lot of such data connections in TIME_WAIT state.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s890827c.067@prv-mail20.provo.novell.com&gt;">kcpoon@eng.sun.com</A> 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1951.html">Ramesh Shankar: "TCP Port reuse related ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1955">[ date ]</A>
+<A HREF="index.html#1955">[ thread ]</A>
+<A HREF="subject.html#1955">[ subject ]</A>
+<A HREF="author.html#1955">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

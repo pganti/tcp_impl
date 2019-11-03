@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Connection Establishment</TITLE>
+<META NAME="Author" CONTENT="Jeremy Harris - Network Service Providers Division (jgh@uk.sun.com)">
+<META NAME="Subject" CONTENT="RE: Connection Establishment">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Connection Establishment</H1>
+<!-- received="Wed Feb  6 13:30:03 2002" -->
+<!-- isoreceived="20020206183003" -->
+<!-- sent="Wed, 6 Feb 2002 18:23:23 +0000 (GMT)" -->
+<!-- isosent="20020206182323" -->
+<!-- name="Jeremy Harris - Network Service Providers Division" -->
+<!-- email="jgh@uk.sun.com" -->
+<!-- subject="RE: Connection Establishment" -->
+<!-- id="200202061823.g16INNc03372@sunuk.UK.Sun.COM" -->
+<!-- inreplyto="Connection Establishment" -->
+<STRONG>From:</STRONG> Jeremy Harris - Network Service Providers Division (<A HREF="mailto:jgh@uk.sun.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202061823.g16INNc03372@sunuk.UK.Sun.COM&gt;"><EM>jgh@uk.sun.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 06 2002 - 13:23:23 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2595.html">Bob Braden: "Re: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2599.html">David Nicol: "Re: Connection Establishment"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2596">[ date ]</A>
+<A HREF="index.html#2596">[ thread ]</A>
+<A HREF="subject.html#2596">[ subject ]</A>
+<A HREF="author.html#2596">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:Venkata.Naidu@Marconi.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202061823.g16INNc03372@sunuk.UK.Sun.COM&gt;">Venkata.Naidu@Marconi.com</A> said:
+<BR>
+<EM>&gt;   As per TCP standard (not w.r.t. any API implementations, 
+</EM><BR>
+<EM>&gt;   like sockets)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Machine A initiates a connection to machine B.
+</EM><BR>
+<EM>&gt;   A sends a segment with ISN x, chosen according
+</EM><BR>
+<EM>&gt;   A's clock, and with SYN bit set to 1, this is the
+</EM><BR>
+<EM>&gt;   connection request message.
+</EM><BR>
+<EM>&gt; 	- the ACK flag is set to 0
+</EM><BR>
+<EM>&gt; 	- this segment is still a regular TCP segment; it
+</EM><BR>
+<EM>&gt; 	  can carry data too (piggyback 1)
+</EM><BR>
+<P>I have implemented this; it works nicely.   However, the question
+<BR>
+arises: how much data may be piggybacked on a SYN?  What window may
+<BR>
+the sender assume?
+<BR>
+<P><EM>&gt;       - however, if it does contain data, machine B
+</EM><BR>
+<EM>&gt;         cannot deliver the data to application until the
+</EM><BR>
+<EM>&gt;         connection is successfully established
+</EM><BR>
+<P>As a nonstandard extension to TCP, I propose that this restriction
+<BR>
+can be relaxed in certain situations:
+<BR>
+<P>IF
+<BR>
+- The TCP and next layer up (&quot;ULP&quot;) are tightly-coupled (e.g. both in the
+<BR>
+&nbsp;&nbsp;kernel) and have a rich interface
+<BR>
+- The ULP data consists of a request which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- does not require much processing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- does not modify any server state (bar stats counters, cache
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state etc)
+<BR>
+&nbsp;&nbsp;( thus making the &quot;at-most-once&quot; property of TCP unneeded )
+<BR>
+- The receiver system can adequately defend itself against DOS attack
+<BR>
+<P>THEN
+<BR>
+&nbsp;&nbsp;&nbsp;the &quot;piggyback 1&quot; data can be delivered to the ULP.
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+Further, IF
+<BR>
+- The ULP can respond with public data
+<BR>
+<P>THEN
+<BR>
+&nbsp;&nbsp;&nbsp;the &quot;piggyback 2&quot; can carry that response.
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+<P>I believe that an HTTP GET which hits an in-kernel cache satisfies the
+<BR>
+above constraints; the transaction can then be reduced to a minimum of
+<BR>
+three packets.
+<BR>
+<P>Jeremy Harris		<A HREF="mailto:jeremy.harris@sun.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;200202061823.g16INNc03372@sunuk.UK.Sun.COM&gt;">jeremy.harris@sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2595.html">Bob Braden: "Re: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2599.html">David Nicol: "Re: Connection Establishment"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2596">[ date ]</A>
+<A HREF="index.html#2596">[ thread ]</A>
+<A HREF="subject.html#2596">[ subject ]</A>
+<A HREF="author.html#2596">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 06 2002 - 13:30:10 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

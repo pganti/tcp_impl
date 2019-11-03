@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 15:56:53 1998" -->
+<!-- isoreceived="19981110205653" -->
+<!-- sent="Tue, 10 Nov 1998 12:52:34 PST" -->
+<!-- isosent="19981110205234" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811102052.MAA18983@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Tue, 10 Nov 1998 11:31:05 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102052.MAA18983@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 15:52:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1391.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1392">[ date ]</A>
+<A HREF="index.html#1392">[ thread ]</A>
+<A HREF="subject.html#1392">[ subject ]</A>
+<A HREF="author.html#1392">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Is there any way that we can tweak MSS to take path MTU discovery into
+</EM><BR>
+<EM>&gt; account?  It seems like the current definition would result in an
+</EM><BR>
+<EM>&gt; unnaturally small number of ACKs on a path with a smaller discovered
+</EM><BR>
+<EM>&gt; MTU.
+</EM><BR>
+<P>Note that the current definition is for the *upper bound* on how often
+<BR>
+a TCP acks.  A TCP can certainly ack more often, and in particular if
+<BR>
+it has a different notion of the sender's MSS, that's fine, as long as
+<BR>
+it's less than the original MSS it told the sender.  We're not trying to
+<BR>
+*change* how (most) current TCPs ack, just clarify the requirement in
+<BR>
+the spec.
+<BR>
+<P><EM>&gt; Since increases in slow-start are defined in terms of MSS rather than
+</EM><BR>
+<EM>&gt; the number of segments, I guess the PMTU-equipped stacks wouldn't
+</EM><BR>
+<EM>&gt; pay a penalty versus non-PMTU-equipped stacks, but wouldn't they
+</EM><BR>
+<EM>&gt; be dumping large numbers of packets into the network?
+</EM><BR>
+<P>They will be dumping the same number of packets.  The packets may be
+<BR>
+larger or smaller, depending on the path MTU.  We hope that they are
+<BR>
+larger.  This is overall a Good Thing, we want to encourage use of
+<BR>
+the largest non-fragmenting segment size.
+<BR>
+<P><EM>&gt; I guess implementations are free to send more frequent ACKs to 
+</EM><BR>
+<EM>&gt; avoid this ...
+</EM><BR>
+<P>Right, per the above.
+<BR>
+<P><EM>&gt; Could this result in an unnaturally fast increase in the congestion
+</EM><BR>
+<EM>&gt; window when the receiver ACKed every two packets (not every two 
+</EM><BR>
+<EM>&gt; MSS-sized packets) and the sender always increased by MSS (not
+</EM><BR>
+<EM>&gt; the appropriate PMTU)?
+</EM><BR>
+<P>MSS for the sender means the maximum segment size it's using to send,
+<BR>
+and includes whatever modifications it's made to its original size
+<BR>
+based on PMTU discovery.
+<BR>
+<P>Hmmmm, it looks like this is the key point that you're stressing.
+<BR>
+We need to add this to the definition of MSS.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1391.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1392">[ date ]</A>
+<A HREF="index.html#1392">[ thread ]</A>
+<A HREF="subject.html#1392">[ subject ]</A>
+<A HREF="author.html#1392">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

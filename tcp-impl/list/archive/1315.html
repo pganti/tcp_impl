@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Jim Gettys (jg@pa.dec.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Wed Sep 16 10:31:34 1998" -->
+<!-- isoreceived="19980916143134" -->
+<!-- sent="Wed, 16 Sep 1998 10:29:14 -0700" -->
+<!-- isosent="19980916172914" -->
+<!-- name="Jim Gettys" -->
+<!-- email="jg@pa.dec.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="9809161729.AA17399@pachyderm.pa.dec.com" -->
+<!-- inreplyto="199809041644.AA27622@gra.isi.edu" -->
+<STRONG>From:</STRONG> Jim Gettys (<A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;"><EM>jg@pa.dec.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 16 1998 - 13:29:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1314.html">Nagampali Narasimharao: "Re: OO TCP implementations?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1296.html">braden@ISI.EDU: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1315">[ date ]</A>
+<A HREF="index.html#1315">[ thread ]</A>
+<A HREF="subject.html#1315">[ subject ]</A>
+<A HREF="author.html#1315">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Sender: <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Date: Fri, 4 Sep 1998 09:44:58 -0700
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:rstevens@kohala.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">rstevens@kohala.com</A>, <A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">mycroft@mit.edu</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:perry@piermont.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">perry@piermont.com</A>, <A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">aron@cs.rice.edu</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161729.AA17399@pachyderm.pa.dec.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: status of T/TCP
+</EM><BR>
+<EM>&gt; -----
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; Furthermore, the case that T/TCP was originally designed for (HTTP)
+</EM><BR>
+<EM>&gt;   *&gt; has been more or less resolved by changing the application layer
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; According to Jim Gettys, this is an hypothesis which has not been
+</EM><BR>
+<EM>&gt; proven and may be open some doubt.  I have been looking for resources
+</EM><BR>
+<EM>&gt; (read &quot;graduate student&quot;) to run a test, but perhaps someone else
+</EM><BR>
+<EM>&gt; will do it.  Jim has a test scenario.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Bob Braden
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>I suppose I should watch this list more often, but life's been
+<BR>
+a bit busy.
+<BR>
+<P>I've always been a fan of T/TCP (if the problems that have been raised
+<BR>
+can be resolved).
+<BR>
+<P>There are several reasons why:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) initial latency is too high. RTT's matter.  Much of the work
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in HTTP/1.1 is to allow pipelining, to reduce the number of RTT's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;required for operation; but the TCP open is one I can't get around.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) the distribution of traffic in the Web is not what you might think.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Some of it is quite &quot;trasaction oriented&quot; in nature.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) HTTP/1.1, when implemented well, can greatly reduce (in terms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of # of packets) the length of a packet train of a TCP connection).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) Style sheets will change the content over the next few years.
+<BR>
+<P>Lets look at these separately:
+<BR>
+<P>First: Initial connection latency.
+<BR>
+<P>Some people blithly wave their hands at the savings in latency on connection
+<BR>
+open...
+<BR>
+<P>I do not; the Web is an interactive application, which is currently
+<BR>
+most used over high latency paths (28.8 modems are the bulk of the
+<BR>
+world out there, so 170ms is optimistically the best you ever see,
+<BR>
+even for local documents). The RTT between MIT and the main AltaVista
+<BR>
+site, for example, is around 80 milliseconds as I measure it this instant;
+<BR>
+any/all of these times are multiples of human perceptible delay.
+<BR>
+<P>Wireless networks (GSM, etc) look to be in the 800ms range.
+<BR>
+<P>So right there, I immediately see lots of good reasons to save round trips
+<BR>
+at connection open.  These are delays that immediately impact human
+<BR>
+percieved performance.
+<BR>
+<P>Second: transactional behavior.
+<BR>
+<P>The patterns of of access to a web server is a complex function. But a 
+<BR>
+fair fraction of this traffic (due to extensive client caching) is a single 
+<BR>
+HTTP request followed by a single response, even on pages which are 
+<BR>
+graphically complex.  I'll as our Web characterization group to try to 
+<BR>
+get a better pointer to data showing what this distribution looks like. 
+<BR>
+And commonly, in the cases that are not transactional in nature, you want 
+<BR>
+behavior that devolves to normal TCP.  You can't predict in advance what 
+<BR>
+behavior is likely.
+<BR>
+<P>Another common idiom I expect to see as HTTP/1.1 is deployed and implemented 
+<BR>
+well (not clear current implementations typically do this, though) is 
+<BR>
+an initial handshake request/response, followed by a second (the cache 
+<BR>
+validation case) request/response piplines, which would be one or more
+<BR>
+back to back packets and similar behavior from the server.  If everything
+<BR>
+is cached, you'll get just a few packets of payload in each direction before
+<BR>
+the connection goes idle (waiting for the next user click that may never
+<BR>
+come).
+<BR>
+<P>Note that our SIGCOM paper does not model this often transactional
+<BR>
+behavior seen in the Web; please don't believe that our Microscape site
+<BR>
+bears much resemblance to reality (it is about a factor of 2 more
+<BR>
+complex than a number of fancy corporate home pages).
+<BR>
+<P><P>Third: 
+<BR>
+<P>HTTP/1.1, implemented well, can greatly reduce (in terms of # of packets) 
+<BR>
+the length of a packet train of a TCP connection). This will result in 
+<BR>
+more of the traffic looking &quot;transactional&quot; in nature (while increasing, 
+<BR>
+maybe doubling, the mean size of packets).
+<BR>
+<P>See our SIGCOM paper of a year ago.
+<BR>
+<P>Fourth:
+<BR>
+<P>Roughly as HTTP/1.1 rolls out, stylesheets are also deploying.  As our 
+<BR>
+SIGCOM paper showes, it will have a possibly great impact on most Web 
+<BR>
+surfing. This can significantly change the nature of the content.  There 
+<BR>
+are two possibilities:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) people will exploit style sheets to improve 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interactive feel.  This will shorten the length of a transaction
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to a server, in some cases, pretty dramatically, by getting rid
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of most &quot;junk GIF's&quot;, replacing it with stylesheets (which are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more compact to begin with, and	can be further compressed 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;greatly with deflate compression).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) Web site designers will use the fact that more useful
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content can be sent in the same amount of time to put more junk on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a web page.  I have heard it asserted that web site designers design
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to human tolerance time, rather than speed.
+<BR>
+If 1) is true, we'll see very different traffic, more transactional in 
+<BR>
+nature.  If 2) is true, things won't change so much.  I don't know
+<BR>
+which is going to happen; most likely a combination.
+<BR>
+<P>See our SIGCOM paper (and other tidbits) for some of the background, which 
+<BR>
+can be found at: <A HREF="http://www.w3.org/Protocols/HTTP/Performance/">http://www.w3.org/Protocols/HTTP/Performance/</A>
+<BR>
+<P>So I was, and still am, a fan of T/TCP.  I believe that HTTP/1.1 does NOT
+<BR>
+reduce the need for it, for the reasons given. I pose to this list: can it be
+<BR>
+fixed?  If it can be fixed, I think it is good stuff.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Jim Gettys
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1314.html">Nagampali Narasimharao: "Re: OO TCP implementations?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1296.html">braden@ISI.EDU: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1315">[ date ]</A>
+<A HREF="index.html#1315">[ thread ]</A>
+<A HREF="subject.html#1315">[ subject ]</A>
+<A HREF="author.html#1315">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

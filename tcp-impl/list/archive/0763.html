@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Resetting of ssthresh accord</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: Resetting of ssthresh according to RFC2001">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Resetting of ssthresh according to RFC2001</H1>
+<!-- received="Tue Oct 14 11:39:44 1997" -->
+<!-- isoreceived="19971014153944" -->
+<!-- sent="Tue, 14 Oct 1997 14:37:11 -0400" -->
+<!-- isosent="19971014183711" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: Resetting of ssthresh according to RFC2001" -->
+<!-- id="199710141837.OAA07948@brookfield.ans.net" -->
+<!-- inreplyto="343CF853.427C@ftel.co.uk" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20Resetting%20of%20ssthresh%20according%20to%20RFC2001&In-Reply-To=&lt;199710141837.OAA07948@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Oct 14 1997 - 14:37:11 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0762.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0759.html">Graham Cope: "Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#763">[ date ]</A>
+<A HREF="index.html#763">[ thread ]</A>
+<A HREF="subject.html#763">[ subject ]</A>
+<A HREF="author.html#763">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:343CF853.427C@ftel.co.uk?Subject=Re:%20Resetting%20of%20ssthresh%20according%20to%20RFC2001&In-Reply-To=&lt;199710141837.OAA07948@brookfield.ans.net&gt;">343CF853.427C@ftel.co.uk</A>&gt;, Graham Cope writes:
+<BR>
+<EM>&gt; RFC2001 states that:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &quot;When congestion occurs (indicated by a timeout or the reception of
+</EM><BR>
+<EM>&gt; dupliucate ACKs), one-half of the currect window size should is saved in
+</EM><BR>
+<EM>&gt; ssthresh.&quot;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Presumably this means that ssthresh should be reset when congestion
+</EM><BR>
+<EM>&gt; occurs. I have observed (ina simulation) that if congestion occurs then
+</EM><BR>
+<EM>&gt; multiple segments tend to be lost or timeout, cwnd is set to MSS after
+</EM><BR>
+<EM>&gt; the first loss, and hence ssthresh is set to 2*MSS. This limits the
+</EM><BR>
+<EM>&gt; total achievable throughput.
+</EM><BR>
+<P>What simulator?
+<BR>
+<P>With Reno, if fast rexmt triggers, you could half more than once but
+<BR>
+cwnd is never set to 1 unless RTO fires.  With newreno the problem of
+<BR>
+halving more than once is eliminated if the losses are within the same
+<BR>
+RTT.
+<BR>
+<P>If RTO triggers instead of fast retransmit there is a chance of
+<BR>
+getting another loss in the next few RTTs and getting the hit while
+<BR>
+cwnd is ramping up during slow start.
+<BR>
+<P><EM>&gt; Thus, I take this mean that ssthresh should be reset to half the current
+</EM><BR>
+<EM>&gt; window size when congestion occurs, but should not be reset until
+</EM><BR>
+<EM>&gt; congestion goes away. Is this reasonable? If so, how to determine when
+</EM><BR>
+<EM>&gt; congestion has gone away?
+</EM><BR>
+<P>No.  Your assumption is not reasonable.  [Do you need references on
+<BR>
+fast retransmit, fast recovery and newreno?  If so, look elsewhere in
+<BR>
+RFC2001, look at TCP Illustrated Vol 1., and check the section on
+<BR>
+newreno in <A HREF="http://www.iet.unipi.it/~luigi/sack.html">http://www.iet.unipi.it/~luigi/sack.html</A>.  I lost the URL
+<BR>
+to J. Hoe's work and Sally Floyd's work which (I think independently)
+<BR>
+proposed to do the same thing, now called newreno.]
+<BR>
+<P><EM>&gt; I'm sure this must have been discussed before. If so, any reference?
+</EM><BR>
+<P>It has and in great detail.  Are you sure you are doing fast
+<BR>
+retransmit and fast recovery correctly in the simulations?  
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0762.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0759.html">Graham Cope: "Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#763">[ date ]</A>
+<A HREF="index.html#763">[ thread ]</A>
+<A HREF="subject.html#763">[ subject ]</A>
+<A HREF="author.html#763">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

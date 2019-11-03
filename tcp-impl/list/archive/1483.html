@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb  3 18:32:51 1999" -->
+<!-- isoreceived="19990203233251" -->
+<!-- sent="Wed, 03 Feb 1999 15:29:56 -0800" -->
+<!-- isosent="19990203232956" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36B8DBF4.FBCB23FB@cup.hp.com" -->
+<!-- inreplyto="199902032230.OAA33831@bossette.engr.sgi.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36B8DBF4.FBCB23FB@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 03 1999 - 18:29:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1484.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1482.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1478.html">Sam Manthorpe: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1523.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1483">[ date ]</A>
+<A HREF="index.html#1483">[ thread ]</A>
+<A HREF="subject.html#1483">[ subject ]</A>
+<A HREF="author.html#1483">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Because you just have to make one change to the kernel code instead
+</EM><BR>
+<EM>&gt; of many changes to all applications which do bulk data transfer.  Moreover,
+</EM><BR>
+<P>Back-up a step here - I thought that the problem being fixed here was
+<BR>
+for request/response applications. From the original rfc txt:
+<BR>
+<P>begin quote:
+<BR>
+<P>The interaction of delayed ACKs and Nagle
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If a TCP has more application data to transmit than will fit in one
+<BR>
+&nbsp;&nbsp;&nbsp;packet, but less than two full-sized packets' worth of data, it
+<BR>
+&nbsp;&nbsp;&nbsp;will transmit the first packet.  As a result of Nagle, it will not
+<BR>
+&nbsp;&nbsp;&nbsp;transmit the second packet until the first packet has been
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledged.  On the other hand, the receiving TCP will delay
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledging the first packet until either i) a second packet
+<BR>
+&nbsp;&nbsp;&nbsp;arrives (which, in this case, won't arrive), or ii) approximately
+<BR>
+&nbsp;&nbsp;&nbsp;100ms (and a maximum of 200ms) has elapsed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;When the sending TCP receives the delayed ACK, it can then transmit
+<BR>
+&nbsp;&nbsp;&nbsp;its second packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In a request-response protocol, this second packet will complete
+<BR>
+&nbsp;&nbsp;&nbsp;either a request or a response, which then enables a succeeding
+<BR>
+&nbsp;&nbsp;&nbsp;response or request.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Note two (related) bad results of the interaction of delayed ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;and the Nagle algorithm in this case: the request-response time may
+<BR>
+&nbsp;&nbsp;&nbsp;be increased by up to 400ms (if both the request and the response
+<BR>
+&nbsp;&nbsp;&nbsp;are delayed); and, the number of transactions per second is
+<BR>
+&nbsp;&nbsp;&nbsp;substantially reduced.
+<BR>
+<P>end quote.
+<BR>
+<P>Perhaps my definition of bulk data transfer application is differnet,
+<BR>
+but I take that to mean a very large (&gt;&gt;&gt; MSS) quantity of data
+<BR>
+transfered unidirectinally (eg FTP). Given that, I'm not sure that there
+<BR>
+is any problem with such an application and the current Nagle algorithm
+<BR>
+is there? Enough data accumulates from the small sends to make full-MSS
+<BR>
+segments and away they go.
+<BR>
+<P>Now, in separate email I was discussing that first quoted paragraph with
+<BR>
+Greg. I'll try to paraphrase it here :) First, the paragraph again:
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;If a TCP has more application data to transmit than will fit in one
+<BR>
+&nbsp;&nbsp;&nbsp;packet, but less than two full-sized packets' worth of data, it
+<BR>
+&nbsp;&nbsp;&nbsp;will transmit the first packet.  As a result of Nagle, it will not
+<BR>
+&nbsp;&nbsp;&nbsp;transmit the second packet until the first packet has been
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledged.  On the other hand, the receiving TCP will delay
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledging the first packet until either i) a second packet
+<BR>
+&nbsp;&nbsp;&nbsp;arrives (which, in this case, won't arrive), or ii) approximately
+<BR>
+&nbsp;&nbsp;&nbsp;100ms (and a maximum of 200ms) has elapsed.
+<BR>
+<P>My understanding of &quot;the way things are supposed to work&quot; :) is that if
+<BR>
+that one-and-a-fraction MSS-worth of data was presented to the TCP in a
+<BR>
+single &quot;send&quot; that all of it should go out without delay. And yes, that
+<BR>
+could mean a series of 1460,1,1460,1 segments traversing the network. I
+<BR>
+demonstrated that being the case with a quick netperf TCP_RR test with
+<BR>
+&quot;-r 1461,1&quot; - if the paragraphs description was correct, I should have
+<BR>
+only gotten ~5 transactions per second (200 ms delayed ACK), but I got
+<BR>
+several hundred.
+<BR>
+<P>My further understanding (going further in the quoted text above) was
+<BR>
+that if the application presented the data to the TCP in two (or more)
+<BR>
+&quot;sends&quot; and that the remote could only reply when all the data arrived,
+<BR>
+that the application was essentially broken - it was presenting
+<BR>
+logically associated data to the TCP in separate &quot;send&quot; calls when it
+<BR>
+should have been presented in a single send (perhaps a gathering send).
+<BR>
+<P>Depending on how that application structured its sends. I'm not sure the
+<BR>
+proposed change: 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The proposed Nagle algorithm modifies this as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if any previous less than full-sized packet has not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yet been acknowledged, do not transmit a packet.
+<BR>
+<P>would actually &quot;fix&quot; things. For instance, a (broken IMO) application
+<BR>
+that sent a 2048 byte &quot;request&quot; as a pair of 1024 byte &quot;sends&quot; would
+<BR>
+still encounter the delayed ACK. As I am guessing would an application
+<BR>
+dribbling data out through stdio (say a web plug-in or something)
+<BR>
+<P>Now, there may still be sufficient cases of reasonable applications that
+<BR>
+are not broken, but still &quot;suffer&quot; from Nagle, but I'm not sure (yet -
+<BR>
+I'm sure someone else will point some out :) what they are. _Maybe_
+<BR>
+something to do with pipelined http requests generating sub MSS
+<BR>
+responses?
+<BR>
+<P>The idea presented in the draft about an explicit flush mechanism was
+<BR>
+interesting, though it would be a coupled change in both the
+<BR>
+application(s) and the kernel.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+today, an ACK is just as expensive to the server as a data segment...
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1484.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1482.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1478.html">Sam Manthorpe: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1491.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1523.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1483">[ date ]</A>
+<A HREF="index.html#1483">[ thread ]</A>
+<A HREF="subject.html#1483">[ subject ]</A>
+<A HREF="author.html#1483">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

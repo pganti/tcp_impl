@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Peter Ford (peterf@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: Last Call for TCP Congestion Control I-D (IW&gt;1)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Last Call for TCP Congestion Control I-D (IW&gt;1)</H1>
+<!-- received="Tue Nov 17 14:47:51 1998" -->
+<!-- isoreceived="19981117194751" -->
+<!-- sent="Tue, 17 Nov 1998 11:45:19 -0800" -->
+<!-- isosent="19981117194519" -->
+<!-- name="Peter Ford" -->
+<!-- email="peterf@microsoft.com" -->
+<!-- subject="RE: Last Call for TCP Congestion Control I-D (IW&gt;1)" -->
+<!-- id="416245726D64D211808100805F3198EE0132F65D@RED-MSG-46" -->
+<!-- inreplyto="Last Call for TCP Congestion Control I-D (IW&gt;1)" -->
+<STRONG>From:</STRONG> Peter Ford (<A HREF="mailto:peterf@microsoft.com?Subject=RE:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D%20(IW&gt;1)&In-Reply-To=&lt;416245726D64D211808100805F3198EE0132F65D@RED-MSG-46&gt;"><EM>peterf@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 17 1998 - 14:45:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1401.html">Mark Allman: "Re: Last Call for TCP Congestion Control I-D (IW&gt;1)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1399.html">Mark Allman: "PILC BOF -- Orlando IETF"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1400">[ date ]</A>
+<A HREF="index.html#1400">[ thread ]</A>
+<A HREF="subject.html#1400">[ subject ]</A>
+<A HREF="author.html#1400">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mark, Vern and William,
+<BR>
+<P>Given the following text in RFC 2414:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This upper bound for the initial window size represents a change from
+<BR>
+&nbsp;&nbsp;&nbsp;RFC 2001 [S97], which specifies that the congestion window be
+<BR>
+&nbsp;&nbsp;&nbsp;initialized to one segment.  If implementation experience proves
+<BR>
+&nbsp;&nbsp;&nbsp;successful, then the intent is for this change to be incorporated
+<BR>
+&nbsp;&nbsp;&nbsp;into a revision to RFC 2001.
+<BR>
+<P>isn't the language in the -01 draft a little out of sync?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;IW, the initial value of cwnd, MUST be less than or equal to MSS
+<BR>
+bytes.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;We note that a non-standard, experimental TCP extension allows that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;a TCP MAY use a larger initial window (IW), as defined in equation 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;[AFP98]:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IW = min (4*MSS, max (2*MSS, 4380 bytes))             (1)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;With this extension, a TCP sender MAY use a 2 segment initial
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;window, regardless of the segment size, and 3 and 4 segment initial
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;windows MAY be used, provided the combined size of the segments does
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;not exceed 4380 bytes.  We do NOT allow this change as part of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;standard defined by this document.  However, we include discussion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;of (1) in the remainder of this document as a guideline for those
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;experimenting with the change, rather than conforming to the present
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;standards for TCP congestion control. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;
+<BR>
+I believe the language in the draft should be modified to reflect the intent
+<BR>
+and direction the Internet community is taking.  This is clearly documented
+<BR>
+in RFC 2414.  May I propose that the paragraph from RFC 2414 be lifted and
+<BR>
+used to replace the sentences in the last paragraph  starting with: &quot;We do
+<BR>
+NOT allow this change as part of the standard defined by this document.
+<BR>
+However, ...&quot;
+<BR>
+<P>The draft on TCP Congestion Control  should reflect the knowledge we have
+<BR>
+gained since 1988, and indicate direction and rationale to those who read
+<BR>
+the spec.
+<BR>
+<P>cheers, peter
+<BR>
+<P><P><P><P><P>&nbsp;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1401.html">Mark Allman: "Re: Last Call for TCP Congestion Control I-D (IW&gt;1)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1399.html">Mark Allman: "PILC BOF -- Orlando IETF"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1400">[ date ]</A>
+<A HREF="index.html#1400">[ thread ]</A>
+<A HREF="subject.html#1400">[ subject ]</A>
+<A HREF="author.html#1400">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

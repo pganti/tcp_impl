@@ -1,0 +1,376 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 11:42:16 2000" -->
+<!-- isoreceived="20000225164216" -->
+<!-- sent="Fri, 25 Feb 2000 09:35:30 -0700 (MST)" -->
+<!-- isosent="20000225163530" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002251635.JAA08403@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 11:35:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2012.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2018.html">Howard Berkey: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2013">[ date ]</A>
+<A HREF="index.html#2013">[ thread ]</A>
+<A HREF="subject.html#2013">[ subject ]</A>
+<A HREF="author.html#2013">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+] From: Charles Esson &lt;<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">charlese@cvs.com.au</A>&gt;
+<BR>
+<P>] I must have missed something.
+<BR>
+]
+<BR>
+] If we don't have this, you can take the destination port, convert to a
+<BR>
+] table address, use the sequence number,
+<BR>
+] do some calculations and come up with a buffer address and an offset. If
+<BR>
+] you want to mess up the layering
+<BR>
+] of your stack, they are all things you can do now.
+<BR>
+<P>Standards committees don't like hashing.  It looks complicated and
+<BR>
+insufficiently deterministic on an overhead projector.
+<BR>
+<P>] or using RDMA
+<BR>
+] ...
+<BR>
+<P>] ---&gt;An attacker plays with the data so returned.
+<BR>
+] ...
+<BR>
+<P>That's a very good point.  The tagging in RDMA cannot be used until
+<BR>
+after it has been validated by the receiver.  The validating consists
+<BR>
+of looking at sequence numbers, RPC/XDR headers, etc. to figure
+<BR>
+out where the data can and should go, and then checking that the
+<BR>
+sender guessed right.  Why not skip the last part and ignore the
+<BR>
+RDMA tag?  Then why send the RDMA tag?
+<BR>
+<P>&nbsp;.......
+<BR>
+<P><P><EM>&gt; From: Pete Zaitcev &lt;<A HREF="mailto:zaitcev@metabyte.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">zaitcev@metabyte.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; Very well, but what about its companion document (SCOT)?
+</EM><BR>
+<EM>&gt;  <A HREF="http://search.ietf.org/internet-drafts/draft-satran-scot-00.txt">http://search.ietf.org/internet-drafts/draft-satran-scot-00.txt</A>
+</EM><BR>
+<EM>&gt; It is published, isn't it? It was somewhat disturbing to see the
+</EM><BR>
+<EM>&gt; notice, but on the other hand it was honest. IBM could just as
+</EM><BR>
+<EM>&gt; easily come up silently with a silly software patent for RDMA option
+</EM><BR>
+<EM>&gt; or for SCSI over TCP idea as such.
+</EM><BR>
+<P>The IETF's protections against patent games are well intended, but nothing
+<BR>
+to worry about if you want to play them and nothing to rely upon if you
+<BR>
+don't.  The history of IETF patent games demonstrates that the IETF is
+<BR>
+powerless to limit them (or worse), and that they're harder to play than
+<BR>
+the players hope.  (E.g. PPP CCP and PPP 48-bit FCS, respectively)
+<BR>
+<P>&nbsp;&nbsp;......
+<BR>
+<P>} From: &quot;Justin T. Gibbs&quot; &lt;<A HREF="mailto:gibbs@FreeBSD.org?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">gibbs@FreeBSD.org</A>&gt;
+<BR>
+<P>} ...
+<BR>
+} &gt;Can you elaborate on this?  Suppose TCP &quot;blindly&quot; does zero copy everything to
+<BR>
+} &gt;an app's buffer (for example, to a web browser's receive buffer) without
+<BR>
+} &gt;RDMA.  Then the browser app looks at the data and displays it.  What is the
+<BR>
+} &gt;difference RDMA makes in this case?  Yes, RDMA can separate different messages
+<BR>
+} &gt;in the buffer.  But this can also be done by the browser app, not by TCP.
+<BR>
+}
+<BR>
+} You seem to be saying that in the common case zero copy is achievable.
+<BR>
+} Most implementations I've seen require the network driver to make
+<BR>
+} a guess about where the payload will be in an incoming packet so the header
+<BR>
+} can be stripped off and the payload dmaed to an aligned area.   A page
+<BR>
+} flip is then performed to get the data where the user wants it,
+<BR>
+} imposing the restriction that your  payload be page sized so you don't
+<BR>
+} leave gaps in the user's destination buffer.
+<BR>
+<P>That is required only if you stick to the current API.  Obvious, 
+<BR>
+minor changes in the direction of some operating systems that existed
+<BR>
+before UNIX are sufficient to relax the page boundary requirement.
+<BR>
+To use RDMA, you have to change the API.
+<BR>
+<P>}                                               Certainly, with a more
+<BR>
+} intelligent network adapter that knows every protocol you can determine
+<BR>
+} exactly where the data is in each packet.  If you add connection tracking
+<BR>
+} and sequence number sniffing to the nic with a mechanism to register user
+<BR>
+} buffers to connections, you can get zero copy every time*.  Unfortunately
+<BR>
+} this is not very general purpose solution.
+<BR>
+<P>Only standards committees and some academics care about &quot;every protocol&quot;
+<BR>
+or optimizing absolutely every application.  The rest of us (including
+<BR>
+academics) only care about optimizing the important stuff.
+<BR>
+<P>Also as you say, looking at sequence numbers in the interface and relaxing
+<BR>
+the sockets API rules about not touching any bytes in the buffer except
+<BR>
+those that are actually received lets you avoid copies all of the time.
+<BR>
+I don't see why that is not a general purpose solution, if you want one.
+<BR>
+<P>}                                             The point of RDMA seems to be
+<BR>
+} to allow nic manufacturers to add support for a single tcp option that, at
+<BR>
+} the very least, allows the nic to align the payload for you.  Add RID
+<BR>
+} registration with the nic and you get the payload exactly where you want it
+<BR>
+} too.  All without too much state information kept by the nic.
+<BR>
+<P>I've been hearing since the mid-1980's proposals to do TSP lookups in the
+<BR>
+network interface instead of software because it is so incredibly difficult
+<BR>
+to find the right TSP quickly in software.  I think those ideas are similar
+<BR>
+to the RDMA idea.  They assume facts not in evidence, that there is a
+<BR>
+problem that needs to be solved, and that the solution is not worse than
+<BR>
+the nominal problem.  There are reasons why such proposals appear in
+<BR>
+standards committees before implementations.
+<BR>
+<P>&nbsp;......
+<BR>
+<P>] From: Lloyd Wood &lt;<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">l.wood@eim.surrey.ac.uk</A>&gt;
+<BR>
+<P>] Note the mentions of SCSI and SCSI/TCP and the tie-in with the
+<BR>
+] proposed IP Storage efforts (recent ietf general list discussion).
+<BR>
+]
+<BR>
+] I'd still like to know _why_.
+<BR>
+<P>] ...
+<BR>
+] SCSI DMA over TCP? What _is_ all this aiming for - trying to build
+<BR>
+] distributed RAID arrays with really poor performance that are subject
+<BR>
+] to WAN outages and DoS attacks?
+<BR>
+<P>Why put SCSI over an protocol that measures RTT's, worries about
+<BR>
+congestion in routers, and that expects the error rates that come
+<BR>
+with 5000 miles of wire and 20 routers in the path?  Does anyone
+<BR>
+really think that TCP/IP or even IP with it's 64K bit packet limit
+<BR>
+are remotely close to the right protocol, particularly given the
+<BR>
+existing and commercially available alternatives?
+<BR>
+<P>A standards committee is the venue of first and last resort for
+<BR>
+such ideas, especially a committee that is related to currently
+<BR>
+trendy things like the SuperInfoHypeWay.
+<BR>
+<P>&nbsp;....
+<BR>
+<P>) From: <A HREF="mailto:julian_satran@il.ibm.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">julian_satran@il.ibm.com</A>
+<BR>
+<P>) That is not completely accurate. You will need appreciably more silicon to
+<BR>
+) do what you suggest.   And you can do it only with information that &quot;passes
+<BR>
+) through the protocol&quot; .
+<BR>
+<P>Significantly silicon more than what to do what?  Since the comment
+<BR>
+was addressed to me, I'll assume one 'what' was looking at sequence
+<BR>
+numbers, port numbers, and so forth to page flip.  Clearly it takes more
+<BR>
+silicon to support page flipping in hardware than to not support page
+<BR>
+flipping in hardware.  I will not agree that the required silicon is a
+<BR>
+big deal, not because I have a clue about floor plans and so forth (I
+<BR>
+don't), but because at a previous employeer I fought to keep the hardware
+<BR>
+guys from throwing in gates to do it.  They had the silicon to spare and
+<BR>
+had heard so much about the wonderfulness of page flipping that they wanted
+<BR>
+to get in on the fun.
+<BR>
+<P>Doing things in hardware is ok only if you absolutely must.  Software is
+<BR>
+always better when it is good enough, because it is soft.
+<BR>
+<P>) The good thing about the  proposal is that it can TAG whatever the
+<BR>
+) application wants (and that can be several layers away from the protocol).
+<BR>
+) You can't &quot;page-flip&quot; to buffers that you are not aware of. And page
+<BR>
+) flipping wherever is applicable assumes  also page boundaries for buffers.
+<BR>
+<P>That's important only if you stick close to the sockets or UNIX read()
+<BR>
+API.  If you are not ultra-conservative, and if you know a little of the
+<BR>
+history of file and device I/O API's, or of you think about such things
+<BR>
+for 10 seconds, then RDMA tagging becomes less interesting.
+<BR>
+To use RDMA tagging, you must abandone the UNIX read() API.  If you change
+<BR>
+the API, then you may as well think about the whole problem instead of
+<BR>
+only a corner.  If you let the operating system tell the application where
+<BR>
+the incoming data arrived, then you don't need elaborate hints from the
+<BR>
+sender to the receivers hardware to say where the receiving software will
+<BR>
+want the data.
+<BR>
+<P><P>) Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">vjs@calcite.rhyolite.com</A>&gt; on 25/02/2000 04:23:47
+<BR>
+)
+<BR>
+) Please respond to Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+<BR>
+<P>I did not write that!
+<BR>
+<P>&nbsp;.....
+<BR>
+<P>) From: Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A>&gt;
+<BR>
+)
+<BR>
+) &gt; flip is then performed to get the data where the user wants it,
+<BR>
+) &gt; imposing the restriction that your  payload be page sized so you don't
+<BR>
+) &gt; leave gaps in the user's destination buffer.  Certainly, with a more
+<BR>
+)
+<BR>
+) Perhaps its about time the world put together an official, sane, ring buffer
+<BR>
+) style mmap socket api. A lot of the requirement to align data is coming
+<BR>
+) from the existing socket API. 
+<BR>
+<P>The IETF should not get involved in API's.  There are plenty of other
+<BR>
+standards committees in that arena, as well as big commercial outfits
+<BR>
+including one in the U.S. Pacific Northwest.  In other words, do you think
+<BR>
+the IETF would be more successful arguing with Microsoft about winsock
+<BR>
+than the IETF has been in dealing with Microsoft's obviously completely
+<BR>
+stupid and wrong PPP ideas?
+<BR>
+<P>If you do get involved in standardizing such things, then *PLEASE* don't
+<BR>
+limit yourself to #$%$#@! ring buffers!  The ancient Execelan and preceding
+<BR>
+(I've a mental block against the name starting with 'I') ring buffer notion
+<BR>
+was ok as an initial hack, but WRONG for something to go fast.  To start,
+<BR>
+you don't need pointers or indeces that must be written by both the
+<BR>
+interface and the host.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002251635.JAA08403@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2014.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2012.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2018.html">Howard Berkey: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2013">[ date ]</A>
+<A HREF="index.html#2013">[ thread ]</A>
+<A HREF="subject.html#2013">[ subject ]</A>
+<A HREF="author.html#2013">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

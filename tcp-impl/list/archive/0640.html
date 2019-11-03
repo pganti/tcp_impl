@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 10:19:42 1997" -->
+<!-- isoreceived="19970801141942" -->
+<!-- sent="Fri, 1 Aug 1997 10:13:58 -0700" -->
+<!-- isosent="19970801171358" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708011713.KAA05341@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 13:13:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0641.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#640">[ date ]</A>
+<A HREF="index.html#640">[ thread ]</A>
+<A HREF="subject.html#640">[ subject ]</A>
+<A HREF="author.html#640">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Thu Jul 31 23:13:57 1997
+</EM><BR>
+<EM>&gt; Date: Thu, 31 Jul 1997 23:09:57 -0700
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:kcpoon@jurassic.Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;">kcpoon@jurassic.Eng.Sun.COM</A> (Kacheong Poon)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Included message from <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;">touch@ISI.EDU</A> (Joe Touch):
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;more than 10-20 packets in the connection (from open to close,
+</EM><BR>
+<EM>&gt; &gt;approx.):
+</EM><BR>
+<EM>&gt; &gt;	
+</EM><BR>
+<EM>&gt; &gt;	the connection will take (best case, 'order' estimates):
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;		1 RTT to open
+</EM><BR>
+<EM>&gt; &gt;		log2(numpackets) RTTs to transmit the data (approx)
+</EM><BR>
+<EM>&gt; &gt;	
+</EM><BR>
+<EM>&gt; &gt;	If IW is 1, 2, or 4 we save 0, 1, or 2 RTTs out of a total
+</EM><BR>
+<EM>&gt; &gt;	of 5 or more, i.e., the connection saves 25% or less time
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I guess it is a &quot;theoretical&quot; best case.  One of the reasons to have larger
+</EM><BR>
+<EM>&gt; than 1 initial cwnd is that many implementations, like BSD, delay acks.  So
+</EM><BR>
+<EM>&gt; the first ack will be delayed, presumably by 200ms, if cwnd is 1.  Say, in 
+</EM><BR>
+<P>This presumes that delayed ACKs are good, which, for the very small
+<BR>
+window case, may be debatable.
+<BR>
+<P><EM>&gt; It seems to me that it makes sense to have cwnd greater than 1 if TCP knows
+</EM><BR>
+<EM>&gt; &quot;in advance&quot; that RTT will be small.  If RTT &quot;is&quot; large, use IW=RW=1.  Or if
+</EM><BR>
+<EM>&gt; TCP does not delay ack initially and after a restart, then IW=RW=1 is good
+</EM><BR>
+<EM>&gt; enough.
+</EM><BR>
+<P>A small RTT does preclude either being useful, as you indicate.
+<BR>
+<P>However, RTT alone isn't sufficient to justify a large IW or RW.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011713.KAA05341@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0641.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0639.html">Rick Jones: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0642.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#640">[ date ]</A>
+<A HREF="index.html#640">[ thread ]</A>
+<A HREF="subject.html#640">[ subject ]</A>
+<A HREF="author.html#640">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Sally Floyd (floyd@aciri.org)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Fri Jun 16 11:27:04 2000" -->
+<!-- isoreceived="20000616152704" -->
+<!-- sent="Sun, 11 Jun 2000 09:35:21 -0700" -->
+<!-- isosent="20000611163521" -->
+<!-- name="Sally Floyd" -->
+<!-- email="floyd@aciri.org" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="969378680.0044@hypermail.dummy" -->
+<!-- inreplyto="network device and tcp-flow packet ordering" -->
+<STRONG>From:</STRONG> Sally Floyd (<A HREF="mailto:floyd@aciri.org?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;969378680.0044@hypermail.dummy&gt;"><EM>floyd@aciri.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jun 11 2000 - 12:35:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2160">[ date ]</A>
+<A HREF="index.html#2160">[ thread ]</A>
+<A HREF="subject.html#2160">[ subject ]</A>
+<A HREF="author.html#2160">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I think it is fairly clear that currently, TCP gives abysmal
+<BR>
+performance in the presence of significant reordering.  (When the
+<BR>
+TCP receiver receives out-of-order packets, the TCP receiver sends
+<BR>
+duplicate acknowledgements to tell the TCP sender.  The TCP sender
+<BR>
+then does a Fast Retransmit, retransmitting the packet presumed to
+<BR>
+be lost, and cutting the congestion window at least in half.  This
+<BR>
+is true of Tahoe, Reno, NewReno, and SACK TCP, and, I presume, of
+<BR>
+any TCP implementation more recent that 1988.)
+<BR>
+<P>I believe that the first step in making TCP more robust to reordering
+<BR>
+is in the D-SACK (duplicate-SACK) extension to SACK, &quot;An Extension
+<BR>
+to the Selective Acknowledgement (SACK) Option for TCP&quot;,
+<BR>
+&quot;<A HREF="http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt">http://search.ietf.org/internet-drafts/draft-floyd-sack-00.txt</A>&quot;.
+<BR>
+This has already been approved by the IESG for Proposed Standard,
+<BR>
+and is on the RFC editor's to-do queue.
+<BR>
+<P>I have a draft paper, &quot;A Report on Some Recent Developments in TCP
+<BR>
+Congestion Control&quot;, that discusses how the D-SACK option could be
+<BR>
+used to make TCP more robust to reordering.  I am appending an
+<BR>
+excerpt from that paper below.  As the excerpt makes clear, there
+<BR>
+is a significant amount of work that would have to be done to take
+<BR>
+the information in the D-SACK option and come out with viable,
+<BR>
+tested algorithms that allow TCP to be robust to persistent
+<BR>
+reordering...
+<BR>
+<P>- Sally
+<BR>
+--------------------------------
+<BR>
+<A HREF="http://www.aciri.org/floyd/">http://www.aciri.org/floyd/</A>
+<BR>
+--------------------------------
+<BR>
+<P>From &quot;A Report on Some Recent Developments in TCP
+<BR>
+Congestion Control&quot;:
+<BR>
+<P>An initial step towards adding robustness in the presence of
+<BR>
+unnecessary Retransmit Timeouts and Fast Retransmits is to give
+<BR>
+the TCP sender the information to determine when an unnecessary
+<BR>
+Retransmit Timeout or Fast Retransmit has occurred..  This first
+<BR>
+step has been accomplished with the D-SACK (for duplicate-SACK)
+<BR>
+extension \cite{FMMPR99} that has recently been added to the SACK
+<BR>
+TCP option.  The D-SACK extension allows the TCP data receiver to
+<BR>
+use the SACK option to report the receipt of duplicate segments.
+<BR>
+With the use of D-SACK, the TCP sender can correctly infer the 
+<BR>
+segments that have been received by the data receiver, including
+<BR>
+duplicate segments. 
+<BR>
+<P>When the sender has retransmitted a packet, D-SACK does not allow
+<BR>
+TCP to distinguish between the receipt at the receiver of both the
+<BR>
+original and retransmitted packet, and the receipt of two copies  
+<BR>
+of the retransmitted packet, one of which was duplicated in the
+<BR>
+network.  If necessary, TCP's timestamp option could be used to
+<BR>
+distinguish between these two cases \cite{AP99,L99}.  However, in
+<BR>
+an environment with minimal packet replication in the network,
+<BR>
+D-SACK allows the TCP sender to make reasonable inferences, one
+<BR>
+round-trip time after a packet has been retransmitted, about whether
+<BR>
+the retransmission was necessary or unnecessary.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+If the TCP data sender determines, a round-trip time after
+<BR>
+retransmitting a packet, that the receiver received two copies of
+<BR>
+that segment and therefore that the packet retransmission was most
+<BR>
+likely unnecessary, then the sender could have the option of
+<BR>
+``undoing'' the halving in the congestion window.  The sender can
+<BR>
+``undo'' the recent halving of the congestion window by increasing
+<BR>
+the Slow-Start threshold ssthresh to the previous value of the old
+<BR>
+congestion window, effectively slow-starting until the congestion
+<BR>
+window has reached its old value.  In addition to restoring the
+<BR>
+congestion window, the TCP sender could adjust the duplicate
+<BR>
+acknowledgement threshold or the retransmit timeout parameters, to
+<BR>
+avoid the wasted bandwidth of persistent unnecessary retransmits.
+<BR>
+<P>The first part of this work, providing the information to the sender
+<BR>
+about duplicate packets received at the receiver, is done with the
+<BR>
+D-SACK extension.  The next step is to evaluate specific mechanisms
+<BR>
+for identifying an unnecessary halving of the congestion window,
+<BR>
+and for adjusting the duplicate acknowledgement threshold or
+<BR>
+retransmit timeout parameters.  Once this is done, there is no
+<BR>
+fundamental reason why TCP congestion control cannot perform
+<BR>
+effectively in an environment with persistent reordering.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2159.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2161.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2160">[ date ]</A>
+<A HREF="index.html#2160">[ thread ]</A>
+<A HREF="subject.html#2160">[ subject ]</A>
+<A HREF="author.html#2160">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

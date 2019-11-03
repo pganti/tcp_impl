@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP Port reuse related ...</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RSHANKAR@novell.com)">
+<META NAME="Subject" CONTENT="TCP Port reuse related ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP Port reuse related ...</H1>
+<!-- received="Wed, 26 Jan 2000 20:22:08 -0700" -->
+<!-- isoreceived="20000127032208" -->
+<!-- sent="Wed, 26 Jan 2000 20:22:08 -0700" -->
+<!-- isosent="20000127032208" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RSHANKAR@novell.com" -->
+<!-- subject="TCP Port reuse related ..." -->
+<!-- id="s88f5776.003@prv-mail25.provo.novell.com" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s88f5776.003@prv-mail25.provo.novell.com&gt;"><EM>RSHANKAR@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jan 26 2000 - 22:22:08 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1953.html">Ramesh Shankar: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1955.html">Ramesh Shankar: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1957.html">Barney Wolff: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1951">[ date ]</A>
+<A HREF="index.html#1951">[ thread ]</A>
+<A HREF="subject.html#1951">[ subject ]</A>
+<A HREF="author.html#1951">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+While trying to figure out the details related to SO_REUSEADDR/SO_REUSEPORT, I found that there are considerable differences between Linux, NetBSD/FreeBSD, Winsock.
+<BR>
+<P>While looking at Linux v2.2.14 source, (and in the previous versions of the source), there are some comments related to port reuse and FTP servers which I don't seem to understand.
+<BR>
+<P>Specifically, if I bind &lt;*, port #&gt; to socket1 and bind &lt;*, port #&gt; to socket2 (Port #s are the same, * is INADDR_ANY) and specify SO_REUSEADDR for both bind operations, then the bind()s succeed. 
+<BR>
+<P>However, if I call listen() for socket1 before binding socket2, then socket2's bind() *fails* (even if we use SO_REUSEADDR). This is somewhat understandable. (Note: The same operation succeeds in NetBSD/FreeBSD). Any combination of IP address (one being *, other not being * or vice versa or both being the same IP address) when socket1 is put on listen fails. When listen() is used on socket1, the only allowed way seems to be:
+<BR>
+<P>socket1: bind(IP1, port #)
+<BR>
+listen(socket1)
+<BR>
+socket2: bind(IP2, port#)
+<BR>
+<P>(Where IP1 and IP2 are valid local IP addresses)
+<BR>
+<P>I don't understand why the following combination should not be allowed:
+<BR>
+<P>socket1: bind(*, port #)
+<BR>
+listen(socket1)
+<BR>
+socket2: bind(IP1, port #)
+<BR>
+<P>For a multihomed host, socket2 (if put on listen()), would field all packets destined for IP1, while socket1 will field the others.
+<BR>
+<P>(Refer tcp_v4_get_port() in net/ipv4/tcp_ipv4.c)
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P>P.S.:
+<BR>
+<P>If anyone can explain me what the comments in the file include/net/tcp.h near the definition of the structure tcp_bind_bucket really mean, it would be greatly appreciated!
+<BR>
+<P>Even though this is kind of a Linux question, it still is related to TCP implementation, and hence I posted on this list.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1953.html">Ramesh Shankar: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1955.html">Ramesh Shankar: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1956.html">der Mouse: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1957.html">Barney Wolff: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1951">[ date ]</A>
+<A HREF="index.html#1951">[ thread ]</A>
+<A HREF="subject.html#1951">[ subject ]</A>
+<A HREF="author.html#1951">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

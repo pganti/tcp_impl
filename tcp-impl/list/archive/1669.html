@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Mon Mar 15 02:39:28 1999" -->
+<!-- isoreceived="19990315073928" -->
+<!-- sent="Sun, 14 Mar 1999 23:27:46 -0800 (PST)" -->
+<!-- isosent="19990315072746" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="199903150727.XAA15344@jurassic.eng.sun.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903150727.XAA15344@jurassic.eng.sun.com&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 15 1999 - 02:27:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1669">[ date ]</A>
+<A HREF="index.html#1669">[ thread ]</A>
+<A HREF="subject.html#1669">[ subject ]</A>
+<A HREF="author.html#1669">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903150727.XAA15344@jurassic.eng.sun.com&gt;">mrosu@us.ibm.com</A>:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;I've a question regarding your draft (draft-ietf-tcpimpl-newreno-02):
+</EM><BR>
+<P>The following is my understanding of NewReno and its variants.  The 2 basic
+<BR>
+ideas behind NewReno are stated in the draft.  They are:
+<BR>
+<P>1. Multiple drops of TCP segments in a window should be treated as a
+<BR>
+single congestion event.
+<BR>
+2. It is safe to infer from a partial ACK during fast retransmit phase
+<BR>
+that the next unack'ed segment is lost, retransmit it immediately.
+<BR>
+<P>Note that there is no mention of dup ack count in the above 2 ideas.  The
+<BR>
+count is an implementation detail about when to start the fast retransmit
+<BR>
+phase.
+<BR>
+<P>Reading from what you suggested, it seems to me that you did not agree that
+<BR>
+2 above is a good idea.  I infer that you think TCP should not retransmit a
+<BR>
+segment unless 3 dup acks of the previous segment are received.  While this
+<BR>
+may be a good idea, but I think it has its shortcomings.  Let's look at
+<BR>
+your example.
+<BR>
+<P><EM>&gt;Example 1.
+</EM><BR>
+...
+<BR>
+<EM>&gt;[1] 2 3 4 5 6 [7] 8    ([ ] =  lost segments)
+</EM><BR>
+...
+<BR>
+<P><EM>&gt;When the partial ack arrives, dupacks is 6 and the draft says only
+</EM><BR>
+<EM>&gt;that it shouldn't be reset.  As dupacks &gt;= 3, should segment 7 be
+</EM><BR>
+<EM>&gt;retransmitted immediately?
+</EM><BR>
+<P>Idea 2 says that it should.  
+<BR>
+<P>...
+<BR>
+<EM>&gt;The next example shows that the proposed rule for updating the dupacks
+</EM><BR>
+<EM>&gt;counter doesn't prevent partial ACKs from generating retransmissions.
+</EM><BR>
+...
+<BR>
+<P>Let's consider a simpler example.  Using your notation, with cwnd = 5, the
+<BR>
+following segments are sent.
+<BR>
+<P>[1] [2] 3 4 5
+<BR>
+<P>If we use the implementation suggested by the draft, seg 1 is fast
+<BR>
+retransmitted as with the old algorithm.  If the retransmitted seg 1 is not
+<BR>
+lost, the partial ack of 1 will trigger the retransmission of seg 2.  Note
+<BR>
+that because of the small cwnd, no new segments are sent during the fast
+<BR>
+retransmit phase.  But with your suggestion about dup ack count, seg 2
+<BR>
+will not be retransmitted.  And because no new acks will come back, TCP
+<BR>
+has to time out.  This is what NewReno tries to avoid.
+<BR>
+<P>...
+<BR>
+<EM>&gt;Example 3.
+</EM><BR>
+<EM>&gt;Consider an initial cwnd of 9, message 1 and 7 are lost, messages 2-6,
+</EM><BR>
+<EM>&gt;8, and 9 are received. recover is set to 9 and ssthresh to 4. If we update
+</EM><BR>
+<EM>&gt;dupacks as in example 1, upon receiving a partial ack for segment 6,
+</EM><BR>
+<EM>&gt;segment 7 is not retransmitted immediately because the new value of
+</EM><BR>
+<EM>&gt;dupacks is 2. However, the new cwnd is 6 and three new  data segments
+</EM><BR>
+<EM>&gt;(10, 11, 12) are sent. Lets assume segment 10 is dropped:
+</EM><BR>
+<EM>&gt;[1] 2 3 4 5 6 [7] 8 9 [10] 11 12 13   ([ ] = lost segments)
+</EM><BR>
+<P>NewReno will retrasnmit seg 7 immediately after getting a partial ack for
+<BR>
+seg 6 because TCP is still in fast retransmit phase.  It seems to me that
+<BR>
+you are mixing your suggestion with NewReno.
+<BR>
+<P>Let's look at what NewReno will do in your example more closely.  Note the
+<BR>
+differences from the description in your mail.
+<BR>
+<P>1. Seg 1 is fast retransmitted after getting dup acks elicited by segs 2, 3,
+<BR>
+and 4.  cwnd is set to 9/2 + 3 = 7.
+<BR>
+2. Dup acks elicited by segs 5, 6, 8, and 9 increases cwnd to 11.  Segs 10
+<BR>
+and 11 are sent.
+<BR>
+3. Partial ack for 6 is received, seg 7 is retransmitted.  cwnd is set to 11
+<BR>
+- 6 + 1 = 6.  Seg 12 can be sent.
+<BR>
+4. Dup ack elicited by seg 11 is received, cwnd is set to 7.  Segs 13 can be
+<BR>
+sent.
+<BR>
+5. &quot;Complete&quot; ack for seg 9 is received, cwnd is set to 4.  Fast retransmit
+<BR>
+phase ends.  No new seg can be sent.
+<BR>
+6. Dup ack elicited by segs 12, 13 are received.  Dup ack count is 2, no
+<BR>
+fast retransmit will happen.  TCP has to time out.
+<BR>
+<P>Although the end result is the same as you described, there are some subtle
+<BR>
+differences in the sequence of events.  And one may argue that this time out
+<BR>
+is a good thing.  In fast retransmit phase, the sender has already slowed
+<BR>
+down.  Seg 10 is sent in this phase.  If segment loss is solely because of
+<BR>
+congestion, the loss of seg 10 indicates that the network is congested even
+<BR>
+after the sending rate is dropped.  It is good for TCP to slow down further.
+<BR>
+This conforms to the idea that multiple drops in a window should be treated
+<BR>
+as one single congestion event.  Seg 10 is outside the original window.  It
+<BR>
+should be treated as another congestion event.  That is why dup ack count
+<BR>
+is reset to 0.
+<BR>
+<P>Note that NewReno does not try to recover all segment drops.  It just tries
+<BR>
+&quot;harder&quot; than the original fast retransmit algorithm.  Can your suggestion
+<BR>
+be added to NewReno?  May be.  But there are several things you need to
+<BR>
+clarify first.
+<BR>
+<P>1. You have to decide what a congestion event is.  You cannot keep on 
+<BR>
+manipulating the dup ack count.  When should this end?  Does TCP halve its
+<BR>
+window whenever dup ack count equals 3?
+<BR>
+2. I think idea 2 of NeReno is pretty safe and very helpful when drops happen
+<BR>
+in a burst.  Do you agree that we should not change it?  If no, why?
+<BR>
+<P>Basically you need to describe the reasons behind your suggestion and then
+<BR>
+tell us how your suggestion should be integrated into NewReno.  As mentioned
+<BR>
+in the draft (isn't it an RFC now?), there are many variations to NewReno.
+<BR>
+You are encouraged to describe yours.
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903150727.XAA15344@jurassic.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1670.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1669">[ date ]</A>
+<A HREF="index.html#1669">[ thread ]</A>
+<A HREF="subject.html#1669">[ subject ]</A>
+<A HREF="author.html#1669">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

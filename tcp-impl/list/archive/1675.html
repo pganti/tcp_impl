@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Tue Mar 16 03:49:01 1999" -->
+<!-- isoreceived="19990316084901" -->
+<!-- sent="Tue, 16 Mar 1999 00:44:25 -0800 (PST)" -->
+<!-- isosent="19990316084425" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="199903160844.AAA21819@jurassic.eng.sun.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160844.AAA21819@jurassic.eng.sun.com&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 16 1999 - 03:44:25 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1674.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1675">[ date ]</A>
+<A HREF="index.html#1675">[ thread ]</A>
+<A HREF="subject.html#1675">[ subject ]</A>
+<A HREF="author.html#1675">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from <A HREF="mailto:mrosu@us.ibm.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160844.AAA21819@jurassic.eng.sun.com&gt;">mrosu@us.ibm.com</A>:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;First, let me clarify my proposal: upon receiving a partial or full ack, dupacks
+</EM><BR>
+<EM>&gt;should be
+</EM><BR>
+<EM>&gt;decremented by (the number of segments acknowledged - 1), i.e.,
+</EM><BR>
+<EM>&gt;dupacks -= #segs_acked -1.
+</EM><BR>
+<P>Oops, I misunderstood yours as
+<BR>
+<P>dup_ack_cnt = dup_ack_cnt - segs_acked - 1.
+<BR>
+<P>Now, I see where that - 1 comes from.
+<BR>
+<P><EM>&gt;A segment is retransmitted if dupacks is &gt;= 3. The duplicate acks don't
+</EM><BR>
+<EM>&gt;have to ack the previous segment.
+</EM><BR>
+<P>Let me try another example.  Using your notation, cwnd = 5,
+<BR>
+<P>[1] 2 [3] 4 5
+<BR>
+<P>After fast retransmitting seg 1, partial ack for seg 2 comes back.  Then
+<BR>
+dup_ack_cnt -= 2 - 1 = 2.  (I hope I get it right this time (-:)  So
+<BR>
+using your idea, since dup_ack_cnt &lt; 3, seg 3 will not be retransmitted.
+<BR>
+cwnd is set to 5 - 2 + 1 = 3.  So no new segment can be sent.  TCP has
+<BR>
+to time out.
+<BR>
+<P><EM>&gt;I didn't say that 2 is not a good idea. What I'm saying is that within
+</EM><BR>
+<EM>&gt;the window, counting dupacks more carefully will get you about the same
+</EM><BR>
+<EM>&gt;results as the old algorithm but with less risk. Furthermore, as you advance
+</EM><BR>
+<EM>&gt;beyond the right edge of the window, the new algorithm preserves &quot;hard
+</EM><BR>
+<EM>&gt;to collect info&quot; (# of dupacks) and having this info helps you avoid timeouts
+</EM><BR>
+<EM>&gt;when segments immediately to the right of the window are lost.
+</EM><BR>
+<P>I think we can separate your modification into 2 cases.  Using NewReno's
+<BR>
+terms, partial ack and ack covers recover.  Firstly, I don't believe that it
+<BR>
+is &quot;risky&quot; at all in retransmitting the first unack'ed segment after getting
+<BR>
+a partial ack.  Fast retransmit is triggered because of 3 dup acks.  We
+<BR>
+assume that there is no reordering, thus the segment is really dropped.  This
+<BR>
+means that no partial ack or complete ack can be sent back until this
+<BR>
+dropped segment is retransmitted and received by the receiver.  Thus
+<BR>
+retransmitting a segment because of a partial ack is as &quot;risky&quot; as the first
+<BR>
+fast retransmission.  They are all linked together.
+<BR>
+<P>Suppose for the moment, we just apply half of your idea, do the dup_ack_cnt
+<BR>
+calculation but relax the dup_ack_cnt &gt;= 3 rule.  If after leaving fast
+<BR>
+retransmit phase, dup_ack_cnt is still &gt; 0, can we infer that some of the
+<BR>
+new segments sent during fast retransmit phase are also dropped?  I'll say
+<BR>
+probably.
+<BR>
+<P><EM>&gt;Due to my limited experience, I can't agree or disagree with you. I thought
+</EM><BR>
+<EM>&gt;that timeouts and unnecessary retransmissions are always bad.
+</EM><BR>
+<P>If the network is very congested, what is not good for a connection can be
+<BR>
+the best way to prevent network collapse.
+<BR>
+<P><EM>&gt;I don't see the benefit of clearing the dupacks counter. Please elaborate.
+</EM><BR>
+<P>The dup_ack_cnt is just an implementation detail in NewReno which is used to
+<BR>
+identify when fast retransmit start and ends.  Reseting it to 0 just means
+<BR>
+it is the end.
+<BR>
+<P><EM>&gt;When there are no losses, the dupacks counter will go to zero rapidly.
+</EM><BR>
+<EM>&gt;Because of lost acks, there will be attempts to decrement the counter
+</EM><BR>
+<EM>&gt;below zero. Anyway, dupacks should always be &gt;= 0.
+</EM><BR>
+<EM>&gt;No. The congestion window should be handled as in the current draft.
+</EM><BR>
+<P>Actually, my intention is to ask when you stop the fast retransmit phase.
+<BR>
+Do you stop only when dup_ack_cnt becomes 0 or a time out happens?  The
+<BR>
+reason I ask is that a fast retransmit phase covers a single congestion
+<BR>
+event.  If cwnd is adjusted as in the draft, the loss of a new segment sent
+<BR>
+during fast retransmit phase is treated as the same congestion event.  I'd
+<BR>
+suggest cwnd needs to be decremented when recovering for segments sent
+<BR>
+beyond recover.
+<BR>
+<P><EM>&gt;I'm not sure idea 2 is always safe. For instance,
+</EM><BR>
+<EM>&gt;consider an initial window of 5, with segments 1 and 5 lost:
+</EM><BR>
+<EM>&gt;[1] 2 3 4 [5].
+</EM><BR>
+<EM>&gt;How safe is to retransmit 5 upon receiving a partial ack for 4?
+</EM><BR>
+<P>As I described above, it is as &quot;safe&quot; as the first fast retransmission
+<BR>
+of seg 1, especially in this example.
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160844.AAA21819@jurassic.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1674.html">Chadi M. BARAKAT: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1676.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1675">[ date ]</A>
+<A HREF="index.html#1675">[ thread ]</A>
+<A HREF="subject.html#1675">[ subject ]</A>
+<A HREF="author.html#1675">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

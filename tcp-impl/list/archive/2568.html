@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Persist Mode -- ** Standards</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: Persist Mode -- ** Standards bug ??">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Persist Mode -- ** Standards bug ??</H1>
+<!-- received="Thu Jul  5 19:17:09 2001" -->
+<!-- isoreceived="20010705231709" -->
+<!-- sent="Fri, 06 Jul 2001 09:04:34 +1000" -->
+<!-- isosent="20010705230434" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: Persist Mode -- ** Standards bug ??" -->
+<!-- id="3B44F282.20F9F14F@cvs.com.au" -->
+<!-- inreplyto="Pine.NEB.4.05.10107051013230.15832-100000@tesla.psc.edu" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20Persist%20Mode%20--%20**%20Standards%20bug%20??&In-Reply-To=&lt;3B44F282.20F9F14F@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 05 2001 - 19:04:34 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2569.html">David C. Dickson: "NETWORK AND INFO SYSTEMS SECURITY TRAINING CONFERENCE - WASH DC, 16 JULY 2001"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2570.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2568">[ date ]</A>
+<A HREF="index.html#2568">[ thread ]</A>
+<A HREF="subject.html#2568">[ subject ]</A>
+<A HREF="author.html#2568">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I've not implemented a TCP stack that uses the scale option ( performance over
+<BR>
+satellite links is not my problem), so I had not thought about this.
+<BR>
+<P>I have now, and I can see your point.
+<BR>
+<P>For the last 7 bytes the receiver is advertising a right window position past it's
+<BR>
+actual right position.
+<BR>
+<P>It would not be a problem if the window was calculated. n*scale - ( scale-1). I
+<BR>
+would argue that if that isn't the formula for the window  then 1323 has a serious
+<BR>
+bug as it breaks some fundamentals.
+<BR>
+<P>Regards Charles
+<BR>
+<P>Matt Mathis wrote:
+<BR>
+<P><EM>&gt; I think we have conflicting standards.... although I agree with your
+</EM><BR>
+<EM>&gt; recollection, I believe that strict &quot;never retract the window&quot; can not be
+</EM><BR>
+<EM>&gt; implemented.  Consider the following scenario:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; A connection negotiates TCP window scale (e.g. 3, so the window size is
+</EM><BR>
+<EM>&gt;         quantized in steps of 8 bytes).
+</EM><BR>
+<EM>&gt; After running for awhile with a reasonable window, the receiver stops
+</EM><BR>
+<EM>&gt;         consuming data.
+</EM><BR>
+<EM>&gt; The sender continues to send data, 1 byte at a time, progressively filling
+</EM><BR>
+<EM>&gt;         the window.
+</EM><BR>
+<EM>&gt; Under these conditions the right edge of the window can not be maintained at a
+</EM><BR>
+<EM>&gt; constant position in the sequence space.  Following 7 consecutive data packets
+</EM><BR>
+<EM>&gt; it will advance by one byte.  On the 8th, it will retract by 7 bytes.
+</EM><BR>
+<EM>&gt; (Alternatively, if the TCP rounds windows to MSS, the steps are MSS sized).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Furthermore when the window finally closes all the way, it will always be due
+</EM><BR>
+<EM>&gt; to a window retraction.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If the TCP doesn't behave this way it will violate some other part of RFC1323
+</EM><BR>
+<EM>&gt; or the base specifications.  Therefore every TCP that implements 1323 violates
+</EM><BR>
+<EM>&gt; rule 1 under some conditions.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Furthermore any TCP requires strict adherence to rule 1 is broken.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I believe that this is &quot;well tested&quot; in todays Internet (it happens all the
+</EM><BR>
+<EM>&gt; time) but nobody has been looking for symptoms.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Now a question for the readers:  what might happen if this rule was formally
+</EM><BR>
+<EM>&gt; retracted or amended?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thanks,
+</EM><BR>
+<EM>&gt; --MM--
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2569.html">David C. Dickson: "NETWORK AND INFO SYSTEMS SECURITY TRAINING CONFERENCE - WASH DC, 16 JULY 2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2570.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2568">[ date ]</A>
+<A HREF="index.html#2568">[ thread ]</A>
+<A HREF="subject.html#2568">[ subject ]</A>
+<A HREF="author.html#2568">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Jul 05 2001 - 19:17:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: [Tsvwg] ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Arun Prasad (arun@netlab.hcltech.com)">
+<META NAME="Subject" CONTENT="Re: [Tsvwg] ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: [Tsvwg] ECN &amp; PMTU</H1>
+<!-- received="Tue Apr  9 05:58:18 2002" -->
+<!-- isoreceived="20020409095818" -->
+<!-- sent="Tue, 09 Apr 2002 15:27:22 +0530" -->
+<!-- isosent="20020409095722" -->
+<!-- name="Arun Prasad" -->
+<!-- email="arun@netlab.hcltech.com" -->
+<!-- subject="Re: [Tsvwg] ECN &amp; PMTU" -->
+<!-- id="3CB2BB02.21AA779C@netlab.hcltech.com" -->
+<!-- inreplyto="3CB285B4.9E8FBBA4@lucent.com" -->
+<STRONG>From:</STRONG> Arun Prasad (<A HREF="mailto:arun@netlab.hcltech.com?Subject=Re:%20[Tsvwg]%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB2BB02.21AA779C@netlab.hcltech.com&gt;"><EM>arun@netlab.hcltech.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 09 2002 - 05:57:22 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2678.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2678.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2677">[ date ]</A>
+<A HREF="index.html#2677">[ thread ]</A>
+<A HREF="subject.html#2677">[ subject ]</A>
+<A HREF="author.html#2677">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+hi jacob,
+<BR>
+<P>Jacob Heitz wrote:
+<BR>
+<P><EM>&gt; One reason: sending extra packets in the face
+</EM><BR>
+<EM>&gt; of congestion will worsen the congestion.
+</EM><BR>
+<EM>&gt; Congestion collapse could be a very serious possible
+</EM><BR>
+<EM>&gt; consequence of sending extra packets.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I couldnt get the point of, sending extra packets during congestion.....
+<BR>
+Say if a Router decides that there will be congestion ( its not in congestion now...)
+<BR>
+then it decides to set the ECN bit in the IP header of certain packets in the Queue...
+<BR>
+These packets should reach the receiver endpoint.... then the receiver will
+<BR>
+send a ACK to the sender to indicate there is a congestion..... Doesnt this too
+<BR>
+long a process.... ie., anyway a SACK is to be sent from the Receiver to the
+<BR>
+sender....  In that case why not an ICMP packet from the router to the sender???
+<BR>
+<P>And also, since the extra packets are going to flow in the opposite direction
+<BR>
+of the actual congestion, I couldnt see any harm .... (I know this might be a
+<BR>
+wrong statemnent.... but I dont have the right justification...)
+<BR>
+<P>Atleast in Source Quenching method, the flooding of Data by the Sender can be
+<BR>
+controlled fast than the current ECN method...right!!
+<BR>
+<P><P><EM>&gt;
+</EM><BR>
+<EM>&gt; Notice the ECN does not go towards the sender,
+</EM><BR>
+<EM>&gt; but in the other direction. I think the intention
+</EM><BR>
+<EM>&gt; is to have the upper layer (transport) in the
+</EM><BR>
+<EM>&gt; receiver withhold acknowledgements to cause the
+</EM><BR>
+<EM>&gt; sender to back off. I'm making this up, so please
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why at all a receiver bother about the Congetion....  I see no reasons for the
+<BR>
+receiver to know about the congestion in the path.... because he cant do anything
+<BR>
+about that...
+<BR>
+And also by doing this by Source Quenching method.... its not mandatory that
+<BR>
+both the source and destination Transport layers support the ECN capability..
+<BR>
+If only sender is supporting, its more than enough... and there will be no necessity
+<BR>
+to negotiate the support of this feature, end to end....
+<BR>
+Router  also doesnt bother  whether an Endpoint is supporting  ECN or not...
+<BR>
+he can just send an ICMP message to the sender, whether he supports ECN or not...
+<BR>
+(slightly costly operation but thought its ok...)
+<BR>
+<P>Thanks
+<BR>
+-arun
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt; correct me if I'm wrong.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; PMTU discovery does not face this problem. It's ok to send
+</EM><BR>
+<EM>&gt; an extra packet back to the sender in this case.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Arun Prasad wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Hi all,
+</EM><BR>
+<EM>&gt; &gt;     Some doubts on the procedure followed for PMTU (Path mtu) discovery and
+</EM><BR>
+<EM>&gt; &gt; ECN method.....
+</EM><BR>
+<EM>&gt; &gt;     The doubt is not related to the procedure as such, but the relation between the
+</EM><BR>
+<EM>&gt; &gt; two procedures stated above......
+</EM><BR>
+<EM>&gt; &gt; Tcp and Sctp uses ICMP message to handle the PMTU discovery procedure....
+</EM><BR>
+<EM>&gt; &gt; ie., the intermediate router will send an ICMP messge of &quot;Message too Long&quot;
+</EM><BR>
+<EM>&gt; &gt; to the end point sending the data packet of size greater than the MTU size of some
+</EM><BR>
+<EM>&gt; &gt; intermediate path to the destination.....
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; For ECN, the intermediate router should set the appropriate bits in the IP header
+</EM><BR>
+<EM>&gt; &gt; (if it supports ECN ....) whenever there is congestion and risk of packet drops
+</EM><BR>
+<EM>&gt; &gt; is high....... The endpoints then correct their Congestion window accordingly and
+</EM><BR>
+<EM>&gt; &gt; help in reducing the Congestion in the intermediate router.....
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Why, we adopt two different methods to carry out similar (in the sense, both are
+</EM><BR>
+<EM>&gt; &gt; related to the Intermediate routers....)?????
+</EM><BR>
+<EM>&gt; &gt;     Why cant we generalise this stuff.... ie.,  the need here is some way to
+</EM><BR>
+<EM>&gt; &gt; communicate between the intermediate router and the endpoint.... Not sure
+</EM><BR>
+<EM>&gt; &gt; which of the two ways is advantageous, but cant we use the same method for
+</EM><BR>
+<EM>&gt; &gt; both..... ie.,
+</EM><BR>
+<EM>&gt; &gt; As for the PMTU discovery, the intermediate router can send an ICMP message
+</EM><BR>
+<EM>&gt; &gt; to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+</EM><BR>
+<EM>&gt; &gt; endpoint will do all appropriate actions as it does when it receives the packet set
+</EM><BR>
+<EM>&gt; &gt; with ECN-ECHO flag (as in present ECN procedure...)
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+</EM><BR>
+<EM>&gt; &gt; that might be slighly tough, considering the Backward compatibility....)
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;     What we can achieve by this is the simplicity  in the router implementation,
+</EM><BR>
+<EM>&gt; &gt; which doesnt need to do different procedure for different features of the Transport
+</EM><BR>
+<EM>&gt; &gt; layer..... and by maintaining this uniformity, the future extentions which demands a
+</EM><BR>
+<EM>&gt; &gt; similar requirement can use the same way......
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; I could have missed some points....
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Any comments on this????
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Thanks
+</EM><BR>
+<EM>&gt; &gt; -arun
+</EM><BR>
+<EM>&gt; &gt; --
+</EM><BR>
+<EM>&gt; &gt; ****************************************************************
+</EM><BR>
+<EM>&gt; &gt; V.Arun Prasad
+</EM><BR>
+<EM>&gt; &gt; HCL Technologies Ltd.
+</EM><BR>
+<EM>&gt; &gt; 51, Jawaharlal Nehru Road,
+</EM><BR>
+<EM>&gt; &gt; Ekkattuthangal,
+</EM><BR>
+<EM>&gt; &gt; Guindy Industrial Estate,
+</EM><BR>
+<EM>&gt; &gt; Chennai - 600097.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Contact # : 9144 - 2334174
+</EM><BR>
+<EM>&gt; &gt;             9144 - 2334181
+</EM><BR>
+<EM>&gt; &gt;             extn : 233
+</EM><BR>
+<EM>&gt; &gt; ****************************************************************
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; _______________________________________________
+</EM><BR>
+<EM>&gt; &gt; tsvwg mailing list
+</EM><BR>
+<EM>&gt; &gt; <A HREF="mailto:tsvwg@ietf.org?Subject=Re:%20[Tsvwg]%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB2BB02.21AA779C@netlab.hcltech.com&gt;">tsvwg@ietf.org</A>
+</EM><BR>
+<EM>&gt; &gt; https://www1.ietf.org/mailman/listinfo/tsvwg
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; // Jacob Heitz. Tel:510-747-2917
+</EM><BR>
+<P><PRE>
+--
+****************************************************************
+V.Arun Prasad
+HCL Technologies Ltd.
+51, Jawaharlal Nehru Road,
+Ekkattuthangal,
+Guindy Industrial Estate,
+Chennai - 600097.
+<P>Contact # : 9144 - 2334174
+            9144 - 2334181
+            extn : 233
+****************************************************************
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2678.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2676.html">La Monte Henry Piggy Yarroll: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2678.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2677">[ date ]</A>
+<A HREF="index.html#2677">[ thread ]</A>
+<A HREF="subject.html#2677">[ subject ]</A>
+<A HREF="author.html#2677">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Apr 09 2002 - 05:58:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Wed Mar 26 05:57:01 1997" -->
+<!-- isoreceived="19970326105701" -->
+<!-- sent="Wed, 26 Mar 97 02:12:11 GMT" -->
+<!-- isosent="19970326021211" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="5724.wsimpson@greendragon.com" -->
+<!-- inreplyto="OT 1.1.2 trace -- delayed Ack" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5724.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 25 1997 - 21:12:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0259.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0262.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#260">[ date ]</A>
+<A HREF="index.html#260">[ thread ]</A>
+<A HREF="subject.html#260">[ subject ]</A>
+<A HREF="author.html#260">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:backman@ftp.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5724.wsimpson@greendragon.com&gt;">backman@ftp.com</A> (Larry Backman)
+</EM><BR>
+<EM>&gt; ||Mine is srtt / 2 + mdev, with a min of 100 ms and max of 500 ms.
+</EM><BR>
+<EM>&gt; ||Doesn't anyone other than me actually implement a stack that tunes the
+</EM><BR>
+<EM>&gt; ||Ack timeout?
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; yes, no one but us geeks wanted it though :-).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Seriously we put more knobs and dials on PCTCP/Onnet than anyone but a
+</EM><BR>
+<EM>&gt; TCP expert could understand.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Oh, I don't let a _user_ set it!  It's just done automatically on a per
+<BR>
+connection basis.  I'm a firm believer in automation.
+<BR>
+<P>Besides, one of my implementations was Qualcomm's cellular phones (with
+<BR>
+Karn), and there was no place for any user knobs.... :-)
+<BR>
+<P><P><EM>&gt; Another interesting  discussion we had but never implemented were how to
+</EM><BR>
+<EM>&gt; create heuristics that could sense an environment (slow serial/fast LAN,
+</EM><BR>
+<EM>&gt; single client connect/multiple server listen) and tune those stack
+</EM><BR>
+<EM>&gt; knobs for the user.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+It's not too hard, really.  The interface speed is generally available,
+<BR>
+the number of current TCBs, etc.
+<BR>
+<P>Of course, you folks didn't design the packet driver interface to
+<BR>
+return the speed, so that has been a problem sometimes....
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5724.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;5724.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0261.html">Scott Dawson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0259.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0262.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#260">[ date ]</A>
+<A HREF="index.html#260">[ thread ]</A>
+<A HREF="subject.html#260">[ subject ]</A>
+<A HREF="author.html#260">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

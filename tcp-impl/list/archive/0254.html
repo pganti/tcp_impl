@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Tue Mar 25 14:10:38 1997" -->
+<!-- isoreceived="19970325191038" -->
+<!-- sent="Tue, 25 Mar 97 14:04:02 PST" -->
+<!-- isosent="19970325220402" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="9703252204.AA08249@mentat.com" -->
+<!-- inreplyto="OT 1.1.2 trace -- delayed Ack" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;9703252204.AA08249@mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 25 1997 - 17:04:02 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0255.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0253.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#254">[ date ]</A>
+<A HREF="index.html#254">[ thread ]</A>
+<A HREF="subject.html#254">[ subject ]</A>
+<A HREF="author.html#254">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Yes, the Mac tick is 1/60 second, about 17 ms.  50 ms should be plenty
+</EM><BR>
+<EM>&gt; of time for a single application on a dedicated machine to turn around.
+</EM><BR>
+<EM>&gt; Perhaps Apple lowered the limit to &quot;improve&quot; the code?
+</EM><BR>
+<P>No, I'm pretty sure that it is at 50ms for OT 1.1.1 and 1.1.2.  I don't know
+<BR>
+what kind of Mac tick is at 1/60 sec.  As far as OT TCP is concerned, ticks
+<BR>
+are 1ms.  I know for sure that timing is accurate on PPC Macs.  I don't
+<BR>
+have a 68K Mac that I can easily check, but I am not aware of any timing
+<BR>
+problems.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Anyway, I didn't set out to test for delayed Ack.  I just was trying to
+</EM><BR>
+<EM>&gt; find out why my 600 user ISP (watervalley.net) went into congestive
+</EM><BR>
+<EM>&gt; collapse when I installed MacOS 7.6 on the POP3 mail server.  The reason
+</EM><BR>
+<EM>&gt; is the number of packets and retransmissions went through the roof.
+</EM><BR>
+<P>This is almost surely due to the RTT problems.  Given the excellent reports
+<BR>
+of improvement coming from the few sites that have received fixes...  I'm
+<BR>
+on real thin ice discussing customer product plans, so I can't.  I do hope
+<BR>
+you get something soon.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; RFC-813 talks about making the delayed Ack timeout dynamically tunable.
+</EM><BR>
+<EM>&gt; Mine is srtt / 2 + mdev, with a min of 100 ms and max of 500 ms.
+</EM><BR>
+<EM>&gt; Doesn't anyone other than me actually implement a stack that tunes the
+</EM><BR>
+<EM>&gt; Ack timeout?
+</EM><BR>
+<P>I have to admit that I missed this...  But I like it.  On the ride into
+<BR>
+work I was thinking about how the fixed deferred ACK interval screws up
+<BR>
+best case performance.  Sooner or later, someone is going to twist my arm
+<BR>
+to get me to justify the fact that we &quot;clearly violate the spec&quot; by blatantly
+<BR>
+not ACKing every other packet...  That will be fun...
+<BR>
+<P>jt
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0255.html">Vern Paxson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0253.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0243.html">William Allen Simpson: "OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0268.html">Alan Cox: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#254">[ date ]</A>
+<A HREF="index.html#254">[ thread ]</A>
+<A HREF="subject.html#254">[ subject ]</A>
+<A HREF="author.html#254">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

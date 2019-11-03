@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revision RFC 2001 (draft-iet</TITLE>
+<META NAME="Author" CONTENT="Kacheong.Poon@eng.Sun.COM (Kacheong.Poon@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)</H1>
+<!-- received="Wed Aug 12 18:32:34 1998" -->
+<!-- isoreceived="19980812223234" -->
+<!-- sent="Wed, 12 Aug 1998 18:31:06 -0700 (PDT)" -->
+<!-- isosent="19980813013106" -->
+<!-- name="Kacheong.Poon@eng.Sun.COM" -->
+<!-- email="Kacheong.Poon@eng.Sun.COM" -->
+<!-- subject="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<!-- id="Roam.SIMC.2.0.6.902971866.24899.kcpoon@jurassic" -->
+<!-- inreplyto="k2iujx3mw9.fsf@zero.aec.at" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Kacheong.Poon@eng.Sun.COM?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;Roam.SIMC.2.0.6.902971866.24899.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@eng.Sun.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Aug 12 1998 - 21:31:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1203.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1203.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1206.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1204">[ date ]</A>
+<A HREF="index.html#1204">[ thread ]</A>
+<A HREF="subject.html#1204">[ subject ]</A>
+<A HREF="author.html#1204">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Most BSD implementation (at least Free/NetBSD) don't have the problem, 
+</EM><BR>
+<EM>&gt; because they simply send an ACK every second packet, no matter how big
+</EM><BR>
+<EM>&gt; the packets were (this means BSD will send more acks than linux in some
+</EM><BR>
+<EM>&gt; situations)
+</EM><BR>
+<P>I just got the latest FreeBSD source.  The following part of code has not
+<BR>
+changed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Compare available window to amount of window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* known to peer (as advertised window less
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* next expected input).  If the difference is at least two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* max size segments, or at least 50% of the maximum possible
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* window, then want to send a window update to peer.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (win &gt; 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* &quot;adv&quot; is the amount we can increase the window,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* taking into account that we are limited by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* TCP_MAXWIN &lt;&lt; tp-&gt;rcv_scale.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long adv = min(win, (long)TCP_MAXWIN &lt;&lt; tp-&gt;rcv_scale) -
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;rcv_adv - tp-&gt;rcv_nxt);
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (adv &gt;= (long) (2 * tp-&gt;t_maxseg))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (2 * adv &gt;= (long) so-&gt;so_rcv.sb_hiwat)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto send;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>Can you point me to where FreeBSD forces acking every second segment,
+<BR>
+regardless of the size?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;Roam.SIMC.2.0.6.902971866.24899.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1203.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1203.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1205.html">Kevin M. Lahey: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1206.html">Andi Kleen: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1204">[ date ]</A>
+<A HREF="index.html#1204">[ thread ]</A>
+<A HREF="subject.html#1204">[ subject ]</A>
+<A HREF="author.html#1204">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

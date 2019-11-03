@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="RE: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 12:02:37 1999" -->
+<!-- isoreceived="19990915160237" -->
+<!-- sent="Wed, 15 Sep 1999 11:51:53 -0400" -->
+<!-- isosent="19990915155153" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="RE: TCP's handling of IP precedence" -->
+<!-- id="236F133B43F4D211A4B00090273C79DC0E0C96@rv-ex-2.rsvl.unisys.com" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C96@rv-ex-2.rsvl.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 11:51:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1807.html">Vern Paxson: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1805.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1811.html">Ross Harvey: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1813.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1825.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1833.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1806">[ date ]</A>
+<A HREF="index.html#1806">[ thread ]</A>
+<A HREF="subject.html#1806">[ subject ]</A>
+<A HREF="author.html#1806">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C96@rv-ex-2.rsvl.unisys.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; &gt; I would agree with Allyn that this sets a terrible precedent.
+</EM><BR>
+<EM>&gt;&gt; &gt; In the past, whenever change to TCP was proposed, the answer has been
+</EM><BR>
+that 
+<BR>
+<EM>&gt;&gt; &gt; there are millions of existing TCP instances out there so we could not 
+</EM><BR>
+<EM>&gt;&gt; &gt; change it.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt; I'm sorry to say it, but the time to have voiced concerns over this
+</EM><BR>
+change
+<BR>
+<EM>&gt;&gt; was during the IETF Last Call on the diffserv documents.  It is too late
+</EM><BR>
+now
+<BR>
+<EM>&gt;&gt; to rescind the fact that the diffserv architecture allows for
+</EM><BR>
+modification
+<BR>
+<EM>&gt;&gt; of the TOS byte in flight.
+</EM><BR>
+<P><EM>&gt;If you think about it for a momenet, that reasoning is obviously incorrect.
+</EM><BR>
+<EM>&gt;It assumes that everyone is required to read all IETF documents.  Since
+</EM><BR>
+<EM>&gt;getting anything changed during Last Call is at best difficult, it requires
+</EM><BR>
+<EM>&gt;that everyone participate in all working groups.  It also assumes that no
+</EM><BR>
+<EM>&gt;recent standards track document is ever wrong or ever needs significant
+</EM><BR>
+<EM>&gt;revision.  It assumes that DiffServ is more special and unchangable than
+</EM><BR>
+<EM>&gt;TCP as defined in RFC 793, which can be freely changed, despite the fact
+</EM><BR>
+<EM>&gt;that there are far more RFC 793 implementations and installations than
+</EM><BR>
+<EM>&gt;RFC 2474.  It provides a procedure for a small part of the IETF to make
+</EM><BR>
+<EM>&gt;arbitrary changes to protocols that most of the IETF cares about, simply
+</EM><BR>
+<EM>&gt;publish an RFC, sneak it through Last Call, and then make the claim of
+</EM><BR>
+<EM>&gt;fait accompli.
+</EM><BR>
+<P>Nicely put, Vernon.  My sentiments precisely.  I don't think the precedence
+<BR>
+change to TCP is really a big deal, but the philosophy and the reasoning
+<BR>
+that is causing TCP to change bothers me: 
+<BR>
+1. Emerging DiffServ technology redefines a protocol header field (dangerous
+<BR>
+proposition at best).
+<BR>
+2. It's discovered that header field redefinition in the DiffServ emerging
+<BR>
+technology (not a standard yet) causes TCPs (a well established, long
+<BR>
+existing standard) to send resets when they previously did not. 
+<BR>
+3. DiffServ bug causes undesirable TCP behavior.
+<BR>
+4. Fix to DiffServ: change all existing TCPs.
+<BR>
+<P>Very illogical.  DiffServ should have formalized the TCP change before
+<BR>
+proceeding with the DiffServ implementation.  They are very naughty network
+<BR>
+citizens.
+<BR>
+<P>_______________________________
+<BR>
+Al Smith
+<BR>
+Unisys
+<BR>
+1.651.635.5769    NET 524.5769
+<BR>
+<A HREF="mailto:Al.Smith@Unisys.Com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C96@rv-ex-2.rsvl.unisys.com&gt;">Al.Smith@Unisys.Com</A>
+<BR>
+_______________________________
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1807.html">Vern Paxson: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1805.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1811.html">Ross Harvey: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1813.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1822.html">Steve Alexander: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1825.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1833.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1806">[ date ]</A>
+<A HREF="index.html#1806">[ thread ]</A>
+<A HREF="subject.html#1806">[ subject ]</A>
+<A HREF="author.html#1806">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HP-UX -11.0  (FIN_WAIT_2)</TITLE>
+<META NAME="Author" CONTENT="Scott Millward (scotty@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: HP-UX -11.0  (FIN_WAIT_2)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HP-UX -11.0  (FIN_WAIT_2)</H1>
+<!-- received="Thu Jun 29 19:41:52 2000" -->
+<!-- isoreceived="20000629234152" -->
+<!-- sent="Thu, 29 Jun 2000 16:35:20 -0700" -->
+<!-- isosent="20000629233520" -->
+<!-- name="Scott Millward" -->
+<!-- email="scotty@cup.hp.com" -->
+<!-- subject="Re: HP-UX -11.0  (FIN_WAIT_2)" -->
+<!-- id="395BDD38.BA962F8F@cup.hp.com" -->
+<!-- inreplyto="20000629210816.12295.qmail@web2902.mail.yahoo.com" -->
+<STRONG>From:</STRONG> Scott Millward (<A HREF="mailto:scotty@cup.hp.com?Subject=Re:%20HP-UX%20-11.0%20%20(FIN_WAIT_2)&In-Reply-To=&lt;395BDD38.BA962F8F@cup.hp.com&gt;"><EM>scotty@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 29 2000 - 19:35:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2194.html">vijay singh: "HP-UX -11.0  (FIN_WAIT_2)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2197">[ date ]</A>
+<A HREF="index.html#2197">[ thread ]</A>
+<A HREF="subject.html#2197">[ subject ]</A>
+<A HREF="author.html#2197">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>On 11.0 there is an algorithm that extends the keepalive probes during
+<BR>
+the FIN_WAIT_2 state.  This was to prevent an time-based drop of the
+<BR>
+connection half without really knowing if the other half was really
+<BR>
+gone, or just delaying their close.  The BSD Stack has a timer that
+<BR>
+silently drops the connections in FIN_WAIT_2 after a specified interval.
+<BR>
+<P>Due to popular demand ;-) .. The old BSD style FIN_WAIT_2 timer can be
+<BR>
+enabled in the HPUX 11.0 stack if you have a recent Transport Patch
+<BR>
+level. (The latest patch ID for Transport as of today is PHNE_21767)
+<BR>
+<P>Following is a write up on how you would enable this:
+<BR>
+<P>--------------------------------------------------------------------
+<BR>
+<P>There is an ndd parameter, post-patch PHNE_19375/11.0, that is called
+<BR>
+<P>&nbsp;&nbsp;tcp_fin_wait_2_timeout
+<BR>
+<P>This parameter sets the fin_wait_2 timer on 11.X to stop idle fin_wait_2
+<BR>
+connections. It will not survive a reboot, so modification of the
+<BR>
+/etc/rc.config.d/nddconf is a necessary.
+<BR>
+<P><P>It specifies an interval, in milliseconds, after which the TCP will be
+<BR>
+unconditionally killed.  An appropriate reset segment will be sent when
+<BR>
+the connection is killed.
+<BR>
+<P>The default for tcp_fin_wait_2_timeout is 0, which allows the connection
+<BR>
+to live forever, as long as the far side continues to answer keepalives.
+<BR>
+<P>To enable the tcp_fin_wait_2 timer to timeout do the following:
+<BR>
+<P>1. To get the current value (0 is turned off):
+<BR>
+&nbsp;&nbsp;&nbsp;# ndd -get /dev/tcp tcp_fin_wait_2_timeout 0
+<BR>
+<P>2. To set the value to 20 min's:
+<BR>
+&nbsp;&nbsp;&nbsp;# ndd -set /dev/tcp tcp_fin_wait_2_timeout 1200000
+<BR>
+<P>3. Check the setting:
+<BR>
+&nbsp;&nbsp;&nbsp;# ndd -get /dev/tcp tcp_fin_wait_2_timeout 1200000
+<BR>
+<P><P>Note: (1000 ms in 1 second) * (60 seconds) * (20 minutes)= 1200000 ms.
+<BR>
+20 minutes is just an example but probably a good selection.
+<BR>
+<P><P>This will not survive a reboot, so you need to update
+<BR>
+<P>&nbsp;&nbsp;/etc/rc.config.d/nddconf
+<BR>
+<P>with the parameter so that it will be set at boot time.
+<BR>
+<P>&nbsp;&nbsp;TRANSPORT_NAME[0]=tcp
+<BR>
+&nbsp;&nbsp;NDD_NAME[0]=tcp_fin_wait_2_timeout
+<BR>
+&nbsp;&nbsp;NDD_VALUE[0]=1200000
+<BR>
+<P><P><P>NOTE: patches may be superceded, verify your patch levels via the patch
+<BR>
+database on the IT resource Center.
+<BR>
+<P>For more information regarding Transmission Control Protocols See RFC
+<BR>
+793
+<BR>
+<P><P><P><P><P><P>vijay singh wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hello,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; is anyone on the list aware of problems on the HP UX
+</EM><BR>
+<EM>&gt; TCP stack implementation, wherein a connection in the
+</EM><BR>
+<EM>&gt; FIN_WAIT_2 state remains so indefinitely. This may
+</EM><BR>
+<EM>&gt; have happened as the application (client) exited
+</EM><BR>
+<EM>&gt; without closing the socket. Specifically I have the
+</EM><BR>
+<EM>&gt; following questions:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1. Is there a known problem like this?
+</EM><BR>
+<EM>&gt; 2. Is there a way to drop a connection (with the tuple
+</EM><BR>
+<EM>&gt; obtained from netstat) without recycling the kernel?
+</EM><BR>
+<EM>&gt; 3. What are the consequences of issuing a *shutdown*
+</EM><BR>
+<EM>&gt; and immediately following it with a *close*?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Any help is appreciated.
+</EM><BR>
+<EM>&gt; Vijay
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; =====
+</EM><BR>
+<EM>&gt; VIJAY SINGH
+</EM><BR>
+<EM>&gt; 41 W Brown Street,
+</EM><BR>
+<EM>&gt; Apt# 7,
+</EM><BR>
+<EM>&gt; Somerville - NJ 08876.
+</EM><BR>
+<EM>&gt; Ph (H) - (908)575-3255
+</EM><BR>
+<EM>&gt;    (O) - (973)360-3148.
+</EM><BR>
+<EM>&gt; E-MAIL: <A HREF="mailto:vsingh@pershing.com?Subject=Re:%20HP-UX%20-11.0%20%20(FIN_WAIT_2)&In-Reply-To=&lt;395BDD38.BA962F8F@cup.hp.com&gt;">vsingh@pershing.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; __________________________________________________
+</EM><BR>
+<EM>&gt; Do You Yahoo!?
+</EM><BR>
+<EM>&gt; Get Yahoo! Mail - Free email you can access from anywhere!
+</EM><BR>
+<EM>&gt; <A HREF="http://mail.yahoo.com/">http://mail.yahoo.com/</A>
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2197/01-scotty.vcf">Card for Scott Millward</A>
+</UL>
+<!-- attachment="01-scotty.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2194.html">vijay singh: "HP-UX -11.0  (FIN_WAIT_2)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2197">[ date ]</A>
+<A HREF="index.html#2197">[ thread ]</A>
+<A HREF="subject.html#2197">[ subject ]</A>
+<A HREF="author.html#2197">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

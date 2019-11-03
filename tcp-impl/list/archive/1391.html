@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 14:33:10 1998" -->
+<!-- isoreceived="19981110193310" -->
+<!-- sent="Tue, 10 Nov 1998 11:31:05 -0800" -->
+<!-- isosent="19981110193105" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="Re: Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811101931.LAA08892@gecko.nas.nasa.gov" -->
+<!-- inreplyto="199811101827.KAA18281@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811101931.LAA08892@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 14:31:05 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1389.html">Vern Paxson: "Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1391">[ date ]</A>
+<A HREF="index.html#1391">[ thread ]</A>
+<A HREF="subject.html#1391">[ subject ]</A>
+<A HREF="author.html#1391">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199811101827.KAA18281@daffy.ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811101931.LAA08892@gecko.nas.nasa.gov&gt;">199811101827.KAA18281@daffy.ee.lbl.gov</A>&gt;Vern Paxson writes
+<BR>
+<EM>&gt;The -01 version of the TCP Congestion Control I-D has now come out.
+</EM><BR>
+<EM>&gt;Mark &amp; I feel it's ready for publication as Proposed Standard, so we're
+</EM><BR>
+<EM>&gt;holding a two-week last call for final comments, with the last call ending
+</EM><BR>
+<EM>&gt;on Nov 24.
+</EM><BR>
+<P><EM>&gt;	- Clarified that the receiver doesn't know the true MSS and
+</EM><BR>
+<EM>&gt;	  so the ack-at-least-every-second-full-MSS-segment requirement
+</EM><BR>
+<EM>&gt;	  means in terms of its offered MSS.
+</EM><BR>
+<P>Is there any way that we can tweak MSS to take path MTU discovery into
+<BR>
+account?  It seems like the current definition would result in an
+<BR>
+unnaturally small number of ACKs on a path with a smaller discovered
+<BR>
+MTU.  For instance, if two ATM-equipped hosts wind up communicating
+<BR>
+across an Ethernet, won't we wind up with only a quarter as many ACKs
+<BR>
+as we'd get without PMTU?
+<BR>
+<P>Since increases in slow-start are defined in terms of MSS rather than
+<BR>
+the number of segments, I guess the PMTU-equipped stacks wouldn't
+<BR>
+pay a penalty versus non-PMTU-equipped stacks, but wouldn't they
+<BR>
+be dumping large numbers of packets into the network?  Wouldn't
+<BR>
+it be smoother to have more frequent ACKs?
+<BR>
+<P>I guess implementations are free to send more frequent ACKs to 
+<BR>
+avoid this, and PMTU-equipped stacks could just be smarter about it.
+<BR>
+Could this result in an unnaturally fast increase in the congestion
+<BR>
+window when the receiver ACKed every two packets (not every two 
+<BR>
+MSS-sized packets) and the sender always increased by MSS (not
+<BR>
+the appropriate PMTU)?
+<BR>
+<P>Thanks,
+<BR>
+<P>Kevin
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811101931.LAA08892@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1390.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1389.html">Vern Paxson: "Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1392.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1391">[ date ]</A>
+<A HREF="index.html#1391">[ thread ]</A>
+<A HREF="subject.html#1391">[ subject ]</A>
+<A HREF="author.html#1391">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

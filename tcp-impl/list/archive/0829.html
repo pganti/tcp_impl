@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: [Q] socket address vs. socke</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: [Q] socket address vs. socket interface">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: [Q] socket address vs. socket interface</H1>
+<!-- received="Thu Nov 20 07:36:03 1997" -->
+<!-- isoreceived="19971120123603" -->
+<!-- sent="Thu, 20 Nov 1997 09:25:07 -0600 (CST)" -->
+<!-- isosent="19971120152507" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: [Q] socket address vs. socket interface" -->
+<!-- id="199711201525.JAA26664@frantic.BSDI.COM" -->
+<!-- inreplyto="[Q] socket address vs. socket interface" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20[Q]%20socket%20address%20vs.%20socket%20interface&In-Reply-To=&lt;199711201525.JAA26664@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Nov 20 1997 - 10:25:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0828.html">Yong-Woon Kim: "[Q] socket address vs. socket interface"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0828.html">Yong-Woon Kim: "[Q] socket address vs. socket interface"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#829">[ date ]</A>
+<A HREF="index.html#829">[ thread ]</A>
+<A HREF="subject.html#829">[ subject ]</A>
+<A HREF="author.html#829">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Thu, 20 Nov 1997 19:38:39 +0900
+</EM><BR>
+<EM>&gt; From: Yong-Woon Kim &lt;<A HREF="mailto:qkim@pec.etri.re.kr?Subject=Re:%20[Q]%20socket%20address%20vs.%20socket%20interface&In-Reply-To=&lt;199711201525.JAA26664@frantic.BSDI.COM&gt;">qkim@pec.etri.re.kr</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: [Q] socket address vs. socket interface
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'm confusing the same word of socket.
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; My questions are 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1. the above socket number is the 'result' value?
+</EM><BR>
+<P>The socket() system call creates a communications endpoint which is
+<BR>
+associatied with a file descriptor, and that descriptor is the 'result'.
+<BR>
+<P><EM>&gt; 2. do the same word of 'socket' have the same semantics?
+</EM><BR>
+<P>No.  In RFC 793 &quot;socket&quot; is a lable placed on one end of a TCP connection,
+<BR>
+and thus refers to just the local address/port combination.
+<BR>
+<P>The file descriptor, or socket, returned by socket() can be bound via
+<BR>
+bind() to assign the local address and/or port, and the remote address/port
+<BR>
+is specified using connect().  Each socket represents at most one TCP
+<BR>
+connection.  If you have multiple TCP connections with the same local
+<BR>
+address/port combination, they will each have a unique socket.
+<BR>
+<P><EM>&gt; 3. when a server port is shared by multiple connections, 
+</EM><BR>
+<EM>&gt;    do corresponding server sockets in view of socket interface have
+</EM><BR>
+<EM>&gt;    the same 'result' value? or different 'result' values?
+</EM><BR>
+<P>Different values.  The 'result' value is the file descriptor, and is
+<BR>
+unique within a single process.  So, if a server process is processing
+<BR>
+multiple connections at the same time, it will have a unique file
+<BR>
+descriptor for each socket that it is processing.
+<BR>
+<P><EM>&gt; Please fix my confusions.
+</EM><BR>
+<P>I hope this helps.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20[Q]%20socket%20address%20vs.%20socket%20interface&In-Reply-To=&lt;199711201525.JAA26664@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0828.html">Yong-Woon Kim: "[Q] socket address vs. socket interface"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0828.html">Yong-Woon Kim: "[Q] socket address vs. socket interface"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0830.html">Mohit Aron: "Re: [Q] socket address vs. socket interface"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#829">[ date ]</A>
+<A HREF="index.html#829">[ thread ]</A>
+<A HREF="subject.html#829">[ subject ]</A>
+<A HREF="author.html#829">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

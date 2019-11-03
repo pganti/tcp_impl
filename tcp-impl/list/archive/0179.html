@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: PSH (was Re: draft descripti</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)</H1>
+<!-- received="Thu Mar 20 07:14:16 1997" -->
+<!-- isoreceived="19970320121416" -->
+<!-- sent="Thu, 20 Mar 1997 15:11:09 -0000" -->
+<!-- isosent="19970320151109" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<!-- id="c=US%a=_ATTMAIL%p=UNISYS%l=RV-EXCHANGE--970320151109Z-20822@ea_ihx102.ea.unisys.com" -->
+<!-- inreplyto="PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20PSH%20(was%20Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;)&In-Reply-To=&lt;c=US%25a=_ATTMAIL%25p=UNISYS%25l=RV-EXCHANGE--970320151109Z-20822@ea_ihx102.ea.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 20 1997 - 10:11:09 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0178.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#179">[ date ]</A>
+<A HREF="index.html#179">[ thread ]</A>
+<A HREF="subject.html#179">[ subject ]</A>
+<A HREF="author.html#179">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vern and Der Mouse are correct in their understanding of this problem.
+<BR>
+The sending TCP MUST set the PSH bit in the last segment that drains 
+<BR>
+the output queue. Apparently, Berkeley derived TCPs always pass 
+<BR>
+received input immediately to an application regardless of the PSH 
+<BR>
+bit. TCPs that don't immediately pass the input must rely on the PSH 
+<BR>
+bit to deliver data to an application or the connection is deadlocked.
+<BR>
+Passing data immediately upon receipt, or inventing a timer to push 
+<BR>
+the data to the application is not a good idea for large servers that 
+<BR>
+support 10s of thousands of connections.
+<BR>
+<P>jt writes:
+<BR>
+<EM>&gt;What concerns me is that some of this discussion has seemed to imply that a
+</EM><BR>
+<EM>&gt;trace showing a sender which almost never turns on the PSH bit somehow
+</EM><BR>
+implies
+<BR>
+<EM>&gt;that there is something wrong with the sender implementation.  This is
+</EM><BR>
+clearly
+<BR>
+<EM>&gt;not true.  If the sender is faster than the receiver, meaning that the sender
+</EM><BR>
+<EM>&gt;always has unsent data ready to go, then there is no obligation to turn on
+</EM><BR>
+the
+<BR>
+<EM>&gt;PSH bit until the FIN goes out. 
+</EM><BR>
+<P>You are correct. What I meant to imply was that the sending TCP must set
+<BR>
+the PSH 
+<BR>
+bit in the last segment that drains the output queue. In fact, a sending
+<BR>
+TCP NEVER 
+<BR>
+has to set the PSH bit since the FIN implies a push.  
+<BR>
+<P>jt also writes:
+<BR>
+<EM>&gt;If there really is a receiver that will
+</EM><BR>
+<EM>&gt;refuse to send any data upstream until it sees a PSH bit, and will in fact
+</EM><BR>
+<EM>&gt;let its receive window shrink to zero as a result, then I hope we can all
+</EM><BR>
+agree
+<BR>
+<EM>&gt;that this is a receiver problem, not a sender problem.
+</EM><BR>
+<P>This was not the problem. The receivers receive window never shrunk. The
+<BR>
+receiver had no data to send. The receiver was waiting for the PSH or
+<BR>
+enough
+<BR>
+data to fill the receive buffer before giving it to the application. The
+<BR>
+local 
+<BR>
+application couldn't send data until it had received the data TCP was
+<BR>
+sitting on.
+<BR>
+<P>Regards,
+<BR>
+<P>Al Smith
+<BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0178.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#179">[ date ]</A>
+<A HREF="index.html#179">[ thread ]</A>
+<A HREF="subject.html#179">[ subject ]</A>
+<A HREF="author.html#179">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

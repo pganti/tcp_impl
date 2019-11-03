@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft description of &quot;No sl</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="draft description of &quot;No slow start after timeout&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft description of &quot;No slow start after timeout&quot;</H1>
+<!-- received="Tue Mar 18 15:34:06 1997" -->
+<!-- isoreceived="19970318203406" -->
+<!-- sent="Tue, 18 Mar 1997 15:22:04 PST" -->
+<!-- isosent="19970318232204" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="draft description of &quot;No slow start after timeout&quot;" -->
+<!-- id="199703182322.PAA20950@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft%20description%20of%20&quot;No%20slow%20start%20after%20timeout&quot;&In-Reply-To=&lt;199703182322.PAA20950@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 18 1997 - 18:22:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0150.html">touch@ISI.EDU: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0150.html">touch@ISI.EDU: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0151.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0152.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0153.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0162.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0171.html">Mark Allman: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0174.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#147">[ date ]</A>
+<A HREF="index.html#147">[ thread ]</A>
+<A HREF="subject.html#147">[ subject ]</A>
+<A HREF="author.html#147">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Name of problem: No slow start after timeout
+<BR>
+<P>Category: Congestion control
+<BR>
+<P>Description:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP experiences a retransmission timeout, it is required by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122, 4.2.2.15, to engage in &quot;slow start&quot; by initializing its
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window, cwnd, to one packet (one segment of the maximum
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size).  It subsequently increases cwnd by one packet for each ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it receives for new data until it reaches the &quot;congestion avoidance&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threshold, ssthresh, at which point the congestion avoidance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithm for updating the window takes over.  A TCP that fails
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to enter slow start upon a timeout exhibits &quot;No slow start after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout&quot;.
+<BR>
+<P>Significance:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vital.
+<BR>
+<P>Implications: 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entering slow start upon timeout forms one of the cornerstones
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of Internet congestion stability, as outlined in [Jacobson88].
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If TCPs fail to do so, the network becomes at risk of suffering
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;congestion collapse&quot; [RFC896].
+<BR>
+<P>Relevant RFCs:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start after loss.  RFC 896 describes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion collapse.  RFC 2001 describes the &quot;fast recovery&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mechanism that differs from the timeout retransmissions discussed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;here.
+<BR>
+<P>Trace file demonstrating it:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[This will eventually be a URL to the trace file, probably
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in both ASCII and binary forms.]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the sending TCP (A).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.090612 B &gt; A: . ack 357125 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.222025 A &gt; B: . 357125:358585(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.868871 A &gt; B: . 357125:358585(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.016641 B &gt; A: . ack 364425 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.036709 A &gt; B: . 364425:365885(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.045231 A &gt; B: . 365885:367345(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.053785 A &gt; B: . 367345:368805(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.062426 A &gt; B: . 368805:370265(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.071074 A &gt; B: . 370265:371725(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.079794 A &gt; B: . 371725:373185(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.089304 A &gt; B: . 373185:374645(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.097738 A &gt; B: . 374645:376105(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.106409 A &gt; B: . 376105:377565(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.115024 A &gt; B: . 377565:379025(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.123576 A &gt; B: . 379025:380485(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.132016 A &gt; B: . 380485:381945(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.141635 A &gt; B: . 381945:383405(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.150094 A &gt; B: . 383405:384865(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.158552 A &gt; B: . 384865:386325(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.167053 A &gt; B: . 386325:387785(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.175518 A &gt; B: . 387785:389245(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.210835 A &gt; B: . 389245:390705(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.226108 A &gt; B: . 390705:392165(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.241524 B &gt; A: . ack 389245 win 8760 (DF) [tos 0x8]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first packet indicates the ack point is 357125.  130 msec
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;after receiving the ack, A transmits the packet after the ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point, 357125:358585.  640 msec after this transmission,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it retransmits 357125:358585, in an apparent retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout.  At this point, A's cwnd should be one MSS, or 1460 bytes,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as A enters slow-start.  The trace is consistent with this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;possibility.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B replies with an ack of 364425, indicating that A has filled a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence hole.  At this point, A's cwnd should be 1460*2 = 2920
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes, since in slow start receiving an ack advances cwnd by MSS.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, A then launches 19 consecutive packets, which is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inconsistent with slow start.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P>Trace file demonstrating correct behavior:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the sending TCP (C).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.442538 C &gt; D: P 465409:465921(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.544483 D &gt; C: . ack 461825 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.703496 D &gt; C: . ack 461825 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.044613 C &gt; D: . 461825:462337(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.192282 D &gt; C: . ack 465921 win 2048
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.192538 D &gt; C: . ack 465921 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.193392 C &gt; D: P 465921:466433(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.194726 C &gt; D: P 466433:466945(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.350665 D &gt; C: . ack 466945 win 4096 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.351694 C &gt; D: . 466945:467457(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.352168 C &gt; D: . 467457:467969(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.352643 C &gt; D: . 467969:468481(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.506000 D &gt; C: . ack 467969 win 3584 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After C transmits the first packet shown to D, it takes no action
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in response to D's acks for 461825, because the first packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;already reached the advertised window limit of 4096 bytes above
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;461825.  600 msec after transmitting the first packet, C retransmits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;461825:462337, presumably due to a timeout.  Its congestion window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is now MSS (512 bytes).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D acks 465921, indicating that C's retransmission filled
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a sequence hole.  This ack advances C's cwnd from 512 to 1024.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Very shortly after, D acks 465921 again in order to update
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the offered window from 2048 to 4096.  This ack does not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;advance cwnd since it is not for new data.  Very shortly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;after, C responds to the newly enlarged window by transmitting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;two packets.  D acks both, advancing cwnd from 1024 to 1536.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C in turn transmits three packets.
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Jacobson, &quot;Congestion Avoidance and Control,&quot; Proc. SIGCOMM '88.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z">ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z</A>
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Paxson, &quot;Automated Packet Trace Analysis of TCP Implementations,&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available in draft form from vern@ee.lbl.gov.
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Packet loss is common enough in the Internet that generally it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is not difficult to find an Internet path that will force
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission due to packet loss.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the effective window prior to loss is large enough, however,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then the TCP may retransmit using the &quot;fast recovery&quot; mechanism
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;described in RFC 2001.  In a packet trace, the signature of fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery is that the packet retransmission occurs in response to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the receipt of three duplicate acks, and subsequent duplicate acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may lead to the transmission of new data, above both the ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point and the highest sequence transmitted so far.  An absence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of three duplicate acks prior to retransmission suffices to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distinguish between timeout and fast recovery retransmissions.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the face of only observing fast recovery retransmissions,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generally it is not difficult to repeat the data transfer until
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;observing a timeout retransmission.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Once armed with a trace exhibiting a timeout retransmission,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;determining whether the TCP follows slow start is done by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;computing the correct progression of cwnd and comparing it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the amount of data transmited by the TCP subsequent to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the timeout rtransmission.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks a notion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of a congestion window, then unfortunately this requires significant
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work to fix.  However, doing so is vital, for reasons outlined above.
+<BR>
+<P>Implementation specifics (if approved by implementor)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Implementor contact address)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0146.html">Vern Paxson: "draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0150.html">touch@ISI.EDU: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0150.html">touch@ISI.EDU: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0151.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0152.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0153.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0162.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0171.html">Mark Allman: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0174.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#147">[ date ]</A>
+<A HREF="index.html#147">[ thread ]</A>
+<A HREF="subject.html#147">[ subject ]</A>
+<A HREF="author.html#147">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

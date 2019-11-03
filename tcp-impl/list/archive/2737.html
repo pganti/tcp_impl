@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: types of traffic in tcp cong</TITLE>
+<META NAME="Author" CONTENT="J Wu (jinw@comp.leeds.ac.uk)">
+<META NAME="Subject" CONTENT="RE: types of traffic in tcp congest control">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: types of traffic in tcp congest control</H1>
+<!-- received="Mon May 13 14:47:41 2002" -->
+<!-- isoreceived="20020513184741" -->
+<!-- sent="Mon, 13 May 2002 19:15:27 +0100 (BST)" -->
+<!-- isosent="20020513181527" -->
+<!-- name="J Wu" -->
+<!-- email="jinw@comp.leeds.ac.uk" -->
+<!-- subject="RE: types of traffic in tcp congest control" -->
+<!-- id="Pine.LNX.4.33.0205131853550.30118-100000@cslin135.leeds.ac.uk" -->
+<!-- inreplyto="NEBBJGDMMLHHCIKHGBEJMECBDCAA.dotis@sanlight.net" -->
+<STRONG>From:</STRONG> J Wu (<A HREF="mailto:jinw@comp.leeds.ac.uk?Subject=RE:%20types%20of%20traffic%20in%20tcp%20congest%20control&In-Reply-To=&lt;Pine.LNX.4.33.0205131853550.30118-100000@cslin135.leeds.ac.uk&gt;"><EM>jinw@comp.leeds.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon May 13 2002 - 14:15:27 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2738.html">Alan Cox: "Re: types of traffic in tcp congest control"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2736.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2734.html">Douglas Otis: "RE: types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2739.html">Alan Cox: "Re: types of traffic in tcp congest control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2737">[ date ]</A>
+<A HREF="index.html#2737">[ thread ]</A>
+<A HREF="subject.html#2737">[ subject ]</A>
+<A HREF="author.html#2737">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Mon, 13 May 2002, Douglas Otis wrote:
+<BR>
+<P><EM>&gt; J Wu,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; A given number of Mice may consume the network and reduce effective use of
+</EM><BR>
+<EM>&gt; Elephants even with  Dense Wavelength Division Multiplexing in the mix.
+</EM><BR>
+<P>Indeed, give way to mice will decrease the efficiency of the network, but
+<BR>
+gained a low queuing delay, that is a trade-off. As more real-time
+<BR>
+applications are deployed to the Internet, it should be worthy.
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt; With TCP framing where small objects are aligned with the segment at high
+</EM><BR>
+<EM>&gt; rates, would this be  Mice or Rats? : )
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  -Doug
+</EM><BR>
+<P>Still Mice,
+<BR>
+<P>I think the elephant should be:
+<BR>
+&nbsp;(transmission data size) &gt;&gt; (Rtt*(transmission rate))
+<BR>
+It should be still acceptable for some non-mice non-elephant connections.
+<BR>
+Say &quot;Taker&quot; or &quot;Panda&quot; :))
+<BR>
+Jin.
+<BR>
+<P><P><EM>&gt;
+</EM><BR>
+<EM>&gt; On May 13, 2002 8:48 AM J Wu (<A HREF="mailto:jinw@comp.leeds.ac.uk?Subject=RE:%20types%20of%20traffic%20in%20tcp%20congest%20control&In-Reply-To=&lt;Pine.LNX.4.33.0205131853550.30118-100000@cslin135.leeds.ac.uk&gt;">jinw@comp.leeds.ac.uk</A>) wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; On Sun, 12 May 2002, Joe Touch wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; J Wu wrote:
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; Hi Li,
+</EM><BR>
+<EM>&gt; &gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; As my understanding of S.Low's paper that the mice stands for
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; small scale transmition with delay sensitive and the elephant
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; stands for large scale transmition. The small scale
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; transmitions will not cause any congestion, but the large
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; scale transmitions will.
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; That is an assumption, one which other results, notably of bandwidth
+</EM><BR>
+<EM>&gt; &gt; &gt; limited highly-shared core links (e.g., the US-UK link) refute. They
+</EM><BR>
+<EM>&gt; &gt; &gt; indicate that mice can indeed cause congestion amongst themselves, even
+</EM><BR>
+<EM>&gt; &gt; &gt; in the absence of elephants.
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Joe
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Hi Joe,
+</EM><BR>
+<EM>&gt; &gt; Well, if only the mice can still congest the link, which shows that the
+</EM><BR>
+<EM>&gt; &gt; network resources are under severe shortage. The only way to solve under
+</EM><BR>
+<EM>&gt; &gt; this situation is hardware solution. But I think even under this situation
+</EM><BR>
+<EM>&gt; &gt; restrict the elephants will also do benefit to alleviate the stage of
+</EM><BR>
+<EM>&gt; &gt; congestion.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; And also, it seems that most network congestions are take place at access
+</EM><BR>
+<EM>&gt; &gt; network which is not the core network.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Another question maybe far from this topic: As the invent of new core
+</EM><BR>
+<EM>&gt; &gt; transmission techniques like DWDM, is congestion control still needed in
+</EM><BR>
+<EM>&gt; &gt; core network?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; --
+</EM><BR>
+<EM>&gt; &gt; Jin Wu
+</EM><BR>
+<EM>&gt; &gt; School of Computing,
+</EM><BR>
+<EM>&gt; &gt; University of Leeds.
+</EM><BR>
+<EM>&gt; &gt; Tel: +44 113 2336806
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><PRE>
+-- 
+Jin Wu
+School of Computing,
+University of Leeds.
+Tel: +44 113 2336806
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2738.html">Alan Cox: "Re: types of traffic in tcp congest control"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2736.html">Joe Touch: "Re: types of traffic in tcp congest control"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2734.html">Douglas Otis: "RE: types of traffic in tcp congest control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2739.html">Alan Cox: "Re: types of traffic in tcp congest control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2737">[ date ]</A>
+<A HREF="index.html#2737">[ thread ]</A>
+<A HREF="subject.html#2737">[ subject ]</A>
+<A HREF="author.html#2737">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon May 13 2002 - 14:48:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

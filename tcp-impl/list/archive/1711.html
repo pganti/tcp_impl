@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start bit</H1>
+<!-- received="Mon May 17 13:18:44 1999" -->
+<!-- isoreceived="19990517171844" -->
+<!-- sent="Mon, 17 May 1999 12:15:39 -0500 (CDT)" -->
+<!-- isosent="19990517171539" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: slow-start bit" -->
+<!-- id="199905171715.MAA04837@frantic.bsdi.com" -->
+<!-- inreplyto="slow-start bit" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905171715.MAA04837@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon May 17 1999 - 13:15:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1712.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1710.html">Jamshid Mahdavi: "Re: slow-start bit"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1711">[ date ]</A>
+<A HREF="index.html#1711">[ thread ]</A>
+<A HREF="subject.html#1711">[ subject ]</A>
+<A HREF="author.html#1711">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+John,
+<BR>
+<P><EM>&gt; Subject: Re: slow-start bit 
+</EM><BR>
+<EM>&gt; Date: Sat, 15 May 1999 11:05:38 -0700
+</EM><BR>
+<EM>&gt; From: John Hanley &lt;<A HREF="mailto:jh@yahoo-inc.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905171715.MAA04837@frantic.bsdi.com&gt;">jh@yahoo-inc.com</A>&gt;
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; How about just causing the receiver to never delay ACK if more than
+</EM><BR>
+<EM>&gt; `threshold' time has elapsed since the last ACK sent by the receiver?
+</EM><BR>
+<EM>&gt; Certainly `threshold' would be &lt; 200ms; I'm thinking around 100ms or 50ms.
+</EM><BR>
+<EM>&gt; If it is much less than sender's RTO interval, then receiver would effectively
+</EM><BR>
+<EM>&gt; suppress delayed ACK *without* the sender signaling that in an option bit.
+</EM><BR>
+<P>Many years ago I put the slow-start code into UNICOS.  The poor
+<BR>
+interaction between the initial packet during slow-start and the
+<BR>
+delayed ACK/ACK every other packet stratagey became quite obvious,
+<BR>
+both at connection startup and after the connection had been idle
+<BR>
+for awhile and the sender restarted slow-start.  There are two ways
+<BR>
+to address this.  Either the receiver doesn't delay ACKs during
+<BR>
+slow-start, or the sender sends more than 1 packet to get past the
+<BR>
+ack every other packet strategy.
+<BR>
+<P>I figured that I couldn't change all the other TCPs out there, and
+<BR>
+since either one will improve throughput, I implemented the reciever
+<BR>
+changes.  When a connection was first opened, I immediatly acked the
+<BR>
+first N packets (actually, first N*maxseg bytes) , and then went back
+<BR>
+to the ack-every-other-packet strategy.  I chose N=8 for no particular
+<BR>
+reason, other than it was a power of 2, and 16 seemed too big.  I didn't
+<BR>
+just use N=2, because it helps to get through slow-start when you ACK
+<BR>
+every packet, and with N=8 you can get through a couple of round-trip
+<BR>
+times before going back to ack-every-other-packet.  It worked fine, so
+<BR>
+there never was any reason to change it.
+<BR>
+<P>The actual implementation took IRS and added N*maxseg to it.  As long
+<BR>
+as data arrived with a seq number less than that, it was immediatly
+<BR>
+acked.  Once we passed that point, the pointer was pulled along
+<BR>
+equal to seg.rcv_next.  Then, in TCP input, if the idle counter
+<BR>
+got large enough to kick in slow-start, I reset the value to
+<BR>
+seg.rcv_next + N*maxseg, so that packets would be immediatly ACKed
+<BR>
+again.
+<BR>
+<P>The nice thing was that with these changes our throughput improved
+<BR>
+both in Cray-&gt;Cray transfers, and other-&gt;Cray transfers.
+<BR>
+<P>Combine those receiver changes with the new initial window of 4K,
+<BR>
+(see RFC 2414), and you can eliminate a lot of the artificial
+<BR>
+delays due to bad delayed ACK interaction.
+<BR>
+<P>I don't see a need for a &quot;slow start&quot; bit.  Effectivly it would be
+<BR>
+a &quot;please ACK immediatly&quot; bit, and would be ripe for abuse by
+<BR>
+setting it in every packet, in which case you'd have to put in code
+<BR>
+to determine whether or not the bit is legitimate, which by the
+<BR>
+way would be similar code to what I've just described, so just
+<BR>
+skip the bit.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905171715.MAA04837@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1712.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1710.html">Jamshid Mahdavi: "Re: slow-start bit"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1713.html">Kacheong Poon: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1711">[ date ]</A>
+<A HREF="index.html#1711">[ thread ]</A>
+<A HREF="subject.html#1711">[ subject ]</A>
+<A HREF="author.html#1711">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

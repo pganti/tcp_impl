@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: The trace ( HTTP/RFC1122 )</TITLE>
+<META NAME="Author" CONTENT="Josh Cohen (josh@birdcage.mcom.com)">
+<META NAME="Subject" CONTENT="Re: The trace ( HTTP/RFC1122 )">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: The trace ( HTTP/RFC1122 )</H1>
+<!-- received="Thu Feb 13 12:11:37 1997" -->
+<!-- isoreceived="19970213171137" -->
+<!-- sent="Thu, 13 Feb 1997 04:00:11 -0800 (PST)" -->
+<!-- isosent="19970213120011" -->
+<!-- name="Josh Cohen" -->
+<!-- email="josh@birdcage.mcom.com" -->
+<!-- subject="Re: The trace ( HTTP/RFC1122 )" -->
+<!-- id="199702131200.EAA01474@birdcage.mcom.com" -->
+<!-- inreplyto="9702121450.AA23128@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Josh Cohen (<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;199702131200.EAA01474@birdcage.mcom.com&gt;"><EM>josh@birdcage.mcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 13 1997 - 07:00:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0095.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0093.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#94">[ date ]</A>
+<A HREF="index.html#94">[ thread ]</A>
+<A HREF="subject.html#94">[ subject ]</A>
+<A HREF="author.html#94">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Could you say a bit more about exactly how a client 'aborts' a
+</EM><BR>
+<EM>&gt; connection, in terms of library/API calls? The application doesn't
+</EM><BR>
+I beleive the client is doing a close() to send a FIN.
+<BR>
+<P><EM>&gt; send FINs, it tells TCP to do so via an API call. I suspect that you
+</EM><BR>
+<EM>&gt; mean it issues a 'half-duplex close', which is *supposed* to send RSTs
+</EM><BR>
+<EM>&gt; and cause subsequent received data to trigger a RST.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+Umm. I dont think thats right.  A half close does not cause a 
+<BR>
+RST to be sent.  Actually, I think that regardless of the
+<BR>
+half or full close, what is sent on the wire is the same, a FIN.
+<BR>
+half close is just the time that elapses after the client sends
+<BR>
+the FIN and before the server sends its own FIN.
+<BR>
+<P>The API stuff for half or full close just controls the
+<BR>
+clients ( in this case ) stack determining if the control 
+<BR>
+block stays around or not.
+<BR>
+<P>In a half close situation, there should be no RSTs since
+<BR>
+data is expected to continue to flow in the direction
+<BR>
+left open.  An RST would prohibit that and tear down the
+<BR>
+connection immediately on both sides.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Im not suggesting any hacks to the protocols.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But it seems to like you are. How is it that the client can send a RST
+</EM><BR>
+<EM>&gt; (the suggested workaround) without modifying the stack to do so? That
+</EM><BR>
+<EM>&gt; would be modifying the protocol implemented by the stack. But if you
+</EM><BR>
+<EM>&gt; have to modify the stack to get the desired behavior anyway, why not
+</EM><BR>
+<EM>&gt; just fix the actual problem, so the workaround isn't needed anymore?
+</EM><BR>
+No, a client application can force a RST to be sent via using
+<BR>
+the SO_LINGER socket option. Which is what netscape navigator does.
+<BR>
+Unfortunately it isnt within our engineering power to change the
+<BR>
+stack that we are run on.  We can however 'coerce' it to send the
+<BR>
+RST via the SO_LINGER.
+<BR>
+<P><PRE>
+-- 
+-----------------------------------------------------------------------------
+Josh Cohen				        Netscape Communications Corp.
+Netscape Fire Department	       
+Server Engineering
+<A HREF="mailto:josh@netscape.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;199702131200.EAA01474@birdcage.mcom.com&gt;">josh@netscape.com</A>                       <A HREF="http://home.netscape.com/people/josh/">http://home.netscape.com/people/josh/</A>
+-----------------------------------------------------------------------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0095.html">Larry Backman: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0093.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#94">[ date ]</A>
+<A HREF="index.html#94">[ thread ]</A>
+<A HREF="subject.html#94">[ subject ]</A>
+<A HREF="author.html#94">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

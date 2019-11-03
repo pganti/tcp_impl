@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: max active TCP connections</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: max active TCP connections">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: max active TCP connections</H1>
+<!-- received="Fri Jul 17 08:33:49 1998" -->
+<!-- isoreceived="19980717123349" -->
+<!-- sent="Fri, 17 Jul 1998 09:32:06 -0600 (MDT)" -->
+<!-- isosent="19980717153206" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: max active TCP connections" -->
+<!-- id="199807171532.JAA04996@calcite.rhyolite.com" -->
+<!-- inreplyto="max active TCP connections" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20max%20active%20TCP%20connections&In-Reply-To=&lt;199807171532.JAA04996@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jul 17 1998 - 11:32:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1166.html">David Borman: "Re: max active TCP connections"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1163.html">Tim Dorcey: "max active TCP connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1167">[ date ]</A>
+<A HREF="index.html#1167">[ thread ]</A>
+<A HREF="subject.html#1167">[ subject ]</A>
+<A HREF="author.html#1167">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; Suppose each has a receive buffer of 8KBytes. Then 10K connections
+</EM><BR>
+<EM>&gt; &gt; requires 800MBytes from somewhere.
+</EM><BR>
+<EM>&gt; &gt;   Perhaps someone else can suggest where.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Most TCPs (at least, BSD based TCPs) don't pre-allocate receive
+</EM><BR>
+<EM>&gt; buffers.  So, 10K idle connections don't use up any memory for
+</EM><BR>
+<EM>&gt; buffers, just the memory for the connection state.  The usual
+</EM><BR>
+<EM>&gt; place where buffers sit around awhile is on the send side, when
+</EM><BR>
+<EM>&gt; TCP is waiting for an ACK of the data.
+</EM><BR>
+<P>Yes, but as I'm sure Dave knows, that connection state can amount to a
+<BR>
+few MBytes when multipled by 10K.  Exactly how much depends on the
+<BR>
+implementation.  Then there are the other resources needed for each of
+<BR>
+those connections such as:
+<BR>
+&nbsp;&nbsp;- kernel process table slot, stack, etc (if you have a process/connection)
+<BR>
+&nbsp;&nbsp;- user space equivalent of kernel process state (if you have a thread each)
+<BR>
+&nbsp;&nbsp;- user space application state for each connection, such as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authentication, authorization, and encryption values, current
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;location&quot;/database-key/whatever, accounting/usage counts.
+<BR>
+<P>&nbsp;&nbsp;If you need none of that, then why use TCP?  Why not go at least
+<BR>
+&nbsp;&nbsp;as &quot;stateless&quot; as NFS/UDP?
+<BR>
+<P>Also, if you have 10K connections, you might need to send to many of them
+<BR>
+simultaneously, say when 10K users get back from their tea breaks or when
+<BR>
+big football game pauses, and they all hit the ENTER key.   You might need
+<BR>
+more than 8KBytes of output buffering for each of many of your 10K
+<BR>
+connections.  (8K is puny in the late 1990's.)
+<BR>
+<P>Over the years, I've seen attempts to grow various systems in various
+<BR>
+arenas (not just TCP connections).  Order-of-magnitude changes in size
+<BR>
+bring major qualitative changes.  People who expected to just crank up
+<BR>
+table sizes from 1 to 10 to 100 to ... and see things work have always (!)
+<BR>
+been amazed that I and my fellow pessimists have been proven right. 
+<BR>
+<P>If you need to ask what might break at 10K TCP connections, it would be
+<BR>
+best to find someone who's &quot;been there; done that&quot;, or at least &quot;tried to
+<BR>
+do that.&quot;  Things are very different above 1000 connections compared to
+<BR>
+less than 100, and even people very experienced with smaller TCP systems
+<BR>
+are often surprised.  I suspect that's related to what the other people
+<BR>
+who have responded have been hinting at.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20max%20active%20TCP%20connections&In-Reply-To=&lt;199807171532.JAA04996@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P>P.S. about any outfit that has sold systems to customers wanting to support
+<BR>
+&nbsp;&nbsp;at least 1000 users (for most meanings of &quot;user&quot;) has had to fiddle with
+<BR>
+&nbsp;&nbsp;the old BSD anonymous port selection limits.  Consider big universities
+<BR>
+&nbsp;&nbsp;or big WWW servers, as well as AOL, GTE, AT&amp;T, etc.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1166.html">David Borman: "Re: max active TCP connections"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1163.html">Tim Dorcey: "max active TCP connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1168.html">Alan Cox: "Re: max active TCP connections"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1167">[ date ]</A>
+<A HREF="index.html#1167">[ thread ]</A>
+<A HREF="subject.html#1167">[ subject ]</A>
+<A HREF="author.html#1167">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

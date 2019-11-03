@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Alan Hannan (alan@globalcenter.net)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 22:18:17 1999" -->
+<!-- isoreceived="19990916021817" -->
+<!-- sent="Wed, 15 Sep 1999 19:15:32 -0700" -->
+<!-- isosent="19990916021532" -->
+<!-- name="Alan Hannan" -->
+<!-- email="alan@globalcenter.net" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="19990915191531.F12989@globalcenter.net" -->
+<!-- inreplyto="199909160123.SAA29842@rum.isi.edu" -->
+<STRONG>From:</STRONG> Alan Hannan (<A HREF="mailto:alan@globalcenter.net?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;19990915191531.F12989@globalcenter.net&gt;"><EM>alan@globalcenter.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 22:15:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1821.html">Geert Jan de Groot: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1819.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1819.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1824.html">Geoff Huston: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1820">[ date ]</A>
+<A HREF="index.html#1820">[ thread ]</A>
+<A HREF="subject.html#1820">[ subject ]</A>
+<A HREF="author.html#1820">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; &gt; Is it the case that Diffserv:
+</EM><BR>
+<EM>&gt; &gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; 	- intends these bits to be used for TCP connections?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;   No.
+</EM><BR>
+<P><EM>&gt; I don't understand how the first question can be 
+</EM><BR>
+<EM>&gt; a &quot;No&quot; and the second question is relevant.
+</EM><BR>
+<P>&nbsp;&nbsp;I think I was focused on the tree instead of the forest.
+<BR>
+<P>&nbsp;&nbsp;Yes, Diffserv intends for these bits to be used to differentiate
+<BR>
+&nbsp;&nbsp;service levels of TCP connections, as a non-specific subset of IP
+<BR>
+&nbsp;&nbsp;traffic.
+<BR>
+<P>&nbsp;&nbsp;I interpreted your question to mean that Diffserv intended the
+<BR>
+&nbsp;&nbsp;bits to be a component of the connection setup.
+<BR>
+<P><EM>&gt; &gt;   Rather, Diffserv intends that they change while the connection is
+</EM><BR>
+<EM>&gt; &gt;   being established.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;   Remember that what happens is that the initiator tries to setup a 
+</EM><BR>
+<EM>&gt; &gt;   tcp session w/ TOS=0; but en route to the receiver, a router
+</EM><BR>
+<EM>&gt; &gt;   changes the DS bits from the original [as specificed by the
+</EM><BR>
+<EM>&gt; &gt;   initiator] to something else.  The receiver then 'plays along'
+</EM><BR>
+<EM>&gt; &gt;   because he doesn't know any better, and the initiator doesn't get
+</EM><BR>
+<EM>&gt; &gt;   back what he wants, so he breaks the connection.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;   Ideally, the 'initiator' would negotiate the TOS w/ the receiver,
+</EM><BR>
+<EM>&gt; &gt;   but this doesn't happen.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Why shouldn't this happen like ICMP redirects or PMTU - some sort
+</EM><BR>
+<EM>&gt; of NACK at the ICMP level to the source?
+</EM><BR>
+<P>&nbsp;&nbsp;One reason is that the quality of the traffic is non-relevant to
+<BR>
+&nbsp;&nbsp;the connection; ie; IP is connection-less; so failure to be
+<BR>
+&nbsp;&nbsp;granted a given traffic quality should not inhibit the
+<BR>
+&nbsp;&nbsp;connection, as a function of the protocol.
+<BR>
+<P><EM>&gt; I.e., &quot;ideally, the initiator would negotiate with the network,
+</EM><BR>
+<EM>&gt; then ask the receiver for something known&quot;...
+</EM><BR>
+<P>&nbsp;&nbsp;Yes, this is one approach, but _that_ change to the tcp spec is
+<BR>
+&nbsp;&nbsp;far more reaching than the one we're proposing :-)
+<BR>
+<P>&nbsp;&nbsp;-alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1821.html">Geert Jan de Groot: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1819.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1819.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1824.html">Geoff Huston: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1820">[ date ]</A>
+<A HREF="index.html#1820">[ thread ]</A>
+<A HREF="subject.html#1820">[ subject ]</A>
+<A HREF="author.html#1820">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

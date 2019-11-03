@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: OT 1.1.2 trace -- Nagle</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="OT 1.1.2 trace -- Nagle">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>OT 1.1.2 trace -- Nagle</H1>
+<!-- received="Tue Mar 25 11:47:32 1997" -->
+<!-- isoreceived="19970325164732" -->
+<!-- sent="Tue, 25 Mar 97 16:19:59 GMT" -->
+<!-- isosent="19970325161959" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="OT 1.1.2 trace -- Nagle" -->
+<!-- id="969378237.0002@hypermail.dummy" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20Nagle&In-Reply-To=&lt;969378237.0002@hypermail.dummy&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 25 1997 - 11:19:59 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0249.html">Jerry Toporek: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#250">[ date ]</A>
+<A HREF="index.html#250">[ thread ]</A>
+<A HREF="subject.html#250">[ subject ]</A>
+<A HREF="author.html#250">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The use of this implementation detail is already covered verbosely
+<BR>
+in RFC-896 (January 1984):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&quot;The solution is to inhibit the sending of new TCP segments when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;new outgoing data arrives from the user if any previously
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;transmitted data on the connection remains unacknowledged.  This
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;inhibition is to be unconditional; no timers, tests for size of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;data received, or other conditions are required.
+<BR>
+<P>And in RFC-1122:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3.4  When to Send Data
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP MUST include a SWS avoidance algorithm in the sender.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP SHOULD implement the Nagle Algorithm [TCP:9] to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coalesce short segments.  However, there MUST be a way for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an application to disable the Nagle algorithm on an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;individual connection.  In all cases, sending data is also
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject to the limitation imposed by the Slow Start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithm (Section 4.2.2.15).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Nagle algorithm is generally as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If there is unacknowledged data (i.e., SND.NXT &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SND.UNA), then the sending TCP buffers all user
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data (regardless of the PSH bit), until the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outstanding data has been acknowledged or until
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the TCP can send a full-sized segment (Eff.snd.MSS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes; see Section 4.2.2.6).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----
+<BR>
+<P><EM>&gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20OT%201.1.2%20trace%20--%20Nagle&In-Reply-To=&lt;969378237.0002@hypermail.dummy&gt;">jt@mentat.com</A> (Jerry Toporek)
+</EM><BR>
+<EM>&gt; &gt; Fri Feb 28 22:00:25 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; &gt; Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; &gt; IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; &gt; TCP: 110-&gt;1024 Seq x8c84b492 Ack xcae702c ACK PSH Wnd 17520 Data 31
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; *** No separate Ack here, but we see a PSH (above) on a short data
+</EM><BR>
+<EM>&gt; &gt;     packet, inexplicably followed by a full data packet (below).
+</EM><BR>
+<EM>&gt; &gt;     That PSH proves that the buffer was idle.  AIMS must call OT
+</EM><BR>
+<EM>&gt; &gt;     separately, but no Nagle algorithm!
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Fri Feb 28 22:00:25 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; &gt; Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; &gt; IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; &gt; TCP: 110-&gt;1024 Seq x8c84b4b1 Ack xcae702c ACK Wnd 17520 Data 1460
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The first segment is short, but the PSH bit indicates that it is all we
+</EM><BR>
+<EM>&gt; have seen.  There is no un-ACKed data, so out it goes.  The second segment
+</EM><BR>
+<EM>&gt; is a full MSS.  You seem to have misinterpreted the Nagle algorithm.  Please
+</EM><BR>
+<EM>&gt; go read it again.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+It's been a long time since I looked at Nagle's RFC-896, but it solved a
+<BR>
+pretty serious problem when I worked on my first router implementation
+<BR>
+back in '86-87, and I've been beating on vendors to implement Nagle ever
+<BR>
+since!  I think that I understand it rather well!!!
+<BR>
+<P>I apologize that my comment is insufficiently clear.  See instead the
+<BR>
+next section that appears to be the end of this OT send (labelled #3),
+<BR>
+where #1 and #2 remain unacknowledged, yet a short MSS is sent:
+<BR>
+<P>&nbsp;&nbsp;*** data packet #3
+<BR>
+<P>&nbsp;&nbsp;Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+&nbsp;&nbsp;Ether: len 354 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+&nbsp;&nbsp;IP: len 340 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+&nbsp;&nbsp;TCP: 110-&gt;1024 Seq x8c84ba65 Ack xcae702c ACK PSH Wnd 17520 Data 300
+<BR>
+<P>Please remember that you have already admitted (and I already knew) that
+<BR>
+you have no API for the application to add a PSH.  Therefore, that is
+<BR>
+merely the end of a particular OT send.
+<BR>
+<P>Anyway, RFC-1122 amends RFC-896: &quot;regardless of the PSH bit&quot;.
+<BR>
+<P>This is immediately followed by a new OT send of another full MSS that
+<BR>
+could have been combined with the previous 300 bytes:
+<BR>
+<P>&nbsp;&nbsp;*** data packet #4
+<BR>
+<P>&nbsp;&nbsp;Fri Feb 28 22:00:25 1997 - e0 recv:
+<BR>
+&nbsp;&nbsp;Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+&nbsp;&nbsp;IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+&nbsp;&nbsp;TCP: 110-&gt;1024 Seq x8c84bb91 Ack xcae702c ACK Wnd 17520 Data 1460
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----
+<BR>
+<P>Actually, your argument is disproved in the next trace section:
+<BR>
+<P>&nbsp;&nbsp;*** data packet #1
+<BR>
+<P>&nbsp;&nbsp;Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+&nbsp;&nbsp;Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+&nbsp;&nbsp;IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+&nbsp;&nbsp;TCP: 110-&gt;1024 Seq x8c84cf6e Ack xcae703c ACK PSH Wnd 17520 Data 31
+<BR>
+<P>&nbsp;&nbsp;*** data packet #2, no Nagle
+<BR>
+<P>&nbsp;&nbsp;Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+&nbsp;&nbsp;Ether: len 1444 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+&nbsp;&nbsp;IP: len 1430 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+&nbsp;&nbsp;TCP: 110-&gt;1024 Seq x8c84cf8d Ack xcae703c ACK Wnd 17520 Data 1390
+<BR>
+<P>&nbsp;&nbsp;*** data packet #3, short MSS
+<BR>
+<P>&nbsp;&nbsp;Fri Feb 28 22:00:26 1997 - e0 recv:
+<BR>
+&nbsp;&nbsp;Ether: len 904 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+<BR>
+&nbsp;&nbsp;IP: len 889 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+<BR>
+&nbsp;&nbsp;TCP: 110-&gt;1024 Seq x8c84d4fb Ack xcae703c ACK PSH Wnd 17520 Data 849
+<BR>
+<P>There _is_ outstanding unacknowledged data (#1), and the next segment is
+<BR>
+_not_ a full MSS (none of them are).  This happens repeatedly throughout
+<BR>
+the trace.
+<BR>
+<P>I stand by my assertion that you have not correctly implemented Nagle.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----
+<BR>
+<P>Finally, just to hit my point home, what is your required API mechanism
+<BR>
+to turn off Nagle?
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20OT%201.1.2%20trace%20--%20Nagle&In-Reply-To=&lt;969378237.0002@hypermail.dummy&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20OT%201.1.2%20trace%20--%20Nagle&In-Reply-To=&lt;969378237.0002@hypermail.dummy&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0249.html">Jerry Toporek: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0251.html">Jerry Toporek: "Re: OT 1.1.2 trace -- Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#250">[ date ]</A>
+<A HREF="index.html#250">[ thread ]</A>
+<A HREF="subject.html#250">[ subject ]</A>
+<A HREF="author.html#250">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

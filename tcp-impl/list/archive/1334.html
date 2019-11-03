@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: viewgraphs on revisions to R</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: viewgraphs on revisions to RFC 2001">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: viewgraphs on revisions to RFC 2001</H1>
+<!-- received="Wed Sep 23 19:14:39 1998" -->
+<!-- isoreceived="19980923231439" -->
+<!-- sent="Wed, 23 Sep 1998 19:13:06 -0700 (PDT)" -->
+<!-- isosent="19980924021306" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: viewgraphs on revisions to RFC 2001" -->
+<!-- id="Roam.SIMCSD.2.0.4.906603186.7912.kcpoon@jurassic" -->
+<!-- inreplyto="199808300130.SAA19711@owl.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20viewgraphs%20on%20revisions%20to%20RFC%202001&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.906603186.7912.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 23 1998 - 22:13:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1335.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1333.html">Andrew Hobson: "Re: OO TCP implementations?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1285.html">Sally Floyd: "viewgraphs on revisions to RFC 2001"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1334">[ date ]</A>
+<A HREF="index.html#1334">[ thread ]</A>
+<A HREF="subject.html#1334">[ subject ]</A>
+<A HREF="author.html#1334">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;     5A.  When a non-duplicate ACK arrives that covers &quot;recover&quot;,
+</EM><BR>
+<EM>&gt; 	 follow step 5 above.  When a non-duplicate ACK arrives
+</EM><BR>
+<EM>&gt; 	 that does not cover &quot;recover&quot; (i.e., a &quot;partial ack&quot;),
+</EM><BR>
+<EM>&gt; 	 retransmit the first unacknowledged segment.  (This is
+</EM><BR>
+<EM>&gt; 	 &quot;NewReno&quot;.) Do not change cwnd or ssthresh, but deflate
+</EM><BR>
+<EM>&gt; 	 the congestion window by removing the additive term with
+</EM><BR>
+<EM>&gt; 	 the count of duplicate acknowledgements.  For the first
+</EM><BR>
+<EM>&gt; 	 partial ACK that arrives, also reset the retransmit timer.
+</EM><BR>
+<P>A very late reply...  Just to repeat what I mentioned in the IETF meeting. The
+<BR>
+reason to reset the retransmit timer only for the first partial ACK is to
+<BR>
+avoid a stop and go behaviour.  But this also limits the number of segments
+<BR>
+NewReno can recover.  An implementation with a coarse grain timer, like in BSD
+<BR>
+RTO is in the order of 500ms, can recover more segments than an implementation
+<BR>
+with a finer grain timer.  The number of segments which can be recovered also
+<BR>
+depends on the RTT.  For a satellite link, RTT is ~520ms.  Say with BSD, RTO
+<BR>
+may be 1.5s for such link.  That means NewReno can only recover 2 additional
+<BR>
+segments before a timeout happens.  And for such LFN, TCP window is usually
+<BR>
+very large.  It is likely that more than 3 segments can be dropped in a window.
+<BR>
+&nbsp;In [H96], the algorithm suggested is a little bit different from the above. 
+<BR>
+During the fast retransmit phase, a slow start like mechanism is used.  That
+<BR>
+means for one RTT, more than one segment can be recovered.  NewReno can only
+<BR>
+recover one segment.  This reduces the impact of stop and go behaviour.  This
+<BR>
+is more aggressive and can potentially retransmit quite a few duplicate
+<BR>
+segments.  But for LFN, this can be a big help.  For relatively small window
+<BR>
+and short RTT, the gain is small compared to NewReno.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20viewgraphs%20on%20revisions%20to%20RFC%202001&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.906603186.7912.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1335.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1333.html">Andrew Hobson: "Re: OO TCP implementations?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1285.html">Sally Floyd: "viewgraphs on revisions to RFC 2001"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1334">[ date ]</A>
+<A HREF="index.html#1334">[ thread ]</A>
+<A HREF="subject.html#1334">[ subject ]</A>
+<A HREF="author.html#1334">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

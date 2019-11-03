@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Comments on draft-ietf-tcpimpl-p</TITLE>
+<META NAME="Author" CONTENT="Geert Jan de Groot (GeertJan.deGroot@bsdi.com)">
+<META NAME="Subject" CONTENT="Comments on draft-ietf-tcpimpl-pmtud-01.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Comments on draft-ietf-tcpimpl-pmtud-01.txt</H1>
+<!-- received="Thu May 27 19:09:19 1999" -->
+<!-- isoreceived="19990527230919" -->
+<!-- sent="Fri, 28 May 1999 00:58:11 +0200" -->
+<!-- isosent="19990527225811" -->
+<!-- name="Geert Jan de Groot" -->
+<!-- email="GeertJan.deGroot@bsdi.com" -->
+<!-- subject="Comments on draft-ietf-tcpimpl-pmtud-01.txt" -->
+<!-- id="199905272259.AAA20868@berserkly.bsdi.com" -->
+<STRONG>From:</STRONG> Geert Jan de Groot (<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905272259.AAA20868@berserkly.bsdi.com&gt;"><EM>GeertJan.deGroot@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 27 1999 - 18:58:11 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1732.html">Joo Change-hee: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1733">[ date ]</A>
+<A HREF="index.html#1733">[ thread ]</A>
+<A HREF="subject.html#1733">[ subject ]</A>
+<A HREF="author.html#1733">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I would like to make a couple of comments on the Path MTU Discovery 
+<BR>
+Problems draft, and perhaps have a little discussion on it.
+<BR>
+<P>First, a quicky at the end of the document:
+<BR>
+<P><EM>&gt;3.3.   Determining MSS from PMTU
+</EM><BR>
+...
+<BR>
+<EM>&gt;     The MSS advertised at the start of a connection should be based on
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<BR>
+<EM>&gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<BR>
+<EM>&gt;     determined values to determine the MSS to advertise.
+</EM><BR>
+<EM>&gt;     This results in an advertised MSS that is smaller than the largest
+</EM><BR>
+<EM>&gt;     MTU the system can receive.
+</EM><BR>
+<P>I would like to change the marked sentence with:
+<BR>
+The MSS advertised at the start of a connection should be based on
+<BR>
+the largest MTU of all interfaces on the system.
+<BR>
+<P>Rationale: assume a TCP connect happens over an ethernet interface.
+<BR>
+While the TCP session is alive, routing changes and the session is
+<BR>
+now routed over an FDDI interface. If mss would have been 1460 (ethernet),
+<BR>
+we would see micrograms on the FDDI interface unneccesary.
+<BR>
+I just want to make the original text more explicit, that's all.
+<BR>
+<P>Then the real issue:
+<BR>
+<EM>&gt;3.1.     Black Hole Detection
+</EM><BR>
+...
+<BR>
+<EM>&gt;     Path MTU Discovery (PMTUD) works by sending out as large a packet
+</EM><BR>
+<EM>&gt;     as possible, with the Don't Fragment (DF) bit set in the IP header.
+</EM><BR>
+<EM>&gt;     If the packet is too large for a router to forward on to a particu-
+</EM><BR>
+<EM>&gt;     lar link, the router must send an ICMP Destination Unreachable --
+</EM><BR>
+<EM>&gt;     Fragmentation Needed message to the source address.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;     As was pointed out in [RFC1435], routers don't always do this cor-
+</EM><BR>
+<EM>&gt;     rectly -- many routers fail to send the ICMP messages, for a vari-
+</EM><BR>
+<EM>&gt;     ety of reasons ranging from kernel bugs to configuration problems.
+</EM><BR>
+<EM>&gt;     Firewalls are often misconfigured to supress all ICMP messages.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;     PMTUD, as documented in [RFC1191], fails when confronted with this
+</EM><BR>
+<EM>&gt;     problem.  The upper-layer protocol continues to try to send large
+</EM><BR>
+<EM>&gt;     packets and, without the ICMP messages, never discovers that it
+</EM><BR>
+<EM>&gt;     needs to reduce the size of those packets.  Its packets are disap-
+</EM><BR>
+<EM>&gt;     pearing into a PMTUD black hole.
+</EM><BR>
+<P>I would like to make things more explicit by adding another scenario,
+<BR>
+one that I'm seeing every few weeks, and which IMHO warrants either
+<BR>
+explicit mentioning in an RFC. This is a typical scenario:
+<BR>
+- Many ISP's now run with MTU~4470 in their cloud, also on serial
+<BR>
+&nbsp;&nbsp;lines to their customers;
+<BR>
+- An uncreasing number of webfarms apperently allow this large an MTU
+<BR>
+&nbsp;&nbsp;all the way to the web server;
+<BR>
+- Assume a typical customer of such an ISP, using a Cisco box with
+<BR>
+&nbsp;&nbsp;Cisco-HDLC framing (which apperently doesn't catch MTU mismatches).
+<BR>
+&nbsp;&nbsp;Customer has a cache box with ethernet (to the Cisco), and FDDI
+<BR>
+&nbsp;&nbsp;(to the internal network), and hence MSS = 4352 - 40 = 4312 bytes.
+<BR>
+- Note that the default MTU on Cisco serial lines is 1500 bytes.
+<BR>
+<P>If the customer surfs to such a high-MTU site, we see the SYN exchange,
+<BR>
+the HTTP request gets sent, but data never arrives at the cache.
+<BR>
+Investigation reveals that large packets are sent on the serial line
+<BR>
+to the customer router, however because it's configured for smaller MTU,
+<BR>
+this packet overruns the input buffer, so the packet is dropped
+<BR>
+(and the giants error counter is bumped up).
+<BR>
+It is important to note that, since the packet is not received correctly,
+<BR>
+no ICMP message is sent, and therefore we have a blackhole scenario.
+<BR>
+<P>In defense I must mention that if the ISP sets up the customer router, 
+<BR>
+the serial line is configured with the correct MTU, however chances
+<BR>
+are that the customer sets up the router himself, the configuration
+<BR>
+is lost at an upgrade or otherwise.
+<BR>
+<P>We see this kind of problem as a support case every few weeks; I have poked 
+<BR>
+a bit around and there are numerous places where this potential problem
+<BR>
+currently exists (but is masked in practive by a 1500-MTU hop
+<BR>
+somewhere in the field).
+<BR>
+<P><EM>&gt;Implications
+</EM><BR>
+<EM>&gt;     This failure is especially difficult to debug, as pings and some
+</EM><BR>
+<EM>&gt;     interactive TCP connections to the destination host work.  Bulk
+</EM><BR>
+<EM>&gt;     transfers fail with the first large packet and the connection even-
+</EM><BR>
+<EM>&gt;     tually times out.
+</EM><BR>
+<P>Note however, that it is possible to diagnose this by pinging with 
+<BR>
+large packets: from the customer, try to ping the Cisco, then ping with
+<BR>
+32K packets. If this all succeeds, repeat both tests with the ISP end
+<BR>
+of the serial line. If the large packet ping test fails, you have the 
+<BR>
+problem (though for completeness, the test should be run from both ends)
+<BR>
+<P><EM>&gt;     TCP should notice that the connection is timing out.  After several
+</EM><BR>
+<EM>&gt;     timeouts, TCP should attempt to send smaller packets, perhaps turn-
+</EM><BR>
+<EM>&gt;     ing off the DF flag for each packet.  If this succeeds, it should
+</EM><BR>
+<EM>&gt;     continue to turn off PMTUD for the connection for some reasonable
+</EM><BR>
+<EM>&gt;     period of time, after which it should probe again to try to deter-
+</EM><BR>
+<EM>&gt;     mine if the path has changed.
+</EM><BR>
+<P>I am not sure if I agree with this. First, there is a huge performance
+<BR>
+impact; second, there is ambiguity between packets dropped because of
+<BR>
+MTU problems and packets dropped because of congestion. The side effect
+<BR>
+of the suggestion above is that congestion might lead to sending
+<BR>
+micrograms unneccesary.
+<BR>
+Second, this requires changes in the web server config, while it's
+<BR>
+the _client_ path that's broken. I see no big incentive for webserver
+<BR>
+maintainers to install this workaround if it becomes available.
+<BR>
+<P>So, my questions are:
+<BR>
+- Is it appropiate to document the scenario above explicitely?
+<BR>
+- Should it be documented in a tcpimpl document (it's not a tcpimpl issue!)
+<BR>
+- I don't agree with the blackhole workaround, and believe it should
+<BR>
+&nbsp;&nbsp;not be recommended.
+<BR>
+<P>Comments?
+<BR>
+<P>Geert Jan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1732.html">Joo Change-hee: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1733">[ date ]</A>
+<A HREF="index.html#1733">[ thread ]</A>
+<A HREF="subject.html#1733">[ subject ]</A>
+<A HREF="author.html#1733">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

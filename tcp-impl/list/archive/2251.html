@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Doubletree RST 'BOF' meeting not</TITLE>
+<META NAME="Author" CONTENT="IETF user (ietfuser@wired-128-112.ietf.marconi.com)">
+<META NAME="Subject" CONTENT="Doubletree RST 'BOF' meeting notes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Doubletree RST 'BOF' meeting notes</H1>
+<!-- received="Wed Aug  2 16:23:01 2000" -->
+<!-- isoreceived="20000802202301" -->
+<!-- sent="Wed, 2 Aug 2000 16:07:44 -0400 (EDT)" -->
+<!-- isosent="20000802200744" -->
+<!-- name="IETF user" -->
+<!-- email="ietfuser@wired-128-112.ietf.marconi.com" -->
+<!-- subject="Doubletree RST 'BOF' meeting notes" -->
+<!-- id="200008022007.QAA05076@wired-128-112.ietf.marconi.com" -->
+<STRONG>From:</STRONG> IETF user (<A HREF="mailto:ietfuser@wired-128-112.ietf.marconi.com?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;200008022007.QAA05076@wired-128-112.ietf.marconi.com&gt;"><EM>ietfuser@wired-128-112.ietf.marconi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 16:07:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2258.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2261.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2262.html">Craig Partridge: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2281.html">Bob Braden: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2251">[ date ]</A>
+<A HREF="index.html#2251">[ thread ]</A>
+<A HREF="subject.html#2251">[ subject ]</A>
+<A HREF="author.html#2251">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Attendees:  Ian Heavens (&quot;chair&quot;/minutes,Spider Software), William Gilliam (HP),
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Joe Touch (ISI), Bernie Volz (IPworks), Tom Lane (sss?), Scott Lawrence (Agranat)
+<BR>
+<P>I hope these notes reflect the discussion - please add/correct if not!
+<BR>
+It was (as always at the IETF) a spirited discussion and I may have
+<BR>
+not always reflected the consensus accurately. 
+<BR>
+<P>1.  Error codes with RSTs
+<BR>
+<P>Two approaches to this were apparent - useful diagnostic tool (just need to 
+<BR>
+see these on the wire) - and whether the receiver could do anything useful
+<BR>
+with them.  As pointed out on the mailing list, the RST data field is
+<BR>
+not appropriate for the latter  - no API, and standardising this might (or will)
+<BR>
+overlap with other current uses.  Joe Touch pointed out that what is
+<BR>
+really needed is a generic &quot;Instrumentation Option&quot; that can be carried
+<BR>
+in any segment.  However, the &quot;send RST error code&quot; option would have
+<BR>
+to default to on (send it unless the receiver NAKs the option request),
+<BR>
+or the current usefulness of using the data field would be lost (until
+<BR>
+receiver TCP implementations supported the option).  Instrumentation option
+<BR>
+could be passed to the application as SACK option implementation supports this.
+<BR>
+[the SACK people would like this option too - Matt Matthis told me afterwards
+<BR>
+however that currently SACK options must be sent with the SYN as some implementations
+<BR>
+fall over if the first TCP option is sent with a non-SYN segment.  So this
+<BR>
+must be solved before the instrumentation option is generally useful.
+<BR>
+<P>Two conclusions: [1] Instrumentation option generally useful and the only mechanism
+<BR>
+by which RST error codes can be standardised [2] RST error code taxonomy
+<BR>
+can still be published as an Informational RFC as it will be needed for
+<BR>
+use by the instrumentation option (and TCP implementations that send data
+<BR>
+with RSTs in this way can - at least - use agreed codes) [is anyone arguing
+<BR>
+that it is bad to use RST data in this manner?  Or just that it cannot be
+<BR>
+reserved for this usage?]. 
+<BR>
+<P>I don't know if anyone wants to follow up the instrumentation option issue??
+<BR>
+HP/Mentat/Spider/(Sun?) will complete and submit my RST error codes draft. 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+2. TIME-WAIT and RSTs
+<BR>
+<P>There is no TIME-WAIT after RST (first submitted in expired draft by myself
+<BR>
+in 1994 I think..) and so no protection against acceptance of stale data
+<BR>
+by a new connection.  Solutions discussed in that draft and Joe Touch's paper
+<BR>
+on using RSTs to transfer responsibility for TIME-WAIT from servers to clients.
+<BR>
+Basically TIME-WAIT after sending a RST (in ESTABLISHED and half-closed states)
+<BR>
+with 'soft and hard TIME-WAIT' indicating how RSTs are treated in TIME-WAIT
+<BR>
+(stemming from RFC 1337 and Joe's paper).
+<BR>
+<P>We discussed the implementation issues in supporting many TIME-WAITS - as this
+<BR>
+was perceived at the time as an obstacle to solving the issue, since TIME-WAIT
+<BR>
+after RST will increase the number of connections in TIME-WAIT state: 
+<BR>
+these are well documented and understood now.
+<BR>
+&nbsp;
+<BR>
+I will submit the &quot;Problem Statement&quot; again as an Informational RFC (to underline
+<BR>
+that application writers should not abort connections with a RST to circumvent
+<BR>
+TIME-WAIT: Scott Bradner suggested a few years ago that it could be a Best Current
+<BR>
+Practices to reinforce this).  Joe/myself/Ted Faber will submit the solution as an 
+<BR>
+internet draft (whether Informational or standards track will depend on whether
+<BR>
+it is perceived that the solution is preferable to the status quo).  This will
+<BR>
+strongly reference work on implementation issues.
+<BR>
+<P>3.  Miscellaneous application and API issues
+<BR>
+<P>Tom  Lane has highlighted a usage of RSTs that conflicts with RFC 1122 half duplex
+<BR>
+close recommendation (and emphasised in RFC 2525 - contributed by me).  Bernie Volz 
+<BR>
+and Tom discussed this after so I don't know whether the conclusion was that the 
+<BR>
+application should avoid sockets close() and use shutdown() - thereby circumventing 
+<BR>
+RFC 1122 completely (it only applying to use of APIs that close in both directions ).
+<BR>
+To be pursued on the list if appropriate, with possible clarification of RFC 1122
+<BR>
+and RFC 2525.
+<BR>
+<P>The Transport Area WG is appropriate for discussion of the above drafts and the
+<BR>
+authors will bring them to a future IETF meeting...
+<BR>
+<P>Thanks to all those who participated
+<BR>
+<P>ian (about to duck :-)
+<BR>
+<P>PS I will put together a web page with the missing references above
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2252.html">Tom Lane: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2258.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2261.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2262.html">Craig Partridge: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2281.html">Bob Braden: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2251">[ date ]</A>
+<A HREF="index.html#2251">[ thread ]</A>
+<A HREF="subject.html#2251">[ subject ]</A>
+<A HREF="author.html#2251">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

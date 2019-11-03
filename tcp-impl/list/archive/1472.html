@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: out-of-window SYNs ... what to d</TITLE>
+<META NAME="Author" CONTENT="Jason Thorpe (thorpej@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="out-of-window SYNs ... what to do?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>out-of-window SYNs ... what to do?</H1>
+<!-- received="Tue Jan 26 06:13:55 1999" -->
+<!-- isoreceived="19990126111355" -->
+<!-- sent="Tue, 26 Jan 1999 03:06:04 -0800" -->
+<!-- isosent="19990126110604" -->
+<!-- name="Jason Thorpe" -->
+<!-- email="thorpej@nas.nasa.gov" -->
+<!-- subject="out-of-window SYNs ... what to do?" -->
+<!-- id="199901261106.DAA03302@lestat.nas.nasa.gov" -->
+<STRONG>From:</STRONG> Jason Thorpe (<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20out-of-window%20SYNs%20...%20what%20to%20do?&In-Reply-To=&lt;199901261106.DAA03302@lestat.nas.nasa.gov&gt;"><EM>thorpej@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 26 1999 - 06:06:04 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1471.html">The IESG: "Document Action: Known TCP Implementation Problems to Informational"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1472">[ date ]</A>
+<A HREF="index.html#1472">[ thread ]</A>
+<A HREF="subject.html#1472">[ subject ]</A>
+<A HREF="author.html#1472">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi folks...
+<BR>
+<P>While debugging a completely unrelated issue in the NetBSD kernel today,
+<BR>
+I noticed some behavior which I felt warranted some discussion here (and
+<BR>
+please forgive me if this horse has been beaten into mush already...)
+<BR>
+<P>The problem was observed between a diskless Network Computer (`client')
+<BR>
+and home directory server for its workgroup (`server').
+<BR>
+<P>The two systems are using NFSv3 (over TCP) to communicate.
+<BR>
+<P>So, consider the following scenario:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1) client.1023 mounts server.2049.  This causes a TCP connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to be established.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2) Power cord on client is pulled, and reinserted.  Client reboots.
+<BR>
+<P>Now, at this point, you have the server in ESTABLISHED state for this
+<BR>
+connection.  The client thinks here is no connection.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3) client.1023 mounts server.2049.  This causes a TCP connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to be established.
+<BR>
+<P>...except, the connection never completes.  Indeed, server never sends SYN,ACK
+<BR>
+because out-of-window SYNs are simply dropped on the floor.
+<BR>
+<P>At this point, client is hosed.  The only way we can be unwedged is for the
+<BR>
+server to send what it thinks is an in-window packet.  This can be either
+<BR>
+a keepalive (very infrequent) or, if we're lucky, a retransmission of data
+<BR>
+left un-ACK'd when the client went down (much more frequent).  This packet
+<BR>
+will cause the client to generate an RST, which will cause the socket on
+<BR>
+the server to close, which will cause the client's attempts to connect to
+<BR>
+complete (since it will be a &quot;fresh&quot; connection at this point).
+<BR>
+<P>This behavior is probably technically correct (tho, at nearly 3am, I'm too
+<BR>
+tired to go look it up right now).  However, the effect it produces is
+<BR>
+annoying at best.
+<BR>
+<P>While brainstorming, some colleagues and I came up with the idea that
+<BR>
+resending the last ACK for the current window would be a reasonable course
+<BR>
+of action for the server to take in this situation (i.e. when it discovers
+<BR>
+an out-of-window SYN for an established connection).  This would simply
+<BR>
+expedite the discovery of the no-longer-established connection (by forcing
+<BR>
+the client to send the RST sooner).
+<BR>
+<P>Anyhow, I'd appreciate some input on this...
+<BR>
+<P>Thanks!
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- Jason R. Thorpe &lt;<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20out-of-window%20SYNs%20...%20what%20to%20do?&In-Reply-To=&lt;199901261106.DAA03302@lestat.nas.nasa.gov&gt;">thorpej@nas.nasa.gov</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1471.html">The IESG: "Document Action: Known TCP Implementation Problems to Informational"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1472">[ date ]</A>
+<A HREF="index.html#1472">[ thread ]</A>
+<A HREF="subject.html#1472">[ subject ]</A>
+<A HREF="author.html#1472">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

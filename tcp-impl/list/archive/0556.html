@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ICMP must fragment and IPsec</H1>
+<!-- received="Sun Jun 22 20:25:29 1997" -->
+<!-- isoreceived="19970623002529" -->
+<!-- sent="Sun, 22 Jun 1997 21:11:29 -0600" -->
+<!-- isosent="19970623031129" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: ICMP must fragment and IPsec" -->
+<!-- id="199706230311.VAA24233@mica.denver.sgi.com" -->
+<!-- inreplyto="ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230311.VAA24233@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jun 22 1997 - 23:11:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0559.html">Matt Crawford: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#556">[ date ]</A>
+<A HREF="index.html#556">[ thread ]</A>
+<A HREF="subject.html#556">[ subject ]</A>
+<A HREF="author.html#556">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Michael C. Richardson&quot; &lt;<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230311.VAA24233@mica.denver.sgi.com&gt;">mcr@sandelman.ottawa.on.ca</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;     &gt;&gt; ...  I can't think of many cases in the current deployed
+</EM><BR>
+<EM>&gt;     &gt;&gt; internet where the MTU might change during a
+</EM><BR>
+<EM>&gt;     &gt;&gt; connection. ...
+</EM><BR>
+<P><EM>&gt;     Vernon&gt; There is a vast amount of topology on the edges, what with
+</EM><BR>
+<EM>&gt;     Vernon&gt; ATM (9180), FDDI (4352), Ethernet (1500 or 1492), PPP (256
+</EM><BR>
+<EM>&gt;     Vernon&gt; to more than 1500), and Frame Relay.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   But, do any of these things *change* during the course of a TCP
+</EM><BR>
+<EM>&gt; connection?
+</EM><BR>
+<P>They do, at least for plain-vanilla IP in Silicon Graphic's internal
+<BR>
+network.  (Lots of FDDI and some ATM and HIPPI backbones.)  Of course,
+<BR>
+anything through the Internet will be probably filtered to 1500, but
+<BR>
+anyone with HIPPI, 802.5, FDDI, or some flavors of ATM will have other
+<BR>
+PMTU's, at least for &quot;servers on the backbone&quot;.  Add a little
+<BR>
+redundancy--say a few high-metric backup 1500 links in your campus, and
+<BR>
+it's easy to get flappying in your PMTU for some real applications.
+<BR>
+<P>For the duration of an HTTP 1.0 transfer, you'd expect the PMTU to be
+<BR>
+constant.  I often have TCP connections that stay up for days.  Often
+<BR>
+when demand-dialed PPP/ISDN dies, I switch to PPP/modems, and then back
+<BR>
+to PPP/ISDN, keeping the same TCP connections alive.  If I followed
+<BR>
+conventional wisdom for modems, I'd be switching between 1500 and
+<BR>
+something smaller.
+<BR>
+<P><P><EM>&gt;   While the routing on the backbone might change, my guess is that the
+</EM><BR>
+<EM>&gt; MTU between backbone nodes is almost always going to be more than the
+</EM><BR>
+<EM>&gt; 1500 typical of a T1. I guess, two networks, that do ATM with their
+</EM><BR>
+<EM>&gt; supplier could get a much lower MTU if the supplier's ATM backbone
+</EM><BR>
+<EM>&gt; goes down, and the move their backup T1s. 
+</EM><BR>
+<P>Yes, of course, on the &quot;backbone&quot; (whatever that means today).  But
+<BR>
+anyone with FDDI, HIPPI, ATM, 802.5, and PPP out in the marches
+<BR>
+(marshes?) has other PMTU's some of the time, at least between &quot;big
+<BR>
+servers on the backbone.&quot;  Consider big NFS servers doing network
+<BR>
+backups.
+<BR>
+<P><P><EM>&gt;   I don't agree that getting authenticated PMTU information is
+</EM><BR>
+<EM>&gt; impossible. 
+</EM><BR>
+<P>Again, how?  Say you do authenticate router99.bad.guy.net as the
+<BR>
+furshure source of the PMTU info, in whatever form, that you just got.
+<BR>
+How do you know that router99.bad.guy.net is in your path?  It seems to
+<BR>
+me that if you could know your path reliably, a lot of problems would
+<BR>
+be vastly easier, from IP security to IP routing.  For that matter, if
+<BR>
+you know which routers that might touch your packets, then also knowing
+<BR>
+the MTU's of their links is a trivial addition, and so you don't need
+<BR>
+any ad hoc or post hoc Path MTU discoverying, timers, probing, DF-bit
+<BR>
+kludges, lost user-data etc.
+<BR>
+<P>Well, I guess you could require everyone use a link-state routing
+<BR>
+protocol that covers the entire Internet, and have every host maintain
+<BR>
+a global link-state table, and pay attention to PMTU, source quench,
+<BR>
+etc only from routers that are on a path that is close to the current
+<BR>
+minimum for your packets.  Or continually use something like
+<BR>
+`traceroute` to map the path, and pay attention only to PTMU info from
+<BR>
+close to most recent path.  Or we could get rid of TCP and switch to
+<BR>
+XTP--I think the initial route setup of XTP could be changed to track
+<BR>
+the path.  Or best, get rid of IP and run TCP over ATM end-to-end.
+<BR>
+<P>My point is that (reasonable) packet switching means not knowing who's
+<BR>
+moving your packets, at least in large networks, and there's no
+<BR>
+escaping the implications of that fact.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706230311.VAA24233@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+æÔ$˝˘dOI+ÛÎ2zÂtè‡Ÿ”Çœ…≈¡jπ∞´•°áA9õî&amp;\
+<BR>
+.pdefaults
+<BR>
+.loc-cshrc
+<BR>
+.nevotinit
+<BR>
+.gamtables
+<BR>
+.signature
+<BR>
+.sgihelprc
+<BR>
+.insightrc
+<BR>
+.Xdefaults
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0559.html">Matt Crawford: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#556">[ date ]</A>
+<A HREF="index.html#556">[ thread ]</A>
+<A HREF="subject.html#556">[ subject ]</A>
+<A HREF="author.html#556">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

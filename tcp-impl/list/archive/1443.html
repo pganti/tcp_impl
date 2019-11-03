@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 18:33:37 1999" -->
+<!-- isoreceived="19990104233337" -->
+<!-- sent="Mon, 4 Jan 1999 16:33:12 -0700 (MST)" -->
+<!-- isosent="19990104233312" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901042333.QAA03867@calcite.rhyolite.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042333.QAA03867@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 18:33:12 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1442.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1445.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1443">[ date ]</A>
+<A HREF="index.html#1443">[ thread ]</A>
+<A HREF="subject.html#1443">[ subject ]</A>
+<A HREF="author.html#1443">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042333.QAA03867@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<P><EM>&gt; &gt; collision is small enough.  Incrementing with a clock is one way to get
+</EM><BR>
+<EM>&gt; &gt; &quot;far apart,&quot; but there are plenty of other permutations of the natural
+</EM><BR>
+<P><EM>&gt; Its not as simple as it first looks because BSD also allowed the shortcut
+</EM><BR>
+<EM>&gt; from timewait for sequence spaces subject to certain range rules. That means
+</EM><BR>
+<EM>&gt; you either have to ignore the shortcuts or for a given src,dst,ports pair
+</EM><BR>
+<EM>&gt; keep incrementing sanely
+</EM><BR>
+<P>Or keep asking your crypto random number generator until it gives you a
+<BR>
+number far enough away on the down side that it looks &quot;larger.&quot;  That's
+<BR>
+at most only another factor of two in the hammering on your random number
+<BR>
+generator.  One MD5 is tolerable for RFC 1948 least significant bits on
+<BR>
+modern hardware, but the worst case number of MD5 (or other) cyclings to
+<BR>
+guarantee far apart fully random ISS's sounds large enough that a mere
+<BR>
+factor of two wouldn't matter.
+<BR>
+<P><P>Again, I personally wouldn't bother, and doubt anyone with a clue about
+<BR>
+ISS's would.  It's too easy to fiddle the less significant bits as
+<BR>
+suggested by RFC 1948 or other mechanisms (e.g. usec resolution clocks).
+<BR>
+I also suspect that any real random ISS implementation would not worry
+<BR>
+about getting far apart ISS, but would be be something &quot;kick ass&quot; and
+<BR>
+bogus like ISS=rand(3).
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042333.QAA03867@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P>P.S.  I apologize for not combining this point with my previous message.
+<BR>
+<P>P.P.S.  I've been told that the official doctrine of a certain large
+<BR>
+&nbsp;&nbsp;&nbsp;software outfit is that all of their programmers are &quot;kick ass.&quot;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1442.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1445.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1443">[ date ]</A>
+<A HREF="index.html#1443">[ thread ]</A>
+<A HREF="subject.html#1443">[ subject ]</A>
+<A HREF="author.html#1443">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

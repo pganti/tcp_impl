@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Hung Solaris TCP</TITLE>
+<META NAME="Author" CONTENT="Wu-chang Feng (wfeng@pumatech.com)">
+<META NAME="Subject" CONTENT="Hung Solaris TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Hung Solaris TCP</H1>
+<!-- received="Fri Jun  2 18:04:46 2000" -->
+<!-- isoreceived="20000602220446" -->
+<!-- sent="Fri, 02 Jun 2000 15:01:46 -0700" -->
+<!-- isosent="20000602220146" -->
+<!-- name="Wu-chang Feng" -->
+<!-- email="wfeng@pumatech.com" -->
+<!-- subject="Hung Solaris TCP" -->
+<!-- id="39382ECA.555E23E6@pumatech.com" -->
+<STRONG>From:</STRONG> Wu-chang Feng (<A HREF="mailto:wfeng@pumatech.com?Subject=Re:%20Hung%20Solaris%20TCP&In-Reply-To=&lt;39382ECA.555E23E6@pumatech.com&gt;"><EM>wfeng@pumatech.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 02 2000 - 18:01:46 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2107.html">Kacheong Poon: "Re: Snoop maxcount"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2105.html">Frank: "Re: Snoop maxcount"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2108.html">Kacheong Poon: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2108.html">Kacheong Poon: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2111.html">Markus Peuhkuri: "Re: Hung Solaris TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2106">[ date ]</A>
+<A HREF="index.html#2106">[ thread ]</A>
+<A HREF="subject.html#2106">[ subject ]</A>
+<A HREF="author.html#2106">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Has anyone seen problems with TCP hanging on Solaris when accessing a
+<BR>
+web site over a lossy link?  I've tried hitting pages from
+<BR>
+www.viajeya.com using Solaris 2.6 and Solaris 2.7 (11/99 version). 
+<BR>
+When packets arrive ordered correctly, the request immediately
+<BR>
+returns.  When the last couple of packets come back out of order, the
+<BR>
+client TCP (in this case either a manual telnet or a squid cache
+<BR>
+process) sits around indefinitely.....Here's a tcpdump trace of two
+<BR>
+identical requests: one fails and the other is OK.
+<BR>
+<P>Wu
+<BR>
+<P>Bad request
+<BR>
+-----------
+<BR>
+14:45:12.511537 panamint.35323 &gt; 200.10.104.13.80: S
+<BR>
+1806393459:1806393459(0) win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+14:45:13.259467 200.10.104.13.80 &gt; panamint.35323: S
+<BR>
+2085229208:2085229208(0) ack 1806393460 win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+14:45:13.259495 panamint.35323 &gt; 200.10.104.13.80: . ack 1 win 8760
+<BR>
+(DF)
+<BR>
+14:45:14.198208 panamint.35323 &gt; 200.10.104.13.80: P 1:42(41) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+14:45:15.144267 200.10.104.13.80 &gt; panamint.35323: . ack 42 win 8719
+<BR>
+(DF)
+<BR>
+14:45:15.144291 panamint.35323 &gt; 200.10.104.13.80: P 42:44(2) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+14:45:15.966015 200.10.104.13.80 &gt; panamint.35323: P 1660:1665(5) ack
+<BR>
+44 win 8717 (DF)
+<BR>
+14:45:15.966058 panamint.35323 &gt; 200.10.104.13.80: P 44:46(2) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+14:45:15.966069 panamint.35323 &gt; 200.10.104.13.80: . ack 1 win 8760
+<BR>
+(DF)
+<BR>
+14:45:15.970164 200.10.104.13.80 &gt; panamint.35323: P 1:200(199) ack 44
+<BR>
+win 8717 (DF)
+<BR>
+14:45:15.970206 panamint.35323 &gt; 200.10.104.13.80: . ack 200 win 8760
+<BR>
+(DF)
+<BR>
+14:45:16.163957 200.10.104.13.80 &gt; panamint.35323: P 200:1660(1460)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:45:16.163984 panamint.35323 &gt; 200.10.104.13.80: . ack 1665 win 8760
+<BR>
+(DF)
+<BR>
+14:45:16.973773 200.10.104.13.80 &gt; panamint.35323: P 3125:4585(1460)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:16.973804 panamint.35323 &gt; 200.10.104.13.80: . ack 1665 win 8760
+<BR>
+(DF)
+<BR>
+14:45:16.986916 200.10.104.13.80 &gt; panamint.35323: P 1665:3125(1460)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:16.986940 panamint.35323 &gt; 200.10.104.13.80: . ack 4585 win 8760
+<BR>
+(DF)
+<BR>
+14:45:17.184131 200.10.104.13.80 &gt; panamint.35323: P 6045:7505(1460)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:17.184154 panamint.35323 &gt; 200.10.104.13.80: . ack 4585 win 8760
+<BR>
+(DF)
+<BR>
+14:45:17.327897 200.10.104.13.80 &gt; panamint.35323: P 4585:6045(1460)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:17.327925 panamint.35323 &gt; 200.10.104.13.80: . ack 7505 win 8760
+<BR>
+(DF)
+<BR>
+14:45:17.805154 200.10.104.13.80 &gt; panamint.35323: FP 8965:9198(233)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:17.805187 panamint.35323 &gt; 200.10.104.13.80: . ack 7505 win 8760
+<BR>
+(DF)
+<BR>
+14:45:18.009141 200.10.104.13.80 &gt; panamint.35323: P 7505:8965(1460)
+<BR>
+ack 46 win 8715 (DF)
+<BR>
+14:45:18.009166 panamint.35323 &gt; 200.10.104.13.80: . ack 9198 win 8760
+<BR>
+(DF)
+<BR>
+-------&gt;Connection killed manually after 5 minutes.
+<BR>
+14:50:09.086690 panamint.35323 &gt; 200.10.104.13.80: P 46:51(5) ack 9198
+<BR>
+win 8760 (DF)
+<BR>
+14:50:09.638441 200.10.104.13.80 &gt; panamint.35323: R
+<BR>
+2085238407:2085238407(0) win 0 (DF)
+<BR>
+<P><P>Good request:
+<BR>
+-------------
+<BR>
+14:43:30.073361 panamint.35321 &gt; 200.10.104.13.80: S
+<BR>
+1793430152:1793430152(0) win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+14:43:30.578465 200.10.104.13.80 &gt; panamint.35321: S
+<BR>
+2085100976:2085100976(0) ack 1793430153 win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+14:43:30.578489 panamint.35321 &gt; 200.10.104.13.80: . ack 1 win 8760
+<BR>
+(DF)
+<BR>
+14:43:37.043337 panamint.35321 &gt; 200.10.104.13.80: P 1:42(41) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+14:43:37.696615 200.10.104.13.80 &gt; panamint.35321: . ack 42 win 8719
+<BR>
+(DF)
+<BR>
+14:43:37.696650 panamint.35321 &gt; 200.10.104.13.80: P 42:44(2) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+14:43:38.198522 200.10.104.13.80 &gt; panamint.35321: P 1:200(199) ack 44
+<BR>
+win 8717 (DF)
+<BR>
+14:43:38.198673 panamint.35321 &gt; 200.10.104.13.80: . ack 200 win 8760
+<BR>
+(DF)
+<BR>
+14:43:38.371998 200.10.104.13.80 &gt; panamint.35321: P 200:1660(1460)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:38.372097 panamint.35321 &gt; 200.10.104.13.80: . ack 1660 win 8760
+<BR>
+(DF)
+<BR>
+14:43:38.372325 200.10.104.13.80 &gt; panamint.35321: P 1660:1665(5) ack
+<BR>
+44 win 8717 (DF)
+<BR>
+14:43:38.420311 panamint.35321 &gt; 200.10.104.13.80: . ack 1665 win 8760
+<BR>
+(DF)
+<BR>
+14:43:38.787564 200.10.104.13.80 &gt; panamint.35321: P 1665:3125(1460)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:38.830446 panamint.35321 &gt; 200.10.104.13.80: . ack 3125 win 8760
+<BR>
+(DF)
+<BR>
+14:43:38.994654 200.10.104.13.80 &gt; panamint.35321: P 3125:4585(1460)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:39.040430 panamint.35321 &gt; 200.10.104.13.80: . ack 4585 win 8760
+<BR>
+(DF)
+<BR>
+14:43:39.048770 200.10.104.13.80 &gt; panamint.35321: P 4585:6045(1460)
+<BR>
+ack 44 win 8717 (DF) 
+<BR>
+14:43:39.048834 200.10.104.13.80 &gt; panamint.35321: . 8960:8965(5) ack
+<BR>
+44 win 8717 (DF)
+<BR>
+14:43:39.048859 panamint.35321 &gt; 200.10.104.13.80: . ack 6045 win 8760
+<BR>
+(DF)
+<BR>
+14:43:39.109748 200.10.104.13.80 &gt; panamint.35321: P 6045:7500(1455)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:39.109773 panamint.35321 &gt; 200.10.104.13.80: . ack 7500 win 8760
+<BR>
+(DF)
+<BR>
+14:43:39.133228 200.10.104.13.80 &gt; panamint.35321: P 7500:8960(1460)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:39.133255 panamint.35321 &gt; 200.10.104.13.80: . ack 8965 win 8760
+<BR>
+(DF)
+<BR>
+14:43:39.340590 200.10.104.13.80 &gt; panamint.35321: FP 8965:9198(233)
+<BR>
+ack 44 win 8717 (DF)
+<BR>
+14:43:39.340702 panamint.35321 &gt; 200.10.104.13.80: . ack 9199 win 8760
+<BR>
+(DF)
+<BR>
+14:43:39.341280 panamint.35321 &gt; 200.10.104.13.80: F 44:44(0) ack 9199
+<BR>
+win 8760 (DF)
+<BR>
+14:43:39.829074 200.10.104.13.80 &gt; panamint.35321: . ack 45 win 8717
+<BR>
+(DF)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2107.html">Kacheong Poon: "Re: Snoop maxcount"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2105.html">Frank: "Re: Snoop maxcount"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2108.html">Kacheong Poon: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2108.html">Kacheong Poon: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2111.html">Markus Peuhkuri: "Re: Hung Solaris TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2106">[ date ]</A>
+<A HREF="index.html#2106">[ thread ]</A>
+<A HREF="subject.html#2106">[ subject ]</A>
+<A HREF="author.html#2106">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

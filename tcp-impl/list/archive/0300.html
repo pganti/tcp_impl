@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Jim Gettys (jg@pa.dec.com)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Wed Apr  2 12:44:07 1997" -->
+<!-- isoreceived="19970402174407" -->
+<!-- sent="Wed, 2 Apr 1997 12:25:50 -0800" -->
+<!-- isosent="19970402202550" -->
+<!-- name="Jim Gettys" -->
+<!-- email="jg@pa.dec.com" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="9704022025.AA09973@pachyderm.pa.dec.com" -->
+<!-- inreplyto="TCP buffers" -->
+<STRONG>From:</STRONG> Jim Gettys (<A HREF="mailto:jg@pa.dec.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;9704022025.AA09973@pachyderm.pa.dec.com&gt;"><EM>jg@pa.dec.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 15:25:50 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0299.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#300">[ date ]</A>
+<A HREF="index.html#300">[ thread ]</A>
+<A HREF="subject.html#300">[ subject ]</A>
+<A HREF="author.html#300">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bear with me here, folks: I'm not a true TCP guru...  I may be confused
+<BR>
+(probably am).  You may be missing nothing, and I may be confused on how
+<BR>
+TCP works.
+<BR>
+<P>Craig says:
+<BR>
+<P><EM>&gt;      The reality of HTTP is that it is an interactive bulk transport
+</EM><BR>
+<EM>&gt;      protocol; i.e. there are users, who often changes their minds as a result
+</EM><BR>
+<EM>&gt;      of what they see on the screen, and then surf on to another page
+</EM><BR>
+<EM>&gt;      (or further down the screen, with a different set of embedded graphics
+</EM><BR>
+<EM>&gt;      to fetch).
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      Control of latency by a browser is therefore important.  This isn't just
+</EM><BR>
+<EM>&gt;      file transfer...
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  Jim:
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      Sanity check for me here.  I don't see how this affects window size
+</EM><BR>
+<EM>&gt;      management by the client unless the client is severely CPU limited.
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      Let me go through the separate problems.  I assume in all cases the
+</EM><BR>
+<EM>&gt;      window is equal to the delay*bandwidth product (if it is smaller, the
+</EM><BR>
+<EM>&gt;      problems get less bad, if it is bigger, it is never filled, so this
+</EM><BR>
+<EM>&gt;      seems the right spot to pick)
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      1. Client goes to another page on same server
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  	- their request gets to sent to remote server immediately
+</EM><BR>
+<EM>&gt;  	(the reverse traffic is small and completely under user control,
+</EM><BR>
+<EM>&gt;  	so failure to achieve immediate transmission is a client application
+</EM><BR>
+<EM>&gt;  	programming error if Nagle is turned off, nothing to do with window
+</EM><BR>
+<EM>&gt;  	size)
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  	- server gets request in 1/2 RTT and starts sending
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  	- meanwhile client discards all data up to new page
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  	- result is client sees new page in 1 RTT which is the goal.
+</EM><BR>
+<EM>&gt;  	Furthermore since client has been draining the window assiduously,
+</EM><BR>
+<EM>&gt;  	the page comes at full bandwidth.
+</EM><BR>
+<P>The question is how much data gets queued in the final router driving 
+<BR>
+the PPP link to the end user.  This is where most of the delay occurs, 
+<BR>
+and where the packets congregate.  The question is: how many packets can 
+<BR>
+congregate in this final router?  There is no way for a client to discard 
+<BR>
+them, once they have been sent (and the client wouldn't want to in any 
+<BR>
+case; he'd just as soon put the data in its cache).  Any packets sent 
+<BR>
+will accumulate there.
+<BR>
+<P>Now, the question is therefore how many packets might get queued in this
+<BR>
+router.  With current browser behavior, a client might have 4 times as much
+<BR>
+data in flight (over 4 separate connections; that is how the current browsers
+<BR>
+work).  With HTTP/1.1, things might be better, as a good client might be
+<BR>
+using just one connection.
+<BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      2. Client goes to another page on another server
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  	- TCP connection to new server established
+</EM><BR>
+<EM>&gt;  	- request gets sent to new server
+</EM><BR>
+<EM>&gt;  	- replies start back, subject to slow start
+</EM><BR>
+<EM>&gt;  	- bandwidth less than full until slow start over
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      3. Client is going through proxy (makes case 2 into case 1)
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;      4. Client goes further down page, another version of case 1.
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  What am I missing?
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  Thanks!
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt;  Craig
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0299.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#300">[ date ]</A>
+<A HREF="index.html#300">[ thread ]</A>
+<A HREF="subject.html#300">[ subject ]</A>
+<A HREF="author.html#300">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

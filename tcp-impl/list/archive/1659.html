@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Mar  3 19:08:00 1999" -->
+<!-- isoreceived="19990304000800" -->
+<!-- sent="Wed, 3 Mar 1999 17:00:59 -0700 (MST)" -->
+<!-- isosent="19990304000059" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199903040000.RAA20144@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903040000.RAA20144@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 19:00:59 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1658.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1659">[ date ]</A>
+<A HREF="index.html#1659">[ thread ]</A>
+<A HREF="subject.html#1659">[ subject ]</A>
+<A HREF="author.html#1659">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Bill Fenner &lt;<A HREF="mailto:fenner@parc.xerox.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903040000.RAA20144@calcite.rhyolite.com&gt;">fenner@parc.xerox.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; I think a lot of the question of what applying Nagle on a per-send
+</EM><BR>
+<EM>&gt; basis means includes what happens when data is delayed due to cwnd
+</EM><BR>
+<EM>&gt; or the receive window.  My imagination says that you keep another
+</EM><BR>
+<EM>&gt; variable in the TCB that's the highest sequence number that has
+</EM><BR>
+<EM>&gt; passed Nagle (in order to not delay the last packet of a large
+</EM><BR>
+<EM>&gt; write), but I haven't particularly thought through exactly how this
+</EM><BR>
+<EM>&gt; variable is updated or used except in the obvious case.  In
+</EM><BR>
+<EM>&gt; particular, I don't know how it should be updated when you perform
+</EM><BR>
+<EM>&gt; a send() and there is still data outstanding.
+</EM><BR>
+<P>I think that's still confusing applying the algorithm per-send with
+<BR>
+applying it per-Ack, and that is a Bad Thing(tm).  If you apply the
+<BR>
+algorithm per-send, then future Acks are irrelevant, and there is no need
+<BR>
+to save any state.
+<BR>
+<P>Applying it per-send is the equivalent of:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;link_new_data_into_socket_buffer();
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!idle || !NO_DELAY) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_output();
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>and that's all; no code whatsoever anywhere or anyplace else.
+<BR>
+<P>&quot;delaying per-send&quot; does not mean &quot;delay per-send at first than randomly
+<BR>
+delay arbirary segments at random future times as determined by the
+<BR>
+vagaries of interface and MTU changes.&quot;
+<BR>
+<P>If you are delaying-per-send, then there should be at most one opportunity
+<BR>
+for the entire blob of application data to be delayed.  If some of the
+<BR>
+data is not delayed at first, then none of it should ever be delayed at
+<BR>
+all.  If any of it is delayed, of course), then all of it should be
+<BR>
+delayed.  Later (e.g. when an Ack arrives), all of the data should be
+<BR>
+sent, just as it is now sent in a system with TCP_NODELAY=1.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903040000.RAA20144@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><P>P.S. I'm sending to <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903040000.RAA20144@calcite.rhyolite.com&gt;">tcp-impl@lerc.nasa.gov</A> instead of @grc.nasa.gov because
+<BR>
+&nbsp;&nbsp;that's how the return address arrived here.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1660.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1658.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1659">[ date ]</A>
+<A HREF="index.html#1659">[ thread ]</A>
+<A HREF="subject.html#1659">[ subject ]</A>
+<A HREF="author.html#1659">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

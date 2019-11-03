@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: new version of TCP Congestio</TITLE>
+<META NAME="Author" CONTENT="Neal Cardwell (cardwell@cs.washington.edu)">
+<META NAME="Subject" CONTENT="Re: new version of TCP Congestion Control">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: new version of TCP Congestion Control</H1>
+<!-- received="Wed Dec 23 18:42:35 1998" -->
+<!-- isoreceived="19981223234235" -->
+<!-- sent="Wed, 23 Dec 1998 15:40:05 -0800 (PST)" -->
+<!-- isosent="19981223234005" -->
+<!-- name="Neal Cardwell" -->
+<!-- email="cardwell@cs.washington.edu" -->
+<!-- subject="Re: new version of TCP Congestion Control" -->
+<!-- id="Pine.LNX.4.02A.9812231436220.31401-100000@saba.cs.washington.edu" -->
+<!-- inreplyto="199812181751.MAA07588@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Neal Cardwell (<A HREF="mailto:cardwell@cs.washington.edu?Subject=Re:%20new%20version%20of%20TCP%20Congestion%20Control&In-Reply-To=&lt;Pine.LNX.4.02A.9812231436220.31401-100000@saba.cs.washington.edu&gt;"><EM>cardwell@cs.washington.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Dec 23 1998 - 18:40:05 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1420.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1418.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1416.html">Mark Allman: "new version of TCP Congestion Control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1422.html">Mark Allman: "Re: new version of TCP Congestion Control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1419">[ date ]</A>
+<A HREF="index.html#1419">[ thread ]</A>
+<A HREF="subject.html#1419">[ subject ]</A>
+<A HREF="author.html#1419">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+There seems to be a small ambiguity in section 3.1, &quot;Slow Start and
+<BR>
+Congestion Avoidance&quot;:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;The slow start algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;is used when cwnd &lt; ssthresh, while the congestion avoidance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;algorithm is used when cwnd &gt; ssthresh.  When cwnd and ssthresh are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;equal the sender may use either slow start or congestion avoidance.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;During slow start, a TCP increments cwnd by at most MSS bytes for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;each ACK received that acknowledges new data.  Slow start ends when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;cwnd exceeds ssthresh (or, optionally, when it reaches it, as noted
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;above); or when cwnd reaches rwnd; or when congestion is observed.
+<BR>
+<P>This last sentence says that slow start ends when cwnd reaches rwnd. This
+<BR>
+seems to confuse things a bit. I suspect this sentence is alluding to the
+<BR>
+fact that the exponential growth in sending rate that we usually associate
+<BR>
+with slow start is going to stop when cwnd hits the rwnd ceiling. But it's
+<BR>
+my understanding from reading the popular TCP implementations that the
+<BR>
+more fundamental aspect of slow start -- the increase of cwnd by SMSS
+<BR>
+bytes for each ACK received -- continues even when cwnd is above rwnd, as
+<BR>
+long as cwnd is still below (or at) ssthresh.
+<BR>
+<P>So either
+<BR>
+&nbsp;a) TCP is supposed to exit slow start (stop the exponential growth of
+<BR>
+cwnd) when cwnd reaches rwnd. This makes a lot of sense, but i don't think
+<BR>
+this is what most TCP implementations do, and i don't think this is what
+<BR>
+the draft is proposing. If it is proposing this, then i think the draft
+<BR>
+should be more explicit about what TCP is supposed to do when cwnd hits
+<BR>
+rwnd.
+<BR>
+&nbsp;&nbsp;&nbsp;or
+<BR>
+&nbsp;b) TCP is not supposed to exit slow start (stop the exponential growth of
+<BR>
+cwnd) when cwnd reaches rwnd. In this case, i guess the &quot;or when cwnd
+<BR>
+reaches rwnd; &quot; phrase above should be omitted from the draft.
+<BR>
+<P>Happy Holidays!
+<BR>
+neal
+<BR>
+<P>ps: btw, i guess the &quot;MSS&quot; in the second paragraph above should be &quot;SMSS&quot;.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1420.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1418.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1416.html">Mark Allman: "new version of TCP Congestion Control"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1422.html">Mark Allman: "Re: new version of TCP Congestion Control"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1419">[ date ]</A>
+<A HREF="index.html#1419">[ thread ]</A>
+<A HREF="subject.html#1419">[ subject ]</A>
+<A HREF="author.html#1419">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

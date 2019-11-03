@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Wed Feb 18 11:23:27 1998" -->
+<!-- isoreceived="19980218162327" -->
+<!-- sent="Wed, 18 Feb 1998 14:21:55 -0500 (EST)" -->
+<!-- isosent="19980218192155" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="199802181921.OAA25631@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181921.OAA25631@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 14:21:55 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#959">[ date ]</A>
+<A HREF="index.html#959">[ thread ]</A>
+<A HREF="subject.html#959">[ subject ]</A>
+<A HREF="author.html#959">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Actually the reset on zero window probe problem can be bad. [...]
+</EM><BR>
+<P><EM>&gt; 		send data		ack window (n)
+</EM><BR>
+<EM>&gt; 		send data (n)		ack window (0)
+</EM><BR>
+<EM>&gt; 					shutdown for rx
+</EM><BR>
+<EM>&gt; 					[compute mode]
+</EM><BR>
+<EM>&gt; 		keepalive n+1
+</EM><BR>
+<EM>&gt; 					RST 
+</EM><BR>
+<P><EM>&gt; and the reset tears down both sides of the connection.  For a zero
+</EM><BR>
+<EM>&gt; window probe this is ok so long as the stack never attempts to probe
+</EM><BR>
+<EM>&gt; a zero window unless it has queued data.
+</EM><BR>
+<P>IMO this is not OK even then.  If we call the two machines in your
+<BR>
+example A (left column) and B (right column), then when B shuts down
+<BR>
+for receive, this fact should be pushed back to the application on A
+<BR>
+when a write is attempted (eg, EPIPE/SIGPIPE under BSD), but I can't
+<BR>
+see any excuse for tearing down the B-to-A half of the connection as
+<BR>
+well.  I don't think an RST should be generated unless the connection
+<BR>
+is completely gone on B's end - ie, there is no further possibility of
+<BR>
+anyone on that end doing *any* I/O on it.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181921.OAA25631@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#959">[ date ]</A>
+<A HREF="index.html#959">[ thread ]</A>
+<A HREF="subject.html#959">[ subject ]</A>
+<A HREF="author.html#959">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP keep-alives</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: TCP keep-alives">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP keep-alives</H1>
+<!-- received="Tue Apr 29 16:09:00 1997" -->
+<!-- isoreceived="19970429200900" -->
+<!-- sent="Tue, 29 Apr 1997 19:03:41 -0400 (EDT)" -->
+<!-- isosent="19970429230341" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: TCP keep-alives" -->
+<!-- id="199704292303.TAA03619@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="TCP keep-alives" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;199704292303.TAA03619@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 29 1997 - 19:03:41 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0363.html">sparker@Eng.Sun.COM: "Packet Shell 4.0 release now available"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0370.html">C. Harald Koch: "Re: TCP keep-alives"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#364">[ date ]</A>
+<A HREF="index.html#364">[ thread ]</A>
+<A HREF="subject.html#364">[ subject ]</A>
+<A HREF="author.html#364">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The Host Requirements treatment of TCP keepalives was basically a
+</EM><BR>
+<EM>&gt; compromise.
+</EM><BR>
+(Gee, what a surprise. :-)
+<BR>
+<EM>&gt; So the compromise was to go as far as we could to make keep-alives
+</EM><BR>
+<EM>&gt; disappear without actually banning them...
+</EM><BR>
+<P>Well, I'm glad you didn't ban them, because I've run into a situation
+<BR>
+where they are essential.
+<BR>
+<P>At a certain company whom I'll call XYZ, there is a firewall box that,
+<BR>
+among other things, maintains state for every TCP connection that's
+<BR>
+open through it.
+<BR>
+<P>This is relevant because the firewall box has a timeout on that
+<BR>
+per-connection state.  A connection idle for longer than that timeout
+<BR>
+will have its firewall state dropped, and thereafter its packets won't
+<BR>
+get through when it de-idles.  Keepalives fix this.  (You don't want to
+<BR>
+know how long it took me to figure out what was killing my connections.)
+<BR>
+<P>What's the opinion of the list here?  If keepalives are to be
+<BR>
+condemned, it seems to me we will also have to condemn anything else
+<BR>
+which causes an idle connection to be destroyed, such as a stateful
+<BR>
+router that drops packets for which it has no state (if nothing else,
+<BR>
+the box could crash).  (Yes, I realize RFC1122 _didn't_ condemn
+<BR>
+keepalives, but it sounds as though it tried to come as close as it
+<BR>
+could.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20keep-alives&In-Reply-To=&lt;199704292303.TAA03619@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0363.html">sparker@Eng.Sun.COM: "Packet Shell 4.0 release now available"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0361.html">braden@ISI.EDU: "TCP keep-alives"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0365.html">John Hawkinson: "Re: TCP keep-alives"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0370.html">C. Harald Koch: "Re: TCP keep-alives"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#364">[ date ]</A>
+<A HREF="index.html#364">[ thread ]</A>
+<A HREF="subject.html#364">[ subject ]</A>
+<A HREF="author.html#364">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

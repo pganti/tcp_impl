@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 11 18:08:36 1999" -->
+<!-- isoreceived="19990211230836" -->
+<!-- sent="Thu, 11 Feb 1999 15:06:47 -0800" -->
+<!-- isosent="19990211230647" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36C36287.4CE7ECDC@cup.hp.com" -->
+<!-- inreplyto="199902112223.OAA05610@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36C36287.4CE7ECDC@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 11 1999 - 18:06:47 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1562.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1560.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1563.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1563.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1575.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1561">[ date ]</A>
+<A HREF="index.html#1561">[ thread ]</A>
+<A HREF="subject.html#1561">[ subject ]</A>
+<A HREF="author.html#1561">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; In the case you are doing Nagle on send() (rather than on segments leaving
+</EM><BR>
+<EM>&gt; tcp_output()), then the send(904) would *not* be delayed by the modified Nagle
+</EM><BR>
+<EM>&gt; algorithm.
+</EM><BR>
+<P>OK, I'm losted then :) Or perhaps I missed a clarification:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The proposed Nagle algorithm modifies this as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if any previous less than full-sized packet has not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yet been acknowledged, do not transmit a packet.
+<BR>
+<P>So, the application doing internal buffering in 4096 byte chunks trying
+<BR>
+to send 5000 bytes goes
+<BR>
+<P>send(4096) - this is &gt; MSS so it all goes out right away
+<BR>
+&nbsp;xmit 1460
+<BR>
+&nbsp;xmit 1460
+<BR>
+&nbsp;xmit 1176
+<BR>
+send(904)
+<BR>
+&nbsp;
+<BR>
+the second send call is &lt; MSS, and there is an unacked, less than
+<BR>
+full-sized segment on the network, so the send(904) waits.
+<BR>
+<P>Is the clarification I'm missing that in essence _all_ instances of
+<BR>
+&quot;packet&quot; were replaced by &quot;send?&quot; If a TCP is presented with less than
+<BR>
+an MSS-sized send to transmit, and if any previous less than MSS-sized
+<BR>
+send has not been acknowledged, do not transmit the send. Is that it?
+<BR>
+<P>I've been assuming something a triffle simpler (presumeably) to
+<BR>
+implement - if the send is larger than MSS send all of it now (windows
+<BR>
+willing). If the send is less than MSS, only send it if it and unsent
+<BR>
+data combines to form a &gt;=MSS-sized segment.
+<BR>
+<P>Which have you been assuming?
+<BR>
+<P>rick
+<BR>
+<P>PS - since everyone in the discussion is on the mailing list, might as
+<BR>
+well trim the reply to just tcp-impl - that will serialize the
+<BR>
+discussion through the list server, and cut-down on the number of
+<BR>
+messages some of us receive :)
+<BR>
+<P><PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1562.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1560.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1559.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1563.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1563.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1575.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1561">[ date ]</A>
+<A HREF="index.html#1561">[ thread ]</A>
+<A HREF="subject.html#1561">[ subject ]</A>
+<A HREF="author.html#1561">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

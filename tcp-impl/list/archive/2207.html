@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Fri Jun 30 16:59:03 2000" -->
+<!-- isoreceived="20000630205903" -->
+<!-- sent="Fri, 30 Jun 2000 14:54:52 -0600" -->
+<!-- isosent="20000630205452" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="395D091C.B4068F76@Novell.COM" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.962391871.6789.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395D091C.B4068F76@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 30 2000 - 16:54:52 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2206.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2203.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2207">[ date ]</A>
+<A HREF="index.html#2207">[ thread ]</A>
+<A HREF="subject.html#2207">[ subject ]</A>
+<A HREF="author.html#2207">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Isn't it possible for a receiver who is retransmitting to us to send
+<BR>
+window updates (when the application at the receiving side picked up new
+<BR>
+data)? Also, when the receiver is retransmitting, not every segment
+<BR>
+needs to ACK new data (perhaps we stopped temporarily, perhaps our data
+<BR>
+didn't make it to the receiver), even if it were bidirectional. 
+<BR>
+<P>Here is a solid example. Bidirectional data transfer, receiver
+<BR>
+advertised zero window, as we filled receiver's window, receiver timed
+<BR>
+out and retransmitted (SEG.SEQ &lt; SND.WL1) and then when the application
+<BR>
+at the receiver picked up the data, it sent a window update, with
+<BR>
+SEG.ACK = SND.WL2. Note that we will be doing window probes (and getting
+<BR>
+0 window responses until application at receiver picks up enough data).
+<BR>
+Remember that SEG.SEQ for this window update would be less than SND.WL1.
+<BR>
+Hence, if we ignore this window update (or use the 3rd check mentioned
+<BR>
+by Alexy), until the receiver retransmits all lost data and its SEG.SEQ
+<BR>
+crosses SND.WL1, we won't ever be able to send anything.
+<BR>
+<P>I don't know what you mean by &quot;old&quot; segments. The basic check of SND.UNA
+<BR>
+&lt;= SEG.ACK &lt;= SND.MAX must have been already made when we do the send
+<BR>
+window update check. Hence, If the receiver sent an ACK which got
+<BR>
+delayed, and during retransmit sent another plain ACK (with a higher ACK
+<BR>
+#), and we updated SND.WL2 and the ACK which got delayed is received,
+<BR>
+then we would not be accepting that old ack as SEG.ACK &lt; SND.UNA (and
+<BR>
+essentially SND.WL2).
+<BR>
+<P>Am I missing something very obvious?
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P>Kacheong Poon wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; What I meant to say was that when receiver is retransmitting, SEG.SEQ
+</EM><BR>
+<EM>&gt; &gt; will be &lt; SND.WL1. Hence, the third check must use SND.WL2 to handle
+</EM><BR>
+<EM>&gt; &gt; pure ACKs having window updates. This was one of the issues that I
+</EM><BR>
+<EM>&gt; &gt; started off the whole discussion with :-)).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hmm, in the original mail, you mentioned that it was a bi-directional
+</EM><BR>
+<EM>&gt; transfer.  So the retransmission should better ack some data.  If it
+</EM><BR>
+<EM>&gt; ack's some data, then the window update should be accepted.  It seems
+</EM><BR>
+<EM>&gt; to me that what you are suggesting here is that TCP should accept window
+</EM><BR>
+<EM>&gt; updates from old segment without new data being acked.  I don't think
+</EM><BR>
+<EM>&gt; it is a good idea.  How can you know for sure that the segment you get
+</EM><BR>
+<EM>&gt; is really a retransmission or just the old original one, if the ack
+</EM><BR>
+<EM>&gt; stays the same.  Do you really mean that?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;                                                         K. Poon.
+</EM><BR>
+<EM>&gt;                                                         <A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395D091C.B4068F76@Novell.COM&gt;">kcpoon@eng.sun.com</A>
+</EM><BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2207/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2206.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2203.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2208.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2207">[ date ]</A>
+<A HREF="index.html#2207">[ thread ]</A>
+<A HREF="subject.html#2207">[ subject ]</A>
+<A HREF="author.html#2207">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

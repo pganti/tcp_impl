@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 15:33:30 1998" -->
+<!-- isoreceived="19980423193330" -->
+<!-- sent="Thu, 23 Apr 1998 16:24:10 -0600 (MDT)" -->
+<!-- isosent="19980423222410" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804232224.QAA08068@calcite.rhyolite.com" -->
+<!-- inreplyto="Last Call for draft-floyd-incr-init-win-02.txt" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 18:24:10 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1099.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1099.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1101.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1091">[ date ]</A>
+<A HREF="index.html#1091">[ thread ]</A>
+<A HREF="subject.html#1091">[ subject ]</A>
+<A HREF="author.html#1091">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Natchu Vishnu Priya &lt;<A HREF="mailto:vishnu@cs.ucr.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">vishnu@cs.ucr.edu</A>&gt;
+</EM><BR>
+<EM>&gt; To: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; cc: Mark Allman &lt;<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">mallman@lerc.nasa.gov</A>&gt;,
+</EM><BR>
+<EM>&gt;         &quot;David S. Miller&quot; &lt;<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">davem@dm.cobaltmicro.com</A>&gt;, <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">vern@ee.lbl.gov</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:sob@harvard.edu?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">sob@harvard.edu</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; let me get this one.. I use browser x which starts off 4
+</EM><BR>
+<EM>&gt; connections..
+</EM><BR>
+<EM>&gt; so that is 16K in flight from the server down my modem.. 4K comes through
+</EM><BR>
+<EM>&gt; 12K gets dropped..
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; So I drop around 12K of data which moved right throught the internet
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>How and why did that 12K get through the Internet and get dropped?  You
+<BR>
+have the 28K modem, and you're concerned that the modem has only 4K of
+<BR>
+buffering, right?  Why is the modem dropping bytes?  Why does it not
+<BR>
+instead lowering CTS and let the system driving the modem hold the bytes?
+<BR>
+The system driving the modem is on the far side of the modem from you
+<BR>
+isn't it?
+<BR>
+<P>Or instead are you concerned that the system driving the modem has only
+<BR>
+4 segments of buffering, and that while it is holding 4 segments for the
+<BR>
+modem, it will drop the next 12 segments?  If that is the issue, then I
+<BR>
+think you have the numbers insiginficantly wrong, since most modems have
+<BR>
+more than 1 byte internal buffering.  The main issue is that if your pipe
+<BR>
+to the Internet cannot carry 4 TCP streams, then you would be wise to
+<BR>
+reduce the number of streams that that your WWW browser opens simultaneously.
+<BR>
+The reason for 4 TCP streams is in large part due to the initial start-up
+<BR>
+problem that the proposal is intended to help. 
+<BR>
+<P>It would also be wise to get your ISP to ensure that there is a full
+<BR>
+window*bandwidth of buffering on your port, which is surely far more than
+<BR>
+4 segments.  Having only 4 segments worth of buffering is likely to cause
+<BR>
+you significant grief regardless of proposed initial window change.
+<BR>
+<P>Also note that the change is NOT a factor of 4.  As has been noted
+<BR>
+repeatedly, one of the most common family of systems (particularly those
+<BR>
+used for WWW servers) has for years started with 2, so that the change is
+<BR>
+a factor of 2.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232224.QAA08068@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1090.html">Craig Partridge: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1099.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1099.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1101.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1091">[ date ]</A>
+<A HREF="index.html#1091">[ thread ]</A>
+<A HREF="subject.html#1091">[ subject ]</A>
+<A HREF="author.html#1091">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

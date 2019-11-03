@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Sun Aug 16 12:58:29 1998" -->
+<!-- isoreceived="19980816165829" -->
+<!-- sent="Sun, 16 Aug 1998 15:33:20 -0400 (EDT)" -->
+<!-- isosent="19980816193320" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808161933.PAA09174@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808161933.PAA09174@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Aug 16 1998 - 15:33:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1214.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1212.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1214.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1213">[ date ]</A>
+<A HREF="index.html#1213">[ thread ]</A>
+<A HREF="subject.html#1213">[ subject ]</A>
+<A HREF="author.html#1213">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; Now, I can see having a timer, to clean up the connection in case
+</EM><BR>
+<EM>&gt;&gt; the peer has crashed or something.  But tearing down the connection
+</EM><BR>
+<EM>&gt;&gt; without checking to see whether the peer thinks it's still up, that
+</EM><BR>
+<EM>&gt;&gt; looks like a problem to me.
+</EM><BR>
+<P><EM>&gt; I think someone once suggested that an arbitrary timer would be OK if
+</EM><BR>
+<EM>&gt; it were only initiated in the close() path as opposed to the
+</EM><BR>
+<EM>&gt; shutdown() path.  Is the code you see executed in both cases, or just
+</EM><BR>
+<EM>&gt; close()?
+</EM><BR>
+<P>I am not certain; I *think* it can be executed via shutdown, calling
+<BR>
+tcp_usrreq with PRU_SHUTDOWN, calling tcp_usrclosed, arming the 2MSL
+<BR>
+timer.  The last step happens only if the socket is already in
+<BR>
+TCPS_FIN_WAIT_2, which I'm not convinced can't happen.  I *think* every
+<BR>
+other code path that arms that timer happens only when user-land has
+<BR>
+indiciated no more receives either.
+<BR>
+<P>Part of the problem seems to me to be that 793 does not seem to model
+<BR>
+the situation where the TCP stack is sufficiently separate from the
+<BR>
+data producer/consumer that it's possible for the latter to simply go
+<BR>
+away without more than a bare notification thereof to the former; there
+<BR>
+seems to be no modeling of the &quot;no more receives possible&quot; state.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808161933.PAA09174@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1214.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1212.html">Rick Jones: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1214.html">Mohit Aron: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1213">[ date ]</A>
+<A HREF="index.html#1213">[ thread ]</A>
+<A HREF="subject.html#1213">[ subject ]</A>
+<A HREF="author.html#1213">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 11 17:03:45 1999" -->
+<!-- isoreceived="19990211220345" -->
+<!-- sent="Thu, 11 Feb 1999 14:59:32 -0700 (MST)" -->
+<!-- isosent="19990211215932" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902112159.OAA19953@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902112159.OAA19953@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 11 1999 - 16:59:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1556.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1557">[ date ]</A>
+<A HREF="index.html#1557">[ thread ]</A>
+<A HREF="subject.html#1557">[ subject ]</A>
+<A HREF="author.html#1557">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;I think that by modifying the Nagle algorithm in the manner presented in the
+</EM><BR>
+<EM>&gt;&gt;draft, we can improve the performance for a percentage of the request/response
+</EM><BR>
+<EM>&gt;&gt;interactions for many internet applications (including the biggie, http) in a
+</EM><BR>
+<EM>&gt; &gt; way that is transparent to application developers.  I think this is a win.
+</EM><BR>
+<P>As the discussion has gone on, there seems to me less justification for
+<BR>
+changing the Nagle algorithm.  Could someone review the plausible scenarios
+<BR>
+where the change helps?  (I.e. not just switching the interpretation of
+<BR>
+&quot;send&quot; from what it seems no one used to something closer to what everyone
+<BR>
+is doing.)
+<BR>
+<P><P><EM>&gt; I do not think that just the interpretation change alone will make much
+</EM><BR>
+<EM>&gt; of a difference because the internal application buffering such as you
+</EM><BR>
+<EM>&gt; discuss will not align nicely with 2*MSS, or the applications will make
+</EM><BR>
+<EM>&gt; a pair of sub-mss sends.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Also, it sounds like we have a number of stacks out there already which
+</EM><BR>
+<EM>&gt; are implementing something very close to the proposed change to Nagle,
+</EM><BR>
+<EM>&gt; and we still have rampant use of TCP_NODELAY.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; So, we could go ahead with the codification of the change to nagle as
+</EM><BR>
+<EM>&gt; being per-send/the draft, but unless explicit flush becomes reality I
+</EM><BR>
+<EM>&gt; don't think there will be a significant impact on the use of
+</EM><BR>
+<EM>&gt; TCP_NODELAY.
+</EM><BR>
+<P>That's an excellent point.  It's weakness is in the implicit assumption
+<BR>
+that there exist many request-response applications that use transactions
+<BR>
+larger than the MSS and smaller than the windows, where 100 ms one way or
+<BR>
+another matters, which are not turning off Nagle for other reasons, and
+<BR>
+also where turning off Nagle would be less desirable.  Concrete examples
+<BR>
+of such applications are required for any change to TCP.
+<BR>
+<P>That bad programmers might imitate people who turn off Nagle for good
+<BR>
+reasons is not justification for adding a TCP Flush knob.  The incompetant
+<BR>
+will do the wrong thing regardless.  The best you might hope is that
+<BR>
+they'd use the flush knob as well as turning off Nagle.
+<BR>
+<P><P>One must never add code to an operating system by reasoning &quot;why not,&quot;
+<BR>
+since down that path lie many infamous piles of bloat.  It is even more
+<BR>
+important to never write standards based on vague hopes or &quot;it can't
+<BR>
+hurt&quot; reasoning.  Down that road lie the dead protocols such as the ISO
+<BR>
+OSI suite, 100VG-AnyLAN, and FDDI-II.  That way also is populated by
+<BR>
+Winsock 2.0 (read the spec to see the zillions of geegaws, geewhizzes,
+<BR>
+and &quot;wouldn't-it-be-nice&quot;s) and WIN32 (which must be used to be believed,
+<BR>
+with its 37 ways to do anything, all of which require at least 300 lines
+<BR>
+more than you'd expect).
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902112159.OAA19953@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1556.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1557">[ date ]</A>
+<A HREF="index.html#1557">[ thread ]</A>
+<A HREF="subject.html#1557">[ subject ]</A>
+<A HREF="author.html#1557">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

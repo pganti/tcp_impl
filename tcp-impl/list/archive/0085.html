@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Richard Fox (Richard.Fox@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Wed Feb 12 21:12:25 1997" -->
+<!-- isoreceived="19970213021225" -->
+<!-- sent="Wed, 12 Feb 1997 12:42:39 -0800" -->
+<!-- isosent="19970212204239" -->
+<!-- name="Richard Fox" -->
+<!-- email="Richard.Fox@Eng.Sun.COM" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702122042.MAA18766@skybolt.eng.sun.com" -->
+<!-- inreplyto="HTTP and RFC1122 half duplex close" -->
+<STRONG>From:</STRONG> Richard Fox (<A HREF="mailto:Richard.Fox@Eng.Sun.COM?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;"><EM>Richard.Fox@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 12 1997 - 15:42:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0084.html">Bill Fenner: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0087.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0087.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#85">[ date ]</A>
+<A HREF="index.html#85">[ thread ]</A>
+<A HREF="subject.html#85">[ subject ]</A>
+<A HREF="author.html#85">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@relay.engr.SGI.COM?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">owner-tcp-impl@relay.engr.SGI.COM</A> Wed Feb 12 12:38 PST 1997
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<EM>&gt; Subject: Re: HTTP and RFC1122 half duplex close
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">josh@birdcage.mcom.com</A> (Josh Cohen)
+</EM><BR>
+<EM>&gt; Date: Tue, 11 Feb 1997 22:42:25 +0000 (GMT)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:raj@hpisrdq.cup.hp.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">raj@hpisrdq.cup.hp.com</A>, <A HREF="mailto:ian@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">ian@spider.com</A>, <A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">narten@raleigh.ibm.com</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702122042.MAA18766@skybolt.eng.sun.com&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; &quot;The characteristic of the persist state that is different from the 
+</EM><BR>
+<EM>&gt; &gt; retransmission timout in Chapter 21 is that TCP 'never' gives up sending
+</EM><BR>
+<EM>&gt; &gt; window probes.  These window probes will continue to be sent at 60 sec 
+</EM><BR>
+<EM>&gt; &gt; intervals until the window opens up or either of the applications
+</EM><BR>
+<EM>&gt; &gt; using the connection is terminated.&quot;
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I need to check if the bad stack is responding, at all, to the
+</EM><BR>
+<EM>&gt; &gt; probes, and to find out:
+</EM><BR>
+<EM>&gt; &gt; what happens to TCP if the probes are simply unacknowledged?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It varies. The Linux stack does timeout on continual window probes to stop
+</EM><BR>
+<EM>&gt; people doing 0 window tcb and buffer starvation attacks and the like on the 
+</EM><BR>
+<EM>&gt; machine. I was under the impression at least OpenBSD was also doing this,
+</EM><BR>
+<EM>&gt; what are the 'vendor' stacks doing ?
+</EM><BR>
+<P><P>This seems to be in violation of the standard. I at one time believed this
+<BR>
+was the right way to go. However, it seemed that no matter what I used as
+<BR>
+the timeout value, somebody always came back saying: I just came back to my
+<BR>
+desk and was going to get data when the connection was terminated. In other
+<BR>
+words, no matter what timeout value I picked, somebody always found fault
+<BR>
+with it:-)
+<BR>
+<P>--rich
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0086.html">Alan Cox: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0084.html">Bill Fenner: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0087.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0087.html">Alan Cox: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#85">[ date ]</A>
+<A HREF="index.html#85">[ thread ]</A>
+<A HREF="subject.html#85">[ subject ]</A>
+<A HREF="author.html#85">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

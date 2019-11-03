@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 17:44:54 2000" -->
+<!-- isoreceived="20000227224454" -->
+<!-- sent="Sun, 27 Feb 2000 22:41:01 +0000 (GMT)" -->
+<!-- isosent="20000227224101" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="E12PCN6-0000vD-00@the-village.bc.nu" -->
+<!-- inreplyto="3.0.3.32.20000227141724.006bd2d4@ruby.cisco.com" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;E12PCN6-0000vD-00@the-village.bc.nu&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 17:41:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2044">[ date ]</A>
+<A HREF="index.html#2044">[ thread ]</A>
+<A HREF="subject.html#2044">[ subject ]</A>
+<A HREF="author.html#2044">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; it seems like a cost issue of providing the above hardware resources
+</EM><BR>
+<EM>&gt; vs. providing a NIC chip that can RDMA.  
+</EM><BR>
+<P>or a NIC chip that has more memory on the chip and sends you the header then
+<BR>
+you asynchronously give a DMA location for the rest of the buffer.
+<BR>
+<P>You've now got rid of RDMA, instead your little bit of extra silicon is 
+<BR>
+generic, and will work with stuff like appletalk even. What does the
+<BR>
+extra RAM and PCI glue cost you - probably not a lot.
+<BR>
+<P>That is why I prefer software solutions
+<BR>
+<P><EM>&gt; &gt;It might also be fragmented of course.
+</EM><BR>
+<EM>&gt; What you need to do &gt;&gt;in the common case&lt;&lt; before processing the RDMA
+</EM><BR>
+<EM>&gt; option is relatively simple and a very small portion of the
+</EM><BR>
+<EM>&gt; overall protocol state machines, so I presume your comment is
+</EM><BR>
+<EM>&gt; asking for more careful wording? Or do you really disagree with the
+</EM><BR>
+<EM>&gt; fundamental point?
+</EM><BR>
+<P>Yes
+<BR>
+<P>The sequence of operations you must execute is complex. 
+<BR>
+<P>You have to
+<BR>
+<P>Check the packet is long enough
+<BR>
+Check the header is IPv4
+<BR>
+Check the IPV4 IHL is valid
+<BR>
+Check the protocol field
+<BR>
+Check the source/dest addresses are legal
+<BR>
+Work out if dest is for us or another node
+<BR>
+Perform IP fragmentation (checks at least cannot be deferred defrag can)
+<BR>
+Walk the IP options (I guess you could defer this)
+<BR>
+Get the tcp header
+<BR>
+Check the tcp header lengths are legal and fit the packet length
+<BR>
+Check the tcp ports to figure out the socket
+<BR>
+Parse the tcp options 
+<BR>
+Check the RDMA identifier, arbitarily aligned of course
+<BR>
+Check the RDMA identifier, port and addresses match
+<BR>
+Perform sequence space checks
+<BR>
+<P>Then you can deliver the packet.
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2043.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2044">[ date ]</A>
+<A HREF="index.html#2044">[ thread ]</A>
+<A HREF="subject.html#2044">[ subject ]</A>
+<A HREF="author.html#2044">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

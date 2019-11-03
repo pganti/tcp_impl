@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@info.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 17:16:34 2000" -->
+<!-- isoreceived="20000612211634" -->
+<!-- sent="Mon, 12 Jun 2000 23:07:57 +0200 (CEST)" -->
+<!-- isosent="20000612210757" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@info.iet.unipi.it" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="200006122107.XAA04208@info.iet.unipi.it" -->
+<!-- inreplyto="4.3.2.7.2.20000612130325.00e374b0@flipper.cisco.com" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@info.iet.unipi.it?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;200006122107.XAA04208@info.iet.unipi.it&gt;"><EM>luigi@info.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 17:07:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2143.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2141.html">Fred Baker: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2141.html">Fred Baker: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2166.html">Wilson C. Chung: "ISA used in TCP/IP/UDP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2142">[ date ]</A>
+<A HREF="index.html#2142">[ thread ]</A>
+<A HREF="subject.html#2142">[ subject ]</A>
+<A HREF="author.html#2142">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; At 07:06 AM 6/12/00 +0200, Luigi Rizzo wrote:
+</EM><BR>
+<EM>&gt; &gt;Given the following:
+</EM><BR>
+<EM>&gt; &gt;     * the receiver knows there is reordering;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; the problem is that the receiver doesn't necessarily know that. It may know 
+</EM><BR>
+...
+<BR>
+<EM>&gt; received is not the next one it expected to receive. The discrepancy may be 
+</EM><BR>
+<EM>&gt; due to reordering, and it may be due to loss. In the latter case, you'd 
+</EM><BR>
+<EM>&gt; like to recover as quickly as you could.
+</EM><BR>
+...
+<BR>
+<EM>&gt; I tend to think Sally's approach, being explicit rather than heuristic, is 
+</EM><BR>
+<EM>&gt; a better one.
+</EM><BR>
+<P>but as you say, the receiver doesn't necessarily know that there
+<BR>
+is reordering, nor does the sender, so either you wait or you have
+<BR>
+to make your bet :) So my idea woud be that you start by assuming
+<BR>
+that there is no reordering, but when you see reordering once, you
+<BR>
+become biased on the other one.
+<BR>
+<P>For those arguing that delaying ACKs is detrimental to RTT measurements:
+<BR>
+yes, it is, but we have been living with delayed acks triggered by
+<BR>
+applications reads for &gt;10 years now...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;luigi
+<BR>
+-----------------------------------+-------------------------------------
+<BR>
+&nbsp;&nbsp;Luigi RIZZO, <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;200006122107.XAA04208@info.iet.unipi.it&gt;">luigi@iet.unipi.it</A>  . Dip. di Ing. dell'Informazione
+<BR>
+&nbsp;&nbsp;<A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>  . Universita` di Pisa
+<BR>
+&nbsp;&nbsp;TEL/FAX: +39-050-568.533/522     . via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+&nbsp;&nbsp;Mobile   +39-347-0373137
+<BR>
+-----------------------------------+-------------------------------------
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2143.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2141.html">Fred Baker: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2141.html">Fred Baker: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2166.html">Wilson C. Chung: "ISA used in TCP/IP/UDP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2142">[ date ]</A>
+<A HREF="index.html#2142">[ thread ]</A>
+<A HREF="subject.html#2142">[ subject ]</A>
+<A HREF="author.html#2142">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

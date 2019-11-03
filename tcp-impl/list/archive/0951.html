@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (VOLZ@PROCESS.COM)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Tue Feb 17 18:33:43 1998" -->
+<!-- isoreceived="19980217233343" -->
+<!-- sent="Tue, 17 Feb 1998 19:05 -0500" -->
+<!-- isosent="19980218000556" -->
+<!-- name="Bernie Volz" -->
+<!-- email="VOLZ@PROCESS.COM" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="009C1F5F8B80E8AC.2E25@PROCESS.COM" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;009C1F5F8B80E8AC.2E25@PROCESS.COM&gt;"><EM>VOLZ@PROCESS.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 17 1998 - 19:05:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0950.html">David Mosberger: "question about Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#951">[ date ]</A>
+<A HREF="index.html#951">[ thread ]</A>
+<A HREF="subject.html#951">[ subject ]</A>
+<A HREF="author.html#951">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;         In this trace, the application process is terminated on Machine
+</EM><BR>
+<EM>&gt;&gt;         D at approximately 13:48:36.34 and it sends the FIN with the
+</EM><BR>
+<EM>&gt;&gt;         window opened again (since it properly discarded the previously
+</EM><BR>
+<EM>&gt;&gt;         received data). Machine C promptly sends more data, causing
+</EM><BR>
+<EM>&gt;&gt;         Machine D to reset the connection since it can not deliver the
+</EM><BR>
+<EM>&gt;&gt;         data to the application.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Is it stated someplace that a window update should not be taken as an
+</EM><BR>
+<EM>&gt;indication that the data has been received into the application? If
+</EM><BR>
+<EM>&gt;&quot;feels&quot; as though there is an implicit assumption that if the window
+</EM><BR>
+<EM>&gt;advances, data has been presented to the application - for instance,
+</EM><BR>
+<EM>&gt;from 1122, section 4.2.2.14
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&quot;When the application program subsequently consumes the data and
+</EM><BR>
+<EM>&gt;increases the available receive buffer space again...&quot;
+</EM><BR>
+<P>Not sure why you introduce this. There is no assumption about an ACK
+<BR>
+meaning data has been received by an application. My point regarding
+<BR>
+this problem is that if the application has CLOSED the socket in such a
+<BR>
+way that it indicates &quot;I am no longer interested in reading further data
+<BR>
+from the socket&quot; (such as if the application crashes or, in UNIX, does a
+<BR>
+close on the socket), the TCP stack MUST assure that it takes steps to
+<BR>
+either reset the connection or discard any previously received data and
+<BR>
+opens the window to allow the connection to properly close (since if the
+<BR>
+window is closed, the peer can't deliver any more data and send the FIN
+<BR>
+to close its end of the connection - hanging the connection).
+<BR>
+<P><EM>&gt;Would it be better to reset upon a window probe?
+</EM><BR>
+<P>I don't believe so. I believe it best to either open the window (and
+<BR>
+reset the connection if more data is received) or just reset the
+<BR>
+connection immediately.
+<BR>
+<P><EM>&gt;Or is this an area where we say that an applicaiton needs its own
+</EM><BR>
+<EM>&gt;app-level protocol for what was and was not received?
+</EM><BR>
+<P>I would say that applications that needs this might. A lot of apps may
+<BR>
+not if they use typical command/reply sequences or other mechanisms.
+<BR>
+<P>- Bernie Volz
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0950.html">David Mosberger: "question about Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#951">[ date ]</A>
+<A HREF="index.html#951">[ thread ]</A>
+<A HREF="subject.html#951">[ subject ]</A>
+<A HREF="author.html#951">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

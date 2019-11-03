@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: RFC 1323 implementation</TITLE>
+<META NAME="Author" CONTENT="Craig Buffinton (craigb@ftp.com)">
+<META NAME="Subject" CONTENT="RE: RFC 1323 implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: RFC 1323 implementation</H1>
+<!-- received="Thu Apr 30 17:30:47 1998" -->
+<!-- isoreceived="19980430213047" -->
+<!-- sent="Thu, 30 Apr 1998 20:27:25 -0400" -->
+<!-- isosent="19980501002725" -->
+<!-- name="Craig Buffinton" -->
+<!-- email="craigb@ftp.com" -->
+<!-- subject="RE: RFC 1323 implementation" -->
+<!-- id="199805010026.UAA20044@mailserv-2high" -->
+<!-- inreplyto="RFC 1323 implementation" -->
+<STRONG>From:</STRONG> Craig Buffinton (<A HREF="mailto:craigb@ftp.com?Subject=RE:%20RFC%201323%20implementation&In-Reply-To=&lt;199805010026.UAA20044@mailserv-2high&gt;"><EM>craigb@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 30 1998 - 20:27:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1121.html">Pandian, Sivagnana: "subscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1122">[ date ]</A>
+<A HREF="index.html#1122">[ thread ]</A>
+<A HREF="subject.html#1122">[ subject ]</A>
+<A HREF="author.html#1122">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;Reply to your message of 4/27/98 5:00 PM
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+The FTP Software OnNet Kernel for Windows 95 includes support
+<BR>
+for all but #13 on the check list. It also implements 
+<BR>
+RFC 2001 and 2018.
+<BR>
+<P>Craig Buffinton
+<BR>
+Senior Software Engineer
+<BR>
+FTP Software
+<BR>
+978-684-6653
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. |x|   Window Scale Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. |x|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. |x|   Window Scale size based on receive buffer size
+<BR>
+<P>--&gt;			receive buffer size can be set by registry or app.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. |x|   Shift values &gt; 14 are logged and treated as 14.
+<BR>
+<P>--&gt;			Shift values &gt; 14 are not logged
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. |x|   Timestamps Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. |x|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7. |x|   RTT calculations based on Timestamps
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.4
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*8. |x|   Update TS.Recent if:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEG.TSval &gt;= TSrecent and SEG.SEQ &lt;= Last.ACK.sent
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 4.x
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9. |x|   PAWS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10. |x|   &quot;invalidate&quot; TS.Recent if idle &gt; 24 days.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix A:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*11. |x|   TCP Maxseg option: MSS = MTU - fixed IP/TCP header
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*12. |x|   On output: adjust TCP data length for TCP options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*13. |_|              adjust TCP data length for IP options
+<BR>
+<P>--&gt; 			TCP data length not adjusted for IP options 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix C:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*14. |x|   Disable Karn algorithm w/RTTM
+<BR>
+<P><P><EM>&gt;&gt;End of message
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1121.html">Pandian, Sivagnana: "subscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1122">[ date ]</A>
+<A HREF="index.html#1122">[ thread ]</A>
+<A HREF="subject.html#1122">[ subject ]</A>
+<A HREF="author.html#1122">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

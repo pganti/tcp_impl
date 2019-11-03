@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Wed Apr  2 13:32:10 1997" -->
+<!-- isoreceived="19970402183210" -->
+<!-- sent="Wed, 02 Apr 97 13:22:44 -0800" -->
+<!-- isosent="19970402212244" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704022122.NAA00287@aland.bbn.com" -->
+<!-- inreplyto="9704022025.AA09973@pachyderm.pa.dec.com" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704022122.NAA00287@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 16:22:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0303.html">Kacheong Poon: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#302">[ date ]</A>
+<A HREF="index.html#302">[ thread ]</A>
+<A HREF="subject.html#302">[ subject ]</A>
+<A HREF="author.html#302">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;&nbsp;Jim asks:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;The question is how much data gets queued in the final router driving 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the PPP link to the end user.  This is where most of the delay occurs, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and where the packets congregate.  The question is: how many packets can 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;congregate in this final router?  There is no way for a client to discard 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;them, once they have been sent (and the client wouldn't want to in any 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;case; he'd just as soon put the data in its cache).  Any packets sent 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;will accumulate there.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Now, the question is therefore how many packets might get queued in this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;router.
+<BR>
+<P>The complex answer is it depends and mostly it depends on the router.
+<BR>
+<P>Let me try walking through the pieces.
+<BR>
+<P>TCP tries to find the correct window size given the bandwidth available.
+<BR>
+Assuming the TCP connection has been going for a while (and without long
+<BR>
+pauses that may throw it back into slow start), this means the sender is
+<BR>
+sending *in theory* only at the rate the client can absorb and should
+<BR>
+not be creating an appreciable queue at any router.
+<BR>
+<P>NOTE: There's one exception to this rule.  TCP never shrinks its window
+<BR>
+smaller than one MSS.  So if you've got a very small pipe, where the
+<BR>
+available delay bandwidth product is less than 1 MSS, you will have
+<BR>
+a queue.  That's one reason why parallel TCP is evil.  If you have 4
+<BR>
+TCPs running, each with MSS of 1 KB, the slowest they can transmit is
+<BR>
+(4*1KB * 8 b/B)/RTT = 32Kb/RTT.  If your RTT is low, that will back up
+<BR>
+your dial-up PPP line pretty easily.  (Since this situation isn't stable,
+<BR>
+what happens is the sending TCPs see an unstable RTT and increase their
+<BR>
+RTT estimate, but regardless you'll likely get very variable performance).
+<BR>
+<P>OK, but lets assume we're running one TCP and move from theory to practice.
+<BR>
+In practice, TCP figures it is overdriving a link when it sees loss.  What
+<BR>
+that means is that slow start loads up the queue at the last hop router and
+<BR>
+only slows down when it sees something thrown away.  So, for practical
+<BR>
+purposes, the queue you get is equal to the min of (a) the buffer space
+<BR>
+in the router; or (b) the receiver window size, UNLESS you run something
+<BR>
+like RED in your routers which strives to keep the queues short.  If you
+<BR>
+run RED, you're closer to theory again.  One thing this also says is that
+<BR>
+there's no point in advertising a big window if you're behind a small
+<BR>
+pipe.  Better to advertise a small window and smaller TCP MSS.
+<BR>
+<P>[Folks -- I think I've done this all right -- beat me up if I missed some
+<BR>
+subtle interaction -- thanks!]
+<BR>
+<P>Craig
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0303.html">Kacheong Poon: "Re: scheduling and agenda for Memphis"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0318.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#302">[ date ]</A>
+<A HREF="index.html#302">[ thread ]</A>
+<A HREF="subject.html#302">[ subject ]</A>
+<A HREF="author.html#302">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

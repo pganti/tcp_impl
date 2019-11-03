@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Feb  8 20:19:37 1999" -->
+<!-- isoreceived="19990209011937" -->
+<!-- sent="Mon, 08 Feb 1999 16:53:38 -0800" -->
+<!-- isosent="19990209005338" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902090053.QAA01403@red.mtv.siara.com" -->
+<!-- inreplyto="36BBA6F6.7297D2CC@cup.hp.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902090053.QAA01403@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 08 1999 - 19:53:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1542.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1538.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1547.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1543">[ date ]</A>
+<A HREF="index.html#1543">[ thread ]</A>
+<A HREF="subject.html#1543">[ subject ]</A>
+<A HREF="author.html#1543">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Rick,
+<BR>
+<P><EM>&gt; I guess I would be in the camp that feels that interpreting nagle send
+</EM><BR>
+<EM>&gt; by send is sufficient and the way to go and that we need to make sure
+</EM><BR>
+<EM>&gt; app writers understand just what they are doing when they set
+</EM><BR>
+<EM>&gt; TCP_NODELAY. A &quot;mantra&quot; along the lines of &quot;provide as much of the
+</EM><BR>
+<EM>&gt; logically associated data as you can to the transport at one time&quot; or
+</EM><BR>
+<EM>&gt; something... 
+</EM><BR>
+<P>I think two things.
+<BR>
+<P>One, i don't think application writers can always guarantee that even if they 
+<BR>
+get the write buffer size, all the data will be exempt from Nagle.  For 
+<BR>
+example, in the BSD stack at least, if you pass too much data for the current 
+<BR>
+(congestion or whatever) window in your send() call, subsequent packets may be 
+<BR>
+subject to Nagle (thus susceptible to bad interactions with delayed ACKs at 
+<BR>
+the remote side).  Check out, for example, John Heideman's article in the 
+<BR>
+April, 1997, ACM SIGCOMM Computer Communications Review, or Henrik Nielsen, et 
+<BR>
+al, from SIGCOMM 1997, for example of fairly well-crafted applications that 
+<BR>
+still run afoul of Nagle/delayed ACK interactions.
+<BR>
+<P>Two, i think that making this change may have the effect of preventing people 
+<BR>
+from wholesale disabling of Nagle.
+<BR>
+<P>(I also think i'm happy to have the change apply to &quot;send()s&quot;, as is quite 
+<BR>
+often current practice, rather than to the output of TCP.  I think, though, 
+<BR>
+that it should be *written* as if it applies to the output of TCP, just as 
+<BR>
+RFC896.)
+<BR>
+<P>Does that make sense?
+<BR>
+<P>Cheers,  Greg
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1542.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1538.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1545.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1547.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1543">[ date ]</A>
+<A HREF="index.html#1543">[ thread ]</A>
+<A HREF="subject.html#1543">[ subject ]</A>
+<A HREF="author.html#1543">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

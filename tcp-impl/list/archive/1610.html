@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: dynamic rwin adjustments</TITLE>
+<META NAME="Author" CONTENT="Jamshid Mahdavi (mahdavi@novell.com)">
+<META NAME="Subject" CONTENT="Re: dynamic rwin adjustments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: dynamic rwin adjustments</H1>
+<!-- received="Wed Feb 24 11:53:09 1999" -->
+<!-- isoreceived="19990224165309" -->
+<!-- sent="24 Feb 1999 08:48:22 -0800" -->
+<!-- isosent="19990224164822" -->
+<!-- name="Jamshid Mahdavi" -->
+<!-- email="mahdavi@novell.com" -->
+<!-- subject="Re: dynamic rwin adjustments" -->
+<!-- id="yu8xsobvd9yh.fsf@sabre.sjf.novell.com" -->
+<!-- inreplyto="Tue, 23 Feb 1999 17:43:17 -0700 (MST)&quot;" -->
+<STRONG>From:</STRONG> Jamshid Mahdavi (<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20dynamic%20rwin%20adjustments&In-Reply-To=&lt;yu8xsobvd9yh.fsf@sabre.sjf.novell.com&gt;"><EM>mahdavi@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 24 1999 - 11:48:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1609.html">Vernon Schryver: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1615.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1610">[ date ]</A>
+<A HREF="index.html#1610">[ thread ]</A>
+<A HREF="subject.html#1610">[ subject ]</A>
+<A HREF="author.html#1610">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20dynamic%20rwin%20adjustments&In-Reply-To=&lt;yu8xsobvd9yh.fsf@sabre.sjf.novell.com&gt;">vjs@calcite.rhyolite.com</A>&gt; writes:
+<BR>
+<P><EM>&gt; The paper recently mentioned here about dynamically adjusting receive
+</EM><BR>
+<EM>&gt; windows looks interesting.  As I understand it, their idea is to adjust
+</EM><BR>
+<EM>&gt; receive windows based on the out-going congestion window and/or recent
+</EM><BR>
+<EM>&gt; receive throughput and a notion of fairness.  Their plan seems intended
+</EM><BR>
+<EM>&gt; to give every connection the largest window that maximizes total system
+</EM><BR>
+<EM>&gt; throughput, while honoring the familiar operating system notion of fairness
+</EM><BR>
+<EM>&gt; or at least avoiding starvation.  (I'd repeat the URL of the paper, but
+</EM><BR>
+<EM>&gt; I think I've lost it.)
+</EM><BR>
+<P>A couple corrections, and the URL.  The paper covers dynamic tuning of
+<BR>
+the senders socket buffer (and hence sending window).  It is dynamic
+<BR>
+throughout the connection, not just at startup as Eric asked in his
+<BR>
+original email.
+<BR>
+<P>For receiver window, we argue that just setting the window to max (as
+<BR>
+Vernon suggests) is just as effective as dynamically tuning.  The
+<BR>
+reason for this is that, under normal circumstances, receivers use 
+<BR>
+very little memory.  The data in the receive window is normally stored
+<BR>
+in the network.  The cases where you would need the receiver memory
+<BR>
+are when packets are dropped or when applications get behind.
+<BR>
+<P>Unless you tuned *very* conservatively, tuning would still probably
+<BR>
+allow for situations where loss in the network would fill up all of
+<BR>
+the available memory (mbufs) on the receiver.  There is perhaps a
+<BR>
+better case for trying to protect the system from slow applications.
+<BR>
+<P>In either event, data in the receive queue is eligible for dropping.
+<BR>
+This is a fairly draconian solution, but since (in most
+<BR>
+implementations) this data is not ACKed until it is delivered to the
+<BR>
+application, you can free up memory very simply by dropping some data
+<BR>
+from connections which are being memory-hogs.  In our testing, we
+<BR>
+never encountered a situation where this was necessary -- although we
+<BR>
+didn't go out of our way to look for one, either.
+<BR>
+<P>Oh yes, here is the URL:
+<BR>
+<P><A HREF="http://www.psc.edu/networking/papers/auto_abstract.html">http://www.psc.edu/networking/papers/auto_abstract.html</A>
+<BR>
+<P>--Jamshid
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1609.html">Vernon Schryver: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1615.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1610">[ date ]</A>
+<A HREF="index.html#1610">[ thread ]</A>
+<A HREF="subject.html#1610">[ subject ]</A>
+<A HREF="author.html#1610">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

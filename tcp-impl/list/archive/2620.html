@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: regarding sending of a reset</TITLE>
+<META NAME="Author" CONTENT="Robin Uyeshiro (ruyeshiro@iready.com)">
+<META NAME="Subject" CONTENT="RE: regarding sending of a reset packet....">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: regarding sending of a reset packet....</H1>
+<!-- received="Tue Mar  5 13:15:04 2002" -->
+<!-- isoreceived="20020305181504" -->
+<!-- sent="Tue, 5 Mar 2002 10:06:15 -0800 " -->
+<!-- isosent="20020305180615" -->
+<!-- name="Robin Uyeshiro" -->
+<!-- email="ruyeshiro@iready.com" -->
+<!-- subject="RE: regarding sending of a reset packet...." -->
+<!-- id="639BAB6ABE61D411B3870090276A8975119B74@hermes.corp.iready.com" -->
+<!-- inreplyto="regarding sending of a reset packet...." -->
+<STRONG>From:</STRONG> Robin Uyeshiro (<A HREF="mailto:ruyeshiro@iready.com?Subject=RE:%20regarding%20sending%20of%20a%20reset%20packet....&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119B74@hermes.corp.iready.com&gt;"><EM>ruyeshiro@iready.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 05 2002 - 13:06:15 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2621.html">jcpark@kics.or.kr: "CIC 2002 - Call for Papers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2619.html">Bhuvaneswari R.P: "RE: regarding sending of a reset packet...."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2618.html">bhaskar: "regarding sending of a reset packet...."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2620">[ date ]</A>
+<A HREF="index.html#2620">[ thread ]</A>
+<A HREF="subject.html#2620">[ subject ]</A>
+<A HREF="author.html#2620">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I think the top of page 65 of RFC 793 applies:
+<BR>
+&nbsp;
+<BR>
+SEGMENT ARRIVES
+<BR>
+<P>If the state is CLOSED (i.e., TCB does not exist) then
+<BR>
+<P>all data in the incoming segment is discarded. An incoming
+<BR>
+<P>segment containing a RST is discarded. An incoming segment not
+<BR>
+<P>containing a RST causes a RST to be sent in response. The
+<BR>
+<P>acknowledgment and sequence field values are selected to make the
+<BR>
+<P>reset sequence acceptable to the TCP that sent the offending
+<BR>
+<P>segment.
+<BR>
+<P>If the ACK bit is off, sequence number zero is used,
+<BR>
+<P>&lt;SEQ=0&gt;&lt;ACK=SEG.SEQ+SEG.LEN&gt;&lt;CTL=RST,ACK&gt;
+<BR>
+<P>If the ACK bit is on,
+<BR>
+<P>&lt;SEQ=SEG.ACK&gt;&lt;CTL=RST&gt;
+<BR>
+<P>Return.
+<BR>
+<P>-----Original Message-----
+<BR>
+From: bhaskar [mailto:<A HREF="mailto:ubyadati@qpackets.com?Subject=RE:%20regarding%20sending%20of%20a%20reset%20packet....&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119B74@hermes.corp.iready.com&gt;">ubyadati@qpackets.com</A>]
+<BR>
+Sent: Monday, March 04, 2002 6:58 PM
+<BR>
+To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20regarding%20sending%20of%20a%20reset%20packet....&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119B74@hermes.corp.iready.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: regarding sending of a reset packet....
+<BR>
+<P><P>hi,
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;in the case of segment arrives ( rfc 793 pg. no 64 ),  when tcp is in the
+<BR>
+closed state, if a reset packet has to be sent out,
+<BR>
+&nbsp;&nbsp;the rfc specifies the cases when the ack flag is set in the incoming
+<BR>
+packet. 
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;what happens if a syn flag is set or a fin is set along with ack in the
+<BR>
+incoming packet... what should be the sequence number in that case of the
+<BR>
+outgoing reset packet ?? 
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;to elaborate my doubt,
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;suppose for an incoming packet of tcp length 60 and ack num is 500, let us
+<BR>
+suppose, and the flags set are ack, and syn. what should be the sequence
+<BR>
+number of the reset packet that has to be sent out.  since the syn occupies
+<BR>
+one sequence number, should the seq. no be 60 + 500 + 1 or just 60 + 500.
+<BR>
+&nbsp;
+<BR>
+thanx in advance,
+<BR>
+uday.
+<BR>
+&nbsp;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2621.html">jcpark@kics.or.kr: "CIC 2002 - Call for Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2619.html">Bhuvaneswari R.P: "RE: regarding sending of a reset packet...."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2618.html">bhaskar: "regarding sending of a reset packet...."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2620">[ date ]</A>
+<A HREF="index.html#2620">[ thread ]</A>
+<A HREF="subject.html#2620">[ subject ]</A>
+<A HREF="author.html#2620">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Mar 05 2002 - 13:15:11 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

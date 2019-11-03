@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Resetting of ssthresh accord</TITLE>
+<META NAME="Author" CONTENT="Graham Cope (G.Cope@ftel.co.uk)">
+<META NAME="Subject" CONTENT="Re: Resetting of ssthresh according to RFC2001">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Resetting of ssthresh according to RFC2001</H1>
+<!-- received="Mon Oct 13 02:59:29 1997" -->
+<!-- isoreceived="19971013065929" -->
+<!-- sent="Mon, 13 Oct 1997 10:56:59 +0100" -->
+<!-- isosent="19971013095659" -->
+<!-- name="Graham Cope" -->
+<!-- email="G.Cope@ftel.co.uk" -->
+<!-- subject="Re: Resetting of ssthresh according to RFC2001" -->
+<!-- id="3441F06B.7861@ftel.co.uk" -->
+<!-- inreplyto="199710092206.PAA23469@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Graham Cope (<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20Resetting%20of%20ssthresh%20according%20to%20RFC2001&In-Reply-To=&lt;3441F06B.7861@ftel.co.uk&gt;"><EM>G.Cope@ftel.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Oct 13 1997 - 05:56:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0762.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0760.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0760.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0854.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#761">[ date ]</A>
+<A HREF="index.html#761">[ thread ]</A>
+<A HREF="subject.html#761">[ subject ]</A>
+<A HREF="author.html#761">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vern Paxson wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Presumably this means that ssthresh should be reset when congestion
+</EM><BR>
+<EM>&gt; &gt; occurs.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; More exactly, when TCP responds to a loss, by either a timeout retransmission
+</EM><BR>
+<EM>&gt; or beginning a fast retransmit/fast recovery sequence, it first sets ssthresh
+</EM><BR>
+<EM>&gt; based on the value of cwnd in effect at the time of the loss.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; I have observed (ina simulation) that if congestion occurs then
+</EM><BR>
+<EM>&gt; &gt; multiple segments tend to be lost or timeout, cwnd is set to MSS after
+</EM><BR>
+<EM>&gt; &gt; the first loss ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; For a timeout retransmission, this is correct behavior.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ... and hence ssthresh is set to 2*MSS.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is incorrect.  ssthresh is supposed to be set *first*, to half of the
+</EM><BR>
+<EM>&gt; current value of cwnd.  This happens before cwnd is set to 1 MSS to begin
+</EM><BR>
+<EM>&gt; slow start.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If cwnd was sufficiently large to begin with, then the only normal circumstance
+</EM><BR>
+<EM>&gt; in which ssthresh should be set to 2*MSS is if the retransmitted packet is
+</EM><BR>
+<EM>&gt; itself lost (or if the slow start following the retransmission doesn't get
+</EM><BR>
+<EM>&gt; very far before there's a loss).  In that case, ssthresh (again) gets set
+</EM><BR>
+<EM>&gt; to half of cwnd, which gets rounded up to the minimum value of 2*MSS if
+</EM><BR>
+<EM>&gt; needed.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Thus, I take this mean that ssthresh should be reset to half the current
+</EM><BR>
+<EM>&gt; &gt; window size when congestion occurs, but should not be reset until
+</EM><BR>
+<EM>&gt; &gt; congestion goes away ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There's no explicit notion of congestion going away.  The algorithm is
+</EM><BR>
+<EM>&gt; that ssthresh is always set to cwnd/2 (modulo rounding) when a fast
+</EM><BR>
+<EM>&gt; retransmission begins or a timeout retransmission occurs.  If you have a
+</EM><BR>
+<EM>&gt; timeout retransmission that is itself lost, then yes, ssthresh is set to
+</EM><BR>
+<EM>&gt; MSS*2 - and that's what you want, because the net is still congested, so
+</EM><BR>
+<EM>&gt; you must proceed gingerly.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>What I am observing in my simulation model is that if a segment gets
+<BR>
+delayed, then all the other segments behind it also get delayed. The
+<BR>
+timers for all of these expire, and after the timer for the second has
+<BR>
+expired cwnd and ssthresh are down 2*MSS. This is OK for cwnd, but seems
+<BR>
+drastic for ssthresh.
+<BR>
+&nbsp;&nbsp;I agree that it would be sensible for ssthresh to be set to 2*MSS
+<BR>
+after loss of the retransmitted segment (which happens after at least 1
+<BR>
+RTT), but not after timeout of the second segment in a sequence of
+<BR>
+segments that experience the same congestion.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If congestion is a state, then there are multiple events that
+<BR>
+correspond to being in that state (i.e. multiple timeouts).
+<BR>
+<P><P>Has this been investigated before (I'm still getting up to speed in this
+<BR>
+area)? If not, I think it might be worth doing so since unnecessary
+<BR>
+reduction of ssthresh can reduce throughput.
+<BR>
+<P><P><P>Graham Cope
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0762.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0760.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0760.html">Vern Paxson: "Re: Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0854.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#761">[ date ]</A>
+<A HREF="index.html#761">[ thread ]</A>
+<A HREF="subject.html#761">[ subject ]</A>
+<A HREF="author.html#761">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

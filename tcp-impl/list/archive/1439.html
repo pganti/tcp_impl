@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 17:51:05 1999" -->
+<!-- isoreceived="19990104225105" -->
+<!-- sent="Mon, 4 Jan 1999 16:50:39 -0600 (CST)" -->
+<!-- isosent="19990104225039" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901042250.QAA27181@frantic.bsdi.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 17:50:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1438.html">Rick Jones: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1439">[ date ]</A>
+<A HREF="index.html#1439">[ thread ]</A>
+<A HREF="subject.html#1439">[ subject ]</A>
+<A HREF="author.html#1439">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon,
+<BR>
+<P><EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">owner-tcp-impl@lerc.nasa.gov</A> Mon Jan  4 16:07:45 1999
+</EM><BR>
+<EM>&gt; X-Authentication-Warning: assateague-fi.lerc.nasa.gov: listserv set sender to <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">owner-tcp-impl@lerc.nasa.gov</A> using -f
+</EM><BR>
+<EM>&gt; Date: Mon, 4 Jan 1999 14:43:22 -0700 (MST)
+</EM><BR>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Question on initial sequence numbers
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">Richard_Berke@troweprice.com</A>
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; As far as I can see, there would be no problem (other than cost) with what
+</EM><BR>
+<EM>&gt; Microsoft is alledged to be doing if they guarantee that all initial
+</EM><BR>
+<EM>&gt; sequence numbers are &quot;sufficently far apart.&quot;   &quot;Smaller&quot; is as good as
+</EM><BR>
+<EM>&gt; &quot;larger&quot;, provided the delta is large enough so the probability of
+</EM><BR>
+<EM>&gt; collision is small enough.  Incrementing with a clock is one way to get
+</EM><BR>
+<EM>&gt; &quot;far apart,&quot; but there are plenty of other permutations of the natural
+</EM><BR>
+<EM>&gt; order of the most significant ~16 bits that would work just as well. 
+</EM><BR>
+<P>Well, I wouldn't say &quot;no problem&quot;.  What I see at issue is that many
+<BR>
+TCP implementations (such as BSD) will allow a connection in TIME-WAIT to
+<BR>
+be reused before the TIME-WAIT has expired, if the incoming SYN has an ISS
+<BR>
+that is greater than the FIN from the previous instance of the connection.
+<BR>
+Otherwise, since there is no ACK bit, the SYN and any retranmissions of the
+<BR>
+SYN will be silently dropped until the TIME-WAIT state expires.
+<BR>
+<P>So, for a TCP that generates random ISS values, when quickly re-using a
+<BR>
+TCP connection, they are going to have a 50/50 chance of the connection
+<BR>
+either being quickly established, or hung up doing SYN retransmissions until
+<BR>
+the TIME-WAIT connection on the server goes away or the client gives up on
+<BR>
+its SYN retransmissions.
+<BR>
+<P>Of course, one problem is that since most TCPs destroy the PCB after
+<BR>
+getting the FIN in LAST-ACK state, if they immediatly reuse the
+<BR>
+connection they have no idea what the last sequence number used was.
+<BR>
+So the new ISS is just the standard ISS increment, and if the previous
+<BR>
+connection transfered more data than the delta between the ISSs, the
+<BR>
+ISS on the new SYN won't pass the TIME-WAIT check...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901042250.QAA27181@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P>PS: by &quot;standard ISS increment&quot;, I don't mean just a fixed value.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1440.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1438.html">Rick Jones: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1441.html">David S. Miller: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1439">[ date ]</A>
+<A HREF="index.html#1439">[ thread ]</A>
+<A HREF="subject.html#1439">[ subject ]</A>
+<A HREF="author.html#1439">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

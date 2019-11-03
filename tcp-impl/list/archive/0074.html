@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: The trace ( HTTP/RFC1122 )</TITLE>
+<META NAME="Author" CONTENT="Josh Cohen (josh@birdcage.mcom.com)">
+<META NAME="Subject" CONTENT="The trace ( HTTP/RFC1122 )">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>The trace ( HTTP/RFC1122 )</H1>
+<!-- received="Tue Feb 11 23:56:12 1997" -->
+<!-- isoreceived="19970212045612" -->
+<!-- sent="Tue, 11 Feb 1997 15:40:31 -0800 (PST)" -->
+<!-- isosent="19970211234031" -->
+<!-- name="Josh Cohen" -->
+<!-- email="josh@birdcage.mcom.com" -->
+<!-- subject="The trace ( HTTP/RFC1122 )" -->
+<!-- id="199702112340.PAA27437@birdcage.mcom.com" -->
+<STRONG>From:</STRONG> Josh Cohen (<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;199702112340.PAA27437@birdcage.mcom.com&gt;"><EM>josh@birdcage.mcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 18:40:31 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0075.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#74">[ date ]</A>
+<A HREF="index.html#74">[ thread ]</A>
+<A HREF="subject.html#74">[ subject ]</A>
+<A HREF="author.html#74">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hey!,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I got the trace of the evil behavior.
+<BR>
+<P>A few notes on my previous posts..
+<BR>
+1. In the problem state, the client stack is in FIN_WAIT_2
+<BR>
+2. Server is in CLOSE_WAIT
+<BR>
+3. write() never times out if you do a blocking write.
+<BR>
+4. Its the client *stack* which is broken, not the web client.
+<BR>
+5. Our products are commonly run on this stack, on PCs.
+<BR>
+6. When I say aborted connection I mean at the HTTP level.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The client hits 'stop' or equivalent.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If we handle this with a client FIN, we may allow this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;problem.(in the client)  If we do it with a RST, we have a 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;better chance of avoiding it.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(yes, the RST can be lost, but chances are itll make it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more often than not.  Even if lost, we're in the same boat)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Now, what the trace tells us.
+<BR>
+1. Client does the http abort via a FIN (not our client)
+<BR>
+2. Client *stack* doesnt send RSTs to the servers data when its in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN_WAIT_X
+<BR>
+3. Client *does* respond to window probes, with win=0 forever
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I think this is ok for FIN_WAIT_X in general, but 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in this case, its bad news.  How can we decide to 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close the server side ?
+<BR>
+4. The clients window drops to zero instantly with the FIN sent.
+<BR>
+<P>notes:
+<BR>
+<P>Im not suggesting any hacks to the protocols.  The reality is that
+<BR>
+the problem exists often, so workarounds must be done.
+<BR>
+<P>It is the servers, proxy, web, whatever, which take the damage.  The
+<BR>
+misbehaving client goes on with its life.  
+<BR>
+<P>(timeouts as a workaround)	
+<BR>
+Timeouts are a help, but dont help enough.  A busy web server
+<BR>
+can handle hundreds of connections per second.  If the timeout
+<BR>
+is 2 minutes, its still way too long.  The server must scale
+<BR>
+to be very large, ie memory, processes/threads etc, to take 
+<BR>
+care of these dead connections until they timeout.
+<BR>
+To use 2 min as an example, its too long to help the problem on
+<BR>
+a really busy server, yet its too short from the client perspective,
+<BR>
+especially for a proxy.  Consider a CGI app which does some
+<BR>
+database queries.  It may not send any output for over two 
+<BR>
+minutes while a large query is being run on the DBMS.  In this case,
+<BR>
+the proxy would close the connection due to a timeout, prematurely.
+<BR>
+<P>Prohibit half-close in HTTP.
+<BR>
+If the client has done a half-close, close the connection.
+<BR>
+My gut reaction is that in HTTP, the half-close isnt necessary.
+<BR>
+Ill raise it in http-wg.
+<BR>
+<P>--- here's the trace ---
+<BR>
+I had to add some comments and data from the detail section (which I
+<BR>
+didnt post), my additions are in &lt;&gt;'s.
+<BR>
+The trace came from an trace tool which isnt really very friendly.
+<BR>
+<P>The client is a PC running the bad stack, with a web browser which does
+<BR>
+not workaround the problem by sending a reset.
+<BR>
+<P>The server is an HPUX box running Netscape Proxy Server 2.5 without
+<BR>
+any workarounds in place.
+<BR>
+<P>Si client.1391 &gt; server.8080: S 0:1(0) ack: 0 win: 2000 &lt;mss: 5b4&gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] SA 20768c01:20768c02(0) ack: 1 win: 8000 &lt;mss: 100&gt;
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si client.1391 &gt; server.8080: PA 1:1c2(1c1) ack: 20768c02 win: 2000
+<BR>
+Si server.8080 &gt; client.1391: [DF] PA 20768c02:20768cde(dc) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 20768cde:20769292(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 20769292:20769846(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 20769846:20769dfa(5b4) ack: 1c2 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 20769dfa:2076a3ae(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076a3ae:2076a962(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076a962:2076af16(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076af16:2076b4ca(5b4) ack: 1c2 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076b4ca:2076ba7e(5b4) ack: 1c2 win: 8000
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076b4ca:2076ba7e(5b4) ack: 1c2 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076ba7e:2076bdfa(37c) ack: 1c2 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c2 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA 
+<BR>
+Si client.1391 &gt; server.8080: FPA 
+<BR>
+&lt; client window drops to zero and proceeds to FIN_WAIT_1 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 
+<BR>
+&lt; server ACKs the FIN &gt;
+<BR>
+&lt; client now in FIN_WAIT_2 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c3 win: 8000
+<BR>
+&lt; server continues to try to send its data &gt;
+<BR>
+Si client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c3 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c3 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c3 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+Si server.8080 &gt; client.1391: [DF] A 2076bdfa:2076bdfb(1) ack: 1c3 win: 8000
+<BR>
+Si client.1391 &gt; server.8080: PA &lt; window = 0 &gt;
+<BR>
+.. repeat ad nauseum ..
+<BR>
+<P><P>&nbsp;
+<BR>
+<P><PRE>
+-- 
+-----------------------------------------------------------------------------
+Josh Cohen				        Netscape Communications Corp.
+Netscape Fire Department	       
+Server Engineering
+<A HREF="mailto:josh@netscape.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;199702112340.PAA27437@birdcage.mcom.com&gt;">josh@netscape.com</A>                       <A HREF="http://home.netscape.com/people/josh/">http://home.netscape.com/people/josh/</A>
+-----------------------------------------------------------------------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0075.html">Steve Alexander: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0077.html">Thomas Narten: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#74">[ date ]</A>
+<A HREF="index.html#74">[ thread ]</A>
+<A HREF="subject.html#74">[ subject ]</A>
+<A HREF="author.html#74">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

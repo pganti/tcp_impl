@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Slow start question ...</TITLE>
+<META NAME="Author" CONTENT="Jan Koum (jkb@ethereal.net)">
+<META NAME="Subject" CONTENT="Re: Slow start question ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Slow start question ...</H1>
+<!-- received="Tue May 23 13:49:24 2000" -->
+<!-- isoreceived="20000523174924" -->
+<!-- sent="Tue, 23 May 2000 10:41:58 -0700" -->
+<!-- isosent="20000523174158" -->
+<!-- name="Jan Koum" -->
+<!-- email="jkb@ethereal.net" -->
+<!-- subject="Re: Slow start question ..." -->
+<!-- id="20000523104158.E47375@ethereal.net" -->
+<!-- inreplyto="392AB240.6EF60106@cs.unc.edu" -->
+<STRONG>From:</STRONG> Jan Koum (<A HREF="mailto:jkb@ethereal.net?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000523104158.E47375@ethereal.net&gt;"><EM>jkb@ethereal.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue May 23 2000 - 13:41:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2093.html">Luigi Rizzo: "Re: Slow start question ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2084.html">Howard Berkey: "Re: Slow start question ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2094">[ date ]</A>
+<A HREF="index.html#2094">[ thread ]</A>
+<A HREF="subject.html#2094">[ subject ]</A>
+<A HREF="author.html#2094">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+my output is from 4.0 -- i didn't think there was a sysctl in earlier
+<BR>
+versions since 3.x doesn't have a sysct:
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Don't force slow-start on local network.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/     
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!in_localaddr(inp-&gt;inp_faddr))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = mss;
+<BR>
+<P>but 2.2.x does seem to have a sysctl:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Don't force slow-start on local network.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Make this depend on the sysctl variable below
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!no_local_slowstart || !in_localaddr(inp-&gt;inp_faddr))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = mss;
+<BR>
+<P>and 2.1 does not have a sysctl:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Don't force slow-start on local network.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!in_localaddr(inp-&gt;inp_faddr))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = mss;
+<BR>
+<P><P>with no_local_slowstart set to 0, this evaluates to true:
+<BR>
+&nbsp;&nbsp;(!no_local_slowstart || !in_localaddr(inp-&gt;inp_faddr)
+<BR>
+<P><P>so i think 2.2.8 (just like the comment indicates) does not force slow
+<BR>
+start on the local network either.
+<BR>
+<P>-- yan
+<BR>
+<P><P><P>On Tue, May 23, 2000 at 12:30:56PM -0400, Michele Clark &lt;<A HREF="mailto:clark@cs.unc.edu?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000523104158.E47375@ethereal.net&gt;">clark@cs.unc.edu</A>&gt; wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Which version are you running?  
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In FreeBSD 2.2.8, there's a sysctl option 
+</EM><BR>
+<EM>&gt; net.inet.tcp.no_local_slowstart.  It's default value is 0, I
+</EM><BR>
+<EM>&gt; believe, which forces slow start on the local network.  (This option
+</EM><BR>
+<EM>&gt; wasn't present before 2.2.8.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -Michele
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Jan Koum wrote:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; looking at freebsd, it seem that slowstart *is* disabled for local
+</EM><BR>
+<EM>&gt; &gt; network:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; $ sysctl -a|grep slowstart
+</EM><BR>
+<EM>&gt; &gt; net.inet.tcp.slowstart_flightsize: 1
+</EM><BR>
+<EM>&gt; &gt; net.inet.tcp.local_slowstart_flightsize: 65535
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; this is probably correct for 95% of the time, since having bridged
+</EM><BR>
+<EM>&gt; &gt; wireless and atm are not very common. but you are right, to be 100%
+</EM><BR>
+<EM>&gt; &gt; correct, freebsd should probably also have local slowstart enabled.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; -- yan
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; On Mon, May 22, 2000 at 10:15:34AM -0700, Jamshid Mahdavi &lt;<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000523104158.E47375@ethereal.net&gt;">mahdavi@novell.com</A>&gt; wrote:
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; There is also no way of knowing what the layer 2 topology is.  For
+</EM><BR>
+<EM>&gt; &gt; &gt; example, you could be sending out of a 100 Mb/s interface, but the
+</EM><BR>
+<EM>&gt; &gt; &gt; receiver might only be on a 10 Mb/s interface.  These days, pretty
+</EM><BR>
+<EM>&gt; &gt; &gt; much anything can be bridged together; wireless, DSL, ATM, and more
+</EM><BR>
+<EM>&gt; &gt; &gt; could all be quietly masquerading as part of your &quot;local ethernet&quot;.
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; Since there can be congestion on any of these transitions, it is still
+</EM><BR>
+<EM>&gt; &gt; &gt; necessary to do slowstart and congestion avoidance to hosts on the
+</EM><BR>
+<EM>&gt; &gt; &gt; local network.
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; --J
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &quot;Ramesh Shankar&quot; &lt;<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000523104158.E47375@ethereal.net&gt;">RSHANKAR@novell.com</A>&gt; writes:
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; If the peer to which a TCP connection has been established is on a
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; &quot;direct connected&quot; network (i.e. the route doesn't point to a
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; gateway), why exactly is slow start required? Linux and NetBSD seem
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; to do slow start for this case while FreeBSD doesn't seem to (I
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; haven't picked through the source to verify this though). Since slow
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; start is meant to &quot;probe the available network bandwidth&quot; of a route
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; (involving routers), it seems to me that I really shouldn't have to
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; use slow start for the case mentioned above.
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; One of the e-mails in this list mentioned a case where the outbound
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; interface queue was overwhelmed by a burst of packets when slow
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; start was not used. Slow start seems to be a wrong way to solve this
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; problem. This problem could happen even when too many connections
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; are opened, and hence is a fundamental inter-layer flow control
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; problem.
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; Any insight would be greatly appreciated.
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; Thanks,
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; &gt; S.R.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2093.html">Luigi Rizzo: "Re: Slow start question ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2084.html">Howard Berkey: "Re: Slow start question ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2094">[ date ]</A>
+<A HREF="index.html#2094">[ thread ]</A>
+<A HREF="subject.html#2094">[ subject ]</A>
+<A HREF="author.html#2094">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

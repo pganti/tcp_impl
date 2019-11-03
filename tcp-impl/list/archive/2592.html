@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-15">
+<TITLE>TCP-IMPL Mailing List Archive: Connection Establishment</TITLE>
+<META NAME="Author" CONTENT="Sebastian Zimmermann (S.Zimmermann@tu-harburg.de)">
+<META NAME="Subject" CONTENT="Connection Establishment">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Connection Establishment</H1>
+<!-- received="Wed Feb  6 09:24:00 2002" -->
+<!-- isoreceived="20020206142400" -->
+<!-- sent="Wed, 06 Feb 2002 15:11:25 +0100" -->
+<!-- isosent="20020206141125" -->
+<!-- name="Sebastian Zimmermann" -->
+<!-- email="S.Zimmermann@tu-harburg.de" -->
+<!-- subject="Connection Establishment" -->
+<!-- id="3C61398D.90005@tu-harburg.de" -->
+<!-- charset="ISO-8859-15" -->
+<STRONG>From:</STRONG> Sebastian Zimmermann (<A HREF="mailto:S.Zimmermann@tu-harburg.de?Subject=Re:%20Connection%20Establishment&In-Reply-To=&lt;3C61398D.90005@tu-harburg.de&gt;"><EM>S.Zimmermann@tu-harburg.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 06 2002 - 09:11:25 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2593.html">David Borman: "Re: Connection Establishment"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2591.html">krunz@ece.arizona.edu: "Mobicom 2002"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2593.html">David Borman: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2594.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2595.html">Bob Braden: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2596.html">Jeremy Harris - Network Service Providers Division: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2598.html">Bob Braden: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2604.html">Jeremy Harris [RU-UK]: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2609.html">D'laila Pereira: "Client Server"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2592">[ date ]</A>
+<A HREF="index.html#2592">[ thread ]</A>
+<A HREF="subject.html#2592">[ subject ]</A>
+<A HREF="author.html#2592">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>I would like to ask for some help with correct connection establishment:
+<BR>
+<P>1st case: the client does the active open, server sends data (payload)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- client sends SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- server sends SYN-ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- client sends ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- server sends data
+<BR>
+<P>I assume, that this is correct. But what happens in the
+<BR>
+<P>2nd case: the server does the active open and sends data
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- server sends SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- client sends SYN+ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- server sends ACK
+<BR>
+<P>And now the question:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;May the server send the data already with the final ACK of the 
+<BR>
+connection establishment (piggyback), or must it send two packets (ACK 
+<BR>
+and data), or must it wait for the clients ACK of the ACK (and then send 
+<BR>
+data)?
+<BR>
+<P>Thanks for your help
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Sebastian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2593.html">David Borman: "Re: Connection Establishment"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2591.html">krunz@ece.arizona.edu: "Mobicom 2002"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2593.html">David Borman: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2594.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2595.html">Bob Braden: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2596.html">Jeremy Harris - Network Service Providers Division: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2597.html">Naidu, Venkata: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2598.html">Bob Braden: "RE: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2604.html">Jeremy Harris [RU-UK]: "Re: Connection Establishment"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2609.html">D'laila Pereira: "Client Server"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2592">[ date ]</A>
+<A HREF="index.html#2592">[ thread ]</A>
+<A HREF="subject.html#2592">[ subject ]</A>
+<A HREF="author.html#2592">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 06 2002 - 09:24:07 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

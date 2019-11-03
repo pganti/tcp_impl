@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 17:54:48 1997" -->
+<!-- isoreceived="19970211225448" -->
+<!-- sent="Tue, 11 Feb 1997 17:38:06 +0000" -->
+<!-- isosent="19970211173806" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="3300AE7E.60F9@spider.com" -->
+<!-- inreplyto="9702111708.AA20950@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;3300AE7E.60F9@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 12:38:06 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0051.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0051.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#52">[ date ]</A>
+<A HREF="index.html#52">[ thread ]</A>
+<A HREF="subject.html#52">[ subject ]</A>
+<A HREF="author.html#52">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thomas Narten wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I don't quite follow some of the details here:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>My apologies for not being clear enough.  The scenario to which
+<BR>
+I was referring  was a client TCP that does not support RFC1122
+<BR>
+half duplex close with RST (it is a SHOULD, not a MUST).  This
+<BR>
+causes the server process to hang if the client closes the connection
+<BR>
+with traffic in the pipe.  Maybe it only happens for your second
+<BR>
+scenario: if the server blocks on a write() when a send window of data
+<BR>
+is unacknowledged;  if there is enough data to send then the send
+<BR>
+window will go down to zero - presumably this ends up blocking the
+<BR>
+write.  I don't know if the average web page contains enough data
+<BR>
+to trigger flow control from the receiving application back to the
+<BR>
+sender.
+<BR>
+<P>I think the sequence of events is as follows:
+<BR>
+<P>1.  server  is blocked on write()
+<BR>
+2.  client closes normally and server ACKs (client in FIN-WAIT-2
+<BR>
+and server in CLOSE-WAIT).  No RST because RFC1122 is not followed.
+<BR>
+3.  server never closes
+<BR>
+<P><EM>&gt; &gt; To get round this, Netscape (but not all web browsers) sets
+</EM><BR>
+<EM>&gt; &gt; SO_LINGER to zero, i.e. the application forces the RST.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But this would only send out a single RST, which might get lost. What
+</EM><BR>
+<EM>&gt; happens if the RST is lost and the server retransmits? Aren't we now
+</EM><BR>
+<EM>&gt; back in the same situation described in the first paragraph, which
+</EM><BR>
+<EM>&gt; presumably can lead to hung servers too, right?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>But the client has closed, so any data received will be RST because
+<BR>
+there is no socket, isn't that the case?
+<BR>
+<P>It's a small point maybe, but it's another bug that should be listed
+<BR>
+(and a clarification of the TCP specification).
+<BR>
+<P>I forgot to mention that multiple concurrent TCP connections exacerbates
+<BR>
+the situation, as might be expected.
+<BR>
+<P>regards
+<BR>
+<P>ian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0051.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0051.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#52">[ date ]</A>
+<A HREF="index.html#52">[ thread ]</A>
+<A HREF="subject.html#52">[ subject ]</A>
+<A HREF="author.html#52">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

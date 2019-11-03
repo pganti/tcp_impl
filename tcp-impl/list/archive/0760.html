@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Resetting of ssthresh accord</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Resetting of ssthresh according to RFC2001">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Resetting of ssthresh according to RFC2001</H1>
+<!-- received="Thu Oct  9 15:09:23 1997" -->
+<!-- isoreceived="19971009190923" -->
+<!-- sent="Thu, 09 Oct 1997 15:06:39 PDT" -->
+<!-- isosent="19971009220639" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: Resetting of ssthresh according to RFC2001" -->
+<!-- id="199710092206.PAA23469@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Thu, 09 Oct 1997 16:29:23 PDT" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Resetting%20of%20ssthresh%20according%20to%20RFC2001&In-Reply-To=&lt;199710092206.PAA23469@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Oct 09 1997 - 18:06:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0759.html">Graham Cope: "Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0854.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#760">[ date ]</A>
+<A HREF="index.html#760">[ thread ]</A>
+<A HREF="subject.html#760">[ subject ]</A>
+<A HREF="author.html#760">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Presumably this means that ssthresh should be reset when congestion
+</EM><BR>
+<EM>&gt; occurs.
+</EM><BR>
+<P>More exactly, when TCP responds to a loss, by either a timeout retransmission
+<BR>
+or beginning a fast retransmit/fast recovery sequence, it first sets ssthresh
+<BR>
+based on the value of cwnd in effect at the time of the loss.
+<BR>
+<P><EM>&gt; I have observed (ina simulation) that if congestion occurs then
+</EM><BR>
+<EM>&gt; multiple segments tend to be lost or timeout, cwnd is set to MSS after
+</EM><BR>
+<EM>&gt; the first loss ...
+</EM><BR>
+<P>For a timeout retransmission, this is correct behavior.
+<BR>
+<P><EM>&gt; ... and hence ssthresh is set to 2*MSS.
+</EM><BR>
+<P>This is incorrect.  ssthresh is supposed to be set *first*, to half of the
+<BR>
+current value of cwnd.  This happens before cwnd is set to 1 MSS to begin
+<BR>
+slow start.
+<BR>
+<P>If cwnd was sufficiently large to begin with, then the only normal circumstance
+<BR>
+in which ssthresh should be set to 2*MSS is if the retransmitted packet is
+<BR>
+itself lost (or if the slow start following the retransmission doesn't get
+<BR>
+very far before there's a loss).  In that case, ssthresh (again) gets set
+<BR>
+to half of cwnd, which gets rounded up to the minimum value of 2*MSS if
+<BR>
+needed.
+<BR>
+<P><EM>&gt; Thus, I take this mean that ssthresh should be reset to half the current
+</EM><BR>
+<EM>&gt; window size when congestion occurs, but should not be reset until
+</EM><BR>
+<EM>&gt; congestion goes away ...
+</EM><BR>
+<P>There's no explicit notion of congestion going away.  The algorithm is
+<BR>
+that ssthresh is always set to cwnd/2 (modulo rounding) when a fast
+<BR>
+retransmission begins or a timeout retransmission occurs.  If you have a
+<BR>
+timeout retransmission that is itself lost, then yes, ssthresh is set to
+<BR>
+MSS*2 - and that's what you want, because the net is still congested, so
+<BR>
+you must proceed gingerly.
+<BR>
+<P>I've noted this as an area to clarify as we tweak RFC 2001.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0759.html">Graham Cope: "Resetting of ssthresh according to RFC2001"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0761.html">Graham Cope: "Re: Resetting of ssthresh according to RFC2001"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0854.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#760">[ date ]</A>
+<A HREF="index.html#760">[ thread ]</A>
+<A HREF="subject.html#760">[ subject ]</A>
+<A HREF="author.html#760">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

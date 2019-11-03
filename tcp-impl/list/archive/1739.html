@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TOS issues with non RFC comp</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TOS issues with non RFC compliant TCP stacks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TOS issues with non RFC compliant TCP stacks</H1>
+<!-- received="Wed Jun  9 04:00:50 1999" -->
+<!-- isoreceived="19990609080050" -->
+<!-- sent="Wed, 9 Jun 1999 00:57:53 -0700 (PDT)" -->
+<!-- isosent="19990609075753" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TOS issues with non RFC compliant TCP stacks" -->
+<!-- id="199906090757.AAA01888@rum.isi.edu" -->
+<!-- inreplyto="TOS issues with non RFC compliant TCP stacks" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;199906090757.AAA01888@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 09 1999 - 03:57:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1738.html">Alan Hannan: "TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1738.html">Alan Hannan: "TOS issues with non RFC compliant TCP stacks"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1739">[ date ]</A>
+<A HREF="index.html#1739">[ thread ]</A>
+<A HREF="subject.html#1739">[ subject ]</A>
+<A HREF="author.html#1739">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;199906090757.AAA01888@rum.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Tue Jun  8 23:27:07 1999
+</EM><BR>
+<EM>&gt; Date: Tue, 8 Jun 1999 22:45:11 -0700
+</EM><BR>
+<EM>&gt; From: Alan Hannan &lt;<A HREF="mailto:alan@globalcenter.net?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;199906090757.AAA01888@rum.isi.edu&gt;">alan@globalcenter.net</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:nanog@merit.edu?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;199906090757.AAA01888@rum.isi.edu&gt;">nanog@merit.edu</A>, <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;199906090757.AAA01888@rum.isi.edu&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: TOS issues with non RFC compliant TCP stacks
+</EM><BR>
+...
+<BR>
+<EM>&gt;   It has come to our attention that a notable fraction of the
+</EM><BR>
+<EM>&gt;   internet client community uses a TCP stack which is not RFC
+</EM><BR>
+<EM>&gt;   compliant, as far as we can determine.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Certain versions of MacTCP send a RST when they receive SYN ACK
+</EM><BR>
+<EM>&gt;   packets of TOS!=0.
+</EM><BR>
+<P>Far as I have found, the spec (STD7) says that TOS is a TCP 
+<BR>
+per-connection property (page 12). 
+<BR>
+<P>On page 36 it appears to clearly state that (case 2):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;terminated then).  If our SYN has been acknowledged (perhaps in this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;incoming segment) the precedence level of the incoming segment must
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;match the local precedence level exactly, if it does not a reset
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;must be sent.
+<BR>
+<P><EM>&gt;   So, the empirical part:  We implemented TOS bit-setting for the
+</EM><BR>
+<EM>&gt;   purpose of tracking traffic flows and traffic levels.  For an
+</EM><BR>
+<EM>&gt;   entirely arbitrary reason, we chose TOS=5 for the default of
+</EM><BR>
+<EM>&gt;   traffic.  We found that MacTCP ceased functioning.  The MacTCP
+</EM><BR>
+<EM>&gt;   stack would initiate an RST when receiving SYN ACK packets with
+</EM><BR>
+<EM>&gt;   a TOS=5, as the SYN packets had a TOS=0.  Therefore, all TCP
+</EM><BR>
+<EM>&gt;   sessions would fail.
+</EM><BR>
+<P>Granted, this is a first cut read, but wouldn't this appear
+<BR>
+to indicate that NOT sending the RST is the violation of the 
+<BR>
+spec?
+<BR>
+<P>Can you clarify?
+<BR>
+<P>Joe 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1738.html">Alan Hannan: "TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1738.html">Alan Hannan: "TOS issues with non RFC compliant TCP stacks"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1739">[ date ]</A>
+<A HREF="index.html#1739">[ thread ]</A>
+<A HREF="subject.html#1739">[ subject ]</A>
+<A HREF="author.html#1739">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Thu Mar 27 00:43:33 1997" -->
+<!-- isoreceived="19970327054333" -->
+<!-- sent="Thu, 27 Mar 1997 09:01:58 +0100" -->
+<!-- isosent="19970327080158" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="199703270801.JAA32168@regin.dna.lth.se" -->
+<!-- inreplyto="5736.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703270801.JAA32168@regin.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Mar 27 1997 - 03:01:58 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0272.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimp-prob-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0269.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#271">[ date ]</A>
+<A HREF="index.html#271">[ thread ]</A>
+<A HREF="subject.html#271">[ subject ]</A>
+<A HREF="author.html#271">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703270801.JAA32168@regin.dna.lth.se&gt;">wsimpson@greendragon.com</A>&gt; writes:
+<BR>
+<EM>&gt;Actually, 3 key parameters, as already written in RFC-813:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 1) Should not be less than the time the application takes to process
+</EM><BR>
+<EM>&gt;    the data (&quot;holding&quot; or &quot;processing&quot; time).  When RTT dominated by
+</EM><BR>
+<EM>&gt;    processing time (low delay networks), need floor (&quot;minimum value&quot;).
+</EM><BR>
+<P>I don't see anything in the discussion of the holding time that
+<BR>
+implies a minimum value for the ACK timeout (ATO). The discussion talks
+<BR>
+about a minimum value on the RTT calculated at the sender to prevent
+<BR>
+spurious retransmission due to the fact that the receiver is delaying an ACK.
+<BR>
+We see this problem in Linux due to the fact that we use 10 milisecond
+<BR>
+or 1 milisecond granularity timers (depending on the hardware).
+<BR>
+If we don't place a 200 millisecond floor on the RTT then we do
+<BR>
+spurious retransmission against BSD derived stacks which have a fixed 200
+<BR>
+millisecond delayed ACK policy.
+<BR>
+<P><EM>&gt;    No floor specified, but the example is 200 to 300 milliseconds.  I
+</EM><BR>
+<EM>&gt;    always thought of that as a floor of 200 and a ceiling of 300.
+</EM><BR>
+<P>The only place I find these numbers mentioned in the RFC is on the
+<BR>
+discussion of the expected interarrival time on the Arpanet.
+<BR>
+Have I missed something?
+<BR>
+<P><EM>&gt; 2) Should not be more than measured 1/2 RTT, as otherwise might cause
+</EM><BR>
+<EM>&gt;    retransmission.  RFC-1122 specifies a ceiling of 500 milliseconds.
+</EM><BR>
+<P>I can't find any discussion specific to this point in the RFC.
+<BR>
+What have I missed?
+<BR>
+<P>As to the 500 millisecond ceiling, this seems to derive from the
+<BR>
+500 millisecond granularity in the RTT calculation on BSD derived stacks.
+<BR>
+Since we always have a 500 millisecond &quot;over estimate&quot; (roughly
+<BR>
+speaking) in the RTT a 500 millisecond ceiling on the delay prevents
+<BR>
+a spurious retransmission due to a delayed ack. Also note that
+<BR>
+if you are calculating the RTT with higher resolution timers you
+<BR>
+need to consider this fact. 
+<BR>
+<P><EM>&gt; 3) Should be related to inter-arrival time of packet _bursts_ (back to
+</EM><BR>
+<EM>&gt;    back packets).  This was for _high_ delay &quot;very slow&quot; links, trying
+</EM><BR>
+<EM>&gt;    to measure how long it takes a packet to transmit down the slowest
+</EM><BR>
+<EM>&gt;    link.  Unfortunately, a packet train over ethernet/FDDI/OC-3 will
+</EM><BR>
+<EM>&gt;    have virtually zero inter-arrival time, while a 1500 byte packet
+</EM><BR>
+<EM>&gt;    at 9600 bps is 1.5 seconds.
+</EM><BR>
+<P>Yes, we filter the ATO measure we do against large changes in the
+<BR>
+interarrival time for just this reason. As you observe the 500 millisecond
+<BR>
+ceiling kicks in on really slow links, and on really fast links
+<BR>
+we end up just ACKing every second packet as required by RFC-1122.
+<BR>
+(Although I can still measure the ATO on 10 base-T ethernet, it's
+<BR>
+just very small. I'm not so sure about 100 base-T or FDDI, maybe
+<BR>
+when we have 1 millisecond clocks.  Also, at this speed delay between
+<BR>
+packets might be dominated by the time the sending machine takes to
+<BR>
+stuff the next packet into the network and not on the transmission
+<BR>
+delay in the network.)
+<BR>
+<P><EM>&gt;    BTW, this was for future research, in the appendix.
+</EM><BR>
+<P>Quite right. Perhaps this discussion is straying from the charter
+<BR>
+of this group at this point.
+<BR>
+<P><EM>&gt;As I mentioned, I used &quot;srtt/2 + mdev&quot; quite successfully, with a floor
+</EM><BR>
+<EM>&gt;of 100 ms and a ceiling of 500 ms.
+</EM><BR>
+<P>Note that you on a pure receiving link you have no RTT measure.
+<BR>
+If you use the initial srtt and mdev settings on your link you are
+<BR>
+essentially setting the ATO to a constant on a pure receiver.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703270801.JAA32168@regin.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0272.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimp-prob-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0270.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0269.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#271">[ date ]</A>
+<A HREF="index.html#271">[ thread ]</A>
+<A HREF="subject.html#271">[ subject ]</A>
+<A HREF="author.html#271">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

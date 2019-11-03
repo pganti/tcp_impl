@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 12:58:02 1997" -->
+<!-- isoreceived="19970430165802" -->
+<!-- sent="Wed, 30 Apr 1997 13:54:43 -0600" -->
+<!-- isosent="19970430195443" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301954.NAA18217@mica.denver.sgi.com" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301954.NAA18217@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 15:54:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0393.html">Bill Fenner: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0394.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#392">[ date ]</A>
+<A HREF="index.html#392">[ thread ]</A>
+<A HREF="subject.html#392">[ subject ]</A>
+<A HREF="author.html#392">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:fab@fab.md.interlink.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301954.NAA18217@mica.denver.sgi.com&gt;">fab@fab.md.interlink.com</A> (Fred Bohle)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301954.NAA18217@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, vjs, <A HREF="mailto:jt@mentat.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301954.NAA18217@mica.denver.sgi.com&gt;">jt@mentat.com</A>
+</EM><BR>
+<P><EM>&gt; &gt; Can we try to gather some specific details on the extent of the problem?
+</EM><BR>
+<EM>&gt; &gt; Which specific implementations crash on receipt of options other than MSS,
+</EM><BR>
+<EM>&gt; &gt; and which do not crash but do black hole the connection request?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; An S.E. did a search on our problem database and came up with the following
+</EM><BR>
+<EM>&gt; culprits:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A Lexmart (sp?) printer (lpd type) would lock up and require power-cycling
+</EM><BR>
+<EM>&gt; the box if the SYN had options in it (other than MSS?).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Old PC/NFS implementations would fail.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Some old Sun releases would fail.(!!!)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Data General would fail.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Unisys/Burroughs(sp?) would fail.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Silicon Graphics would fail. (!!! Vernon? Weren't you in on this thread?)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; No, I don't have release numbers of these implementations.  Perhaps the
+</EM><BR>
+<EM>&gt; guilty can find out and let us know.
+</EM><BR>
+<P><P>That any versions of SGI boxes built since 1986 would do the wrong
+<BR>
+thing with TCP options other than MSS is news to me.  I just spent some
+<BR>
+time asking the SGI bug tracking system about likely combinations of
+<BR>
+keywords, but found nothing, except that it doesn't go back past 1987.
+<BR>
+(1986 is when Kipp and I tossed the previous TCP code as well as the
+<BR>
+XNS support and jammed in the 4.3-BSD-beta network code.) I'm also
+<BR>
+surprised that old Sun systems would croak instead of just ignore the
+<BR>
+option.  I'd rather suspect that you guys had a bug in how you shifted
+<BR>
+the window or something.
+<BR>
+<P>But no matter, Murphy says that whenever you do something out of the
+<BR>
+ordinary, you'll get caught, regardless of whether what you are doing
+<BR>
+is legal and right.  &quot;Be conservative in what you send, ...&quot;
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301954.NAA18217@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0393.html">Bill Fenner: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0394.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#392">[ date ]</A>
+<A HREF="index.html#392">[ thread ]</A>
+<A HREF="subject.html#392">[ subject ]</A>
+<A HREF="author.html#392">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: I-D ACTION:draft-ietf-tcpimpl-pm</TITLE>
+<META NAME="Author" CONTENT="Internet-Drafts@ietf.org (Internet-Drafts@ietf.org)">
+<META NAME="Subject" CONTENT="I-D ACTION:draft-ietf-tcpimpl-pmtud-03.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>I-D ACTION:draft-ietf-tcpimpl-pmtud-03.txt</H1>
+<!-- received="Thu May 11 07:13:49 2000" -->
+<!-- isoreceived="20000511111349" -->
+<!-- sent="Thu, 11 May 2000 06:57:44 -0400" -->
+<!-- isosent="20000511105744" -->
+<!-- name="Internet-Drafts@ietf.org" -->
+<!-- email="Internet-Drafts@ietf.org" -->
+<!-- subject="I-D ACTION:draft-ietf-tcpimpl-pmtud-03.txt" -->
+<!-- id="200005111057.GAA23563@ietf.org" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Internet-Drafts@ietf.org?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-pmtud-03.txt&In-Reply-To=&lt;200005111057.GAA23563@ietf.org&gt;"><EM>Internet-Drafts@ietf.org</EM></A><BR>
+<STRONG>Date:</STRONG> Thu May 11 2000 - 06:57:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2080.html">Mark Allman: "WG last call on pmtud doc"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2078.html">SoftCOM Secretary: "Second Call for Papers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2079">[ date ]</A>
+<A HREF="index.html#2079">[ thread ]</A>
+<A HREF="subject.html#2079">[ subject ]</A>
+<A HREF="author.html#2079">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A New Internet-Draft is available from the on-line Internet-Drafts directories.
+<BR>
+This draft is a work item of the TCP Implementation Working Group of the IETF.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title		: TCP Problems with Path MTU Discovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s)	: K. Lahey
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filename	: draft-ietf-tcpimpl-pmtud-03.txt
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages		: 16
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date		: 10-May-00
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+This memo catalogs several known TCP implementation problems dealing
+<BR>
+with Path MTU Discovery [RFC1191], including the long-standing black
+<BR>
+hole problem, stretch ACKs due to confusion between MSS and segment
+<BR>
+size, and MSS advertisement based on PMTU.  The goal in doing so is
+<BR>
+to improve conditions in the existing Internet by enhancing the
+<BR>
+quality of current TCP/IP implementations.
+<BR>
+<P>A URL for this Internet-Draft is:
+<BR>
+<A HREF="http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-pmtud-03.txt">http://www.ietf.org/internet-drafts/draft-ietf-tcpimpl-pmtud-03.txt</A>
+<BR>
+<P>Internet-Drafts are also available by anonymous FTP. Login with the username
+<BR>
+&quot;anonymous&quot; and a password of your e-mail address. After logging in,
+<BR>
+type &quot;cd internet-drafts&quot; and then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;get draft-ietf-tcpimpl-pmtud-03.txt&quot;.
+<BR>
+<P>A list of Internet-Drafts directories can be found in
+<BR>
+<A HREF="http://www.ietf.org/shadow.html">http://www.ietf.org/shadow.html</A> 
+<BR>
+or <A HREF="ftp://ftp.ietf.org/ietf/1shadow-sites.txt">ftp://ftp.ietf.org/ietf/1shadow-sites.txt</A>
+<BR>
+<P><P>Internet-Drafts can also be obtained by e-mail.
+<BR>
+<P>Send a message to:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mailserv@ietf.org.
+<BR>
+In the body type:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;FILE /internet-drafts/draft-ietf-tcpimpl-pmtud-03.txt&quot;.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+NOTE:	The mail server at ietf.org can return the document in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIME-encoded form by using the &quot;mpack&quot; utility.  To use this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feature, insert the command &quot;ENCODING mime&quot; before the &quot;FILE&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command.  To decode the response(s), you will need &quot;munpack&quot; or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a MIME-compliant mail reader.  Different MIME-compliant mail readers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit different behavior, especially when dealing with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;multipart&quot; MIME messages (i.e. documents which have been split
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up into multiple messages), so check your local documentation on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;how to manipulate these messages.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Below is the data which will enable a MIME compliant mail reader
+<BR>
+implementation to automatically retrieve the ASCII version of the
+<BR>
+Internet-Draft.
+<BR>
+<P><P>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2080.html">Mark Allman: "WG last call on pmtud doc"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2078.html">SoftCOM Secretary: "Second Call for Papers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2079">[ date ]</A>
+<A HREF="index.html#2079">[ thread ]</A>
+<A HREF="subject.html#2079">[ subject ]</A>
+<A HREF="author.html#2079">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

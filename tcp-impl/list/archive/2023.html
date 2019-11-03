@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Michael Krause (krause@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 15:20:13 2000" -->
+<!-- isoreceived="20000225202013" -->
+<!-- sent="Fri, 25 Feb 2000 12:03:38 -0800" -->
+<!-- isosent="20000225200338" -->
+<!-- name="Michael Krause" -->
+<!-- email="krause@cup.hp.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="4.2.2.20000225115214.00b73280@hpindlm.cup.hp.com" -->
+<!-- inreplyto="200002250010.QAA16997@pizda.ninka.net" -->
+<STRONG>From:</STRONG> Michael Krause (<A HREF="mailto:krause@cup.hp.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;4.2.2.20000225115214.00b73280@hpindlm.cup.hp.com&gt;"><EM>krause@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 15:03:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2023">[ date ]</A>
+<A HREF="index.html#2023">[ thread ]</A>
+<A HREF="subject.html#2023">[ subject ]</A>
+<A HREF="author.html#2023">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 04:10 PM 2/24/00 -0800, David S. Miller wrote:
+<BR>
+<EM>&gt;    Date: Thu, 24 Feb 2000 17:09:51 -0700
+</EM><BR>
+<EM>&gt;    From: &quot;Justin T. Gibbs&quot; &lt;<A HREF="mailto:gibbs@freebsd.org?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;4.2.2.20000225115214.00b73280@hpindlm.cup.hp.com&gt;">gibbs@freebsd.org</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;    In the case of a server response, RDMA benefits the client, not the
+</EM><BR>
+<EM>&gt;    server, so I fail to see why your example is problematic.  Zero
+</EM><BR>
+<EM>&gt;    copy send is not what this standard addresses.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;With client memory bus bandwidth in the multi-gigabyte per second
+</EM><BR>
+<EM>&gt;range, who needs to avoid the single copy?  How much NFS and web
+</EM><BR>
+<EM>&gt;surfing does one need to do before this is would really come into
+</EM><BR>
+<EM>&gt;play?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;And the bus speeds will just be faster by the time something like
+</EM><BR>
+<EM>&gt;this could be deployed widely.
+</EM><BR>
+<P>It ain't free and there are plenty of reasons to avoid copying data since 
+<BR>
+many applications do not always touch the data being moved.  Also, http and 
+<BR>
+web traffic are probably not the best examples to illustrate the value of 
+<BR>
+RDMA Read and Write operations.  Storage which was the context that started 
+<BR>
+this effort certainly benefits from a combination of send for 
+<BR>
+control  messages and RDMA for data movement - doesn't matter whether this 
+<BR>
+in user-space / kernel-space, client or server.  Those buffers may be only 
+<BR>
+used by the server to reflect a data set to a set of users without ever 
+<BR>
+touching the buffers themselves.  Also, one could use this technology with 
+<BR>
+storage devices to bypass the server and send data to one or more NICs for 
+<BR>
+remote access - RDMA is still quite good for this type of operation and 
+<BR>
+does not involve touching the data.
+<BR>
+<P>Mike
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2022.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1991.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2023">[ date ]</A>
+<A HREF="index.html#2023">[ thread ]</A>
+<A HREF="subject.html#2023">[ subject ]</A>
+<A HREF="author.html#2023">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

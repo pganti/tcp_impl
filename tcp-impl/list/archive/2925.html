@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: FWD:: Re: [e2e] Re: Question</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header</H1>
+<!-- received="Wed Dec 18 12:51:39 2002" -->
+<!-- isoreceived="20021218175139" -->
+<!-- sent="Wed, 18 Dec 2002 08:22:23 -0800" -->
+<!-- isosent="20021218162223" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header" -->
+<!-- id="3E00A0BF.1000407@isi.edu" -->
+<!-- inreplyto="200212181536.KAA27785@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP%20header&In-Reply-To=&lt;3E00A0BF.1000407@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Dec 18 2002 - 11:22:23 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2926.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2924.html">Mark Allman: "FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2921.html">Mark Allman: "FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2925">[ date ]</A>
+<A HREF="index.html#2925">[ thread ]</A>
+<A HREF="subject.html#2925">[ subject ]</A>
+<A HREF="author.html#2925">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mark Allman wrote:
+<BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ------- Forwarded Message
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@tardy.cup.hp.com?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP%20header&In-Reply-To=&lt;3E00A0BF.1000407@isi.edu&gt;">raj@tardy.cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:RShankar@Novell.COM?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP%20header&In-Reply-To=&lt;3E00A0BF.1000407@isi.edu&gt;">RShankar@Novell.COM</A>
+</EM><BR>
+<EM>&gt; Date: Mon, 16 Dec 2002 10:49:21 -0800 (PST)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:end2end-interest@postel.org?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP%20header&In-Reply-To=&lt;3E00A0BF.1000407@isi.edu&gt;">end2end-interest@postel.org</A>, <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP%20header&In-Reply-To=&lt;3E00A0BF.1000407@isi.edu&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;&gt;Thanks for the pointer. I have heard that the IP ID field is used for 
+</EM><BR>
+<EM>&gt;&gt;covert channel by hackers. Apparently a rogue SSL implementation was 
+</EM><BR>
+<EM>&gt;&gt;leaking session keys in the IP ID field. While not foolproof or the 
+</EM><BR>
+<EM>&gt;&gt;ultimate defense, if I don't need to use the IP ID field for IP 
+</EM><BR>
+<EM>&gt;&gt;datagrams with the don't fragment bit set (mostly TCP), then it may be 
+</EM><BR>
+<EM>&gt;&gt;useful as an intrusion detection technique.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;  
+</EM><BR>
+<EM>&gt; I'd be very careful fixing the IP ID - I have been told by one major
+</EM><BR>
+<EM>&gt; &quot;interconnect&quot; vendor that some of their products have ways to allow
+</EM><BR>
+<EM>&gt; the customer (at customers persistent request) to cause the devices to
+</EM><BR>
+<EM>&gt; ignore and clear the DF bit...
+</EM><BR>
+<P>That would be a violation of the STDs (1812, 791), which could cause 
+<BR>
+problems that would be very difficult to debug (e.g., path MTU, etc.)
+<BR>
+<P>I.e., you're worried about changing the IP ID field because vendors who 
+<BR>
+violate standards will break? Go right ahead, IMO.
+<BR>
+<P>Laws for the lawless are a waste of effort (shades of NAT).
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2926.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2924.html">Mark Allman: "FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2921.html">Mark Allman: "FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2925">[ date ]</A>
+<A HREF="index.html#2925">[ thread ]</A>
+<A HREF="subject.html#2925">[ subject ]</A>
+<A HREF="author.html#2925">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Dec 18 2002 - 12:51:47 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

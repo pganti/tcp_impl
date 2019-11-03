@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 15:43:30 1997" -->
+<!-- isoreceived="19970605194330" -->
+<!-- sent="Thu, 5 Jun 97 15:39:03 PDT" -->
+<!-- isosent="19970605223903" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="9706052239.AA04188@can.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:39:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0468.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#466">[ date ]</A>
+<A HREF="index.html#466">[ thread ]</A>
+<A HREF="subject.html#466">[ subject ]</A>
+<A HREF="author.html#466">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:erics@rekk.dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">erics@rekk.dna.lth.se</A> Thu Jun  5 14:28:26 1997
+<BR>
+&nbsp;&nbsp;*&gt; To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">braden@ISI.EDU</A>
+<BR>
+&nbsp;&nbsp;*&gt; Cc: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">Eric.Schenk@dna.lth.se</A>, <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>
+<BR>
+&nbsp;&nbsp;*&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">Eric.Schenk@dna.lth.se</A>
+<BR>
+&nbsp;&nbsp;*&gt; Subject: Re: TIME-WAIT truncation 
+<BR>
+&nbsp;&nbsp;*&gt; In-Reply-To: Your message of &quot;Thu, 05 Jun 1997 13:49:08 PDT.&quot;
+<BR>
+&nbsp;&nbsp;*&gt;              &lt;<A HREF="mailto:9706052049.AA04066@can.isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">9706052049.AA04066@can.isi.edu</A>&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Date: Thu, 05 Jun 1997 23:26:10 +0200
+<BR>
+&nbsp;&nbsp;*&gt; Sender: <A HREF="mailto:erics@rekk.dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">erics@rekk.dna.lth.se</A>
+<BR>
+&nbsp;&nbsp;*&gt; Content-Length: 992
+<BR>
+&nbsp;&nbsp;*&gt; X-Lines: 21
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">braden@ISI.EDU</A> &lt;<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;9706052239.AA04188@can.isi.edu&gt;">braden@ISI.EDU</A>&gt; writes:
+<BR>
+&nbsp;&nbsp;*&gt; &gt;When you start messing with TCP's reliable delivery mechanism, you have
+<BR>
+&nbsp;&nbsp;*&gt; &gt;to be very careful.  I am not positive, but I think I recall that the
+<BR>
+&nbsp;&nbsp;*&gt; &gt;scheme you mention is in fact formally incorrect and can be
+<BR>
+&nbsp;&nbsp;*&gt; &gt;demonstrated in particular circumstances to allow corrupted data.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Being a theoretician by training, I would be very interested to see
+<BR>
+&nbsp;&nbsp;*&gt; any such proof. Anyone got a hint at a reference?
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>Eric,
+<BR>
+<P>Perhaps I should not have said &quot;formally&quot;.  It's not a proof, but I
+<BR>
+buried an informal explanation of this error in the appendix to
+<BR>
+RFC-1185.  I *hope* you don't want to argue about it, because thinking
+<BR>
+about TCP reliability always makes my head hurt!
+<BR>
+<P>Sandy Murphy of TIS wrote a thesis and a published a paper some years
+<BR>
+ago containing a formal proof of correctness for a TCP-like protocol.
+<BR>
+We could ask her about this case.
+<BR>
+<P>Bob Braden
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0468.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#466">[ date ]</A>
+<A HREF="index.html#466">[ thread ]</A>
+<A HREF="subject.html#466">[ subject ]</A>
+<A HREF="author.html#466">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

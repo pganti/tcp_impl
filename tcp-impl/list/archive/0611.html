@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 13:51:38 1997" -->
+<!-- isoreceived="19970702175138" -->
+<!-- sent="Wed, 2 Jul 1997 15:47:06 -0500 (CDT)" -->
+<!-- isosent="19970702204706" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707022047.PAA19105@frantic.BSDI.COM" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 16:47:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#611">[ date ]</A>
+<A HREF="index.html#611">[ thread ]</A>
+<A HREF="subject.html#611">[ subject ]</A>
+<A HREF="author.html#611">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">luigi@labinfo.iet.unipi.it</A> Wed Jul  2 04:00:03 1997
+</EM><BR>
+<EM>&gt; From: Luigi Rizzo &lt;<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">luigi@labinfo.iet.unipi.it</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: TCP research issues from a tcp-impl perspective
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:dab@BSDI.COM?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">dab@BSDI.COM</A> (David Borman)
+</EM><BR>
+<EM>&gt; Date: Wed, 2 Jul 1997 09:58:05 +0200 (MET DST)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">Eric.Schenk@dna.lth.se</A>, <A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">wsimpson@greendragon.com</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; X-Mailer: ELM [version 2.4 PL23]
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; I think that the purpose of filtering RTT should be clarified.
+</EM><BR>
+<EM>&gt; Should SRTT track averages, maximums, remove exceedingly large or
+</EM><BR>
+<EM>&gt; exceedingly small samples, or what; and how many RTTs it takes for
+</EM><BR>
+<EM>&gt; a sample to be (practically) forgotten.  Probably a recommendation
+</EM><BR>
+<EM>&gt; should be made to use high resolution timings when possible.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In order to correct the computation when more samples per RTT are
+</EM><BR>
+<EM>&gt; available, you also need to know (dynamically) how many samples
+</EM><BR>
+<EM>&gt; you have per RTT, but this is a bit tricky to implement, and probably
+</EM><BR>
+<EM>&gt; not worth the effort, since there might be such a big variance on
+</EM><BR>
+<EM>&gt; RTT estimates on top of what the real network RTT is (because of
+</EM><BR>
+<EM>&gt; low resolution timers, delayed acks, or acks triggered by user
+</EM><BR>
+<EM>&gt; processes reading data, etc.) that one might also wonder if linear
+</EM><BR>
+<EM>&gt; filtering is appropriate at all for the purpose (e.g. one might
+</EM><BR>
+<EM>&gt; want to compute
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	NEWRTT = MAX(alpha*OLDRTT + (1-alpha)*SAMPLE , SAMPLE )
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; to track large samples more effectively, in order to have more
+</EM><BR>
+<EM>&gt; conservative timeouts...
+</EM><BR>
+<P>Dynamically tracking and changing ALPHA on the fly is not
+<BR>
+that difficult, especially if you don't worry about being
+<BR>
+exact, but rather better than the current code.  The whole
+<BR>
+goal of the SRTT is to be able to set the retransmit timer
+<BR>
+so that it doesn't go off early and cause unneccessary
+<BR>
+retransmissions, but also to try and keep it from waiting
+<BR>
+longer than necessary before retransmitting.
+<BR>
+<P>The simple code is to count the # of calculated RTT values
+<BR>
+during one RTT, and use that result to adjust the ALPPH
+<BR>
+weighting for the next RTT values.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022047.PAA19105@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0610.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#611">[ date ]</A>
+<A HREF="index.html#611">[ thread ]</A>
+<A HREF="subject.html#611">[ subject ]</A>
+<A HREF="author.html#611">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;F</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Wed Mar 19 19:47:58 1997" -->
+<!-- isoreceived="19970320004758" -->
+<!-- sent="Wed, 19 Mar 1997 22:39:36 -0500" -->
+<!-- isosent="19970320033936" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="Re: draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703200339.WAA10987@MAILSERV-2HIGH.FTP.COM" -->
+<!-- inreplyto="draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703200339.WAA10987@MAILSERV-2HIGH.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 22:39:36 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#178">[ date ]</A>
+<A HREF="index.html#178">[ thread ]</A>
+<A HREF="subject.html#178">[ subject ]</A>
+<A HREF="author.html#178">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+||Thanks.  While I appreciate this point, I'm still wondering why in
+<BR>
+||limited-memory situations one would advertise a window exceeding available
+<BR>
+||buffer.  Why not just advertise a window equal to the buffer to ensure that
+<BR>
+||above-sequence data can be retained?
+<BR>
+||
+<BR>
+because these were younger and more innocent days prior to the
+<BR>
+Internet being on the front page of Business Week :-).  Your absolutely
+<BR>
+right, and it was an issue we discussed but never implemented for as you 
+<BR>
+say:
+<BR>
+<P>||A natural answer is: for added performance.  
+<BR>
+yes.
+<BR>
+||window buys you performance is for a large bandwidth-delay path.  These are
+<BR>
+||generally WANs, which are quite prone to packet loss, for which failing to
+<BR>
+||retain the above-sequence data is potentially a serious congestion
+<BR>
+||problem.  If the main performance concern is for a LAN, then I'd think it
+<BR>
+||wouldn't be hard to have enough buffer to support a sufficiently large
+<BR>
+||window, because due to the smaller bandwidth-delay product the window
+<BR>
+||doesn't actually have to be very big.  Say it's an Ethernet with a 1 msec
+<BR>
+||RTT.  Then:
+<BR>
+Aha - in simple single connection cases - FTP as an example, no
+<BR>
+problem - however in complex multiconnection cases - FTP to an NFS
+<BR>
+drive there weren't enough buffers to go around.
+<BR>
+<P>Again - I think the point is important to reemphasize, as its going to
+<BR>
+resurface again in network widgets - the stack model we had to deal
+<BR>
+w/ in those days was a model that supported a default of 5-10 concurrent
+<BR>
+connections (X ran on DOS back then..) with a buffer pool of 3-5 MTU
+<BR>
+sized packets and 10'ish RPC sized packets.
+<BR>
+<P>The more I think thru the issue the more I realize that  our receiving
+<BR>
+one out of sequence packet was correct, if (which we didn;t do..) we
+<BR>
+managed the window size more agressively as someone already suggested.
+<BR>
+<P>Perhaps wording to the effect that in low memory cases where out
+<BR>
+of sequence packet retention is limited, the window should be shrunk to
+<BR>
+avoid dropping incoming packets.
+<BR>
+<P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0180.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#178">[ date ]</A>
+<A HREF="index.html#178">[ thread ]</A>
+<A HREF="subject.html#178">[ subject ]</A>
+<A HREF="author.html#178">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

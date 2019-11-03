@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Charles M. Hannum (mycroft@mit.edu)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Tue Sep  8 08:44:48 1998" -->
+<!-- isoreceived="19980908124448" -->
+<!-- sent="Tue, 8 Sep 1998 11:43:39 -0400 (EDT)" -->
+<!-- isosent="19980908154339" -->
+<!-- name="Charles M. Hannum" -->
+<!-- email="mycroft@mit.edu" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809081543.LAA02918@lunacity.ne.mediaone.net" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Charles M. Hannum (<A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809081543.LAA02918@lunacity.ne.mediaone.net&gt;"><EM>mycroft@mit.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 08 1998 - 11:43:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1301.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1299.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1301.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1300">[ date ]</A>
+<A HREF="index.html#1300">[ thread ]</A>
+<A HREF="subject.html#1300">[ subject ]</A>
+<A HREF="author.html#1300">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+BTW, on review, I believe the `sequence number attacks' section is
+<BR>
+actually irrelevant.  The comment about TIME-WAIT state is incorrect,
+<BR>
+because TIME-WAIT can be assassinated even with normal TCP.  This
+<BR>
+causes the entire logic of the argument to fall apart.  It's also the
+<BR>
+case that this is only really relevant for applications using
+<BR>
+host-based authorization, which should be disabling T/TCP for the
+<BR>
+other reasons I mentioned.  (I actually noticed this once before, but
+<BR>
+due to the distinct lack of feedback I never updated the draft.)
+<BR>
+<P>So, let's assume for a moment that there are correct implementations
+<BR>
+resolving the concerns mentioned in sections 2 (`Host-Based
+<BR>
+Authorization') and 4 (`Pre-SYN Queueing'), and that section 5
+<BR>
+(`Sequence Number Attacks') is simply discarded.  That still leaves
+<BR>
+the concerns in section 3 (`SYN flooding') and 6 (`Conclusions').
+<BR>
+<P>I could easily give on the interoperability problem mentioned in
+<BR>
+section 6.  It's specifically the client using T/TCP and connecting to
+<BR>
+an old server that causes the problem.  It doesn't matter whether or
+<BR>
+not a server uses T/TCP.  So this problem isn't particularly relevant
+<BR>
+to service operators.
+<BR>
+<P>However, the potential for denial of service attacks is still real,
+<BR>
+and I don't see any way around it.
+<BR>
+<P>Now, I expect at this point someone will simply fire up a stupid SYN
+<BR>
+flooding engine and claim that nothing happened.  So I will explain a
+<BR>
+simple scenario that your SYN flooding tool didn't exercise, but which
+<BR>
+will completely hose your server:
+<BR>
+<P>* Say you have a CGI script that takes 1 second of real time to load.
+<BR>
+&nbsp;&nbsp;Lots of sites -- especially ones with fancy shopping carts and
+<BR>
+&nbsp;&nbsp;whatnot -- have a plethora of these.
+<BR>
+<P>* Now say I flood you at a pretty slow rate, perhaps 11 packets every
+<BR>
+&nbsp;&nbsp;10 seconds, with requests that exercise this particular CGI script.
+<BR>
+&nbsp;&nbsp;Since we're using T/TCP, I only need 1 packet per probe to do this,
+<BR>
+&nbsp;&nbsp;and I never have to see the replies.
+<BR>
+<P>* In not too much time at all, I'll have hundreds of httpd processes
+<BR>
+&nbsp;&nbsp;on your machine stuck waiting for this damned CGI script, and not
+<BR>
+&nbsp;&nbsp;processing any real requests.
+<BR>
+<P>* Your customers get pissed off.
+<BR>
+<P>Scale the numbers to suit your CGI scripts, of course.  It doesn't
+<BR>
+matter; the point is still the same.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1301.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1299.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1301.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1300">[ date ]</A>
+<A HREF="index.html#1300">[ thread ]</A>
+<A HREF="subject.html#1300">[ subject ]</A>
+<A HREF="author.html#1300">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:01 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

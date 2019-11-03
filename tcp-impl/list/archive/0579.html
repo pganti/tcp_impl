@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Amr A. Awadallah (amr@hplms2.hpl.hp.com)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jun 25 11:58:55 1997" -->
+<!-- isoreceived="19970625155855" -->
+<!-- sent="Wed, 25 Jun 1997 11:57:14 -0700" -->
+<!-- isosent="19970625185714" -->
+<!-- name="Amr A. Awadallah" -->
+<!-- email="amr@hplms2.hpl.hp.com" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="33B16A0A.42FD@hpl.hp.com" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> Amr A. Awadallah (<A HREF="mailto:amr@hplms2.hpl.hp.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;33B16A0A.42FD@hpl.hp.com&gt;"><EM>amr@hplms2.hpl.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 14:57:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0578.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0582.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0582.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0590.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#579">[ date ]</A>
+<A HREF="index.html#579">[ thread ]</A>
+<A HREF="subject.html#579">[ subject ]</A>
+<A HREF="author.html#579">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Given BLAM, I doubt fiddling with the ACK rate is justified for Ethernet.
+</EM><BR>
+<P>&nbsp;&nbsp;Given Ethernet switches and full duplex cards (with one host per port,
+<BR>
+which is the trend), fiddling with the ACK rate is not justified
+<BR>
+since the capture effect is not there at the first place.
+<BR>
+<P>&nbsp;&nbsp;Also fiddling with the ACK rate will change the rate at which cwnd
+<BR>
+increases, specially during slow-start.  If we ACK once every 4 packets,
+<BR>
+then this means cwnd will increase by 4 for each ACK, and 4 packets will
+<BR>
+be released into the net back-to-back. Back-to-back packets -&gt; capture
+<BR>
+effect. But again this is only during the slow-start phase which is
+<BR>
+short
+<BR>
+for reliable networks, the source's window hits the receiver's
+<BR>
+advertised
+<BR>
+window pretty quickly and stays stable at that value.
+<BR>
+<P>&nbsp;&nbsp;I wonder if anybody out there is doing research on how to regulate the
+<BR>
+back-to-back &quot;effect&quot;. It has been pointed out to me by others that
+<BR>
+selective ACKs combined with the FACK mechanism may provide a solution
+<BR>
+to this problem, but I don't see how. The source still does not have
+<BR>
+immediate information of how many packets left the network. The
+<BR>
+information is always delayed by the delayed-ACK period.
+<BR>
+<P>-- Amr
+<BR>
+<P><PRE>
+-- 
+ Amr A. Awadallah       ####  /    ####   Hewlett-Packard
+ Computer Systems Lab   ###  /_  __ ###   MS: 3L-1
+ <A HREF="mailto:amr@hpl.hp.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;33B16A0A.42FD@hpl.hp.com&gt;">amr@hpl.hp.com</A>         ##  / / /_/  ##   1501 Page Mill Road
+ Phone: (415) 236-2381  ###    /    ###   Palo Alto, CA 94304
+ FAX:   (415) 857-7029  ####  /    ####
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0578.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0582.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0582.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0590.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#579">[ date ]</A>
+<A HREF="index.html#579">[ thread ]</A>
+<A HREF="subject.html#579">[ subject ]</A>
+<A HREF="author.html#579">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

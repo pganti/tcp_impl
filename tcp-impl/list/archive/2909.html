@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: rtt in freebsd</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: rtt in freebsd">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: rtt in freebsd</H1>
+<!-- received="Tue Dec  3 10:12:39 2002" -->
+<!-- isoreceived="20021203151239" -->
+<!-- sent="Tue, 03 Dec 2002 08:29:53 -0500" -->
+<!-- isosent="20021203132953" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="Re: rtt in freebsd" -->
+<!-- id="200212031329.IAA16238@lawyers.ir.bbn.com" -->
+<!-- inreplyto="rtt in freebsd" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20rtt%20in%20freebsd&In-Reply-To=&lt;200212031329.IAA16238@lawyers.ir.bbn.com&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Dec 03 2002 - 08:29:53 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2910.html">Ext-Rafael.M.Sanchez@nokia.com: "Retransmission timer in TCP"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2908.html">Mark Allman: "Re: CFP-The First ACM Conference on Embedded Networked Sensor Systems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2904.html">Gokul Poduval: "rtt in freebsd"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2909">[ date ]</A>
+<A HREF="index.html#2909">[ thread ]</A>
+<A HREF="subject.html#2909">[ subject ]</A>
+<A HREF="author.html#2909">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+<P>------- Forwarded Message
+<BR>
+<P>Date: Thu, 28 Nov 2002 10:47:00 -0600
+<BR>
+From: Jonathan Lemon &lt;<A HREF="mailto:jlemon@flugsvamp.com?Subject=Re:%20rtt%20in%20freebsd&In-Reply-To=&lt;200212031329.IAA16238@lawyers.ir.bbn.com&gt;">jlemon@flugsvamp.com</A>&gt;
+<BR>
+To: Gokul Poduval &lt;<A HREF="mailto:gokulpod@comp.nus.edu.sg?Subject=Re:%20rtt%20in%20freebsd&In-Reply-To=&lt;200212031329.IAA16238@lawyers.ir.bbn.com&gt;">gokulpod@comp.nus.edu.sg</A>&gt;
+<BR>
+Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20rtt%20in%20freebsd&In-Reply-To=&lt;200212031329.IAA16238@lawyers.ir.bbn.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: rtt in freebsd
+<BR>
+<P><EM>&gt;From tcp_input.c:
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* srtt is stored as fixed point with 5 bits after the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* binary point (i.e., scaled by 8).  The following magic
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* is equivalent to the smoothing algorithm in rfc793 with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* an alpha of .875 (srtt = rtt/8 + srtt*7/8 in fixed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* point).  Adjust rtt to origin 0.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+<P>srtt is the smoothed RTT.
+<BR>
+rtttime is the current tick value, and is used for timing segments.
+<BR>
+- -- 
+<BR>
+Jonathan
+<BR>
+<P><P>On Thu, Nov 28, 2002 at 07:01:46PM +0800, Gokul Poduval wrote:
+<BR>
+<EM>&gt; Hello, 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    In the tcpcb structure in freebsd (release 4.5), what variable
+</EM><BR>
+<EM>&gt; maintains the instantaneous rtt ? I tried printing tp-&gt;t_rtttime in the
+</EM><BR>
+<EM>&gt; congestion avoidance section in tcp_input.c, but it always seems to be
+</EM><BR>
+<EM>&gt; 0. 
+</EM><BR>
+<EM>&gt;    tp-&gt;t_srtt seems to reflect a more accurate value of rtt, but its
+</EM><BR>
+<EM>&gt; value seems to be 10 times of what the actual rtt is. (if the rtt is
+</EM><BR>
+<EM>&gt; 60ms, srtt is ~600). 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -- 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Gokul Poduval
+</EM><BR>
+<EM>&gt; <A HREF="http://www.comp.nus.edu.sg/~gokulpod">http://www.comp.nus.edu.sg/~gokulpod</A>
+</EM><BR>
+<P>------- End of Forwarded Message
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2910.html">Ext-Rafael.M.Sanchez@nokia.com: "Retransmission timer in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2908.html">Mark Allman: "Re: CFP-The First ACM Conference on Embedded Networked Sensor Systems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2904.html">Gokul Poduval: "rtt in freebsd"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2909">[ date ]</A>
+<A HREF="index.html#2909">[ thread ]</A>
+<A HREF="subject.html#2909">[ subject ]</A>
+<A HREF="author.html#2909">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Dec 03 2002 - 10:13:17 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

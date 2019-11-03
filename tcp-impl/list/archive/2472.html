@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: [e2e] TEAR.</TITLE>
+<META NAME="Author" CONTENT="Injong Rhee (rhee@eos.ncsu.edu)">
+<META NAME="Subject" CONTENT="RE: [e2e] TEAR.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: [e2e] TEAR.</H1>
+<!-- received="Tue Mar  6 12:10:09 2001" -->
+<!-- isoreceived="20010306171009" -->
+<!-- sent="Tue, 6 Mar 2001 12:01:50 -0500" -->
+<!-- isosent="20010306170150" -->
+<!-- name="Injong Rhee" -->
+<!-- email="rhee@eos.ncsu.edu" -->
+<!-- subject="RE: [e2e] TEAR." -->
+<!-- id="NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu" -->
+<!-- inreplyto="Pine.LNX.4.10.10103031745150.1886-100000@kuang.sask.trlabs.ca" -->
+<STRONG>From:</STRONG> Injong Rhee (<A HREF="mailto:rhee@eos.ncsu.edu?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;"><EM>rhee@eos.ncsu.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 06 2001 - 12:01:50 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2473.html">MMNS'2001: "CFP for Special Sessions in MMNS'2001"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2471.html">Tianbo kuang: "Re: [e2e] TEAR."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2471.html">Tianbo kuang: "Re: [e2e] TEAR."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2472">[ date ]</A>
+<A HREF="index.html#2472">[ thread ]</A>
+<A HREF="subject.html#2472">[ subject ]</A>
+<A HREF="author.html#2472">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>I can't help overhearing, and want to drop a few lines. The RTT calculation
+<BR>
+can be done by the sender through receiving the receiver report about the
+<BR>
+rate. The receiver sends back the time stamp of the last packet received to
+<BR>
+the sender with the sequence number which will be used by the sender to
+<BR>
+compute the RTT. This is one way to do it, and there are  many other ways.
+<BR>
+For instance, you can use the same way that RTP does or use GPS to
+<BR>
+synchronize the clocks and measure the one-way time. Then use the one-way
+<BR>
+trip time in place of RTT -- I know in this case that TCP-friendliness may
+<BR>
+suffer, but it can at least give some bounded fairness. In fact this removes
+<BR>
+back-channel concerns completely from flow control scuh as losses and delays
+<BR>
+in the back channels.
+<BR>
+<P>Some of nice things about TEAR are that (1) it does not use back channels
+<BR>
+much so sutiable for wireless comm; (2) rate control is very smooth; (3)
+<BR>
+TCP-friendly over various ranges of bandwidth --- TFRC has some prblems
+<BR>
+under very low bandwidth cases.
+<BR>
+<P>We have improved TEAR quite bit from the initial work and  TEAR is
+<BR>
+incorporated into an MPEG-4 stream player and stream server, and it seems to
+<BR>
+give pretty good performance over other existing streaming solutions. Other
+<BR>
+areas of exploration are multicast and wireless communication. Sorry I have
+<BR>
+not kept you guys up to date about the progress. I got tired of writing
+<BR>
+papers and have been digging into writing codes.....Maybe its time to come
+<BR>
+out and see the light :-)
+<BR>
+<P>Injong
+<BR>
+<P><P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:end2end-interest-admin@postel.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest-admin@postel.org</A>
+</EM><BR>
+<EM>&gt; [mailto:<A HREF="mailto:end2end-interest-admin@postel.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest-admin@postel.org</A>]On Behalf Of Tianbo kuang
+</EM><BR>
+<EM>&gt; Sent: Saturday, March 03, 2001 6:55 PM
+</EM><BR>
+<EM>&gt; To: foo
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:end2end-interest@ISI.EDU?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest@ISI.EDU</A>; <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">tcp-impl@lerc.nasa.gov</A>;
+</EM><BR>
+<EM>&gt; <A HREF="mailto:end2end-interest@postel.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest@postel.org</A>
+</EM><BR>
+<EM>&gt; Subject: Re: [e2e] TEAR.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I was just about to ask a question about TEAR. It seems unclear to me how
+</EM><BR>
+<EM>&gt; TEAR calculates RTT in the technical report (TEAR: TCP emulation at
+</EM><BR>
+<EM>&gt; receivers - flow control for multimedia streaming). Does the sender
+</EM><BR>
+<EM>&gt; calculate it and send it to the receiver, or does the receiver calculate
+</EM><BR>
+<EM>&gt; it (and how?)? In section 3.5, it does mention under the title _timeout_
+</EM><BR>
+<EM>&gt; that, &quot;this information is embedded in the packet header by the sender&quot;.
+</EM><BR>
+<EM>&gt; What does &quot;this information&quot; refer to?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Cheers,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; --Tianbo
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ------------------------------------------------------
+</EM><BR>
+<EM>&gt;   Kuang Tianbo
+</EM><BR>
+<EM>&gt;   TRlabs
+</EM><BR>
+<EM>&gt;   111-116 Research Drive
+</EM><BR>
+<EM>&gt;   Saskatoon, Saskatchewan S7N 3R3
+</EM><BR>
+<EM>&gt;   Tel: (306) 668-9325(office) (306) 343-9747 (home)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   <A HREF="mailto:kuang@sask.trlabs.ca?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">kuang@sask.trlabs.ca</A>
+</EM><BR>
+<EM>&gt; ------------------------------------------------------
+</EM><BR>
+<EM>&gt; On Mon, 5 Mar 2001, foo wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; Date: Mon, 5 Mar 2001 19:42:52 -0600
+</EM><BR>
+<EM>&gt; &gt; From: foo &lt;<A HREF="mailto:foo@eek.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">foo@eek.org</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; To: <A HREF="mailto:end2end-interest@ISI.EDU?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest@ISI.EDU</A>, <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; &gt; Subject: [e2e] TEAR.
+</EM><BR>
+<EM>&gt; &gt; Resent-Date: Mon, 5 Mar 2001 19:48:05 -0600
+</EM><BR>
+<EM>&gt; &gt; Resent-From: <A HREF="mailto:foo@eek.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">foo@eek.org</A>
+</EM><BR>
+<EM>&gt; &gt; Resent-To: <A HREF="mailto:end2end-interest@postel.org?Subject=RE:%20[e2e]%20TEAR.&In-Reply-To=&lt;NEBBJFHFCDNOKHIEJPAGMEEFCGAA.rhee@eos.ncsu.edu&gt;">end2end-interest@postel.org</A>
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Does anyone have any experience with or thoughts about TEAR
+</EM><BR>
+<EM>&gt; (TCP Emulation
+</EM><BR>
+<EM>&gt; &gt; at Receivers) developed by Injong Rhee at NCSU?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; <A HREF="http://www.csc.ncsu.edu/faculty/rhee/export/tear_page/">http://www.csc.ncsu.edu/faculty/rhee/export/tear_page/</A>
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; -Brian
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2473.html">MMNS'2001: "CFP for Special Sessions in MMNS'2001"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2471.html">Tianbo kuang: "Re: [e2e] TEAR."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2471.html">Tianbo kuang: "Re: [e2e] TEAR."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2472">[ date ]</A>
+<A HREF="index.html#2472">[ thread ]</A>
+<A HREF="subject.html#2472">[ subject ]</A>
+<A HREF="author.html#2472">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Mar 06 2001 - 12:10:38 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

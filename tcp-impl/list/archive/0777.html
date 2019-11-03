@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Out Of Band and Nagle</TITLE>
+<META NAME="Author" CONTENT="Erik Nordmark (Erik.Nordmark@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Out Of Band and Nagle">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Out Of Band and Nagle</H1>
+<!-- received="Wed Oct 15 15:34:48 1997" -->
+<!-- isoreceived="19971015193448" -->
+<!-- sent="Wed, 15 Oct 1997 15:23:45 -0700 (PDT)" -->
+<!-- isosent="19971015222345" -->
+<!-- name="Erik Nordmark" -->
+<!-- email="Erik.Nordmark@eng.Sun.COM" -->
+<!-- subject="Re: Out Of Band and Nagle" -->
+<!-- id="Roam.SIMC.2.0.6.876954225.3674.nordmark@jurassic" -->
+<!-- inreplyto="199710151924.MAA01035@feller.mentat.com" -->
+<STRONG>From:</STRONG> Erik Nordmark (<A HREF="mailto:Erik.Nordmark@eng.Sun.COM?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;Roam.SIMC.2.0.6.876954225.3674.nordmark@jurassic&gt;"><EM>Erik.Nordmark@eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Oct 15 1997 - 18:23:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0778.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0776.html">braden@ISI.EDU: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0768.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0771.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#777">[ date ]</A>
+<A HREF="index.html#777">[ thread ]</A>
+<A HREF="subject.html#777">[ subject ]</A>
+<A HREF="author.html#777">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jerry,
+<BR>
+<P><EM>&gt; The important point, that is not explict in RFC 1122, is that the URG flag
+</EM><BR>
+<EM>&gt; should be made visible to the receiving side without delay.  Forcing out a
+</EM><BR>
+<EM>&gt; segment with data that would not otherwise be sendable (which may or may not
+</EM><BR>
+<EM>&gt; include the data at the urgent pointer) is a way to accomplish this, but I am
+</EM><BR>
+<EM>&gt; not sure that it is a good idea to provide this back-door mechanism to bypass
+</EM><BR>
+<EM>&gt; all send controls.  I believe that the right thing to do when the sender TCP
+</EM><BR>
+<EM>&gt; is presented with outbound urgent data at a time when the send rules preclude
+</EM><BR>
+<EM>&gt; putting a segment on the wire is to generate a zero-length segment with the
+</EM><BR>
+<EM>&gt; URG flag on and the urgent pointer set.
+</EM><BR>
+<P>A zero length segment can not be reliably delivered by TCP since it can not
+<BR>
+be acknowledged.
+<BR>
+<P>I believe t_force in BSD allows TCP to send one byte i.e. it might not
+<BR>
+send the urgent byte but it will at least send a segment that contains
+<BR>
+the urgent pointer. This allows the reliable delivery of an urgent notification
+<BR>
+to the other application.
+<BR>
+<P>A case that does work on BSD derived systems is to have an
+<BR>
+application send data until it gets an EWOULDBLOCK (i.e. TCP is flow
+<BR>
+controlled) and then send an urgent byte. With BSD derived sender
+<BR>
+and receiver this causes an immediate SIGURG on the receiver even though
+<BR>
+TCP is flow controlled by the receiving application.
+<BR>
+<P>I don't know of any applications that depend on this behavior (because
+<BR>
+Solaris 2.0 through 2.5.1 didn't do this) and I know it is somewhat
+<BR>
+painful to implement this and BSD SIOCATMARK behavior correctly in
+<BR>
+an asynchronous (streams based) protocol stack. But in any case, I haven't seen
+<BR>
+anything (except the BSD source :-) that document this behavior in sufficient
+<BR>
+detail.
+<BR>
+<P>Would it be useful to nail down this detailed behavior?
+<BR>
+A lot of the behavior is tied to the socket API and not to the TCP
+<BR>
+protocol specification.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Erik
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0778.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0776.html">braden@ISI.EDU: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0768.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0771.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#777">[ date ]</A>
+<A HREF="index.html#777">[ thread ]</A>
+<A HREF="subject.html#777">[ subject ]</A>
+<A HREF="author.html#777">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

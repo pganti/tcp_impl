@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revised internet draft on su</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: revised internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revised internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 26 17:09:40 1999" -->
+<!-- isoreceived="19990226220940" -->
+<!-- sent="Fri, 26 Feb 1999 14:55:18 -0700 (MST)" -->
+<!-- isosent="19990226215518" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: revised internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902262155.OAA04335@calcite.rhyolite.com" -->
+<!-- inreplyto="revised internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902262155.OAA04335@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 26 1999 - 16:55:18 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1625.html">braden@ISI.EDU: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1624">[ date ]</A>
+<A HREF="index.html#1624">[ thread ]</A>
+<A HREF="subject.html#1624">[ subject ]</A>
+<A HREF="author.html#1624">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I have the distinct impression that the consensus of this mailinglist
+<BR>
+is that:
+<BR>
+<P>&nbsp;&nbsp;- as much as possible, turning off the Nagle algorithm should be avoided.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;However, no one has reported any harm done to any network by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;applications that have set TCP_NODELAY.
+<BR>
+<P>&nbsp;&nbsp;- an explicit flush mechanism might be useful, but it would be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;functionally identical to how toggling TCP_NODELAY should work.
+<BR>
+<P>&nbsp;&nbsp;- modifying the Nagle algorithm as proposed would not be profitable.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ The proposal requires additional CPU cycles, code, and state in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;every TCP implemetation, albeit not a lot.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ There are no existing applications or programs that would benefit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from the change.  All existing programs that would benefit already
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set TCP_NODELAY, have not wrecked the Internet or even caused any
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported harm, and in most cases would stll be forced to set
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP_NODELAY and so could not benefit from the proposed change
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or avoid doing hypothetical harm to networks.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;    applications.  However, for a certain class of applications
+</EM><BR>
+<EM>&gt;    (notably, request-response protocols) the Nagle algorithm interacts
+</EM><BR>
+<EM>&gt;    poorly with delayed acknowledgements to give these applications
+</EM><BR>
+<EM>&gt;    poorer performance.
+</EM><BR>
+<P>That's not quite right, is it?  Many request-response applications do
+<BR>
+not suffer any bad Nagle effects.  The canonical Nagle application, telnet,
+<BR>
+is a request-response protocol.  Its requests are keystrokes and the
+<BR>
+responses are echos.
+<BR>
+<P>Doesn't the class of applications are suffer from the Nagle algorithm
+<BR>
+consist of:
+<BR>
+&nbsp;&nbsp;1. poorly written applications that do send()-send()-receive()
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead of writev()-receive().
+<BR>
+&nbsp;&nbsp;2. applications that necessarily do send()-send() of small blocks.
+<BR>
+&nbsp;&nbsp;3. applications that send blocks larger than 1 MSS but not a multiple
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of the MSS on systems that do not block based on send() requests.
+<BR>
+<P>As far as I can see, only #3 might benefit from the proposal.  #1 and #2
+<BR>
+would still be forced to set TCP_NODELAY.
+<BR>
+<P><P><EM>&gt;    This draft is NOT suggesting that these applications should disable
+</EM><BR>
+<EM>&gt;    the Nagle algorithm.
+</EM><BR>
+<P>Why not?  Exactly what is the harm done to the network or anything else
+<BR>
+when type #3 applications disable the Nagle algorithm?  The only harm I've
+<BR>
+heard mentioned can be best summarized as &quot;&quot;application writers are idiots
+<BR>
+and will write junk code that will trash the network if we give them the
+<BR>
+slightest opportunity.  Therefore, we must make the API so complicated and
+<BR>
+obscure so that only the smartest programmers will figure out how to do
+<BR>
+what they need to do.&quot;  I like the Nagle algorithm, but I am offended by
+<BR>
+some of the implicit attitudes offered in its defense.  Some programmers
+<BR>
+are idiots, but some others are not.
+<BR>
+<P><P><EM>&gt;    This draft suggests a fairly small and simple modification to the
+</EM><BR>
+<EM>&gt;    Nagle algorithm which preserves the Nagle algorithm as a means of
+</EM><BR>
+<EM>&gt;    protecting the internet while at the same time giving better
+</EM><BR>
+<EM>&gt;    performance to a wider class of applications.
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;    The current Nagle algorithm can be described as follows:
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; 	if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; (snd.nxt &gt; snd.una)) {
+</EM><BR>
+<EM>&gt; 		do not send the packet;
+</EM><BR>
+<EM>&gt; 	}
+</EM><BR>
+<P>My copy of 4.4BSD-Lite uses
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; (snd.nxt != snd.una)) {
+<BR>
+<P>That avoids hassles with computing (snd.nxt &gt; snd.una)
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; 	if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; (snd.sml &gt; snd.una)) {
+</EM><BR>
+<EM>&gt; 		do not send the packet;
+</EM><BR>
+<EM>&gt; 	} else {
+</EM><BR>
+<EM>&gt; 		snd.sml = snd.nxt+packet.size;
+</EM><BR>
+<EM>&gt; 		send the packet;
+</EM><BR>
+<EM>&gt; 	}
+</EM><BR>
+<P>Do you have a favorite way of dealing with the problems behind computing 
+<BR>
+(snd.sml &gt; snd.una) ?
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;    To implement the modified Nagle algorithm in such a system, we
+</EM><BR>
+<EM>&gt;    replace snd.sml with two variables: ``snd.sml.add'' is a TCP
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Why modify the Nagle algorithm in such a system?  Exactly how do any of
+<BR>
+the &quot;certain class of applications&quot; benefit?
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;    explicit direction of the application.  For example, a system based
+</EM><BR>
+<EM>&gt;    on BSD might implement a socket option (using setsockopt(2))
+</EM><BR>
+<EM>&gt;    SO_EXPLICITPUSH, as well as a flag to sendto(2) (possibly
+</EM><BR>
+<EM>&gt;    overloading the semantics of an existing flag, such as MSG_EOF).
+</EM><BR>
+<P>Why would any system put the SO_EXPLICITPUSH into setsockopt()?
+<BR>
+Or exactly what would be the difference in such a system between
+<BR>
+setting SO_EXPLICITPUSH and setting TCP_NODELAY?
+<BR>
+<P>And as we all seem to agree, note that turning TCP_NODELAY on and
+<BR>
+off around a send() request is or should be functionally identical
+<BR>
+to putting SO_EXPLICITPUSH in the send request.
+<BR>
+<P><P><EM>&gt;    In this scenario, an application would set a socket into
+</EM><BR>
+<EM>&gt;    SO_EXPLICITPUSH mode, then enter a mode of writing data to the
+</EM><BR>
+<EM>&gt;    socket and, at the last write, using send(2) with the MSG_EOF flag.
+</EM><BR>
+<EM>&gt;    The underlying TCP would recognize the MSG_EOF flag as an indicator
+</EM><BR>
+<EM>&gt;    to transmit the (possibly) small packet.
+</EM><BR>
+<P>So SO_EXPLICITPUSH as a setsockopt() is not an action, but an
+<BR>
+enabler for MSG_EOF?  Why is an enabler needed?  Why not just honer
+<BR>
+MSG_EOF() (assuming you don't instead turn TCP_NODELAY on and off).
+<BR>
+<P><P><EM>&gt; ..
+</EM><BR>
+<EM>&gt;    If a system were to implement this interface, it would be important
+</EM><BR>
+<EM>&gt;    to NOT disable Nagle when using this interface.  In other words,
+</EM><BR>
+<EM>&gt;    when using this interface, the default mode for TCP would be to NOT
+</EM><BR>
+<EM>&gt;    transmit a small packet (even in the presence of MSG_EOF) if a
+</EM><BR>
+<EM>&gt;    previously transmitted small packet was as yet unacknowledged.
+</EM><BR>
+<P>If there were a packet stuck from a previous application of the Nagle
+<BR>
+algorithm, would you not want to push it out along with the new data that
+<BR>
+has been explicitly marked with MSG_EOF as needing to go out?  Why delay
+<BR>
+the new, urgent data because there is old, non-urgent data that is waiting?
+<BR>
+Regardless of what any RFC said, such behavior would generate plenty of
+<BR>
+bug reports.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Application scenarios that will not be helped by this modification
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;    The proposed modification helps applications which do not need to
+</EM><BR>
+<EM>&gt;    transmit more than one small packet in a single round-trip time.
+</EM><BR>
+<EM>&gt;    This characterizes one way file transfer applications (such as FTP
+</EM><BR>
+<EM>&gt;    [RFC959]) and request/response protocols (such as NNTP [RFC977] and
+</EM><BR>
+<EM>&gt;    HTTP [RFC2068] without pipelining).
+</EM><BR>
+<P>In practice, that paragraph is false.  
+<BR>
+&nbsp;&nbsp;- Doesn't the new NNTP include pipelining?  And what would be the harm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should an NNTP implementation set TCP_NODELAY?
+<BR>
+&nbsp;&nbsp;- When was the last time someone complained about FTP performance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;effects of Nagle?
+<BR>
+&nbsp;&nbsp;- since all HTTP implementations set TCP_NODELAY, modifcations to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nagle on their behalf are at best moot and irrelevant.
+<BR>
+<P><EM>&gt;    However, applications that need to transmit more than one small
+</EM><BR>
+<EM>&gt;    packet in a single round-trip time are not served by this
+</EM><BR>
+<EM>&gt;    modification.  An example of such an application is HTTP [RFC2068]
+</EM><BR>
+<EM>&gt;    using ``pipelining'', in which multiple requests (responses) are
+</EM><BR>
+<EM>&gt;    transmitted asynchronously.
+</EM><BR>
+<P>When I last asked about concrete applications that would benefit from the
+<BR>
+proposal, only new HTTP was nominated, but seemed a better fit with
+<BR>
+a flush bit or TCP_NODELAY toggling.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902262155.OAA04335@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1625.html">braden@ISI.EDU: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1624">[ date ]</A>
+<A HREF="index.html#1624">[ thread ]</A>
+<A HREF="subject.html#1624">[ subject ]</A>
+<A HREF="author.html#1624">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

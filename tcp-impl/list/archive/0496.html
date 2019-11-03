@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 17:11:50 1997" -->
+<!-- isoreceived="19970605211150" -->
+<!-- sent="Fri, 06 Jun 1997 02:07:48 +0200" -->
+<!-- isosent="19970606000748" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706060007.CAA07350@rekk.dna.lth.se" -->
+<!-- inreplyto="199706052327.AA07724@ash.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060007.CAA07350@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 20:07:48 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0497.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0495.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0480.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0481.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#496">[ date ]</A>
+<A HREF="index.html#496">[ thread ]</A>
+<A HREF="subject.html#496">[ subject ]</A>
+<A HREF="author.html#496">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060007.CAA07350@rekk.dna.lth.se&gt;">touch@ISI.EDU</A> &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060007.CAA07350@rekk.dna.lth.se&gt;">touch@ISI.EDU</A>&gt; writes:
+<BR>
+<EM>&gt;&gt; A solution exists which knows precisely which SYN attempts should not
+</EM><BR>
+<EM>&gt;&gt; be allowed, it has zero chance of zapping legitimate users, and it
+</EM><BR>
+<EM>&gt;&gt; have been demonstrated that it can be implemented at very low cost,
+</EM><BR>
+<EM>&gt;&gt; why do you dislike these techniques so much?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;1. doesn't work when incoming requests can be from arbitrary sites
+</EM><BR>
+<EM>&gt;	e.g., web servers
+</EM><BR>
+<P>Huh? A cookie defense doesn't care where the incoming requests come from.
+<BR>
+<P><EM>&gt;2. can consume other resources at the server (CPU, in particular)
+</EM><BR>
+<EM>&gt;	though you've shown it doesn't consume sufficient for
+</EM><BR>
+<EM>&gt;	100 Mbps links
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;	in this sense, cookies do exactly the wrong thing -
+</EM><BR>
+<EM>&gt;	they make the SYN attack more effective when processing
+</EM><BR>
+<EM>&gt;	is the bottleneck (or may in fact make processing the
+</EM><BR>
+<EM>&gt;	bottleneck instead)
+</EM><BR>
+<P>There is certainly a tradeoff here. The question is if it is
+<BR>
+a tradeoff we need to worry about in practice. First, you should
+<BR>
+never invoke a defense against SYN flooding unless you really
+<BR>
+are under attack. This means that under normal circumstances there
+<BR>
+is no penalty (for either drop methods or cookie methods).
+<BR>
+<P>The cost of creating SYN cookies (measured) isn't much more than
+<BR>
+the cost of driving your networking connections at full blast.
+<BR>
+If you don't have the CPU power for that, then you are going to
+<BR>
+have other troubles.
+<BR>
+<P>Also, if someone has the capacity to attack your machine with
+<BR>
+enough SYN packets to saturate your LAN, you're dead anyway,
+<BR>
+the choice of defense is meaningless in this situation.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060007.CAA07350@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0497.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0495.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0480.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0481.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#496">[ date ]</A>
+<A HREF="index.html#496">[ thread ]</A>
+<A HREF="subject.html#496">[ subject ]</A>
+<A HREF="author.html#496">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

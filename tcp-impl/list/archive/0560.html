@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ICMP must fragment and IPsec</H1>
+<!-- received="Mon Jun 23 09:01:32 1997" -->
+<!-- isoreceived="19970623130132" -->
+<!-- sent="Mon, 23 Jun 1997 09:57:20 -0600" -->
+<!-- isosent="19970623155720" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: ICMP must fragment and IPsec" -->
+<!-- id="199706231557.JAA25294@mica.denver.sgi.com" -->
+<!-- inreplyto="ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706231557.JAA25294@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jun 23 1997 - 11:57:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0561.html">Kevin M. Lahey: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0559.html">Matt Crawford: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0598.html">Vern Paxson: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#560">[ date ]</A>
+<A HREF="index.html#560">[ thread ]</A>
+<A HREF="subject.html#560">[ subject ]</A>
+<A HREF="author.html#560">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Matt Crawford &lt;<A HREF="mailto:crawdad@FNAL.GOV?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706231557.JAA25294@mica.denver.sgi.com&gt;">crawdad@FNAL.GOV</A>&gt;
+</EM><BR>
+<EM>&gt; To: vjs (Vernon Schryver)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706231557.JAA25294@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:ipsec@tis.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706231557.JAA25294@mica.denver.sgi.com&gt;">ipsec@tis.com</A>
+</EM><BR>
+<P><EM>&gt; &gt; &gt;   One way might be to have an ICMP or TCP option that requests the
+</EM><BR>
+<EM>&gt; &gt; &gt; other end to provide a response, giving the size of the largest
+</EM><BR>
+<EM>&gt; &gt; &gt; fragment received. This would be enclosed in the SA that the TCP data
+</EM><BR>
+<EM>&gt; &gt; &gt; is flowing in. This is in some sense a variation of the TCP MSS option.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; What is this &quot;other end&quot;?
+</EM><BR>
+<EM>&gt; &gt; If talking to the other end of a TCP connection were enough, then the
+</EM><BR>
+<EM>&gt; &gt; MSS negotiation would be enough ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; No, I think he meant for one end to tell the other what was the size
+</EM><BR>
+<EM>&gt; of the largest IP packet-or-fragment it has actually received.  It
+</EM><BR>
+<EM>&gt; can't rightly be a TCP option, because TCP wouldn't know this.  And
+</EM><BR>
+<EM>&gt; besides, it becomes pretty hairy at any level when you try to find
+</EM><BR>
+<EM>&gt; out what was the largest packet received &quot;lately.&quot;  Ugh.
+</EM><BR>
+<P><P>Yes, I foolishly missed that very interesting idea.
+<BR>
+<P>I'm not bothered by the &quot;lately&quot; in &quot;the largest packet received
+<BR>
+lately&quot;, since you must have timers even to use the DF bit.  The
+<BR>
+idea just moves the timers.  Instead, it bothers me that:
+<BR>
+<P>&nbsp;&nbsp;- it requires changes in both hosts.  PMTU discovery is a hack that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;works without any changes in the rest of the net including the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;peer.  Consider how long it has taken for routers to support the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;improved ICMP error message.
+<BR>
+<P>&nbsp;&nbsp;- it also requires protocol changes.  The IETF aint what it used to be.
+<BR>
+<P>&nbsp;&nbsp;- when would you re-probe to discover if the PMTU has increased?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;This is not a showstopper, but doesn't have an obviously neat answer.
+<BR>
+<P>&nbsp;&nbsp;- I think it assumes UDP does not need PMTU discovery.
+<BR>
+<P>&nbsp;&nbsp;- it assumes no intermediate router is doing fragment reassembly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;I don't know of any that do that, but it is a recurring idea
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;for good reasons.
+<BR>
+<P>&nbsp;&nbsp;- the largest fragment is as large as PMTU.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;First, since all but the last IP fragment must be a multiple of 8
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;bytes, the largest fragment will generally be the largest multiple
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;of 8 less or equal to the MTU.  For example, you'll probably guess
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;1496 or 1488 instead of 1500 or 1492 for an Ethernet segment.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Second, instead of the usual algorithm, a router might try to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fragment into evenly sized pieces.  At the cost of a divide
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;instruction (cheap on modern CPU's), that can reduce the total
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fragmentation should the datagram have to be fragmented twice.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Consider the silly UDP/IP fragment sizes seen often seen from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;NFS servers with FDDI interfaces.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706231557.JAA25294@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0561.html">Kevin M. Lahey: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0559.html">Matt Crawford: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0598.html">Vern Paxson: "Re: ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#560">[ date ]</A>
+<A HREF="index.html#560">[ thread ]</A>
+<A HREF="subject.html#560">[ subject ]</A>
+<A HREF="author.html#560">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

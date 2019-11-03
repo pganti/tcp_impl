@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Josh Cohen (josh@birdcage.mcom.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 21:04:39 1997" -->
+<!-- isoreceived="19970212020439" -->
+<!-- sent="Tue, 11 Feb 1997 12:54:15 -0800 (PST)" -->
+<!-- isosent="19970211205415" -->
+<!-- name="Josh Cohen" -->
+<!-- email="josh@birdcage.mcom.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702112054.MAA26884@birdcage.mcom.com" -->
+<!-- inreplyto="9702112031.AA22266@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Josh Cohen (<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702112054.MAA26884@birdcage.mcom.com&gt;"><EM>josh@birdcage.mcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 15:54:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0067.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0068.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0068.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#66">[ date ]</A>
+<A HREF="index.html#66">[ thread ]</A>
+<A HREF="subject.html#66">[ subject ]</A>
+<A HREF="author.html#66">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; It doesn't make sense to have the client send out a reset, and yet
+</EM><BR>
+<EM>&gt; still be in FIN_WAIT_2 state. If it sends a reset, the server is
+</EM><BR>
+<EM>&gt; supposed to delete its end and stop sending anything else. What will
+</EM><BR>
+<EM>&gt; take the client out of the FIN_WAIT_2 state (normally, it is a FIN
+</EM><BR>
+<EM>&gt; from the server!)?
+</EM><BR>
+We're talking about two different things here.
+<BR>
+The problem occurs when the client send a FIN to abort a connection
+<BR>
+ie, user hits 'stop'.  In this case we go to FIN_WAIT_2 ( as well as
+<BR>
+the other prior states ). 
+<BR>
+<P>The workaround has been that the web client forces the stack to send
+<BR>
+a RST, avoiding the later states, and the hang problem.
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I really don't see this as a big issue. I'd venture that in the vast
+</EM><BR>
+<EM>&gt; majority of cases, at the exect time the client half-duplex closes a
+</EM><BR>
+<EM>&gt; connection, there will be no received data queued by TCP (at the
+</EM><BR>
+<EM>&gt; receiver), so this scenario won't happen frequently in practice. What
+</EM><BR>
+<EM>&gt; is absolutely critical, however, is that any subsequent TCP packets
+</EM><BR>
+<EM>&gt; that arrive for that connection cause a RST to be generated.
+</EM><BR>
+Actually, its a trememdously big issue, and it happens more often than
+<BR>
+many peopl think, in terms of the web.
+<BR>
+( yes yes, HTTP is evil for TCP )
+<BR>
+With HTTP virtually *any* time the client is the active closer,
+<BR>
+it is in an interrupt case.  The server almost *always* has 
+<BR>
+data to send afterwards.
+<BR>
+<P>Think about it:
+<BR>
+<P>case 1:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This page is taking too long, I hit stop.  Sooner or later
+<BR>
+the server is going to get around to sending the requested page.
+<BR>
+It will probably send a series of packets before it receives
+<BR>
+my clients first RST. 
+<BR>
+(the client will end up sending RSTs for a whole bunch of packets,
+<BR>
+more on slower links where there is more data 'in the pipe', and 
+<BR>
+guess what, there are *plenty* of people on slow links and dialup lines)
+<BR>
+<P>case 2:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Im 'joe surfer'  I dont even let the page finish loading
+<BR>
+before I make my next click.  This is virtually the same as hitting
+<BR>
+stop, except that now the client goes on to load the next page.
+<BR>
+If I do a series of these, I have aborted many connections.
+<BR>
+Eventually Ill get to a page I want, then Ill read it, which
+<BR>
+takes a long time relatively speaking.
+<BR>
+<P>So for 20 connections, 5 links traveled, 4 gifs on each, I
+<BR>
+aborted 16 out of 20 connections.  Each aborted connection
+<BR>
+was a case where the server did have data to send.
+<BR>
+<P>In both cases, it isnt just one connection, but multple concurrent
+<BR>
+connections for each gif on the page, up to the browsers max 
+<BR>
+concurrent limit.
+<BR>
+<P><P><P><PRE>
+-- 
+-----------------------------------------------------------------------------
+Josh Cohen				        Netscape Communications Corp.
+Netscape Fire Department	       
+Server Engineering
+<A HREF="mailto:josh@netscape.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702112054.MAA26884@birdcage.mcom.com&gt;">josh@netscape.com</A>                       <A HREF="http://home.netscape.com/people/josh/">http://home.netscape.com/people/josh/</A>
+-----------------------------------------------------------------------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0067.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0065.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0068.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0068.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#66">[ date ]</A>
+<A HREF="index.html#66">[ thread ]</A>
+<A HREF="subject.html#66">[ subject ]</A>
+<A HREF="author.html#66">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

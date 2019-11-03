@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Wed Aug  2 15:34:22 2000" -->
+<!-- isoreceived="20000802193422" -->
+<!-- sent="Wed, 2 Aug 2000 15:52:59 +0100" -->
+<!-- isosent="20000802145259" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="20000802155259.A29837@malatesta.spider.com" -->
+<!-- inreplyto="200008020731.AAA05953@rock.mentat.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;20000802155259.A29837@malatesta.spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 10:52:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2249">[ date ]</A>
+<A HREF="index.html#2249">[ thread ]</A>
+<A HREF="subject.html#2249">[ subject ]</A>
+<A HREF="author.html#2249">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I've actually written 75% of this draft and included Jerry's codes
+<BR>
+that he helpfully sent me three years ago!  Also as far as I am aware
+<BR>
+Mentat is the ONLY TCP stack in wide circulation to use these codes.
+<BR>
+So if the providers of Mentat-based stacks (HP, Solaris, Apple) are
+<BR>
+willing to participate in and implement these codes (the internet draft
+<BR>
+will include example code), we have &quot;de facto&quot; standardisation or
+<BR>
+at least an example.
+<BR>
+<P>I've spoken to William from HP on this.  I suggest he, I and the Sun
+<BR>
+TCP people coauthor the draft. William pointed out that the biggest
+<BR>
+win would be to get the Microsoft stacks to include the error codes
+<BR>
+so we should approach them too.
+<BR>
+<P>I've also discussed this with Alison Mankin and we can take this (and other
+<BR>
+RST issues ) to the Transport Area WG for discussion as needed.  She
+<BR>
+supported the idea (let's face it, if you've ever had to work out why
+<BR>
+the heck a TCP connection has aborted for no obvious reason, any clue
+<BR>
+is useful).  My thought was to present it as an Informational RFC .  This
+<BR>
+could go on the standards track if there was enough interest - which
+<BR>
+would then get it into more TCP stacks.
+<BR>
+<P>I followed the FTP/SMTP code / string idea in the draft as Rick suggested
+<BR>
+<P>cheers
+<BR>
+ian 
+<BR>
+<P>&nbsp;
+<BR>
+On Wed, Aug 02, 2000 at 12:31:59AM -0700, Jerry Toporek wrote:
+<BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; It would be interesting for Apple, Sun (Solaris), and/or Mentat to perhaps
+</EM><BR>
+<EM>&gt; &gt; provide a list of the messages that they currently return so we get an
+</EM><BR>
+<EM>&gt; &gt; understanding of what the possible reasons they've captured are?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Here's where the discussion left off exactly three years ago...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From jt Wed Jul 30 02:15:28 1997
+</EM><BR>
+<EM>&gt; &gt; To: <A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;20000802155259.A29837@malatesta.spider.com&gt;">ian@spider.com</A>
+</EM><BR>
+<EM>&gt; &gt; Subject: Re: RST data - meanings
+</EM><BR>
+<EM>&gt; &gt; X-Sun-Charset: US-ASCII
+</EM><BR>
+<EM>&gt; &gt; Content-Length: 1507
+</EM><BR>
+<EM>&gt; &gt; X-Lines: 37
+</EM><BR>
+<EM>&gt; &gt; Status: O
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; Sorry to hurry you on the RST types, but I'm hoping to put the
+</EM><BR>
+<EM>&gt; &gt; &gt; draft in for the IETF deadline - in around 2 days I think...
+</EM><BR>
+<EM>&gt; &gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; I'll certainly make sure that the proposed standards deviate
+</EM><BR>
+<EM>&gt; &gt; &gt; as little as possible from your usage anyway
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Ok...  Here's what we have...  It's a pretty shabby collection so I have
+</EM><BR>
+<EM>&gt; &gt; added some commentary in parens to help interpret...
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; tcp_accept, state changed	(something weird happened to accepting stream)
+</EM><BR>
+<EM>&gt; &gt; tcp_close, couldn't detach	(resource allocation failure)
+</EM><BR>
+<EM>&gt; &gt; tcp_close, abort rqstd		(SO_LINGER with time -1)
+</EM><BR>
+<EM>&gt; &gt; tcp_close, unread data
+</EM><BR>
+<EM>&gt; &gt; tcp_close, during connect
+</EM><BR>
+<EM>&gt; &gt; tcp_disconnect			(T_DISCON_REQ)
+</EM><BR>
+<EM>&gt; &gt; tcp_eager_blowoff, can't wait	(T_DISCON_REQ before accept)
+</EM><BR>
+<EM>&gt; &gt; tcp_kill_conn			(administrative request to abort connection)
+</EM><BR>
+<EM>&gt; &gt; tcp_kill_conn_by_addr		(same thing, different flavor)
+</EM><BR>
+<EM>&gt; &gt; tcp_lift_anchor, can't wait	(listener closed before accept)
+</EM><BR>
+<EM>&gt; &gt; TCPS_LISTEN-TH_ACK		(unexpected ACK bit while in LISTEN state)
+</EM><BR>
+<EM>&gt; &gt; TCPS_LISTEN-TH_BAD_SECURITY	(bad security specification)
+</EM><BR>
+<EM>&gt; &gt; TCPS_LISTEN-TH_BAD_PRECEDENCE	(bad precedence)
+</EM><BR>
+<EM>&gt; &gt; TCPS_SYN_SENT-Bad_seq
+</EM><BR>
+<EM>&gt; &gt; TCPS_SYN_SENT-Bad_sec_or_prec-TH_ACK
+</EM><BR>
+<EM>&gt; &gt; TCPS_SYN_SENT-Bad_sec_or_prec
+</EM><BR>
+<EM>&gt; &gt; Bad_seq_or_prec-TCPS_SYN_RCVD
+</EM><BR>
+<EM>&gt; &gt; Bad_seq_or_prec
+</EM><BR>
+<EM>&gt; &gt; TH_SYN				(SYN bit with unexpected sequence number)
+</EM><BR>
+<EM>&gt; &gt; TCPS_SYN_RCVD-bad_ack		(SYN-ACK that doesn't ACK SYN)
+</EM><BR>
+<EM>&gt; &gt; new data when detached		(new data received after close)
+</EM><BR>
+<EM>&gt; &gt; TCPS_TIME_WAIT-TH_ACK		(inexplicable segment with ACK while TIME_WAIT)
+</EM><BR>
+<EM>&gt; &gt; TCPS_TIME_WAIT-???		(similar, but no ACK bit)
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Pretty ugly, actually, but helpful for customer support.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; jt
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<P><PRE>
+-- 
+Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;20000802155259.A29837@malatesta.spider.com&gt;">ian@spider.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2249">[ date ]</A>
+<A HREF="index.html#2249">[ thread ]</A>
+<A HREF="subject.html#2249">[ subject ]</A>
+<A HREF="author.html#2249">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

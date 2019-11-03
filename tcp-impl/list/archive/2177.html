@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ISA used in TCP/IP/UDP</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: ISA used in TCP/IP/UDP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ISA used in TCP/IP/UDP</H1>
+<!-- received="Tue Jun 20 12:27:12 2000" -->
+<!-- isoreceived="20000620162712" -->
+<!-- sent="Tue, 20 Jun 2000 09:15:30 -0700" -->
+<!-- isosent="20000620161530" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: ISA used in TCP/IP/UDP" -->
+<!-- id="394F98A2.105E9FF7@isi.edu" -->
+<!-- inreplyto="200006201241.IAA06761@klos.com" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20ISA%20used%20in%20TCP/IP/UDP&In-Reply-To=&lt;394F98A2.105E9FF7@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jun 20 2000 - 12:15:30 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2178.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2176.html">Andreas Pitsillides: "IEEE Infocom 2001 ---&gt; 13 DAYS to GO ---- HAVE YOU SUBMITTED YOUR PAPER ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2175.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2183.html">Craig Partridge: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2183.html">Craig Partridge: "Re: ISA used in TCP/IP/UDP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2177">[ date ]</A>
+<A HREF="index.html#2177">[ thread ]</A>
+<A HREF="subject.html#2177">[ subject ]</A>
+<A HREF="author.html#2177">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Patrick Klos wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;&gt; What are the typical instruction set extension on
+</EM><BR>
+<EM>&gt; &gt;&gt; a CPU so that implementing TCP/IP/UDP network stacks
+</EM><BR>
+<EM>&gt; &gt;&gt; would be more efficient?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;add-with-carry is a nice instruction; it makes it somewhat faster to do IP
+</EM><BR>
+<EM>&gt; &gt;checksums...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I got the impression the original poster was asking for real extensions -
+</EM><BR>
+<EM>&gt; not items that are already available on most processors.  Maybe I'm wrong.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If I were building a processor with TCP/UDP/IP specific extensions, I'd
+</EM><BR>
+<EM>&gt; probably add some of the following:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1)  Checksum register/instructions:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         Compute standard checksum on a range of bytes (useful to
+</EM><BR>
+<EM>&gt;         check IP header checksum).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         Copy and compute standard checksum (useful when collecting
+</EM><BR>
+<EM>&gt;         pieces of a packet before sending it).
+</EM><BR>
+<P>Better if done by a DMA.
+<BR>
+<P><EM>&gt;         Initialize checksum (used to extract pseudo-header and compute
+</EM><BR>
+<EM>&gt;         checksum on it).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     Checksum instructions would be supported by several registers:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         Accumulator (the running checksum total)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         Checksum offset (where in the &quot;packet&quot; to ignore the data since
+</EM><BR>
+<EM>&gt;         the real checksum is stored there).
+</EM><BR>
+<P>A simpler solution would be &quot;ones complement add&quot; - a little more than
+<BR>
+add with carry (i.e., there's no carry, it just gets folded in).
+<BR>
+However, all that would save is one instruction each time the checksum
+<BR>
+is read, since intermediate carries can pipelined in.
+<BR>
+&nbsp;
+<BR>
+<EM>&gt; 2)  Keep in mind similar extensions to support the possibility of
+</EM><BR>
+<EM>&gt;     IPv6.
+</EM><BR>
+<P>Or lack of similar extensions. I.e., in IPv6, checksum of a range of
+<BR>
+bytes becomes much less useful for header manipulations; checksum of
+<BR>
+large quantities of data should be combined with DMA where possible.
+<BR>
+<P><EM>&gt; 5)  Built-in &quot;mbuf&quot;s?  I.e. the processor understands a specific scheme
+</EM><BR>
+<EM>&gt;     of chaining buffers to create packets, thus can more efficiently
+</EM><BR>
+<EM>&gt;     poke around in a packet for you, rather then your code having to
+</EM><BR>
+<EM>&gt;     always do it by hand.
+</EM><BR>
+<P>Assumes mbufs. There are versions of TCP that don't rely on that
+<BR>
+structure, and the structure and especially the order of its components
+<BR>
+can be OS and even compiler-specific. 
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2178.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2176.html">Andreas Pitsillides: "IEEE Infocom 2001 ---&gt; 13 DAYS to GO ---- HAVE YOU SUBMITTED YOUR PAPER ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2175.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2183.html">Craig Partridge: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2183.html">Craig Partridge: "Re: ISA used in TCP/IP/UDP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2177">[ date ]</A>
+<A HREF="index.html#2177">[ thread ]</A>
+<A HREF="subject.html#2177">[ subject ]</A>
+<A HREF="author.html#2177">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

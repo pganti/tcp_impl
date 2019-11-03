@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start related performan</TITLE>
+<META NAME="Author" CONTENT="Pedro Roque (roque@di.fc.ul.pt)">
+<META NAME="Subject" CONTENT="Re: slow-start related performance bugs in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start related performance bugs in TCP</H1>
+<!-- received="Thu Nov 28 12:13:47 1996" -->
+<!-- isoreceived="19961128171347" -->
+<!-- sent="Thu, 28 Nov 1996 12:08:29 GMT" -->
+<!-- isosent="19961128120829" -->
+<!-- name="Pedro Roque" -->
+<!-- email="roque@di.fc.ul.pt" -->
+<!-- subject="Re: slow-start related performance bugs in TCP" -->
+<!-- id="199611281208.MAA26179@oberon.di.fc.ul.pt" -->
+<!-- inreplyto="5511.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> Pedro Roque (<A HREF="mailto:roque@di.fc.ul.pt?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;199611281208.MAA26179@oberon.di.fc.ul.pt&gt;"><EM>roque@di.fc.ul.pt</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Nov 28 1996 - 07:08:29 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0033.html">Ian Heavens: "my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#32">[ date ]</A>
+<A HREF="index.html#32">[ thread ]</A>
+<A HREF="subject.html#32">[ subject ]</A>
+<A HREF="author.html#32">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt;&gt;&gt; &quot;William&quot; == William Allen Simpson &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;199611281208.MAA26179@oberon.di.fc.ul.pt&gt;">wsimpson@greendragon.com</A>&gt; writes:
+</EM><BR>
+<P><EM>    &gt;&gt; From: John Heidemann &lt;<A HREF="mailto:johnh@isi.edu?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;199611281208.MAA26179@oberon.di.fc.ul.pt&gt;">johnh@isi.edu</A>&gt; The first interaction
+</EM><BR>
+<EM>    &gt;&gt; occurs when the congestion window (cwnd) is at 1x MSS (as at
+</EM><BR>
+<EM>    &gt;&gt; the start of a connection, or after an idle period as described
+</EM><BR>
+<EM>    &gt;&gt; below).  The sender transmits the single packet allowed by
+</EM><BR>
+<EM>    &gt;&gt; cwnd, but the receiver delays ACKing this packet because
+</EM><BR>
+<EM>    &gt;&gt; immediate ACKs are only required after two full packets.
+</EM><BR>
+<EM>    &gt;&gt; 
+</EM><BR>
+<EM>    &gt;&gt; The second interaction occurs when the cwnd is at 2x MSS.  If
+</EM><BR>
+<EM>    &gt;&gt; the sender transmits a less-than full-size segment the receiver
+</EM><BR>
+<EM>    &gt;&gt; will refuse to ACK immediately because delayed ACKs require
+</EM><BR>
+<EM>    &gt;&gt; receipt of two *full-MSS* segments for an immediate ACK.
+</EM><BR>
+<EM>    &gt;&gt; 
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; Well, on my typically low speed links into a fat pipe,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; I've always viewed these both as a &quot;feature&quot;....  The
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; delayed Ack helps keep the SRTT from dropping too quickly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; on these less than full size packets, preventing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; retransmissions of full MSS packets later.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;William&gt; Unnecessary retransmission of a 1000 ms packet is a much
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; bigger performance loser over a short term or bursty
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;William&gt; connection than an extra 50 ms delayed Ack at the start.
+<BR>
+<P>One interestening point about delayed acks is that RFC 1122 recomends
+<BR>
+that delayed acks be implemented acording to:
+<BR>
+<P>[TCP:5] &quot;Window and Acknowledgment Strategy in TCP,&quot; D. Clark, RFC-813,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;July 1982.
+<BR>
+<P>Which BSD based stacks usually don't conform to (they use the random 0-50ms
+<BR>
+interval).
+<BR>
+<P>Is this a bug ? Or is 1122 superseded in this regard by one random document
+<BR>
+i'm not aware off ?
+<BR>
+<P>./Pedro.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0033.html">Ian Heavens: "my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#32">[ date ]</A>
+<A HREF="index.html#32">[ thread ]</A>
+<A HREF="subject.html#32">[ subject ]</A>
+<A HREF="author.html#32">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

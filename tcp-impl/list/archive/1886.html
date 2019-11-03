@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: queue limits for DSL and mod</TITLE>
+<META NAME="Author" CONTENT="pwarren@gte.com (pwarren@gte.com)">
+<META NAME="Subject" CONTENT="RE: queue limits for DSL and modems">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: queue limits for DSL and modems</H1>
+<!-- received="Thu Oct 14 14:48:58 1999" -->
+<!-- isoreceived="19991014184858" -->
+<!-- sent="Thu, 14 Oct 1999 14:31:25 -0400" -->
+<!-- isosent="19991014183125" -->
+<!-- name="pwarren@gte.com" -->
+<!-- email="pwarren@gte.com" -->
+<!-- subject="RE: queue limits for DSL and modems" -->
+<!-- id="9552CF5691C5D111A68200A0C92547680FE244@mars.gte.com" -->
+<!-- inreplyto="9552CF5691C5D111A68200A0C925476804D055@mars.gte.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:pwarren@gte.com?Subject=RE:%20queue%20limits%20for%20DSL%20and%20modems&In-Reply-To=&lt;9552CF5691C5D111A68200A0C92547680FE244@mars.gte.com&gt;"><EM>pwarren@gte.com</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Oct 14 1999 - 14:31:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1887.html">Neal Cardwell: "Re: queue limits for DSL and modems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1885.html">Paraskevopoulos Pavlos: "help"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1887.html">Neal Cardwell: "Re: queue limits for DSL and modems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1886">[ date ]</A>
+<A HREF="index.html#1886">[ thread ]</A>
+<A HREF="subject.html#1886">[ subject ]</A>
+<A HREF="author.html#1886">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I don't have a definitive answer, but a while back I did some performance testing over Westell Flexcap I ADSL modems
+<BR>
+(1.5Mbps downstream, 64Kbps upstream). On a bulk FTP download, I measured the sender's output into the downstream queue
+<BR>
+using Etherpeek and found it to be greater than the downstream ADSL bitrate of 1.5Mbps until ACK clocking eventually
+<BR>
+throttled it back. During that initial period, the excess data sitting in the downstream queue built up to as much as
+<BR>
+19,300 bytes (derived from a simple calculation: measured arrival rate minus the known service rate of 1.5Mbps). Since
+<BR>
+no packets were dropped, I concluded that the queue is at least that deep. Incidentally, by doing measurements on the
+<BR>
+receiver side instead, I found the _upstream_ queue to be at least 2000 bytes deep.
+<BR>
+<P>I don't know how representative this is of current ADSL modems, and I don't know how this compares to dialup modems,
+<BR>
+except that my impression (from conversations with Tim Shepard when he was working on this) is that they have far less
+<BR>
+buffer space than this Westell modem.
+<BR>
+<P>All very anecdotal, but I hope it helps...
+<BR>
+<P>= Peter
+<BR>
+------------------------------------
+<BR>
+Peter Warren
+<BR>
+Principal Member of Technical Staff
+<BR>
+GTE Laboratories
+<BR>
+40 Sylvan Rd.
+<BR>
+Waltham, MA 02451
+<BR>
+------------------------------------
+<BR>
+<P><P><EM>&gt;-----Original Message-----
+</EM><BR>
+<EM>&gt;From: <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=RE:%20queue%20limits%20for%20DSL%20and%20modems&In-Reply-To=&lt;9552CF5691C5D111A68200A0C92547680FE244@mars.gte.com&gt;">owner-tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt;[mailto:<A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=RE:%20queue%20limits%20for%20DSL%20and%20modems&In-Reply-To=&lt;9552CF5691C5D111A68200A0C92547680FE244@mars.gte.com&gt;">owner-tcp-impl@lerc.nasa.gov</A>]On Behalf Of Rick Jones
+</EM><BR>
+<EM>&gt;Sent: Wednesday, October 13, 1999 3:49 PM
+</EM><BR>
+<EM>&gt;To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20queue%20limits%20for%20DSL%20and%20modems&In-Reply-To=&lt;9552CF5691C5D111A68200A0C92547680FE244@mars.gte.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt;Subject: queue limits for DSL and modems
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;does anyone have pointers to or data for queue limits in the downstream
+</EM><BR>
+<EM>&gt;(ie towards the &quot;user&quot;) direction for DSL links and/or dial-up modems?
+</EM><BR>
+<EM>&gt;I'm looking for numbers to plug into a crude Streams port of dummynet.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;thanks,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;rick jones
+</EM><BR>
+<EM>&gt;--
+</EM><BR>
+<EM>&gt;these opinions are mine, all mine; HP might not want them anyway... :)
+</EM><BR>
+<EM>&gt;feel free to email, or post, but please do not do both...
+</EM><BR>
+<EM>&gt;my email address is raj in the cup.hp.com domain...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1887.html">Neal Cardwell: "Re: queue limits for DSL and modems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1885.html">Paraskevopoulos Pavlos: "help"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1887.html">Neal Cardwell: "Re: queue limits for DSL and modems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1886">[ date ]</A>
+<A HREF="index.html#1886">[ thread ]</A>
+<A HREF="subject.html#1886">[ subject ]</A>
+<A HREF="author.html#1886">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

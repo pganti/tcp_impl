@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Problems with Path MTU D</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Problems with Path MTU Discovery</H1>
+<!-- received="Thu Sep 16 15:24:13 1999" -->
+<!-- isoreceived="19990916192413" -->
+<!-- sent="Thu, 16 Sep 1999 14:16:44 -0500 (CDT)" -->
+<!-- isosent="19990916191644" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: TCP Problems with Path MTU Discovery" -->
+<!-- id="199909161916.OAA20420@frantic.bsdi.com" -->
+<!-- inreplyto="TCP Problems with Path MTU Discovery" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161916.OAA20420@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 16 1999 - 15:16:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1828.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1826.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1828.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1827">[ date ]</A>
+<A HREF="index.html#1827">[ thread ]</A>
+<A HREF="subject.html#1827">[ subject ]</A>
+<A HREF="author.html#1827">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161916.OAA20420@frantic.bsdi.com&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Thu, 16 Sep 1999 10:18:42 -0700 (PDT)
+</EM><BR>
+<EM>&gt; Subject: Re: TCP Problems with Path MTU Discovery
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; From: Geert Jan de Groot &lt;<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161916.OAA20420@frantic.bsdi.com&gt;">GeertJan.deGroot@bsdi.com</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; Subject: Re: TCP Problems with Path MTU Discovery 
+</EM><BR>
+<EM>&gt; &gt; Date: Thu, 16 Sep 1999 04:39:42 +0200
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; First, a quicky at the end of the document:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt;3.3.   Determining MSS from PMTU
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt;     The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt; &gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt; &gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+</EM><BR>
+<EM>&gt; &gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt; &gt;     determined values to determine the MSS to advertise.
+</EM><BR>
+<EM>&gt; &gt; &gt;     This results in an advertised MSS that is smaller than the largest
+</EM><BR>
+<EM>&gt; &gt; &gt;     MTU the system can receive.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I would like to change the marked sentence with:
+</EM><BR>
+<EM>&gt; &gt; The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt; &gt; the largest MTU of all interfaces on the system.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Rationale: assume a TCP connect happens over an ethernet interface.
+</EM><BR>
+<EM>&gt; &gt; While the TCP session is alive, routing changes and the session is
+</EM><BR>
+<EM>&gt; &gt; now routed over an FDDI interface. If mss would have been 1460 (ethernet),
+</EM><BR>
+<EM>&gt; &gt; we would see micrograms on the FDDI interface unneccesary.
+</EM><BR>
+<EM>&gt; &gt; I just want to make the original text more explicit, that's all.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Advertising the largest of all interfaces at the _start_ of
+</EM><BR>
+<EM>&gt; a connection won't help a connection that changes interfaces
+</EM><BR>
+<EM>&gt; while it is running.
+</EM><BR>
+<P>Sure it will.
+<BR>
+<P><EM>&gt; The advertised MSS need only be as large as the MTU of
+</EM><BR>
+<EM>&gt; the outgoing interface during connection start.
+</EM><BR>
+<P>You've never heard of asymetric routes?
+<BR>
+<P>Just because the packets go out an ethernet interface, doesn't
+<BR>
+mean that the return traffic can't come in the FDDI interface.
+<BR>
+When you advertise only 1500 bytes in the MSS, then return
+<BR>
+traffic through the FDDI interface is limited to 1500 bytes.
+<BR>
+<P><EM>&gt; (if there is reason to re-check or re-try larger MTUs
+</EM><BR>
+<EM>&gt; later, that needs to be addressed separately).
+</EM><BR>
+<P>PMTUD already does rechecks for larger MTUs.
+<BR>
+<P>BTW, if you look at RFC 1191, pg. 6, it says:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;....  The MSS option should be 40 octets less than the
+<BR>
+&nbsp;&nbsp;&nbsp;size of the largest datagram the host is able to reassemble (MMS_R, 
+<BR>
+&nbsp;&nbsp;&nbsp;as defined in [1]); in many cases, this will be the architectural  
+<BR>
+&nbsp;&nbsp;&nbsp;limit of 65495 (65535 - 40) octets.  A host MAY send an MSS value 
+<BR>
+&nbsp;&nbsp;&nbsp;derived from the MTU of its connected network (the maximum MTU over 
+<BR>
+&nbsp;&nbsp;&nbsp;its connected networks, for a multi-homed host); this should not
+<BR>
+&nbsp;&nbsp;&nbsp;cause problems for PMTU Discovery, and may dissuade a broken peer
+<BR>
+&nbsp;&nbsp;&nbsp;from sending enormous datagrams.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: At the moment, we see no reason to send an MSS greater
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;than the maximum MTU of the connected networks, and we
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recommend that hosts do not use 65495.  It is quite possible
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that some IP implementations have sign-bit bugs that would be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tickled by unnecessary use of such a large MSS.
+<BR>
+<P>Note that it doesn't say anything about using the MTU of the
+<BR>
+outgoing interface, it says use the &quot;maximum MTU of the connected
+<BR>
+networks&quot;.  That sounds to me like using the largest MTU across
+<BR>
+all interfaces.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161916.OAA20420@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1828.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1826.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1828.html">Joe Touch: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1827">[ date ]</A>
+<A HREF="index.html#1827">[ thread ]</A>
+<A HREF="subject.html#1827">[ subject ]</A>
+<A HREF="author.html#1827">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:57 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Bandwidth estimation</TITLE>
+<META NAME="Author" CONTENT="Chadi M. BARAKAT (Chadi.Barakat@sophia.inria.fr)">
+<META NAME="Subject" CONTENT="Bandwidth estimation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Bandwidth estimation</H1>
+<!-- received="Wed Mar 10 11:50:23 1999" -->
+<!-- isoreceived="19990310165023" -->
+<!-- sent="Wed, 10 Mar 1999 17:32:40 +0100" -->
+<!-- isosent="19990310163240" -->
+<!-- name="Chadi M. BARAKAT" -->
+<!-- email="Chadi.Barakat@sophia.inria.fr" -->
+<!-- subject="Bandwidth estimation" -->
+<!-- id="36E69EA8.2C49B333@sophia.inria.fr" -->
+<STRONG>From:</STRONG> Chadi M. BARAKAT (<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Bandwidth%20estimation&In-Reply-To=&lt;36E69EA8.2C49B333@sophia.inria.fr&gt;"><EM>Chadi.Barakat@sophia.inria.fr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 10 1999 - 11:32:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1664.html">Vern Paxson: "Fwd: RFC 2525 on TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1665">[ date ]</A>
+<A HREF="index.html#1665">[ thread ]</A>
+<A HREF="subject.html#1665">[ subject ]</A>
+<A HREF="author.html#1665">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>Two weeks ago, I talked about some kind of packet spacing to send many
+<BR>
+packets at the beginning of slow start so that to avoid some RTTs and to
+<BR>
+reduce the time required to reach the available bandwidth. It is clear
+<BR>
+that such solution involves certain implicit bandwidth estimation.
+<BR>
+Another mechanism is required to estimate the bandwidth on the path and
+<BR>
+to set the timer accordingly. This lets us avoid the situation Neal
+<BR>
+mentioned, that of a slow modem and large packets. How to estimate the
+<BR>
+bandwidth, I think that Timestamp option provide us with the required
+<BR>
+information. Namely, the time elapsed between the transmission of two
+<BR>
+ACKs, together with the number of packets acked, can give the source an
+<BR>
+idea about the bottleneck bandwidth. Now, the time between the beginning
+<BR>
+of the connection and the obtaining of such information guarantees that
+<BR>
+the network is not very congested (because a certain number of packets
+<BR>
+has succeeded to cross it) and hence a faster increase of the window
+<BR>
+with separated packets is possible. We can use the same algorithm
+<BR>
+proposed by Hoe to estimate the bandwidth and then the slow start
+<BR>
+threshold. The difference is that here whence the bandwidth is
+<BR>
+estimated, a large window is transmitted by spacing the packets.
+<BR>
+<P>But here I ask, once such estimation is accomplished, why to not profit
+<BR>
+from it to spread any subsequent burst sent by TCP even in congestion
+<BR>
+avoidance. It is known that the loss and the compression of ACKs cause
+<BR>
+burstiness at the source. With some estimation of the bandwidth, these
+<BR>
+bursts can be spread out and some losses avoided (this is can beneficial
+<BR>
+in asymmetric paths). Do you think that some kind of bandwidth
+<BR>
+estimation and packets spread is feasible and form a practical solution?
+<BR>
+I am seeing this as a way to separate the transmission rate of the
+<BR>
+source from the arrival rate of ACKs (to don't rely on the ACK clock
+<BR>
+when it is disturbed). With asymmetric paths and reverse traffic, ACK
+<BR>
+stream doesn't represent what is happening on the forward path. 
+<BR>
+<P>I am currently studying the feasibility of such solution, any help will
+<BR>
+be very appreciated.
+<BR>
+<P>Chadi
+<BR>
+<P><P><PRE>
+-- 
+                    **  Chadi Mohamad BARAKAT  **
+           <A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+                                  /\
+PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Bandwidth%20estimation&In-Reply-To=&lt;36E69EA8.2C49B333@sophia.inria.fr&gt;">Chadi.Barakat@sophia.inria.fr</A>
+2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1664.html">Vern Paxson: "Fwd: RFC 2525 on TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1665">[ date ]</A>
+<A HREF="index.html#1665">[ thread ]</A>
+<A HREF="subject.html#1665">[ subject ]</A>
+<A HREF="author.html#1665">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

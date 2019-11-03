@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Retransmissions without expl</TITLE>
+<META NAME="Author" CONTENT="Umesh Mallugari (umesh@seeyes.co.in)">
+<META NAME="Subject" CONTENT="Re: Retransmissions without explanation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Retransmissions without explanation</H1>
+<!-- received="Thu May 20 04:28:22 1999" -->
+<!-- isoreceived="19990520082822" -->
+<!-- sent="Thu, 20 May 1999 14:07:09 +0530" -->
+<!-- isosent="19990520083709" -->
+<!-- name="Umesh Mallugari" -->
+<!-- email="umesh@seeyes.co.in" -->
+<!-- subject="Re: Retransmissions without explanation" -->
+<!-- id="199905200833.OAA00526@seeyes.seeyes.co.in" -->
+<!-- inreplyto="Retransmissions without explanation" -->
+<STRONG>From:</STRONG> Umesh Mallugari (<A HREF="mailto:umesh@seeyes.co.in?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;199905200833.OAA00526@seeyes.seeyes.co.in&gt;"><EM>umesh@seeyes.co.in</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 20 1999 - 04:37:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1721.html">Steve Nice: "Test"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1719.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1720">[ date ]</A>
+<A HREF="index.html#1720">[ thread ]</A>
+<A HREF="subject.html#1720">[ subject ]</A>
+<A HREF="author.html#1720">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Yes, Jamshid, this is a practical issue that has been out of thought
+<BR>
+for a long time.
+<BR>
+<P>I think the following points you mentioned are related.
+<BR>
+<EM>&gt; - Running with fine-grained clocks.
+</EM><BR>
+<EM>&gt;   1.  Should you?
+</EM><BR>
+<EM>&gt;   2.  Are adjustments to the computations needed?  (Remember delayed
+</EM><BR>
+<EM>&gt;       ack might tack on 200msec).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Always time the RTO from the last packet in flight.
+</EM><BR>
+<P>And, I vote for the idea that adjustment/computation should be based on 
+<BR>
+the last packet in flight because it is more related to the  current
+<BR>
+network
+<BR>
+conditions.
+<BR>
+At the same time, there should be a minimum. So, the following points are
+<BR>
+also worth the thought.
+<BR>
+<EM>&gt; - Should there be a minimum RTO?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Should there be a minimum deviation?
+</EM><BR>
+However, attention to speed must be kept in mind while implementing these.
+<BR>
+<P>-Umesh.
+<BR>
+<P>----------
+<BR>
+<EM>&gt; From: Jamshid Mahdavi &lt;<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;199905200833.OAA00526@seeyes.seeyes.co.in&gt;">mahdavi@novell.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;199905200833.OAA00526@seeyes.seeyes.co.in&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Retransmissions without explanation
+</EM><BR>
+<EM>&gt; Date: Wednesday, May 19, 1999 9:44 PM
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; [This is in response to a note on tcpsat about retransmit timers
+</EM><BR>
+<EM>&gt; firing too early on long connections.]
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have seen unwanted retransmit timouts (i.e. bugs) of this nature in
+</EM><BR>
+<EM>&gt; two other implementations as well.  All of these implementations have
+</EM><BR>
+<EM>&gt; in common more accurate timers.  I suspect it would be useful to have
+</EM><BR>
+<EM>&gt; more detailed documentation on the use of timers and computation of
+</EM><BR>
+<EM>&gt; RTO.  However, it isn't clear to me that there is a lot of consensus
+</EM><BR>
+<EM>&gt; on a number of the issues.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Here are some issues which I think are unresolved, or could use better
+</EM><BR>
+<EM>&gt; documentation:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - How to modify the RTO calculation when doing 1323 timestamps.  The
+</EM><BR>
+<EM>&gt;   idea here is that you are getting measurements more quickly, so you
+</EM><BR>
+<EM>&gt;   might want to adjust the moving average calculation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Running with fine-grained clocks.
+</EM><BR>
+<EM>&gt;   1.  Should you?
+</EM><BR>
+<EM>&gt;   2.  Are adjustments to the computations needed?  (Remember delayed
+</EM><BR>
+<EM>&gt;       ack might tack on 200msec).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Always time the RTO from the last packet in flight.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Should there be a minimum RTO?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; - Should there be a minimum deviation?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Interestingly, I see no discussion of these issues in the TCPSAT
+</EM><BR>
+<EM>&gt; drafts, and I don't believe I have seen them covered in any of the
+</EM><BR>
+<EM>&gt; other relevant places either (i.e. pilc or tcl-impl).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'd be happy to pull together ideas on this subject if people are
+</EM><BR>
+<EM>&gt; interested in seeing such a document.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; --Jamshid
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; PS.  On a process note, I'm thinking this belongs under tcp-impl, so
+</EM><BR>
+<EM>&gt; I've sent this note to tcp-impl and BCC'd tcpsat (where the
+</EM><BR>
+<EM>&gt; conversation started).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1721.html">Steve Nice: "Test"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1719.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1720">[ date ]</A>
+<A HREF="index.html#1720">[ thread ]</A>
+<A HREF="subject.html#1720">[ subject ]</A>
+<A HREF="author.html#1720">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

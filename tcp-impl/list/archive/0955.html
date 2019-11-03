@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Wed Feb 18 09:50:26 1998" -->
+<!-- isoreceived="19980218145026" -->
+<!-- sent="Wed, 18 Feb 1998 11:46:27 -0600 (CST)" -->
+<!-- isosent="19980218174627" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="199802181746.LAA01820@frantic.bsdi.com" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181746.LAA01820@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 12:46:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#955">[ date ]</A>
+<A HREF="index.html#955">[ thread ]</A>
+<A HREF="subject.html#955">[ subject ]</A>
+<A HREF="author.html#955">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bernie Volz writes:
+<BR>
+<P><EM>&gt; I would rather see the &quot;receiving TCP&quot; open the window when it detects
+</EM><BR>
+<EM>&gt; this case and resetting the connection if any new data was received
+</EM><BR>
+<EM>&gt; (even if that data was received because of a window probe). I believe
+</EM><BR>
+<EM>&gt; this is what BSD based stacks typically do. I don't see any advantage to
+</EM><BR>
+<EM>&gt; waiting for a probe before opening the window (and discarding the
+</EM><BR>
+<EM>&gt; previously received data).
+</EM><BR>
+<P>Yes, new data should cause an RST to be generated, but there is no
+<BR>
+need to require that the window be opened.  A window probe *is* new
+<BR>
+data, it just happens to be one byte beyond the end of the current
+<BR>
+window.  BSD stacks generate a RST when receiving a window probe for
+<BR>
+a connection that the user has closed.  (It trims any old data off
+<BR>
+the front of the packet, checks for new data for a closed connection
+<BR>
+and generates a RST if there is any, and then it trims any data off
+<BR>
+the end of the packet beyond the edge of the window.)
+<BR>
+<P>I'd say that real problem in the cited examples is that the sending
+<BR>
+host is not correctly generating window probes:
+<BR>
+<P><EM>&gt;       Note: The persistence probes done by Machine A are the older
+</EM><BR>
+<EM>&gt;       style (resending the last octet to solicit an ACK).
+</EM><BR>
+<P>RFC 793 is not clear that you should generate a RST when receiving data
+<BR>
+for a closed connection when all the new data is beyond the end of the
+<BR>
+window. From page 69:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the RCV.WND is zero, no segments will be acceptable, but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;special allowance should be made to accept valid ACKs, URGs and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RSTs.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If an incoming segment is not acceptable, an acknowledgment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be sent in reply (unless the RST bit is set, if so drop
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the segment and return):
+<BR>
+<P>But in RFC 1122, page 88, it states:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A host MAY implement a &quot;half-duplex&quot; TCP close sequence, so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that an application that has called CLOSE cannot continue to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read data from the connection.  If such a host issues a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLOSE call while received data is still pending in TCP, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if new data is received after CLOSE is called, its TCP 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD send a RST to show that data was lost.
+<BR>
+<P>So that seems to clarify it.
+<BR>
+<P><EM>&gt; The only other option that may make sense to discuss is whether the
+</EM><BR>
+<EM>&gt; &quot;receiving TCP&quot; just resets the connection when there is data on its
+</EM><BR>
+<EM>&gt; receive queue when the application &quot;closes&quot; the socket (in such a way
+</EM><BR>
+<EM>&gt; that it can no longer read that data). I don't a strong opinion on
+</EM><BR>
+<EM>&gt; whether this is better (we could argue that it isn't because most
+</EM><BR>
+<EM>&gt; implementations open the window and reset if more data is received).
+</EM><BR>
+<P>According to the preceeding quote from RFC 1122, it is already
+<BR>
+documented that a host should generate a RST in this case.  I'm
+<BR>
+not sure if BSD does this (generate a RST when the connection is
+<BR>
+closed with un-read data), from a brief look at the code I can't
+<BR>
+quickly confirm this one way or the other.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181746.LAA01820@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#955">[ date ]</A>
+<A HREF="index.html#955">[ thread ]</A>
+<A HREF="subject.html#955">[ subject ]</A>
+<A HREF="author.html#955">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

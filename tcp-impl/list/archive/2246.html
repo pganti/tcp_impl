@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Wed Aug  2 15:22:59 2000" -->
+<!-- isoreceived="20000802192259" -->
+<!-- sent="Wed, 02 Aug 2000 11:13:20 -0700" -->
+<!-- isosent="20000802181320" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="398864C0.9D7D3A3E@ehsco.com" -->
+<!-- inreplyto="20000802155259.A29837@malatesta.spider.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;398864C0.9D7D3A3E@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 14:13:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2247.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2246">[ date ]</A>
+<A HREF="index.html#2246">[ thread ]</A>
+<A HREF="subject.html#2246">[ subject ]</A>
+<A HREF="author.html#2246">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I've actually written 75% of this draft and included Jerry's codes
+</EM><BR>
+<EM>&gt; that he helpfully sent me three years ago!  Also as far as I am aware
+</EM><BR>
+<EM>&gt; Mentat is the ONLY TCP stack in wide circulation to use these codes.
+</EM><BR>
+<P>ONLY has no relevance to WIDE; it's the ONLY or it's not.
+<BR>
+<P>The problem with data in the stream is multi-dimensional. First of all,
+<BR>
+the specs let anybody do anything, and I guarantee that somebody is
+<BR>
+doing something that won't be appreciated. It is highly likely that
+<BR>
+there are at least a few implementations which (1) use some format you
+<BR>
+do not, (2) leave binary data as leftovers in the RST, or (3) will do
+<BR>
+something else in the future since the spec allows it.
+<BR>
+<P>If we are going to standardize on the interpretation of errors, then the
+<BR>
+representation should be standardized in such a way that interpretation
+<BR>
+is not likely. Reverse-standardizing on legacy representations does not
+<BR>
+satisfy that objective. In other words, if we find out that in some
+<BR>
+particular scenario there are many stacks which leave binary junk in the
+<BR>
+data stream for RST then your spec will be instantly broken.
+<BR>
+<P>To wit:
+<BR>
+<P><EM>&gt; I followed the FTP/SMTP code / string idea in the draft as Rick
+</EM><BR>
+<EM>&gt; suggested
+</EM><BR>
+<P>That will make legacy Mentat implementations non-compliant, and will
+<BR>
+require coding around.
+<BR>
+<P>The primary benefit of an RST option is that the representation of the
+<BR>
+failure is removed from the datastream, guaranteeing that the only
+<BR>
+implementations who do anything with it are the implementations who know
+<BR>
+WHAT to do with it explicitly.
+<BR>
+<P>A secondary benefit is that TEXT data is not required, but instead there
+<BR>
+is room for explicit codes/types in 2 bytes of option data (four bytes
+<BR>
+if you include all the option overhead which isn't necessary with
+<BR>
+options that are not variable-length).
+<BR>
+<P>Trying to do this in the free-form datastream is a bad idea all around,
+<BR>
+I believe.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2247.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2250.html">Alan Cox: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2246">[ date ]</A>
+<A HREF="index.html#2246">[ thread ]</A>
+<A HREF="subject.html#2246">[ subject ]</A>
+<A HREF="author.html#2246">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

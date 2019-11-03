@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 18:14:19 1998" -->
+<!-- isoreceived="19981110231419" -->
+<!-- sent="Tue, 10 Nov 1998 15:13:01 -0800" -->
+<!-- isosent="19981110231301" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="Re: Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811102313.PAA10710@gecko.nas.nasa.gov" -->
+<!-- inreplyto="199811102239.OAA22618@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102313.PAA10710@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 18:13:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1394">[ date ]</A>
+<A HREF="index.html#1394">[ thread ]</A>
+<A HREF="subject.html#1394">[ subject ]</A>
+<A HREF="author.html#1394">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199811102239.OAA22618@daffy.ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102313.PAA10710@gecko.nas.nasa.gov&gt;">199811102239.OAA22618@daffy.ee.lbl.gov</A>&gt;Vern Paxson writes
+<BR>
+<EM>&gt;One of the likely agenda topics for Orlando is whether there are enough
+</EM><BR>
+<EM>&gt;PMTU issues to consider doing a document on them.  Mark &amp; I think the
+</EM><BR>
+<EM>&gt;WG is pretty much ready to go dormant, except for that possibility.
+</EM><BR>
+<P>I had three PMTU issues:  one bug, one possible problem, and 
+<BR>
+a need for more research.
+<BR>
+<P>* Several stacks will mistakenly use a PMTU value as an MSS.
+<BR>
+&nbsp;&nbsp;The problem is that the sender correctly opens a connection to
+<BR>
+&nbsp;&nbsp;a receiver, and then determines a PMTU for the connection.
+<BR>
+&nbsp;&nbsp;If another connection is opened to that receiver, the MSS
+<BR>
+&nbsp;&nbsp;advertised is actually the previously determined PMTU.
+<BR>
+&nbsp;&nbsp;This means that the second connection can never try to increase
+<BR>
+&nbsp;&nbsp;that PMTU value as suggested in RFC1191.
+<BR>
+<P>* At least one vendor keeps PMTU values on a per-connection basis.
+<BR>
+&nbsp;&nbsp;This means that each new TCP connection starts over at the
+<BR>
+&nbsp;&nbsp;default MTU, and has to go through the PMTU discovery process.
+<BR>
+&nbsp;&nbsp;This seems like a lose for HTTP-style connections, but it is
+<BR>
+&nbsp;&nbsp;certainly allowed by RFC1191.
+<BR>
+<P>* Almost all PMTU discovery implementations are easily confused
+<BR>
+&nbsp;&nbsp;by routers that do not forward ICMP messages or otherwise 
+<BR>
+&nbsp;&nbsp;silently drop large packets.  Black hole detection has been
+<BR>
+&nbsp;&nbsp;discussed on this mailing list, but it doesn't seem to be
+<BR>
+&nbsp;&nbsp;getting (correctly) implemented.  I made a survey of PMTU 
+<BR>
+&nbsp;&nbsp;discovery algorithms about six months ago, and found that only
+<BR>
+&nbsp;&nbsp;Windows NT got it totally right.
+<BR>
+<P>&nbsp;&nbsp;It sure would be nice to get some more experience with this and
+<BR>
+&nbsp;&nbsp;to hear from recent implementors (it sounds like the Linux 
+<BR>
+&nbsp;&nbsp;folks have done some good stuff).  It'd be nice to get closer to
+<BR>
+&nbsp;&nbsp;a standard for delayed acknowledgements with path MTU discovery...
+<BR>
+<P>Thanks,
+<BR>
+<P>Kevin
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102313.PAA10710@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1393.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1395.html">Vern Paxson: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1394">[ date ]</A>
+<A HREF="index.html#1394">[ thread ]</A>
+<A HREF="subject.html#1394">[ subject ]</A>
+<A HREF="author.html#1394">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

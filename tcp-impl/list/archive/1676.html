@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Tue Mar 16 04:22:28 1999" -->
+<!-- isoreceived="19990316092228" -->
+<!-- sent="Tue, 16 Mar 1999 01:10:42 -0800 (PST)" -->
+<!-- isosent="19990316091042" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="199903160910.BAA22650@jurassic.eng.sun.com" -->
+<!-- inreplyto="Counting ACKs in NewReno" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160910.BAA22650@jurassic.eng.sun.com&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 16 1999 - 04:10:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1676">[ date ]</A>
+<A HREF="index.html#1676">[ thread ]</A>
+<A HREF="subject.html#1676">[ subject ]</A>
+<A HREF="author.html#1676">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from &quot;Chadi M. BARAKAT&quot; &lt;<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160910.BAA22650@jurassic.eng.sun.com&gt;">Chadi.Barakat@sophia.inria.fr</A>&gt;:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;[1] 2 3 [4] 5
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I use the same notation for lost packets. The source receives first
+</EM><BR>
+<EM>&gt;three dup acks that correspond to the receipt of packets 2, 3 and 5.
+</EM><BR>
+<EM>&gt;dupacks is then 3 and the source retransmits packet 1, sets its window
+</EM><BR>
+<EM>&gt;to 2 and adds three to cwnd which becomes 5. Here no new segments are
+</EM><BR>
+<EM>&gt;transmitted. When packet 1 arrives at the destination, an ack asking for
+</EM><BR>
+<EM>&gt;packet 4 is transmitted. According to your proposal, when the source
+</EM><BR>
+<EM>&gt;receives this ACK, it decrements dupacks by two which becomes 1. Here
+</EM><BR>
+<EM>&gt;packets 4 cannot be retransmitted and a timeout is required.
+</EM><BR>
+<P>Actually, after getting partial ack of seg 3, cwnd is set to 5-3+1 = 3.
+<BR>
+That means a new seg can be sent, assuming there is new data.  This
+<BR>
+new seg 6 will in turn elicit another dup ack, which will increase cwnd
+<BR>
+by 1 and dup_ack_cnt by 1.  Another new seg 7 can be sent, which will
+<BR>
+elicit another dup ack.  After getting this dup ack, dup_ack_cnt will
+<BR>
+be equal to 3, thus seg 4 is retransmitted according to Marcel's
+<BR>
+suggestion.
+<BR>
+<P><EM>&gt;The source stores in a variable the highest sequence number sent and it
+</EM><BR>
+<EM>&gt;updates this variable when it receives a partial ACK (less than Y). When
+</EM><BR>
+<EM>&gt;it leaves Fast Recovery and receives an ACK asking for a packet less
+</EM><BR>
+<EM>&gt;than this variable (T in our exemple), it retransmits this packet
+</EM><BR>
+<EM>&gt;directly.
+</EM><BR>
+<P>What I want to know is if you retransmit a segment because of this ack,
+<BR>
+should cwnd be decremented?  I think you agree that it should.  Another
+<BR>
+question is should this retransmission be the start of another fast
+<BR>
+retransmit?  If it should, then maybe your T will become recover of the next
+<BR>
+phase.  And because cwnd and ssthresh are getting smaller, this extension
+<BR>
+will eventaully end.  
+<BR>
+<P>As I stated in my previous mail, if the window is relatively large, your
+<BR>
+dropped U can be recovered by another fast retransmit.  Your extension
+<BR>
+mechanism can recover it faster and for smaller windows.  You have a 
+<BR>
+&quot;fast track&quot; fast retransmit proposal (-:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;199903160910.BAA22650@jurassic.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1675.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1677.html">mrosu@us.ibm.com: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1676">[ date ]</A>
+<A HREF="index.html#1676">[ thread ]</A>
+<A HREF="subject.html#1676">[ subject ]</A>
+<A HREF="author.html#1676">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:41 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

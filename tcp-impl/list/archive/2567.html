@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Persist Mode -- ** Standards</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: Persist Mode -- ** Standards bug ??">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Persist Mode -- ** Standards bug ??</H1>
+<!-- received="Thu Jul  5 11:18:58 2001" -->
+<!-- isoreceived="20010705151858" -->
+<!-- sent="Thu, 5 Jul 2001 10:59:36 -0400 (EDT)" -->
+<!-- isosent="20010705145936" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: Persist Mode -- ** Standards bug ??" -->
+<!-- id="Pine.NEB.4.05.10107051013230.15832-100000@tesla.psc.edu" -->
+<!-- inreplyto="3B2EF257.68807807@cvs.com.au" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20Persist%20Mode%20--%20**%20Standards%20bug%20??&In-Reply-To=&lt;Pine.NEB.4.05.10107051013230.15832-100000@tesla.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 05 2001 - 10:59:36 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2568.html">Charles Esson: "Re: Persist Mode -- ** Standards bug ??"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2566.html">SoftCOM: "IEEE SoftCOM 2001 - new deadline 14.07.2001."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2562.html">Charles Esson: "Re: Persist Mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2568.html">Charles Esson: "Re: Persist Mode -- ** Standards bug ??"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2573.html">kuznet@ms2.inr.ac.ru: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2567">[ date ]</A>
+<A HREF="index.html#2567">[ thread ]</A>
+<A HREF="subject.html#2567">[ subject ]</A>
+<A HREF="author.html#2567">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I think we have conflicting standards.... although I agree with your
+<BR>
+recollection, I believe that strict &quot;never retract the window&quot; can not be
+<BR>
+implemented.  Consider the following scenario:
+<BR>
+<P>A connection negotiates TCP window scale (e.g. 3, so the window size is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;quantized in steps of 8 bytes).
+<BR>
+After running for awhile with a reasonable window, the receiver stops
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consuming data.
+<BR>
+The sender continues to send data, 1 byte at a time, progressively filling
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the window.
+<BR>
+Under these conditions the right edge of the window can not be maintained at a
+<BR>
+constant position in the sequence space.  Following 7 consecutive data packets
+<BR>
+it will advance by one byte.  On the 8th, it will retract by 7 bytes.
+<BR>
+(Alternatively, if the TCP rounds windows to MSS, the steps are MSS sized).
+<BR>
+<P>Furthermore when the window finally closes all the way, it will always be due
+<BR>
+to a window retraction.
+<BR>
+<P>If the TCP doesn't behave this way it will violate some other part of RFC1323
+<BR>
+or the base specifications.  Therefore every TCP that implements 1323 violates
+<BR>
+rule 1 under some conditions.
+<BR>
+<P>Furthermore any TCP requires strict adherence to rule 1 is broken.
+<BR>
+<P>I believe that this is &quot;well tested&quot; in todays Internet (it happens all the
+<BR>
+time) but nobody has been looking for symptoms.
+<BR>
+<P>Now a question for the readers:  what might happen if this rule was formally
+<BR>
+retracted or amended?
+<BR>
+<P>Thanks,
+<BR>
+--MM--
+<BR>
+<P>On Tue, 19 Jun 2001, Charles Esson wrote:
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; 1) Somewhere in the mile high stack of paper that represents the TCP standard
+</EM><BR>
+<EM>&gt; it says that the receiver is not allowed to reduce it's advertised window.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 2) Somewhere else it says the sender is not allowed to expect nice things if
+</EM><BR>
+<EM>&gt; it transmits past the advertised window.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If both conditions are met the receiver can't close his window before
+</EM><BR>
+<EM>&gt; in-flight packets are acked.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If I am right ( and this is from memory), then all three behave correctly as
+</EM><BR>
+<EM>&gt; the condition should not arise.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It would seem AIX4.3 and Sun0S 5.6 throw their hands in the air and wait for
+</EM><BR>
+<EM>&gt; some sanity. Linux insists you obey rule 1.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As I only allow the window to move forward I am with linux.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2568.html">Charles Esson: "Re: Persist Mode -- ** Standards bug ??"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2566.html">SoftCOM: "IEEE SoftCOM 2001 - new deadline 14.07.2001."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2562.html">Charles Esson: "Re: Persist Mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2568.html">Charles Esson: "Re: Persist Mode -- ** Standards bug ??"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2573.html">kuznet@ms2.inr.ac.ru: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2567">[ date ]</A>
+<A HREF="index.html#2567">[ thread ]</A>
+<A HREF="subject.html#2567">[ subject ]</A>
+<A HREF="author.html#2567">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Jul 05 2001 - 11:19:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

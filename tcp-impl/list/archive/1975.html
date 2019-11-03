@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: strange duplicate ack behavior</TITLE>
+<META NAME="Author" CONTENT="Stefan Savage (savage@cs.washington.edu)">
+<META NAME="Subject" CONTENT="strange duplicate ack behavior">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>strange duplicate ack behavior</H1>
+<!-- received="Thu, 20 Jan 2000 13:36:08 -0800" -->
+<!-- isoreceived="20000120213608" -->
+<!-- sent="Thu, 20 Jan 2000 13:36:08 -0800" -->
+<!-- isosent="20000120213608" -->
+<!-- name="Stefan Savage" -->
+<!-- email="savage@cs.washington.edu" -->
+<!-- subject="strange duplicate ack behavior" -->
+<!-- id="055A195871E5D1119F8100A0C9499B5FF00D30@exchsrv1.cs.washington.edu" -->
+<STRONG>From:</STRONG> Stefan Savage (<A HREF="mailto:savage@cs.washington.edu?Subject=Re:%20strange%20duplicate%20ack%20behavior&In-Reply-To=&lt;055A195871E5D1119F8100A0C9499B5FF00D30@exchsrv1.cs.washington.edu&gt;"><EM>savage@cs.washington.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jan 20 2000 - 16:36:08 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1976.html">Ramesh Shankar: "Re: BSD 4.4 TCP header prediction code error - SecondaryEffect"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1974.html">Ali Irfan-FIA225: "RE: BSD 4.4 TCP header prediction code error - Secondary Effect"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1975">[ date ]</A>
+<A HREF="index.html#1975">[ thread ]</A>
+<A HREF="subject.html#1975">[ subject ]</A>
+<A HREF="author.html#1975">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A few months ago I released a tool for estimating one-way loss by exploiting
+<BR>
+TCP's fast retransmit behavior (see
+<BR>
+<A HREF="http://www.cs.washington.edu/homes/savage/sting/">http://www.cs.washington.edu/homes/savage/sting/</A> for details).  Most of my
+<BR>
+users have been quite happy with it, but I've received one report of
+<BR>
+spurious results that is stumping me.  It appears that under certain
+<BR>
+configurations, modern Solaris TCP stacks (nmap suggests between 2.5 and
+<BR>
+2.7) will generate up to TWO duplicate acknowledgements per out-of-order
+<BR>
+packet.  I say &quot;up to&quot; because if the out-of-order packets are not spaced
+<BR>
+far enough apart, only a single duplicate ack is sent.  For this reason I
+<BR>
+suspect an interaction with the delayed ack timer.  Here's an excerpt from a
+<BR>
+tcpdump to show what I mean:
+<BR>
+<P>13:11:01.023694 A.11155 &gt; B.http: S 4096623726:4096623726(0) win 0 (DF)
+<BR>
+13:11:01.221263 B.http &gt; A.11155: S 3198574868:3198574868(0) ack 4096623727
+<BR>
+win 4096 &lt;mss 1460&gt;
+<BR>
+13:11:01.224463 A.11155 &gt; B.http: P 4:5(1) ack 1 win 0 (DF)
+<BR>
+13:11:01.422993 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:01.536986 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:02.233622 A.11155 &gt; B.http: P 5:6(1) ack 1 win 0 (DF)
+<BR>
+13:11:02.431472 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:02.535080 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:03.233471 A.11155 &gt; B.http: P 6:7(1) ack 1 win 0 (DF)
+<BR>
+13:11:03.432267 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:03.540995 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:04.233312 A.11155 &gt; B.http: P 7:8(1) ack 1 win 0 (DF)
+<BR>
+13:11:04.433672 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:04.535917 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:05.233163 A.11155 &gt; B.http: P 8:9(1) ack 1 win 0 (DF)
+<BR>
+13:11:05.439115 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+13:11:05.534234 B.http &gt; A.11155: . ack 1 win 4096
+<BR>
+<P>Its pretty suspicious that the second ack is 100ms after the first...  
+<BR>
+<P>Two other clues: This does not occur with all services (for instance, if I
+<BR>
+go to port 25 on the same box I will see normal behavior) so presumably it
+<BR>
+may reflect some interaction between the delayed ack timer and select.
+<BR>
+Second, this doesn't seem to happen with all solaris boxes... only some of
+<BR>
+them (so it may reflect a combination of application characteristics, stack
+<BR>
+and configuration options).  
+<BR>
+<P>Unfortunately, I don't have Solaris source code or I'd check this out
+<BR>
+myself.  Has anyone seen this before or have any insight into what's
+<BR>
+happening?  Thanks.
+<BR>
+<P>- Stefan 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1976.html">Ramesh Shankar: "Re: BSD 4.4 TCP header prediction code error - SecondaryEffect"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1974.html">Ali Irfan-FIA225: "RE: BSD 4.4 TCP header prediction code error - Secondary Effect"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1975">[ date ]</A>
+<A HREF="index.html#1975">[ thread ]</A>
+<A HREF="subject.html#1975">[ subject ]</A>
+<A HREF="author.html#1975">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

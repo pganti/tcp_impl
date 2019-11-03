@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 15:59:11 1997" -->
+<!-- isoreceived="19970702195911" -->
+<!-- sent="Thu, 03 Jul 1997 00:53:16 +0200" -->
+<!-- isosent="19970702225316" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707022253.AAA11137@rekk.dna.lth.se" -->
+<!-- inreplyto="199707022205.PAA21951@aland.bbn.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022253.AAA11137@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 18:53:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#616">[ date ]</A>
+<A HREF="index.html#616">[ thread ]</A>
+<A HREF="subject.html#616">[ subject ]</A>
+<A HREF="author.html#616">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022253.AAA11137@rekk.dna.lth.se&gt;">craig@aland.bbn.com</A>&gt; writes:
+<BR>
+<EM>&gt;If the RTT measured in the last round-trip time is 5, what's wrong with
+</EM><BR>
+<EM>&gt;RTT going to 5, provided RTTVAR is still OK?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Think of RTT as your base round trip time (without queueing effects) and
+</EM><BR>
+<EM>&gt;RTTVAR as reflecting queueing effects.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Then it should be obvious that since no sample can be less than the
+</EM><BR>
+<EM>&gt;queueing free round-trip time, all valid samples (i.e. not tainted by
+</EM><BR>
+<EM>&gt;retranmission) should be equally useful in setting RTT.  No scaling is
+</EM><BR>
+<EM>&gt;required.
+</EM><BR>
+<P>Up to here I'm moderately convinced, but I'd want to read the
+<BR>
+math in Van's paper again to see the reasoning behind the orignal
+<BR>
+choice of alpha.
+<BR>
+<P><EM>&gt;The only issue is whether RTTVAR correctly tracks variations in queueing
+</EM><BR>
+<EM>&gt;in the path.  And that's determined by *g*, not *alpha*, in the Jacobson
+</EM><BR>
+<EM>&gt;model.
+</EM><BR>
+<P>This is where I think the real concern is. If we are tracking
+<BR>
+RTTVAR within a window for every packet in a 50 packet window,
+<BR>
+then it will decay away to 0 rather rapidly. If we get a spike
+<BR>
+every few RTT the model will have lost all knowledge of the spike
+<BR>
+just before it occurs.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022253.AAA11137@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#616">[ date ]</A>
+<A HREF="index.html#616">[ thread ]</A>
+<A HREF="subject.html#616">[ subject ]</A>
+<A HREF="author.html#616">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

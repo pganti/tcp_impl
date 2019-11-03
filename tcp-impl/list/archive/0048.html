@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: tcpdump analysis tools?</TITLE>
+<META NAME="Author" CONTENT="Shawn Ostermann (sdo@picard.cs.OhioU.Edu)">
+<META NAME="Subject" CONTENT="Re: tcpdump analysis tools?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: tcpdump analysis tools?</H1>
+<!-- received="Tue Feb  4 18:13:14 1997" -->
+<!-- isoreceived="19970204231314" -->
+<!-- sent="Tue, 04 Feb 1997 13:02:34 -0500" -->
+<!-- isosent="19970204180234" -->
+<!-- name="Shawn Ostermann" -->
+<!-- email="sdo@picard.cs.OhioU.Edu" -->
+<!-- subject="Re: tcpdump analysis tools?" -->
+<!-- id="199702041802.SAA03465@picard.cs.ohiou.edu" -->
+<!-- inreplyto="tcpdump analysis tools?" -->
+<STRONG>From:</STRONG> Shawn Ostermann (<A HREF="mailto:sdo@picard.cs.OhioU.Edu?Subject=Re:%20tcpdump%20analysis%20tools?&In-Reply-To=&lt;199702041802.SAA03465@picard.cs.ohiou.edu&gt;"><EM>sdo@picard.cs.OhioU.Edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 04 1997 - 13:02:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0049.html">Vern Paxson: "Re: tcpdump analysis tools?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0047.html">Ian Heavens: "tcpdump analysis tools?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0047.html">Ian Heavens: "tcpdump analysis tools?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0049.html">Vern Paxson: "Re: tcpdump analysis tools?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#48">[ date ]</A>
+<A HREF="index.html#48">[ thread ]</A>
+<A HREF="subject.html#48">[ subject ]</A>
+<A HREF="author.html#48">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; I'd like to analyse TCP connections collected by tcpdump in terms of
+</EM><BR>
+<EM>&gt;&gt; state transitions:
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; how many simultaneous opens (few)
+</EM><BR>
+<EM>&gt;&gt; how many closed by RST from state X (lots)
+</EM><BR>
+<EM>&gt;&gt; how many closed first by server, how many by client
+</EM><BR>
+<P>I have a public domain program called tcptrace that might give you a
+<BR>
+headstart.  I doesn't answer any of the questions you've asked, but it
+<BR>
+wouldn't take much coding to get that information out.  It already
+<BR>
+sifts through tcpdump files gathering information about individual TCP
+<BR>
+connections.  Probably overkill for what you need, but it already does
+<BR>
+enough of the busy work that you could code up something quickly.  If
+<BR>
+you're interested, see:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://jarok.cs.ohiou.edu/software/tcptrace/tcptrace.html">http://jarok.cs.ohiou.edu/software/tcptrace/tcptrace.html</A>
+<BR>
+<P>--sdo
+<BR>
+<P><P>For example, it might tell you (for one particular connection):
+<BR>
+<P><P>connection 4:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;host g:        lawyers.cs.ohiou.edu:3999
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;host h:        indigo.cs.ohiou.edu:1034
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complete conn: yes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first packet:  Fri Jan 31 17:27:47.565430
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;last packet:   Fri Jan 31 17:29:10.496596
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elapsed time:  0:01:22.931166
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total packets: 36739
+<BR>
+&nbsp;&nbsp;&nbsp;g-&gt;h:                              h-&gt;g:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total packets:          9368           total packets:         27371      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack pkts sent:          9367           ack pkts sent:         27371      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unique bytes sent:         0           unique bytes sent:  12589056      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actual data pkts:          0           actual data pkts:      27368      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;actual data bytes:         0           actual data bytes:  12589056      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rexmt data pkts:           0           rexmt data pkts:           0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rexmt data bytes:          0           rexmt data bytes:          0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outoforder pkts:           0           outoforder pkts:           0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN/FIN pkts sent:       1/1           SYN/FIN pkts sent:       1/1      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req 1323 ws/ts:          Y/Y           req 1323 ws/ts:          Y/Y      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adv wind scale:            1           adv wind scale:            1      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;req sack:                  Y           req sack:                  Y      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sacks sent:                0           sacks sent:                0      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mss requested:          1460 bytes     mss requested:           472 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max segm size:             0 bytes     max segm size:           460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min segm size:             0 bytes     min segm size:           236 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avg segm size:             0 bytes     avg segm size:           459 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max win adv:          114696 bytes     max win adv:          131070 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min win adv:          113680 bytes     min win adv:          114696 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zero win adv:              0 times     zero win adv:              0 times
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avg win adv:          114685 bytes     avg win adv:          114696 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throughput:                0 Bps       throughput:           151801 Bps  
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT samples:               0           RTT samples:            9364      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT min:                 0.0 ms        RTT min:               586.2 ms   
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT max:                 0.0 ms        RTT max:               796.6 ms   
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT avg:                 0.0 ms        RTT avg:               662.5 ms   
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT stdev:               0.0 ms        RTT stdev:              10.8 ms   
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segs cum acked:            0           segs cum acked:        18004      
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0049.html">Vern Paxson: "Re: tcpdump analysis tools?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0047.html">Ian Heavens: "tcpdump analysis tools?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0047.html">Ian Heavens: "tcpdump analysis tools?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0049.html">Vern Paxson: "Re: tcpdump analysis tools?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#48">[ date ]</A>
+<A HREF="index.html#48">[ thread ]</A>
+<A HREF="subject.html#48">[ subject ]</A>
+<A HREF="author.html#48">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RSTs and Half Duplex Close b</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: RSTs and Half Duplex Close bug">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RSTs and Half Duplex Close bug</H1>
+<!-- received="Tue Dec  2 07:39:11 1997" -->
+<!-- isoreceived="19971202123911" -->
+<!-- sent="Tue, 02 Dec 1997 15:23:46 +0000" -->
+<!-- isosent="19971202152346" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: RSTs and Half Duplex Close bug" -->
+<!-- id="34842802.665B@spider.com" -->
+<!-- inreplyto="199712020651.WAA20591@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20RSTs%20and%20Half%20Duplex%20Close%20bug&In-Reply-To=&lt;34842802.665B@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Dec 02 1997 - 10:23:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0852.html">Vern Paxson: "agenda for next Monday's TCPIMPL WG meeting"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#851">[ date ]</A>
+<A HREF="index.html#851">[ thread ]</A>
+<A HREF="subject.html#851">[ subject ]</A>
+<A HREF="author.html#851">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vern Paxson wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ... I meant &quot;delivered to the peer TCP&quot;.
+</EM><BR>
+<EM>&gt; &gt; I agree that delivery to an application is unlikely.  I was making the
+</EM><BR>
+<EM>&gt; &gt; point that after a RST, one is much more likely to get data than after
+</EM><BR>
+<EM>&gt; &gt; a FIN exchange.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I still don't see why this is.  It takes half an RTT (roughly) for either
+</EM><BR>
+<EM>&gt; the RST or the first FIN to travel to the other peer.  At that point, in
+</EM><BR>
+<EM>&gt; either case the peer should stop sending new data.  So I don't see why one
+</EM><BR>
+<EM>&gt; is much more likely to get data with a RST.
+</EM><BR>
+<P>It's only a problem if data arrives in CLOSED state.
+<BR>
+<P>For the RST case, while the RST is in transit, up to a window of
+<BR>
+data may arrive in CLOSED state, since it may have already left
+<BR>
+the peer before the RST arrives.
+<BR>
+<P>For the FIN case, a window of data may be in transit - but it will
+<BR>
+arrive in FIN_WAIT_1.  The other end can continue transmitting until
+<BR>
+it sends a FIN (this data will arrive in FIN_WAIT_2).  To arrive in
+<BR>
+TIME-WAIT, the data has to be reordered with the second FIN, or
+<BR>
+duplicated in the network, or have been lost and retransmitted.
+<BR>
+(if the peer sends a FIN before it receives our FIN, the data arrives in
+<BR>
+CLOSING or LAST-ACK state at one or both peers).  So even if TIME-WAIT
+<BR>
+state is omitted, the chance of data arriving in CLOSED state at one
+<BR>
+end or the other is small - roughly the probability of a segment being
+<BR>
+reordered, lost or duplicated.  
+<BR>
+<P>I might have got the above analysis not quite right, but I think
+<BR>
+that's roughly how it works.  After a RST, you often get a lot of
+<BR>
+segments in CLOSED state (e.g. the correct implementation of half
+<BR>
+duplex close in the Known Bugs I-D).  After a FIN, a single segment
+<BR>
+is unlikely to arrive in TIME-WAIT (or CLOSED state if TIME-WAIT is
+<BR>
+omitted).
+<BR>
+<P>Then the chance of actual data corruption is factored by the chance
+<BR>
+of a new application opening with the port/sequence number space
+<BR>
+overlapping that of one or more of the segments that arrived in
+<BR>
+CLOSED state, which makes it a low probability event for either case.
+<BR>
+<P>Awaiting corrections...
+<BR>
+<P>cheers
+<BR>
+<P>ian
+<BR>
+<P><P>Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+<BR>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+<BR>
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20RSTs%20and%20Half%20Duplex%20Close%20bug&In-Reply-To=&lt;34842802.665B@spider.com&gt;">ian@spider.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0852.html">Vern Paxson: "agenda for next Monday's TCPIMPL WG meeting"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0850.html">Vern Paxson: "Re: RSTs and Half Duplex Close bug"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#851">[ date ]</A>
+<A HREF="index.html#851">[ thread ]</A>
+<A HREF="subject.html#851">[ subject ]</A>
+<A HREF="author.html#851">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

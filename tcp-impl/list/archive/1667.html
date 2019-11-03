@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Nagle on send</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Nagle on send">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Nagle on send</H1>
+<!-- received="Thu Mar 11 18:18:49 1999" -->
+<!-- isoreceived="19990311231849" -->
+<!-- sent="Thu, 11 Mar 1999 16:12:18 -0700 (MST)" -->
+<!-- isosent="19990311231218" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Nagle on send" -->
+<!-- id="199903112312.QAA04048@calcite.rhyolite.com" -->
+<!-- inreplyto="Nagle on send" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Nagle%20on%20send&In-Reply-To=&lt;199903112312.QAA04048@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 11 1999 - 18:12:18 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1667">[ date ]</A>
+<A HREF="index.html#1667">[ thread ]</A>
+<A HREF="subject.html#1667">[ subject ]</A>
+<A HREF="author.html#1667">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Greg Minshall &lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20Nagle%20on%20send&In-Reply-To=&lt;199903112312.QAA04048@calcite.rhyolite.com&gt;">minshall@siara.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; 2.  What i think most people would agree on:  If the send is bigger than an 
+</EM><BR>
+<EM>&gt; MTU, then even if there is unacknowledged data, then all the data in the send 
+</EM><BR>
+<EM>&gt; (no matter how large the send was, more or less), including any residual data 
+</EM><BR>
+<EM>&gt; making up only a small packet, will be transmitted.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 3.  (I think this is what Vernon has in mind.)  If the send is not big enough 
+</EM><BR>
+<EM>&gt; and there is data in the pipe and NODELAY is not set, then don't call 
+</EM><BR>
+<EM>&gt; tcp_output().  And (if i understand correctly) don't do any Nagle in 
+</EM><BR>
+<EM>&gt; tcp_output().
+</EM><BR>
+<P>No, I think I said 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;put the data in the socket buffer;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;if (!NODELAY)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_output();
+<BR>
+<P>There's nothing there about sizes.
+<BR>
+<P><P><EM>&gt; OK, so forget #1 above (it doesn't meet most of our idea of &quot;Nagle on send&quot;).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;(I'm going to concentrate on #2, since i have a problem with #3, since i think 
+</EM><BR>
+<EM>&gt;it means that the next ACK received will cause a small packet to be generated, 
+</EM><BR>
+<EM>&gt; even if the next ACK doesn't acknowledge all outstanding data, and i'm not 
+</EM><BR>
+<EM>&gt; sure that is a good idea.  Also, the *intent* (and, i guess, mostly the 
+</EM><BR>
+<EM>&gt; *effect*) of #3 is the same as that of #2.)
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- silly window avoidance is not the Nagle algorithm, and vice versa.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If your tcp_output() is not broken, then it won't generate any
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bad small packets.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- if you have 1 byte waiting to send, 10K waiting to be Acked, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you receive an Ack for 1 MSS and with no data, then (ignoring SWS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prevention), it is ok to send even with Nagle on because you know
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you're not going to be able to piggyback.   If the Ack came with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data, then you should definitely send your tiny data (modulo SWS).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- most of us agree that the intention or purpose of the Nagle algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is &lt;&lt;NOT&gt;&gt; to prevent small packets, but to piggyback small data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on Acks instead of in their own packets.   That distinction is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;significant, and allows you avoid being obssessd with the sizes of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets.  That obsession is a Bad Thing because it leads to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;additional TCB state, code, and debugging opportunties.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- sending small packets is &lt;&lt;GOOD&gt;&gt; even with the Nagle algorithm on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provided there is no opportunity for piggybacking, and provided
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you believe the algorithm sould be applied to application send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;requests instead the bowels of the TCP state machine.
+<BR>
+<P><EM>&gt; Case #2 breaks into two categories, based on what happens if the current 
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P><EM>&gt; Thoughts?
+</EM><BR>
+<P>I think I'm opposed, because it is still not applying the Nagle algorithm
+<BR>
+to application send requests, and it is still obsessing on the sizes of
+<BR>
+packets instead of trying to utilize opportunities for piggybacking.
+<BR>
+<P><P>vjs
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1666.html">Greg Minshall: "Nagle on send"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1667">[ date ]</A>
+<A HREF="index.html#1667">[ thread ]</A>
+<A HREF="subject.html#1667">[ subject ]</A>
+<A HREF="author.html#1667">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

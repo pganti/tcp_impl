@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: listen queue</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: listen queue">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: listen queue</H1>
+<!-- received="Mon Nov 13 13:13:23 2000" -->
+<!-- isoreceived="20001113181323" -->
+<!-- sent="Mon, 13 Nov 2000 12:53:54 -0500 (EST)" -->
+<!-- isosent="20001113175354" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: listen queue" -->
+<!-- id="200011131753.MAA15600@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="listen queue" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20listen%20queue&In-Reply-To=&lt;200011131753.MAA15600@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 13 2000 - 12:53:54 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2409.html">V@tzw.de: "Lady V:  The Pleasure Pill for Women!"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2403.html">D'laila Pereira: "listen queue"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2408">[ date ]</A>
+<A HREF="index.html#2408">[ thread ]</A>
+<A HREF="subject.html#2408">[ subject ]</A>
+<A HREF="author.html#2408">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; When the TCP on the server side receives a SYN during the three way
+</EM><BR>
+<EM>&gt; handshake the listen (...) command will allocate a buffer and place
+</EM><BR>
+<EM>&gt; the IP address and port number of the client sending the SYN into the
+</EM><BR>
+<EM>&gt; buffer
+</EM><BR>
+<P>Since you mention listen(), I assume you're talking about the BSD
+<BR>
+socket API.  (TCP and the socket API are orthogonal to one another;
+<BR>
+neither one implies the other.)
+<BR>
+<P>And in that case, your description is somewhat confused.  listen()
+<BR>
+ensures that the socket will accept connections; it doesn't place
+<BR>
+anything from an incoming SYN anywhere - listen() is called before the
+<BR>
+incoming SYN arrives.
+<BR>
+<P><EM>&gt; What data structure should be used to create this buffer in case of
+</EM><BR>
+<EM>&gt; BSD implemenations?
+</EM><BR>
+<P>I'm not sure what you're asking here.  Your use of &quot;should&quot; implies
+<BR>
+that there is choice, which means you must be talking about userland
+<BR>
+code, since the kernel code either does or doesn't use any particular
+<BR>
+structure - there is no &quot;should&quot; for it.  And if you're talking about a
+<BR>
+userland buffer for the peer address, then *none* of the socket calls
+<BR>
+will allocate it; it is passed as an argument to the various calls that
+<BR>
+use it (accept(), getpeername(), etc).
+<BR>
+<P>The most plausible explanation that comes to mind is that you meant
+<BR>
+accept(), not listen(), in which case the argument is typed as a
+<BR>
+&quot;struct sockaddr&quot;, and you should use the AF-specific struct
+<BR>
+appropriate to the AF of the socket (probably struct sockaddr_in,
+<BR>
+corresponding to AF_INET).
+<BR>
+<P>Also, in this case, your question contains an inaccuracy; accept() does
+<BR>
+not return until the three-way handshake has been completed, rather
+<BR>
+than doing anything when the first SYN arrives.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20listen%20queue&In-Reply-To=&lt;200011131753.MAA15600@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2409.html">V@tzw.de: "Lady V:  The Pleasure Pill for Women!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2407.html">Joe Touch: "Re: TIME-WAIT assasination implementations"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2403.html">D'laila Pereira: "listen queue"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2408">[ date ]</A>
+<A HREF="index.html#2408">[ thread ]</A>
+<A HREF="subject.html#2408">[ subject ]</A>
+<A HREF="author.html#2408">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Nov 13 2000 - 13:13:52 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

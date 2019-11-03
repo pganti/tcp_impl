@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: initial window size</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="RE: initial window size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: initial window size</H1>
+<!-- received="Thu Mar 29 20:07:55 2001" -->
+<!-- isoreceived="20010330010755" -->
+<!-- sent="Thu, 29 Mar 2001 18:01:25 -0700 (MST)" -->
+<!-- isosent="20010330010125" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="RE: initial window size" -->
+<!-- id="200103300101.f2U11PK13483@calcite.rhyolite.com" -->
+<!-- inreplyto="initial window size" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=RE:%20initial%20window%20size&In-Reply-To=&lt;200103300101.f2U11PK13483@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 29 2001 - 20:01:25 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2506.html">arun: "Re: initial window size"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2504.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2491.html">arun: "initial window size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2506.html">arun: "Re: initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2505">[ date ]</A>
+<A HREF="index.html#2505">[ thread ]</A>
+<A HREF="subject.html#2505">[ subject ]</A>
+<A HREF="author.html#2505">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Oleg Vishnepolsky&quot; &lt;<A HREF="mailto:oleg@inforocket.com?Subject=RE:%20initial%20window%20size&In-Reply-To=&lt;200103300101.f2U11PK13483@calcite.rhyolite.com&gt;">oleg@inforocket.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; The stack has to determine the initial window size, and all it
+</EM><BR>
+<EM>&gt; has is the address of the other host, and MSS derived from MTU.
+</EM><BR>
+<P>On the contrary, &quot;the stack&quot; is just code.  BSD-style code could
+<BR>
+follow the if pointers to find the interface speed as easily
+<BR>
+as it now finds the interface MTU to generate the MSS option.
+<BR>
+<P><EM>&gt; Practically speaking, most stacks use a hard-wired default (32k
+</EM><BR>
+<EM>&gt; or 8k or whatever). They could a better job taking MSS into account. 
+</EM><BR>
+<P>agreed.
+<BR>
+<P><EM>&gt; To your other point, MTU definitely  has to do with the speed
+</EM><BR>
+<EM>&gt; and memory on the adaptor. That's why
+</EM><BR>
+<EM>&gt; you will see higher MTUs with higher speeds. 
+</EM><BR>
+<P>It is true that as the years have passed, media have become faster
+<BR>
+as MTU's generally have grown longer.  However, Ethernet is a rather
+<BR>
+important counter example.
+<BR>
+<P><P><EM>&gt; As far as 6-8 times the MTU being from mid 80s is not correct either.
+</EM><BR>
+<EM>&gt; In fact, BSD 4.3 Reno had 2k windows
+</EM><BR>
+<EM>&gt; for local communications, which is even less than that ratio.
+</EM><BR>
+<EM>&gt; 6-8 figure is based on my own experiments and measurements done
+</EM><BR>
+<EM>&gt; in the early 90s.
+</EM><BR>
+<P>So in about 1986 I did not change the default TCP window shipped by one of
+<BR>
+the major commercial UNIX vendors to 30K?  And in about 1988 I didn't
+<BR>
+change it to 60K?  That's interesting, because I didn't think I'd become
+<BR>
+so senile that I'd invent such recollections.  (Note that I don't mean
+<BR>
+that I changed it from the default that someone at the factory set.  I
+<BR>
+mean that according to those false recollections of mine, I was that
+<BR>
+someone at the factory.)
+<BR>
+<P>Yes, as a reasult of my enthusiasm for better`ttcp` numbers to give to my
+<BR>
+employer's sales people (and my own bosses), I also saw some bug reports
+<BR>
+of interoperability problems.  Some were related to bugs in other vendors'
+<BR>
+systems uncovered by large mismatches in window sizes.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=RE:%20initial%20window%20size&In-Reply-To=&lt;200103300101.f2U11PK13483@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2506.html">arun: "Re: initial window size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2504.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2491.html">arun: "initial window size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2506.html">arun: "Re: initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2505">[ date ]</A>
+<A HREF="index.html#2505">[ thread ]</A>
+<A HREF="subject.html#2505">[ subject ]</A>
+<A HREF="author.html#2505">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Mar 29 2001 - 20:08:24 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

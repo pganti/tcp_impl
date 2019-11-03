@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Luigi Rizzo (luigi@labinfo.iet.unipi.it)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 02:02:31 1997" -->
+<!-- isoreceived="19970702060231" -->
+<!-- sent="Wed, 2 Jul 1997 09:58:05 +0200 (MET DST)" -->
+<!-- isosent="19970702075805" -->
+<!-- name="Luigi Rizzo" -->
+<!-- email="luigi@labinfo.iet.unipi.it" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707020758.JAA14377@labinfo.iet.unipi.it" -->
+<!-- inreplyto="199707011621.LAA17249@frantic.BSDI.COM" -->
+<STRONG>From:</STRONG> Luigi Rizzo (<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707020758.JAA14377@labinfo.iet.unipi.it&gt;"><EM>luigi@labinfo.iet.unipi.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 03:58:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#608">[ date ]</A>
+<A HREF="index.html#608">[ thread ]</A>
+<A HREF="subject.html#608">[ subject ]</A>
+<A HREF="author.html#608">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+About the RTT filtering issue:
+<BR>
+<P><EM>&gt; *sigh*... I'm behind on getting the revision to RFC1323 out, I'm
+</EM><BR>
+<EM>&gt; trying to get the final editing done in the next week or so.  One
+</EM><BR>
+<EM>&gt; addition to 1323+ will be a short discussion about the fact that
+</EM><BR>
+<EM>&gt; when when using timestamps, you can get more than 1 RTT sample
+</EM><BR>
+<EM>&gt; per RTT, and the code that figures out the SRTT needs to take
+</EM><BR>
+<EM>&gt; this into account.
+</EM><BR>
+<P>I think that the purpose of filtering RTT should be clarified.
+<BR>
+Should SRTT track averages, maximums, remove exceedingly large or
+<BR>
+exceedingly small samples, or what; and how many RTTs it takes for
+<BR>
+a sample to be (practically) forgotten.  Probably a recommendation
+<BR>
+should be made to use high resolution timings when possible.
+<BR>
+<P>In order to correct the computation when more samples per RTT are
+<BR>
+available, you also need to know (dynamically) how many samples
+<BR>
+you have per RTT, but this is a bit tricky to implement, and probably
+<BR>
+not worth the effort, since there might be such a big variance on
+<BR>
+RTT estimates on top of what the real network RTT is (because of
+<BR>
+low resolution timers, delayed acks, or acks triggered by user
+<BR>
+processes reading data, etc.) that one might also wonder if linear
+<BR>
+filtering is appropriate at all for the purpose (e.g. one might
+<BR>
+want to compute
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEWRTT = MAX(alpha*OLDRTT + (1-alpha)*SAMPLE , SAMPLE )
+<BR>
+<P>to track large samples more effectively, in order to have more
+<BR>
+conservative timeouts...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luigi
+<BR>
+-----------------------------+--------------------------------------
+<BR>
+Luigi Rizzo                  |  Dip. di Ingegneria dell'Informazione
+<BR>
+email: <A HREF="mailto:luigi@iet.unipi.it?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707020758.JAA14377@labinfo.iet.unipi.it&gt;">luigi@iet.unipi.it</A>    |  Universita' di Pisa
+<BR>
+tel: +39-50-568533           |  via Diotisalvi 2, 56126 PISA (Italy)
+<BR>
+fax: +39-50-568522           |  <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>
+<BR>
+_____________________________|______________________________________
+<BR>
+filtering should aim more at removing 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#608">[ date ]</A>
+<A HREF="index.html#608">[ thread ]</A>
+<A HREF="subject.html#608">[ subject ]</A>
+<A HREF="author.html#608">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

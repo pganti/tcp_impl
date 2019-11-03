@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 19:39:01 1999" -->
+<!-- isoreceived="19990205003901" -->
+<!-- sent="Thu, 04 Feb 1999 11:07:01 -0800" -->
+<!-- isosent="19990204190701" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36B9EFD5.D90FABF1@ehsco.com" -->
+<!-- inreplyto="199902041707.LAA02391@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36B9EFD5.D90FABF1@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 14:07:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1511.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1512">[ date ]</A>
+<A HREF="index.html#1512">[ thread ]</A>
+<A HREF="subject.html#1512">[ subject ]</A>
+<A HREF="author.html#1512">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; whereas the current Nagle code would produce:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         1st write:      send 1460 bytes  (defer 40 bytes)
+</EM><BR>
+<EM>&gt;         2nd write:      send 40 + 1420 = 1460 bytes (defer 80 bytes)
+</EM><BR>
+<EM>&gt;         3rd write:      send 80 + 1380 = 1460 bytes  (defer 120 bytes)
+</EM><BR>
+<EM>&gt;                         (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt;                         send 120 bytes
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; and the proposed Nagle (and the current BSD/OS) would produce:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         1st write:      send 1460 bytes
+</EM><BR>
+<EM>&gt;                         send 40 bytes
+</EM><BR>
+<EM>&gt;         2nd write:      send 1460 bytes (defer 40 bytes)
+</EM><BR>
+<EM>&gt;         3rd write       send 40 + 1420 = 1460 bytes (defer 80 bytes)
+</EM><BR>
+<EM>&gt;                         (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt;                         send 80 bytes
+</EM><BR>
+<P>This is at least one extra send operation, which can't be a good thing,
+<BR>
+particularly when the network is over-utilized (or near to it) already.
+<BR>
+While this isn't as bad as Rick's example (1461-byte writes), it is
+<BR>
+still bad utilization. (I'd hate to own the network that did both.)
+<BR>
+<P>I'd say that based on this info, it is better to just disable Nagle if
+<BR>
+your application is going to be writing small (1.5 segments) chunks, and
+<BR>
+leaving it enabled for applications that do large writes, rather than
+<BR>
+introducing lots of new frames to the network.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                            <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36B9EFD5.D90FABF1@ehsco.com&gt;">ehall@ehsco.com</A>
++1-650-685-0557                                    <A HREF="http://www.ehsco.com">http://www.ehsco.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1511.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1498.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1513.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1512">[ date ]</A>
+<A HREF="index.html#1512">[ thread ]</A>
+<A HREF="subject.html#1512">[ subject ]</A>
+<A HREF="author.html#1512">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

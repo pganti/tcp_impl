@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: testing tools</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: testing tools">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: testing tools</H1>
+<!-- received="Fri May  2 15:28:11 1997" -->
+<!-- isoreceived="19970502192811" -->
+<!-- sent="Fri, 2 May 1997 17:22:51 -0500 (CDT)" -->
+<!-- isosent="19970502222251" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: testing tools" -->
+<!-- id="199705022222.RAA12739@frantic.BSDI.COM" -->
+<!-- inreplyto="testing tools" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705022222.RAA12739@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri May 02 1997 - 18:22:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0407.html">Alan Cox: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0293.html">W. Richard Stevens: "testing tools"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#408">[ date ]</A>
+<A HREF="index.html#408">[ thread ]</A>
+<A HREF="subject.html#408">[ subject ]</A>
+<A HREF="author.html#408">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jumping back to early last month:
+<BR>
+<P><EM>&gt; From: <A HREF="mailto:rstevens@kohala.com?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705022222.RAA12739@frantic.BSDI.COM&gt;">rstevens@kohala.com</A> (W. Richard Stevens)
+</EM><BR>
+<EM>&gt; Date: Wed, 2 Apr 1997 04:57:04 -0700
+</EM><BR>
+<EM>&gt; Subject: testing tools
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; [In Vern's message of Apr  2, 12:06am he writes:]
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Calling all testing tools [10 min]
+</EM><BR>
+<EM>&gt; &gt; 	Need to document
+</EM><BR>
+<EM>&gt; &gt; 	Encourage development of new tools
+</EM><BR>
+<EM>&gt; &gt; 		maybe simple raw socket interface for testing
+</EM><BR>
+<EM>&gt; &gt; 			particular problems?
+</EM><BR>
+<EM>&gt; &gt; 		(but how do you get the host TCP to shut up?)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have such a test program and I use a raw socket to write my own TCP
+</EM><BR>
+<EM>&gt; segments, and then libpcap (e.g., BPF on a BSD/OS system) to read back
+</EM><BR>
+<EM>&gt; the replies.  The way I shup up my TCP, to keep it from sending back
+</EM><BR>
+<EM>&gt; RSTs to all the replies to all the segments that I generated, is with
+</EM><BR>
+<EM>&gt; the following kernel hack:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;         /*
+</EM><BR>
+<EM>&gt;          * Locate pcb for segment.
+</EM><BR>
+<EM>&gt;          */
+</EM><BR>
+<EM>&gt; findpcb:
+</EM><BR>
+<EM>&gt;         /* Following hack to let me read and write my own TCP segments
+</EM><BR>
+<EM>&gt;            using BPF, without confusing kernel.  Just patch tcp_ignport
+</EM><BR>
+<EM>&gt;            (at beginning of this file) to desired value. */
+</EM><BR>
+<EM>&gt;         if (htons(tcp_ignport) &amp;&amp;
+</EM><BR>
+<EM>&gt;             (htons(tcp_ignport) == ti-&gt;ti_dport ||
+</EM><BR>
+<EM>&gt;              htons(tcp_ignport) == ti-&gt;ti_sport))
+</EM><BR>
+<EM>&gt;                 goto drop;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I could never figure out another way to do this.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Rich Stevens
+</EM><BR>
+<P>I've been thinking about this, and I now have some modifications to
+<BR>
+BSD/OS to allow a hook for raw TCP sockets.  Its purpose is to be
+<BR>
+able to receive all the packet destined for a particular TCP port
+<BR>
+by short-circuiting tcp_input().  You would create a raw socket like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int s;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;struct sockaddr_in sin;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int port = 4242;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memset(&amp;sin, 0, sizeof(sin));
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_family = AF_INET;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_len = sizeof(sin);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sin.sin_port = htons(port);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bind(s, (struct sockaddr *)&amp;sin, sizeof(sin));
+<BR>
+<P>At this point, all TCP packets destined for port 4242 would be
+<BR>
+received on this file descriptor.  Any replies would be sent just
+<BR>
+as you would send any packet on a raw IP socket.  In addition, a
+<BR>
+connect() could be done to restrict it to packets coming from a
+<BR>
+particular host/port.
+<BR>
+<P>For the most part, I like this.  However, there are some issues:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Does this seem useful?  I don't want to put something
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;into our system that no one wants or would use.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) The TCP checksum is verified before finding the appropriate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PCB, so packets with bad TCP checksums don't make it up
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;through this interface.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) The TCP checksum field is always set to zero.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) The IP portion of the packet is zeroed out except for the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fields that are part of the TCP pseudo header (part of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verifying the checksum).
+<BR>
+<P>Some other points about the implementation:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o There is a new TCP flag, TF_RAW.  Each raw TCP socket has this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bit set.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o Raw TCP sockets show up in the normal netstat output, but they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are always in the CLOSED state.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o The TCP fields are presented in network byte order.
+<BR>
+<P>Thoughts? Comments?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705022222.RAA12739@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0407.html">Alan Cox: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0293.html">W. Richard Stevens: "testing tools"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0409.html">Alan Cox: "Re: testing tools"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#408">[ date ]</A>
+<A HREF="index.html#408">[ thread ]</A>
+<A HREF="subject.html#408">[ subject ]</A>
+<A HREF="author.html#408">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 12:22:35 1997" -->
+<!-- isoreceived="19970430162235" -->
+<!-- sent="Wed, 30 Apr 1997 13:18:38 -0600" -->
+<!-- isosent="19970430191838" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301918.NAA18078@mica.denver.sgi.com" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301918.NAA18078@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 15:18:38 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0389.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#390">[ date ]</A>
+<A HREF="index.html#390">[ thread ]</A>
+<A HREF="subject.html#390">[ subject ]</A>
+<A HREF="author.html#390">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301918.NAA18078@mica.denver.sgi.com&gt;">jt@mentat.com</A> (Jerry Toporek)
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; Given that the active side has to be conservative, your heuristic is just
+</EM><BR>
+<EM>&gt; &gt; &gt; fine.  How do you decide whether to try negotiating on TCP Timestamps?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Why not the same?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well, because, as Matt anticipated, my next question was going to be about
+</EM><BR>
+<EM>&gt; TCP SACK.  There is no heuristic there because I always want to try to
+</EM><BR>
+<EM>&gt; negotiate it on.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In general, we need to examine whether it is feasible to blackball any
+</EM><BR>
+<EM>&gt; implementation that can not swallow unrecognized options on SYN segments,
+</EM><BR>
+<P>Blackball implementations?  I don't know about your situation, but the
+<BR>
+sales and support people I deal with say the funniest things whenever I
+<BR>
+say something like &quot;that other vendor's system is broken junk; tell
+<BR>
+the customer to throw it out and get something that works.&quot;
+<BR>
+<P><P><EM>&gt; or do we have to provide a global switch to disable use of anything other
+</EM><BR>
+<EM>&gt; than the MSS option.  If the problem is sufficiently widespread, you then
+</EM><BR>
+<EM>&gt; have to ship with the global switch in the conservative position, to avoid
+</EM><BR>
+<EM>&gt; having system administrators everywhere going nuts discovering that they have
+</EM><BR>
+<EM>&gt; to throw the switch.  Few, if any, will then enable use of these options.
+</EM><BR>
+<EM>&gt; I do hope that we can decide that this approach is not neccessary.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Can we try to gather some specific details on the extent of the problem?
+</EM><BR>
+<EM>&gt; Which specific implementations crash on receipt of options other than MSS,
+</EM><BR>
+<EM>&gt; and which do not crash but do black hole the connection request?
+</EM><BR>
+<P>As I've tried to say before, global options are of very little utility,
+<BR>
+unless you are building single-purpose, probably embedded boxes.  If
+<BR>
+you're building a multi-purpose box, then even when your box wants to
+<BR>
+use a newfangled TCP (or IP or whatever) option with host X, it will
+<BR>
+also have to deal with cruffty old hosts U,V,W,Y, and Z.  Consider a
+<BR>
+box that wants to talk to some peers where a fancy TCP option is a good
+<BR>
+thing (e.g. SACK and satellites) but also wants to use FTP and STMP to
+<BR>
+any of millions of systems on the Internet.  No matter how you set a
+<BR>
+global switch, it will be wrong.
+<BR>
+<P>Personally, I'd pick linking SACK with TCP-LW. 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- A peer that can handle timestamps and window shifts is likely
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to do the right thing with SACK or other new options (including
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ignoring it if not understood)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- if you want selective ACK's, you probably want large windows in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at least one direction, and vice versa,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&quot;Be conservative in what you send ...&quot; is not just a good idea. 
+<BR>
+It's the only thing that works outside of ivory towers.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301918.NAA18078@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0389.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0391.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#390">[ date ]</A>
+<A HREF="index.html#390">[ thread ]</A>
+<A HREF="subject.html#390">[ subject ]</A>
+<A HREF="author.html#390">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

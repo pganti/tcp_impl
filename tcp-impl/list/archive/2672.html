@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Unacceptable ACK in SYN_RCVD</TITLE>
+<META NAME="Author" CONTENT="Robin Uyeshiro (ruyeshiro@iready.com)">
+<META NAME="Subject" CONTENT="RE: Unacceptable ACK in SYN_RCVD state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Unacceptable ACK in SYN_RCVD state handling</H1>
+<!-- received="Mon Apr  8 19:06:26 2002" -->
+<!-- isoreceived="20020408230626" -->
+<!-- sent="Mon, 8 Apr 2002 16:06:20 -0700 " -->
+<!-- isosent="20020408230620" -->
+<!-- name="Robin Uyeshiro" -->
+<!-- email="ruyeshiro@iready.com" -->
+<!-- subject="RE: Unacceptable ACK in SYN_RCVD state handling" -->
+<!-- id="639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com" -->
+<!-- inreplyto="Unacceptable ACK in SYN_RCVD state handling" -->
+<STRONG>From:</STRONG> Robin Uyeshiro (<A HREF="mailto:ruyeshiro@iready.com?Subject=RE:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com&gt;"><EM>ruyeshiro@iready.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 08 2002 - 19:06:20 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2671.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2643.html">Murali Bashyam: "Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2672">[ date ]</A>
+<A HREF="index.html#2672">[ thread ]</A>
+<A HREF="subject.html#2672">[ subject ]</A>
+<A HREF="author.html#2672">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm confused.  The stuff on page 68 (69?) seems to contradict the following
+<BR>
+from page 36, under the Reset Generation heading, at least for SYN-RECEIVED:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;2.  If the connection is in any non-synchronized state (LISTEN,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;SYN-SENT, SYN-RECEIVED), and the incoming segment acknowledges
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;something not yet sent (the segment carries an unacceptable ACK), or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;if an incoming segment has a security level or compartment which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;does not exactly match the level and compartment requested for the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;connection, a reset is sent.
+<BR>
+<P>Page 68/69 appears to count SYN-RECEIVED as a synchronized state.
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Bob Braden [mailto:<A HREF="mailto:braden@ISI.EDU?Subject=RE:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com&gt;">braden@ISI.EDU</A>]
+<BR>
+Sent: Monday, April 08, 2002 12:14 PM
+<BR>
+To: <A HREF="mailto:braden@ISI.EDU?Subject=RE:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com&gt;">braden@ISI.EDU</A>; <A HREF="mailto:mbashyam@cisco.com?Subject=RE:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com&gt;">mbashyam@cisco.com</A>
+<BR>
+Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: Unacceptable ACK in SYN_RCVD state handling
+<BR>
+<P><P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; No, the scenario that applies is described on page 68 (sequence number
+<BR>
+check),
+<BR>
+<P>Yes, sorry, I misinterpreted what you were asking (ACK field as opposed
+<BR>
+to sequence field of ACK segment (But the man DID say &quot;receive window&quot;...
+<BR>
+mumble).
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; The point u mentioned above is the conflict i am having as well, it
+<BR>
+seems to me
+<BR>
+&nbsp;&nbsp;*&gt; that retransmitting
+<BR>
+&nbsp;&nbsp;*&gt; a SYN-ACK seems the right thing to do. But the BSD stack doesn't seem
+<BR>
+to be
+<BR>
+&nbsp;&nbsp;*&gt; doing that.
+<BR>
+<P>I thought you said earlier that the BSD DOES retransmit the SYN.  In
+<BR>
+any case, I would agree that the text of RFC 793 seems to say
+<BR>
+otherwise.  This particular test is one that has caused a great deal of
+<BR>
+confusion over the years.  From the underlying logic of TCP,  I believe
+<BR>
+that retransmitting the SYN is OK.  So it seems you can choose either
+<BR>
+interpretation you want (unless there is some  subtle security
+<BR>
+implication.)
+<BR>
+<P>Bob Braden
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Murali
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt;
+<BR>
+&nbsp;&nbsp;*&gt; &gt;
+<BR>
+&nbsp;&nbsp;*&gt; &gt; Bob Braden
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2671.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2643.html">Murali Bashyam: "Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2672">[ date ]</A>
+<A HREF="index.html#2672">[ thread ]</A>
+<A HREF="subject.html#2672">[ subject ]</A>
+<A HREF="author.html#2672">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Apr 08 2002 - 19:06:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

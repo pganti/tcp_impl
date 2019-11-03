@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: simulation results for increased</TITLE>
+<META NAME="Author" CONTENT="Kathleen Nichols (knichols@baynetworks.com)">
+<META NAME="Subject" CONTENT="simulation results for increased tcp intial window">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>simulation results for increased tcp intial window</H1>
+<!-- received="Thu Sep  4 23:04:08 1997" -->
+<!-- isoreceived="19970905030408" -->
+<!-- sent="Thu, 04 Sep 1997 22:59:02 PDT" -->
+<!-- isosent="19970905055902" -->
+<!-- name="Kathleen Nichols" -->
+<!-- email="knichols@baynetworks.com" -->
+<!-- subject="simulation results for increased tcp intial window" -->
+<!-- id="199709050559.WAA09449@mist.corpwest.baynetworks.com" -->
+<STRONG>From:</STRONG> Kathleen Nichols (<A HREF="mailto:knichols@baynetworks.com?Subject=Re:%20simulation%20results%20for%20increased%20tcp%20intial%20window&In-Reply-To=&lt;199709050559.WAA09449@mist.corpwest.baynetworks.com&gt;"><EM>knichols@baynetworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 05 1997 - 01:59:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0685.html">Curtis Villamizar: "Re: simulation results for increased tcp intial window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#683">[ date ]</A>
+<A HREF="index.html#683">[ thread ]</A>
+<A HREF="subject.html#683">[ subject ]</A>
+<A HREF="author.html#683">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+These are the results of simulations exploring the conditions under which
+<BR>
+a larger inital window size (IW) for TCP is a &quot;win&quot; and to determine
+<BR>
+what effects, if any, the larger IW might have on other traffic flows
+<BR>
+using an IW of 1. This set of simulations was inspired by discussions
+<BR>
+at the Munich IETF tcp-impl and tcp-sat meetings. It appeared that some
+<BR>
+of the questions being raised could be addressed fairly easily in an
+<BR>
+ns-2 simulation. It turned out that the simulation model was easy to
+<BR>
+construct, but debugging ns-2's tcp-full implementation took a lot more time.
+<BR>
+<P>For ns-2 users: some modifications were made to the base tcp class,
+<BR>
+mainly fixes to the timers (tcp base class modifications by Van,
+<BR>
+tcp-full modifications made by both Van and myself). The tcp-full code
+<BR>
+was modified to use an &quot;application&quot; class and three application
+<BR>
+client-server pairs were written: a simple file transfer (ftp), a model
+<BR>
+of http1.0 style web connection and a very rough model of http1.1
+<BR>
+style web connection. I'll see about making these modified files available
+<BR>
+through the &quot;contributed code&quot; link from the ns-2 web page. (so don't bother
+<BR>
+me in the short term unless you're a Close Personal Friend.)
+<BR>
+<P>The simulated network topology:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10Mb,100us                             10Mb,100us
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(all 4 links)                          (all 4 links)
+<BR>
+<P>C   n2_________                               ______ n6   S
+<BR>
+l   n3_________\                             /______ n7	  e
+<BR>
+i              \\         1.5Mb,50ms        //		  r
+<BR>
+e               n1 ------------------------ n0		  v
+<BR>
+n   n4__________//                          \ \_____ n8   e
+<BR>
+t   n5__________/                            \______ n9   r
+<BR>
+s							  s
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URLs --&gt;		&lt;--- FTP &amp; Web data
+<BR>
+<P>Each left hand side node (n2-n5) has four web clients attached to
+<BR>
+it, each of which is served by a different web server attached to
+<BR>
+one of the nodes on the right hand side (n6-n8). The links to and from those
+<BR>
+nodes is at 10 Mbps. The bottleneck link is between n1 and n0. Depending
+<BR>
+on the simulation scenario, one or two ftp clients can also be
+<BR>
+attached to the left hand side nodes and ftp servers can be attached
+<BR>
+to the right hand side nodes. All links are bi-directional, but
+<BR>
+only acks, syns, fins, and URLs are flowing from left to right.
+<BR>
+<P>Assumptions made in the simulations were that all ftps transfered 1 MB
+<BR>
+files and that all web pages had exactly three embeded urls. The web clients
+<BR>
+are browsing quite aggressively, requesting a new page after a delay
+<BR>
+uniformly randomly distributed between 1 and 5 seconds. This is not meant to
+<BR>
+realistically model a single user's web-browsing pattern, but to create a
+<BR>
+reasonably heavy traffic load whose individual tcp connections
+<BR>
+accurately reflect real web traffic.
+<BR>
+<P>The maximum tcp window was set to 11 packets, maximum packet size to
+<BR>
+1460 bytes, and buffer sizes were set at 22 packets.
+<BR>
+(The ns-2 tcp's require setting window sizes and buffer sizes in number of
+<BR>
+packets. In tcp-full some of the internal parameters have been set to be
+<BR>
+byte-oriented, but external values must still be set in number of packets.)
+<BR>
+<P>The first set of simulation runs was done with 16 web clients and
+<BR>
+a number of ftp clients ranging from zero to 8. The IW was varied
+<BR>
+from 1 to 4, though the 4 packet case lies beyond what is currently
+<BR>
+recommended. The figures of merit used were the median page delay
+<BR>
+seen by the web clients and the median file transfer delay seen
+<BR>
+by the ftp clients. The simulated run time was rather large, 360 seconds,
+<BR>
+to sample a large number of these metrics. (The median values remained
+<BR>
+stable for twice that time, so it seemed adequate.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Median Web Page Delays (secs) | Median File Transfer Delays
+<BR>
+#FTPs	IW=1	IW=2	IW=3	IW=4 | IW=1	IW=2	IW=3	IW=4
+<BR>
+------------------------------------ | ----------------------------
+<BR>
+&nbsp;0	0.71	0.58	0.55	0.52 | 
+<BR>
+&nbsp;1	0.81	0.68	0.64	0.62 |  9.1	 9.3	 9.3	 9.4
+<BR>
+&nbsp;4	2.17	1.76	1.56	1.46 | 26.3	27.0	27.1	28.1
+<BR>
+&nbsp;6	2.57	2.11	1.87	1.70 | 39.5	38.3	40.1	40.7
+<BR>
+&nbsp;8	2.80	2.37	2.07	2.02 | 52.2	51.7	52.2	52.1
+<BR>
+<P>&nbsp;percentage improvement in page delays vs number of ftps
+<BR>
+#FTPs	IW=1	IW=2	IW=3	IW=4 
+<BR>
+------------------------------------ 
+<BR>
+&nbsp;0	-	18	23	27 
+<BR>
+&nbsp;1	-	16	21	23 
+<BR>
+&nbsp;4	-	19	28	33 
+<BR>
+&nbsp;6	-	18	27	34 
+<BR>
+&nbsp;8	-	15	26	28 
+<BR>
+<P>Even though the ftps use the same IW as the webs, the effect is
+<BR>
+not significant since there are only about 50 file transfers
+<BR>
+completed over the run time of the simulation. When a packet is
+<BR>
+dropped, the restart window size used is one packet. Thus it
+<BR>
+didn't seem necessary to compare web clients with larger IWs to
+<BR>
+ftps with shorter IWs. On the other hand, it is interesting to
+<BR>
+mix some webs with shorter windows with those using longer windows.
+<BR>
+This experiment doubled the number of web clients to 32. All 32 were
+<BR>
+simulated using the same initial window size, first IW=1, then IW=3.
+<BR>
+Then the clients were split into two groups of 16 each, one of which
+<BR>
+use IW=1 and the other used IW=3.
+<BR>
+<P>Median Page Delays (secs)
+<BR>
+#Webs	IW=1	IW=3
+<BR>
+--------------------
+<BR>
+&nbsp;32	0.75	0.61
+<BR>
+&nbsp;16/16	0.80	0.60	
+<BR>
+<P>The first line shows the same result as the earlier data: clients
+<BR>
+with IW=3 significantly outperform clients with IW=1.  The second
+<BR>
+line shows that running a mixture of IW=3 &amp; IW=1 has a tiny
+<BR>
+negative effect on the IW=1 conversations and essentially no
+<BR>
+effect on the IW=3 conversations.
+<BR>
+<P>Since these simulations were all with http1.0 style web traffic, a
+<BR>
+natural question is to ask how results are affected by migration to
+<BR>
+http1.1. A rough model of this behavior was simulated by using one
+<BR>
+connection to send all of the information from both the primary URL
+<BR>
+and the three in-lines. These results:
+<BR>
+<P>Med Web Page Delay   | Med FTP Delays	| % web improvement
+<BR>
+#FTPs	IW=1	IW=3 | IW=1	IW=3	|  from IW=1 to IW=3
+<BR>
+------------------------------------	|--------------
+<BR>
+&nbsp;0	0.57	0.45 | 			|	21
+<BR>
+&nbsp;1	0.64	0.52 |  9.2	 9.5	|	19
+<BR>
+&nbsp;4	1.80	1.31 | 27.0	27.0	|	27
+<BR>
+&nbsp;8	2.26	1.74 | 53.1	54.6	|	23
+<BR>
+<P>Although these web clients clearly have better delay properties, they
+<BR>
+seem to get about the same percentage delay improvement from going
+<BR>
+to the larger IW.
+<BR>
+<P>The indications from these results are that increasing the initial
+<BR>
+window size to 3 packets (or 4380 bytes) doesn't &quot;hurt&quot; and helps
+<BR>
+to improve the perceived performance. These simulations have suggested
+<BR>
+some further analyses of the traffic dynamics of the simulated network.
+<BR>
+It is also possible to do some further variations on the scenarios
+<BR>
+simulated here.
+<BR>
+<P>Using ns for the simulations made it possible to explore some
+<BR>
+other effects. ns-2 has a built-in RED function for buffer managment,
+<BR>
+making it a simple matter to rerun the simulations with the RED buffer
+<BR>
+managment on. With no FTPs there are no (or almost no) dropped packets,
+<BR>
+so that case will not differ from those with the drop tail queues.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Median Web Page Delays (secs) | Median File Transfer Delays
+<BR>
+#FTPs	IW=1	IW=2	IW=3	IW=4 | IW=1	IW=2	IW=3	IW=4
+<BR>
+------------------------------------ | ----------------------------
+<BR>
+&nbsp;1	0.82	0.69	0.64	0.62 |  9.1	 9.3	 9.4	 9.4
+<BR>
+&nbsp;4	1.31	1.11	1.03	0.98 | 27.8	29.2	29.5	29.3
+<BR>
+&nbsp;6	1.68	1.54	1.48	1.47 | 42.3	43.1	42.8	43.6
+<BR>
+&nbsp;8	2.02	1.91	1.69	1.61 | 55.1	58.7	59.7	51.3
+<BR>
+<P>&nbsp;percentage improvement in page delay
+<BR>
+#FTPs	IW=1	IW=2	IW=3	IW=4 
+<BR>
+------------------------------------ 
+<BR>
+&nbsp;1	-	16	22	24 
+<BR>
+&nbsp;4	-	15	21	25 
+<BR>
+&nbsp;6	-	 8	12	13 
+<BR>
+&nbsp;8	-	 5	16	20 
+<BR>
+<P>There are two interesting aspects to these results. First, for the cases
+<BR>
+where there are enough concurrent FTPs to fill the buffers, there is a
+<BR>
+larger improvement gained going from drop tail to RED than with the
+<BR>
+increased IW, another validation of the usefulness of RED.
+<BR>
+The other is that the improvements from larger IWs are smaller with
+<BR>
+the RED scenario. Although deploying RED would have a more powerful
+<BR>
+impact on the delays seen by small transfers like typical web pages,
+<BR>
+increasing the initial window size is still useful.
+<BR>
+<P>Packet drop rates did increase with IW, but the change was not significant.
+<BR>
+For the drop-tail simulations, the drop rates on the congested link for all
+<BR>
+flows range from 0.6-1.0% for 4 FTPs, 1.6-1.9% for 6 FTPs, and 2.4-2.8%
+<BR>
+for 8 FTPs.  For the RED scenarios the ranges were 1.8-2.0% for 4 FTPs,
+<BR>
+2.9-3.2% for 6 FTPs, and 4.0-4.2% for 8 FTPs. Since the increased drop
+<BR>
+rates were accompanied by better performance, it's clear that, for
+<BR>
+these low rates, drop rate is clearly not an indicator of user level
+<BR>
+performance.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathie
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:knichols@baynetworks.com?Subject=Re:%20simulation%20results%20for%20increased%20tcp%20intial%20window&In-Reply-To=&lt;199709050559.WAA09449@mist.corpwest.baynetworks.com&gt;">knichols@baynetworks.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(this work benefited from discussions and comments from Van Jacobson)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0682.html">Vern Paxson: "Re: Source quench"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0684.html">Wu-chang Feng: "Re: simulation results for increased tcp intial window"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0685.html">Curtis Villamizar: "Re: simulation results for increased tcp intial window"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#683">[ date ]</A>
+<A HREF="index.html#683">[ thread ]</A>
+<A HREF="subject.html#683">[ subject ]</A>
+<A HREF="author.html#683">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

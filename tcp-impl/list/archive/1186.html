@@ -1,0 +1,1813 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: new problems documented in Known</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="new problems documented in Known Problems I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>new problems documented in Known Problems I-D</H1>
+<!-- received="Fri Aug  7 09:33:54 1998" -->
+<!-- isoreceived="19980807133354" -->
+<!-- sent="Fri, 07 Aug 1998 09:32:24 PDT" -->
+<!-- isosent="19980807163224" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="new problems documented in Known Problems I-D" -->
+<!-- id="199808071632.JAA02838@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20new%20problems%20documented%20in%20Known%20Problems%20I-D&In-Reply-To=&lt;199808071632.JAA02838@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 07 1998 - 12:32:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1185.html">Vern Paxson: "draft-ietf-tcpimpl-prob-04.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1186">[ date ]</A>
+<A HREF="index.html#1186">[ thread ]</A>
+<A HREF="subject.html#1186">[ subject ]</A>
+<A HREF="author.html#1186">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+3.3.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uninitialized CWND
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As described above for &quot;No initial slow start&quot;, when a TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection begins cwnd is initialized to one segment (or perhaps a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;few segments, if experimenting with [Allman98]).  One particular
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form of &quot;No initial slow start&quot;, worth separate mention as the bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is fairly widely deployed, is &quot;Uninitialized CWND&quot;.  That is, while
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the TCP implements the proper slow start mechanism, it fails to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initialize cwnd properly, so slow start in fact fails to occur.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The particular bug occurs when, during the connection establishment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handshake, the SYN ACK packet arrives without an MSS option.  The
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;faulty implementation uses receipt of the MSS option to initialize
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cwnd to one segment; if the option fails to arrive, then cwnd is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead initialized to a very large value.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In congested environments, detrimental to the performance of other
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections, and likely to the connection itself.  The burst can be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so large (see below) that it has deleterious effects even in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uncongested environments.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP exhibiting this behavior is stressing the network with a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;large burst of packets, which can cause loss in the network.
+<BR>
+<P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start.  RFC 2001 gives the specifics
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 9]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of slow start.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This trace was made using tcpdump/BPF running on host A.  Host A is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the sender and host B is the receiver.  The advertised window and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp options have been omitted for clarity, except for the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first segment sent by host A.  Note that A sends an MSS option in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;its initial SYN but B does not include one in its reply.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.226937 A &gt; B: S 237585307:237585307(0) win 8192
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 536,nop,wscale 0,nop,nop,timestamp[|tcp]&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.557135 B &gt; A: S 1617216000:1617216000(0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack 237585308 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.557788 A &gt; B: . ack 1 win 8192
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.566014 A &gt; B: . 1:537(536) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.566557 A &gt; B: . 537:1073(536) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.567120 A &gt; B: . 1073:1609(536) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.567662 A &gt; B: P 1609:2049(440) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.568349 A &gt; B: . 2049:2585(536) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.568909 A &gt; B: . 2585:3121(536) ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[54 additional burst segments deleted for brevity]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:02.936638 A &gt; B: . 32065:32601(536) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:56:03.018685 B &gt; A: . ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After the three-way handshake, host A bursts 61 segments into the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network, before duplicate ACKs on the first segment cause a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission to occur.  Since host A did not wait for the ACK on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the first segment before sending additional segments, it is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibiting &quot;Uninitialized CWND&quot;
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;See the example for &quot;No initial slow start&quot;.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Paxson97].
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem can be detected by examining a packet trace recorded
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at either the sender or the receiver.  However, the bug can be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;difficult to induce because it requires finding a remote TCP peer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that does not send an MSS option in its SYN ACK.
+<BR>
+<P><P><P><P>Paxson, Editor                                                 [Page 10]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem can be fixed by ensuring that cwnd is initialized upon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receipt of a SYN ACK, even if the SYN ACK does not contain an MSS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;option.
+<BR>
+<P>3.6.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Extra additive constant in congestion avoidance
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control / performance
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 section 4.2.2.15 states that TCP MUST implement Jacobson's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;congestion avoidance&quot; algorithm [Jacobson88], which calls for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increasing the congestion window, cwnd, by:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MSS * MSS / cwnd
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for each ACK received for new data [RFC2001].  This has the effect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of increasing cwnd by approximately one segment in each round trip
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Some TCP implementations add an additional fraction of a segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(typically MSS/8) to cwnd for each ACK received for new data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Stevens94, Wright95]:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(MSS * MSS / cwnd) + MSS/8
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These implementations exhibit &quot;Extra additive constant in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion avoidance&quot;.
+<BR>
+<P><P><P><P><P>Paxson, Editor                                                 [Page 17]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;May be detrimental to performance even in completely uncongested
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;environments (see Implications).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In congested environments, may also be detrimental to the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performance of other connections.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The extra additive term allows a TCP to more aggressively open its
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window (quadratic rather than linear increase).  For
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congested networks, this can increase the loss rate experienced by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all connections sharing a bottleneck with the aggressive TCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, even for completely uncongested networks, the extra
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;additive term can lead to diminished performance, as follows.  In
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion avoidance, a TCP sender probes the network path to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;determine its available capacity, which often equates to the number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of buffers available at a bottleneck link.  With linear congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avoidance, the TCP only probes for sufficient capacity (buffer) to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hold one extra packet per RTT.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thus, when it exceeds the available capacity, generally only one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet will be lost (since on the previous RTT it already found
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that the path could sustain a window with one less packet in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flight).  If the congestion window is sufficiently large, then the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP will recover from this single loss using fast retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and avoid an expensive (in terms of performance) retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, when the additional additive term is used, then cwnd can
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase by more than one packet per RTT, in which case the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probes more aggressively.  If in the previous RTT it had reached
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the available capacity of the path, then the excess due to the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase will again be lost, but now this will result in multiple
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses from the flight instead of a single loss.  TCPs that do not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;utilize SACK [RFC2018] generally will not recover from multiple
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses without incurring a retransmission timeout [Fall96,Hoe96],
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;significantly diminishing performance.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of the &quot;congestion avoidance&quot; algorithm.  RFC
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2001 outlines the fast retransmit/fast recovery algorithms.  RFC
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018 discusses the SACK option.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 18]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recorded using tcpdump running on the same FDDI LAN as host A.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host A is the sender and host B is the receiver.  The connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;establishment specified an MSS of 4,312 bytes and a window scale
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factor of 4.  We omit the establishment and the first 2.5 MB of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data transfer, as the problem is best demonstrated when the window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has grown to a large value.  At the beginning of the trace excerpt,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the congestion window is 31 packets.  The connection is never
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiver-window limited, so we omit window advertisements from the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace for clarity.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.697951 B &gt; A: . ack 2383006
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.699388 A &gt; B: . 2508054:2512366(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.699962 A &gt; B: . 2512366:2516678(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.700012 B &gt; A: . ack 2391630
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.701081 A &gt; B: . 2516678:2520990(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.701656 A &gt; B: . 2520990:2525302(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.701739 B &gt; A: . ack 2400254
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.702685 A &gt; B: . 2525302:2529614(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.703257 A &gt; B: . 2529614:2533926(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.703295 B &gt; A: . ack 2408878
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.704414 A &gt; B: . 2533926:2538238(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.704989 A &gt; B: . 2538238:2542550(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.705040 B &gt; A: . ack 2417502
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.705935 A &gt; B: . 2542550:2546862(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.706506 A &gt; B: . 2546862:2551174(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.706544 B &gt; A: . ack 2426126
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.707480 A &gt; B: . 2551174:2555486(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.708051 A &gt; B: . 2555486:2559798(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.708088 B &gt; A: . ack 2434750
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.709030 A &gt; B: . 2559798:2564110(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.709604 A &gt; B: . 2564110:2568422(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.710175 A &gt; B: . 2568422:2572734(4312) *
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.710215 B &gt; A: . ack 2443374
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.710799 A &gt; B: . 2572734:2577046(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.711368 A &gt; B: . 2577046:2581358(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.711405 B &gt; A: . ack 2451998
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.712323 A &gt; B: . 2581358:2585670(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.712898 A &gt; B: . 2585670:2589982(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.712938 B &gt; A: . ack 2460622
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.713926 A &gt; B: . 2589982:2594294(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.714501 A &gt; B: . 2594294:2598606(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.714547 B &gt; A: . ack 2469246
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.715747 A &gt; B: . 2598606:2602918(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.716287 A &gt; B: . 2602918:2607230(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.716328 B &gt; A: . ack 2477870
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.717146 A &gt; B: . 2607230:2611542(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.717717 A &gt; B: . 2611542:2615854(4312)
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 19]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.717762 B &gt; A: . ack 2486494
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.718754 A &gt; B: . 2615854:2620166(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.719331 A &gt; B: . 2620166:2624478(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.719906 A &gt; B: . 2624478:2628790(4312) **
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.719958 B &gt; A: . ack 2495118
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.720500 A &gt; B: . 2628790:2633102(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.721080 A &gt; B: . 2633102:2637414(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.721739 B &gt; A: . ack 2503742
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.722348 A &gt; B: . 2637414:2641726(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.722918 A &gt; B: . 2641726:2646038(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:42:07.769248 B &gt; A: . ack 2512366
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The receiver's acknowledgment policy is one ACK per two packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;received.  Thus, for each ACK arriving at host A, two new packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are sent, except when cwnd increases due to congestion avoidance,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in which case three new packets are sent.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;With an ack-every-two-packets policy, cwnd should only increase one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MSS per 2 RTT.  However, at the point marked &quot;*&quot; the window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increases after 7 ACKs have arrived, and then again at &quot;**&quot; after 6
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more ACKs.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;While we do not have space to show the effect, this trace suffered
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from repeated timeout retransmissions due to multiple packet losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;during a single RTT.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using the same host and tracing setup as above, except now A's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP has been modified to remove the MSS/8 additive constant.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tcpdump reported 77 packet drops; the excerpt below is fully self-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consistent so it is unlikely that any of these occurred during the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;excerpt.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We again begin when cwnd is 31 packets (this occurs significantly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;later in the trace, because the congestion avoidance is now less
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aggressive with opening the window).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.236757 B &gt; A: . ack 5194679
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.238192 A &gt; B: . 5319727:5324039(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.238770 A &gt; B: . 5324039:5328351(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.238821 B &gt; A: . ack 5203303
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.240158 A &gt; B: . 5328351:5332663(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.240738 A &gt; B: . 5332663:5336975(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.270422 B &gt; A: . ack 5211927
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.271883 A &gt; B: . 5336975:5341287(4312)
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 20]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.272458 A &gt; B: . 5341287:5345599(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.279099 B &gt; A: . ack 5220551
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.280539 A &gt; B: . 5345599:5349911(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.281118 A &gt; B: . 5349911:5354223(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.281183 B &gt; A: . ack 5229175
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.282348 A &gt; B: . 5354223:5358535(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.283029 A &gt; B: . 5358535:5362847(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.283089 B &gt; A: . ack 5237799
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.284213 A &gt; B: . 5362847:5367159(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.284779 A &gt; B: . 5367159:5371471(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.285976 B &gt; A: . ack 5246423
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.287465 A &gt; B: . 5371471:5375783(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.288036 A &gt; B: . 5375783:5380095(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.288073 B &gt; A: . ack 5255047
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.289155 A &gt; B: . 5380095:5384407(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.289725 A &gt; B: . 5384407:5388719(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.289762 B &gt; A: . ack 5263671
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.291090 A &gt; B: . 5388719:5393031(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.291662 A &gt; B: . 5393031:5397343(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.291701 B &gt; A: . ack 5272295
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.292870 A &gt; B: . 5397343:5401655(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.293441 A &gt; B: . 5401655:5405967(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.293481 B &gt; A: . ack 5280919
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.294476 A &gt; B: . 5405967:5410279(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.295053 A &gt; B: . 5410279:5414591(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.295106 B &gt; A: . ack 5289543
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.296306 A &gt; B: . 5414591:5418903(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.296878 A &gt; B: . 5418903:5423215(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.296917 B &gt; A: . ack 5298167
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.297716 A &gt; B: . 5423215:5427527(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.298285 A &gt; B: . 5427527:5431839(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.298324 B &gt; A: . ack 5306791
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.299413 A &gt; B: . 5431839:5436151(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.299986 A &gt; B: . 5436151:5440463(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.303696 B &gt; A: . ack 5315415
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.305177 A &gt; B: . 5440463:5444775(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.305755 A &gt; B: . 5444775:5449087(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.308032 B &gt; A: . ack 5324039
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.309525 A &gt; B: . 5449087:5453399(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.310101 A &gt; B: . 5453399:5457711(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.310144 B &gt; A: . ack 5332663           ***
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.311615 A &gt; B: . 5457711:5462023(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.312198 A &gt; B: . 5462023:5466335(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.341876 B &gt; A: . ack 5341287
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.343451 A &gt; B: . 5466335:5470647(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.343985 A &gt; B: . 5470647:5474959(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.350304 B &gt; A: . ack 5349911
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 21]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.351852 A &gt; B: . 5474959:5479271(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.352430 A &gt; B: . 5479271:5483583(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.352484 B &gt; A: . ack 5358535
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.353574 A &gt; B: . 5483583:5487895(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.354149 A &gt; B: . 5487895:5492207(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.354205 B &gt; A: . ack 5367159
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.355467 A &gt; B: . 5492207:5496519(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.356039 A &gt; B: . 5496519:5500831(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.357361 B &gt; A: . ack 5375783
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.358855 A &gt; B: . 5500831:5505143(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.359424 A &gt; B: . 5505143:5509455(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.359465 B &gt; A: . ack 5384407
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.360605 A &gt; B: . 5509455:5513767(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.361181 A &gt; B: . 5513767:5518079(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.361225 B &gt; A: . ack 5393031
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.362485 A &gt; B: . 5518079:5522391(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.363057 A &gt; B: . 5522391:5526703(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.363096 B &gt; A: . ack 5401655
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.364236 A &gt; B: . 5526703:5531015(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.364810 A &gt; B: . 5531015:5535327(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.364867 B &gt; A: . ack 5410279
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.365819 A &gt; B: . 5535327:5539639(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.366386 A &gt; B: . 5539639:5543951(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.366427 B &gt; A: . ack 5418903
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.367586 A &gt; B: . 5543951:5548263(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.368158 A &gt; B: . 5548263:5552575(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.368199 B &gt; A: . ack 5427527
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.369189 A &gt; B: . 5552575:5556887(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.369758 A &gt; B: . 5556887:5561199(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.369803 B &gt; A: . ack 5436151
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.370814 A &gt; B: . 5561199:5565511(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.371398 A &gt; B: . 5565511:5569823(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.375159 B &gt; A: . ack 5444775
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.376658 A &gt; B: . 5569823:5574135(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.377235 A &gt; B: . 5574135:5578447(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.379303 B &gt; A: . ack 5453399
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.380802 A &gt; B: . 5578447:5582759(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.381377 A &gt; B: . 5582759:5587071(4312)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:22:21.381947 A &gt; B: . 5587071:5591383(4312) ****
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;***&quot; marks the end of the first round trip.  Note that cwnd did
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not increase (as evidenced by each ACK eliciting two new data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets).  Only at &quot;****&quot;, which comes near the end of the second
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;round trip, does cwnd increase by one packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This trace did not suffer any timeout retransmissions.  It
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferred the same amount of data as the first trace in about
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;half as much time.  This difference is repeatable between hosts A
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 22]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and B.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Stevens94] and [Wright95] discuss this problem.  The problem of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reno TCP failing to recover from multiple losses except via a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission timeout is discussed in [Fall96,Hoe96].
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If source code is available, that is generally the easiest way to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;detect this problem.  Search for each modification to the cwnd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variable; (at least) one of these will be for congestion avoidance,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and inspection of the related code should immediately identify the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;problem if present.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The problem can also be detected by closely examining packet traces
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;taken near the sender.  During congestion avoidance, cwnd will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase by an additional segment upon the receipt of (typically)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eight acknowledgements without a loss.  This increase is in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addition to the one segment increase per round trip time (or two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;round trip times if the receiver is using delayed ACKs).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Furthermore, graphs of the sequence number vs. time, taken from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet traces, are normally linear during congestion avoidance.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When viewing packet traces of transfers from senders exhibiting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this problem, the graphs appear quadratic instead of linear.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finally, the traces will show that, with sufficiently large
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windows, nearly every loss event results in a timeout.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem may be corrected by removing the &quot;+ MSS/8&quot; term from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the congestion avoidance code that increases cwnd each time an ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of new data is received.
+<BR>
+<P><P>3.7.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initial RTO too low
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Performance
+<BR>
+<P><P><P><P><P>Paxson, Editor                                                 [Page 23]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP first begins transmitting data, it lacks the RTT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;measurements necessary to have computed an adaptive retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timeout (RTO).  RFC 1122, 4.2.3.1, states that a TCP SHOULD
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initialize RTO to 3 seconds.  A TCP that uses a lower value
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibits &quot;Initial RTO too low&quot;.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In environments with large RTTs (where &quot;large&quot; means any value
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;larger than the initial RTO), TCPs will experience very poor
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performance.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Whenever RTO &lt; RTT, very poor performance can result as packets are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unnecessarily retransmitted (because RTO will expire before an ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the packet can arrive) and the connection enters slow start and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion avoidance.  Generally, the algorithms for computing RTO
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avoid this problem by adding a positive term to the estimated RTT.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, when a connection first begins it must use some estimate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for RTO, and if it picks a value less than RTT, the above problems
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will arise.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Furthermore, when the initial RTO &lt; RTT, it can take a long time
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the TCP to correct the problem by adapting the RTT estimate,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because the use of Karn's algorithm (mandated by RFC 1122, 4.2.3.1)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will discard many of the candidate RTT measurements made after the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first timeout, since they will be measurements of retransmitted
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 states that TCPs SHOULD initialize RTO to 3 seconds and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MUST implement Karn's algorithm.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The following trace file was taken using tcpdump at host A, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data sender.  The advertised window and SYN options have been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;omitted for clarity.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:39.870301 A &gt; B: S 2786333696:2786333696(0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:40.548170 B &gt; A: S 130240000:130240000(0) ack 2786333697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:40.561287 A &gt; B: P 1:513(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:40.753466 A &gt; B: . 1:513(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.133687 A &gt; B: . 1:513(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.458529 B &gt; A: . ack 513
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 24]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.458686 A &gt; B: . 513:1025(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.458797 A &gt; B: P 1025:1537(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.541633 B &gt; A: . ack 513
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:41.703732 A &gt; B: . 513:1025(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.044875 B &gt; A: . ack 513
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.173728 A &gt; B: . 513:1025(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.330861 B &gt; A: . ack 1537
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.331129 A &gt; B: . 1537:2049(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.331262 A &gt; B: P 2049:2561(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.623673 A &gt; B: . 1537:2049(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:42.683203 B &gt; A: . ack 1537
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:43.044029 B &gt; A: . ack 1537
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;07:52:43.193812 A &gt; B: . 1537:2049(512) ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note from the SYN/SYN-ack exchange, the RTT is over 600 msec.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, from the elapsed time between the third and fourth lines
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(the first packet being sent and then retransmitted), it is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apparent the RTO was initialized to under 200 msec.  The next line
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shows that this value has doubled to 400 msec (correct exponential
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backoff of RTO), but that still does not suffice to avoid an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unnecessary retransmission.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finally, an ACK from B arrives for the first segment.  Later two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more duplicate ACKs for 513 arrive, indicating that both the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;original and the two retransmissions arrived at B.  (Indeed, a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concurrent trace at B showed that no packets were lost during the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entire connection).  This ACK opens the congestion window to two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets, which are sent back-to-back, but at 07:52:41.703732 RTO
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;again expires after a little over 200 msec, leading to an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unnecessary retransmission, and the pattern repeats.  By the end of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the trace excerpt above, 1536 bytes have been successfully
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitted from A to B, over an interval of more than 2 seconds,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reflecting terrible performance.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The following trace file was taken using tcpdump at host C, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data sender.  The advertised window and SYN options have been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;omitted for clarity.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:32.090299 C &gt; D: S 2031744000:2031744000(0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:32.900325 D &gt; C: S 262737964:262737964(0) ack 2031744001
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:32.900326 C &gt; D: . ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:32.910326 C &gt; D: . 1:513(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:34.150355 D &gt; C: . ack 513
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:34.150356 C &gt; D: . 513:1025(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:34.150357 C &gt; D: . 1025:1537(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.170384 D &gt; C: . ack 1025
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 25]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.170385 C &gt; D: . 1537:2049(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.170386 C &gt; D: . 2049:2561(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.320385 D &gt; C: . ack 1537
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.320386 C &gt; D: . 2561:3073(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.320387 C &gt; D: . 3073:3585(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:30:35.730384 D &gt; C: . ack 2049
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initital SYN/SYN-ack exchange shows that RTT is more than 800
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msec, and for some subsequent packets it rises above 1 second, but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C's retransmit timer does not ever expire.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Paxson97].
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is readily detected by inspecting a packet trace of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the startup of a TCP connection made over a long-delay path.  It
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can be diagnosed from either a sender-side or receiver-side trace.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Long-delay paths can often be found by locating remote sites on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;other continents.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As this problem arises from a faulty initialization, one hopes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fixing it requires a one-line change to the TCP source code.
+<BR>
+<P><P>3.8.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure of window deflation after loss recovery
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control / performance
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The fast recovery algorithm allows TCP senders to continue to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmit new segments during loss recovery.  First, fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission is initiated after a TCP sender receives three
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate ACKs.  At this point, a retransmission is sent and cwnd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is halved.  The fast recovery algorithm then allows additional
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments to be sent when sufficient additional duplicate ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arrive.  Some implementations of fast recovery compute when to send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;additional segments by artificially incrementing cwnd, first by
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 26]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;three segments to account for the three duplicate ACKs that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;triggered fast retransmission, and subsequently by 1 MSS for each
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new duplicate ACK that arrives.  When cwnd allows, the sender
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmits new data segments.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When an ACK arrives that covers new data, cwnd is to be reduced by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the amount by which it was artificially increased.  However, some
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP implementations fail to &quot;deflate&quot; the window, causing an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inappropriate amount of data to be sent into the network after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery.  One cause of this problem is the &quot;header prediction&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code, which is used to handle incoming segments that require little
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work.  In some implementations of TCP, the header prediction code
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;does not check to make sure cwnd has not been artificially
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inflated, and therefore does not reduce the artificially increased
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cwnd when appropriate.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP senders that exhibit this problem will transmit a burst of data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immediately after recovery, which can degrade performance, as well
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as network stability.  Effectively, the sender does not reduce the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size of cwnd as much as it should (to half its value when loss was
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;detected), if at all.  This can harm the performance of the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection itself, as well as competing TCP flows.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP sender exhibiting this problem does not reduce cwnd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;appropriately in times of congestion, and therefore may contribute
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to congestive collapse.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 2001 outlines the fast retransmit/fast recovery algorithms.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Brakmo95] outlines this implementation problem and offers a fix.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The following trace file was taken using tcpdump at host A, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data sender.  The advertised window (which never changed) has been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;omitted for clarity, except for the first packet sent by each host.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:56.825635 A.7505 &gt; B.7505: . 29697:30209(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.038794 B.7505 &gt; A.7505: . ack 27649 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.039279 A.7505 &gt; B.7505: . 30209:30721(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.321876 B.7505 &gt; A.7505: . ack 28161
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.322356 A.7505 &gt; B.7505: . 30721:31233(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.347128 B.7505 &gt; A.7505: . ack 28673
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 27]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.347572 A.7505 &gt; B.7505: . 31233:31745(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.347782 A.7505 &gt; B.7505: . 31745:32257(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.936393 B.7505 &gt; A.7505: . ack 29185
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.936864 A.7505 &gt; B.7505: . 32257:32769(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.950802 B.7505 &gt; A.7505: . ack 29697 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:57.951246 A.7505 &gt; B.7505: . 32769:33281(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:58.169422 B.7505 &gt; A.7505: . ack 29697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:58.638222 B.7505 &gt; A.7505: . ack 29697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:58.643312 B.7505 &gt; A.7505: . ack 29697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:58.643669 A.7505 &gt; B.7505: . 29697:30209(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:58.936436 B.7505 &gt; A.7505: . ack 29697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.002614 B.7505 &gt; A.7505: . ack 29697
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.003026 A.7505 &gt; B.7505: . 33281:33793(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.682902 B.7505 &gt; A.7505: . ack 33281
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.683391 A.7505 &gt; B.7505: P 33793:34305(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.683748 A.7505 &gt; B.7505: P 34305:34817(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.684043 A.7505 &gt; B.7505: P 34817:35329(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.684266 A.7505 &gt; B.7505: P 35329:35841(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.684567 A.7505 &gt; B.7505: P 35841:36353(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.684810 A.7505 &gt; B.7505: P 36353:36865(512) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.685094 A.7505 &gt; B.7505: P 36865:37377(512) ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first 12 lines of the trace show incoming ACKs clocking out a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window of data segments.  At this point in the transfer, cwnd is 7
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments.  The next 4 lines of the trace show 3 duplicate ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arriving from the receiver, followed by a retransmission from the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sender.  At this point, cwnd is halved (to 3 segments) and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;artificially incremented by the three duplicate ACKs that have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arrived, making cwnd 6 segments.  The next two lines show 2 more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate ACKs arriving, each of which increases cwnd by 1 segment.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, after these two duplicate ACKs arrive the cwnd is 8 segments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the sender has permission to send 1 new segment (since there
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are 7 segments outstanding).  The next line in the trace shows this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new segment being transmitted.  The next packet shown in the trace
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is an ACK from host B that covers the first 7 outstanding segments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(all but the segment sent during recovery).  This should cause cwnd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to be reduced to 3 segments and 2 segments to be transmitted (since
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there is already 1 outstanding segment in the network).  However,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as shown by the last 7 lines of the trace, cwnd is not reduced,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;causing a line-rate burst of 7 new segments.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The trace would appear identical to the one above, only it would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop after:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;08:22:59.683748 A.7505 &gt; B.7505: P 34305:34817(512) ack 1
+<BR>
+<P><P><P><P>Paxson, Editor                                                 [Page 28]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because at this point host A would correctly reduce cwnd after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery, allowing only 2 segments to be transmited, rather than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;producing a burst of 7 segments.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented and the performance implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;analyzed in [Brakmo95].
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure of window deflation after loss recovery can be found by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;examining sender-side packet traces recorded during periods of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moderate loss (so cwnd can grow large enough to allow for fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery when loss occurs).
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When this bug is caused by incorrect header prediction, the fix is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to add a predicate to the header prediction test that checks to see
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;whether cwnd is inflated; if so, the header prediction test fails
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the usual ACK processing occurs, which (in this case) takes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;care to deflate the window.
+<BR>
+<P>3.10.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to back off retransmission timeout
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control / reliability
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The retransmission timeout is used to determine when a packet has
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;been dropped in the network.  When this timeout has expired without
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the arrival of an ACK, the segment is retransmitted. Each time a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segment is retransmitted, the timeout is adjusted according to an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exponential backoff algorithm, doubling each time.  If a TCP fails
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to receive an ACK after numerous attempts at retransmitting the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same segment, it terminates the connection.  A TCP that fails to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;double its retransmission timeout upon repeated timeouts is said to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit &quot;Failure to back off retransmission timeout&quot;.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Backing off the retransmission timer is a cornerstone of network
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stability in the presence of congestion.  Consequently, this bug
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can have severe adverse affects in congested networks.  It also
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;affects TCP reliability in congested networks, as discussed in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next section.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is possible for the network connection between two TCP peers to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;become congested or to exhibit packet loss at the time that a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission is sent on a connection.  If the retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mechanism does not allow sufficient time before dropping
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections in the face of unacknowledged segments, connections may
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be dropped even when, by waiting longer, the connection could have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continued.
+<BR>
+<P><P><P><P><P>Paxson, Editor                                                 [Page 32]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 specifies mandatory exponential backoff of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission timeout, and the termination of connections after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;some period of time (at least 100 seconds).
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump on an intermediate host:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:12.671727 A &gt; B: S 510878852:510878852(0) win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:12.672479 B &gt; A: S 2392143687:2392143687(0) ack 510878853 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:12.672581 A &gt; B: . ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:15.244171 A &gt; B: P 1:3(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:15.244933 B &gt; A: . ack 3 win 17518  (DF)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;receiving host disconnected&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:19.381176 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:20.162016 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:21.161936 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:22.161914 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:23.161914 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:24.161879 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:25.161857 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:26.161836 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:27.161814 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:28.161791 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:29.161769 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:30.161750 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:31.161727 A &gt; B: P 3:5(2) ack 1 win 16384
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:51:32.161701 A &gt; B: R 5:5(0) ack 1 win 16384
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial three packets are the SYN exchange for connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setup, then a single data packet, to verify that data can be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transferred.  Then the connection to the destination host was
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disconnected, and more data sent.  Retransmissions occur every
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second for 12 seconds, and then the connection is terminated with a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RST.  This is problematic because a 12 second pause in connectivity
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;could result in the termination of a connection.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Again, a tcpdump taken from a third host:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:05.398301 A &gt; B: S 2503324757:2503324757(0) win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:05.399673 B &gt; A: S 2492674648:2492674648(0) ack 2503324758 win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:05.399866 A &gt; B: . ack 1 win 17520
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 33]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:06.538107 A &gt; B: P 1:3(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:06.540977 B &gt; A: . ack 3 win 17518  (DF)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;receiving host disconnected&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:13.121542 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:14.010928 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:16.010979 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:20.011229 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:28.011896 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:59:44.013200 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:00:16.015766 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:01:20.021308 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:02:24.027752 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:03:28.034569 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:04:32.041567 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:05:36.048264 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:06:40.054900 A &gt; B: P 3:5(2) ack 1 win 17520
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:07:44.061306 A &gt; B: R 5:5(0) ack 1 win 17520
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this trace, when the retransmission timer expires, 12
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmissions are sent at exponentially-increasing intervals,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;until the interval value reaches 64 seconds, at which time the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval stops growing.  64 seconds after the last retransmission,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a final RST segment is sent indicating that the connection has been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;closed.  This implementation waits about 9 minutes before timing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out the connection, while the first implementation shown allows
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only 12 seconds.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None known.
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A simple transfer can be eaily interrupted by disconnecting the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiving host from the network.  tcpdump or another appropriate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tool should show the retransmissions being sent.  Several trials in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a low-rtt environment may be required to demonstrate the bug.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For one of the implementations studied, this problem seemed to be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the result of an error introduced with the addition of the Brakmo-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Peterson RTO algorithm [Brakmo95], which can return a value of zero
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where the older Jacobson algorithm would always have a minimum
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value of three.  Brakmo and Peterson specified an additional step
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 34]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of min(rtt + 2, RTO) to avoid problems with this.  Unfortunately,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the implementation this step was omitted when calculating the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exponential backoff for the RTO.  This results in an RTO of 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seconds being multiplied by the backoff, yielding again zero, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then being subjected to a later MAX operation that increases it to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 second, regardless of the backoff factor.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A similar TCP persist failure has the same cause.
+<BR>
+<P><P>3.13.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Retransmission sends multiple packets
+<BR>
+<P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP retransmits a segment due to a timeout expiration or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;beginning a fast retransmission sequence, it should only transmit a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;single segment.  A TCP that transmits more than one segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibits &quot;Retransmission Sends Multiple Packets&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instances of this problem have been known to occur due to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miscomputations involving the use of TCP options.  TCP options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase the TCP header beyond its usual size of 20 bytes.  The
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total size of header must be taken into account when retransmitting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a packet.  If a TCP sender does not account for the length of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP options when determining how much data to retransmit, it will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send too much data to fit into a single packet.  In this case, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correct retransmission will be followed by a short segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tinygram) containing data that may not need to be retransmitted.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A specific case is a TCP using the RFC 1323 timestamp option, which
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 40]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adds 12 bytes to the standard 20-byte TCP header.  On
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission of a packet, the 12 byte option is incorrectly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interpreted as part of the data portion of the segment.  A standard
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP header and a new 12-byte option is added to the data, which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yields a transmission of 12 bytes more data than contained in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;original segment.  This overflow causes a smaller packet, with 12
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data bytes, to be transmitted.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is somewhat serious for congested environments because
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the TCP implementation injects more packets into the network than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is appropriate.  However, since a tinygram is only sent in response
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to a fast retransmit or a timeout, it does not effect the sustained
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sending rate.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP exhibiting this behavior is stressing the network with more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traffic than appropriate, and stressing routers by increasing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number of packets they must process.  The redundant tinygram will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;also elicit a duplicate ack from the receiver, resulting in yet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;another unnecessary transmission.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start after loss; RFC 2001 explicates
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow start; RFC 1323 describes the timestamp option that has been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;observed to lead to some implementations exhibiting this problem.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at a machine on the same subnet as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host A.  Host A is the sender and Host B is the receiver.  The
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;advertised window and timestamp options have been omitted for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clarity, except for the first segment sent by host A.  In addition,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;portions of the trace file not pertaining to the packet in question
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;have been removed (missing packets are denoted by ``[...]'' in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:22.701668 A &gt; B: . 7361:7821(460) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win 49324 &lt;nop,nop,timestamp 3485348 3485113&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:22.702109 A &gt; B: . 7821:8281(460) ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.112405 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.113069 A &gt; B: . 12421:12881(460) ack 1
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 41]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.113511 A &gt; B: . 12881:13341(460) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.333077 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.336860 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.340638 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.341290 A &gt; B: . 7821:8281(460) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.341317 A &gt; B: . 8281:8293(12) ack 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.498242 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.506850 B &gt; A: . ack 7821
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.510630 B &gt; A: . ack 7821
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.746649 B &gt; A: . ack 10581
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The second line of the above trace shows the original transmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of a segment which is later dropped.  After 3 duplicate ACKs, line
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9 of the trace shows the dropped packet (7821:8281), with a 460-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byte payload, being retransmitted.  Immediately following this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission, a packet with a 12-byte payload is unnecessarily
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sent.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The trace file would be identical to the one above, with a single
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:55:23.341317 A &gt; B: . 8281:8293(12) ack 1
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;omitted.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Brakmo95]
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem can be detected by examining a packet trace of the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections of a machine using TCP options, during which a packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is retransmitted.
+<BR>
+<P><P>3.17.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options missing from TCP MSS calculation
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability / performance
+<BR>
+<P><P><P><P><P>Paxson, Editor                                                 [Page 51]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP determines how much data to send per packet, it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculates a segment size based on the MTU of the path.  It must
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then subtract from that MTU the size of the IP and TCP headers in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the packet.  If IP options and TCP options are not taken into
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;account correctly in this calculation, the resulting segment size
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may be too large.  TCPs that do so are said to exhibit &quot;Options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;missing from TCP MSS calculation&quot;.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In some implementations, this causes the transmission of strangely
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fragmented packets.  In some implementations with Path MTU (PMTU)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discovery [RFC1191], this problem can actually result in a total
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;failure to transmit any data at all, regardless of the environment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(see below).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arguably, especially since the wide deployment of firewalls, IP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options appear only rarely in normal operations.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In implementations using PMTU discovery, this problem can result in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets that are too large for the output interface, and that have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the DF (don't fragment) bit set in the IP header.  Thus, the IP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layer on the local machine is not allowed to fragment the packet to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send it out the interface.  It instead informs the TCP layer of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correct MTU size of the interface; the TCP layer again miscomputes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the MSS by failing to take into account the size of IP options; and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the problem repeats, with no data flowing.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 describes the calculation of the effective send MSS.  RFC
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1191 describes Path MTU discovery.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trace file taking using tcpdump on host C.  The first trace
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demonstrates the fragmentation that occurs without path MTU
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discovery:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:25.488728 A.65528 &gt; C.discard:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P 567833:569273(1440) ack 1 win 17520
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nop,nop,timestamp 3839 1026342&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(frag 20828:1472@0+)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 62, optlen=8 LSRR{B#} NOP)
+<BR>
+<P><P><P><P>Paxson, Editor                                                 [Page 52]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:25.488943 A &gt; C:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(frag 20828:8@1472)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 62, optlen=8 LSRR{B#} NOP)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:25.489052 C.discard &gt; A.65528:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;. ack 566385 win 60816
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;nop,nop,timestamp 1026345 3839&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 60, id 41266)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Host A repeatedly sends 1440-octet data segments, but these hare
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fragmented into two packets, one with 1432 octets of data, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;another with 8 octets of data.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The second trace demonstrates the failure to send any data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments, sometimes seen with hosts doing path MTU discovery:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:44.332219 A.65527 &gt; C.discard:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S 1018235390:1018235390(0) win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,nop,wscale 0,nop,nop,timestamp 3876 0&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 62, id 20912, optlen=8 LSRR{B#} NOP)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:44.333015 C.discard &gt; A.65527:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S 1271629000:1271629000(0) ack 1018235391 win 60816
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,nop,wscale 0,nop,nop,timestamp 1026383 3876&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 60, id 41427)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:55:44.333206 C.discard &gt; A.65527:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S 1271629000:1271629000(0) ack 1018235391 win 60816
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,nop,wscale 0,nop,nop,timestamp 1026383 3876&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ttl 60, id 41427)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is all of the activity seen on this connection.  Eventually
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;host C will time out attempting to establish the connection.
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The &quot;netcat&quot; utility is useful for generating source routed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1% nc C discard
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(interactive typing)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2% nc C discard &lt; /dev/zero
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3% nc -g B C discard
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(interactive typing)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4% nc -g B C discard &lt; /dev/zero
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 53]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems         August 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^C
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lines 1 through 3 should generate appropriate packets, which can be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verified using tcpdump.  If the problem is present, line 4 should
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generate one of the two kinds of packet traces shown.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The implementation should ensure that the effective send MSS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculation includes a term for the IP and TCP options, as mandated
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by RFC 1122.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1187.html">Alan Cox: "Re: draft-ietf-tcpimpl-prob-04.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1185.html">Vern Paxson: "draft-ietf-tcpimpl-prob-04.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1186">[ date ]</A>
+<A HREF="index.html#1186">[ thread ]</A>
+<A HREF="subject.html#1186">[ subject ]</A>
+<A HREF="author.html#1186">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

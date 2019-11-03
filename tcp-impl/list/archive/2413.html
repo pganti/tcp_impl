@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Multiple TCP source addresses?</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Multiple TCP source addresses?</H1>
+<!-- received="Fri Dec 15 09:38:20 2000" -->
+<!-- isoreceived="20001215143820" -->
+<!-- sent="Fri, 15 Dec 2000 09:20:24 -0500 (EST)" -->
+<!-- isosent="20001215142024" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Multiple TCP source addresses?" -->
+<!-- id="200012151420.JAA03793@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012151420.JAA03793@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 15 2000 - 09:20:24 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2412.html">Marylou Orayani: "TIME_WAIT problem on Solaris 2.7"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2419.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2426.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2413">[ date ]</A>
+<A HREF="index.html#2413">[ thread ]</A>
+<A HREF="subject.html#2413">[ subject ]</A>
+<A HREF="author.html#2413">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I've got a problem I'm trying to invent a solution to and I thought I'd
+<BR>
+ask if there's any past work I should look at, or perhaps it's already
+<BR>
+been solved and I just don't know it.
+<BR>
+<P>Most of the hosts on my home LAN are multihomed; I have address space
+<BR>
+from two different places and I run both subnets over the same house
+<BR>
+Ethernet.  (Network interfaces are configured to have both addresses.)
+<BR>
+Sometimes one block of address space is reachable while the other one
+<BR>
+isn't, and outgoing packets are routed to one of two tunnels (one to
+<BR>
+each provider of address space) based on which subnet their source
+<BR>
+addresses fall into.
+<BR>
+<P>This all works well in normal circumstances.  The problem is with
+<BR>
+outgoing connections when one block of address space is unreachable for
+<BR>
+some reason.  All the hosts have their default routes pointing to the
+<BR>
+off-LAN gateway, but I had to pick one of its two addresses, and the
+<BR>
+source address for the outgoing connection is always in the
+<BR>
+corresponding subnet.  When that subnet is unreachable from the
+<BR>
+destination host, outgoing connections fail even if I do have
+<BR>
+connectivity to that host via the other subnet.
+<BR>
+<P>I could deal with the case where a subnet goes completely unreachable
+<BR>
+with a routing protocol of some sort, perhaps.  But reachability is not
+<BR>
+always all-or-nothing; depending on where the outage is, which hosts
+<BR>
+can reach which subnet varies.
+<BR>
+<P>So I'd like to do something so that outgoing connections for which the
+<BR>
+application has not specified a source address don't always try with
+<BR>
+one source address and give up if that doesn't work; conceptually, I'd
+<BR>
+like to try from all local addresses.  I was thinking of sending out
+<BR>
+multiple SYNs, one for each local address; as soon as one gets
+<BR>
+SYN-ACKed, that would commit the local address and SYN-ACKs for the
+<BR>
+others would draw RSTs.  It does occur to me that I may want to do this
+<BR>
+round-robin among the addresses, rather than in bursts, to avoid
+<BR>
+creating unnecessary embryonic connections on the taget host in case
+<BR>
+both addresses work.  (Of course, they would be torn down quickly in
+<BR>
+response to the RST, but still.)
+<BR>
+<P>Comments?  Thoughts?  Prior art?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012151420.JAA03793@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2412.html">Marylou Orayani: "TIME_WAIT problem on Solaris 2.7"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2419.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2426.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2413">[ date ]</A>
+<A HREF="index.html#2413">[ thread ]</A>
+<A HREF="subject.html#2413">[ subject ]</A>
+<A HREF="author.html#2413">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Dec 15 2000 - 09:38:52 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

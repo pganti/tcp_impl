@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: put on your PMTU discovery t</TITLE>
+<META NAME="Author" CONTENT="Kevin M. Lahey (kml@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: put on your PMTU discovery thinking caps">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: put on your PMTU discovery thinking caps</H1>
+<!-- received="Fri Dec  4 18:45:04 1998" -->
+<!-- isoreceived="19981204234504" -->
+<!-- sent="Fri, 04 Dec 1998 13:10:21 -0800" -->
+<!-- isosent="19981204211021" -->
+<!-- name="Kevin M. Lahey" -->
+<!-- email="kml@nas.nasa.gov" -->
+<!-- subject="Re: put on your PMTU discovery thinking caps" -->
+<!-- id="199812042110.NAA20029@gecko.nas.nasa.gov" -->
+<!-- inreplyto="199812040743.XAA01294@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Kevin M. Lahey (<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812042110.NAA20029@gecko.nas.nasa.gov&gt;"><EM>kml@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 04 1998 - 16:10:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1410.html">Nagampali Narasimharao: "Multi Threaded Implementations of TCPIP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1414.html">Geert Jan de Groot: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1409">[ date ]</A>
+<A HREF="index.html#1409">[ thread ]</A>
+<A HREF="subject.html#1409">[ subject ]</A>
+<A HREF="author.html#1409">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199812040743.XAA01294@daffy.ee.lbl.gov?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812042110.NAA20029@gecko.nas.nasa.gov&gt;">199812040743.XAA01294@daffy.ee.lbl.gov</A>&gt;Vern Paxson writes
+<BR>
+<EM>&gt;We've heard a number of people mention that it would be good to document
+</EM><BR>
+<EM>&gt;some of the pitfalls &amp; problems of implementing PMTU discovery (something
+</EM><BR>
+<EM>&gt;with a bit more meat than RFC 1435).
+</EM><BR>
+<P><EM>&gt;So we've put on the Orlando agenda a discussion of PMTU discovery problems,
+</EM><BR>
+<EM>&gt;to try to get a feel for the scope.  Neither of your esteemed WG chairs,
+</EM><BR>
+<EM>&gt;though, is particularly familiar with these problems.  We'd therefore like
+</EM><BR>
+<EM>&gt;to encourage discussion on the list over the next few days, so we can get
+</EM><BR>
+<EM>&gt;things rolling in advance and figure out some of the common ground in order
+</EM><BR>
+<EM>&gt;to cover it quickly at the meeting.  We'd also like to encourage tcpimpl'ers
+</EM><BR>
+<EM>&gt;to come to the meeting prepared to discuss their favorite PMTU problems.
+</EM><BR>
+<P>I listed two small problems and one large (black hole discovery)
+<BR>
+problem a few weeks ago.  Other than that, I guess I worry about the
+<BR>
+oft-discussed issue of when to ACK -- if MSS really doesn't mean
+<BR>
+anything anymore, do we ACK every two, or try to determine on-the-fly
+<BR>
+the segment size in use by the sender.
+<BR>
+<P>An additional problem is MSS determination for multi-homed hosts.  
+<BR>
+If we are responding to an SYN, we can use the MSS for the interface on 
+<BR>
+which we received the SYN.  If we are originating a SYN, we can use the 
+<BR>
+MSS of the interface out which we expect the packet to be sent.  What 
+<BR>
+about routing changes?  If we belatedly find out that a connection
+<BR>
+that can use our HIPPI interface (65280 byte MTU) instead of our
+<BR>
+Ethernet interface, the MSS would prevent us from taking advantage
+<BR>
+of the new PMTU.  We could use the MSS of the interface with the
+<BR>
+largest MTU, but what happens we we plug in our HIPPI PCMCIA card :-)
+<BR>
+half-way through a very long-term connection?
+<BR>
+<P>Kevin
+<BR>
+<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812042110.NAA20029@gecko.nas.nasa.gov&gt;">kml@nas.nasa.gov</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1410.html">Nagampali Narasimharao: "Multi Threaded Implementations of TCPIP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1408.html">der Mouse : "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1414.html">Geert Jan de Groot: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1409">[ date ]</A>
+<A HREF="index.html#1409">[ thread ]</A>
+<A HREF="subject.html#1409">[ subject ]</A>
+<A HREF="author.html#1409">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

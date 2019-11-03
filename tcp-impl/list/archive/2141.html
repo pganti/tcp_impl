@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Fred Baker (fred@cisco.com)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 16:22:39 2000" -->
+<!-- isoreceived="20000612202239" -->
+<!-- sent="Mon, 12 Jun 2000 13:11:04 -0700" -->
+<!-- isosent="20000612201104" -->
+<!-- name="Fred Baker" -->
+<!-- email="fred@cisco.com" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="4.3.2.7.2.20000612130325.00e374b0@flipper.cisco.com" -->
+<!-- inreplyto="200006120506.HAA13642@info.iet.unipi.it" -->
+<STRONG>From:</STRONG> Fred Baker (<A HREF="mailto:fred@cisco.com?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;4.3.2.7.2.20000612130325.00e374b0@flipper.cisco.com&gt;"><EM>fred@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 16:11:04 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2140.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2126.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2141">[ date ]</A>
+<A HREF="index.html#2141">[ thread ]</A>
+<A HREF="subject.html#2141">[ subject ]</A>
+<A HREF="author.html#2141">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 07:06 AM 6/12/00 +0200, Luigi Rizzo wrote:
+<BR>
+<EM>&gt;Given the following:
+</EM><BR>
+<EM>&gt;     * the receiver knows there is reordering;
+</EM><BR>
+<P>the problem is that the receiver doesn't necessarily know that. It may know 
+<BR>
+that some packet previous in this session had been reordered, but it 
+<BR>
+generally has no visibility of other sessions on the same machine (which 
+<BR>
+may use different routes) or sessions to different machines. On the first 
+<BR>
+reordered packet in a session, it knows only that the message it has 
+<BR>
+received is not the next one it expected to receive. The discrepancy may be 
+<BR>
+due to reordering, and it may be due to loss. In the latter case, you'd 
+<BR>
+like to recover as quickly as you could.
+<BR>
+<P><EM>&gt;       (maybe excet with SACK, i am a bit out-of-date on this)
+</EM><BR>
+<EM>&gt;wouldn't it make sense for the receiver who sees out-of-sequence
+</EM><BR>
+<EM>&gt;delivery of packets to withold the ACKs for such packets until
+</EM><BR>
+<EM>&gt;a) the hole is filled, or b) a small timeout has elapsed (this can be
+</EM><BR>
+<EM>&gt;of the same order of the delayed ack timer, or half the RTT if we have
+</EM><BR>
+<EM>&gt;a local estimate available).
+</EM><BR>
+<P>Maybe. An issue arises with delaying the Ack in the presence of a 
+<BR>
+measurement of RTT - the delay is itself part of the RTT. So I would argue 
+<BR>
+that only *these* Acks want to be delayed - only the Acks that might 
+<BR>
+trigger a retransmission. And when you do send them, it would be either to 
+<BR>
+acknowledge the now-in-order segment when it arrived and subsequently to 
+<BR>
+trigger further transmissions (would rather not see a burst) or to trigger 
+<BR>
+the retransmission, so in either case you actually want the specific Ack, 
+<BR>
+not a collected Ack of several segments.
+<BR>
+<P>I tend to think Sally's approach, being explicit rather than heuristic, is 
+<BR>
+a better one.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2140.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2126.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2142.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2141">[ date ]</A>
+<A HREF="index.html#2141">[ thread ]</A>
+<A HREF="subject.html#2141">[ subject ]</A>
+<A HREF="author.html#2141">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

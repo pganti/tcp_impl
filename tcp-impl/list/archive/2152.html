@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 04:14:14 2000" -->
+<!-- isoreceived="20000616081414" -->
+<!-- sent="Fri, 16 Jun 2000 13:37:51 +1000" -->
+<!-- isosent="20000616033751" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="3949A10F.F1847DD1@cvs.com.au" -->
+<!-- inreplyto="200006160206.WAA13176@seraph3.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;3949A10F.F1847DD1@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 15 2000 - 23:37:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2153.html">Srinivas Kurla: "Re: Tracing TCP's cwnd"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2152">[ date ]</A>
+<A HREF="index.html#2152">[ thread ]</A>
+<A HREF="subject.html#2152">[ subject ]</A>
+<A HREF="author.html#2152">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&lt;rant&gt;
+<BR>
+Doesn't Defragmentation belongs in the IP layer; if you make that
+<BR>
+assumption, then you could make life easier for that layer by sending
+<BR>
+the last fragment first; the receiver then knows what resources are
+<BR>
+required to reassemble.
+<BR>
+<P>As an outsider looking in; it would seem to me TCP/IP started out a very
+<BR>
+elegant general purpose protocol. It allowed for out of order delivery;
+<BR>
+multiple packet delivery and made no assumption on the packet size that
+<BR>
+the underlying medium could handle. It has become more and more complex;
+<BR>
+and less and less robust ( complexity brings bugs) as people try to get
+<BR>
+additional speed out of systems that don't need a protocol that is as
+<BR>
+robust as TCP/IP was.
+<BR>
+<P>Fast retransmit for example making assumptions that are just not valid
+<BR>
+in the general case.
+<BR>
+<P>I am also a little confused as too why out of order packet delivery is
+<BR>
+an issue with the ever decreasing cost of processors. It for example
+<BR>
+costs very little to have a NIC reassemble fragmented IP packets before
+<BR>
+delivery to the general purpose CPU.
+<BR>
+<P>Granted sorting out the IP order is a little more complex, but even
+<BR>
+there if rules where made to have the IP identifier indicate the order
+<BR>
+it would not have been a big deal; the NIC could have handled it; but
+<BR>
+that was not to be.
+<BR>
+<P>If you have to move to the TCP sequence number to sort out packet order
+<BR>
+then surely all is lost.
+<BR>
+1) TCP is one of many possible protocols handled by IP.
+<BR>
+2) You are using in a low layer something that has nothing to do with
+<BR>
+that layer, more complexity more bugs.
+<BR>
+<P>If  you send packets in parallel surly it would be better to add a
+<BR>
+sequence number  when dividing the input stream up, then use and remove
+<BR>
+that sequence number when putting it back together, assuming you have
+<BR>
+control over how the stream is put back together.
+<BR>
+<P>Given the way the US patent system is going it is probable something as
+<BR>
+simple and obvious as this that is about to be patented. Perhaps this is
+<BR>
+today's solution, but not tomorrow's.
+<BR>
+<P>If you haven't got control of reassemble, then I would have thought that
+<BR>
+was the very application IP was initially designed to handle, and the
+<BR>
+bits added as time has passed are the problem.
+<BR>
+&lt;/rant&gt;
+<BR>
+<P><P><P><P>Nabil Seddigh wrote:
+<BR>
+<P><EM>&gt; Recent discussions on this list focused on network
+</EM><BR>
+<EM>&gt; devices reordering packets. How about an end-host
+</EM><BR>
+<EM>&gt; that intentionally reorders some TCP packets?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; During testing of Packet Classification capability
+</EM><BR>
+<EM>&gt; on for Diffserv-capable routers, one of my colleagues
+</EM><BR>
+<EM>&gt; discovered that the Linux TCP sender intentionally
+</EM><BR>
+<EM>&gt; reorders fragments - the pkt containing the TCP port
+</EM><BR>
+<EM>&gt; number is the last pkt sent in a family (same ip_id)
+</EM><BR>
+<EM>&gt; of fragments.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The implication of such an implementation is that
+</EM><BR>
+<EM>&gt; Layer-4 packet classification of fragments
+</EM><BR>
+<EM>&gt; is virtually impossible - unless routers try to
+</EM><BR>
+<EM>&gt; cache packets....not a desirable solution.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Of course one could argue that most fragments on
+</EM><BR>
+<EM>&gt; the net are UDP and not TCP but nonetheless:
+</EM><BR>
+<EM>&gt; shouldn't end-hosts avoid intentional reordering?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; We checked out various RFCs and didn't find explicit
+</EM><BR>
+<EM>&gt; prohibitions on an end-host reordering the pkts
+</EM><BR>
+<EM>&gt; that it sends out.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Best,
+</EM><BR>
+<EM>&gt; ---
+</EM><BR>
+<EM>&gt; Nabil Seddigh
+</EM><BR>
+<EM>&gt; <A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;3949A10F.F1847DD1@cvs.com.au&gt;">nseddigh@nortelnetworks.com</A>
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2153.html">Srinivas Kurla: "Re: Tracing TCP's cwnd"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2156.html">Craig Partridge: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2152">[ date ]</A>
+<A HREF="index.html#2152">[ thread ]</A>
+<A HREF="subject.html#2152">[ subject ]</A>
+<A HREF="author.html#2152">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

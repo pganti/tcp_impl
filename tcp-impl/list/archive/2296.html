@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Important question re: new T</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: Important question re: new TCP options on data segments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Important question re: new TCP options on data segments</H1>
+<!-- received="Wed Aug  9 15:02:06 2000" -->
+<!-- isoreceived="20000809190206" -->
+<!-- sent="Wed, 9 Aug 2000 13:52:20 -0500 (CDT)" -->
+<!-- isosent="20000809185220" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: Important question re: new TCP options on data segments" -->
+<!-- id="200008091852.NAA04678@frantic.bsdi.com" -->
+<!-- inreplyto="Important question re: new TCP options on data segments" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;200008091852.NAA04678@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 09 2000 - 14:52:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2297.html">Matt Mathis: "RE: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2295.html">Rick Jones: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2290.html">Matt Mathis: "Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2299.html">Bernie Volz: "RE: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2296">[ date ]</A>
+<A HREF="index.html#2296">[ thread ]</A>
+<A HREF="subject.html#2296">[ subject ]</A>
+<A HREF="author.html#2296">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Wed, 09 Aug 2000 10:17:45 -0700
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;200008091852.NAA04678@frantic.bsdi.com&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: Important question re: new TCP options on data segments
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Matt Mathis wrote:
+</EM><BR>
+<EM>&gt; &gt; Can anybody think of *any* compelling argument agaist droping the prohibition
+</EM><BR>
+<EM>&gt; &gt; against new TCP options appearing after a SYN?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It means I have to be prepared to look for &quot;unexpected&quot; options in my
+</EM><BR>
+<EM>&gt; mainline data path.
+</EM><BR>
+<P>That's already required by RFC 1122.
+<BR>
+<P><EM>&gt; I'm not certain it ensures there is enough space for all the options one
+</EM><BR>
+<EM>&gt; might want to carry. True, it means that the options added in the middle
+</EM><BR>
+<EM>&gt; would not have to fight for space with the MSS option or the window
+</EM><BR>
+<EM>&gt; scale option, but it may still have to duke it out with a SACK option
+</EM><BR>
+<EM>&gt; and timestamps.
+</EM><BR>
+<P>If worse comes to worse, we can define a TCP option to extend the TCP
+<BR>
+option space in a backwards compatable manner.  We did it for the
+<BR>
+window field, and there are several ways we can do it for the Data
+<BR>
+Offset field.  But that's not to say that I'm advocating putting in
+<BR>
+oodles of TCP options...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;200008091852.NAA04678@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2297.html">Matt Mathis: "RE: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2295.html">Rick Jones: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2290.html">Matt Mathis: "Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2299.html">Bernie Volz: "RE: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2296">[ date ]</A>
+<A HREF="index.html#2296">[ thread ]</A>
+<A HREF="subject.html#2296">[ subject ]</A>
+<A HREF="author.html#2296">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

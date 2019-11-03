@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start bit</H1>
+<!-- received="Sat May 15 12:34:37 1999" -->
+<!-- isoreceived="19990515163437" -->
+<!-- sent="Sat, 15 May 1999 09:29:47 -0700" -->
+<!-- isosent="19990515162947" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: slow-start bit" -->
+<!-- id="373DA0FB.EC414EC@ehsco.com" -->
+<!-- inreplyto="199905150415.VAA03266@bossette.engr.sgi.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;373DA0FB.EC414EC@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat May 15 1999 - 12:29:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1700.html">David S. Miller: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1701">[ date ]</A>
+<A HREF="index.html#1701">[ thread ]</A>
+<A HREF="subject.html#1701">[ subject ]</A>
+<A HREF="author.html#1701">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Is there any reason why it wouldn't be a good idea to use one of the
+</EM><BR>
+<EM>&gt; free bits in the TCP header as a `slow-start' bit to enable a sender
+</EM><BR>
+<EM>&gt; to indicate to the receiver that it is sending the first packet
+</EM><BR>
+<EM>&gt; of a slow-start phase?
+</EM><BR>
+<P>I read this as &quot;what are the mechanisms for doing circuit-setup messages
+<BR>
+with TCP, and is it a good idea?&quot; Right now, the only circuit-setup
+<BR>
+message we have is the MSS option. I suppose that it would be possible
+<BR>
+to add a flag that indicated that slow start was in effect, but why stop
+<BR>
+there? Shouldn't we also add flags for congestion avoidance, current
+<BR>
+retransmission timer, and so forth? All of these things will affect the
+<BR>
+bi-directional exchange of data in some manner.
+<BR>
+<P>One could define a set of bits or options that passed this info back and
+<BR>
+forth. This would let the sender say &quot;I'm at multiple four with slow
+<BR>
+start&quot; and &quot;my retransmission timer is currently set to 28 ms&quot; for
+<BR>
+example. Or, going even further, it would be possible for one end-point
+<BR>
+to request certain values from the other end-point, like &quot;please use
+<BR>
+28ms&quot;. It's early on a saturday morning and I'm just going through mail
+<BR>
+so I can't really think of a situation where that would be useful, but
+<BR>
+if it needs to be advertised then it can probably benefit from being set
+<BR>
+as well. Probably.
+<BR>
+<P>There are lots of issues here of course. First and foremost is legacy
+<BR>
+support, which is the big thorn for all new options. It would take a
+<BR>
+really long time to update all of the existing products to use any new
+<BR>
+data in the header. Another issue is that lots of products out there
+<BR>
+don't do slow start, so passing the data would be irrelevant.
+<BR>
+<P>I guess my feeling is that the broader issue of circuit-negotiation
+<BR>
+should definitely be addressed, but that it is sufficiently complex that
+<BR>
+it should probably be tabled for TCPng whenever that gets started. Would
+<BR>
+it make life easier or harder, and who would be affected by these
+<BR>
+messages (developers? users? admins?).
+<BR>
+<P>I also think its time to start the work on TCPng.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                            <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;373DA0FB.EC414EC@ehsco.com&gt;">ehall@ehsco.com</A>
++1-650-685-0557                                    <A HREF="http://www.ehsco.com">http://www.ehsco.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1700.html">David S. Miller: "Re: slow-start bit"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1699.html">Sam Manthorpe: "slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1702.html">Kevin Fall: "Re: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1701">[ date ]</A>
+<A HREF="index.html#1701">[ thread ]</A>
+<A HREF="subject.html#1701">[ subject ]</A>
+<A HREF="author.html#1701">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

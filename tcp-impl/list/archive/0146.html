@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft description of &quot;No in</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="draft description of &quot;No initial slow start&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft description of &quot;No initial slow start&quot;</H1>
+<!-- received="Tue Mar 18 15:34:01 1997" -->
+<!-- isoreceived="19970318203401" -->
+<!-- sent="Tue, 18 Mar 1997 15:21:44 PST" -->
+<!-- isosent="19970318232144" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="draft description of &quot;No initial slow start&quot;" -->
+<!-- id="199703182321.PAA20942@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;&In-Reply-To=&lt;199703182321.PAA20942@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 18 1997 - 18:21:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0145.html">Vern Paxson: "draft descriptions of TCP implementation problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0158.html">Smith, Allyn D: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#146">[ date ]</A>
+<A HREF="index.html#146">[ thread ]</A>
+<A HREF="subject.html#146">[ subject ]</A>
+<A HREF="author.html#146">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Name of problem: No initial slow start
+<BR>
+<P>Category: Congestion control
+<BR>
+<P>Description:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP begins transmitting data, it is required by RFC 1122,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2.15, to engage in a &quot;slow start&quot; by initializing its congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window, cwnd, to one packet (one segment of the maximum size).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It subsequently increases cwnd by one packet for each ack it receives
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for new data.  A TCP that fails to do so exhibits &quot;No initial slow
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start&quot;.
+<BR>
+<P>Significance:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious.
+<BR>
+<P>Implications: 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP failing to slow start when beginning a connection results in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traffic bursts that can stress the network, leading to excessive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queueing delays and packet loss.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Implementations exhibiting this problem might do so because
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;they suffer from the general problem of not including the required
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window.  These implementations will also suffer from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;No slow start after timeout&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are different shades of &quot;No initial slow start&quot;.  From
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the perspective of stressing the network, the worst is a connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that simply always sends based on the receiver's advertised window,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with no notion of a separate congestion window.  Some other forms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are described in &quot;Uninitialized CWND&quot; and &quot;Initial CWND of 2 packets&quot;.
+<BR>
+<P>Relevant RFCs:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start.  RFC 2001 gives the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specifics of slow start.
+<BR>
+<P>Trace file demonstrating it:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[This will eventually be a URL to the trace file, probably
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in both ASCII and binary forms.]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the connection responder.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.244503 B &gt; A: S 1168512000:1168512000(0) win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,nop,wscale 0&gt; (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.259908 A &gt; B: S 3688169472:3688169472(0) 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack 1168512001 win 32768 &lt;mss 1460&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.389992 B &gt; A: . ack 1 win 33580 (DF) [tos 0x8] 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.664975 A &gt; B: P 1:513(512) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.700185 A &gt; B: . 513:1973(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.718017 A &gt; B: . 1973:3433(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.762945 A &gt; B: . 3433:4893(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.811273 A &gt; B: . 4893:6353(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.829149 A &gt; B: . 6353:7813(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.853687 B &gt; A: . ack 1973 win 33580 (DF) [tos 0x8] 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.864031 B &gt; A: . ack 3433 win 33580 (DF) [tos 0x8] 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After the third packet, the connection is established.  A, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection responder, begins transmitting to B, the connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initiator.  A quickly sends 6 packets comprising 7812 bytes,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;even though the SYN exchange agreed upon an MSS of 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and so A should have sent at most 1460 bytes.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The acks sent by B to A in the last two lines indicate that this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace is not a measurement error (slow start really occurring but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the corresponding acks having been dropped by the packet filter).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P>Trace file demonstrating correct behavior:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the connection originator.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:31.914050 C &gt; D: S 1448571845:1448571845(0) win 4380 &lt;mss 1460&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.068819 D &gt; C: S 1755712000:1755712000(0) ack 1448571846 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.069341 C &gt; D: . ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.075213 C &gt; D: P 1:513(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.286073 D &gt; C: . ack 513 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.287032 C &gt; D: . 513:1025(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.287506 C &gt; D: . 1025:1537(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.432712 D &gt; C: . ack 1537 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.433690 C &gt; D: . 1537:2049(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.434481 C &gt; D: . 2049:2561(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.435032 C &gt; D: . 2561:3073(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.594526 D &gt; C: . ack 3073 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.595465 C &gt; D: . 3073:3585(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.595947 C &gt; D: . 3585:4097(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.596414 C &gt; D: . 4097:4609(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.596888 C &gt; D: . 4609:5121(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.733453 D &gt; C: . ack 4097 win 4096
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Paxson, &quot;Automated Packet Trace Analysis of TCP Implementations,&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available in draft form from vern@ee.lbl.gov.
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For implementations always manifesting this problem, it shows
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up immediately in a packet trace or a sequence plot, as illustrated
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks a notion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of a congestion window, then unfortunately this requires significant
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work to fix.  However, doing so is vital, as such implementations
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit &quot;No slow start after timeout&quot;, which has a significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of &quot;Vital&quot;.
+<BR>
+<P>Implementation specifics (if approved by implementor)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Implementor contact address)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0145.html">Vern Paxson: "draft descriptions of TCP implementation problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0158.html">Smith, Allyn D: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#146">[ date ]</A>
+<A HREF="index.html#146">[ thread ]</A>
+<A HREF="subject.html#146">[ subject ]</A>
+<A HREF="author.html#146">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

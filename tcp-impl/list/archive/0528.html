@@ -1,0 +1,329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="kennethw@VNET.IBM.COM (kennethw@VNET.IBM.COM)">
+<META NAME="Subject" CONTENT="Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 11:18:24 1997" -->
+<!-- isoreceived="19970620151824" -->
+<!-- sent="Fri, 20 Jun 97 13:58:31 EDT" -->
+<!-- isosent="19970620175831" -->
+<!-- name="kennethw@VNET.IBM.COM" -->
+<!-- email="kennethw@VNET.IBM.COM" -->
+<!-- subject="Proposed TCP Group Extensions" -->
+<!-- id="199706201810.LAA14749@sgi.sgi.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706201810.LAA14749@sgi.sgi.com&gt;"><EM>kennethw@VNET.IBM.COM</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 13:58:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0532.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0533.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0534.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0535.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0538.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0541.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0543.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0544.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0545.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0551.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0576.html">David Borman: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#528">[ date ]</A>
+<A HREF="index.html#528">[ thread ]</A>
+<A HREF="subject.html#528">[ subject ]</A>
+<A HREF="author.html#528">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Andy Capella and would like to submit to this working group an
+<BR>
+internet-draft defining groups of objects to extend those
+<BR>
+objects defined by RFC2012. We would base the initial submission
+<BR>
+on a set of objects that we have implemented for our TCP
+<BR>
+implementation in an Enterprise Specific MIB. We feel that there
+<BR>
+is need to extend the group of objects defined by the current
+<BR>
+TCP Group of objects from both a TCP Configuration prospective
+<BR>
+and to provide useful information for a particular TCP Connection
+<BR>
+by AUGMENTation of the TCP Connection Table.
+<BR>
+<P>We would prefer that this is done via a standard MIB as oppose
+<BR>
+to Enterprise Specific MIB definition to enable interoperable Management
+<BR>
+Application support. The following are the groups of objects
+<BR>
+that we would define by function:
+<BR>
+<P>TCP CONFIGURATION OBJECTS &lt;= These objects would be mandatory
+<BR>
+<P>tcpKeepAliveTimer  Integer32 (0..35791)     DEFVAL { 20 }
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;TCP Keepalive timer, expressed in minutes.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;A value of 0 deactivates the timer.&quot;
+<BR>
+tcpReceiveBufferSize  Integer32 (256..262144)  DEFVAL { 16384 }
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;TCP Receive buffer size, expressed in OCTETs.&quot;
+<BR>
+tcpSendBufferSize  Integer32 (256..262144)  DEFVAL { 16384 }
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;TCP Send buffer size, expressed in bytes.&quot;
+<BR>
+tcpRestrictLowPorts  INTEGER { false(0), true(1) }   DEFVAL { false }
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Indicates if TCP low ports are restricted to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;authorized servers/socket applications.&quot;
+<BR>
+<P>TCP CONNECTION TABLE AUGMENTATION &lt;= Mandatory. I am working with
+<BR>
+&nbsp;&nbsp;&nbsp;a few others in the TN3270E working group on Response Time
+<BR>
+&nbsp;&nbsp;&nbsp;Measurement and I believe that from an application prospective
+<BR>
+&nbsp;&nbsp;&nbsp;that the following set of objects would be useful from at least
+<BR>
+&nbsp;&nbsp;&nbsp;a problem determination prospective.
+<BR>
+<P>tcpConnLastActivity  TimeTicks
+<BR>
+&nbsp;&nbsp;&quot;The number of 100ths of seconds  since  this  entry
+<BR>
+&nbsp;&nbsp;&nbsp;was last used.&quot;
+<BR>
+tcpConnBytesIn  Integer32
+<BR>
+&nbsp;&nbsp;&quot;The number of bytes received from IP for this
+<BR>
+&nbsp;&nbsp;&nbsp;connection.&quot;
+<BR>
+tcpConnBytesOut  Integer32
+<BR>
+&nbsp;&nbsp;&quot;The number of bytes sent to IP for this connection.&quot;
+<BR>
+tcpConnReXmt  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Number of retransmissions&quot;
+<BR>
+tcpConnRoundTripTime   Integer32
+<BR>
+&nbsp;&nbsp;&quot;The amount of time that has elapsed, measured in
+<BR>
+&nbsp;&nbsp;&nbsp;milliseconds, from when the last TCP segment was
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted by the TCP Stack until the ACK was
+<BR>
+&nbsp;&nbsp;&nbsp;received.&quot;
+<BR>
+tcpConnRoundTripVariance  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Round trip time variance.&quot;
+<BR>
+<P>TCP CONNECTION TABLE AUGMENTATION &lt;= optional
+<BR>
+<P>tcpConnActiveOpen  Integer32
+<BR>
+&nbsp;&nbsp;&quot;The number of times that this connection has made a
+<BR>
+&nbsp;&nbsp;&nbsp;direct transition to the SYN-RCVD state from the
+<BR>
+&nbsp;&nbsp;&nbsp;listen state.&quot;
+<BR>
+tcpConnOptions   OCTET STRING (SIZE(1..40))
+<BR>
+&nbsp;&nbsp;&quot;IP options (see RFC 791)&quot;
+<BR>
+tcpConnOutBuffered  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Number of outgoing bytes buffered&quot;
+<BR>
+tcpConnUsrSndNxt  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Sequence number of next byte for user&quot;
+<BR>
+tcpConnSndNxt  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Sequence number of next byte for TCP&quot;
+<BR>
+tcpConnSndUna  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Sequence number of sent/unacked byte&quot;
+<BR>
+tcpConnOutgoingPush  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Sequence number of last pushed byte&quot;
+<BR>
+tcpConnOutgoingUrg  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Sequence number of last urg byte&quot;
+<BR>
+tcpConnOutgoingWinSeq  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Last sequence number in snd window&quot;
+<BR>
+tcpConnSendWindowSeq  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Last sequence number used, win update&quot;
+<BR>
+tcpConnSendWindowAck   Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Last Ack number used, win update&quot;
+<BR>
+tcpConnInBuffered  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Number of incoming bytes buffered&quot;
+<BR>
+tcpConnRcvNxt  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Sequence number of next byte for TCP&quot;
+<BR>
+tcpConnUsrRcvNxt  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Sequence number of next byte for user&quot;
+<BR>
+tcpConnIncomingPush  Integer32
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;Sequence number of last pushed byte&quot;
+<BR>
+tcpConnIncomingUrg  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Sequence number of 'urgent' byte received&quot;
+<BR>
+tcpConnIncomingWinSeq   Integer32
+<BR>
+&nbsp;&nbsp;&quot;Last sequence number in receive window&quot;
+<BR>
+tcpConnMaxSndWnd   Integer32
+<BR>
+&nbsp;&nbsp;&quot;Maximum send window seen&quot;
+<BR>
+tcpConnReXmtCount  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Current retransmission count&quot;
+<BR>
+tcpConnCongestionWnd  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Congestion window&quot;
+<BR>
+tcpConnSSThresh  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Slow start threshold&quot;
+<BR>
+tcpConnInitSndSeq  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Initial Send Sequence Number&quot;
+<BR>
+tcpConnInitRcvSeq  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Initial Receive Sequence Number&quot;
+<BR>
+tcpConnSendMSS   Integer32
+<BR>
+&nbsp;&nbsp;&quot;Maximum Segment Size we can send&quot;
+<BR>
+tcpConnSndWl1  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Sequence of last window&quot;
+<BR>
+tcpConnSndWl2   Integer32
+<BR>
+&nbsp;&nbsp;&quot;Ack of last window&quot;
+<BR>
+tcpConnSndWnd   Integer32
+<BR>
+&nbsp;&nbsp;&quot;Send Window size&quot;
+<BR>
+tcpConnPendTcpRecv  Integer32
+<BR>
+&nbsp;&nbsp;&quot;TCP non_block read flag&quot;
+<BR>
+tcpConnRcvBufSize  Integer32
+<BR>
+&nbsp;&nbsp;&quot;Receive buffer size&quot;
+<BR>
+tcpConnRttSeq   Integer32
+<BR>
+&nbsp;&nbsp;&quot;4 byte value for the TCP sequence number&quot;
+<BR>
+tcpConnBackoffCount  Integer32
+<BR>
+&nbsp;&nbsp;&quot;The value of this object will always be zero since
+<BR>
+&nbsp;&nbsp;&nbsp;it currently isn't reported.&quot;
+<BR>
+<P>Is there an interest in this type of submission?
+<BR>
+<P>Thanks, Ken White
+<BR>
+IBM Networking Systems
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0529.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0530.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0531.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0532.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0533.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0534.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0535.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0536.html">touch@ISI.EDU: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0538.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0541.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0542.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0543.html">Perry E. Metzger: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0544.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0545.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0546.html">William Allen Simpson: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0551.html">Vernon Schryver: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0576.html">David Borman: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#528">[ date ]</A>
+<A HREF="index.html#528">[ thread ]</A>
+<A HREF="subject.html#528">[ subject ]</A>
+<A HREF="author.html#528">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

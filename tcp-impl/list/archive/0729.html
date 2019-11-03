@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Munich Minutes</TITLE>
+<META NAME="Author" CONTENT="Steve Alexander (sca@neteng.engr.sgi.com)">
+<META NAME="Subject" CONTENT="Munich Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Munich Minutes</H1>
+<!-- received="Mon Sep 15 17:39:24 1997" -->
+<!-- isoreceived="19970915213924" -->
+<!-- sent="Mon, 15 Sep 1997 17:37:44 -0700" -->
+<!-- isosent="19970916003744" -->
+<!-- name="Steve Alexander" -->
+<!-- email="sca@neteng.engr.sgi.com" -->
+<!-- subject="Munich Minutes" -->
+<!-- id="199709160037.RAA462644@neteng.engr.sgi.com" -->
+<STRONG>From:</STRONG> Steve Alexander (<A HREF="mailto:sca@neteng.engr.sgi.com?Subject=Re:%20Munich%20Minutes&In-Reply-To=&lt;199709160037.RAA462644@neteng.engr.sgi.com&gt;"><EM>sca@neteng.engr.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 15 1997 - 20:37:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0730.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0728.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0734.html">Bernie Volz: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0736.html">sparker@Eng.Sun.COM: "Re: Munich Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#729">[ date ]</A>
+<A HREF="index.html#729">[ thread ]</A>
+<A HREF="subject.html#729">[ subject ]</A>
+<A HREF="author.html#729">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Apologies for being so late with these...
+<BR>
+<P>-- Steve
+<BR>
+<P>The TCP/IP Implementor's Working Group met in Munich, on Monday, August 11th,
+<BR>
+at 7:30 PM.
+<BR>
+<P>Steve Alexander presented an overview of recent changes that have been
+<BR>
+made to the &quot;Known Problems&quot; I-D.  There were two, namely:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- a discussion of keepalive problems was added
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- the &quot;significance&quot; category now includes a description of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;environments in which the problem is significant
+<BR>
+<P>Steve Parker then gave an overview of the current status of the &quot;Testing Tools&quot;
+<BR>
+I-D.  For each tool listed, the document provides information on:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- name
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- availability
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- an overview of how automated the tool is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- other references
+<BR>
+<P>Currently the following tools are described:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- dummynet, netperf, orchestra, packet shell, tcpanaly, tcptrace,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcplook, treno
+<BR>
+<P>Feedback from the audience suggested two additions:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- sock (Rich Stevens' test program); Kent Malave agreed to provide
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a description of this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- SPINS, a protocol verification package
+<BR>
+<P>The next item on the agenda was an overview of proposed changes to RFC 2001.
+<BR>
+2001 is being revised to allow implementations which implement the required
+<BR>
+algorithms in an acceptable manner, but which may differ slightly from
+<BR>
+4.3-BSD-Reno to be considered conformant to RFC 2001.  At the same time, it 
+<BR>
+is proposed that the initial slow-start window should be increased to two
+<BR>
+segments.
+<BR>
+<P>There is an internet draft written by Floyd/Allman/Partridge, which discusses
+<BR>
+some additional proposed changes.  Craig Partridge gave an overview of terms:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- IW; initial congestion window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RW; restart congestion window after idle
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- LW; congestion window used after a loss
+<BR>
+<P>Sally Floyd indicated that more research was needed to ensure that the correct
+<BR>
+trade-offs are made between good scenarios and bad.
+<BR>
+<P>Craig Partridge asserted that no simulations done to date showed any problems
+<BR>
+with raising IW to two segments, but agreed that more cross-traffic simulation
+<BR>
+is probably a good idea.
+<BR>
+<P>Allyn Romanow pointed out that not all of the changes in the Floyd/Allman/
+<BR>
+Partridge draft were being considered for the RFC 2001 update; only increasing
+<BR>
+IW to two segments.
+<BR>
+<P>Van Jacobson gave a historical overview of the reasons for the IW being one
+<BR>
+segment initially, namely a very early ethernet card that could only buffer
+<BR>
+a single frame on receive.  Van also pointed out that dropped SYNs were a
+<BR>
+large problem with current web traffic.
+<BR>
+<P>It was pointed out that if the congestion window oscillated between one segment
+<BR>
+and two, that this might be less bursty than with four.
+<BR>
+<P>Matt Mathis pointed out that the current spec (2001) isn't completely
+<BR>
+up-to-date with all of the latest TCP congestion control enhancements.
+<BR>
+<P>Craig agreed that more simulation should be done to ensure that fairness
+<BR>
+issues are handled correctly.
+<BR>
+<P>Van pointed out that timing is really used for congestion control.  He
+<BR>
+explained that the RTT est. is not really used to estimate round trip time, but
+<BR>
+rather as a clock to determine when it is likely that a packet has left the
+<BR>
+network.  Van suggested that using the max rtt might be better than using the
+<BR>
+single RTT, which is a lower bound.
+<BR>
+<P>Craig Partridge volunteered to write up the RTO algorithm (Karn's) as an RFC,
+<BR>
+since it is not currently documented in the RFC series.
+<BR>
+<P>Bob Braden mentioned that the reason that a lot of Van's early work is not
+<BR>
+explained in RFC 1122 is that the 1122 working group didn't think that they
+<BR>
+could explain it as well, and that it provided an incentive to read the paper
+<BR>
+and get the whole story.  It was suggested that Van should convert the paper
+<BR>
+into an RFC; Van seemed amenable.
+<BR>
+<P>After the congestion control discussion ended, a list of outstanding problems
+<BR>
+for the &quot;Known Problems&quot; I-D was presented, and again, volunteers were
+<BR>
+solicited to contribute text to the I-D.
+<BR>
+<P>Bernard Volz mentioned a new problem, namely implementations that only send a
+<BR>
+FIN after all outstanding data has been ACKed; this should be added to
+<BR>
+the I-D.
+<BR>
+<P><P><P>A discussion of the IRTF End2end group's position on research vs. engineering
+<BR>
+was skipped.  This was because the summary had been posted to the mailing list
+<BR>
+but generated little interest.
+<BR>
+<P>The meeting then adjourned.
+<BR>
+<P>Action items:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Kent Malave, write up description of 'sock'
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Ian Heavens, write up issues around half-duplex close
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Van Jacobson, possibly write up latest SIGCOMM paper as RFC
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Craig Partridge, write I-D on Karn's algorithm
+<BR>
+<P>-- Steve Alexander, Vern Paxson
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0730.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0728.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0733.html">Scott Lawrence: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0734.html">Bernie Volz: "Re: Munich Minutes"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0736.html">sparker@Eng.Sun.COM: "Re: Munich Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#729">[ date ]</A>
+<A HREF="index.html#729">[ thread ]</A>
+<A HREF="subject.html#729">[ subject ]</A>
+<A HREF="author.html#729">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

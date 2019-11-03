@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Determining the number of lost p</TITLE>
+<META NAME="Author" CONTENT="Bogdan Ghita (b.ghita@jack.see.plym.ac.uk)">
+<META NAME="Subject" CONTENT="Determining the number of lost packets">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Determining the number of lost packets</H1>
+<!-- received="Wed May 24 08:08:55 2000" -->
+<!-- isoreceived="20000524120855" -->
+<!-- sent="Wed, 24 May 2000 12:57:27 +0100" -->
+<!-- isosent="20000524115727" -->
+<!-- name="Bogdan Ghita" -->
+<!-- email="b.ghita@jack.see.plym.ac.uk" -->
+<!-- subject="Determining the number of lost packets" -->
+<!-- id="392BC3A7.3E5942A3@jack.see.plym.ac.uk" -->
+<STRONG>From:</STRONG> Bogdan Ghita (<A HREF="mailto:b.ghita@jack.see.plym.ac.uk?Subject=Re:%20Determining%20the%20number%20of%20lost%20packets&In-Reply-To=&lt;392BC3A7.3E5942A3@jack.see.plym.ac.uk&gt;"><EM>b.ghita@jack.see.plym.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed May 24 2000 - 07:57:27 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2100.html">Alan Cox: "Re: IPv6 Path MTU Discovery process ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2101">[ date ]</A>
+<A HREF="index.html#2101">[ thread ]</A>
+<A HREF="subject.html#2101">[ subject ]</A>
+<A HREF="author.html#2101">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello everybody
+<BR>
+<P>- if the content of this e-mail is not relevant to the topic of the
+<BR>
+list, then, if possible, tell me if there is any other mailing list
+<BR>
+where I could ask the question - 
+<BR>
+<P>I am trying to determine the number of lost packets for TCP connections.
+<BR>
+I created an emulated 'lossy link' (10% packet loss) using Nistnet, and
+<BR>
+downloaded a file through this link. I get the number of 'lost' packets
+<BR>
+within a connection from the program, then compare it to my estimates.
+<BR>
+The monitoring point is AFTER the lossy link, on the direction of the
+<BR>
+download.
+<BR>
+I noticed that the nearest estimator is the number of 'inverted'
+<BR>
+packets, as in the following example:
+<BR>
+12:41:35.990251 50.234.ftp-data &gt; ac.uk.1096: . 5841:7301(1460) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+12:41:35.990294 ac.uk.1096 &gt; 50.234.ftp-data: . 1:1(0) ack 7301 win
+<BR>
+30660 (DF) [tos 0x8] 
+<BR>
+12:41:36.294567 141.163.50.234.ftp-data &gt; ac.uk.1096: . 8761:10221(1460)
+<BR>
+ack 1 win 8760 (DF)
+<BR>
+12:41:36.294616 ac.uk.1096 &gt; 50.234.ftp-data: . 1:1(0) ack 7301 win
+<BR>
+30660 (DF) [tos 0x8] 
+<BR>
+12:41:38.919563 50.234.ftp-data &gt; ac.uk.1096: P 7301:8761(1460) ack 1
+<BR>
+win 8760 (DF)
+<BR>
+<P>The packet containing data 7301 - 8761 seems to be inverted but, in
+<BR>
+fact, it was lost, and this is a retransmission.
+<BR>
+<P>The main problem with counting the inverted packets is that it fails to
+<BR>
+see a lost packet if it is at the end of a transmission window (there is
+<BR>
+no packet sent after it, no duplicate ACK and the sender retransmits it
+<BR>
+when the timer expires), which makes it inaccurate.
+<BR>
+<P>I have tried also with the Estimated Timeout, but, because I am not
+<BR>
+measuring it right at the sending endpoint, the measurement is not as
+<BR>
+acurate as it should be, and it gives me some 'false alarms'.
+<BR>
+<P>The question is: are there any good estimators for the number of lost
+<BR>
+packets?
+<BR>
+Any suggestions / relevant papers are welcome as well.
+<BR>
+<P>Than kyou very much for your time
+<BR>
+<P>Best regards
+<BR>
+Bogdan Ghita
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2100.html">Alan Cox: "Re: IPv6 Path MTU Discovery process ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2102.html">Eric A. Hall: "Re: Determining the number of lost packets"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2101">[ date ]</A>
+<A HREF="index.html#2101">[ thread ]</A>
+<A HREF="subject.html#2101">[ subject ]</A>
+<A HREF="author.html#2101">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

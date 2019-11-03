@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Wed Apr  2 11:36:35 1997" -->
+<!-- isoreceived="19970402163635" -->
+<!-- sent="Wed, 2 Apr 1997 11:30:41 -0800" -->
+<!-- isosent="19970402193041" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704021930.AA15701@ash.isi.edu" -->
+<!-- inreplyto="TCP buffers" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704021930.AA15701@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 14:30:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0299.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#298">[ date ]</A>
+<A HREF="index.html#298">[ thread ]</A>
+<A HREF="subject.html#298">[ subject ]</A>
+<A HREF="author.html#298">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704021930.AA15701@ash.isi.edu&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; Subject: Re: TCP buffers 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The reality of HTTP is that it is an interactive bulk transport
+</EM><BR>
+<EM>&gt; protocol; i.e. there are users, who often changes their minds as a result
+</EM><BR>
+<EM>&gt; of what they see on the screen, and then surf on to another page
+</EM><BR>
+<EM>&gt; (or further down the screen, with a different set of embedded graphics
+</EM><BR>
+<EM>&gt; to fetch).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Control of latency by a browser is therefore important.  This isn't just
+</EM><BR>
+<EM>&gt; file transfer...
+</EM><BR>
+<P>TCP isn't just file transfer either. The Nagle optimizations, for
+<BR>
+example, are aimed at interactive traffic, such as Telnet. Not for
+<BR>
+bulk.
+<BR>
+<P><EM>&gt; Now if you'd like the Web to go off and invent its own transport protocol
+</EM><BR>
+<EM>&gt; rather than TCP, I'm sure there are people in the Web community who'd be
+</EM><BR>
+<EM>&gt; happy to do so.  Just don't count on them understanding congestion ann
+</EM><BR>
+<EM>&gt; flow control issues very well. :-(.  And maybe this is the right thing
+</EM><BR>
+<EM>&gt; to do ultimately.  But there be dragons there, as this mailing list certainly
+</EM><BR>
+<EM>&gt; knows.
+</EM><BR>
+<P>Why the Web community? Isn't that how we got &quot;http is better than FTP,
+<BR>
+because we usually only ever get one file and don't want to take
+<BR>
+the 2-rtt hit for opening the FTP connection&quot;  (see the original
+<BR>
+Berners-Lee papers) - then started doing 'persistent connections',
+<BR>
+essentially re-inventing much of what FTP did right in the first place?
+<BR>
+<P>Maybe the Web community should give requirements to the transport
+<BR>
+community, that does understand the issues of congestion
+<BR>
+and flow control, and needs to understand the issues of a
+<BR>
+new class of applications with new transport requirements...
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704021930.AA15701@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0299.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#298">[ date ]</A>
+<A HREF="index.html#298">[ thread ]</A>
+<A HREF="subject.html#298">[ subject ]</A>
+<A HREF="author.html#298">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

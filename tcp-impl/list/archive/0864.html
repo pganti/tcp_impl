@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: detecting loss of retransmit</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: detecting loss of retransmitted packets in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: detecting loss of retransmitted packets in TCP</H1>
+<!-- received="Tue Jan  6 09:44:10 1998" -->
+<!-- isoreceived="19980106144410" -->
+<!-- sent="Tue, 06 Jan 1998 12:37:15 -0500" -->
+<!-- isosent="19980106173715" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: detecting loss of retransmitted packets in TCP" -->
+<!-- id="199801061737.MAA11137@brookfield.ans.net" -->
+<!-- inreplyto="199712231757.JAA25647@owl.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;199801061737.MAA11137@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 06 1998 - 12:37:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0865.html">Chetan Kumar: "Documentations for Delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0863.html">Chetan Kumar: "Is there a revised rfc2001 ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0857.html">Sally Floyd: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#864">[ date ]</A>
+<A HREF="index.html#864">[ thread ]</A>
+<A HREF="subject.html#864">[ subject ]</A>
+<A HREF="author.html#864">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199712231757.JAA25647@owl.ee.lbl.gov?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;199801061737.MAA11137@brookfield.ans.net&gt;">199712231757.JAA25647@owl.ee.lbl.gov</A>&gt;, Sally Floyd writes:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As you indicate, the choices for reacting to a retransmitted packet
+</EM><BR>
+<EM>&gt; that is itself dropped include the following:
+</EM><BR>
+<EM>&gt; (1) waiting for a retransmit timeout;
+</EM><BR>
+<EM>&gt; (2) re-retransmitting one packet and slow-starting;
+</EM><BR>
+<EM>&gt; (3) re-retransmitting dropped packets and sending new packets, subject 
+</EM><BR>
+<EM>&gt;   to cutting the congestion window in half for each window of data in
+</EM><BR>
+<EM>&gt;   which one or more packets are dropped, and subject to the constraint
+</EM><BR>
+<EM>&gt;   the outgoing packets need to be clocked by incoming dup acks.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I don't know which of these three is best for the network, in a
+</EM><BR>
+<P><P>If you do anything but 3, the backoff can be dramatic enough that
+<BR>
+there is a period of link underutilization with FIFO and drop tail.
+<BR>
+<P>The idea of TCP (IMHO) is to maximize goodput without being so
+<BR>
+aggressive as to risk congestion collapse and without causing
+<BR>
+excessive delay.  (Where excessive is any more delay than is needed to
+<BR>
+keep the link full - note that delay is a secondary consideration.)
+<BR>
+<P>If you lower delay or delay variation you go to SFQ and use only your
+<BR>
+fair share (not using TCP) or go with WFQ, CBQ, or some other more
+<BR>
+sophisticated than FIFO scheme and make a reservation and use more
+<BR>
+than you fair share.
+<BR>
+<P>This doesn't mean that 1) or 2) is wrong, it just that it is currently
+<BR>
+thought that it won't yield quite as high aggregate goodputs.
+<BR>
+<P>This would probably be a moot point if RED were widely deployed and
+<BR>
+drops were spaced out by more than an RTT rather than bunched.  In
+<BR>
+that case 3) just gets hosts past that messy time when routers don't
+<BR>
+behave quite as well as we'd like them to despite our best efforts at
+<BR>
+arm twisting the router (and rack modem, terminal server, etc) vendors.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0865.html">Chetan Kumar: "Documentations for Delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0863.html">Chetan Kumar: "Is there a revised rfc2001 ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0857.html">Sally Floyd: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#864">[ date ]</A>
+<A HREF="index.html#864">[ thread ]</A>
+<A HREF="subject.html#864">[ subject ]</A>
+<A HREF="author.html#864">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

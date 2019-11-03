@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Last Call for draft-floyd-incr-i</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Wed Apr 22 09:43:49 1998" -->
+<!-- isoreceived="19980422134349" -->
+<!-- sent="Wed, 22 Apr 1998 09:40:05 PDT" -->
+<!-- isosent="19980422164005" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804221640.JAA03796@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804221640.JAA03796@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 22 1998 - 12:40:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1071.html">m1nn79n: "(no subject)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1085.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1087.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1088.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1091.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1094.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1103.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1072">[ date ]</A>
+<A HREF="index.html#1072">[ thread ]</A>
+<A HREF="subject.html#1072">[ subject ]</A>
+<A HREF="author.html#1072">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+This is the I-D for increasing TCP's initial window, which we discussed at
+<BR>
+the DC and LA meetings.  The plan is to now have it published as an
+<BR>
+Experimental RFC.  The tcp-impl revision of RFC 2001 will then standardize
+<BR>
+the increase (modulo implementation experiences, of course).
+<BR>
+<P>So this is a Last Call for discussion of the I-D prior to submitting it to
+<BR>
+the IESG.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P>(The main technical change between versions -01 and -02 of the I-D concerns
+<BR>
+&nbsp;PMTU discovery: the I-D now simply notes that whether DF should be set on
+<BR>
+&nbsp;all of the initial packets, or just the first, is an open question.)
+<BR>
+<P><P><P><EM>&gt; A New Internet-Draft is available from the on-line Internet-Drafts directories.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Title		: Increasing TCP's Initial Window
+</EM><BR>
+<EM>&gt; 	Author(s)	: C. Partridge, S. Floyd, M. Allman
+</EM><BR>
+<EM>&gt; 	Filename	: draft-floyd-incr-init-win-02.txt
+</EM><BR>
+<EM>&gt; 	Pages		: 11
+</EM><BR>
+<EM>&gt; 	Date		: 21-Apr-98
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt;     This document specifies an increase in the permitted initial window
+</EM><BR>
+<EM>&gt;     for TCP from one segment to roughly 4K bytes.  This document
+</EM><BR>
+<EM>&gt;     discusses the advantages and disadvantages of such a change,
+</EM><BR>
+<EM>&gt;     outlining experimental results that indicate the costs and benefits
+</EM><BR>
+<EM>&gt;     of such a change to TCP.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Internet-Drafts are available by anonymous FTP.  Login with the username
+</EM><BR>
+<EM>&gt; &quot;anonymous&quot; and a password of your e-mail address.  After logging in,
+</EM><BR>
+<EM>&gt; type &quot;cd internet-drafts&quot; and then
+</EM><BR>
+<EM>&gt; 	&quot;get draft-floyd-incr-init-win-02.txt&quot;.
+</EM><BR>
+<EM>&gt; A URL for the Internet-Draft is:
+</EM><BR>
+<EM>&gt; <A HREF="ftp://ftp.ietf.org/internet-drafts/draft-floyd-incr-init-win-02.txt">ftp://ftp.ietf.org/internet-drafts/draft-floyd-incr-init-win-02.txt</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Internet-Drafts directories are located at:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Africa:	ftp.is.co.za
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; 	Europe: ftp.nordu.net
+</EM><BR>
+<EM>&gt; 		ftp.nis.garr.it
+</EM><BR>
+<EM>&gt; 			
+</EM><BR>
+<EM>&gt; 	Pacific Rim: munnari.oz.au
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; 	US East Coast: ftp.ietf.org
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; 	US West Coast: ftp.isi.edu
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Internet-Drafts are also available by mail.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Send a message to:	mailserv@ietf.org.  In the body type:
+</EM><BR>
+<EM>&gt; 	&quot;FILE /internet-drafts/draft-floyd-incr-init-win-02.txt&quot;.
+</EM><BR>
+<EM>&gt; 	
+</EM><BR>
+<EM>&gt; NOTE:	The mail server at ietf.org can return the document in
+</EM><BR>
+<EM>&gt; 	MIME-encoded form by using the &quot;mpack&quot; utility.  To use this
+</EM><BR>
+<EM>&gt; 	feature, insert the command &quot;ENCODING mime&quot; before the &quot;FILE&quot;
+</EM><BR>
+<EM>&gt; 	command.  To decode the response(s), you will need &quot;munpack&quot; or
+</EM><BR>
+<EM>&gt; 	a MIME-compliant mail reader.  Different MIME-compliant mail readers
+</EM><BR>
+<EM>&gt; 	exhibit different behavior, especially when dealing with
+</EM><BR>
+<EM>&gt; 	&quot;multipart&quot; MIME messages (i.e. documents which have been split
+</EM><BR>
+<EM>&gt; 	up into multiple messages), so check your local documentation on
+</EM><BR>
+<EM>&gt; 	how to manipulate these messages.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1071.html">m1nn79n: "(no subject)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1073.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1075.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1085.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1087.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1088.html">Mark Allman: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1091.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1094.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1103.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1109.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1072">[ date ]</A>
+<A HREF="index.html#1072">[ thread ]</A>
+<A HREF="subject.html#1072">[ subject ]</A>
+<A HREF="author.html#1072">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

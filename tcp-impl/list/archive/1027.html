@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: using RST to indicate busy</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: using RST to indicate busy">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: using RST to indicate busy</H1>
+<!-- received="Tue Mar 24 14:31:18 1998" -->
+<!-- isoreceived="19980324193118" -->
+<!-- sent="Tue, 24 Mar 1998 16:28:11 -0600 (CST)" -->
+<!-- isosent="19980324222811" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: using RST to indicate busy" -->
+<!-- id="199803242228.QAA00459@frantic.bsdi.com" -->
+<!-- inreplyto="using RST to indicate busy" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;199803242228.QAA00459@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 24 1998 - 17:28:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1026.html">sparker@Eng.Sun.COM: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1017.html">Doug Drew: "using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1027">[ date ]</A>
+<A HREF="index.html#1027">[ thread ]</A>
+<A HREF="subject.html#1027">[ subject ]</A>
+<A HREF="author.html#1027">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Subject: Re: using RST to indicate busy
+</EM><BR>
+<EM>&gt; Date: Tue, 24 Mar 1998 14:02:25 PST
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;199803242228.QAA00459@frantic.bsdi.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;   If a maximum number of current and pending inbound connections has
+</EM><BR>
+<EM>&gt; &gt;   been exceeded, then sending an RST from the server is, it seems to me,
+</EM><BR>
+<EM>&gt; &gt;   the right thing to do to refuse a new offered connection.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well, it seems busted to me.  There's already a retry mechanism built
+</EM><BR>
+<EM>&gt; into SYN transmission, and it has backoff built into it, which is just
+</EM><BR>
+<EM>&gt; what you want when you're busy; and there's plenty of code out there
+</EM><BR>
+<EM>&gt; that actually believes it when you tell it &quot;go away&quot; with a RST, so
+</EM><BR>
+<EM>&gt; you break connectivity with those apps; and there's the passage from
+</EM><BR>
+<EM>&gt; end2end that Rich just passed along.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If RFC p. 37 gives us chapter and verse on this, then I'm certainly
+</EM><BR>
+<EM>&gt; inclined to document it as a known implementation problem.
+</EM><BR>
+<P>Page 37 is the state transition diagram, pp. 66-67 is the
+<BR>
+explicit text:
+<BR>
+<P>SEGMENT ARRIVES
+<BR>
+...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;If the state is SYN-SENT then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first check the ACK bit
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the ACK bit is set
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If SEG.ACK =&lt; ISS, or SEG.ACK &gt; SND.NXT, send a reset (unless
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the RST bit is set, if so drop the segment and return)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;SEQ=SEG.ACK&gt;&lt;CTL=RST&gt;              
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and discard the segment.  Return.
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If SND.UNA =&lt; SEG.ACK =&lt; SND.NXT then the ACK is acceptable.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second check the RST bit
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the RST bit is set
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the ACK was acceptable then signal the user &quot;error:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection reset&quot;, drop the segment, enter CLOSED state,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete TCB, and return.  Otherwise (no ACK) drop the segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and return.
+<BR>
+<P>It seems pretty clear to me that if you get a RST in response
+<BR>
+to the SYN, you drop the connection and return an error back
+<BR>
+to the user.  I agree with Vern, lets document this as an
+<BR>
+implementation problem.
+<BR>
+<P>If the server really wants to say &quot;I'm busy, go away and don't
+<BR>
+bother me any more!&quot;, then I guess it is ok for it to return an
+<BR>
+RST.  However, if the server wants to be more polite, and tell
+<BR>
+the client &quot;I'm busy, try again in a bit&quot; then they should
+<BR>
+silently drop the SYN and let the client retransmit.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;199803242228.QAA00459@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P>BTW, can anyone verify whether or not the RST packet coming
+<BR>
+from windows has the ACK bit set?  As I re-read the text, if
+<BR>
+the ACK bit is not set, then the RST is to be silently dropped,
+<BR>
+and the connection left intact, retransmitting the SYN.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1026.html">sparker@Eng.Sun.COM: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1017.html">Doug Drew: "using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1028.html">Bernie Volz: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1027">[ date ]</A>
+<A HREF="index.html#1027">[ thread ]</A>
+<A HREF="subject.html#1027">[ subject ]</A>
+<A HREF="author.html#1027">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 12 20:38:33 1999" -->
+<!-- isoreceived="19990213013833" -->
+<!-- sent="Fri, 12 Feb 1999 17:35:17 -0800 (PST)" -->
+<!-- isosent="19990213013517" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="Roam.SIMCSD.2.0.4.918869717.10149.kcpoon@jurassic" -->
+<!-- inreplyto="199902120537.WAA28399@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918869717.10149.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 12 1999 - 20:35:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1572.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1569.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1576.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1573">[ date ]</A>
+<A HREF="index.html#1573">[ thread ]</A>
+<A HREF="subject.html#1573">[ subject ]</A>
+<A HREF="author.html#1573">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; segments.  Will this solve the problem we are discussing when combined with
+</EM><BR>
+<EM>&gt;&gt; the Nagle modification on a per-send basis?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Which Nagle modification is that?  The algorithm as classically described
+</EM><BR>
+<P>I guess the phrase &quot;on a per-send basis&quot; is not clear enough...
+<BR>
+<P><EM>&gt; Assuming there is a problem here that needs to be solved, and that the
+</EM><BR>
+<EM>&gt; problem cannot be easily and cleanly solved with an explicit flush bit,
+</EM><BR>
+...
+<BR>
+<P>Let's see if we can agree on what the problem the draft tries to solve.
+<BR>
+Greg and others can comment on this if I mistake.  I observe the following
+<BR>
+points so far.
+<BR>
+<P>1. There is a bad interaction between some applications, e.g. transaction
+<BR>
+type applications, and Nagle algorithm.
+<BR>
+<P>2. We have observed that many network applications set TCP_NODELAY flag by
+<BR>
+default, thus disabling Nagle algorithm, even though it may not be necessary.
+<BR>
+Many application programmers are not aware of the implications of setting
+<BR>
+TCP_NODELAY flag and do not understand Nagle algorithm.  But by setting
+<BR>
+TCP_NODELAY flag, they see their applications run better.
+<BR>
+<P>3. In many circumstances, Nagle algorithm helps reduce unnecessary network
+<BR>
+traffic.
+<BR>
+<P>4. Many TCP stacks already have some form of modified Nagle algorithm.  The
+<BR>
+interesting thing is that most people do not know about that.  And since
+<BR>
+there is no &quot;standard&quot; modified Nagle, application programmers cannot rely
+<BR>
+on this fact if they want their applications to run well on multiple
+<BR>
+platforms.  Thus having a modified Nagle algorithm does not help reduce
+<BR>
+the number of applications setting TCP_NODELAY.
+<BR>
+<P>Because of 3, Greg and many others thought that we should find a way to 
+<BR>
+remedy 2.  And many such applications are like 1.  So Greg wrote the draft
+<BR>
+to solve 1 hoping 2 will go away.  Note that the draft does not intend to
+<BR>
+solve all bad interactions in 1.  But by getting rid of the most common set
+<BR>
+of bad interactions, 2 may go away.
+<BR>
+<P>Do we agree on the above points?  If we do, the question comes to if modifying
+<BR>
+Nagle algorithm helps.  And if by setting a &quot;standard&quot; modified Nagle, can
+<BR>
+application programmers rely on this fact and do not need to set TCP_NODELAY
+<BR>
+flag even if their applications run on multiple platforms, thus eliminating 4. 
+<BR>
+Does the proposed algorithm really get rid of the most common set of bad
+<BR>
+interactions?  Or do we only need to have an EPS mechanism, as described in
+<BR>
+the draft?
+<BR>
+<P>My observation is that Vernon, and maybe others, think that there is no
+<BR>
+problem at all.  It is just a problem of incompetent programmers and IETF
+<BR>
+should not do anything about it.  Rick and others think that we should
+<BR>
+document the modified Nagle many stacks also have, namely doing the check
+<BR>
+on a per-send basis.  This helps 4.  And to further reduce the problem set
+<BR>
+of bad interactions, we should investigate EPS.  Have I misunderstood the
+<BR>
+flow of discussions so far?
+<BR>
+<P><EM>&gt; A document that would teach good programming sounds like a good thing.
+</EM><BR>
+<EM>&gt; Such documents are often called textbooks.  Some good textbooks contain
+</EM><BR>
+<EM>&gt; lots of example code.  However, as you basically say about the old RFCs,
+</EM><BR>
+<EM>&gt; the IETF is not in the introductory** textbook business.  The IETF is a
+</EM><BR>
+<EM>&gt; standards committee, not Addison-Wesley, John Wiley, or even The Microsoft
+</EM><BR>
+&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^
+<BR>
+<P>You have been involved with IETF much longer than I do.  I guess I have
+<BR>
+misunderstood the intention of FYI notes and various other infomational
+<BR>
+documents IETF has published...  Is IETF really only a &quot;standards committee?&quot;
+<BR>
+Maybe you can tell me what those documents are for.  In your opinion, do
+<BR>
+many of them also fall into the category of textbooks and IETF should not
+<BR>
+have published them in the first place?  I guess probably.
+<BR>
+<P>My point is that it seems that so far no textbook has been clear on what Nagle
+<BR>
+algorithm is and its implication.  Maybe textbook authors do not care, or
+<BR>
+people designing protocol do not care to tell them about it, or ...  IMHO, a
+<BR>
+brief document from TCP implementors urging people not to disable the
+<BR>
+algorithm by default  and describing the right way to write network programs
+<BR>
+using TCP is another way to tackle the problem the draft tries to solve, but
+<BR>
+without modifying Nagle algorithm.  And it will carry more credits than from
+<BR>
+any textbook.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918869717.10149.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1574.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1572.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1569.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1576.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1573">[ date ]</A>
+<A HREF="index.html#1573">[ thread ]</A>
+<A HREF="subject.html#1573">[ subject ]</A>
+<A HREF="author.html#1573">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

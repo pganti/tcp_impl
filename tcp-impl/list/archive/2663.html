@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="der Mouse (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 22:04:27 2002" -->
+<!-- isoreceived="20020406030427" -->
+<!-- sent="Fri, 5 Apr 2002 22:01:58 -0500 (EST)" -->
+<!-- isosent="20020406030158" -->
+<!-- name="der Mouse" -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: TCP Checksum Interoperability" -->
+<!-- id="200204060301.WAA02959@Sparkle.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="3CAE4F6F.3090701@isi.edu" -->
+<STRONG>From:</STRONG> der Mouse (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;200204060301.WAA02959@Sparkle.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 22:01:58 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2664.html">Chris Trobridge: "RE: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2663">[ date ]</A>
+<A HREF="index.html#2663">[ thread ]</A>
+<A HREF="subject.html#2663">[ subject ]</A>
+<A HREF="author.html#2663">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; ...huh?  It depends on how you implement one's-complement arithmetic.
+</EM><BR>
+<EM>&gt; See RFC1624.
+</EM><BR>
+<P>I believe 1624 is wrong, because it makes exactly the same mistake
+<BR>
+you're making here.  What's more, to quote from it, &quot;This memo does not
+<BR>
+specify an Internet standard of any kind&quot;.
+<BR>
+<P><EM>&gt; The definition of 1's complement arithmetic is not implementation
+</EM><BR>
+<EM>&gt; dependent.
+</EM><BR>
+<P>True as far as it goes.  But in abstract one's-complement binary
+<BR>
+arithmetic, all-0-bits and all-1-bits are completely equivalent, both
+<BR>
+on input and on output; an implementation may produce either, at whim,
+<BR>
+for zero results, and still be computing with one's-complement
+<BR>
+arithmetic.
+<BR>
+<P>_That_ arithmetic is the one that is &quot;not implementation dependent&quot;.  I
+<BR>
+believe that's the arithmetic 793 specifies - and in that arithmetic,
+<BR>
+the difference between all-0-bits and all-1-bits is a matter of two
+<BR>
+completely equivalent representations of a single semantic value;
+<BR>
+either may be generated for a zero result, according to convenience of
+<BR>
+implementation, the parity of the cycle counter, or whether the CPU
+<BR>
+happens to be mounted vertically.
+<BR>
+<P><EM>&gt;&gt; Trying to draw an artificial distinction between them is not only
+</EM><BR>
+<EM>&gt;&gt; unsupported by the standard as far as I can tell but liable to break
+</EM><BR>
+<EM>&gt;&gt; interoperability with conformant implementations which don't draw
+</EM><BR>
+<EM>&gt;&gt; that distinction.
+</EM><BR>
+<EM>&gt; That issue is covered in RFC1624 and in RFC768.
+</EM><BR>
+<P>1624, aside from being all about *incremental* computation, is, I
+<BR>
+believe, simply wrong; the arithmetic it describes - wherein all-0-bits
+<BR>
+and all-1-bits are different - is not one's-complement arithmetic.
+<BR>
+<P>768 is irrelevant, since we're discussing TCP, and also because it
+<BR>
+specifically goes to the trouble of specifying one of the two otherwise
+<BR>
+equivalent representations of zero - it standardizes, for purposes of
+<BR>
+UDP, a semantic difference somewhat akin to the one you're trying to
+<BR>
+read into 793, which I believe just isn't there.  That is, 768 is
+<BR>
+describing not one's-complement arithmetic but a specifically and
+<BR>
+narrowly tailored extension of one's-complement arithmetic.
+<BR>
+<P>/~\ The ASCII				der Mouse
+<BR>
+\ / Ribbon Campaign
+<BR>
+&nbsp;X  Against HTML	       <A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;200204060301.WAA02959@Sparkle.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+/ \ Email!	     7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2664.html">Chris Trobridge: "RE: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2663">[ date ]</A>
+<A HREF="index.html#2663">[ thread ]</A>
+<A HREF="subject.html#2663">[ subject ]</A>
+<A HREF="author.html#2663">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 22:04:34 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

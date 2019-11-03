@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Fri Sep 18 08:26:51 1998" -->
+<!-- isoreceived="19980918122651" -->
+<!-- sent="Fri, 18 Sep 1998 09:25:32 -0600 (MDT)" -->
+<!-- isosent="19980918152532" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809181525.JAA14637@calcite.rhyolite.com" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809181525.JAA14637@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 18 1998 - 11:25:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1333.html">Andrew Hobson: "Re: OO TCP implementations?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1332">[ date ]</A>
+<A HREF="index.html#1332">[ thread ]</A>
+<A HREF="subject.html#1332">[ subject ]</A>
+<A HREF="author.html#1332">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809181525.JAA14637@calcite.rhyolite.com&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; Sure.  The right thing to do (if HTTP did not have such verbose request
+</EM><BR>
+<EM>&gt; &gt; &gt; response headers) would be to turn off all modem compression, and
+</EM><BR>
+<EM>&gt; &gt; &gt; send the HTML content compressed.  Deflate compression does very
+</EM><BR>
+<EM>&gt; &gt; &gt; much better than anything in modems.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Modems tend to use LZW, always (I trust) with at least 10-bit and at least
+</EM><BR>
+<EM>&gt; &gt; sometimes more.  Judging from what Paul Mackerras has told me of his
+</EM><BR>
+<EM>&gt; &gt; comparisons between BSD Compress (RFC 1977) and Deflate (RFC 1979) in his
+</EM><BR>
+<EM>&gt; &gt; widely used `pppd`, the difference between Deflate and your typical modem
+</EM><BR>
+<EM>&gt; &gt; on the data that is compressed should be about the difference you see
+</EM><BR>
+<EM>&gt; &gt; between `compress` and `gzip`, or around a 10% improvement in compression
+</EM><BR>
+<EM>&gt; &gt; ratio but at a ~2X cost in CPU cycles, and mostly on the side that does
+</EM><BR>
+<EM>&gt; &gt; not have cycles to waste, the HTTP server.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The server can cache the compressed object, and only compress it once.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Our measurements show a much greater effect of compression than 10%;
+</EM><BR>
+<EM>&gt; see: <A HREF="http://www.w3.org/Protocols/HTTP/Performance/#Compression">http://www.w3.org/Protocols/HTTP/Performance/#Compression</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This are measurements over real modems.
+</EM><BR>
+<P>That difference is much larger than 10%, but you neglected to mention the
+<BR>
+brand or even variety (e.g. v.34 vs. v.32) of the modems.  Your modems
+<BR>
+did about 20 kbit/sec, so they could not have been v.32, but they have
+<BR>
+been either v.32bis or v.34.  You also omitted TCP window sizes and mention
+<BR>
+of the CTE-DTE speeds, both of which have large effects.  With the high
+<BR>
+latencies of modem links, you really want a TCP window of more than 1
+<BR>
+or 2 segments, despite the fact that some TCP/IP/PPP stacks for PCs
+<BR>
+think 2 segments is a lot.
+<BR>
+<P>That your modems appeared to move data at the same speed regardless of
+<BR>
+whether data was compressable (i.e. precompressed or not) suggests that
+<BR>
+v.42bis was turned off.  Please do the obvious sanity check.  If modem
+<BR>
+compression were as absolutely useless as your numbers say, then why would
+<BR>
+anyone bother?
+<BR>
+<P>That your compressed and uncompressed HTML differed 11K vs. 42K means that
+<BR>
+your HTML is over the line into embarassingly compressable territory.  (I
+<BR>
+could easily believe that most image-free HTML is over that line.)  Your
+<BR>
+test obviously, as you note, did not have involved any images, which makes
+<BR>
+it a less than especially interesting test.
+<BR>
+<P>Over the years, I've made a bunch of measurements of precompressed, random,
+<BR>
+ordinary, and embarrassingly compressable data (e.g. `ttcp` or `ping`
+<BR>
+without -P) through SLIP/modems and PPP/modems.  At my previous major UNIX
+<BR>
+vendor employer, I maintained the UUCP/PPP/cu/SLIP/etc modem configuration
+<BR>
+scripts in my spare time, along with doing PPP, and cajoled the loan of
+<BR>
+a pair of modems from everyone who wanted another modem supported so that
+<BR>
+I could tune the scripts and make some measurements.  There is no such
+<BR>
+thing as a &quot;standard modem&quot; as mentioned in your report.  All modems claim
+<BR>
+to support various standards, but their performance varies radically,
+<BR>
+whether you are concerned with analog issues (i.e. phone lines) or bit
+<BR>
+moving.  I've seen variations up to a factor of 4 just by switching modems
+<BR>
+at a single modem-to-modem bit rate; never mind the modems that simply do
+<BR>
+not work on some phone lines.  For example one ome major brand of v.32bis
+<BR>
+modem seemed to be unable to send at the same time it was receiving, or
+<BR>
+vice versa, and so its performance with ordinary data with TCP/IP/PPP/modem
+<BR>
+is other than impressive because of TCP ACKs.  (v.32bis is the old,
+<BR>
+pre-&quot;56K&quot; standard.)
+<BR>
+<P>You can compare for yourself the effects of modem compression by itself
+<BR>
+with Deflate compression by itself comparing `gzip` with `compress` on
+<BR>
+your HTML pages.  (You might want `compress -b10` to make LZW as poor as
+<BR>
+the worst v.42bis modems.)  I bet you will rarely see more than 10% and
+<BR>
+will never more than 25% difference between LZ78 (or is it LZ77?) used in
+<BR>
+gzip and Deflate compared to the LZW used in v.42bis (modems) and
+<BR>
+`compress`.   (This obvious test is the standard counter to modem and PPP
+<BR>
+box salescritters that claim that their boxes get &quot;8:1&quot; or &quot;9:1&quot; on
+<BR>
+&quot;typical&quot; data.)
+<BR>
+<P>Note that the v.42bis modem compression standard says that when a modem
+<BR>
+notices that the data did not compress, it should send it in the clear.
+<BR>
+That means that once you've paid latency that v.42 packetizing costs,
+<BR>
+v.42bis compression is free--well, only in good modems.  There are of junk
+<BR>
+modems that can move data or compress but not both, and not very well.
+<BR>
+<P>Lest you say that the junk modems prove your point, I've found the USR
+<BR>
+Couriers, among some others, to be other than junk.  The last time I bought
+<BR>
+one, it cost me about $250.
+<BR>
+<P>Never mind the effects of PPP compression.  I have clocked my favorite
+<BR>
+flavor of CCP at 3-digit compression ratios over real links, with data
+<BR>
+patterns used in `ttcp` or `ping` without -P.  (I added -P to the `ping`
+<BR>
+program seen in some systems precisesly to foil modem and PPP compression.)
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809181525.JAA14637@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1333.html">Andrew Hobson: "Re: OO TCP implementations?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1332">[ date ]</A>
+<A HREF="index.html#1332">[ thread ]</A>
+<A HREF="subject.html#1332">[ subject ]</A>
+<A HREF="author.html#1332">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

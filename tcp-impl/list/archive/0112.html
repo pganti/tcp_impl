@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Keep-Alive size</TITLE>
+<META NAME="Author" CONTENT="Richard Fox (kck@netcom.com)">
+<META NAME="Subject" CONTENT="Keep-Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Keep-Alive size</H1>
+<!-- received="Fri Mar  7 06:25:44 1997" -->
+<!-- isoreceived="19970307112544" -->
+<!-- sent="Thu, 6 Mar 1997 22:20:37 -0800" -->
+<!-- isosent="19970307062037" -->
+<!-- name="Richard Fox" -->
+<!-- email="kck@netcom.com" -->
+<!-- subject="Keep-Alive size" -->
+<!-- id="199703070620.WAA22783@netcom14.netcom.com" -->
+<STRONG>From:</STRONG> Richard Fox (<A HREF="mailto:kck@netcom.com?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199703070620.WAA22783@netcom14.netcom.com&gt;"><EM>kck@netcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 07 1997 - 01:20:37 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0111.html">PANKAJ N VYAS: "subscribe"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0117.html">Vern Paxson: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0123.html">David Borman: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0126.html">David Borman: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0127.html">Hsiao-keng Jerry Chu: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0285.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0286.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0290.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0334.html">sparker@Eng.Sun.COM: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#112">[ date ]</A>
+<A HREF="index.html#112">[ thread ]</A>
+<A HREF="subject.html#112">[ subject ]</A>
+<A HREF="author.html#112">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here is a question that has potential for having philosophical
+<BR>
+views.
+<BR>
+<P>Should a TCP stack ACK a zero length Keep-Alive packet?
+<BR>
+<P>rfc1122 is very ambiguous on this matter.
+<BR>
+<P>The rfc states that an implementation should not ACK an ACK only
+<BR>
+packet, which is what a zero length Keep-Alive is.
+<BR>
+It states that a Keep-Alive is not part of the standard but is
+<BR>
+an engineering hack (or something to that fact). It then goes on
+<BR>
+to say that a stack should ACK any form of Keep-Alive but that a
+<BR>
+stack should have a tuneable parameter to be able to set the size
+<BR>
+of the Keep-Alive in case a remote end does not support zero length
+<BR>
+Keep-Alives.
+<BR>
+<P>This all seems to imply that Keep-Alive packets should contain at
+<BR>
+least one byte of data. However, there is at least one stack out
+<BR>
+there which only sends zero length Keep-Alives and there is a stack
+<BR>
+out there which does not ACK them. Both stacks seem to be conformant
+<BR>
+to rfc1122 but the behaviour is not the desired one at all.
+<BR>
+<P>Any opinions?
+<BR>
+<P>--thanks rich
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0111.html">PANKAJ N VYAS: "subscribe"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0117.html">Vern Paxson: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0123.html">David Borman: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0126.html">David Borman: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0127.html">Hsiao-keng Jerry Chu: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0285.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0286.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0290.html">der Mouse : "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0334.html">sparker@Eng.Sun.COM: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#112">[ date ]</A>
+<A HREF="index.html#112">[ thread ]</A>
+<A HREF="subject.html#112">[ subject ]</A>
+<A HREF="author.html#112">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

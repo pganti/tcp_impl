@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Minutes</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Minutes</H1>
+<!-- received="Tue Mar 24 05:17:00 1998" -->
+<!-- isoreceived="19980324101700" -->
+<!-- sent="Tue, 24 Mar 1998 08:15:15 -0500" -->
+<!-- isosent="19980324131515" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="Minutes" -->
+<!-- id="199803241315.IAA00858@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20Minutes&In-Reply-To=&lt;199803241315.IAA00858@guns.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 24 1998 - 08:15:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1016.html">Vern Paxson: "Draft agenda for TCPIMPL WG meeting in LA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1014.html">Vern Paxson: "increasing TCP's initial window"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1015">[ date ]</A>
+<A HREF="index.html#1015">[ thread ]</A>
+<A HREF="subject.html#1015">[ subject ]</A>
+<A HREF="author.html#1015">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+Here are the minutes for the Washington meeting that Vern and I have
+<BR>
+hacked out over the past few days.  Thanks for Joe Touch and Bernie
+<BR>
+Volz for their meeting notes.  Any inaccuracies in these notes can
+<BR>
+be attributed to our weak memories.
+<BR>
+<P>allman
+<BR>
+<P><P><PRE>
+---
+<P>TCP-IMPL Meeting Minutes
+40th IETF Meeting -- Washington DC
+12-8-97 -- 12-11-97
+<P>============================================================================
+<P>These notes were compiled by Mark Allman and Vern Paxson based on notes
+from Joe Touch and Bernie Volz (thanks!), as well as the co-chairs'
+(possibly faint) memories of the meeting.
+<P>============================================================================
+<P>1.  additions to Known Problems I-D: Vern Paxson (10 min)
+<P>Vern outlined a new problem catagory: resource management
+<P>Vern outlined a few additions to the &quot;Known Problems&quot; I-D:
+  -A low interval between keepalives can cost money on dial-on-demand links
+<P>  -Stretch ACK Violation
+<P>   A question about the definition of a &quot;full sized packet&quot; was
+   raised.  A suggestion was made that this should be changed to a
+   &quot;packet with data&quot;.  This would allow receivers to ACK every
+   second packet with any data instead of waiting for 2 &quot;full
+   segments worth&quot; of data to arrive.  (Actually, receivers are
+   already &quot;allowed&quot; to do this.  RFC 1122 says the TCP must ack
+   *at least* every two full sized segments, but acking more often
+   is certainly permissible, too. - VP)
+<P>  -Failure to send FIN notification promptly
+  -Failure to send a RST after Half Duplex Close
+<P>============================================================================
+<P>2.  revisions to Testing Tools I-D: Steve Parker (5 min)
+  
+  (We don't recall any details concerning Steve's short presentation.)
+<P>============================================================================
+<P>3.  porting Packet Shell to libpcap: Steve Parker (10 min)
+<P>  Steve Parker reported that Sun's packet shell is being ported to
+  libpcap for greater portability.  Also, roughly 200 TCP tests have
+  been added to the suite.  They are also porting UNH IPv6 tests (licensed
+  from UNH) to this regression suite. [This is currently not available
+  outside Sun.]
+<P>============================================================================
+<P>4.  TIME_WAIT problems: Joe Touch (5 min)
+<P>  TIME_WAIT issues - Joe Touch gave a presentation on the time_wait
+  accumulation issue, and discussed both application and protocol
+  solutions. Joe presented the alternatives as either/or, in favor of
+  the protocol solution, and asked the participants which solution to
+  recommend.  There was support for both solutions, as well as encouragement
+  that existing optimizations for dealing with large number of TCBs, such
+  as hashing and ordering, should also be encouraged.
+<P>  We [the co-chairs] believe there was a considerable body of opinion at
+  the meeting that TIME_WAIT isn't really a significant problem, you just
+  need to implement a decent hash table and you're done (per the final
+  comment in the previous paragraph).  Unfortunately, in the absence of
+  definitive notes, and given that neither co-chair has a clear recollection,
+  we cannot state this more strongly [or rule it out as fantasy].
+<P>============================================================================
+<P>5.  slow-start restart bug: Joe Touch (5 min)
+<P>  Joe Touch discussed various ways to re-start an idle connection.
+  Joe presented 5 mechanisms for doing this...
+<P>    1.	do nothing (i.e., just use same cwnd as before idle period)
+    2.	slow start from 1 segment after not sending for 1 RTO
+    3.	slow start from 1 segment after not receiving for 1 RTO
+    4.	never send more than 4 segments (a 'maxburst' parameter)
+    5.	never accumulate more than 4 segments of unused window
+        (this was Joe's proposed solution)
+<P>  A discussion followed.  Most people agreed the solution widely
+  used (#3) was a bug because in the common case of, say, persistent
+  HTTP, often the TCP has just received something (a request to
+  send more data), so test #3 fails even though the TCP is quite idle.
+<P>  Implementing solution #2 would require a new state variable (time of
+  last send).  Solutions 2 and 3 can generate large line-rate bursts if
+  connection is idle for less than 1 RTO, but does not continue to send
+  new segments as ACKs are received.  Joe noted that solution 4 can also
+  burst when ACK processing and send processing are not appropriately
+  interleaved.  No consensus was generated on the appropriate approach.
+  Joe offered to perform a comparison and give another report at the
+  next meeting.
+<P>============================================================================
+<P>6.  checksum document (5 min)
+  
+  Vern presented a suggestion from Larry Backman: TCP checksumming
+  documentation is spread over a large number of RFCs (RFCs 793,
+  1071, 1122, 1141, 1626, 1936).  The suggestion is for a single
+  document summarizing checksumming, including:
+<P>    -algorithm
+    -what to crunch on 
+    -strategy (whole packet vs. incremental)
+    -reference implementation
+    -caveats/collected wisdom
+<P>  Larry volunteered to work on a document from an implementor's
+  perspective.  But, he requested help from an &quot;algorithm geek&quot;.
+<P>  Consensus was that RFC 1071 already summarized checksumming quite
+  well. 
+<P>============================================================================
+<P>7.  call for volunteers (5 min)
+<P>  Vern asked (begged) for volunteers for the outstanding
+  implementation problems that need documented.  The response
+  was, as usual, underwhelming.
+<P>============================================================================
+<P>8.  initial slow-start (50+ min)
+<P>  Sally Floyd briefly outlined the proposal for increasing TCP's
+  initial window from 1 segment to 2--4 segments, depending on the
+  MSS: 
+<P>    	MSS &lt;= 1095 bytes:
+	    win = 4 * MSS
+	1095 bytes &lt; MSS &lt; 2190 bytes:
+	    win = 4380
+	MSS =&gt; 2190 bytes:
+	    win = 2 * MSS
+<P>  Sally argued that bursts of 2 and 3 segments are common in the
+  Internet.  When TCP is in congestion avoidance and receives a
+  delayed ACK, 2 segments are transmitted.  If TCP is in slow start,
+  3 segments are transmitted.  Furthermore, bursts of 4 and 5
+  segments are not rare.  If a single delayed ACK is dropped during
+  congestion avoidance a burst of 4 segments is sent.  And, if one
+  delayed ACK is dropped during slow start a burst of 5 segments is
+  sent.  
+<P>  Kedar Poduri then presented simulations of multiple flows using an
+  initial window of 1--4 segments.  These simulations showed
+  improvements to web type traffic when using larger initial
+  windows, without large increases in the drop rate.  (Joint work
+  with Kathie Nichols).
+<P>  Tim Shepard presented the results outlined in his Internet Draft
+  (draft-shepard-tcp-4-packets-3-buff-00.txt).  Tim showed that when
+  using an initial window of 4 segments and a router buffer of 3
+  segments (guaranteeing that the 4th segment would be dropped) the
+  performance of the TCP connection was slightly better than using
+  an initial window of 1 segment.  (Joint work with Craig
+  Partridge). 
+<P>  Mark Allman presented measurements of 16KB transfers across the
+  Internet and dialup modem channels.  When using initial window of
+  2--4 segments over the dialup channel, transfer time was decreased
+  by roughly 7--10%.  In addition, the drop rate was not increased.
+  In the Internet tests, the drop rate was increase very slightly
+  with initial window of 2--4 segments.  Furthermore, the transfer
+  time was reduced by 2, 15 and 25% for initial windows of 2, 3 and
+  4 segments respectivly.
+<P>  A discussion followed.  A consensus for an initial window of 2
+  segments was obtained.  Some people felt that more evidence from
+  real networks was needed before they would be comfortable with
+  initial windows of 3 or 4 segments.  It was suggested that we
+  accept an initial window as proposed (i.e., initial window of
+  between 2 and 4 segments based on MSS) at the next meeting unless
+  evidence that it is harmful is presented.
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1016.html">Vern Paxson: "Draft agenda for TCPIMPL WG meeting in LA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1014.html">Vern Paxson: "increasing TCP's initial window"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1015">[ date ]</A>
+<A HREF="index.html#1015">[ thread ]</A>
+<A HREF="subject.html#1015">[ subject ]</A>
+<A HREF="author.html#1015">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

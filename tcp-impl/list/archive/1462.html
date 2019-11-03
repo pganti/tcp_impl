@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: common blackholes, Re: I-D ACTIO</TITLE>
+<META NAME="Author" CONTENT="John Hanley (jh@yahoo-inc.com)">
+<META NAME="Subject" CONTENT="common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt</H1>
+<!-- received="Wed Jan 13 22:30:32 1999" -->
+<!-- isoreceived="19990114033032" -->
+<!-- sent="Wed, 13 Jan 1999 19:21:24 -0800" -->
+<!-- isosent="19990114032124" -->
+<!-- name="John Hanley" -->
+<!-- email="jh@yahoo-inc.com" -->
+<!-- subject="common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt" -->
+<!-- id="199901140321.TAA03404@borogove.yahoo.com" -->
+<!-- inreplyto="199901071511.KAA27844@ietf.org" -->
+<STRONG>From:</STRONG> John Hanley (<A HREF="mailto:jh@yahoo-inc.com?Subject=Re:%20common%20blackholes,%20Re:%20I-D%20ACTION:draft-ietf-tcpimpl-pmtud-00.txt&In-Reply-To=&lt;199901140321.TAA03404@borogove.yahoo.com&gt;"><EM>jh@yahoo-inc.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jan 13 1999 - 22:21:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1461.html">Nicolas Pauli: "RE: socket termination problem"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1460.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1462">[ date ]</A>
+<A HREF="index.html#1462">[ thread ]</A>
+<A HREF="subject.html#1462">[ subject ]</A>
+<A HREF="author.html#1462">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thanks for writing up these MTU issues.
+<BR>
+<P>FYI, there is a common form of blackhole which may be located very close
+<BR>
+to a TCP server (such as a web server).  It might be worth mentioning.
+<BR>
+<P>Various vendors have layer-4 &quot;load balancers&quot; which accept port 80 requests
+<BR>
+sent to a &quot;virtual IP&quot; and divvy up the work among multiple backend web
+<BR>
+servers.  Such a device will use a table or a socket identifier hash
+<BR>
+to map particular request packets to a particular server.  When such a
+<BR>
+device recieves an ICMP packet saying &quot;fragmentation required&quot;, it is
+<BR>
+essential that is use that *same* mapping to send the ICMP to the
+<BR>
+proper backend server.  (Flooding to all servers Would Be Bad :-(
+<BR>
+<P>Detection:
+<BR>
+<P>Suppose the backend server implementing PMTUD has at least two IP
+<BR>
+addresses besides the loopback address:  one address is subject to the
+<BR>
+layer-4 munging and one address gets plain old boring layer-3 service.
+<BR>
+Arrange for TCP traffic to be exchanged between a single client IP and both
+<BR>
+server IPs, and notice that only conversations which use the &quot;virtual IP&quot;
+<BR>
+suffer from blackholing.  The second IP (to avoid munging) is not needed
+<BR>
+with some configurations; just use a TCP port other than 80, or use a
+<BR>
+protocol other than TCP.
+<BR>
+<P><P><P>There is one more configuration issue which may be worth mentioning.
+<BR>
+Some people believe it is reasonable to use rfc1918 addresses (net 10)
+<BR>
+on point-to-point circuits within their cloud.  This causes traceroute
+<BR>
+misery if you get &quot;TTL exceeded&quot; ICMPs with source address of 10.0.0.1.
+<BR>
+Worse, if you get &quot;frag required&quot; ICMPs with source address of 10.0.0.1,
+<BR>
+and a topology-enforcing ACL on some router filters bogus/spoofed
+<BR>
+source addresses, then PMTUD sees a blackhole.
+<BR>
+<P><P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cheers,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JH
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1461.html">Nicolas Pauli: "RE: socket termination problem"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1460.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1463.html">Joe Touch: "Re: common blackholes, Re: I-D ACTION:draft-ietf-tcpimpl-pmtud-00.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1462">[ date ]</A>
+<A HREF="index.html#1462">[ thread ]</A>
+<A HREF="subject.html#1462">[ subject ]</A>
+<A HREF="author.html#1462">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

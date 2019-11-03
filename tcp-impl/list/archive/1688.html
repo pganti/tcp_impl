@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Question about caching ssthresh</TITLE>
+<META NAME="Author" CONTENT="Minghua.Lu@comsat.com (Minghua.Lu@comsat.com)">
+<META NAME="Subject" CONTENT="Question about caching ssthresh in routing table">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Question about caching ssthresh in routing table</H1>
+<!-- received="Tue Mar 23 09:26:28 1999" -->
+<!-- isoreceived="19990323142628" -->
+<!-- sent="Tue, 23 Mar 1999 09:12:01 -0500" -->
+<!-- isosent="19990323141201" -->
+<!-- name="Minghua.Lu@comsat.com" -->
+<!-- email="Minghua.Lu@comsat.com" -->
+<!-- subject="Question about caching ssthresh in routing table" -->
+<!-- id="000FD9E9.003332@comsat.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Minghua.Lu@comsat.com?Subject=Re:%20Question%20about%20caching%20ssthresh%20in%20routing%20table&In-Reply-To=&lt;000FD9E9.003332@comsat.com&gt;"><EM>Minghua.Lu@comsat.com</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Mar 23 1999 - 09:12:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1689.html">Minghua Lu: "ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1687.html">Vernon Schryver: "Re: alternative PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1688">[ date ]</A>
+<A HREF="index.html#1688">[ thread ]</A>
+<A HREF="subject.html#1688">[ subject ]</A>
+<A HREF="author.html#1688">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are running some HTTP applications on Solaris 2.6 platform. In some 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp connections, we noticed that the ssthresh was initialized to a 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;very low value (for example, 2 MSSs) for some reason, even though 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there were no packet losses in these connections. The slow start phase 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in these connections was very short, and the cwnd stays at low values 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because of the slow increasing in linear phase. This behavior leads to 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long delay and low throughput in the application.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is also noticed that if there are no more packet losses, the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ssthresh will stay at the same low value for all consequent TCP 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections. ssthresh will increase only if there is a packet loss. 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We assumed that the above problem was caused by caching the ssthresh 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the routing table. It seems that caching ssthresh might not always 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be desired.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I have two questions regarding the Solaris 2.6 implementation:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) ssthresh is saved in the routing table when a tcp connection is 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;closed. A condition for saving the ssthresh is that there must be at 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;least a certain amount of data transferred during the connection. BSD 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uses 16 times the high water mark of the send buffer. Solaris 2.6 does 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not seem to be using the same value. Does anybody know what the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition is for saving ssthresh in Solaris 2.6?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) I assumed that the ssthresh in the routing table will timeout 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventually if there are no more updates to it after some time. Does 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;anyone know what the timer is for this in Solaris 2.6?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Minghua
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1689.html">Minghua Lu: "ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1687.html">Vernon Schryver: "Re: alternative PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1690.html">Kacheong Poon: "Re: Question about caching ssthresh in routing table"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1688">[ date ]</A>
+<A HREF="index.html#1688">[ thread ]</A>
+<A HREF="subject.html#1688">[ subject ]</A>
+<A HREF="author.html#1688">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (VOLZ@PROCESS.COM)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Wed Feb 18 10:13:51 1998" -->
+<!-- isoreceived="19980218151351" -->
+<!-- sent="Wed, 18 Feb 1998 13:05 -0500" -->
+<!-- isosent="19980218180556" -->
+<!-- name="Bernie Volz" -->
+<!-- email="VOLZ@PROCESS.COM" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="009C1FF65526D2BD.2E27@PROCESS.COM" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;009C1FF65526D2BD.2E27@PROCESS.COM&gt;"><EM>VOLZ@PROCESS.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 13:05:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#956">[ date ]</A>
+<A HREF="index.html#956">[ thread ]</A>
+<A HREF="subject.html#956">[ subject ]</A>
+<A HREF="author.html#956">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Rick Jones wrote:
+<BR>
+<EM>&gt;Bernie Volz wrote:
+</EM><BR>
+<EM>&gt;&gt; I would rather see the &quot;receiving TCP&quot; open the window when it detects
+</EM><BR>
+<EM>&gt;&gt; this case and resetting the connection if any new data was received
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Opening the window has a semantic implication that does not apply if the
+</EM><BR>
+<EM>&gt;data is simply dumped.
+</EM><BR>
+<P>Agreed. But not opening the window isn't very productive.
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; The only other option that may make sense to discuss is whether the
+</EM><BR>
+<EM>&gt;&gt; &quot;receiving TCP&quot; just resets the connection when there is data on its
+</EM><BR>
+<EM>&gt;&gt; receive queue when the application &quot;closes&quot; the socket (in such a way
+</EM><BR>
+<EM>&gt;&gt; that it can no longer read that data). I don't a strong opinion on
+</EM><BR>
+<EM>&gt;&gt; whether this is better (we could argue that it isn't because most
+</EM><BR>
+<EM>&gt;&gt; implementations open the window and reset if more data is received).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I think that this approach would be better because it does not give the
+</EM><BR>
+<EM>&gt;mistaken impression that data has been given to the application.
+</EM><BR>
+<P>This does have that attraction - one end of the connection would be told
+<BR>
+that something is wrong because of the reset.
+<BR>
+<P><EM>&gt;I still wonder though if this is not really an application issue.
+</EM><BR>
+<P>It is a stack issue since the TCP stack does have to deal with this. If
+<BR>
+it doesn't handle this correctly, the connection can remain in the hung
+<BR>
+state forever - certainly, the sender application can start a timer and
+<BR>
+give up if that timer expires, but that is not robust since the receiver
+<BR>
+application may be blocked from processing for a &quot;long&quot; time and the
+<BR>
+sender can't tell the difference.
+<BR>
+<P>- Bernie Volz
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#956">[ date ]</A>
+<A HREF="index.html#956">[ thread ]</A>
+<A HREF="subject.html#956">[ subject ]</A>
+<A HREF="author.html#956">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

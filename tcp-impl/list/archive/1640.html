@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP and/or sockets vs. the last</TITLE>
+<META NAME="Author" CONTENT="spreitze@parc.xerox.com (spreitze@parc.xerox.com)">
+<META NAME="Subject" CONTENT="TCP and/or sockets vs. the last message in full-duplex applications">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP and/or sockets vs. the last message in full-duplex applications</H1>
+<!-- received="Mon Mar  1 14:53:12 1999" -->
+<!-- isoreceived="19990301195312" -->
+<!-- sent="Mon, 1 Mar 1999 11:45:19 PST" -->
+<!-- isosent="19990301194519" -->
+<!-- name="spreitze@parc.xerox.com" -->
+<!-- email="spreitze@parc.xerox.com" -->
+<!-- subject="TCP and/or sockets vs. the last message in full-duplex applications" -->
+<!-- id="99Mar1.114532pst."105927"@augustus.parc.xerox.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:spreitze@parc.xerox.com?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;"><EM>spreitze@parc.xerox.com</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Mar 01 1999 - 14:45:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1641.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1639.html">Mark Allman: "tcpimpl: list news (really, this time)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1646.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1650.html">Henrik Frystyk Nielsen: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1640">[ date ]</A>
+<A HREF="index.html#1640">[ thread ]</A>
+<A HREF="subject.html#1640">[ subject ]</A>
+<A HREF="author.html#1640">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The OMG seems to be in the process of adopting a messy fix to a bug in either TCP or the sockets interface.  I was wondering if you could give me a reality check as to whether it really is a bug, whether the bug is in TCP or certain APIs and their interfaces, what's the prognosis for getting it fixed, and whether the work-around outlined below is the appropriate one.  Apologies if this is not the right forum (and what is the right one?).
+<BR>
+<P>The issue below concerns the OMG's standard RPC protocol, GIOP, and its mapping to TCP, IIOP.  The problem occurs when a server initiates a connection closure at roughly the same time the client starts writing a new request message.  Clean shutdown messages, sent from server to client just before closure, were recently introduced to GIOP, but the bug seems to prevent them from being seen when the timing is close.  The proposed fix is to make the server: send the clean shutdown, close the sending half of the TCP connection, consume data until EOF or timeout, then close the receiving half.  This seems like an inappropriate amount of bother just to reliably send a message and close.
+<BR>
+<P>---------------- Forwarded  Message ----------------------
+<BR>
+<P>Date: Sun, 28 Feb 1999 14:49:41 PST
+<BR>
+From: Jonathan Biggar &lt;<A HREF="mailto:jon@floorboard.com?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">jon@floorboard.com</A>&gt;
+<BR>
+Subject: Re: Draft Final Proposal for CloseConnection Issue for Review
+<BR>
+To: Bill Janssen &lt;<A HREF="mailto:janssen@parc.xerox.com?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">janssen@parc.xerox.com</A>&gt;
+<BR>
+cc: <A HREF="mailto:terutt@lucent.COM?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">terutt@lucent.COM</A>, <A HREF="mailto:interop@omg.ORG?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">interop@omg.ORG</A>
+<BR>
+<P>Bill Janssen wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I notice a problem with another section of this.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;    * After reliably issuing a CloseConnection message, the issuing orb
+</EM><BR>
+<EM>&gt; &gt;      may close the  connection.  Some transport protocols (not
+</EM><BR>
+<EM>&gt; &gt;      including TCP) do not provide an ?orderly disconnect? capability,
+</EM><BR>
+<EM>&gt; &gt;      guaranteeing reliable delivery of the last message sent. When
+</EM><BR>
+<EM>&gt; &gt;      GIOP is used with such protocols, an additional handshake needs
+</EM><BR>
+<EM>&gt; &gt;      to be provided as part of  the mapping to that protocol's
+</EM><BR>
+<EM>&gt; &gt;      connection mechanisms,  to guarantee that both ends of the
+</EM><BR>
+<EM>&gt; &gt;      connection understand the disposition of any outstanding GIOP
+</EM><BR>
+<EM>&gt; &gt;      requests.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Actually, TCP does not seem to provide reliable delivery of the last
+</EM><BR>
+<EM>&gt; message sent.  Take the case where the server sends a CloseConnection,
+</EM><BR>
+<EM>&gt; then closes the TCP connection.  If the client is writing to the socket
+</EM><BR>
+<EM>&gt; during this, it will send data to a closed connection on the server.
+</EM><BR>
+<EM>&gt; The server will then respond with a TCP reset.  This reset ``jumps the
+</EM><BR>
+<EM>&gt; queue'', and instead of seeing the CloseConnection message on its next
+</EM><BR>
+<EM>&gt; read on the socket, the client will see an ECONNRESET error.  This means
+</EM><BR>
+<EM>&gt; that one side may still see connection failures while the other side
+</EM><BR>
+<EM>&gt; presumes to have sent an orderly shutdown.
+</EM><BR>
+<P>This is actually dependent on the TCP implementation.  Some throw away
+<BR>
+any data pending to read when the ECONNRESET occurs, others keep it.  It
+<BR>
+would be best to document this using the TCP standard rather than the
+<BR>
+sockets implementation of it anyway.  In the real TCP standard, each
+<BR>
+direction of the connection can be shutdown (i.e. send a FIN)
+<BR>
+independently.  In practice, for sockets, use the shutdown() call
+<BR>
+instead, with the argument 1, which means close the sending side only.
+<BR>
+<P>I would rewrite this paragraph like this:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;* After reliably issuing a CloseConnection message, the issuing orb
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may close the  connection.  Some transport protocols (not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;including TCP) do not provide an &quot;orderly disconnect&quot; capability,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guaranteeing reliable delivery of the last message sent. When
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GIOP is used with such protocols, an additional handshake needs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to be provided as part of  the mapping to that protocol's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection mechanisms,  to guarantee that both ends of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection understand the disposition of any outstanding GIOP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;requests.  For TCP, the orb should only shutdown the sending side
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of the connection, and then read and discard any incoming data
+<BR>
+until
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it receives an indication that the other side has also shutdown. 
+<BR>
+At this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point, the TCP connection can be closed completely.
+<BR>
+<P><PRE>
+-- 
+Jon Biggar
+Floorboard Software
+<A HREF="mailto:jon@floorboard.com?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">jon@floorboard.com</A>
+<A HREF="mailto:jon@biggar.org?Subject=Re:%20TCP%20and/or%20sockets%20vs.%20the%20last%20message%20in%20full-duplex%20applications&In-Reply-To=&lt;99Mar1.114532pst."105927"@augustus.parc.xerox.com&gt;">jon@biggar.org</A>
+<P><P><P>---------------- End of Forwarded Message ---------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1641.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1639.html">Mark Allman: "tcpimpl: list news (really, this time)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1645.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1646.html">Craig Partridge: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1650.html">Henrik Frystyk Nielsen: "Re: TCP and/or sockets vs. the last message in full-duplex applications"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1640">[ date ]</A>
+<A HREF="index.html#1640">[ thread ]</A>
+<A HREF="subject.html#1640">[ subject ]</A>
+<A HREF="author.html#1640">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

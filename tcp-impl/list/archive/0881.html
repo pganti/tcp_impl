@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: discrepancy in TIME_WAIT sta</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Fri Jan  9 14:10:57 1998" -->
+<!-- isoreceived="19980109191057" -->
+<!-- sent="Fri, 9 Jan 1998 21:55:22 GMT" -->
+<!-- isosent="19980109215522" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: discrepancy in TIME_WAIT state handling" -->
+<!-- id="199801092155.VAA02239@rum.isi.edu" -->
+<!-- inreplyto="discrepancy in TIME_WAIT state handling" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801092155.VAA02239@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jan 09 1998 - 16:55:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#881">[ date ]</A>
+<A HREF="index.html#881">[ thread ]</A>
+<A HREF="subject.html#881">[ subject ]</A>
+<A HREF="author.html#881">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Fri, 9 Jan 1998 10:14:56 -0800
+</EM><BR>
+<EM>&gt; From: David Mosberger &lt;<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801092155.VAA02239@rum.isi.edu&gt;">davidm@hpl.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Content-Transfer-Encoding: 7bit
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801092155.VAA02239@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: discrepancy in TIME_WAIT state handling
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+...
+<BR>
+&nbsp;
+<BR>
+<EM>&gt; Both the BSD and the NT behavior are fine as long as they're not
+</EM><BR>
+<EM>&gt; mixed.  However, when trying to talk from a BSD-derived box to an NT
+</EM><BR>
+<EM>&gt; box, serious performance problems may occur if the BSD box gets
+</EM><BR>
+<EM>&gt; unlucky and happens to reuse a port number within the TIME_WAIT period
+</EM><BR>
+<EM>&gt; of the NT box.  The tcpdump trace below illustrates the problem (the
+</EM><BR>
+<EM>&gt; output has been edited for easier reading; the original trace is
+</EM><BR>
+<EM>&gt; available by request):
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+...
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As the trace shows, a TCP connection exist between 42.55 seconds and
+</EM><BR>
+<EM>&gt; 42.56 seconds between ports 1025 and 80.  At the end of this
+</EM><BR>
+<EM>&gt; connection, the NT 4.0 box (nt40) is in TIME_WAIT state as the FINs in
+</EM><BR>
+<EM>&gt; both directions have been sent and acknowledged.  Then, at 42.57
+</EM><BR>
+<EM>&gt; seconds, the hpux box attempts to create a new connection with the old
+</EM><BR>
+<EM>&gt; port numbers (since BSD-derived TCP implementations consider this all
+</EM><BR>
+<EM>&gt; right).  nt40 responds to this SYN packet by re-sending the last ACK
+</EM><BR>
+<EM>&gt; for the first connection.  The hpux box in turn responds with a RESET
+</EM><BR>
+<EM>&gt; since it was expecting a SYN segment from the nt40 box.  This
+</EM><BR>
+<EM>&gt; SYN/ACK/RESET game repeats itself until the nt40 box moves the first
+</EM><BR>
+<EM>&gt; connection out of the TIME_WAIT state, at which point the connection
+</EM><BR>
+<EM>&gt; establishment proceeds normally.
+</EM><BR>
+<P>The NT is in TIME_WAIT.
+<BR>
+<P>The HP sends the SYN with old port numbers.
+<BR>
+<P>The NT responds with an ACK, and does nothing else.
+<BR>
+<P>The HP, receiving an ACK, sends a RST.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is the HP's responsibility not to reuse 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the port numbers for 2*MSL from this time
+<BR>
+<P>The NT receives the RST, goes to LISTEN and deletes the TCB, and returns.
+<BR>
+<P>At this point, the HP would be in error if it issued a new SYN with the old port numbers,
+<BR>
+if it did so before the 2*MSL timeout.
+<BR>
+<P>(If I didn't miss something)...
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801092155.VAA02239@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0882.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#881">[ date ]</A>
+<A HREF="index.html#881">[ thread ]</A>
+<A HREF="subject.html#881">[ subject ]</A>
+<A HREF="author.html#881">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Multiple TCP source addresse</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Multiple TCP source addresses?</H1>
+<!-- received="Fri Dec 15 13:15:53 2000" -->
+<!-- isoreceived="20001215181553" -->
+<!-- sent="Fri, 15 Dec 2000 13:03:22 -0500 (EST)" -->
+<!-- isosent="20001215180322" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Multiple TCP source addresses?" -->
+<!-- id="200012151803.NAA04141@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Multiple TCP source addresses?" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012151803.NAA04141@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 15 2000 - 13:03:22 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2415">[ date ]</A>
+<A HREF="index.html#2415">[ thread ]</A>
+<A HREF="subject.html#2415">[ subject ]</A>
+<A HREF="author.html#2415">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; So I'd like to do something so that outgoing connections for which
+</EM><BR>
+<EM>&gt;&gt; the application has not specified a source address don't always try
+</EM><BR>
+<EM>&gt;&gt; with one source address and give up if that doesn't work;
+</EM><BR>
+<EM>&gt;&gt; conceptually, I'd like to try from all local addresses.  I was
+</EM><BR>
+<EM>&gt;&gt; thinking of sending out multiple SYNs, [...]
+</EM><BR>
+<P><EM>&gt; The problem is what routing protocols were designed for.  When a
+</EM><BR>
+<EM>&gt; destination subnet is unreachable, packets will be routed to the
+</EM><BR>
+<EM>&gt; second provider (assuming that provider has a route to the
+</EM><BR>
+<EM>&gt; destination and back to you).
+</EM><BR>
+<P>I'm not sure what you mean; perhaps I didn't describe the problem in
+<BR>
+enough detail.
+<BR>
+<P>Let's give a concrete example.  My home mailserver,
+<BR>
+twig.rodents.montreal.qc.ca, is at 132.206.78.3 and 216.46.5.3.  The
+<BR>
+off-LAN gateway is stone, 132.206.78.33 and 216.46.5.9.  Twig's default
+<BR>
+route points to 216.46.5.9; if twig initiates a connection, it will
+<BR>
+come from 216.46.5.3.
+<BR>
+<P>Something went wrong recently with a router on the path from the
+<BR>
+outside world to 216.46.5.3 (packets can get out but can't get back in,
+<BR>
+though for these purposes it might as well have fallen over entirely).
+<BR>
+216.46.5.3 can reach anything on the near side of that router;
+<BR>
+132.206.78.3 can reach anything else - but neither address can reach
+<BR>
+any host the other one can.  (I've put a bug in the ear of the relevant
+<BR>
+techies; it may have been fixed by the time you read this for all I
+<BR>
+know.)  Incoming connections to 216.46.5.3 from beyond the dead router
+<BR>
+time out, but 132.206.78.3 works; for hosts on the near side of it, the
+<BR>
+converse is true.
+<BR>
+<P>How is a routing protocol supposed to deal with this?  Remember, my
+<BR>
+house LAN doesn't have its own AS.
+<BR>
+<P><EM>&gt; Varying the source address, to force packets onto the second
+</EM><BR>
+<EM>&gt; provider, is a solution.  But it doesn't scale
+</EM><BR>
+<P>In what sense does it not scale?  Doesn't scale to a larger house LAN?
+<BR>
+Doesn't scale to more than a few addresses per host?  Doesn't scale in
+<BR>
+that it would be a disaster if every multihomed host did it?  What?
+<BR>
+<P><EM>&gt; I may have missed something in your solution, but I think you mean
+</EM><BR>
+<EM>&gt; you'd only try one source address from the second subnet.
+</EM><BR>
+<P>Yes.  (Actually, I would probably have the code try once per address
+<BR>
+the machine has, which in my case has the same effect.)
+<BR>
+<P><EM>&gt; Sending multiple SYNs from multiple addresses on the same subnet
+</EM><BR>
+<EM>&gt; won't help.
+</EM><BR>
+<P>I'm not convinced; I've seen cases where one host is reachable and the
+<BR>
+host next to it isn't.  (Not often, mind you.)
+<BR>
+<P><EM>&gt; I'd like to know why the block of addresses goes unreachable before
+</EM><BR>
+<EM>&gt; proposing a solution.  Try some traceroutes from each subnet when
+</EM><BR>
+<EM>&gt; this happens.  It could be network congestion, route flaps, crashes,
+</EM><BR>
+<EM>&gt; etc. I've had providers mysteriously lose routes back to me at times.
+</EM><BR>
+<P>Oh, I know what happened, in a functional sense: a router went wonky,
+<BR>
+incorrectly returning host unreachables for inbound (ie, to my house
+<BR>
+LAN) packets.  Perhaps it just lost a route; perhaps it broke more
+<BR>
+seriously - I don't know details.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;200012151803.NAA04141@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2414.html">Ruth Fax: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2416.html">Richard Draves: "RE: Multiple TCP source addresses?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2415">[ date ]</A>
+<A HREF="index.html#2415">[ thread ]</A>
+<A HREF="subject.html#2415">[ subject ]</A>
+<A HREF="author.html#2415">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Dec 15 2000 - 13:16:21 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

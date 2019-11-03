@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 10:52:02 1998" -->
+<!-- isoreceived="19980112155202" -->
+<!-- sent="Mon, 12 Jan 1998 10:41:28 -0800" -->
+<!-- isosent="19980112184128" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="34BA63D8.83025CEB@cup.hp.com" -->
+<!-- inreplyto="199801121649.KAA12791@cs.rice.edu" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA63D8.83025CEB@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 13:41:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0907.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0899.html">Mohit Aron: "Re: delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0900.html">Mark Allman: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#908">[ date ]</A>
+<A HREF="index.html#908">[ thread ]</A>
+<A HREF="subject.html#908">[ subject ]</A>
+<A HREF="author.html#908">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mohit Aron wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; I can see no real evidence they do suffer. Furthermore any ack is implicitly
+</EM><BR>
+<EM>&gt; &gt; a delayed ack viewed on anything but a local lan level because its been
+</EM><BR>
+<EM>&gt; &gt; jittered by routers, rerouted via australia and all the other things that
+</EM><BR>
+<EM>&gt; &gt; happen to packets.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Do all packets happen to get rerouted via Australia ? There's a lot of work
+</EM><BR>
+<P>No, but TCP must assume it could happen. I prefer to route my packets
+<BR>
+through Pluto myself... :)
+<BR>
+<P><EM>&gt; that demonstrates the slowness of slow-start for web traffic. Delayed ACKs
+</EM><BR>
+<EM>&gt; further slow down slow-start. What other real evidence would you ask for ?
+</EM><BR>
+<P>I thought that the discussions on IW=2 (or should that be IW&gt;1?) were
+<BR>
+addressing that issue with delayed ACKs?
+<BR>
+<P>That being the case, most of the rest of the time, the problems I have
+<BR>
+seen with applications (such as web servers) has been that they are not
+<BR>
+making &quot;apropriate&quot; calls to send their data - for instance, sending the
+<BR>
+http headers and the http data in separate calls to send() instead of
+<BR>
+one call to writev() or something. 
+<BR>
+<P>Put another way, all &quot;logically associated&quot; (I am sure there is a better
+<BR>
+term) data should be presented to the transport at the same time.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Secondly your argument makes the oft repeated flawed assumption that
+</EM><BR>
+<EM>&gt; &gt; &quot;traffic by volume&quot; equates to &quot;importance and usage by user base&quot;.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; For one thing I also said that the telnet traffic doesn't form a significant
+</EM><BR>
+<EM>&gt; percentage of the number of TCP connections - so my argument doesn't consider
+</EM><BR>
+<EM>&gt; volume only. Secondly, your argument in favour of delayed ACKs holds for
+</EM><BR>
+<EM>&gt; 'telnet traffic over low speed radio links'. What percentage of the telnet
+</EM><BR>
+<EM>&gt; traffic on the Internet goes over low speed radio links ?
+</EM><BR>
+<P>Another consideration is that the delta in processing time between a
+<BR>
+data packet and an ACK is not necessarily that large. If one were to
+<BR>
+stop delaying ACK's it would certainly increase the CPU overhead on the
+<BR>
+end systems. I do not know what the delta is for the &quot;network&quot; but
+<BR>
+always figure that if a router queue is mesured in packets, one packet
+<BR>
+occupies a slot in that queue just as well as another.
+<BR>
+<P>rick jones
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0907.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0899.html">Mohit Aron: "Re: delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0900.html">Mark Allman: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#908">[ date ]</A>
+<A HREF="index.html#908">[ thread ]</A>
+<A HREF="subject.html#908">[ subject ]</A>
+<A HREF="author.html#908">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

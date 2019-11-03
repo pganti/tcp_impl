@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Tue Aug  1 23:59:15 2000" -->
+<!-- isoreceived="20000802035915" -->
+<!-- sent="Tue, 01 Aug 2000 20:51:44 -0700" -->
+<!-- isosent="20000802035144" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="39879AD0.37642554@cup.hp.com" -->
+<!-- inreplyto="3.0.5.32.20000801190155.03ef77b0@scamp.eng.ascend.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;39879AD0.37642554@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 01 2000 - 23:51:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2315.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2241">[ date ]</A>
+<A HREF="index.html#2241">[ thread ]</A>
+<A HREF="subject.html#2241">[ subject ]</A>
+<A HREF="author.html#2241">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Ignacio Goyret wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; At 06:54 PM 8/1/00 -0400, Bernie Volz wrote:
+</EM><BR>
+<EM>&gt; &gt;Some that I could think of are:
+</EM><BR>
+<EM>&gt; &gt;- No listener (for a SYN segment)
+</EM><BR>
+<EM>&gt; &gt;- Unknown connection
+</EM><BR>
+<EM>&gt; &gt;- Receiver discard connection (data received on a connection with no higher
+</EM><BR>
+<EM>&gt; &gt;level receiver available)
+</EM><BR>
+<EM>&gt; &gt;- Application abort (application requested RST on connection instead of
+</EM><BR>
+<EM>&gt; &gt;closing it)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'm sure that your reasons are well-meant and quite honest, but I have to
+</EM><BR>
+<EM>&gt; wonder out loud if these codes won't be of great help to a hacker.
+</EM><BR>
+<P>Well heck, the very existence of the Internet is the greatest help a
+<BR>
+cracker has ever received. :)
+<BR>
+<P><EM>&gt; For example, if I just get an RST and no code, it is harder for me to guess
+</EM><BR>
+<EM>&gt; the reason than if I get an RST with &quot;application abort&quot;. In the latter case,
+</EM><BR>
+<EM>&gt; it might be easier to mount a DoS based on the knowledge obtained through
+</EM><BR>
+<EM>&gt; those messages. For example, in the previous example, I can guess that an
+</EM><BR>
+<EM>&gt; application was run and that it probably consumed some resources, so if
+</EM><BR>
+<EM>&gt; I can trigger this type of RST, I might be able to consume all the resources
+</EM><BR>
+<EM>&gt; on that server and either make it crash or make it run very slowly.
+</EM><BR>
+<P>I would think that in this example, you can already guess that an
+<BR>
+application was run and/or resources were consumed when your connection
+<BR>
+was accepted in the first place.
+<BR>
+<P>Perhaps there are other texts from other situations that _might_ yield
+<BR>
+script-kiddie-useful info beyond the sending of the RST itself, but I
+<BR>
+cannot think of one myself at the moment.
+<BR>
+<P><EM>&gt; I also hope that all those vendors mentioned have knobs to enable these codes
+</EM><BR>
+<EM>&gt; only when desired (they should default to disabled).
+</EM><BR>
+<P>ndd -set /dev/tcp tcp_text_in_resets 0 for HP-UX 11. The default
+<BR>
+however, is 1.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2315.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2241">[ date ]</A>
+<A HREF="index.html#2241">[ thread ]</A>
+<A HREF="subject.html#2241">[ subject ]</A>
+<A HREF="author.html#2241">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

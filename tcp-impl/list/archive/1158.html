@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Sniffer format specs availab</TITLE>
+<META NAME="Author" CONTENT="Shreyas Sarangan (sarangan@eng.usf.edu)">
+<META NAME="Subject" CONTENT="Re: Sniffer format specs available?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Sniffer format specs available?</H1>
+<!-- received="Thu Jul  9 14:11:14 1998" -->
+<!-- isoreceived="19980709181114" -->
+<!-- sent="Thu, 9 Jul 1998 17:08:18 -0400 (EDT)" -->
+<!-- isosent="19980709210818" -->
+<!-- name="Shreyas Sarangan" -->
+<!-- email="sarangan@eng.usf.edu" -->
+<!-- subject="Re: Sniffer format specs available?" -->
+<!-- id="Pine.SUN.3.96.980709170233.26891A-100000@collins" -->
+<!-- inreplyto="v03007804b1cadaad5772@[132.197.106.39]" -->
+<STRONG>From:</STRONG> Shreyas Sarangan (<A HREF="mailto:sarangan@eng.usf.edu?Subject=Re:%20Sniffer%20format%20specs%20available?&In-Reply-To=&lt;Pine.SUN.3.96.980709170233.26891A-100000@collins&gt;"><EM>sarangan@eng.usf.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 09 1998 - 17:08:18 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1158">[ date ]</A>
+<A HREF="index.html#1158">[ thread ]</A>
+<A HREF="subject.html#1158">[ subject ]</A>
+<A HREF="author.html#1158">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hope this helps....
+<BR>
+<P>///////////////////////////////
+<BR>
+Sniffer Trace Header
+<BR>
+//////////////////////////////
+<BR>
+/*
+<BR>
+&nbsp;* sniffer_trace.h
+<BR>
+&nbsp;*
+<BR>
+&nbsp;*   This file contains the format of Sniffer trace files.  Information on
+<BR>
+&nbsp;* the data files is available from the Sniffer Network Analyzer
+<BR>
+Operations
+<BR>
+&nbsp;* Manual, Chapter 7.
+<BR>
+&nbsp;*
+<BR>
+&nbsp;*   The first 16 bytes contain a text message and end-of-file character
+<BR>
+&nbsp;* (0x1A).  Each trace file contains an arbitrary number of
+<BR>
+variable-length
+<BR>
+&nbsp;* records.  The three principle types are:
+<BR>
+&nbsp;*
+<BR>
+&nbsp;* - Version record
+<BR>
+&nbsp;* - Frame record
+<BR>
+&nbsp;* - End-of-file record (Consists of no data, only header)
+<BR>
+&nbsp;*
+<BR>
+&nbsp;* Note: All multibyte fields (Sniffer calculated) are stored in least
+<BR>
+&nbsp;*       significant byte first.  Frame data stored in transmitted order.
+<BR>
+&nbsp;*
+<BR>
+&nbsp;* Note: 2 byte (16-bit) integers.
+<BR>
+*/
+<BR>
+<P>#define DEBUG    1              /* Turn on debugging.          */
+<BR>
+<P>#define INT      unsigned short /* Shoot for portable analysis */
+<BR>
+#define CHAR     unsigned char
+<BR>
+<P>#define LIBI(X)	(X &gt;&gt; 8) | (X &lt;&lt; 8)
+<BR>
+<P>#define MAXDATA	2048              /* Maximum data size */
+<BR>
+<P><P>/* Record types */
+<BR>
+<P>#define REC_VERS  1               /* Version record */
+<BR>
+#define REC_FRAME 4               /* Frame data     */
+<BR>
+#define REC_EOF   3               /* End-of-file    */
+<BR>
+<P><P>/* Standard Record Header */
+<BR>
+<P>typedef struct {
+<BR>
+&nbsp;&nbsp;INT type;                       /* Type of record                */
+<BR>
+&nbsp;&nbsp;INT length;                     /* Length of remainder of record */
+<BR>
+&nbsp;&nbsp;INT rsvd;                       /* Reserved word, currently 0    */
+<BR>
+} Header_Record;
+<BR>
+<P><P>/* ==== Version Record ==== */
+<BR>
+<P>/*
+<BR>
+&nbsp;* Network types:
+<BR>
+&nbsp;*/
+<BR>
+<P>#define N_TOKEN_RING 0            /* Token Ring           */
+<BR>
+#define N_ETHERNET   1            /* Ethernet             */
+<BR>
+#define N_ARCNET     2            /* ARCNET               */
+<BR>
+#define N_STARLAN    3            /* StarLAN              */
+<BR>
+#define N_PC_NETWORK 4            /* PC broadband network */
+<BR>
+#define N_LOCALTALK  5            /* Localtalk            */
+<BR>
+#define N_ZNET       6            /* Znet                 */   
+<BR>
+#define N_SYNCHRO    7            /* WAN/Synchronous      */
+<BR>
+<P>/*
+<BR>
+&nbsp;*  Timeunit values:
+<BR>
+&nbsp;*/
+<BR>
+<P>#define T_UNSPEC 0                /* Unspecified, default by network */
+<BR>
+#define T_PC     1                /* 0.838096 microsecond unit       */
+<BR>
+#define T_3COM   2                /* 15.00000 mircosecond unit       */
+<BR>
+#define T_MICOM  3                /* 0.500000 microsecond unit       */
+<BR>
+#define T_SYTEK  4                /* 2.000000 microsecond unit       */
+<BR>
+<P>float netunits[4] = { 0.838096, 15.00000, 0.500000, 2.000000 };
+<BR>
+<P>/*
+<BR>
+&nbsp;* Date record used on Sniffer:
+<BR>
+&nbsp;*/
+<BR>
+<P>typedef struct {
+<BR>
+&nbsp;&nbsp;&nbsp;INT value[2];                  /* Place holder */
+<BR>
+} DATE;
+<BR>
+<P>/*
+<BR>
+&nbsp;* Format of version record:
+<BR>
+&nbsp;*/
+<BR>
+<P>typedef struct {
+<BR>
+&nbsp;&nbsp;INT  maj_vers;                  /* Major version of analyzer */
+<BR>
+&nbsp;&nbsp;INT  min_vers;                  /* Minor version             */
+<BR>
+&nbsp;&nbsp;DATE date;                      /* DOS date &amp; time (4 bytes) */
+<BR>
+&nbsp;&nbsp;CHAR type;                      /* Type of records follow    */
+<BR>
+&nbsp;&nbsp;CHAR network;                   /* Network type              */
+<BR>
+&nbsp;&nbsp;CHAR format;                    /* Format version            */
+<BR>
+&nbsp;&nbsp;CHAR timeunit;                  /* Frame timestamp unit      */
+<BR>
+&nbsp;&nbsp;INT  rsvd[3];                   /* Reserved words            */
+<BR>
+} Version_Record;
+<BR>
+<P><P>/* ==== Frame Data Record ==== */
+<BR>
+<P>typedef struct {
+<BR>
+&nbsp;&nbsp;INT      time_low;              /* Low time in units           */
+<BR>
+&nbsp;&nbsp;INT      time_mid;              /* Mid time in units           */
+<BR>
+&nbsp;&nbsp;CHAR     time_high;             /* High time in units          */
+<BR>
+&nbsp;&nbsp;CHAR     time_day;              /* Time since start of capture */
+<BR>
+&nbsp;&nbsp;INT      size;                  /* Number of bytes written     */
+<BR>
+&nbsp;&nbsp;CHAR     frame_status;          /* Frame error status bits     */
+<BR>
+&nbsp;&nbsp;CHAR     flags;                 /* Internal use                */
+<BR>
+&nbsp;&nbsp;INT      true_size;             /* Size of original frame != 0 */
+<BR>
+&nbsp;&nbsp;INT      rsvd;                  /* Reserved                    */
+<BR>
+} Frame_Record;
+<BR>
+<P><P>/* ==== Data Record ==== */
+<BR>
+<P>typedef struct {
+<BR>
+&nbsp;&nbsp;CHAR data[MAXDATA];             /* Rest of frame data         */
+<BR>
+&nbsp;&nbsp;INT  length;
+<BR>
+} Data_Record;
+<BR>
+<P>/*
+<BR>
+&nbsp;* Prototypes for support routines:
+<BR>
+&nbsp;*/
+<BR>
+<P>FILE *open_trace(char *);
+<BR>
+void close_trace(FILE *);
+<BR>
+void read_header();
+<BR>
+void read_frame();
+<BR>
+void read_version();
+<BR>
+void read_data();
+<BR>
+void skip();
+<BR>
+<P>------------------------------------------------------------------------
+<BR>
+<P>-Shreyas
+<BR>
+<P>Shreyas Sarangan
+<BR>
+Electrical Engineering,
+<BR>
+University of South Florida,
+<BR>
+Tampa, FL.
+<BR>
+_________________________________________________________
+<BR>
+<P>On Thu, 9 Jul 1998, Peter Warren wrote:
+<BR>
+<P><EM>&gt; Date: Thu, 9 Jul 1998 16:45:49 -0400
+</EM><BR>
+<EM>&gt; From: Peter Warren &lt;<A HREF="mailto:pwarren@gte.com?Subject=Re:%20Sniffer%20format%20specs%20available?&In-Reply-To=&lt;Pine.SUN.3.96.980709170233.26891A-100000@collins&gt;">pwarren@gte.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20Sniffer%20format%20specs%20available?&In-Reply-To=&lt;Pine.SUN.3.96.980709170233.26891A-100000@collins&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Sniffer format specs available?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We're trying to write a decoder for Sniffer format trace files. Can anyone
+</EM><BR>
+<EM>&gt; tell me if the Sniffer file format (or perhaps some Sniffer decoder source
+</EM><BR>
+<EM>&gt; code) is publicly available? Thanks.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; = Peter
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Peter G. Warren
+</EM><BR>
+<EM>&gt; Performance Analysis Group
+</EM><BR>
+<EM>&gt; Advanced Systems Laboratory
+</EM><BR>
+<EM>&gt; GTE Laboratories
+</EM><BR>
+<EM>&gt; 40 Sylvan Rd., Waltham, MA 02254
+</EM><BR>
+<EM>&gt; (617) 466-4142
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1158">[ date ]</A>
+<A HREF="index.html#1158">[ thread ]</A>
+<A HREF="subject.html#1158">[ subject ]</A>
+<A HREF="author.html#1158">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

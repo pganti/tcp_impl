@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Port reuse related ...</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RSHANKAR@novell.com)">
+<META NAME="Subject" CONTENT="Re: TCP Port reuse related ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Port reuse related ...</H1>
+<!-- received="Thu, 27 Jan 2000 15:37:28 -0700" -->
+<!-- isoreceived="20000127223728" -->
+<!-- sent="Thu, 27 Jan 2000 15:37:28 -0700" -->
+<!-- isosent="20000127223728" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RSHANKAR@novell.com" -->
+<!-- subject="Re: TCP Port reuse related ..." -->
+<!-- id="s8906643.000@prv-mail20.provo.novell.com" -->
+<!-- inreplyto="TCP Port reuse related ..." -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s8906643.000@prv-mail20.provo.novell.com&gt;"><EM>RSHANKAR@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jan 27 2000 - 17:37:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1951.html">Ramesh Shankar: "TCP Port reuse related ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1953">[ date ]</A>
+<A HREF="index.html#1953">[ thread ]</A>
+<A HREF="subject.html#1953">[ subject ]</A>
+<A HREF="author.html#1953">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Well, if one is talking about well known ports, (0 - 1024), then you have the standard protection that comes with it: only super user can bind to such ports.
+<BR>
+<P>In *any case*,  if I had done this:
+<BR>
+<P>socket1: bind(*, port #) (SO_REUSEADDR)
+<BR>
+socket2: bind(*, port #) (SO_REUSEADDR)
+<BR>
+listen(socket1)
+<BR>
+<P>Then the sequence would have succeeded. Nothing prevents this from happening. Also, the standard behaviour is to allow the reuse of ports as long as SO_REUSEADDR has been used (i.e. it works this way in BSD, Winsock). With the UNIX variants, every one using a port has to use SO_REUSEADDR. Hence, if the first server that started off didn't use SO_REUSEADDR, this port stealing can't happen anyway. (With Winsock, only the later bind()ers have to specify SO_REUSEADDR, the first one doesn't have to).
+<BR>
+<P>There was only one explanation that I could think of on why the Linux folks decided to do this way:
+<BR>
+<P>If someone tries to reuse a tuple in the SYN received state for a connect(), then the connect should fail. This is ensured automatically in the way FreeBSD/NetBSD handles inpcbs. Linux has open_request structures for embryonic connections in the listening socket's queue and these consist of SYN received state connections. These are NOT checked for invalid tuple usage when a connect() is made. Also, with SYN cookies, we won't even have these open_request structures and hence there is no real way to identify whether the tuple being used by a connect is valid or not.  Hence, the only way to disallow the connect is to prevent the second bind() from using the same port (except in the case metioned) when the first socket is doing a listen().
+<BR>
+<P>About clarification of FTP related comments in the code:
+<BR>
+<P>I am not sure what case is being optimised here. Obviously there are two important cases - one is bind() time determination whether a port can be used or not - this is based on SO_REUSEADDR and the second one is at connect() time to decide whether a particular tuple can be used in the connect(). 
+<BR>
+<P>In the first case, the tcp_bhash is consulted and in the second case, tcp_ehash (both non-TIME_WAIT part and TIME_WAIT part) are consulted. (Actually the tcp_listening_hash is also consulted without any use!)
+<BR>
+<P>What I don't get it is the comments about O(1) allocation for FTP servers etc. The implementation there seems to be related to standard SO_REUSEADDR case and I don't understand how an FTP server fits into this picture. (I even tried to check whether the Linux FTP server gives the same passive port # to multiple FTP clients, it doesn't seem to).
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P><P><EM>&gt;&gt;&gt; Kacheong Poon &lt;<A HREF="mailto:Kacheong.Poon@eng.sun.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s8906643.000@prv-mail20.provo.novell.com&gt;">Kacheong.Poon@eng.sun.com</A>&gt; 01/27/00 03:03PM &gt;&gt;&gt;
+</EM><BR>
+<EM>&gt; socket1: bind(*, port #)
+</EM><BR>
+<EM>&gt; listen(socket1)
+</EM><BR>
+<EM>&gt; socket2: bind(IP1, port #)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; For a multihomed host, socket2 (if put on listen()), would field all packets
+</EM><BR>
+<EM>&gt; destined for IP1, while socket1 will field the others.
+</EM><BR>
+<P>Suppose this is allowed and assume that socket1 belongs to a server app.  
+<BR>
+Then socket2, which belongs to a malicious app, can steal all service
+<BR>
+requests originated from IP1.  Further assume that the malicious app does
+<BR>
+the above for all &quot;known&quot; IP addresses in that network, then it basically
+<BR>
+hijacks all service requests from the server app.  The bad thing is the
+<BR>
+server app does not even know about this...
+<BR>
+<P><EM>&gt; If anyone can explain me what the comments in the file include/net/tcp.h
+</EM><BR>
+<EM>&gt; near the definition of the structure tcp_bind_bucket really mean, it would
+</EM><BR>
+<EM>&gt; be greatly appreciated!
+</EM><BR>
+<P>It is a nice optimization.  What is not clear in that?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20TCP%20Port%20reuse%20related%20...&In-Reply-To=&lt;s8906643.000@prv-mail20.provo.novell.com&gt;">kcpoon@eng.sun.com</A> 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1952.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1951.html">Ramesh Shankar: "TCP Port reuse related ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1954.html">Kacheong Poon: "Re: TCP Port reuse related ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1953">[ date ]</A>
+<A HREF="index.html#1953">[ thread ]</A>
+<A HREF="subject.html#1953">[ subject ]</A>
+<A HREF="author.html#1953">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

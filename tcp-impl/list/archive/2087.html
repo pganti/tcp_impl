@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Slow start question ...</TITLE>
+<META NAME="Author" CONTENT="Jan Koum (jkb@ethereal.net)">
+<META NAME="Subject" CONTENT="Re: Slow start question ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Slow start question ...</H1>
+<!-- received="Tue May 23 01:07:36 2000" -->
+<!-- isoreceived="20000523050736" -->
+<!-- sent="Mon, 22 May 2000 21:59:18 -0700" -->
+<!-- isosent="20000523045918" -->
+<!-- name="Jan Koum" -->
+<!-- email="jkb@ethereal.net" -->
+<!-- subject="Re: Slow start question ..." -->
+<!-- id="20000522215918.D39617@ethereal.net" -->
+<!-- inreplyto="yu8xya52bj61.fsf@sabre.sjf.novell.com" -->
+<STRONG>From:</STRONG> Jan Koum (<A HREF="mailto:jkb@ethereal.net?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000522215918.D39617@ethereal.net&gt;"><EM>jkb@ethereal.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue May 23 2000 - 00:59:18 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2088.html">Andi Kleen: "Re: Any successor to the sockets APIs ???"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2086.html">Ramesh Shankar: "What is so special about 2*MSL?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2083.html">Jamshid Mahdavi: "Re: Slow start question ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2087">[ date ]</A>
+<A HREF="index.html#2087">[ thread ]</A>
+<A HREF="subject.html#2087">[ subject ]</A>
+<A HREF="author.html#2087">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+looking at freebsd, it seem that slowstart *is* disabled for local
+<BR>
+network:
+<BR>
+<P>$ sysctl -a|grep slowstart
+<BR>
+net.inet.tcp.slowstart_flightsize: 1
+<BR>
+net.inet.tcp.local_slowstart_flightsize: 65535
+<BR>
+<P>this is probably correct for 95% of the time, since having bridged
+<BR>
+wireless and atm are not very common. but you are right, to be 100%
+<BR>
+correct, freebsd should probably also have local slowstart enabled.
+<BR>
+<P>-- yan
+<BR>
+<P>On Mon, May 22, 2000 at 10:15:34AM -0700, Jamshid Mahdavi &lt;<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000522215918.D39617@ethereal.net&gt;">mahdavi@novell.com</A>&gt; wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There is also no way of knowing what the layer 2 topology is.  For
+</EM><BR>
+<EM>&gt; example, you could be sending out of a 100 Mb/s interface, but the
+</EM><BR>
+<EM>&gt; receiver might only be on a 10 Mb/s interface.  These days, pretty
+</EM><BR>
+<EM>&gt; much anything can be bridged together; wireless, DSL, ATM, and more
+</EM><BR>
+<EM>&gt; could all be quietly masquerading as part of your &quot;local ethernet&quot;.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Since there can be congestion on any of these transitions, it is still
+</EM><BR>
+<EM>&gt; necessary to do slowstart and congestion avoidance to hosts on the
+</EM><BR>
+<EM>&gt; local network.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; --J
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &quot;Ramesh Shankar&quot; &lt;<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20Slow%20start%20question%20...&In-Reply-To=&lt;20000522215918.D39617@ethereal.net&gt;">RSHANKAR@novell.com</A>&gt; writes:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; If the peer to which a TCP connection has been established is on a
+</EM><BR>
+<EM>&gt; &gt; &quot;direct connected&quot; network (i.e. the route doesn't point to a
+</EM><BR>
+<EM>&gt; &gt; gateway), why exactly is slow start required? Linux and NetBSD seem
+</EM><BR>
+<EM>&gt; &gt; to do slow start for this case while FreeBSD doesn't seem to (I
+</EM><BR>
+<EM>&gt; &gt; haven't picked through the source to verify this though). Since slow
+</EM><BR>
+<EM>&gt; &gt; start is meant to &quot;probe the available network bandwidth&quot; of a route
+</EM><BR>
+<EM>&gt; &gt; (involving routers), it seems to me that I really shouldn't have to
+</EM><BR>
+<EM>&gt; &gt; use slow start for the case mentioned above.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; One of the e-mails in this list mentioned a case where the outbound
+</EM><BR>
+<EM>&gt; &gt; interface queue was overwhelmed by a burst of packets when slow
+</EM><BR>
+<EM>&gt; &gt; start was not used. Slow start seems to be a wrong way to solve this
+</EM><BR>
+<EM>&gt; &gt; problem. This problem could happen even when too many connections
+</EM><BR>
+<EM>&gt; &gt; are opened, and hence is a fundamental inter-layer flow control
+</EM><BR>
+<EM>&gt; &gt; problem.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Any insight would be greatly appreciated.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; Thanks,
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; S.R.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2088.html">Andi Kleen: "Re: Any successor to the sockets APIs ???"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2086.html">Ramesh Shankar: "What is so special about 2*MSL?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2083.html">Jamshid Mahdavi: "Re: Slow start question ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2092.html">Michele Clark: "Re: Slow start question ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2087">[ date ]</A>
+<A HREF="index.html#2087">[ thread ]</A>
+<A HREF="subject.html#2087">[ subject ]</A>
+<A HREF="author.html#2087">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

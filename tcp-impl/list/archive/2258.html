@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Doubletree RST 'BOF' meeting</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (Volz@ipworks.com)">
+<META NAME="Subject" CONTENT="RE: Doubletree RST 'BOF' meeting notes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Doubletree RST 'BOF' meeting notes</H1>
+<!-- received="Thu Aug  3 11:11:33 2000" -->
+<!-- isoreceived="20000803151133" -->
+<!-- sent="Thu, 3 Aug 2000 10:03:49 -0400 " -->
+<!-- isosent="20000803140349" -->
+<!-- name="Bernie Volz" -->
+<!-- email="Volz@ipworks.com" -->
+<!-- subject="RE: Doubletree RST 'BOF' meeting notes" -->
+<!-- id="63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com" -->
+<!-- inreplyto="Doubletree RST 'BOF' meeting notes" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:Volz@ipworks.com?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;"><EM>Volz@ipworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 03 2000 - 10:03:49 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2259.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2257.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2260.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2260.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2258">[ date ]</A>
+<A HREF="index.html#2258">[ thread ]</A>
+<A HREF="subject.html#2258">[ subject ]</A>
+<A HREF="author.html#2258">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I was one of the people that suggested that.
+<BR>
+<P>However, I believe that the plan might be as follows:
+<BR>
+1) The to be created &quot;TCP Instrumentation&quot; option will be used to carry a
+<BR>
+RST error code. This would likely be a 8 or 16 bit value (256 codes is
+<BR>
+probably more than enough). This code is meant to be available to an
+<BR>
+application such that it can issue an appropriate error message or otherwise
+<BR>
+react better to the cause of the RST if it wants to.
+<BR>
+2) A stack would be free to include any error text it wanted (or other data)
+<BR>
+in the TCP data portion of the RST packet. However, as this will not be
+<BR>
+standardized, it is also possible that &quot;junk&quot; is there (for example,
+<BR>
+application data). The intent of this data would be for debugging purposes
+<BR>
+when doing packet traces and not something available to the TCP stack or
+<BR>
+application. It would also not be standardized. (Implementators might also
+<BR>
+be warned about making sure that the message fits within the maximum segment
+<BR>
+size being used by the connection and perhaps not setting the Don't Fragment
+<BR>
+bit in the IP header.)
+<BR>
+<P>- Bernie
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Craig Partridge [mailto:<A HREF="mailto:craig@aland.bbn.com?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;">craig@aland.bbn.com</A>]
+<BR>
+Sent: Thursday, August 03, 2000 9:21 AM
+<BR>
+To: <A HREF="mailto:ian@spider.com?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;">ian@spider.com</A>
+<BR>
+Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;">tcp-impl@grc.nasa.gov</A>; <A HREF="mailto:mankin@east.isi.edu?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;">mankin@east.isi.edu</A>; <A HREF="mailto:tgl@sss.pgh.pa.us?Subject=RE:%20Doubletree%20RST%20'BOF'%20meeting%20notes&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFCC@lespaul.process.com&gt;">tgl@sss.pgh.pa.us</A>
+<BR>
+Subject: Re: Doubletree RST 'BOF' meeting notes
+<BR>
+<P><P><P><EM>&gt;I don't know if anyone wants to follow up the instrumentation option
+</EM><BR>
+issue??
+<BR>
+<EM>&gt;HP/Mentat/Spider/(Sun?) will complete and submit my RST error codes draft. 
+</EM><BR>
+<P>Some of the email suggested the error codes should follow the SMTP/FTP
+<BR>
+convention (3 digit numbers where the different digits indicate the
+<BR>
+severity of error).  I thought that was a nice idea.  Is that still the
+<BR>
+plan?
+<BR>
+<P>Thanks!
+<BR>
+<P>Craig
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2259.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2257.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting note"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2251.html">IETF user: "Doubletree RST 'BOF' meeting notes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2260.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2260.html">Ian Heavens: "Re: Doubletree RST 'BOF' meeting notes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2258">[ date ]</A>
+<A HREF="index.html#2258">[ thread ]</A>
+<A HREF="subject.html#2258">[ subject ]</A>
+<A HREF="author.html#2258">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

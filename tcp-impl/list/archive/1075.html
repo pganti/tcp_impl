@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 08:46:26 1998" -->
+<!-- isoreceived="19980423124626" -->
+<!-- sent="Thu, 23 Apr 1998 11:40:24 -0400" -->
+<!-- isosent="19980423154024" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804231540.LAA15325@guns.lerc.nasa.gov" -->
+<!-- inreplyto="Last Call for draft-floyd-incr-init-win-02.txt" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804231540.LAA15325@guns.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 11:40:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1074.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1077.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1080.html">Adam Caldwell: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1086.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1075">[ date ]</A>
+<A HREF="index.html#1075">[ thread ]</A>
+<A HREF="subject.html#1075">[ subject ]</A>
+<A HREF="author.html#1075">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Isn't this almost on par with the web browser technique of firing
+</EM><BR>
+<EM>&gt; up 4 connections to a server simultaneously?  It completely
+</EM><BR>
+<EM>&gt; defeats the important congestion control schemes of TCP.
+</EM><BR>
+<P>I would say that the initial burst of data caused by a TCP
+<BR>
+connection with an initial window of 4 segments is somewhat similar
+<BR>
+to the initial burst of data caused by 4 parallel connections using
+<BR>
+1 segment initial windows.  But, that is where the similarities end.
+<BR>
+One connection with an N segment initial window is N times more
+<BR>
+aggressive in the first RTT.  N connections with an initial window
+<BR>
+of 1 segment are N times more aggressive throughout the transfer.
+<BR>
+For example, if we use 4 connections and we see a loss the effective
+<BR>
+window is reduced to 7/8 of the effective window size before loss
+<BR>
+occurred (i.e., one of the connections backed off).  If a single TCP
+<BR>
+connection observed the same loss, the effective window size will be
+<BR>
+1/2 the window size when loss was detected (regardless of the
+<BR>
+initial window).  The change proposed in the I-D alters a
+<BR>
+_parameter_, not any of TCP's fundamental congestion control
+<BR>
+algorithms.
+<BR>
+<P>allman
+<BR>
+<P><P><PRE>
+---
+<A HREF="http://gigahertz.lerc.nasa.gov/~mallman/">http://gigahertz.lerc.nasa.gov/~mallman/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1074.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1076.html">Natchu Vishnu Priya: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1077.html">David S. Miller: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1080.html">Adam Caldwell: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1086.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1075">[ date ]</A>
+<A HREF="index.html#1075">[ thread ]</A>
+<A HREF="subject.html#1075">[ subject ]</A>
+<A HREF="author.html#1075">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TOS issues with non RFC complian</TITLE>
+<META NAME="Author" CONTENT="Alan Hannan (alan@globalcenter.net)">
+<META NAME="Subject" CONTENT="TOS issues with non RFC compliant TCP stacks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TOS issues with non RFC compliant TCP stacks</H1>
+<!-- received="Wed Jun  9 01:49:32 1999" -->
+<!-- isoreceived="19990609054932" -->
+<!-- sent="Tue, 8 Jun 1999 22:45:11 -0700" -->
+<!-- isosent="19990609054511" -->
+<!-- name="Alan Hannan" -->
+<!-- email="alan@globalcenter.net" -->
+<!-- subject="TOS issues with non RFC compliant TCP stacks" -->
+<!-- id="19990608224510.B3451@globalcenter.net" -->
+<STRONG>From:</STRONG> Alan Hannan (<A HREF="mailto:alan@globalcenter.net?Subject=Re:%20TOS%20issues%20with%20non%20RFC%20compliant%20TCP%20stacks&In-Reply-To=&lt;19990608224510.B3451@globalcenter.net&gt;"><EM>alan@globalcenter.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 09 1999 - 01:45:11 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1737.html">Fred Bauer: "INFOCOM 2000 Call For Papers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1738">[ date ]</A>
+<A HREF="index.html#1738">[ thread ]</A>
+<A HREF="subject.html#1738">[ subject ]</A>
+<A HREF="author.html#1738">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;Howdy.
+<BR>
+<P>&nbsp;&nbsp;We have learned of a problem with non RFC compliant users of
+<BR>
+&nbsp;&nbsp;the Internet.
+<BR>
+<P>&nbsp;&nbsp;We believe this problem will be of interest to NANOG and tcp-impl
+<BR>
+&nbsp;&nbsp;WG participants.
+<BR>
+<P>&nbsp;&nbsp;We would like to involve a larger body so that:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- more people are aware of this issue
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ISPs can more quickly handle potential problems when 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;they arise
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- we can learn about additional IP stacks that have this problem
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- alternate opinions can be presented that may argue this 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;behaviour is appropriate, and RFC compliant
+<BR>
+<P>&nbsp;&nbsp;It has come to our attention that a notable fraction of the
+<BR>
+&nbsp;&nbsp;internet client community uses a TCP stack which is not RFC
+<BR>
+&nbsp;&nbsp;compliant, as far as we can determine.
+<BR>
+<P>&nbsp;&nbsp;Certain versions of MacTCP send a RST when they receive SYN ACK
+<BR>
+&nbsp;&nbsp;packets of TOS!=0.
+<BR>
+<P>&nbsp;&nbsp;I assume there are other TCP implementations which also have
+<BR>
+&nbsp;&nbsp;this behaviour.
+<BR>
+<P>&nbsp;&nbsp;This concerns us, as we would like to see IP transport utilize
+<BR>
+&nbsp;&nbsp;TOS markings for the growth of the Internet.
+<BR>
+<P>&nbsp;&nbsp;In discussions with several vendors, colleagues, and review of
+<BR>
+&nbsp;&nbsp;RFCs, the following phrase seems most applicable, from Postel in
+<BR>
+&nbsp;&nbsp;RFC 793:
+<BR>
+<P>------------------------ = ------------------------
+<BR>
+2.10.  Robustness Principle
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;TCP implementations will follow a general principle of robustness:  be
+<BR>
+&nbsp;&nbsp;conservative in what you do, be liberal in what you accept from
+<BR>
+&nbsp;&nbsp;others.
+<BR>
+------------------------ = ------------------------
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;Open Transport (an alternate, Apple supported stack) follows
+<BR>
+&nbsp;&nbsp;this principle and works well.  Additionally, a patch is available 
+<BR>
+&nbsp;&nbsp;on the net for MacTCP (see below).
+<BR>
+<P>&nbsp;&nbsp;So, the empirical part:  We implemented TOS bit-setting for the
+<BR>
+&nbsp;&nbsp;purpose of tracking traffic flows and traffic levels.  For an
+<BR>
+&nbsp;&nbsp;entirely arbitrary reason, we chose TOS=5 for the default of
+<BR>
+&nbsp;&nbsp;traffic.  We found that MacTCP ceased functioning.  The MacTCP
+<BR>
+&nbsp;&nbsp;stack would initiate an RST when receiving SYN ACK packets with
+<BR>
+&nbsp;&nbsp;a TOS=5, as the SYN packets had a TOS=0.  Therefore, all TCP
+<BR>
+&nbsp;&nbsp;sessions would fail.
+<BR>
+<P>&nbsp;&nbsp;We can quite simply work around our customer's problem by setting
+<BR>
+&nbsp;&nbsp;TOS=0 on all traffic to/from the customer interface.
+<BR>
+<P>&nbsp;&nbsp;However, any traffic towards nonFGC customer's [ie, from our
+<BR>
+&nbsp;&nbsp;interconnection partners] will not be modified.  Therefore, they
+<BR>
+&nbsp;&nbsp;are also vulnerable to this problem.
+<BR>
+<P>&nbsp;&nbsp;Because of a hardware implementation limitation on most of
+<BR>
+&nbsp;&nbsp;routers, INbound TOS setting is efficient, while OUTbound TOS
+<BR>
+&nbsp;&nbsp;setting is inefficient.
+<BR>
+<P>&nbsp;&nbsp;So it is difficult for us to modify the TOS settings leaving
+<BR>
+&nbsp;&nbsp;our network.
+<BR>
+<P>&nbsp;&nbsp;It would be moderately trivial for most interconnection partners
+<BR>
+&nbsp;&nbsp;to modify the TOS settings on input.  This is a path we plan
+<BR>
+&nbsp;&nbsp;to pursue.
+<BR>
+<P>&nbsp;&nbsp;As it turns out, this is an archaically (sp) known problem, with
+<BR>
+&nbsp;&nbsp;a pre-existing patch.
+<BR>
+<P>&nbsp;&nbsp;Information about this patch for MacTCP exists at:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.mactcp.org.nz/mactcp.html">http://www.mactcp.org.nz/mactcp.html</A>
+<BR>
+<P>&nbsp;&nbsp;At this time we do not modify TCP TOS bits.  Once we have more
+<BR>
+&nbsp;&nbsp;information we intend to move forward with the TOS modifications,
+<BR>
+&nbsp;&nbsp;after notifying our InterConnection partners and customers of
+<BR>
+&nbsp;&nbsp;potential impact.
+<BR>
+<P>&nbsp;&nbsp;Thank you for your consideration.
+<BR>
+<P>&nbsp;&nbsp;-alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1737.html">Fred Bauer: "INFOCOM 2000 Call For Papers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1739.html">Joe Touch: "Re: TOS issues with non RFC compliant TCP stacks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1738">[ date ]</A>
+<A HREF="index.html#1738">[ thread ]</A>
+<A HREF="subject.html#1738">[ subject ]</A>
+<A HREF="author.html#1738">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="RE: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: keep RST data nonstandardized for the future!</H1>
+<!-- received="Wed Aug  2 03:42:17 2000" -->
+<!-- isoreceived="20000802074217" -->
+<!-- sent="Wed, 2 Aug 2000 00:31:59 -0700" -->
+<!-- isosent="20000802073159" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="RE: keep RST data nonstandardized for the future!" -->
+<!-- id="200008020731.AAA05953@rock.mentat.com" -->
+<!-- inreplyto="keep RST data nonstandardized for the future!" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=RE:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;200008020731.AAA05953@rock.mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 03:31:59 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2243.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2241.html">Rick Jones: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2234.html">David L. Nicol: "keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2242">[ date ]</A>
+<A HREF="index.html#2242">[ thread ]</A>
+<A HREF="subject.html#2242">[ subject ]</A>
+<A HREF="author.html#2242">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It would be interesting for Apple, Sun (Solaris), and/or Mentat to perhaps
+</EM><BR>
+<EM>&gt; provide a list of the messages that they currently return so we get an
+</EM><BR>
+<EM>&gt; understanding of what the possible reasons they've captured are?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>Here's where the discussion left off exactly three years ago...
+<BR>
+<P><EM>&gt; From jt Wed Jul 30 02:15:28 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:ian@spider.com?Subject=RE:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;200008020731.AAA05953@rock.mentat.com&gt;">ian@spider.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: RST data - meanings
+</EM><BR>
+<EM>&gt; X-Sun-Charset: US-ASCII
+</EM><BR>
+<EM>&gt; Content-Length: 1507
+</EM><BR>
+<EM>&gt; X-Lines: 37
+</EM><BR>
+<EM>&gt; Status: O
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Sorry to hurry you on the RST types, but I'm hoping to put the
+</EM><BR>
+<EM>&gt; &gt; draft in for the IETF deadline - in around 2 days I think...
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I'll certainly make sure that the proposed standards deviate
+</EM><BR>
+<EM>&gt; &gt; as little as possible from your usage anyway
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Ok...  Here's what we have...  It's a pretty shabby collection so I have
+</EM><BR>
+<EM>&gt; added some commentary in parens to help interpret...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; tcp_accept, state changed	(something weird happened to accepting stream)
+</EM><BR>
+<EM>&gt; tcp_close, couldn't detach	(resource allocation failure)
+</EM><BR>
+<EM>&gt; tcp_close, abort rqstd		(SO_LINGER with time -1)
+</EM><BR>
+<EM>&gt; tcp_close, unread data
+</EM><BR>
+<EM>&gt; tcp_close, during connect
+</EM><BR>
+<EM>&gt; tcp_disconnect			(T_DISCON_REQ)
+</EM><BR>
+<EM>&gt; tcp_eager_blowoff, can't wait	(T_DISCON_REQ before accept)
+</EM><BR>
+<EM>&gt; tcp_kill_conn			(administrative request to abort connection)
+</EM><BR>
+<EM>&gt; tcp_kill_conn_by_addr		(same thing, different flavor)
+</EM><BR>
+<EM>&gt; tcp_lift_anchor, can't wait	(listener closed before accept)
+</EM><BR>
+<EM>&gt; TCPS_LISTEN-TH_ACK		(unexpected ACK bit while in LISTEN state)
+</EM><BR>
+<EM>&gt; TCPS_LISTEN-TH_BAD_SECURITY	(bad security specification)
+</EM><BR>
+<EM>&gt; TCPS_LISTEN-TH_BAD_PRECEDENCE	(bad precedence)
+</EM><BR>
+<EM>&gt; TCPS_SYN_SENT-Bad_seq
+</EM><BR>
+<EM>&gt; TCPS_SYN_SENT-Bad_sec_or_prec-TH_ACK
+</EM><BR>
+<EM>&gt; TCPS_SYN_SENT-Bad_sec_or_prec
+</EM><BR>
+<EM>&gt; Bad_seq_or_prec-TCPS_SYN_RCVD
+</EM><BR>
+<EM>&gt; Bad_seq_or_prec
+</EM><BR>
+<EM>&gt; TH_SYN				(SYN bit with unexpected sequence number)
+</EM><BR>
+<EM>&gt; TCPS_SYN_RCVD-bad_ack		(SYN-ACK that doesn't ACK SYN)
+</EM><BR>
+<EM>&gt; new data when detached		(new data received after close)
+</EM><BR>
+<EM>&gt; TCPS_TIME_WAIT-TH_ACK		(inexplicable segment with ACK while TIME_WAIT)
+</EM><BR>
+<EM>&gt; TCPS_TIME_WAIT-???		(similar, but no ACK bit)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Pretty ugly, actually, but helpful for customer support.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; jt
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2243.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2241.html">Rick Jones: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2234.html">David L. Nicol: "keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2249.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2242">[ date ]</A>
+<A HREF="index.html#2242">[ thread ]</A>
+<A HREF="subject.html#2242">[ subject ]</A>
+<A HREF="author.html#2242">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

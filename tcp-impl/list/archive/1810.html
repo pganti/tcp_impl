@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 15:40:01 1999" -->
+<!-- isoreceived="19990915194001" -->
+<!-- sent="Wed, 15 Sep 1999 13:33:07 -0600 (MDT)" -->
+<!-- isosent="19990915193307" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="199909151933.NAA25200@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151933.NAA25200@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 15:33:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1811.html">Ross Harvey: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1831.html">venkat venkatsubra: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1831.html">venkat venkatsubra: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1810">[ date ]</A>
+<A HREF="index.html#1810">[ thread ]</A>
+<A HREF="subject.html#1810">[ subject ]</A>
+<A HREF="author.html#1810">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151933.NAA25200@calcite.rhyolite.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; 	5.  6 months later it's discvered that the redefinition causes one
+</EM><BR>
+<EM>&gt; 	    TCP to send resets.  The email describing this says
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 		  &gt; As it turns out, this is an archaically (sp) known
+</EM><BR>
+<EM>&gt; 		  &gt; problem, with a pre-existing patch.
+</EM><BR>
+<EM>&gt; 	    
+</EM><BR>
+<EM>&gt; 	    and elicits a reply:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 		  &gt; MacTCP is *old*, and has many more problems than
+</EM><BR>
+<EM>&gt; 		  &gt; this.  Please tell your help desks that if they run
+</EM><BR>
+<EM>&gt; 		  &gt; across users still using MacTCP, that they advise
+</EM><BR>
+<EM>&gt; 		  &gt; them to upgrade to at least MacOS 7.5.3 (preferably
+</EM><BR>
+<EM>&gt; 		  &gt; 7.5.5), which is free, and includes Open
+</EM><BR>
+<EM>&gt; 		  &gt; Transport.
+</EM><BR>
+<P>See also the note this morning from someone reporting about what sounds
+<BR>
+like the same problem with some Windows TCP code.
+<BR>
+<P>If only ancient MacTCP had the problem, you might, but only might get away
+<BR>
+with declaring old MacTCP non-conformant.   That is basically what you
+<BR>
+are proposing, to break an unknown number of existing implementations and
+<BR>
+installations.
+<BR>
+<P><P><EM>&gt; 	6.  The question now is how many significant TCPs are actually
+</EM><BR>
+<EM>&gt; 	    effected, and, accordingly, how to fix the problem.
+</EM><BR>
+<P>Agreed.
+<BR>
+<P>However, on general grounds the fait accompli argument is completely
+<BR>
+inadmissable.  400 people participating in DiffServ meetings are not a
+<BR>
+majority of the IETF, even if majorities mattered, which they don't. 
+<BR>
+Even if you accept the history as you have stated it (which I don't quite),
+<BR>
+the onus for bearing fixing the problem lies with DiffServe, *NOT* TCP.
+<BR>
+If a painless change can be made to TCP, then that would be great, and
+<BR>
+would remove the burden from DiffServ.  If there is no painless TCP fix,
+<BR>
+then the pain *MUST* be borne by DiffServ.
+<BR>
+<P><P>] From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151933.NAA25200@calcite.rhyolite.com&gt;">vern@ee.lbl.gov</A>&gt;
+<BR>
+<P>] That's the point of Last Call - if you care about where the IETF is going,
+<BR>
+] you are supposed to read <A HREF="mailto:ietf-announce@ietf.org?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151933.NAA25200@calcite.rhyolite.com&gt;">ietf-announce@ietf.org</A> and see what is being
+<BR>
+] proposed.  You don't have to read all the documents, just the ones that
+<BR>
+] appear relevant.  The abstract of RFC 2474 is clear that the document is
+<BR>
+] about redefining the TOS byte.
+<BR>
+<P>That is mistaken in several ways.  Even if the Last Call had said something
+<BR>
+about breaking existing TCP, the onus would still be on DiffServ.  However,
+<BR>
+given the established IETF culture and expectations, something that talks
+<BR>
+about redefining the TOS byte would be assumed by knowledgable people to
+<BR>
+upward compatiable and not break existing installations without explicitly
+<BR>
+saying so, and not without a lot more main IETF list discussion than
+<BR>
+the last call.
+<BR>
+<P>By concidence, I had been trying to understand RFC 2474 before all of this
+<BR>
+broke, and had assumed the intent of RFC 2474 was to be upward compatible.
+<BR>
+The words in RFC 2474 are not entirely clear, but they do promise
+<BR>
+significant upward compatibility.  Consider the start of section 4:
+<BR>
+<P>&nbsp;&nbsp;The DS field will have a limited backwards compatibility with current
+<BR>
+&nbsp;&nbsp;practice, as described in this section.  Backwards compatibility is
+<BR>
+&nbsp;&nbsp;addressed in two ways.  First, there are per-hop behaviors that are 
+<BR>
+&nbsp;&nbsp;already in widespread use (e.g., those satisfying the IPv4 Precedence
+<BR>
+&nbsp;&nbsp;queueing requirements specified in [RFC1812]), and we wish to permit
+<BR>
+&nbsp;&nbsp;their continued use in DS-compliant nodes. ...
+<BR>
+<P><P>] &gt; Since getting anything changed during Last Call is at best difficult
+<BR>
+]
+<BR>
+] The WG raised the issue of what depends on the current structure of the TOS
+<BR>
+] byte at length, had considerable discussion, and no one brought up the TCP
+<BR>
+] incompatibility.  It's not as though it wasn't high profile - 400+ people
+<BR>
+] attend each diffserv meeting.  But even so, it was on the radar as a
+<BR>
+] significant issue, and I think it would have been treated very seriously
+<BR>
+] as a last call comment.
+<BR>
+<P>I am confident of the good intentions of all concerned.  Still, when
+<BR>
+balancing painful changes, which sub-community (or if you prefer, chunks
+<BR>
+of code) must suffer most of the pain?
+<BR>
+<P><P>] &gt; Instead of requiring changes to an unknown but apparently significant
+<BR>
+] &gt; number of existing TCP implementations and literally uncountable TCP
+<BR>
+] &gt; installations, why not strengthen the DiffServ words about upward
+<BR>
+] &gt; compatibility?
+<BR>
+]
+<BR>
+] One of the key questions is: is it really a significant number of TCP
+<BR>
+] implementations?  That's why this discussion should happen on tcp-impl.
+<BR>
+<P>I agree that is a critical question.   The note this morning about
+<BR>
+Windows 3.1 was extremely worrisome.
+<BR>
+<P><P>] &gt; If the RFC 1349/RFC 1812 values of the IP TOS byte were
+<BR>
+] &gt; required to be get through unchanged (after possibly having been mapped
+<BR>
+] &gt; to other values and back again), would any existing combinations of
+<BR>
+] &gt; applications and host break?
+<BR>
+]
+<BR>
+] How do you know what to map them back to?  It's not a one-to-one mapping.
+<BR>
+<P>Which map is not 1:1 and does it matter?  Since RFC 2474 defines a lot
+<BR>
+more potential behaviors than RFC 1812 and RFCX 1349, you obviously cannot
+<BR>
+map DiffServ 1:1 onto RFC 1349.  However, in practice there are only about
+<BR>
+3 different RFC 1349 values.  It seems to me that requiring that DiffServ
+<BR>
+preserve 3 values would completely would be painless for DiffServ, and
+<BR>
+far wiser than declaring that an unknowable number of TCP implementations
+<BR>
+and installations non-conformant and requiring them to be changed.
+<BR>
+<P>I think the only commonly used RFC 1349 values are 0 (extremely common),
+<BR>
+0x10 (minimize delay), and 0x80 (maximize throughput).  See your nearest
+<BR>
+BSD source trees.  I found all of those in the first 4.4BSD-Lite CDROM,
+<BR>
+and I know that 0x10 has been creeping into other widely used applications,
+<BR>
+partly because I've helped push it.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909151933.NAA25200@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1811.html">Ross Harvey: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1809.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1831.html">venkat venkatsubra: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1831.html">venkat venkatsubra: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1810">[ date ]</A>
+<A HREF="index.html#1810">[ thread ]</A>
+<A HREF="subject.html#1810">[ subject ]</A>
+<A HREF="author.html#1810">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

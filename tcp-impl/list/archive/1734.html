@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Comments on draft-ietf-tcpim</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt</H1>
+<!-- received="Thu May 27 21:14:45 1999" -->
+<!-- isoreceived="19990528011445" -->
+<!-- sent="Thu, 27 May 1999 19:11:31 -0600 (MDT)" -->
+<!-- isosent="19990528011131" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt" -->
+<!-- id="199905280111.TAA24706@calcite.rhyolite.com" -->
+<!-- inreplyto="Comments on draft-ietf-tcpimpl-pmtud-01.txt" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280111.TAA24706@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 27 1999 - 21:11:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1734">[ date ]</A>
+<A HREF="index.html#1734">[ thread ]</A>
+<A HREF="subject.html#1734">[ subject ]</A>
+<A HREF="author.html#1734">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280111.TAA24706@calcite.rhyolite.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Comments on draft-ietf-tcpimpl-pmtud-01.txt
+</EM><BR>
+<EM>&gt; From: Geert Jan de Groot &lt;<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280111.TAA24706@calcite.rhyolite.com&gt;">GeertJan.deGroot@bsdi.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt;3.3.   Determining MSS from PMTU
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;     The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+</EM><BR>
+<EM>&gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt;     determined values to determine the MSS to advertise.
+</EM><BR>
+<EM>&gt; &gt;     This results in an advertised MSS that is smaller than the largest
+</EM><BR>
+<EM>&gt; &gt;     MTU the system can receive.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I would like to change the marked sentence with:
+</EM><BR>
+<EM>&gt; The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt; the largest MTU of all interfaces on the system.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Rationale: assume a TCP connect happens over an ethernet interface.
+</EM><BR>
+<EM>&gt; While the TCP session is alive, routing changes and the session is
+</EM><BR>
+<EM>&gt; now routed over an FDDI interface. If mss would have been 1460 (ethernet),
+</EM><BR>
+<EM>&gt; we would see micrograms on the FDDI interface unneccesary.
+</EM><BR>
+<EM>&gt; I just want to make the original text more explicit, that's all.
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>I disagree.  In real life, the initial interface is almost always the only
+<BR>
+interface used during the life of a TCP connection.  With the proposal,
+<BR>
+almost every TCP connection to a multi-homed host using and an interface
+<BR>
+with a smaller MTU would suffer the overhead PMTU probing throughout the
+<BR>
+life of the connection.  That is because people generally try to arrange
+<BR>
+routing so that their big MTU interfaces are prefered.  Since most TCP
+<BR>
+connections are local and high speed, the proposal would have eggregious
+<BR>
+effects on performance in the common case.  The proposal would solve a
+<BR>
+rare problem at the cost of significant harm to the common case
+<BR>
+<P>(Yes, of course, both rare and common modulo the rarity of mult-homed hosts).
+<BR>
+<P>The better solution is to do what most people already do, and arrange to
+<BR>
+have uniform-MTU interfaces on a system, or arranging routing (e.g. by
+<BR>
+router discovery) to prefer routes though big-MTU interfaces.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280111.TAA24706@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1735.html">Kevin Lahey: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1734">[ date ]</A>
+<A HREF="index.html#1734">[ thread ]</A>
+<A HREF="subject.html#1734">[ subject ]</A>
+<A HREF="author.html#1734">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Q: window shrinking in BSD</TITLE>
+<META NAME="Author" CONTENT="pierluigi_marra@libero.it (pierluigi_marra@libero.it)">
+<META NAME="Subject" CONTENT="Q: window shrinking in BSD">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Q: window shrinking in BSD</H1>
+<!-- received="Tue Oct 29 07:11:06 2002" -->
+<!-- isoreceived="20021029121106" -->
+<!-- sent="Tue, 29 Oct 2002 14:06:43 +0200" -->
+<!-- isosent="20021029120643" -->
+<!-- name="pierluigi_marra@libero.it" -->
+<!-- email="pierluigi_marra@libero.it" -->
+<!-- subject="Q: window shrinking in BSD" -->
+<!-- id="H4QSB7$C622444A91C63B8AB51379DA64E7F647@libero.it" -->
+<STRONG>From:</STRONG> <A HREF="mailto:pierluigi_marra@libero.it?Subject=Re:%20Q:%20window%20shrinking%20in%20BSD&In-Reply-To=&lt;H4QSB7$C622444A91C63B8AB51379DA64E7F647@libero.it&gt;"><EM>pierluigi_marra@libero.it</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Oct 29 2002 - 07:06:43 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2903.html">Gokul Poduval: "conflict between mrtt and actual rtt"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2901.html">Murali Bashyam: "TCP out-of-order packet handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2902">[ date ]</A>
+<A HREF="index.html#2902">[ thread ]</A>
+<A HREF="subject.html#2902">[ subject ]</A>
+<A HREF="author.html#2902">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I have a question regarding the code fragment below. It belongs  to 
+<BR>
+tcp_output function of many BSD versions. In this fragment, the 
+<BR>
+function check for a window shrinking. 
+<BR>
+<P><P>if (len &lt; 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* If FIN has been sent but not acked,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* but we haven't been called to retransmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* len will be &lt; 0.  Otherwise, window shrank
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* after we sent into it.  If window shrank to 0,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* cancel pending retransmit, pull snd_nxt back
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* to (closed) window, and set the persist timer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* if it isn't already going.  If the window didn't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* close completely, just wait for an ACK.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;len = 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (win == 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callout_stop(tp-&gt;tt_rexmt);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_rxtshift = 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_nxt = tp-&gt;snd_una;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!callout_active(tp-&gt;tt_persist))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_setpersist(tp);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P><P><P>“If window shrank to 0, cancel pending retransmit, pull snd_nxt back to 
+<BR>
+(closed) window, and set the persist timer if it isn't already going.”
+<BR>
+<P>So, sender set tp-&gt;snd_nxt to tp-&gt;snd_una as soon as it enter in 
+<BR>
+persist mode.
+<BR>
+<P>Now consider this scenario:
+<BR>
+Sender has sent segment [1] [2] [3] when receiver send back an ack for 
+<BR>
+segment [2] and zero advertised window. Then, sender set snd_nxt to 
+<BR>
+snd_una and enter persist mode. In the meantime, if segment [3] reaches 
+<BR>
+receiver and is processed (receiver buffer could be empty now), 
+<BR>
+receiver could reopen window with an ack for segment [3]. But this ack 
+<BR>
+is discarded by sender because snd_nxt &lt; seg_ack. 
+<BR>
+Even if sender sends probes repeatedly, receiver could respond with the 
+<BR>
+same ack. So, does connection remain in a stall situation for an 
+<BR>
+indefinite time?   
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+<P>Tanks in advance,
+<BR>
+Pierluigi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2903.html">Gokul Poduval: "conflict between mrtt and actual rtt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2901.html">Murali Bashyam: "TCP out-of-order packet handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2902">[ date ]</A>
+<A HREF="index.html#2902">[ thread ]</A>
+<A HREF="subject.html#2902">[ subject ]</A>
+<A HREF="author.html#2902">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Oct 29 2002 - 07:11:14 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

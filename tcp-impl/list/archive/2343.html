@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Mon Sep 18 14:47:35 2000" -->
+<!-- isoreceived="20000918184735" -->
+<!-- sent="Mon, 18 Sep 2000 14:39:18 -0400 (EDT)" -->
+<!-- isosent="20000918183918" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009181839.OAA19667@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009181839.OAA19667@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 18 2000 - 14:39:18 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2343">[ date ]</A>
+<A HREF="index.html#2343">[ thread ]</A>
+<A HREF="subject.html#2343">[ subject ]</A>
+<A HREF="author.html#2343">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; You don't need 32 bits of true randomness per ISN.  Once you have 128
+</EM><BR>
+<EM>&gt; bits of true randomness you can safely get trillions of ISNs without
+</EM><BR>
+<EM>&gt; giving an attacker a chance to recognize you're not using a true
+</EM><BR>
+<EM>&gt; random number generator.
+</EM><BR>
+<P>That statement sounds highly dubious to me.  What are your grounds for
+<BR>
+making it?
+<BR>
+<P>That is, as far as I can see, you lose a certain amount of entropy with
+<BR>
+each ISN you generate.  Your ISNs are only as unguessable as the amount
+<BR>
+of entropy you drain off to generate each one.
+<BR>
+<P>And once you've no entropy left un-exposed, all you have left is a PRNG
+<BR>
+whose internal state the attacker has to deduce.  This can be made
+<BR>
+comparatively difficult, for example if you use a decent one-way
+<BR>
+function between the entropy and the resulting ISN, but by no means
+<BR>
+impossible.  In theory, the attacker could even brute-force it.
+<BR>
+<P>As for the attacker recognizing how you generate your ISNs, well, as
+<BR>
+any crypto person will tell you, your security cannot, in more than the
+<BR>
+short term, rest on keeping your algorithms themselves secret.
+<BR>
+<P>Or, of course, you could be lucky, and have hardware attached that
+<BR>
+produces entropy faster than incoming connection attempts consume it.
+<BR>
+Few of us are that lucky.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009181839.OAA19667@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2344.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2343">[ date ]</A>
+<A HREF="index.html#2343">[ thread ]</A>
+<A HREF="subject.html#2343">[ subject ]</A>
+<A HREF="author.html#2343">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

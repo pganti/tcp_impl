@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb  5 15:49:49 1999" -->
+<!-- isoreceived="19990205204949" -->
+<!-- sent="Fri, 05 Feb 1999 12:45:08 -0800" -->
+<!-- isosent="19990205204508" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36BB5854.DACB5A24@cup.hp.com" -->
+<!-- inreplyto="199902051947.LAA01294@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36BB5854.DACB5A24@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 15:45:08 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1527.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1525.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1523.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1526">[ date ]</A>
+<A HREF="index.html#1526">[ thread ]</A>
+<A HREF="subject.html#1526">[ subject ]</A>
+<A HREF="author.html#1526">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Greg Minshall wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Rick,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Now, there may still be sufficient cases of reasonable applications
+</EM><BR>
+<EM>&gt; &gt; that are not broken, but still &quot;suffer&quot; from Nagle, but I'm not sure
+</EM><BR>
+<EM>&gt; &gt; (yet - I'm sure someone else will point some out :) what they are.
+</EM><BR>
+<EM>&gt; &gt; _Maybe_ something to do with pipelined http requests generating sub
+</EM><BR>
+<EM>&gt; &gt; MSS responses?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If a response (could equally well be a request) sends an odd number of MSS
+</EM><BR>
+<EM>&gt; packets, and then wants to send one small packet, Nagle will block until all
+</EM><BR>
+<EM>&gt; the MSS packets have been acknowledged.  Because the response stream was an
+</EM><BR>
+<EM>&gt; odd number of packets, the remote TCP will probably decide not to ACK for
+</EM><BR>
+<EM>&gt; 100ms or so, thus preventing the response from making it through.  So, the
+</EM><BR>
+<EM>&gt; response will take RTT+100ms (approximately) longer than it could have taken.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So, this is the application where there is an argument to be made that Nagle
+</EM><BR>
+<EM>&gt; (especially when coupled with delayed ACKs) is slowing things down somewhat.
+</EM><BR>
+<P>But if that application is presenting that data in separate send calls,
+<BR>
+and it was indeed data that was really one unit, is that application
+<BR>
+broken or not? The whole issue here is for request/response applications
+<BR>
+right? Which means that there is all the data of the &quot;request&quot; and then
+<BR>
+all the data of the &quot;response.&quot;
+<BR>
+<P><EM>&gt; With the proposed modification, the small packet will be allowed to follow the
+</EM><BR>
+<EM>&gt; MSS packets (assuming the window, congestion stuff, etc.).
+</EM><BR>
+<P>I guess part of my hangup is considering any transport that did not
+<BR>
+interpret Nagle on a per&quot;send&quot; basis rather than a per segment basis as
+<BR>
+broken to begin with - perhaps then I'm in violent agreement with the
+<BR>
+spirit of the proposed change :) And with the sonofNagle, apps which are
+<BR>
+broken and sending logically associated data as two sub-MSS sends are
+<BR>
+still broken and still going to either get fixed by the app developer
+<BR>
+(unlikely but good) or disable Nagle (likely and bad) anyway. 
+<BR>
+<P>I'm guessing (common and bad :) that most apps that disable nagle today
+<BR>
+are like that - successive sub-mss sends of logically-associated data
+<BR>
+synchronously awaiting a response/request. Those apps are only going to
+<BR>
+be fixed with apps mods - either by getting all (the major) TCP's to
+<BR>
+include the explicit flush mechanism, or by getting the app to do a
+<BR>
+gthering write. If we are going to have to outreach to get apps modified
+<BR>
+anyway, might as well get all the &quot;rightness&quot; into them we can and get
+<BR>
+them onto gathering writes right?
+<BR>
+<P>rick jones
+<BR>
+<P><PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1527.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1525.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1523.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1537.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1526">[ date ]</A>
+<A HREF="index.html#1526">[ thread ]</A>
+<A HREF="subject.html#1526">[ subject ]</A>
+<A HREF="author.html#1526">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

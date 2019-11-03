@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep-Alive size</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: Keep-Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep-Alive size</H1>
+<!-- received="Mon Apr 14 09:37:05 1997" -->
+<!-- isoreceived="19970414133705" -->
+<!-- sent="Mon, 14 Apr 1997 12:29:30 -0400 (EDT)" -->
+<!-- isosent="19970414162930" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: Keep-Alive size" -->
+<!-- id="199704141629.MAA26749@zippy.psc.edu" -->
+<!-- inreplyto="Tue, 1 Apr 1997 18:45:11 +0100 (BST)" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199704141629.MAA26749@zippy.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 14 1997 - 12:29:30 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0331.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0329.html">Steve Alexander: "Memphis slides online"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0289.html">Alan Cox: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0286.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#330">[ date ]</A>
+<A HREF="index.html#330">[ thread ]</A>
+<A HREF="subject.html#330">[ subject ]</A>
+<A HREF="author.html#330">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Sorry to go back on an old thread, but &quot;sending a garbage byte as a
+<BR>
+keep-alive&quot; makes testing more complicated.  I would like to
+<BR>
+discourage the practice (garbage bytes, not 1 byte keep-alives).
+<BR>
+<P>One useful tester would be a sniffer that ubiquitously validates that
+<BR>
+the association between &lt;connection 4 tuple&gt;.&lt;sequence number&gt; and
+<BR>
+&lt;payload data&gt; is always constant.  Such a sniffer could be run
+<BR>
+continuously in all TCP development labs and field test sites etc,
+<BR>
+alarming violations.  However, the garbage byte keep-alives makes the
+<BR>
+tester more complicated because it has to identify keep-alives and
+<BR>
+allow then as exceptions.
+<BR>
+<P>The exception logic makes the tester vastly more complicated,
+<BR>
+particularly because it needs to sniff both sides of the connection to
+<BR>
+monitor the advancing ACKs.  If you can't sniff both sides for some
+<BR>
+reason, there are heuristics that might work.  In any case the
+<BR>
+exception logic has the potential to mask bugs in the TCP
+<BR>
+implementations under test.
+<BR>
+<P>It would be much better if the keep-alive was always the correct valid
+<BR>
+data for the sequence in question (define pre-SYN data to be zero).
+<BR>
+Thus the tester could enforce a strong invariant on *ALL* TCP
+<BR>
+connections at all times: that the payload data associated with each
+<BR>
+sequence number (extended with a wrap count) is forever constant.
+<BR>
+<P>The requires changing &quot;MAY use a garbage byte&quot; to &quot;SHOULD use the
+<BR>
+correct data byte&quot;, even though the restriction is not needed for
+<BR>
+protocol correctness.
+<BR>
+<P>Now the meta-question: Is this in scope for TCP-Impl?  It seems to be
+<BR>
+that there could be a separate &quot;TCP Implementation guidelines for
+<BR>
+improved testability&quot;, which need not be a strong as protocol
+<BR>
+standard.  Perhaps a BCP?
+<BR>
+<P>Thoughts?
+<BR>
+<P>--MM--
+<BR>
+<P><P><EM>&gt; &gt; Or, since such a keepalive will always be outside the window (since it
+</EM><BR>
+<EM>&gt; &gt; duplicates a sequence number that's already been acked - if you have
+</EM><BR>
+<EM>&gt; &gt; unacked data outstanding, keepalives aren't even an issue), you can use
+</EM><BR>
+<EM>&gt; &gt; any value you please for the single data byte, as you suggest:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Nothing says a stack may not use duplicate data over the original. There are
+</EM><BR>
+<EM>&gt; some very simple embedded stacks that do this to save code. They just do
+</EM><BR>
+<EM>&gt; something akin to
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	offset=diff_seq(buff_start, tcp-&gt;seq);
+</EM><BR>
+<EM>&gt; 	len=tcp-&gt;len;
+</EM><BR>
+<EM>&gt; 	len=min(len, buffer_size-offset);
+</EM><BR>
+<EM>&gt; 	memcpy(...)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Alan
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0331.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0329.html">Steve Alexander: "Memphis slides online"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0289.html">Alan Cox: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0286.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#330">[ date ]</A>
+<A HREF="index.html#330">[ thread ]</A>
+<A HREF="subject.html#330">[ subject ]</A>
+<A HREF="author.html#330">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

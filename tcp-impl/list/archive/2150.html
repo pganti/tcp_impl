@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Intentional Host Reordering of T</TITLE>
+<META NAME="Author" CONTENT="Nabil Seddigh (nseddigh@nortelnetworks.com)">
+<META NAME="Subject" CONTENT="Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Thu Jun 15 22:16:09 2000" -->
+<!-- isoreceived="20000616021609" -->
+<!-- sent="Thu, 15 Jun 2000 22:04:05 -0400 (EDT)" -->
+<!-- isosent="20000616020405" -->
+<!-- name="Nabil Seddigh" -->
+<!-- email="nseddigh@nortelnetworks.com" -->
+<!-- subject="Intentional Host Reordering of TCP Fragments" -->
+<!-- id="200006160206.WAA13176@seraph3.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Nabil Seddigh (<A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006160206.WAA13176@seraph3.lerc.nasa.gov&gt;"><EM>nseddigh@nortelnetworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 15 2000 - 22:04:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2149.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2155.html">Narsimharao Nagampalli: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2157.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2158.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2162.html">Rick Jones: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2164.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2165.html">Howard Berkey: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2168.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2150">[ date ]</A>
+<A HREF="index.html#2150">[ thread ]</A>
+<A HREF="subject.html#2150">[ subject ]</A>
+<A HREF="author.html#2150">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Recent discussions on this list focused on network
+<BR>
+devices reordering packets. How about an end-host
+<BR>
+that intentionally reorders some TCP packets?
+<BR>
+<P>During testing of Packet Classification capability
+<BR>
+on for Diffserv-capable routers, one of my colleagues
+<BR>
+discovered that the Linux TCP sender intentionally
+<BR>
+reorders fragments - the pkt containing the TCP port
+<BR>
+number is the last pkt sent in a family (same ip_id)
+<BR>
+of fragments.
+<BR>
+<P>The implication of such an implementation is that
+<BR>
+Layer-4 packet classification of fragments 
+<BR>
+is virtually impossible - unless routers try to 
+<BR>
+cache packets....not a desirable solution.
+<BR>
+<P>Of course one could argue that most fragments on
+<BR>
+the net are UDP and not TCP but nonetheless:
+<BR>
+shouldn't end-hosts avoid intentional reordering?
+<BR>
+<P>We checked out various RFCs and didn't find explicit 
+<BR>
+prohibitions on an end-host reordering the pkts 
+<BR>
+that it sends out. 
+<BR>
+<P>Best,
+<BR>
+<PRE>
+---
+Nabil Seddigh
+<A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006160206.WAA13176@seraph3.lerc.nasa.gov&gt;">nseddigh@nortelnetworks.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2151.html">Charles M. Hannum: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2149.html">Ramesh Shankar: "Re: RTO calcuation in NetBSD/FreeBSD"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2155.html">Narsimharao Nagampalli: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2157.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2158.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2162.html">Rick Jones: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2164.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2165.html">Howard Berkey: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2168.html">Bob Braden: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2150">[ date ]</A>
+<A HREF="index.html#2150">[ thread ]</A>
+<A HREF="subject.html#2150">[ subject ]</A>
+<A HREF="author.html#2150">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

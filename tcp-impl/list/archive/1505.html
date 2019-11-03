@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 15:03:06 1999" -->
+<!-- isoreceived="19990204200306" -->
+<!-- sent="Thu, 4 Feb 1999 13:59:21 -0600 (CST)" -->
+<!-- isosent="19990204195921" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902041959.NAA02712@frantic.bsdi.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041959.NAA02712@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 14:59:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1506.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1504.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1506.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1505">[ date ]</A>
+<A HREF="index.html#1505">[ thread ]</A>
+<A HREF="subject.html#1505">[ subject ]</A>
+<A HREF="author.html#1505">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Thu, 4 Feb 1999 11:06:19 -0700 (MST)
+</EM><BR>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041959.NAA02712@frantic.bsdi.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: internet draft on suggested mod to the Nagle algorithm
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; MSG_PUSH sounds interesting, but
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   - you would definitely need to pick some other name, since otherwise
+</EM><BR>
+<EM>&gt;      you would have hordes of experts up in arms when they saw the PUSH
+</EM><BR>
+<EM>&gt;      bit in the TCP header set or not set in concert with the MSG_PUSH
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>The name doesn't matter, e.g. MSG_NDELAY would work as well.
+<BR>
+<P><EM>&gt;   - I bet that most applications that now need to turn set TCP_NODELAY
+</EM><BR>
+<EM>&gt;      would still need to use TCP_NODELAY.  In other words, what could you
+</EM><BR>
+<EM>&gt;      do with MSG_PUSH that you could not do more efficiently (i.e. with
+</EM><BR>
+<EM>&gt;      fewer CPU cycles) with writev()?
+</EM><BR>
+<P>First, the combination of modifying Nagle and adding MSG_PUSH
+<BR>
+is what I would recommend, not just MSG_PUSH.  The combination
+<BR>
+of the two would eliminate most of the need for TCP_NODELAY.
+<BR>
+Secondly, yes, sending the transaction in a single writev() is
+<BR>
+by far the prefered method.
+<BR>
+<P>The usual need for using TCP_NODELAY is to get around Nagle, due
+<BR>
+to it interacting poorly with delayed acks.
+<BR>
+<P>1) With the modification to Nagle, then for a single request sent
+<BR>
+&nbsp;&nbsp;&nbsp;in a single writev(), no matter how large the request, there would
+<BR>
+&nbsp;&nbsp;&nbsp;be no need for TCP_NODELAY.
+<BR>
+<P>2) If a request is sent via multiple writes, then using MSG_PUSH
+<BR>
+&nbsp;&nbsp;&nbsp;on the last write will eliminate the need for TCP_NODELAY.
+<BR>
+<P>3) If an application is sending multiple requests with a separate
+<BR>
+&nbsp;&nbsp;&nbsp;write for each request, with or without the Nagle change, the
+<BR>
+&nbsp;&nbsp;&nbsp;trailing data will get delayed.  Using MSG_PUSH on the last write
+<BR>
+&nbsp;&nbsp;&nbsp;will eliminate that.
+<BR>
+<P>The point is that rather than bypassing Nagle in all instances,
+<BR>
+using MSG_PUSH you can bypass Nagle at the specific points where
+<BR>
+you need to.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041959.NAA02712@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1506.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1504.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1506.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1505">[ date ]</A>
+<A HREF="index.html#1505">[ thread ]</A>
+<A HREF="subject.html#1505">[ subject ]</A>
+<A HREF="author.html#1505">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

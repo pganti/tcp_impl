@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP SACK</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@jurassic.eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: TCP SACK">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP SACK</H1>
+<!-- received="Fri Oct 17 13:39:30 1997" -->
+<!-- isoreceived="19971017173930" -->
+<!-- sent="Fri, 17 Oct 1997 13:36:02 -0700 (PDT)" -->
+<!-- isosent="19971017203602" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@jurassic.eng.Sun.COM" -->
+<!-- subject="Re: TCP SACK" -->
+<!-- id="Roam.SIMC.2.0.6.877120562.24836.kcpoon@jurassic" -->
+<!-- inreplyto="199710171159.MAA13754@labinfo.iet.unipi.it" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@jurassic.eng.Sun.COM?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;Roam.SIMC.2.0.6.877120562.24836.kcpoon@jurassic&gt;"><EM>kcpoon@jurassic.eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Oct 17 1997 - 16:36:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0787.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0787.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#788">[ date ]</A>
+<A HREF="index.html#788">[ thread ]</A>
+<A HREF="subject.html#788">[ subject ]</A>
+<A HREF="author.html#788">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; This might have to do with the fact that there are still stacks
+</EM><BR>
+<EM>&gt; around which do not like TCP options and popular servers tend to
+</EM><BR>
+<EM>&gt; disable SACK, RFC1323 and other options which might cause them to
+</EM><BR>
+<EM>&gt; lose clients.
+</EM><BR>
+<P>Or there are just very few, if any, servers out there that are capable of
+<BR>
+doing SACK, or RFC 1323.
+<BR>
+<P><EM>&gt; Note that there are other things which have a good impact on traffic
+</EM><BR>
+<EM>&gt; (at least for web-type traffic), such as lowering the threshold
+</EM><BR>
+<EM>&gt; for fast retransmit when there are too few packets in transit. As
+</EM><BR>
+<EM>&gt; an example, here is an excerpt of netstat -p tcp on our www proxy:
+</EM><BR>
+<P>Lowering the threshold may not be safe.  This can lead to a lot of unnecessary
+<BR>
+&quot;fast retransmissions.&quot;  I think it is safer to do the SACK way.  It is noted
+<BR>
+in Fall and Floyd's &quot;Simulation-based Comparisons of Tahoe, Reno, and SACK
+<BR>
+TCP&quot; that SACK implementations can make a more intelligent use of the first
+<BR>
+and second dup ACKs.  After getting the first and second dup ACKs, SACK info
+<BR>
+may indicate that packets have left the network and one or two new packets can
+<BR>
+be sent, if window allows.  This in turn can generate more dup ACKs, assuming
+<BR>
+the new packets get through, and fast retransmit can then be triggered. 
+<BR>
+Actually, existing stacks can just increase cwnd by 1 MSS after getting the
+<BR>
+first or second dup ACKs.  This also has the same effect.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20TCP%20SACK&In-Reply-To=&lt;Roam.SIMC.2.0.6.877120562.24836.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0789.html">Vern Paxson: "Re: TCP SACK"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0787.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0787.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0790.html">Luigi Rizzo: "Re: TCP SACK"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#788">[ date ]</A>
+<A HREF="index.html#788">[ thread ]</A>
+<A HREF="subject.html#788">[ subject ]</A>
+<A HREF="author.html#788">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

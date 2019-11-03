@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep-Alive size</TITLE>
+<META NAME="Author" CONTENT="Francesco Potorti` (F.Potorti@cnuce.cnr.it)">
+<META NAME="Subject" CONTENT="Re: Keep-Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep-Alive size</H1>
+<!-- received="Mon Mar 10 10:49:28 1997" -->
+<!-- isoreceived="19970310154928" -->
+<!-- sent="Mon, 10 Mar 97 11:45 MET" -->
+<!-- isosent="19970310104500" -->
+<!-- name="Francesco Potorti`" -->
+<!-- email="F.Potorti@cnuce.cnr.it" -->
+<!-- subject="Re: Keep-Alive size" -->
+<!-- id="m0w42aD-00004tC@fly.cnuce.cnr.it" -->
+<!-- inreplyto="199703081759.MAA21194@Twig.Rodents.Montreal.QC.CA" -->
+<STRONG>From:</STRONG> Francesco Potorti` (<A HREF="mailto:F.Potorti@cnuce.cnr.it?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;m0w42aD-00004tC@fly.cnuce.cnr.it&gt;"><EM>F.Potorti@cnuce.cnr.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 10 1997 - 05:45:00 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0121.html">Francesco Potorti`: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0117.html">Vern Paxson: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#120">[ date ]</A>
+<A HREF="index.html#120">[ thread ]</A>
+<A HREF="subject.html#120">[ subject ]</A>
+<A HREF="author.html#120">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Someone (sorry, I lost the original message) wrote:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Basically all bets are off.  The best thing to do on the send side
+<BR>
+&nbsp;&nbsp;&nbsp;is clearly to resend the last byte.
+<BR>
+<P>Well, why?  RFC 1122 speaks about a &quot;garbage octet&quot;, and that looks
+<BR>
+fine to me.  The important thing is that, as stated by 1122, SEG.SEQ =
+<BR>
+SND.NXT-1, which is always outside the receiver's window, so the data
+<BR>
+will not even be looked at.
+<BR>
+<P>der Mouse &lt;<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;m0w42aD-00004tC@fly.cnuce.cnr.it&gt;">mouse@Rodents.Montreal.QC.CA</A>&gt; wrote:
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;What if there is no last byte (ie, if that direction has not sent any
+<BR>
+&nbsp;&nbsp;&nbsp;data since the initial SYN/SYN-ACK/ACK exchange)?
+<BR>
+<P><EM>&gt;From what I said above, it does not matter.
+</EM><BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;Would it do any harm to invent a fictitious last byte and send it?
+<BR>
+&nbsp;&nbsp;&nbsp;In this condition it's guaranteed to be outside the receiver's idea
+<BR>
+&nbsp;&nbsp;&nbsp;of valid sequence numbers, since it duplicates the SYN's sequence
+<BR>
+&nbsp;&nbsp;&nbsp;number.
+<BR>
+<P>Exactly.
+<BR>
+<P>Then Luigi Rizzo &lt;<A HREF="mailto:luigi@labinfo.iet.unipi.it?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;m0w42aD-00004tC@fly.cnuce.cnr.it&gt;">luigi@labinfo.iet.unipi.it</A>&gt; added:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;perhaps the correct wording should have been &quot;resend the item with
+<BR>
+&nbsp;&nbsp;&nbsp;the last acked sequence number -- be it a data byte or a SYN.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;However another problem comes to mind -- the sender might not have
+<BR>
+&nbsp;&nbsp;&nbsp;the &quot;last byte&quot; available anymore since, once acked, data can be
+<BR>
+&nbsp;&nbsp;&nbsp;flushed (except in the case of a SYN of course). One can send a
+<BR>
+&nbsp;&nbsp;&nbsp;random byte of course, but then the receiver might really become
+<BR>
+&nbsp;&nbsp;&nbsp;suspicious....
+<BR>
+<P>Indeed, always sending a garbage byte of data should do no harm,
+<BR>
+because it would be simply discarded.  So no problems exist about
+<BR>
+the sender having no copy of the last byte sent, or the receiver
+<BR>
+doing any checks and becoming suspicious.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This suggests that acking zero-sized Keep-Alives should be
+<BR>
+&nbsp;&nbsp;&nbsp;mandatory.
+<BR>
+<P>This is what rfc 793 and rfc 1122 imply.  
+<BR>
+<P>However, rfc 1122 also states that some implementations fail to
+<BR>
+acknowledge an out-of-window segment with non data.  In my opinion,
+<BR>
+the obvious consequence is that, contrary to what rfc 1122 recommends,
+<BR>
+keepalives should always contain data.
+<BR>
+<P>To this Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;m0w42aD-00004tC@fly.cnuce.cnr.it&gt;">vern@ee.lbl.gov</A>&gt; responded:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I'm confused about how to distinguish [zero-sized keepalives] from
+<BR>
+&nbsp;&nbsp;&nbsp;&quot;pure&quot; acks, which shouldn't be acked.
+<BR>
+<P>Normal acks with no data are inside the receive window, while
+<BR>
+zero-sized keepalives are not.
+<BR>
+<P><PRE>
+-- 
+Francesco Potorti` (researcher)        Voice:    +39-50-593203
+Computer Network Division              Operator: +39-50-593211
+CNUCE-CNR, Via Santa Maria 36          Fax:      +39-50-904052
+56126 Pisa - Italy                     Email:    <A HREF="mailto:F.Potorti@cnuce.cnr.it?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;m0w42aD-00004tC@fly.cnuce.cnr.it&gt;">F.Potorti@cnuce.cnr.it</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0121.html">Francesco Potorti`: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0119.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0114.html">der Mouse : "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0117.html">Vern Paxson: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#120">[ date ]</A>
+<A HREF="index.html#120">[ thread ]</A>
+<A HREF="subject.html#120">[ subject ]</A>
+<A HREF="author.html#120">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

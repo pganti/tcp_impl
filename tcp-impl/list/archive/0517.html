@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SYN cookies</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: SYN cookies">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SYN cookies</H1>
+<!-- received="Fri Jun  6 06:53:39 1997" -->
+<!-- isoreceived="19970606105339" -->
+<!-- sent="Fri, 6 Jun 1997 07:51:50 -0600" -->
+<!-- isosent="19970606135150" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: SYN cookies" -->
+<!-- id="199706061351.HAA08478@mica.denver.sgi.com" -->
+<!-- inreplyto="SYN cookies" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706061351.HAA08478@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 06 1997 - 09:51:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0518.html">Manish Patel(x67071): "subscribe"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0516.html">Eric.Schenk@dna.lth.se: "Re: SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#517">[ date ]</A>
+<A HREF="index.html#517">[ thread ]</A>
+<A HREF="subject.html#517">[ subject ]</A>
+<A HREF="author.html#517">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706061351.HAA08478@mica.denver.sgi.com&gt;">Eric.Schenk@dna.lth.se</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;As to performance
+</EM><BR>
+<EM>&gt; &gt;that one is a red herring - indeed the secure sequence number takes longer
+</EM><BR>
+<EM>&gt; &gt;to compute 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well, that's not quite true. The secure sequence number costs about the
+</EM><BR>
+<EM>&gt; same to compute as a SYN cookie, perhaps a bit more, depending on your
+</EM><BR>
+<EM>&gt; specific secure sequence number hash. In fact the algorithms are
+</EM><BR>
+<EM>&gt; suspiciously similar. The major difference is that the clock portion
+</EM><BR>
+<EM>&gt; of the calculation is taken from the remote sides sequence number
+</EM><BR>
+<EM>&gt; in the case of a SYN cookie.
+</EM><BR>
+<P>What is this about &quot;&lt;&lt;the&gt;&gt; secure sequence number&quot;?
+<BR>
+Using a cryptographic PRNG is one way.  Another is to use an extreme
+<BR>
+cheap (and weak) hash and a local source of randomness, such as a
+<BR>
+microsecond or better clock.  The bad guy must guess your initial
+<BR>
+sequence number exactly, not just get close.
+<BR>
+<P><EM>&gt; However, the main point you make stands. The cost of generating a
+</EM><BR>
+<EM>&gt; cookie is the same as the cost of generating a SYNACK frame.
+</EM><BR>
+<EM>&gt; In a random or tail drop scheme you must look for a TCB to drop,
+</EM><BR>
+<EM>&gt; and you must generate a new TCB for the incoming frame.
+</EM><BR>
+<EM>&gt; In a cookie scheme you don't do anything extra at this point,
+</EM><BR>
+<EM>&gt; you don't even have to create a TCB for the incoming frame at this point.
+</EM><BR>
+<EM>&gt; In both schemes we do send out a response to every incoming SYN packet.
+</EM><BR>
+<P>Again, tail-drop is free if you have the machinery to deal with large
+<BR>
+MHit/day webservering.  In real life (as opposed to benchmarks), large
+<BR>
+loads imply large listen queues, because so many clients never send
+<BR>
+more than the initial SYN before dropping off the net.  Random-drop
+<BR>
+need not cost many cycles, depending on your queue structure.  If you
+<BR>
+use a hash table (as in the BSDI code), it need not be completely
+<BR>
+resistant to any collisions caused by bad guys, but only resistent to
+<BR>
+substantial numbers of collisions per second.
+<BR>
+<P>In the cookie scheme, you do generate and save an entry in a local hash
+<BR>
+table, don't you?  To prevent bad things from happening from collisions
+<BR>
+in cookies, since the 32-bit initial sequence number does not have
+<BR>
+enough space to encode the state of the new connection.  That state
+<BR>
+must include at least
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(addr,port,addr,port)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;start-time, so that you can discard it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;local initial sequence number
+<BR>
+<P>The initial cookie proposals I saw involved no local state.  There was
+<BR>
+a hash computed of (addr,port,addr,port,remote seq #) and returned as a
+<BR>
+SYN-ACK, and forgotten.  The hope was that if the peer responded with
+<BR>
+an ACK and the right sequence number, it must be the right good guy.
+<BR>
+Obviously, without local state, collisions can and will happen, and
+<BR>
+some good guys will suffer, just as with random-drop, although perhaps
+<BR>
+less often than with random-drop.  The recent statements that
+<BR>
+absolutely no good guys can be lost imply that there is now local state
+<BR>
+saved for each SYN-ACK sent, since otherwise collisions would happen,
+<BR>
+and good guys would be hit.
+<BR>
+<P>Given state in a local hash table, I see no advantage to cookies
+<BR>
+compared to the BSDI code.
+<BR>
+<P>If the bad guy knows the target is using cookies without local state,
+<BR>
+wouldn't the effective attack not be just SYNs but a mixture of just
+<BR>
+enough SYNs to trigger the cookie defense and mostly ACKs intended to
+<BR>
+collide with good guys?
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20SYN%20cookies&In-Reply-To=&lt;199706061351.HAA08478@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+æÔ$˝˘dOI+ÛÎ2zÂtè‡Ÿ”Çœ…≈¡jπ∞´•°áA9õî&amp;\
+<BR>
+.pdefaults
+<BR>
+.loc-cshrc
+<BR>
+.nevotinit
+<BR>
+.gamtables
+<BR>
+.signature
+<BR>
+.sgihelprc
+<BR>
+.insightrc
+<BR>
+.Xdefaults
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0518.html">Manish Patel(x67071): "subscribe"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0516.html">Eric.Schenk@dna.lth.se: "Re: SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#517">[ date ]</A>
+<A HREF="index.html#517">[ thread ]</A>
+<A HREF="subject.html#517">[ subject ]</A>
+<A HREF="author.html#517">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

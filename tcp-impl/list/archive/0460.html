@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 14:53:07 1997" -->
+<!-- isoreceived="19970605185307" -->
+<!-- sent="Thu, 5 Jun 1997 15:50:54 -0600" -->
+<!-- isosent="19970605215054" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052150.PAA06270@mica.denver.sgi.com" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052150.PAA06270@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 17:50:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0461.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0459.html">touch@ISI.EDU: "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#460">[ date ]</A>
+<A HREF="index.html#460">[ thread ]</A>
+<A HREF="subject.html#460">[ subject ]</A>
+<A HREF="author.html#460">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052150.PAA06270@mica.denver.sgi.com&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; The justification for this was that if someone was launching a Denial of
+</EM><BR>
+<EM>&gt; &gt; Service attack on your machine, picking a slot at random was most likely
+</EM><BR>
+<EM>&gt; &gt; to pick one that was opened as part of the attack.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The only way to avoid SYN flooding is to deny the connection
+</EM><BR>
+<EM>&gt; attempts, which will happen anyway once the TCB memory space is full.
+</EM><BR>
+<P>SYN attacks do not involve TIME_WAIT.
+<BR>
+<P>&quot;Denying the connection attempts&quot; is a poor defense against a denial of
+<BR>
+service attack such as SYN bombing, since causing you to deny
+<BR>
+connection attemptss is the purpose for the SYM bombing.
+<BR>
+<P>Have you estimated how big your listen queue would need to be at either
+<BR>
+75 or 180 seconds (common listen queue timeouts) if you were being SYN
+<BR>
+bombed at T1 or T3 rates, and were not denying any legitimate connections?
+<BR>
+<P><P><EM>&gt; The better (and TCP friendly) solution is to queue incoming SYN requests,
+</EM><BR>
+<EM>&gt; and pick one randomly when a slot opens. This prevents the attacker
+</EM><BR>
+<EM>&gt; from timing the incoming SYNs to grab TCBs as they get freed.
+</EM><BR>
+<P>Pick one what when a slot opens, a slot or an incoming SYN request?
+<BR>
+Under which circumstances when a slot opens should do that picking?
+<BR>
+After you've picked whichever it is, what do you do with it?  If it is
+<BR>
+a SYN request, then you must discard it, which is what you'd do without
+<BR>
+any picking when your listen queue is full, and is a bad idea since it
+<BR>
+is what the attacker wants.  If it is a slot, then you are doing one of
+<BR>
+the two forms of the second half of the standard SYN bomb defense.
+<BR>
+<P><P><EM>&gt; That would satisfy CERT, too, I presume (someone should
+</EM><BR>
+<EM>&gt; check, though I suspect they'd look to us for verification anyway).
+</EM><BR>
+<P>The SYN bombing issue is long over and solved, essentially
+<BR>
+independently of CERT, and certainly independently of any verifying by
+<BR>
+you or ISI.
+<BR>
+<P><P>The solution to SYN bombing is 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;- use as large a listen queue as you can afford, and try to make
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the cost of each slot on the listen queue small and searching a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;big queue fast so you can afford more.  At least 30K slots is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one recommendation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- drop either the oldest or a random, pre-existing entry in your
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listen queue when it is full and a new SYN arrives.
+<BR>
+<P><P>Again, this has little if anything to do with TIME_WAIT.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052150.PAA06270@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0461.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0459.html">touch@ISI.EDU: "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0464.html">Eric.Schenk@dna.lth.se: "SYN bombing defense (was: TIME-WAIT truncation)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#460">[ date ]</A>
+<A HREF="index.html#460">[ thread ]</A>
+<A HREF="subject.html#460">[ subject ]</A>
+<A HREF="author.html#460">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@jenolan.rutgers.edu)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 16:58:07 1997" -->
+<!-- isoreceived="19970605205807" -->
+<!-- sent="Thu, 5 Jun 1997 19:50:21 -0400" -->
+<!-- isosent="19970605235021" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@jenolan.rutgers.edu" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052350.TAA00988@jenolan.caipgeneral" -->
+<!-- inreplyto="199706052327.AA07724@ash.isi.edu" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@jenolan.rutgers.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052350.TAA00988@jenolan.caipgeneral&gt;"><EM>davem@jenolan.rutgers.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 19:50:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0490.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0488.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0480.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0496.html">Eric.Schenk@dna.lth.se: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#489">[ date ]</A>
+<A HREF="index.html#489">[ thread ]</A>
+<A HREF="subject.html#489">[ subject ]</A>
+<A HREF="author.html#489">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052350.TAA00988@jenolan.caipgeneral&gt;">touch@ISI.EDU</A>
+<BR>
+&nbsp;&nbsp;&nbsp;Date: Thu, 5 Jun 1997 16:27:32 -0700
+<BR>
+<P>&nbsp;&nbsp;&nbsp;1. doesn't work when incoming requests can be from arbitrary sites
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., web servers
+<BR>
+<P>False, I've specifically tested the effects of SYN/RST cookies over
+<BR>
+100BaseT on a web server with 8 thousand or so web connections, the
+<BR>
+results were the same.  I've even lauched SYN bombs at a machine which
+<BR>
+was running one of the various web performance benchmarks using 5 or 6
+<BR>
+high speed clients, again over a saturated 100baseT.  The effects were
+<BR>
+minimal, when the SYN bomb was not taking place the web server
+<BR>
+performance was not measureably descreased due to the SYN/RST
+<BR>
+protection code in the kernel (that is, I ran a web benchmark on
+<BR>
+two versions of Linux, one had SYN/RST cookies compiled in, one did
+<BR>
+not, this was the only difference, and the numbers were the same for
+<BR>
+both sets of runs)
+<BR>
+<P>This further shows that you can get a close to zero cost
+<BR>
+implementation with no effect on CPU utilization or responsiveness for
+<BR>
+legitimate connections...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;2. can consume other resources at the server (CPU, in particular)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;though you've shown it doesn't consume sufficient for 100 Mbps
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;links
+<BR>
+<P>Where is the CPU loss?  Again this can be implemented in such a way
+<BR>
+that this does not even happen at all.  I mean seriously, what is the
+<BR>
+code path for a well written SYN cookie implementation?  Could be made
+<BR>
+to be nothing more than:
+<BR>
+<P>retry_search:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcb = hashed_demultiplex(saddr, sport, daddr, dport);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!tcb)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto drop;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ ... ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tcb-&gt;state == TCP_LISTEN) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(!SYN &amp;&amp; !RST) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* See if this is a syn cookie validation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* response.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(syn_cookie_response_is_valid(tcb, packet)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setup_new_connection(tcb, packet);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto retry_search;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send_reset(tcb, packet);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(RST || !SYN || ACK || MULTICAST_OR_BRDCAST(daddr))
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto drop;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seq = get_secure_sequence_number(...);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_conn_request();
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>tcp_conn_request() uses a hashing scheme to see whether a valid cookie
+<BR>
+probe response has been received from the other end in this request
+<BR>
+within some aging timeout threshold.
+<BR>
+<P>Once you get a valid probe, the cost is one hash lookup for validation
+<BR>
+on each SYN and perhaps 2 or 3 compare instructions in the new
+<BR>
+connection code path.  Every validation timeout interval, one cookie
+<BR>
+probe packet is sent and one received response must be verified. If you
+<BR>
+think about it, for web client connection patterns to a server this is
+<BR>
+should perform extremely well.
+<BR>
+<P>Where is all this CPU overhead you speak of?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in this sense, cookies do exactly the wrong thing -
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;they make the SYN attack more effective when processing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is the bottleneck (or may in fact make processing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bottleneck instead)
+<BR>
+<P>Where is this extra processing which becomes the bottleneck?  We don't
+<BR>
+even setup the micro TCB if we know the source is invalid.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I'm not down on cookies, just that they still don't prevent
+<BR>
+&nbsp;&nbsp;&nbsp;overloading a server with bad cookies and thus killing
+<BR>
+&nbsp;&nbsp;&nbsp;existing valid connections.
+<BR>
+<P>It doesn't happen in practice, I've run extensive tests and have
+<BR>
+studied real web servers on the net running with our SYN/RST cookie
+<BR>
+code dealing with large numbers of concurrent connections, the
+<BR>
+problems you describe are not occurring in any of the situations I
+<BR>
+have studied.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Only limiting the processing for SYNs does that, which
+<BR>
+&nbsp;&nbsp;&nbsp;then requires a drop policy for an overflowing SYN queue
+<BR>
+&nbsp;&nbsp;&nbsp;that doesn't promote synchronization attacks either.
+<BR>
+<P>SYN cookies have a drop policy, if source never answers the probes,
+<BR>
+drop connections sent by him.
+<BR>
+<P>In fact in one of my tests I believe I left the incoming connection
+<BR>
+queue at something silly like 15 or 16 connections for the web server,
+<BR>
+a 5 client web benchmark and a SYN bomb over directly connected
+<BR>
+100baseT never overflowed the queue.
+<BR>
+<P>---------------------------------------------////
+<BR>
+Yow! 11.26 MB/s remote host TCP bandwidth &amp; ////
+<BR>
+199 usec remote TCP latency over 100Mb/s   ////
+<BR>
+ethernet.  Beat that!                     ////
+<BR>
+-----------------------------------------////__________  o
+<BR>
+David S. Miller, <A HREF="mailto:davem@caip.rutgers.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052350.TAA00988@jenolan.caipgeneral&gt;">davem@caip.rutgers.edu</A> /_____________/ / // /_/ &gt;&lt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0490.html">Vern Paxson: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0488.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0480.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0496.html">Eric.Schenk@dna.lth.se: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#489">[ date ]</A>
+<A HREF="index.html#489">[ thread ]</A>
+<A HREF="subject.html#489">[ subject ]</A>
+<A HREF="author.html#489">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

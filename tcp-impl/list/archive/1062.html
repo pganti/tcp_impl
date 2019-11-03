@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP ack every other - perfor</TITLE>
+<META NAME="Author" CONTENT="Mohit Aron (aron@cs.rice.edu)">
+<META NAME="Subject" CONTENT="Re: TCP ack every other - performance issue?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP ack every other - performance issue?</H1>
+<!-- received="Fri Apr 17 16:06:53 1998" -->
+<!-- isoreceived="19980417200653" -->
+<!-- sent="Fri, 17 Apr 1998 18:03:21 -0500 (CDT)" -->
+<!-- isosent="19980417230321" -->
+<!-- name="Mohit Aron" -->
+<!-- email="aron@cs.rice.edu" -->
+<!-- subject="Re: TCP ack every other - performance issue?" -->
+<!-- id="199804172303.SAA12488@cs.rice.edu" -->
+<!-- inreplyto="3537D8D8.24527981@enea.se" -->
+<STRONG>From:</STRONG> Mohit Aron (<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804172303.SAA12488@cs.rice.edu&gt;"><EM>aron@cs.rice.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 17 1998 - 19:03:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1062">[ date ]</A>
+<A HREF="index.html#1062">[ thread ]</A>
+<A HREF="subject.html#1062">[ subject ]</A>
+<A HREF="author.html#1062">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I have seen in the 4.4BSDLite code and in the behaviour of many
+</EM><BR>
+<EM>&gt; commercial TCP/IP stacks that they stick to the 'ack every other
+</EM><BR>
+<EM>&gt; segment' property. I have developed from ground up a TCP/IP stack
+</EM><BR>
+<EM>&gt; for a commercial RTOS and found in my measurements that if
+</EM><BR>
+<EM>&gt; I change the ACK avery other to 'ack every fourth' the TCP
+</EM><BR>
+<EM>&gt; data throughput increases by 8% when receiving large bulks of data
+</EM><BR>
+<EM>&gt; (with a MSS of 1460 and sock rcvbuf of 32768 bytes).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now, I realize there must be(?) a good reason for the ACK every
+</EM><BR>
+<EM>&gt; other property or maybe there have been discussions on the
+</EM><BR>
+<EM>&gt; functional/performance consequences of not adhering to this property.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I am obviously tempted in leaving the experimental 'ack-every-four'
+</EM><BR>
+<EM>&gt; but respect the properties out there. Any comments?
+</EM><BR>
+<P><P><P>The 'ACK every other segment' helps in reducing the number of interrupts seen
+<BR>
+by the sender, reduces the ACKs in the network, and also gives opportunity to
+<BR>
+the receiver to piggyback the ACK on a data segment. But ACK every four would
+<BR>
+have the following disadvantages:
+<BR>
+<P>1) It will cause a burst of 4 segments to be sent by the sender upon every
+<BR>
+&nbsp;&nbsp;&nbsp;ACK. 
+<BR>
+<P>2) It will be extremely undesirable for HTTP traffic. As long as the sender's
+<BR>
+&nbsp;&nbsp;&nbsp;window doesn't grow upto 4 segments, the receiver is always going to 
+<BR>
+&nbsp;&nbsp;&nbsp;delay ACKs until the firing of the delayed ACK timer. In 4.4BSD this
+<BR>
+&nbsp;&nbsp;&nbsp;delay can be as long as 200ms - this'll unnecessary affect the user 
+<BR>
+&nbsp;&nbsp;&nbsp;perceived latency. Here's the worst case time sequence:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(i) sender sends 1 packet (initial congestion window is 1)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ii) receiver delays ACK by 200ms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(iii) sender receives ACK and sends 2 packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(iv) receiver delays ACK by 200ms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(v) sender receives ACK and sends a burst of 3 packets (window is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increased by 1 segment upon receiving ACK in slow-start)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vi) receiver delays ACK by 200ms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vii) sender receives ACK and sends a burst of 4 packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(viii) receiver sends ACK after receiving the 4th segment
+<BR>
+<P><P><P><P><P>- Mohit Aron
+<BR>
+&nbsp;&nbsp;<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804172303.SAA12488@cs.rice.edu&gt;">aron@cs.rice.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1063.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1062">[ date ]</A>
+<A HREF="index.html#1062">[ thread ]</A>
+<A HREF="subject.html#1062">[ subject ]</A>
+<A HREF="author.html#1062">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

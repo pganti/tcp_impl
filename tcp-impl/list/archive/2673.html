@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Unacceptable ACK in SYN_RCVD</TITLE>
+<META NAME="Author" CONTENT="Murali Bashyam (mbashyam@cisco.com)">
+<META NAME="Subject" CONTENT="Re: Unacceptable ACK in SYN_RCVD state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Unacceptable ACK in SYN_RCVD state handling</H1>
+<!-- received="Mon Apr  8 19:25:56 2002" -->
+<!-- isoreceived="20020408232556" -->
+<!-- sent="Mon, 08 Apr 2002 16:25:40 -0700" -->
+<!-- isosent="20020408232540" -->
+<!-- name="Murali Bashyam" -->
+<!-- email="mbashyam@cisco.com" -->
+<!-- subject="Re: Unacceptable ACK in SYN_RCVD state handling" -->
+<!-- id="3CB226F4.F05F97D4@cisco.com" -->
+<!-- inreplyto="639BAB6ABE61D411B3870090276A8975119D58@hermes.corp.iready.com" -->
+<STRONG>From:</STRONG> Murali Bashyam (<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB226F4.F05F97D4@cisco.com&gt;"><EM>mbashyam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 08 2002 - 19:25:40 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2672.html">Robin Uyeshiro: "RE: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2672.html">Robin Uyeshiro: "RE: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2673">[ date ]</A>
+<A HREF="index.html#2673">[ thread ]</A>
+<A HREF="subject.html#2673">[ subject ]</A>
+<A HREF="author.html#2673">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Robin Uyeshiro wrote:
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I'm confused.  The stuff on page 68 (69?) seems to contradict the
+</EM><BR>
+<EM>&gt; following from page 36, under the Reset Generation heading, at least
+</EM><BR>
+<EM>&gt; for SYN-RECEIVED:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;     2.  If the connection is in any non-synchronized state (LISTEN,
+</EM><BR>
+<EM>&gt;     SYN-SENT, SYN-RECEIVED), and the incoming segment acknowledges
+</EM><BR>
+<EM>&gt;     something not yet sent (the segment carries an unacceptable ACK),
+</EM><BR>
+<EM>&gt; or
+</EM><BR>
+<EM>&gt;     if an incoming segment has a security level or compartment which
+</EM><BR>
+<EM>&gt;     does not exactly match the level and compartment requested for the
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;     connection, a reset is sent.
+</EM><BR>
+<P>This is when the incoming ACK is unacceptable because the ack number is
+<BR>
+greater than snd_una,
+<BR>
+the scenario under consideration has to the seq number of the ACK being
+<BR>
+greater than (rcv_nxt + rcv_win)
+<BR>
+i.e the incoming ACK lies complete outside the receive window.
+<BR>
+<P>Murali
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Page 68/69 appears to count SYN-RECEIVED as a synchronized state.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: Bob Braden [mailto:<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB226F4.F05F97D4@cisco.com&gt;">braden@ISI.EDU</A>]
+</EM><BR>
+<EM>&gt; Sent: Monday, April 08, 2002 12:14 PM
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB226F4.F05F97D4@cisco.com&gt;">braden@ISI.EDU</A>; <A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB226F4.F05F97D4@cisco.com&gt;">mbashyam@cisco.com</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Unacceptable%20ACK%20in%20SYN_RCVD%20state%20handling&In-Reply-To=&lt;3CB226F4.F05F97D4@cisco.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Unacceptable ACK in SYN_RCVD state handling
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; No, the scenario that applies is described on page 68 (sequence
+</EM><BR>
+<EM>&gt; number check),
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Yes, sorry, I misinterpreted what you were asking (ACK field as
+</EM><BR>
+<EM>&gt; opposed
+</EM><BR>
+<EM>&gt; to sequence field of ACK segment (But the man DID say &quot;receive
+</EM><BR>
+<EM>&gt; window&quot;...
+</EM><BR>
+<EM>&gt; mumble).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; The point u mentioned above is the conflict i am having as well,
+</EM><BR>
+<EM>&gt; it seems to me
+</EM><BR>
+<EM>&gt;   *&gt; that retransmitting
+</EM><BR>
+<EM>&gt;   *&gt; a SYN-ACK seems the right thing to do. But the BSD stack doesn't
+</EM><BR>
+<EM>&gt; seem to be
+</EM><BR>
+<EM>&gt;   *&gt; doing that.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I thought you said earlier that the BSD DOES retransmit the SYN.  In
+</EM><BR>
+<EM>&gt; any case, I would agree that the text of RFC 793 seems to say
+</EM><BR>
+<EM>&gt; otherwise.  This particular test is one that has caused a great deal
+</EM><BR>
+<EM>&gt; of
+</EM><BR>
+<EM>&gt; confusion over the years.  From the underlying logic of TCP,  I
+</EM><BR>
+<EM>&gt; believe
+</EM><BR>
+<EM>&gt; that retransmitting the SYN is OK.  So it seems you can choose either
+</EM><BR>
+<EM>&gt; interpretation you want (unless there is some  subtle security
+</EM><BR>
+<EM>&gt; implication.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Bob Braden
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; Murali
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<EM>&gt;   *&gt; &gt;
+</EM><BR>
+<EM>&gt;   *&gt; &gt;
+</EM><BR>
+<EM>&gt;   *&gt; &gt; Bob Braden
+</EM><BR>
+<EM>&gt;   *&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2672.html">Robin Uyeshiro: "RE: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2672.html">Robin Uyeshiro: "RE: Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2673">[ date ]</A>
+<A HREF="index.html#2673">[ thread ]</A>
+<A HREF="subject.html#2673">[ subject ]</A>
+<A HREF="author.html#2673">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Apr 08 2002 - 19:26:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

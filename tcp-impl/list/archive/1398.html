@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: I-D ACTION:draft-ietf-tcpimpl-ne</TITLE>
+<META NAME="Author" CONTENT="Internet-Drafts@ietf.org (Internet-Drafts@ietf.org)">
+<META NAME="Subject" CONTENT="I-D ACTION:draft-ietf-tcpimpl-newreno-00.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>I-D ACTION:draft-ietf-tcpimpl-newreno-00.txt</H1>
+<!-- received="Wed Nov 11 09:49:42 1998" -->
+<!-- isoreceived="19981111144942" -->
+<!-- sent="Wed, 11 Nov 1998 09:47:53 -0500" -->
+<!-- isosent="19981111144753" -->
+<!-- name="Internet-Drafts@ietf.org" -->
+<!-- email="Internet-Drafts@ietf.org" -->
+<!-- subject="I-D ACTION:draft-ietf-tcpimpl-newreno-00.txt" -->
+<!-- id="199811111447.JAA00949@ietf.org" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Internet-Drafts@ietf.org?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-newreno-00.txt&In-Reply-To=&lt;199811111447.JAA00949@ietf.org&gt;"><EM>Internet-Drafts@ietf.org</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Nov 11 1998 - 09:47:53 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1399.html">Mark Allman: "PILC BOF -- Orlando IETF"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1397.html">Steve Alexander: "RE: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1398">[ date ]</A>
+<A HREF="index.html#1398">[ thread ]</A>
+<A HREF="subject.html#1398">[ subject ]</A>
+<A HREF="author.html#1398">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+A New Internet-Draft is available from the on-line Internet-Drafts directories.
+<BR>
+This draft is a work item of the TCP Implementation Working Group of the IETF.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title		: The NewReno Modification to TCP's 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fast Recovery Algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s)	: S. Floyd, T. Henderson
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filename	: draft-ietf-tcpimpl-newreno-00.txt
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages		: 11
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date		: 10-Nov-98
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;RFC 2001 [RFC2001] documents the following four intertwined TCP
+<BR>
+&nbsp;&nbsp;&nbsp;congestion control algorithms: Slow Start, Congestion Avoidance, Fast
+<BR>
+&nbsp;&nbsp;&nbsp;Retransmit, and Fast Recovery.  RFC 2001-bis [RFC2001-bis] explicitly
+<BR>
+&nbsp;&nbsp;&nbsp;allows certain modifications of these algorithms, including
+<BR>
+&nbsp;&nbsp;&nbsp;modifications that use the TCP Selective Acknowledgement (SACK)
+<BR>
+&nbsp;&nbsp;&nbsp;option [MMFR96], and modifications that respond to ``partial
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledgments'' (ACKs which cover new data, but not all the data
+<BR>
+&nbsp;&nbsp;&nbsp;outstanding when loss was detected) in the absence of SACK.  This
+<BR>
+&nbsp;&nbsp;&nbsp;document describes a specific algorithm for responding to partial
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledgments, referred to as NewReno.  This response to partial
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledgments was first proposed by Janey Hoe in [Hoe95].
+<BR>
+<P><P>Internet-Drafts are available by anonymous FTP.  Login with the username
+<BR>
+&quot;anonymous&quot; and a password of your e-mail address.  After logging in,
+<BR>
+type &quot;cd internet-drafts&quot; and then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;get draft-ietf-tcpimpl-newreno-00.txt&quot;.
+<BR>
+A URL for the Internet-Draft is:
+<BR>
+<A HREF="ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-newreno-00.txt">ftp://ftp.ietf.org/internet-drafts/draft-ietf-tcpimpl-newreno-00.txt</A>
+<BR>
+<P>Internet-Drafts directories are located at:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Africa:	ftp.is.co.za
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Europe: ftp.nordu.net
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ftp.nic.it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pacific Rim: munnari.oz.au
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US East Coast: ftp.ietf.org
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;US West Coast: ftp.isi.edu
+<BR>
+<P>Internet-Drafts are also available by mail.
+<BR>
+<P>Send a message to:	mailserv@ietf.org.  In the body type:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;FILE /internet-drafts/draft-ietf-tcpimpl-newreno-00.txt&quot;.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+NOTE:	The mail server at ietf.org can return the document in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MIME-encoded form by using the &quot;mpack&quot; utility.  To use this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feature, insert the command &quot;ENCODING mime&quot; before the &quot;FILE&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command.  To decode the response(s), you will need &quot;munpack&quot; or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a MIME-compliant mail reader.  Different MIME-compliant mail readers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit different behavior, especially when dealing with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;multipart&quot; MIME messages (i.e. documents which have been split
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up into multiple messages), so check your local documentation on
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;how to manipulate these messages.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Below is the data which will enable a MIME compliant mail reader
+<BR>
+implementation to automatically retrieve the ASCII version of the
+<BR>
+Internet-Draft.
+<BR>
+<P><P>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1399.html">Mark Allman: "PILC BOF -- Orlando IETF"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1397.html">Steve Alexander: "RE: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1398">[ date ]</A>
+<A HREF="index.html#1398">[ thread ]</A>
+<A HREF="subject.html#1398">[ subject ]</A>
+<A HREF="author.html#1398">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

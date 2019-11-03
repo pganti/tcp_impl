@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP timeout mechanism</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (Volz@ipworks.com)">
+<META NAME="Subject" CONTENT="RE: TCP timeout mechanism">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP timeout mechanism</H1>
+<!-- received="Fri Aug  4 16:28:06 2000" -->
+<!-- isoreceived="20000804202806" -->
+<!-- sent="Fri, 4 Aug 2000 16:17:01 -0400 " -->
+<!-- isosent="20000804201701" -->
+<!-- name="Bernie Volz" -->
+<!-- email="Volz@ipworks.com" -->
+<!-- subject="RE: TCP timeout mechanism" -->
+<!-- id="63D30D6E10CFD11190A90000F805FE8602BEBFDB@lespaul.process.com" -->
+<!-- inreplyto="TCP timeout mechanism" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:Volz@ipworks.com?Subject=RE:%20TCP%20timeout%20mechanism&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFDB@lespaul.process.com&gt;"><EM>Volz@ipworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 04 2000 - 16:17:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2274.html">der Mouse : "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2272.html">Proneet Biswas: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2269.html">Proneet Biswas: "TCP timeout mechanism"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2278.html">stanislav shalunov: "Re: TCP timeout mechanism"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2273">[ date ]</A>
+<A HREF="index.html#2273">[ thread ]</A>
+<A HREF="subject.html#2273">[ subject ]</A>
+<A HREF="author.html#2273">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Why get rid of them? Limit the number of connections you track, overwrite
+<BR>
+old ones with new ones. That way, you never need a timer thread. It may be
+<BR>
+that occasionally you drop a good connection (because of hash collision),
+<BR>
+but that might not be a problem? (It isn't clear what you're doing with
+<BR>
+these connections.)
+<BR>
+<P>Another method is to use a separate timer queue. Whenever you see packets
+<BR>
+for a connection, move that connection to the end of the timer queue (with
+<BR>
+doubling linked lists, this should be relatively inexpensive?). Now, your
+<BR>
+timer thread only needs to check if the first one on the list is &quot;old&quot; and
+<BR>
+if it is drop it (and look at the next until no more to drop). This approach
+<BR>
+is also nice if you need to limit the number of connections for once you
+<BR>
+reach the limit and you have a new connection, just drop the one at the head
+<BR>
+of the queue (it's the oldest connection). NOTE: As a performance boost, if
+<BR>
+you keep your timers fairly granular (say in 10 seconds chunks), you might
+<BR>
+also add an optimization to not move a the packet to end of the list if it
+<BR>
+has been moved recently (in the same timer chunk). That may occasionally
+<BR>
+cause problems, but it may save a lot of queue moves.
+<BR>
+<P>- Bernie Volz
+<BR>
+&nbsp;&nbsp;IPWorks, Inc.
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Proneet Biswas [mailto:<A HREF="mailto:pbiswas@ipolicynet.com?Subject=RE:%20TCP%20timeout%20mechanism&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFDB@lespaul.process.com&gt;">pbiswas@ipolicynet.com</A>]
+<BR>
+Sent: Friday, August 04, 2000 3:07 PM
+<BR>
+To: Alan Cox; TCP List
+<BR>
+Subject: Re: TCP timeout mechanism
+<BR>
+<P><P>Hi Alan,
+<BR>
+&nbsp;I am sorry I had not been very specific. The device I intend to support is
+<BR>
+kind of a firewall which does not have a stack on it. It will create the
+<BR>
+session entries based on the packets which flow through it ot other
+<BR>
+machines.
+<BR>
+SO, it is the internal data structures which I need to clear. To put it a
+<BR>
+different fashion :
+<BR>
+<P>There is a cache to which I add entries whenever a new session starts. The
+<BR>
+problem is identifying the sessions in the cache which have timed out
+<BR>
+without
+<BR>
+using a timer thread to go through all the entries.
+<BR>
+<P>Thanks.
+<BR>
+Proneet.
+<BR>
+<P><P>Alan Cox wrote:
+<BR>
+<P><EM>&gt; Track state (remembering to allow for unreliability/retransmits) and also
+</EM><BR>
+<EM>&gt; generate faked probe acks _very_ carefully and with backoffs to test if
+</EM><BR>
+the
+<BR>
+<EM>&gt; socket has died after a timeout.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Hardly rocket science.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Once ipsec is standard you won't be much able to session track anything
+</EM><BR>
+tho
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2274.html">der Mouse : "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2272.html">Proneet Biswas: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2269.html">Proneet Biswas: "TCP timeout mechanism"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2276.html">Alan Cox: "Re: TCP timeout mechanism"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2278.html">stanislav shalunov: "Re: TCP timeout mechanism"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2273">[ date ]</A>
+<A HREF="index.html#2273">[ thread ]</A>
+<A HREF="subject.html#2273">[ subject ]</A>
+<A HREF="author.html#2273">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

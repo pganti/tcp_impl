@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Header compression and packet IDs</TITLE>
+<META NAME="Author" CONTENT="Guy Romano (romano@magoo.comm.mot.com)">
+<META NAME="Subject" CONTENT="Header compression and packet IDs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Header compression and packet IDs</H1>
+<!-- received="Wed Apr 16 12:53:30 1997" -->
+<!-- isoreceived="19970416165330" -->
+<!-- sent="Wed, 16 Apr 97 14:03:07 CDT" -->
+<!-- isosent="19970416190307" -->
+<!-- name="Guy Romano" -->
+<!-- email="romano@magoo.comm.mot.com" -->
+<!-- subject="Header compression and packet IDs" -->
+<!-- id="9704161903.AA04917@magoo.comm.mot.com" -->
+<STRONG>From:</STRONG> Guy Romano (<A HREF="mailto:romano@magoo.comm.mot.com?Subject=Re:%20Header%20compression%20and%20packet%20IDs&In-Reply-To=&lt;9704161903.AA04917@magoo.comm.mot.com&gt;"><EM>romano@magoo.comm.mot.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 16 1997 - 15:03:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0343.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0341.html">der Mouse : "Re: Memphis Minutes"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#342">[ date ]</A>
+<A HREF="index.html#342">[ thread ]</A>
+<A HREF="subject.html#342">[ subject ]</A>
+<A HREF="author.html#342">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Van Jacobson header compression works best when the IP packet ID is 
+<BR>
+incremented by 1 for each packet sent.  In other words, the difference
+<BR>
+between the current and previous packet ID is equal to 1.  It is my
+<BR>
+understanding that the difference between the current and previous 
+<BR>
+packet ID is included in the compressed header only when it is not equal
+<BR>
+to 1.  If the difference is less than 256 but greater than 1 then it 
+<BR>
+can be represented in a one byte field.  If the difference is greater 
+<BR>
+than or equal to 256 then the difference requires 2 bytes.  I have 
+<BR>
+included a section from RFC1144 that supports my point.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&quot;Finally, the TCP/IP header on the outgoing packet is replaced with a
+<BR>
+&nbsp;&nbsp;&nbsp;compressed header:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- The change in the packet ID is computed and, if not one,/21/ the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;difference is encoded (note that it may be zero or negative) and the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I bit is set in the change mask.&quot;
+<BR>
+<P>At least two different but related stacks increment the packet ID by 256
+<BR>
+(in most cases).  In fact I believe that the packet ID is being sent 
+<BR>
+in non-network byte order.  The tcpdump trace below shows the first packet
+<BR>
+from mip247.139 having a packet ID of 65313.  The next packet sent has a
+<BR>
+packet ID of 34.  If the packet ID was in network byte order and the sender
+<BR>
+was incrementing the packet ID by 256 then the second packet ID should have
+<BR>
+been 33 (65313 + 256 - 65536) or in hex (0xff21 + 0x100 - 0x10000 = 0x21).  
+<BR>
+If we do the math in network byte order, 0x21ff + 0x001 = 0x2200.  The computer 
+<BR>
+then sent the packet ID in non-network byte order or 0x0022 (34 decimal).
+<BR>
+<P><P>ip 60: mip247.139 &gt; mip248.1027: . ack 2369 win 8576 (DF) (ttl 128, id 65313)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 2369:2905(536) ack 109 win 8326 (DF) (ttl 31, id 19459)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 2905:3441(536) ack 109 win 8326 (DF) (ttl 31, id 19715)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 3441 win 8576 (DF) (ttl 128, id 34)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 3441:3977(536) ack 109 win 8326 (DF) (ttl 31, id 19971)
+<BR>
+ip 450: mip248.1027 &gt; mip247.139: P 3977:4373(396) ack 109 win 8326 (DF) (ttl 31, id 20227)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 4373 win 8576 (DF) (ttl 128, id 290)
+<BR>
+ip 95: mip247.139 &gt; mip248.1027: P 109:150(41) ack 4373 win 8576 (DF) (ttl 12 8, id 546)
+<BR>
+<P><P>An example of a different case:  
+<BR>
+<P>ip 450: mip248.1027 &gt; mip247.139: P 16421:16817(396) ack 232 win 8203 (DF) (ttl 31, id 26371)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 16817 win 8576 (DF) (ttl 128, id 5922)
+<BR>
+ip 95: mip247.139 &gt; mip248.1027: P 232:273(41) ack 16817 win 8576 (DF) (ttl 1 28, id 6178)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 16817:17353(536) ack 273 win 8162 (DF) (ttl 31, id 26627)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 17353 win 8576 (DF) (ttl 128, id 6434)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 17353:17889(536) ack 273 win 8162 (DF) (ttl 31, id 26883)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 17889 win 8576 (DF) (ttl 128, id 6690)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 17889:18425(536) ack 273 win 8162 (DF) (ttl 31, id 27139)
+<BR>
+ip 60: mip247.139 &gt; mip248.1027: . ack 18425 win 8576 (DF) (ttl 128, id 6946)
+<BR>
+ip 590: mip248.1027 &gt; mip247.139: . 18425:18961(536) ack 273 win 8162 (DF) (ttl 31, id 27395)
+<BR>
+<P><P>While I have not found the RFC myself I an told that this behavior does not
+<BR>
+violate any rules.  
+<BR>
+<P>This implementation issue is not directly related to TCP since it is an 
+<BR>
+IP header issue.  But it will effect header compressibility and performance 
+<BR>
+of TCP packets when header compression is used.  I have checked with Vern
+<BR>
+Paxson and this issue is within the scope of this working group.
+<BR>
+<P><P><P>Guy
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0343.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0341.html">der Mouse : "Re: Memphis Minutes"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#342">[ date ]</A>
+<A HREF="index.html#342">[ thread ]</A>
+<A HREF="subject.html#342">[ subject ]</A>
+<A HREF="author.html#342">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

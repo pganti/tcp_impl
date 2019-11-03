@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="Michael Smith (msmith@corp.iready.com)">
+<META NAME="Subject" CONTENT="Re: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 14:49:37 2002" -->
+<!-- isoreceived="20020405194937" -->
+<!-- sent="Fri, 5 Apr 2002 11:50:29 -0800 " -->
+<!-- isosent="20020405195029" -->
+<!-- name="Michael Smith" -->
+<!-- email="msmith@corp.iready.com" -->
+<!-- subject="Re: TCP Checksum Interoperability" -->
+<!-- id="034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com" -->
+<!-- inreplyto="TCP Checksum Interoperability" -->
+<STRONG>From:</STRONG> Michael Smith (<A HREF="mailto:msmith@corp.iready.com?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;"><EM>msmith@corp.iready.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 14:50:29 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2646.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2644.html">Michael Smith: "RE: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2645">[ date ]</A>
+<A HREF="index.html#2645">[ thread ]</A>
+<A HREF="subject.html#2645">[ subject ]</A>
+<A HREF="author.html#2645">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Forwarding post from ietf list to '<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">tcp-impl@grc.nasa.gov</A>' (I'm desperately
+<BR>
+hoping this doesn't go on for much longer).
+<BR>
+<P>Mike Smith
+<BR>
+CTO, iReady
+<BR>
+<P><P>Re: TCP Checksum Interoperability
+<BR>
+<P><P><P>To: Lloyd Wood &lt;<A HREF="mailto:L.Wood@eim.surrey.ac.uk?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">L.Wood@eim.surrey.ac.uk</A>&gt; 
+<BR>
+Subject: Re: TCP Checksum Interoperability 
+<BR>
+From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">touch@ISI.EDU</A>&gt; 
+<BR>
+Date: Fri, 05 Apr 2002 11:41:08 -0800 
+<BR>
+CC: Chris Trobridge &lt;<A HREF="mailto:CTrobridge@baltimore.com?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">CTrobridge@baltimore.com</A>&gt;, <A HREF="mailto:ietf@IETF.ORG?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">ietf@IETF.ORG</A> 
+<BR>
+References:
+<BR>
+&lt;<A HREF="mailto:Pine.SOL.4.43.0204051531440.5049-100000@phaestos.ee.surrey.ac.uk?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">Pine.SOL.4.43.0204051531440.5049-100000@phaestos.ee.surrey.ac.uk</A>&gt; 
+<BR>
+Sender: <A HREF="mailto:owner-ietf@IETF.ORG?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">owner-ietf@IETF.ORG</A> 
+<BR>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.9)
+<BR>
+Gecko/20020311 
+<BR>
+<P><P><P>Lloyd Wood wrote:
+<BR>
+<EM>&gt; See sections 3-5 of RFC1624 for discussion of the one's complement
+</EM><BR>
+<EM>&gt; problem for the IP header checksum. I presume similar applies for TCP,
+</EM><BR>
+<EM>&gt; although I don't know offhand if it's written down anywhere.
+</EM><BR>
+<P>RFC793 describes the use of 1's complement as the TCP checksum.
+<BR>
+<P>A TCP checksum can never be 0x0000, by the same argument of RFC1624, 
+<BR>
+since the TCP header length is never 0.
+<BR>
+<P>Most of RFC1624 is clarification of the mathematical properties of 1's 
+<BR>
+complement arithmetic; it's not specific to IP.
+<BR>
+<P><EM>&gt;&gt;We have a compatibility problem between two third party implementations of
+</EM><BR>
+<EM>&gt;&gt;the TCP checksum.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;The problem concerns the representation of zero, which has two 1-s
+</EM><BR>
+<EM>&gt;&gt;complement representations (0000 and ffff).
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;We don't have source to either stack but I managed to deduce the problem
+</EM><BR>
+<EM>&gt;&gt;from looking at a packet trace.  The receiver drops all datagrams
+</EM><BR>
+containing
+<BR>
+<EM>&gt;&gt;a TCP with a TCP checksum of ffff.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;The receiver appears to be following the checksum procedure in the RFC
+</EM><BR>
+<EM>&gt;&gt;literally - ie zero checksum, recalculate and check that the result is the
+</EM><BR>
+<EM>&gt;&gt;complement of what the sender sent.  The problem is that the sender and
+</EM><BR>
+<EM>&gt;&gt;receiver don't agree about zero and hence the datagram is dropped
+</EM><BR>
+silently.
+<BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;My view is that the receiver is in error; it should be checking the
+</EM><BR>
+special
+<BR>
+<EM>&gt;&gt;case of 0.
+</EM><BR>
+<P>The sender is in error. As noted in RFC1624, there is no summation of 
+<BR>
+words which yields a 1's complement sum of 0x0000 except all zeroes, 
+<BR>
+which can't occur because (as above) the TCP header length renders at 
+<BR>
+least one word non-zero.
+<BR>
+<P>Since the TCP checksum is the 1's complement of the sum, and 0x0000 
+<BR>
+cannot occur as a sum, 0xffff cannot occur as a valid TCP checksum.
+<BR>
+<P>It would be useful to check the math used at the source to compute the 
+<BR>
+checksum. It is likely there is an error, in particular, see section 3 
+<BR>
+of RFC1624 for one typical one.
+<BR>
+<P><EM>&gt;&gt;All the receiver code I have seen doesn't work this way.  The normal
+</EM><BR>
+<EM>&gt;&gt;approach is to calculate the1-s complement sum with checksum in place and
+</EM><BR>
+<EM>&gt;&gt;check that this is zero.  The methods I konw always return just one
+</EM><BR>
+<EM>&gt;&gt;representation for zero, hence there is no special case.
+</EM><BR>
+<P>As per RFC1624, that depends on the inputs. Nonzero inputs generate only 
+<BR>
+0xffff as a sum, it takes all-zeroes to generate 0x0000 as a sum, but, 
+<BR>
+as per above, that can't occur.
+<BR>
+<P>Joe
+<BR>
+<P><P><P><P><P>References: 
+<BR>
+Re: TCP Checksum Interoperability 
+<BR>
+From: Lloyd Wood &lt;<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E5@mercury.corp.iready.com&gt;">l.wood@eim.surrey.ac.uk</A>&gt;
+<BR>
+Prev by Date: Re: draft-iab-unsaf-considerations-01.txt 
+<BR>
+Prev by thread: Re: TCP Checksum Interoperability 
+<BR>
+Next by thread: Re: TCP Checksum Interoperability 
+<BR>
+Index(es): 
+<BR>
+Date 
+<BR>
+Thread 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2646.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2644.html">Michael Smith: "RE: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2645">[ date ]</A>
+<A HREF="index.html#2645">[ thread ]</A>
+<A HREF="subject.html#2645">[ subject ]</A>
+<A HREF="author.html#2645">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 14:49:44 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Thu Jun 29 20:42:05 2000" -->
+<!-- isoreceived="20000630004205" -->
+<!-- sent="Thu, 29 Jun 2000 17:37:12 -0700 (PDT)" -->
+<!-- isosent="20000630003712" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="Roam.SIMC.2.0.6.962325432.19099.kcpoon@jurassic" -->
+<!-- inreplyto="395BDD13.1E54F741@Novell.COM" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962325432.19099.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 29 2000 - 20:37:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2199">[ date ]</A>
+<A HREF="index.html#2199">[ thread ]</A>
+<A HREF="subject.html#2199">[ subject ]</A>
+<A HREF="author.html#2199">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The case of pure ACK segments (aka window updates) coming out of order
+</EM><BR>
+<EM>&gt; is not handled by the last check.
+</EM><BR>
+<P>By pure window updates, do you mean that SEG.SEQ and SEG.ACK stay the same?
+<BR>
+I think the check handles that.  If SEG.ACK &lt; SND.UNA, the flow will not 
+<BR>
+go to the update path.  So the last check is equivalent to
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEG.ACK == SND.WL2 &amp;&amp; SND.WL1 == SEG.SEQ &amp;&amp; SEG.WND &gt; SND.WND
+<BR>
+<P>Isn's this pure window update handling since SND.WL2 is just equal to
+<BR>
+SEG.ACK for pure window updates?  Or do you mean another thing?  Actually,
+<BR>
+I think your revised check is equivalent to Alexey's check, except the order
+<BR>
+of checking is different.
+<BR>
+<P><EM>&gt; It is assumed that the segment has been already trimmed to be inside the
+</EM><BR>
+<EM>&gt; window and the ACK satisfies the check:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SEG.ACK &lt;= SND.UNA &lt;= SND.MAX.
+</EM><BR>
+<P>Typo?  I guess you mean SND.UNA &lt;= SEG.ACK &lt;= SND.MAX.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962325432.19099.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2198.html">Ramesh Shankar: "Re: HP-UX -11.0  (FIN_WAIT_2)"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2199">[ date ]</A>
+<A HREF="index.html#2199">[ thread ]</A>
+<A HREF="subject.html#2199">[ subject ]</A>
+<A HREF="author.html#2199">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

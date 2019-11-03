@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Tue Feb 16 22:22:40 1999" -->
+<!-- isoreceived="19990217032240" -->
+<!-- sent="Tue, 16 Feb 1999 20:16:17 -0700 (MST)" -->
+<!-- isosent="19990217031617" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902170316.UAA16861@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902170316.UAA16861@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 16 1999 - 22:16:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1584">[ date ]</A>
+<A HREF="index.html#1584">[ thread ]</A>
+<A HREF="subject.html#1584">[ subject ]</A>
+<A HREF="author.html#1584">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Greg Minshall &lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902170316.UAA16861@calcite.rhyolite.com&gt;">minshall@siara.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; suffer the problem, or a pointer to a real application that
+</EM><BR>
+<EM>&gt; &gt; exemplifies the class of suffering applications.  These must be
+</EM><BR>
+<EM>&gt; &gt; applications that now suffer unnecessary latency on real world TCP
+</EM><BR>
+<EM>&gt; &gt; stacks on private nets or the Internet. 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I'm not sure we're converging, but let's try this:  for request-reponse 
+</EM><BR>
+<EM>&gt; protocols with variable-sized responses, with the current Nagle and delayed 
+</EM><BR>
+<EM>&gt; ACKs, there is no way to write the server application such that some 
+</EM><BR>
+<EM>&gt; percentage of the responses don't get delayed.  The modified Nagle allows an 
+</EM><BR>
+<EM>&gt; application writer to write their application to avoid that particular delay.
+</EM><BR>
+<P>That's still only a sketch of an hypothetical application instead of a
+<BR>
+concrete pointer.  Do you have a name of a product? 
+<BR>
+<P>My intuition claims there are essentially no real applications that fit
+<BR>
+that sketch, and do not need to turn off the Nagle algorithm for other
+<BR>
+reasons.  The most common reason is the incompetant use of write-write
+<BR>
+instead of writev().  Another common but respectable reason is occassional,
+<BR>
+unidirectional traffic asynchronous with the main requests and responses.
+<BR>
+If your application has extra, one sided operations, such as updating
+<BR>
+unimportant status, then you must turn off Nagle, or the real requests will
+<BR>
+stall when they come.
+<BR>
+<P>It has been said that the proposal would wean users of write-write instead
+<BR>
+of writev to turning off Nagle.  I disagree.  They'll still reflexively
+<BR>
+turn off Nagle instead of using writev(), and won't notice the modified
+<BR>
+Nagle algorithm.
+<BR>
+<P>The modification is not free.  It's modest cost &lt;&lt;MUST&gt;&gt; have concrete
+<BR>
+beneficiaries!
+<BR>
+<P>I think you've convinced me the current Nagle algorithm is good enough
+<BR>
+for fixing telnet, that it does not matter to FTP, NFS, and other bulk
+<BR>
+applications, and it is and always will be turned off for HTTP and
+<BR>
+everything else for various good and bad reasons.
+<BR>
+<P><P><EM>&gt; Here's something i mentioned to the Rick Jones (and the list); maybe this 
+</EM><BR>
+<EM>&gt; helps:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; Check out, for example, John Heideman's article in the  April, 1997,
+</EM><BR>
+<EM>&gt; &gt; ACM SIGCOMM Computer Communications Review, or Henrik Nielsen, et  al,
+</EM><BR>
+<EM>&gt; &gt; from SIGCOMM 1997, for example of fairly well-crafted applications
+</EM><BR>
+<EM>&gt; &gt; that  still run afoul of Nagle/delayed ACK interactions.
+</EM><BR>
+<P>Do you have an on-line reference?   A year or two ago, after 15 going on
+<BR>
+30 years of increasing irritation, the ACM's insistance on charging me
+<BR>
+for the nearly content-free, trade rag that CACM had become exhausted my
+<BR>
+patience and extravagance.  You can get ads separated by bogus statistics
+<BR>
+proving the wonders of the latest panacea for the Information Technology
+<BR>
+Crisis du jure for free, and with a lot less stilted pedantry.  And you
+<BR>
+don't get invoices with hefty &quot;contributions&quot; conveniently included.
+<BR>
+<P>I do recall seeing something somewhere about HTTP 1.0 and maybe 1.1 versus
+<BR>
+the Nagle algorithm.  As I vaguely recall it, even the proposed modified
+<BR>
+Nagle algorithm would still have to be turned off.  That's not the subject
+<BR>
+of those articles, is it?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902170316.UAA16861@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1583.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1585.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1584">[ date ]</A>
+<A HREF="index.html#1584">[ thread ]</A>
+<A HREF="subject.html#1584">[ subject ]</A>
+<A HREF="author.html#1584">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

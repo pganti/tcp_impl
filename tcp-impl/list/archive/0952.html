@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (VOLZ@PROCESS.COM)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Tue Feb 17 18:54:52 1998" -->
+<!-- isoreceived="19980217235452" -->
+<!-- sent="Tue, 17 Feb 1998 19:14 -0500" -->
+<!-- isosent="19980218001456" -->
+<!-- name="Bernie Volz" -->
+<!-- email="VOLZ@PROCESS.COM" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="009C1F60C733B7DE.2E25@PROCESS.COM" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;009C1F60C733B7DE.2E25@PROCESS.COM&gt;"><EM>VOLZ@PROCESS.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 17 1998 - 19:14:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#952">[ date ]</A>
+<A HREF="index.html#952">[ thread ]</A>
+<A HREF="subject.html#952">[ subject ]</A>
+<A HREF="author.html#952">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;I agree with Rick Jones comment:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; Would it be better to reset upon a window probe?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The sending TCP should be sending a window probe, with a new byte
+</EM><BR>
+<EM>&gt;of data.  The receiving TCP, upon getting new data for a connection
+</EM><BR>
+<EM>&gt;that the application has shut down, should be generating a RST to
+</EM><BR>
+<EM>&gt;reset the TCP connection.  (If the receiving TCP tosses the out-of-window
+</EM><BR>
+<EM>&gt;data and generates an ACK instead of a RST, then that is the problem
+</EM><BR>
+<EM>&gt;that should be fixed.)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;		-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;009C1F60C733B7DE.2E25@PROCESS.COM&gt;">dab@bsdi.com</A>
+</EM><BR>
+<P>I would rather see the &quot;receiving TCP&quot; open the window when it detects
+<BR>
+this case and resetting the connection if any new data was received
+<BR>
+(even if that data was received because of a window probe). I believe
+<BR>
+this is what BSD based stacks typically do. I don't see any advantage to
+<BR>
+waiting for a probe before opening the window (and discarding the
+<BR>
+previously received data).
+<BR>
+<P>The only other option that may make sense to discuss is whether the
+<BR>
+&quot;receiving TCP&quot; just resets the connection when there is data on its
+<BR>
+receive queue when the application &quot;closes&quot; the socket (in such a way
+<BR>
+that it can no longer read that data). I don't a strong opinion on
+<BR>
+whether this is better (we could argue that it isn't because most
+<BR>
+implementations open the window and reset if more data is received).
+<BR>
+<P>- Bernie Volz
+<BR>
+&nbsp;&nbsp;Process Software
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0954.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#952">[ date ]</A>
+<A HREF="index.html#952">[ thread ]</A>
+<A HREF="subject.html#952">[ subject ]</A>
+<A HREF="author.html#952">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

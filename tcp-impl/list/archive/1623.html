@@ -1,0 +1,827 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: revised internet draft on sugges</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="revised internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>revised internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 26 15:00:29 1999" -->
+<!-- isoreceived="19990226200029" -->
+<!-- sent="Fri, 26 Feb 1999 11:50:46 -0800" -->
+<!-- isosent="19990226195046" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="revised internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902261950.LAA01011@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902261950.LAA01011@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 26 1999 - 14:50:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1622.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1625.html">braden@ISI.EDU: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1628.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1631.html">der Mouse : "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1641.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1644.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1623">[ date ]</A>
+<A HREF="index.html#1623">[ thread ]</A>
+<A HREF="subject.html#1623">[ subject ]</A>
+<A HREF="author.html#1623">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Internet Engineering Task Force                            Greg Minshall
+<BR>
+INTERNET-DRAFT                                             Siara Systems
+<BR>
+draft-minshall-nagle-00.5                              February 26, 1999
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A Proposed Modification to Nagle's Algorithm
+<BR>
+<P><P>Status of This Memo
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This document is an Internet-Draft.  Internet-Drafts are working
+<BR>
+&nbsp;&nbsp;&nbsp;documents of the Internet Engineering Task Force (IETF), its areas,
+<BR>
+&nbsp;&nbsp;&nbsp;and its working groups.  Note that other groups may also distribute
+<BR>
+&nbsp;&nbsp;&nbsp;working documents as Internet-Drafts.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Internet-Drafts are draft documents valid for a maximum of six
+<BR>
+&nbsp;&nbsp;&nbsp;months and may be updated, replaced, or obsoleted by other
+<BR>
+&nbsp;&nbsp;&nbsp;documents at any time.  It is inappropriate to use Internet- Drafts
+<BR>
+&nbsp;&nbsp;&nbsp;as reference material or to cite them other than as ``work in
+<BR>
+&nbsp;&nbsp;&nbsp;progress.''
+<BR>
+<P>&nbsp;&nbsp;&nbsp;To view the entire list of current Internet-Drafts, please check
+<BR>
+&nbsp;&nbsp;&nbsp;the ``1id-abstracts.txt'' listing contained in the Internet-Drafts
+<BR>
+&nbsp;&nbsp;&nbsp;Shadow Directories on ftp.is.co.za (Africa), ftp.nordu.net
+<BR>
+&nbsp;&nbsp;&nbsp;(Northern Europe), ftp.nis.garr.it (Southern Europe), munnari.oz.au
+<BR>
+&nbsp;&nbsp;&nbsp;(Pacific Rim), ftp.ietf.org (US East Coast), or ftp.isi.edu (US
+<BR>
+&nbsp;&nbsp;&nbsp;West Coast).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This draft proposes a modification to Nagle's algorithm (as
+<BR>
+&nbsp;&nbsp;&nbsp;specified in RFC896) to allow TCP, under certain conditions, to
+<BR>
+&nbsp;&nbsp;&nbsp;send a small sized packet immediately after one or more maximum
+<BR>
+&nbsp;&nbsp;&nbsp;segment sized packet.
+<BR>
+<P><P>Abstract
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The Nagle algorithm is one of the primary mechanisms which protects
+<BR>
+&nbsp;&nbsp;&nbsp;the internet from poorly designed and/or poorly implemented
+<BR>
+&nbsp;&nbsp;&nbsp;applications.  However, for a certain class of applications
+<BR>
+&nbsp;&nbsp;&nbsp;(notably, request-response protocols) the Nagle algorithm interacts
+<BR>
+&nbsp;&nbsp;&nbsp;poorly with delayed acknowledgements to give these applications
+<BR>
+&nbsp;&nbsp;&nbsp;poorer performance.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This draft is NOT suggesting that these applications should disable
+<BR>
+&nbsp;&nbsp;&nbsp;the Nagle algorithm.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This draft suggests a fairly small and simple modification to the
+<BR>
+&nbsp;&nbsp;&nbsp;Nagle algorithm which preserves the Nagle algorithm as a means of
+<BR>
+&nbsp;&nbsp;&nbsp;protecting the internet while at the same time giving better
+<BR>
+&nbsp;&nbsp;&nbsp;performance to a wider class of applications.
+<BR>
+<P><P>Introduction to the Nagle algorithm
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The Nagle algorithm [RFC896] protects the internet from
+<BR>
+&nbsp;&nbsp;&nbsp;applications (most notably Telnet [RFC854], at the time the
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm was developed) which tend to dribble small amounts of
+<BR>
+&nbsp;&nbsp;&nbsp;data to TCP.  Without the Nagle algorithm, TCP would transmit a
+<BR>
+&nbsp;&nbsp;&nbsp;packet, with a small amount of data, in response to each of the
+<BR>
+&nbsp;&nbsp;&nbsp;application's writes to TCP.  With the Nagle algorithm, a first
+<BR>
+&nbsp;&nbsp;&nbsp;small packet will be transmitted, then subsequent writes from the
+<BR>
+&nbsp;&nbsp;&nbsp;application will be buffered at the sending TCP until either i)
+<BR>
+&nbsp;&nbsp;&nbsp;enough application data has accumulated to enable TCP to transmit a
+<BR>
+&nbsp;&nbsp;&nbsp;maximum sized packet, or ii) the initial small packet is
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledged by the receiving TCP.  This limits the number of small
+<BR>
+&nbsp;&nbsp;&nbsp;packets to one per round trip time.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;While the current Nagle algorithm does a very good job of
+<BR>
+&nbsp;&nbsp;&nbsp;protecting the internet from such applications, there are other
+<BR>
+&nbsp;&nbsp;&nbsp;applications, such as request-response protocols (with HTTP
+<BR>
+&nbsp;&nbsp;&nbsp;[RFC2068]  being a topical example) in which the current Nagle
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm interacts with TCP's ``delayed ACK'' policy [RFC1122]
+<BR>
+&nbsp;&nbsp;&nbsp;to produce non-optimal results.
+<BR>
+<P><P>Delayed ACKs
+<BR>
+<P>&nbsp;&nbsp;&nbsp;A receiving TCP tries to avoid acknowledging every received data
+<BR>
+&nbsp;&nbsp;&nbsp;packet in the hope of ``piggy-backing'' the acknowledgement on a
+<BR>
+&nbsp;&nbsp;&nbsp;data packet flowing in the reverse direction or combining the
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledgement with a window update flowing in the reverse
+<BR>
+&nbsp;&nbsp;&nbsp;direction.  This process, known as ``delayed ACKing'' [RFC1122],
+<BR>
+&nbsp;&nbsp;&nbsp;typically causes an ACK to be generated for every other received
+<BR>
+&nbsp;&nbsp;&nbsp;(full-sized) data packet.  In the case of an ``isolated'' TCP
+<BR>
+&nbsp;&nbsp;&nbsp;packet (i.e., where a second TCP packet is not going to arrive
+<BR>
+&nbsp;&nbsp;&nbsp;anytime soon), the delayed ACK policy causes an acknowledgement for
+<BR>
+&nbsp;&nbsp;&nbsp;the data in the isolated packet to be delayed up to 200
+<BR>
+&nbsp;&nbsp;&nbsp;milliseconds of the receipt of the isolated packet (the actual
+<BR>
+&nbsp;&nbsp;&nbsp;maximum time the acknowledgement can be delayed is 500ms [RFC1122],
+<BR>
+&nbsp;&nbsp;&nbsp;but most systems implement a maximum of 200ms, and we shall assume
+<BR>
+&nbsp;&nbsp;&nbsp;that number in this document).  The way delayed ACKs are
+<BR>
+&nbsp;&nbsp;&nbsp;implemented in some systems causes the delayed ACK to be generated
+<BR>
+&nbsp;&nbsp;&nbsp;anytime between 0ms and 200ms; in this case, the average amount of
+<BR>
+&nbsp;&nbsp;&nbsp;time before the delayed ACK is generated is 100ms.
+<BR>
+<P><P>The interaction of delayed ACKs and Nagle
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If a TCP has more application data to transmit than will fit in one
+<BR>
+&nbsp;&nbsp;&nbsp;packet, but less than two full-sized packets' worth of data, it
+<BR>
+&nbsp;&nbsp;&nbsp;will transmit the first packet.  As a result of Nagle, it will not
+<BR>
+&nbsp;&nbsp;&nbsp;transmit the second packet until the first packet has been
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledged.  On the other hand, the receiving TCP will delay
+<BR>
+&nbsp;&nbsp;&nbsp;acknowledging the first packet until either i) a second packet
+<BR>
+&nbsp;&nbsp;&nbsp;arrives (which, in this case, won't arrive), or ii) approximately
+<BR>
+&nbsp;&nbsp;&nbsp;100ms (and a maximum of 200ms) has elapsed.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;When the sending TCP receives the delayed ACK, it can then transmit
+<BR>
+&nbsp;&nbsp;&nbsp;its second packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In a request-response protocol, this second packet will complete
+<BR>
+&nbsp;&nbsp;&nbsp;either a request or a response, which then enables a succeeding
+<BR>
+&nbsp;&nbsp;&nbsp;response or request.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Note two (related) bad results of the interaction of delayed ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;and the Nagle algorithm in this case: the request-response time may
+<BR>
+&nbsp;&nbsp;&nbsp;be increased by up to 400ms (if both the request and the response
+<BR>
+&nbsp;&nbsp;&nbsp;are delayed); and, consequently, the number of transactions per
+<BR>
+&nbsp;&nbsp;&nbsp;second is substantially reduced.
+<BR>
+<P><P>A proposed modification to the Nagle algorithm
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In the following discussion we make use of the following variables
+<BR>
+&nbsp;&nbsp;&nbsp;defined in the TCP RFC [RFC793] and in the host requirements RFC
+<BR>
+&nbsp;&nbsp;&nbsp;[RFC1122]: ``snd.nxt'' is a TCP variable which names the next byte
+<BR>
+&nbsp;&nbsp;&nbsp;of data to be transmitted; ``snd.una'' is a TCP variable which
+<BR>
+&nbsp;&nbsp;&nbsp;names the next byte of data to be acknowledged (if snd.nxt equals
+<BR>
+&nbsp;&nbsp;&nbsp;snd.una, then all previous packets have been acknowledged);
+<BR>
+&nbsp;&nbsp;&nbsp;Eff.snd.MSS is the largest TCP payload (user data) that can be
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted in one packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The current Nagle algorithm does not require any other state to be
+<BR>
+&nbsp;&nbsp;&nbsp;kept by TCP on a system.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The proposed modification to the Nagle algorithm does,
+<BR>
+&nbsp;&nbsp;&nbsp;unfortunately, require one new state variable to be kept by TCP:
+<BR>
+&nbsp;&nbsp;&nbsp;``snd.sml'' is a TCP variable which names the last byte of data in
+<BR>
+&nbsp;&nbsp;&nbsp;the most recently transmitted small packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The current Nagle algorithm can be described as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if any previous packet has not yet been acknowledged,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not transmit a packet.&quot;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;and in pseudo-code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; (snd.nxt &gt; snd.una)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The proposed Nagle algorithm modifies this as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;If a TCP has less than a full-sized packet to transmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and if any previously transmitted less than full-sized
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet has not yet been acknowledged, do not transmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a packet.&quot;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;and in pseudo-code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; (snd.sml &gt; snd.una)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snd.sml = snd.nxt+packet.size;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In other words, when running Nagle, only look at the recent
+<BR>
+&nbsp;&nbsp;&nbsp;transmission (and acknowledgement) of small packets (rather than
+<BR>
+&nbsp;&nbsp;&nbsp;all packets, as in the current Nagle).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;(In writing the above, I am aware that TCP acknowledges bytes, not
+<BR>
+&nbsp;&nbsp;&nbsp;packets.  However, expressing the algorithm in terms of packets
+<BR>
+&nbsp;&nbsp;&nbsp;seems to make the explanation a bit clearer.)
+<BR>
+<P><P>Implementing Nagle at Send
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The above description of the current Nagle algorithm and of the
+<BR>
+&nbsp;&nbsp;&nbsp;proposed modification assumes that the Nagle algorithm is being
+<BR>
+&nbsp;&nbsp;&nbsp;implemented just as TCP is about to hand a packet to IP to be
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted, i.e., the algorithm is looking at the sizes of the
+<BR>
+&nbsp;&nbsp;&nbsp;packets it transmits.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In reality, many TCPs essentially implement Nagle at the interface
+<BR>
+&nbsp;&nbsp;&nbsp;where applications present data to TCP to be transmitted (i.e., in
+<BR>
+&nbsp;&nbsp;&nbsp;the call to ``SEND'', as defined in section 3.8 of the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;specification [RFC793]).  The motivation for this is to not
+<BR>
+&nbsp;&nbsp;&nbsp;penalize applications that provide data to TCP in large chunks
+<BR>
+&nbsp;&nbsp;&nbsp;(ideally a multiple of Eff.snd.MSS).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This allows a single application send to be broken into zero or
+<BR>
+&nbsp;&nbsp;&nbsp;more full-sized packets, possibly followed by one small packet,
+<BR>
+&nbsp;&nbsp;&nbsp;without forcing any delay on the trailing small packet.  For
+<BR>
+&nbsp;&nbsp;&nbsp;example, one implementation with which the author is familiar first
+<BR>
+&nbsp;&nbsp;&nbsp;captures the boolean ``snd.nxt &gt; snd.una'' in a temporary variable
+<BR>
+&nbsp;&nbsp;&nbsp;(``busy''):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;busy = (snd.nxt &gt; snd.una);
+<BR>
+<P>&nbsp;&nbsp;&nbsp;then goes into a loop transmitting packets out of the data which
+<BR>
+&nbsp;&nbsp;&nbsp;has been presented to TCP by the application; the loop contains the
+<BR>
+&nbsp;&nbsp;&nbsp;following code to implement the current Nagle algorithm:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((packet.size &lt; Eff.snd.MSS) &amp;&amp; busy) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Since ``busy'' is a constant in the loop transmitting packets, a
+<BR>
+&nbsp;&nbsp;&nbsp;trailing small packet will be transmitted (after zero or more large
+<BR>
+&nbsp;&nbsp;&nbsp;packets transmitted by the same call to send) if the connection had
+<BR>
+&nbsp;&nbsp;&nbsp;no outstanding data at the time the application presented data to
+<BR>
+&nbsp;&nbsp;&nbsp;TCP for transmission (assuming the TCP window allows this).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;To implement the modified Nagle algorithm in such a system, we
+<BR>
+&nbsp;&nbsp;&nbsp;replace snd.sml with two variables: ``snd.sml.add'' is a TCP
+<BR>
+&nbsp;&nbsp;&nbsp;variable which names the last byte presented to TCP by the
+<BR>
+&nbsp;&nbsp;&nbsp;application with a ``small'' send (i.e., the application called
+<BR>
+&nbsp;&nbsp;&nbsp;SEND with fewer than Eff.snd.MSS bytes of data); and
+<BR>
+&nbsp;&nbsp;&nbsp;``snd.sml.snt'' is a TCP variable which names the highest value of
+<BR>
+&nbsp;&nbsp;&nbsp;snd.sml.add which has, in fact, been transmitted.  The send routine
+<BR>
+&nbsp;&nbsp;&nbsp;contains the following code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (byte.count &lt; Eff.snd.MSS) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snd.sml.add = snd.una + snd.bytes.queued;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;(where ``snd.bytes.queued'' is the number of bytes queued for
+<BR>
+&nbsp;&nbsp;&nbsp;transmission, and has already been updated with ``byte.count'', the
+<BR>
+&nbsp;&nbsp;&nbsp;number of bytes being presented to TCP in this call to SEND).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The loop that transmits packets contains the following code:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (packet.size &lt; Eff.snd.MSS) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (snd.sm.snt &gt; snd.una) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((snd.nxt + packet.size) &lt;= snd.sm.add) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;snd.sm.snt = snd.sm.add;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send the packet;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;(In most implementations, the most deeply nested ``if'' statement
+<BR>
+&nbsp;&nbsp;&nbsp;above is unnecessary, as a small-sized packet will contain all the
+<BR>
+&nbsp;&nbsp;&nbsp;data available to be transmitted, and so will include, or be
+<BR>
+&nbsp;&nbsp;&nbsp;beyond, snd.sm.add.  In this case, the modified Nagle algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;adds one test, one addition, and one assignment in the send
+<BR>
+&nbsp;&nbsp;&nbsp;routine, and one assignment in the output routine.)
+<BR>
+<P><P>A Failure Mode
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If an application sends a large amount of data, followed by a small
+<BR>
+&nbsp;&nbsp;&nbsp;amount of data, followed by a large amount of data, the current
+<BR>
+&nbsp;&nbsp;&nbsp;Nagle algorithm would perform better than the proposed
+<BR>
+&nbsp;&nbsp;&nbsp;modification.  The current Nagle algorithm would send at most one
+<BR>
+&nbsp;&nbsp;&nbsp;small packet (possibly the last packet), delaying the middle
+<BR>
+&nbsp;&nbsp;&nbsp;(small) amount of data which would allow the application to send
+<BR>
+&nbsp;&nbsp;&nbsp;the following large amount of data; the modified Nagle algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;would send as many as two small packets (the middle packet, plus
+<BR>
+&nbsp;&nbsp;&nbsp;possibly a last packet).
+<BR>
+<P><P>A separate, but desirable, system facility
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In addition to the Nagle algorithm (or the modification proposed by
+<BR>
+&nbsp;&nbsp;&nbsp;this draft), it would be desirable for a system providing TCP
+<BR>
+&nbsp;&nbsp;&nbsp;service to applications to allow the application to set TCP into a
+<BR>
+&nbsp;&nbsp;&nbsp;mode in which the TCP would only transmit small packets at the
+<BR>
+&nbsp;&nbsp;&nbsp;explicit direction of the application.  For example, a system based
+<BR>
+&nbsp;&nbsp;&nbsp;on BSD might implement a socket option (using setsockopt(2))
+<BR>
+&nbsp;&nbsp;&nbsp;SO_EXPLICITPUSH, as well as a flag to sendto(2) (possibly
+<BR>
+&nbsp;&nbsp;&nbsp;overloading the semantics of an existing flag, such as MSG_EOF).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In this scenario, an application would set a socket into
+<BR>
+&nbsp;&nbsp;&nbsp;SO_EXPLICITPUSH mode, then enter a mode of writing data to the
+<BR>
+&nbsp;&nbsp;&nbsp;socket and, at the last write, using send(2) with the MSG_EOF flag.
+<BR>
+&nbsp;&nbsp;&nbsp;The underlying TCP would recognize the MSG_EOF flag as an indicator
+<BR>
+&nbsp;&nbsp;&nbsp;to transmit the (possibly) small packet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Like the proposed modification to the Nagle algorithm, this is
+<BR>
+&nbsp;&nbsp;&nbsp;fairly simple to implement.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If a system were to implement this interface, it would be important
+<BR>
+&nbsp;&nbsp;&nbsp;to NOT disable Nagle when using this interface.  In other words,
+<BR>
+&nbsp;&nbsp;&nbsp;when using this interface, the default mode for TCP would be to NOT
+<BR>
+&nbsp;&nbsp;&nbsp;transmit a small packet (even in the presence of MSG_EOF) if a
+<BR>
+&nbsp;&nbsp;&nbsp;previously transmitted small packet was as yet unacknowledged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Note, also, that implementing this interface does not eliminate the
+<BR>
+&nbsp;&nbsp;&nbsp;desirability of using the modification of the Nagle as the default
+<BR>
+&nbsp;&nbsp;&nbsp;for applications.  More sophisticated networking applications might
+<BR>
+&nbsp;&nbsp;&nbsp;well use the new interface, but naive applications will often be
+<BR>
+&nbsp;&nbsp;&nbsp;adequately served by the modified Nagle algorithm.
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+<P>Application scenarios that will not be helped by this modification
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The proposed modification helps applications which do not need to
+<BR>
+&nbsp;&nbsp;&nbsp;transmit more than one small packet in a single round-trip time.
+<BR>
+&nbsp;&nbsp;&nbsp;This characterizes one way file transfer applications (such as FTP
+<BR>
+&nbsp;&nbsp;&nbsp;[RFC959]) and request/response protocols (such as NNTP [RFC977] and
+<BR>
+&nbsp;&nbsp;&nbsp;HTTP [RFC2068] without pipelining).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;However, applications that need to transmit more than one small
+<BR>
+&nbsp;&nbsp;&nbsp;packet in a single round-trip time are not served by this
+<BR>
+&nbsp;&nbsp;&nbsp;modification.  An example of such an application is HTTP [RFC2068]
+<BR>
+&nbsp;&nbsp;&nbsp;using ``pipelining'', in which multiple requests (responses) are
+<BR>
+&nbsp;&nbsp;&nbsp;transmitted asynchronously.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Applications needing to transmit more than one small packet in a
+<BR>
+&nbsp;&nbsp;&nbsp;single round-trip time will need other mechanisms to satisfy their
+<BR>
+&nbsp;&nbsp;&nbsp;requirements.  (One possible such mechanism would be to use more
+<BR>
+&nbsp;&nbsp;&nbsp;than one TCP connection.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;If an application developer is considering disabling the Nagle
+<BR>
+&nbsp;&nbsp;&nbsp;algorithm, they should be very careful to ensure that their
+<BR>
+&nbsp;&nbsp;&nbsp;application will generally provide data to TCP in chunks larger
+<BR>
+&nbsp;&nbsp;&nbsp;than two full-sized segments (&gt; 2*Eff.snd.MSS), and they should
+<BR>
+&nbsp;&nbsp;&nbsp;verify after their development that this is, in fact, true.  With
+<BR>
+&nbsp;&nbsp;&nbsp;Nagle disabled, many writes of small blocks of data can add
+<BR>
+&nbsp;&nbsp;&nbsp;significant load to the network, reducing the network's performance.
+<BR>
+<P><P>Acknowledgements
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Jim Gettys, Henrik Frystyk Nielsen, Jeff Mogul, and Yasushi Saito,
+<BR>
+&nbsp;&nbsp;&nbsp;as well as a message forwarded to the end2end-interest list by Sean
+<BR>
+&nbsp;&nbsp;&nbsp;Doran, have motivated my current interest in the Nagle algorithm.
+<BR>
+&nbsp;&nbsp;&nbsp;John Heidemann's work related to the Nagle algorithm has informed
+<BR>
+&nbsp;&nbsp;&nbsp;some of the thinking in this draft; discussions with John have also
+<BR>
+&nbsp;&nbsp;&nbsp;been helpful.  Members of the End-to-End Research Group (under
+<BR>
+&nbsp;&nbsp;&nbsp;the direction of Bob Braden) patiently listened to my discussion of
+<BR>
+&nbsp;&nbsp;&nbsp;the current state of the Nagle algorithm and to the modifications
+<BR>
+&nbsp;&nbsp;&nbsp;proposed in this document.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Members of the TCP implementors mailing list
+<BR>
+&nbsp;&nbsp;&nbsp;&lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902261950.LAA01011@red.mtv.siara.com&gt;">tcp-impl@lerc.nasa.gov</A>&gt; have been very helpful in refining this
+<BR>
+&nbsp;&nbsp;&nbsp;proposal.  In particular, Rick Jones, Neal Cardwell, Vernon
+<BR>
+&nbsp;&nbsp;&nbsp;Schryver, Bernie Volz, Sam Manthorpe, Art Shelest, David Borman,
+<BR>
+&nbsp;&nbsp;&nbsp;Kacheong Poon, Jon Snader, Eric Hall, Joe Touch, and Alan Cox.
+<BR>
+<P><P>Security Considerations
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The Nagle algorithm does not have major security consequences.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Implementation of this algorithm should not negatively impact
+<BR>
+&nbsp;&nbsp;&nbsp;the performance of the internet.  The negative impact of
+<BR>
+&nbsp;&nbsp;&nbsp;implementation of this algorithm should be significantly less
+<BR>
+&nbsp;&nbsp;&nbsp;than disabling the Nagle algorithm.
+<BR>
+<P><P>Appendix -- Sample application code
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The following code is provided to give application developers a
+<BR>
+&nbsp;&nbsp;&nbsp;model for buffering.  We assume a BSD-style sockets API.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;stdio.h&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;stdlib.h&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;sys/types.h&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;sys/socket.h&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;netinet/in.h&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#include &lt;netinet/tcp.h&gt;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#define	SNDBUF_MULT 3     /* * 2 * TCP_MAXSEG -&gt; SO_SNDBUF */
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Given a connected socket (s), configure the socket
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* with good buffer size defaults, and return the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* the size the application should use for issuing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* writes to the socket.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Returns size to use for application buffering, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* zero (0) on error.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getbufsize(int s)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unsigned long bufsize, parm;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int buflen;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buflen = sizeof bufsize;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (getsockopt(s, IPPROTO_TCP, TCP_MAXSEG,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;bufsize, &amp;buflen) == -1) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perror(&quot;getsockopt(...TCP_MAXSEG...)&quot;);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Set socket transmit buffer */
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parm = 2*SNDBUF_MULT*bufsize;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (setsockopt(s, SOL_SOCKET, SO_SNDBUF,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;parm, sizeof parm) == -1) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perror(&quot;setsockopt(SO_SNDBUF)&quot;);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* Now, set socket low water threshhold */
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parm = 2*bufsize;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (setsockopt(s, SOL_SOCKET, SO_SNDLOWAT,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;parm, sizeof parm) == -1) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perror(&quot;setsockopt(...SO_SNDLOWAT...)&quot;);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 2*bufsize;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main(int argc, char *argv[])
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;char *buffer = 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int buflen;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int sock;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* ... allocate a socket (sock) and get it connected
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* via either connect(2) or listen(2)/accept(2).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buflen = getbufsize(sock);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (buflen == 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr, &quot;aborting\n&quot;);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer = malloc(buflen);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (buffer == 0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fprintf(stderr,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;no room for buffer of size %d\n&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buflen);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit(1);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* ... loop generating ``buflen'' data in buffer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* and using send(2) to hand it to TCP.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* When there is no more data to send, call
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* send(2) one last time with &lt;= ``buflen''
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* bytes.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return 0;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+<P>References
+<BR>
+<P>[RFC793]	Postel, J. (ed), &quot;Transmission Control Protocol&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sep-1981.
+<BR>
+[RFC854]	Postel, J., J. Reynolds, &quot;Telnet Protocol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Specification&quot;, May-1983.
+<BR>
+[RFC959]	Postel, J., J. Reynolds, &quot;File Transfer Protocol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(FTP)&quot;, Oct-1985.
+<BR>
+[RFC977]	Kantor, B., P. Lapsley, &quot;Network News Transfer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Protocol&quot;, Feb-1986.
+<BR>
+[RFC896]        Nagle, J., &quot;Congestion control in IP/TCP internetworks&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jan-06-1984.
+<BR>
+[RFC1122]       Braden, R. T., &quot;Requirements for Internet hosts -
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;communication layers&quot;, Oct-01-1989.
+<BR>
+[RFC2068]	Fielding, R., J. Gettys, J. Mogul, H. Frystyk,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T. Berners-Lee, &quot;Hypertext Transfer Protocol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- HTTP/1.1&quot;.
+<BR>
+<P><P>Author's Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Greg Minshall
+<BR>
+&nbsp;&nbsp;&nbsp;Siara Systems
+<BR>
+&nbsp;&nbsp;&nbsp;300 Ferguson Drive, 2nd floor
+<BR>
+&nbsp;&nbsp;&nbsp;Mountain View, CA  94043
+<BR>
+&nbsp;&nbsp;&nbsp;USA
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902261950.LAA01011@red.mtv.siara.com&gt;">minshall@siara.com</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1622.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1624.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1625.html">braden@ISI.EDU: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1628.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1631.html">der Mouse : "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1641.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1644.html">Vernon Schryver: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1623">[ date ]</A>
+<A HREF="index.html#1623">[ thread ]</A>
+<A HREF="subject.html#1623">[ subject ]</A>
+<A HREF="author.html#1623">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

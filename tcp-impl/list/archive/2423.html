@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Multiple TCP source addresse</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Multiple TCP source addresses?</H1>
+<!-- received="Wed Dec 20 12:27:01 2000" -->
+<!-- isoreceived="20001220172701" -->
+<!-- sent="Wed, 20 Dec 2000 09:15:55 -0800" -->
+<!-- isosent="20001220171555" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Multiple TCP source addresses?" -->
+<!-- id="3A40E94B.22614109@isi.edu" -->
+<!-- inreplyto="200012181901.eBIJ1cn18929@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;3A40E94B.22614109@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Dec 20 2000 - 12:15:55 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2422.html">Lloyd Wood: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2419.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2423">[ date ]</A>
+<A HREF="index.html#2423">[ thread ]</A>
+<A HREF="subject.html#2423">[ subject ]</A>
+<A HREF="author.html#2423">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: Harald Koch &lt;<A HREF="mailto:chk@pobox.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;3A40E94B.22614109@isi.edu&gt;">chk@pobox.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; If you run a dynamic routing protocol (even RIP will do with the right
+</EM><BR>
+<EM>&gt; &gt; configuration files), then you can set the default route based on which
+</EM><BR>
+<EM>&gt; &gt; gateway is up and/or primary.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; If the primary gateway goes down, the default route will switch to the
+</EM><BR>
+<EM>&gt; &gt; other gateway. At that point, *new* connections will get the new source
+</EM><BR>
+<EM>&gt; &gt; IP address.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; The details of &quot;appropriate configuration files&quot; are left as an exercise
+</EM><BR>
+<EM>&gt; &gt; to the reader; IIRC, both zebra and gated have a way to prefer one of
+</EM><BR>
+<EM>&gt; &gt; two equal-cost gateways; this would allow you to set the
+</EM><BR>
+<EM>&gt; &gt; primary/secondary gateway separately on each host on your LAN.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The `routed` daemon in several flavors of UNIX including FreeBSD, NetBSD,
+</EM><BR>
+<EM>&gt; and perhaps OpenBSD will do that by default for IPv4 using RIP, RIPv2,
+</EM><BR>
+<EM>&gt; and Router Discovery.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In flavors of UNIX that make it reasonable to tell whether the host's
+</EM><BR>
+<EM>&gt; Ethernet or other interface is alive (e.g. more packets received and sent
+</EM><BR>
+<EM>&gt; than errors), that `routed` pays attention to the state of interfaces.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;3A40E94B.22614109@isi.edu&gt;">vjs@rhyolite.com</A>
+</EM><BR>
+<P>That works only if your interface is UP or DOWN. If it's malfunctioning
+<BR>
+or there's a break somewhere else in the LAN (e.g., on the next wire in
+<BR>
+a switched ethernet), there's no indication.
+<BR>
+<P>It's even worse if you can receive but not send. In that case,
+<BR>
+you get RIP announcements and set your route accordingly, but
+<BR>
+the packets drop on the floor...
+<BR>
+<P>(it would be nice if there were a version that at least tests next-hop 
+<BR>
+connectivity in the forward case after receiving an announcement - is
+<BR>
+there one that does this??)
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2422.html">Lloyd Wood: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2419.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2424.html">Vernon Schryver: "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2423">[ date ]</A>
+<A HREF="index.html#2423">[ thread ]</A>
+<A HREF="subject.html#2423">[ subject ]</A>
+<A HREF="author.html#2423">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Dec 20 2000 - 12:27:29 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

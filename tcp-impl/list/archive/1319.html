@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Jim Gettys (jg@pa.dec.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Wed Sep 16 11:54:24 1998" -->
+<!-- isoreceived="19980916155424" -->
+<!-- sent="Wed, 16 Sep 1998 11:52:40 -0700" -->
+<!-- isosent="19980916185240" -->
+<!-- name="Jim Gettys" -->
+<!-- email="jg@pa.dec.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="9809161852.AA04864@pachyderm.pa.dec.com" -->
+<!-- inreplyto="199809161747.KAA18560@aland.bbn.com" -->
+<STRONG>From:</STRONG> Jim Gettys (<A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;"><EM>jg@pa.dec.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 16 1998 - 14:52:40 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1320.html">Joe Touch: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1319">[ date ]</A>
+<A HREF="index.html#1319">[ thread ]</A>
+<A HREF="subject.html#1319">[ subject ]</A>
+<A HREF="author.html#1319">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Sender: <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; From: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Wed, 16 Sep 1998 10:45:44 -0700
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">braden@ISI.EDU</A>, <A HREF="mailto:rstevens@kohala.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">rstevens@kohala.com</A>, <A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">mycroft@mit.edu</A>, <A HREF="mailto:perry@piermont.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">perry@piermont.com</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">aron@cs.rice.edu</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: status of T/TCP
+</EM><BR>
+<EM>&gt; -----
+</EM><BR>
+<EM>&gt; In message &lt;<A HREF="mailto:9809161729.AA17399@pachyderm.pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809161852.AA04864@pachyderm.pa.dec.com&gt;">9809161729.AA17399@pachyderm.pa.dec.com</A>&gt;, Jim Gettys writes:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;Some people blithly wave their hands at the savings in latency on connection
+</EM><BR>
+<EM>&gt; &gt;open...
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;I do not; the Web is an interactive application, which is currently
+</EM><BR>
+<EM>&gt; &gt;most used over high latency paths (28.8 modems are the bulk of the
+</EM><BR>
+<EM>&gt; &gt;world out there, so 170ms is optimistically the best you ever see,
+</EM><BR>
+<EM>&gt; &gt;even for local documents). The RTT between MIT and the main AltaVista
+</EM><BR>
+<EM>&gt; &gt;site, for example, is around 80 milliseconds as I measure it this instant;
+</EM><BR>
+<EM>&gt; &gt;any/all of these times are multiples of human perceptible delay.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Jim:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Do you have good human factors studies on this topic?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Last time I went into the human factors literature (c. 1993) I discovered
+</EM><BR>
+<EM>&gt; that the best work in the field indicated:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     * round-trip delays of 600ms were generally quite acceptable
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     * that round-trip delays of 300ms were almost always acceptable
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now these studies are from the 1960s and involve voice.  Further, the
+</EM><BR>
+<EM>&gt; authors of one of the studies (who was still doing work 30 years later)
+</EM><BR>
+<EM>&gt; warned me that people appear to get trained to lower delays (as one
+</EM><BR>
+<EM>&gt; improves one's network, one increases expectations).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But has someone done the careful study for the Web? 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>I don't have good research at my hands to point you to.
+<BR>
+<P>Acceptable of course, depends on the applicatation; it may not be a human
+<BR>
+on the other end.
+<BR>
+<P>I have a bit of &quot;first hand&quot; experience in the area due to my previous life:
+<BR>
+<P>30 milliseconds is roughly the limit of human perception; anything
+<BR>
+faster than this is &quot;instantaneous&quot;.  This is true for refresh
+<BR>
+on a TV screen, or rubberbanding a mouse (my own experimental experience
+<BR>
+is once X mouse tracking reached 30HZ, the rubber band &quot;felt&quot; attached
+<BR>
+to the mouse).
+<BR>
+<P>I don't know about you, but I want things &quot;instantly&quot; on my screen
+<BR>
+after I click.   My performance goal is always therefore in the 50-30
+<BR>
+millisecond range.
+<BR>
+<P>Note that speed of light (in glass) becomes an issue in the Internet, 
+<BR>
+at the best of times; taking this number and multiplying by a factor of 
+<BR>
+two easily gets up to the hundreds of milliseconds of even the very old 
+<BR>
+data you quote above. 2X the 82 milliseconds between me and AltaVista 
+<BR>
+becomes 160ms. More commonly, with 28.8 modems, the RTT is in the 170ms 
+<BR>
+range, to the first hop; 2X is then 340ms, which even by your number is 
+<BR>
+becoming an issue.   Add these two, and you get something in the 500ms
+<BR>
+range. 
+<BR>
+<P>Another example: my machine at MIT to Inria's web server (in France): 
+<BR>
+RTT is ~125 milliseconds.  (And we have our own line to Inria) 2X this 
+<BR>
+is 250 milliseconds.  If I were at home on my dialup line, I bet I'd measure 
+<BR>
+an RTT of around 300milliseconds (170 + 125).  2X this is 600 milliseconds.
+<BR>
+<P>I hope this demonstrates that, even given the &quot;acceptable&quot; delays of 300-600
+<BR>
+milliseconds you quote that it is pretty trivial to burn this time up
+<BR>
+in today's internet (and tomorrow's too).  I personally believe that
+<BR>
+&quot;fast enough&quot; is considerably less than your numbers.  
+<BR>
+<P>So I'd like to take the 2X down to 1X of the RTT for the initial latency. 
+<BR>
+<P>And I don't want to use my ENTIRE latency budget for getting things &quot;fast 
+<BR>
+enough&quot; on round trips that aren't necessary.  How about time to do something 
+<BR>
+useful at the server end?  Or to transfer bytes over the wire for some 
+<BR>
+real content so that something appears on my screen. Latency is additive; 
+<BR>
+and you don't ever get it back.
+<BR>
+<P>One alternative, of course, is to always have a web proxy up stream
+<BR>
+of you, with a connection open to your browser to get back the RTT over
+<BR>
+the slowest hop; but I'd like to get it back everywhere.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Jim
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1320.html">Joe Touch: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1316.html">Craig Partridge: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1318.html">Perry E. Metzger: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1319">[ date ]</A>
+<A HREF="index.html#1319">[ thread ]</A>
+<A HREF="subject.html#1319">[ subject ]</A>
+<A HREF="author.html#1319">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

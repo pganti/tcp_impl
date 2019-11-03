@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Important question re: new T</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (Volz@ipworks.com)">
+<META NAME="Subject" CONTENT="RE: Important question re: new TCP options on data segments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Important question re: new TCP options on data segments</H1>
+<!-- received="Wed Aug  9 15:40:27 2000" -->
+<!-- isoreceived="20000809194027" -->
+<!-- sent="Wed, 9 Aug 2000 15:35:58 -0400 " -->
+<!-- isosent="20000809193558" -->
+<!-- name="Bernie Volz" -->
+<!-- email="Volz@ipworks.com" -->
+<!-- subject="RE: Important question re: new TCP options on data segments" -->
+<!-- id="63D30D6E10CFD11190A90000F805FE8602BEBFFF@lespaul.process.com" -->
+<!-- inreplyto="Important question re: new TCP options on data segments" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:Volz@ipworks.com?Subject=RE:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFFF@lespaul.process.com&gt;"><EM>Volz@ipworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 09 2000 - 15:35:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2300.html">Kacheong Poon: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2298.html">Alan Cox: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2290.html">Matt Mathis: "Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2301.html">Kacheong Poon: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2299">[ date ]</A>
+<A HREF="index.html#2299">[ thread ]</A>
+<A HREF="subject.html#2299">[ subject ]</A>
+<A HREF="author.html#2299">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The MSS/MTU change isn't that difficult to deal with since this is an issue
+<BR>
+for the SENDER, not the receiver. The sender knows (or should be able to
+<BR>
+know) in advance what options it might send and thus can adjust the maximum
+<BR>
+&quot;data&quot; size accordingly.
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Alan Cox [mailto:<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=RE:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFFF@lespaul.process.com&gt;">alan@lxorguk.ukuu.org.uk</A>]
+<BR>
+Sent: Wednesday, August 09, 2000 2:53 PM
+<BR>
+To: <A HREF="mailto:raj@cup.hp.com?Subject=RE:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFFF@lespaul.process.com&gt;">raj@cup.hp.com</A>
+<BR>
+Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;63D30D6E10CFD11190A90000F805FE8602BEBFFF@lespaul.process.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: Important question re: new TCP options on data segments
+<BR>
+<P><P><EM>&gt; It means I have to be prepared to look for &quot;unexpected&quot; options in my
+</EM><BR>
+<EM>&gt; mainline data path.
+</EM><BR>
+<P>Only if you support it
+<BR>
+<P><EM>&gt; I'm not certain it ensures there is enough space for all the options one
+</EM><BR>
+<EM>&gt; might want to carry. True, it means that the options added in the middle
+</EM><BR>
+<EM>&gt; would not have to fight for space with the MSS option or the window
+</EM><BR>
+<EM>&gt; scale option, but it may still have to duke it out with a SACK option
+</EM><BR>
+<EM>&gt; and timestamps.
+</EM><BR>
+<P>Actually you made me realise a worse problem. It isnt the options and option
+<BR>
+space that is a pain, its the sudden change of MSS relative to the MTU due
+<BR>
+to additional header overhead
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2300.html">Kacheong Poon: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2298.html">Alan Cox: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2290.html">Matt Mathis: "Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2301.html">Kacheong Poon: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2299">[ date ]</A>
+<A HREF="index.html#2299">[ thread ]</A>
+<A HREF="subject.html#2299">[ subject ]</A>
+<A HREF="author.html#2299">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

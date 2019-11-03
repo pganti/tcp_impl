@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Palm TCP stack</TITLE>
+<META NAME="Author" CONTENT="Wu-chang Feng (wuchang@proxinet.com)">
+<META NAME="Subject" CONTENT="Palm TCP stack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Palm TCP stack</H1>
+<!-- received="Wed Feb 16 20:54:35 2000" -->
+<!-- isoreceived="20000217015435" -->
+<!-- sent="Wed, 16 Feb 2000 17:43:49 -0800" -->
+<!-- isosent="20000217014349" -->
+<!-- name="Wu-chang Feng" -->
+<!-- email="wuchang@proxinet.com" -->
+<!-- subject="Palm TCP stack" -->
+<!-- id="38AB5255.2D3B2281@proxinet.com" -->
+<STRONG>From:</STRONG> Wu-chang Feng (<A HREF="mailto:wuchang@proxinet.com?Subject=Re:%20Palm%20TCP%20stack&In-Reply-To=&lt;38AB5255.2D3B2281@proxinet.com&gt;"><EM>wuchang@proxinet.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 16 2000 - 20:43:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1985.html">Wu-chang Feng: "addendum to last message"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1983.html">Mark Allman: "test"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1984">[ date ]</A>
+<A HREF="index.html#1984">[ thread ]</A>
+<A HREF="subject.html#1984">[ subject ]</A>
+<A HREF="author.html#1984">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm running across some weird TCP behavior using a Palm V with a
+<BR>
+Minstrel V modem.  In the process of downloading a file to the Palm,
+<BR>
+if the connection is terminated you get the  behavior observed in the
+<BR>
+attached file.  In short, the Palm continually sends FIN segments and
+<BR>
+the server continually sends ACKs back.  (Note that the connection is
+<BR>
+terminated by calling close() and not shutdown()).  It would seem that
+<BR>
+the palm should be sending a reset back to the server and not the
+<BR>
+FINs.  Does anyone know if there's a page which tracks bugs in Palm's
+<BR>
+TCP stack?  Any help would be greatly appreciated........
+<BR>
+<P>Wu
+<BR>
+
+<P>
+tail end of trace, close() interrupts download after byte 3753
+<BR>
+--------------------------------------------------------------
+<BR>
+17:05:53.378203 mynetra.8005 &gt; 166.137.17.102.9489: . 3217:3753(536) ack 0 win 9112 (DF)
+<BR>
+17:05:54.962306 166.137.17.102.9489 &gt; mynetra.8005: . ack 3753 win 1608
+<BR>
+17:05:54.962335 mynetra.8005 &gt; 166.137.17.102.9489: . 3753:4289(536) ack 0 win 9112 (DF)
+<BR>
+17:05:54.962352 mynetra.8005 &gt; 166.137.17.102.9489: . 4289:4825(536) ack 0 win 9112 (DF)
+<BR>
+17:05:55.550862 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 3753 win 1608
+<BR>
+17:05:55.550884 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:56.127270 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:56.127291 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:56.610361 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:56.610381 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:56.624960 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:56.624977 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:56.712507 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:56.712526 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.190468 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.190497 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.205040 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.205056 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.216006 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.216025 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.675817 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.675837 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.770665 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.770684 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:57.781629 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:57.781647 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.157429 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.157449 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.351000 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.351022 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.361962 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.361979 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.639158 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.639178 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.843573 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.843591 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:58.850905 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:58.850922 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:59.124419 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:59.124437 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:59.317810 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:59.317829 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+17:05:59.332428 166.137.17.102.9489 &gt; mynetra.8005: F 0:0(0) ack 4289 win 0
+<BR>
+17:05:59.332450 mynetra.8005 &gt; 166.137.17.102.9489: . ack 1 win 9112 (DF)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1985.html">Wu-chang Feng: "addendum to last message"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1983.html">Mark Allman: "test"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1984">[ date ]</A>
+<A HREF="index.html#1984">[ thread ]</A>
+<A HREF="subject.html#1984">[ subject ]</A>
+<A HREF="author.html#1984">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: time of queued connections i</TITLE>
+<META NAME="Author" CONTENT="ravi reddy (Ravi.Reddy@iona.com)">
+<META NAME="Subject" CONTENT="RE: time of queued connections if not reaped...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: time of queued connections if not reaped...</H1>
+<!-- received="Sat Feb  3 12:24:17 2001" -->
+<!-- isoreceived="20010203172417" -->
+<!-- sent="Sat, 3 Feb 2001 15:35:19 -0000" -->
+<!-- isosent="20010203153519" -->
+<!-- name="ravi reddy" -->
+<!-- email="Ravi.Reddy@iona.com" -->
+<!-- subject="RE: time of queued connections if not reaped..." -->
+<!-- id="00d501c08df6$e9f78d40$1703020a@lukeskywalker.dublin.iona.ie" -->
+<!-- inreplyto="3A7B0C91.C4B3937B@cup.hp.com" -->
+<STRONG>From:</STRONG> ravi reddy (<A HREF="mailto:Ravi.Reddy@iona.com?Subject=RE:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;00d501c08df6$e9f78d40$1703020a@lukeskywalker.dublin.iona.ie&gt;"><EM>Ravi.Reddy@iona.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Feb 03 2001 - 10:35:19 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2450.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2457.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2457.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2451">[ date ]</A>
+<A HREF="index.html#2451">[ thread ]</A>
+<A HREF="subject.html#2451">[ subject ]</A>
+<A HREF="author.html#2451">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; My guess would be probably not. The client will be able to send data -
+</EM><BR>
+<EM>&gt; the connection is ESTABLISHED, and that data will likely be accepted and
+</EM><BR>
+<EM>&gt; ACKed. My guess would be that those connections in the listen queue will
+</EM><BR>
+<EM>&gt; stay there for quite a long time.
+</EM><BR>
+<P>&nbsp;&nbsp;Assuming client sends data for the ESTABLISHED connection which is queued
+<BR>
+in the socket receive buffer on the server side and the data fills the
+<BR>
+buffer, then I presume the client's TCP will never get any ACKs for the
+<BR>
+additional data sent and will eventually timeout which is the retransmission
+<BR>
+timeout.
+<BR>
+<P><EM>&gt; Basically until the client gets fed-up with a lack of response and closes.
+</EM><BR>
+<P>&nbsp;&nbsp;Any idea of the situations when it would get fed up.
+<BR>
+<P><EM>&gt; Or, you explicitly accept and close them yourself.
+</EM><BR>
+<P>&nbsp;&nbsp;In my case server won't accept() or close() the connections as it is out
+<BR>
+of FDs and it will do so only if the FD count goes down. The problem here is
+<BR>
+that any data sent by client using the ESTABLISHED connection will be put
+<BR>
+into socket receive buffer and will probably be ACKed. But if I issue an
+<BR>
+accept() call, it will reap a connection from the listen queue and will
+<BR>
+overlay the connection onto a FD whose creation will fail as the server is
+<BR>
+out of FDs.
+<BR>
+<P><EM>&gt; I have no guess as to what would happen if you went and did a
+</EM><BR>
+<EM>&gt; listen(s,0) listen(s,1)...
+</EM><BR>
+<P>&nbsp;&nbsp;You mean to say that I issue an listen(s,0) or listen(s,1) when the server
+<BR>
+runs out of FDs. We call listen with a backlog of 5 and then wait for any
+<BR>
+FDs to fire from the select set. I haven't investigated this scenario.
+<BR>
+<P><EM>&gt; If you really want those connections to go away without more direct
+</EM><BR>
+<EM>&gt; intervention, you might want to use an interface that inserts the
+</EM><BR>
+<EM>&gt; application between the receipt of the SYN and the sending of the
+</EM><BR>
+<EM>&gt; SYN|ACK. I _think_ XTI is or can be such an interface. In that case, you
+</EM><BR>
+<EM>&gt; would simply stop taking the request notificatoins and the clients would
+</EM><BR>
+<EM>&gt; timeout on their connects.
+</EM><BR>
+<P>&nbsp;&nbsp;This is out of question right now with the tight schedules.
+<BR>
+<P>&nbsp;&nbsp;Could you please clarify one more QUESTION?.
+<BR>
+<P>&nbsp;&nbsp;Any clients SYNs will be put into incomplete connection queue waiting for
+<BR>
+the three-way handshake to complete. But since the complete connection queue
+<BR>
+is full, how would TCP handle this scenario. Though it can complete the
+<BR>
+three-way handshake, it can't move this incomplete connection to the
+<BR>
+complete connection queue as the queue is full. I guess the server's TCP
+<BR>
+will not complete the three-way handshake until the complete connection
+<BR>
+queue has space and those SYNs will be ignored and the clients will timeout
+<BR>
+after 75 seconds which is the establishment timer.
+<BR>
+<P>&nbsp;&nbsp;If both the queues are full, the client's SYN will be ignored and will
+<BR>
+these clients stop trying after the expiry of establishment timer of 75
+<BR>
+seconds?.
+<BR>
+<P>&nbsp;&nbsp;Thank you very much for the response.
+<BR>
+<P>&nbsp;&nbsp;regards,
+<BR>
+&nbsp;&nbsp;Ravi.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2450.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2448.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2457.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2457.html">Rick Jones: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2451">[ date ]</A>
+<A HREF="index.html#2451">[ thread ]</A>
+<A HREF="subject.html#2451">[ subject ]</A>
+<A HREF="author.html#2451">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sat Feb 03 2001 - 12:24:46 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

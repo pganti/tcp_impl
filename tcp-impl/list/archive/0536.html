@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Fri Jun 20 14:39:01 1997" -->
+<!-- isoreceived="19970620183901" -->
+<!-- sent="Fri, 20 Jun 1997 14:31:43 -0700" -->
+<!-- isosent="19970620213143" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706202131.OAA26597@rum.isi.edu" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202131.OAA26597@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Jun 20 1997 - 17:31:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0535.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0538.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#536">[ date ]</A>
+<A HREF="index.html#536">[ thread ]</A>
+<A HREF="subject.html#536">[ subject ]</A>
+<A HREF="author.html#536">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@relay.engr.SGI.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202131.OAA26597@rum.isi.edu&gt;">owner-tcp-impl@relay.engr.SGI.COM</A> Fri Jun 20 14:15:29 1997
+</EM><BR>
+<EM>&gt; Date: Fri, 20 Jun 1997 15:10:13 -0600
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202131.OAA26597@rum.isi.edu&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202131.OAA26597@rum.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Proposed TCP Group Extensions
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706202131.OAA26597@rum.isi.edu&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; More to the point, of what use are those values?  I've long had a
+</EM><BR>
+<EM>&gt; &gt; &gt; jandiced view of what many people call &quot;MIB Mania,&quot; but stuffing not
+</EM><BR>
+<EM>&gt; &gt; &gt; just the TCP state machine state into a MIB but also the de facto
+</EM><BR>
+<EM>&gt; &gt; &gt; congestion avoidance and other state seems over the top even if you
+</EM><BR>
+<EM>&gt; &gt; &gt; don't believe the IETF is suffering from MIB Mania.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; See RFC-2140. Also addresses the security implications.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; The general idea is that they _might_ be useful for
+</EM><BR>
+<EM>&gt; &gt; LAN-wide cacheing of TCP startup parameters. Not to mention 
+</EM><BR>
+<EM>&gt; &gt; statistics (but I'm not sure MIB info on such statistics is
+</EM><BR>
+<EM>&gt; &gt; safe, security-wise, in any case).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Your Informational RFC does not convince me.  For example, of what
+</EM><BR>
+<EM>&gt; earthly good is it to cache the MSS?  Are you proposing to remove the
+</EM><BR>
+<EM>&gt; MSS negotiation?  I don't mean to imply that you should not
+</EM><BR>
+<P>MSS isn't the interesting case. Window size, RTT, and variance thereof
+<BR>
+are much more useful, as mentioned in the RFC.
+<BR>
+<P>If my host spends 10 RTTs converging on a good set of these values
+<BR>
+to connect to a host overseas, it might be useful if another host
+<BR>
+in the LAN can re-use my values, rather than using (conservative, but)
+<BR>
+wrong values.
+<BR>
+<P><EM>&gt; experiment.  Maybe something will turn out to be useful, particularly
+</EM><BR>
+<EM>&gt; the RTT and perhaps the congestion windows.  (Why didn't you mention
+</EM><BR>
+<EM>&gt; congestion windows?)   Personally, I would write, deploy, and test code
+</EM><BR>
+<P>I did (page 1, see list).
+<BR>
+<P>Sharing code has already been implemented in T/TCP, as also indicated
+<BR>
+in the RFC. The issue is what algorithm should be used to govern the
+<BR>
+sharing. Sharing (or not) is an implementation detail that this RFC
+<BR>
+raises as having protocol implications. Another implementation is
+<BR>
+exactly what doesn't help solve that issue.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0537.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0535.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0538.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#536">[ date ]</A>
+<A HREF="index.html#536">[ thread ]</A>
+<A HREF="subject.html#536">[ subject ]</A>
+<A HREF="author.html#536">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,398 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Wed Sep  9 08:01:17 1998" -->
+<!-- isoreceived="19980909120117" -->
+<!-- sent="Wed, 9 Sep 1998 09:59:50 -0500 (CDT)" -->
+<!-- isosent="19980909145950" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809091459.JAA29280@frantic.bsdi.com" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809091459.JAA29280@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 09 1998 - 10:59:50 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1307.html">Vern Paxson: "moving the &quot;status of T/TCP&quot; discussion"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1305.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1317.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1306">[ date ]</A>
+<A HREF="index.html#1306">[ thread ]</A>
+<A HREF="subject.html#1306">[ subject ]</A>
+<A HREF="author.html#1306">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I wasn't going to step into the T/TCP discussion, but it has gone
+<BR>
+on long enough that if people are thinking at all seriously about
+<BR>
+T/TCP, then I should.
+<BR>
+<P>Several years ago I studied the T/TCP protocol, and decided that it
+<BR>
+was more complicated than it needed to be.  I'm attaching the message
+<BR>
+that I sent out to the end2end-interest mailing list in 1996.
+<BR>
+<P>And before people start jumping up and down, yes, I know that this
+<BR>
+doesn't address any of the spoofing issues.  But if people are
+<BR>
+thinking about changing T/TCP to address security issues, I'd like
+<BR>
+to change T/TCP to simplify the CC processing at the same time.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809091459.JAA29280@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><P><EM>&gt; From dab Wed Mar 13 15:08:54 1996
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809091459.JAA29280@frantic.bsdi.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Subject: T/TCP &amp; CC processing
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:end2end-interest@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809091459.JAA29280@frantic.bsdi.com&gt;">end2end-interest@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hello all.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This message is a follow up to what I brought up at the T/TCP
+</EM><BR>
+<EM>&gt; BOF in LA about an alternate method for validating CC values.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This proposal does several things:
+</EM><BR>
+<EM>&gt; 	1) It eliminates the need for the CC.NEW option, the
+</EM><BR>
+<EM>&gt; 	   client only sends the CC option.
+</EM><BR>
+<EM>&gt; 	2) Allows the first SYN/CC that is received from
+</EM><BR>
+<EM>&gt; 	   any host to be accepted without waiting for the
+</EM><BR>
+<EM>&gt; 	   3-way handshake to complete, which means that a
+</EM><BR>
+<EM>&gt; 	   stream of in-sequence T/TCP requests can be processed
+</EM><BR>
+<EM>&gt; 	   without forcing any of them to wait for the 3-way
+</EM><BR>
+<EM>&gt; 	   handshake to complete.
+</EM><BR>
+<EM>&gt; 	3) It simplifies the CC processing at both ends.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Background
+</EM><BR>
+<EM>&gt; ----------
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The goal of the cache of CC values is to be able to identify
+</EM><BR>
+<EM>&gt; incoming SYN packets that are valid, so that the data in them
+</EM><BR>
+<EM>&gt; can be processed immediately via the TCP Accelerated Open (TAO)
+</EM><BR>
+<EM>&gt; mechanism, which passes the data up to the application without
+</EM><BR>
+<EM>&gt; waiting for the three way handshake to complete.  Or, more precisely,
+</EM><BR>
+<EM>&gt; we want to identify SYN packets that might be old SYN packets
+</EM><BR>
+<EM>&gt; and not process the data until we have verified the connection
+</EM><BR>
+<EM>&gt; by completing the 3-way handshake.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There are two ways that a duplicate SYN can arrive.  Either
+</EM><BR>
+<EM>&gt; somewhere along the path the packet was duplicated, or else
+</EM><BR>
+<EM>&gt; the source has retransmitted the SYN packet.  In the first
+</EM><BR>
+<EM>&gt; case, the duplicate should be received within one MSL, of
+</EM><BR>
+<EM>&gt; the first SYN, since after one MSL it should be discarded.
+</EM><BR>
+<EM>&gt; As long as the connection created by the original MSL exists
+</EM><BR>
+<EM>&gt; at least one MSL, it will catch any duplicated SYNs.  In the
+</EM><BR>
+<EM>&gt; second case, if the response comes in just after the SYN is
+</EM><BR>
+<EM>&gt; retransmitted, as long as the control block exists at least
+</EM><BR>
+<EM>&gt; one MSL before going away, the retransmitted SYN will be
+</EM><BR>
+<EM>&gt; caught by the control block.  Since the control block has
+</EM><BR>
+<EM>&gt; to go through TIME-WAIT, it will be around at least 2 MSL.
+</EM><BR>
+<EM>&gt; It should also be noted that while the source is retransmitting
+</EM><BR>
+<EM>&gt; SYNs, it means that the connection at the receiver, once one
+</EM><BR>
+<EM>&gt; of the SYNs has gotten through, will persist until the source
+</EM><BR>
+<EM>&gt; has gotten back a response, meaning that the control block
+</EM><BR>
+<EM>&gt; at the receiver will take care of any duplicate SYNs.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; When the first SYN packet from host A arrives at host B, it will
+</EM><BR>
+<EM>&gt; always be a valid SYN.  If it was not a valid SYN, then that means
+</EM><BR>
+<EM>&gt; that host A has destroyed the connection in less than the MSL
+</EM><BR>
+<EM>&gt; after sending out the SYN, which should not happen.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Additionally, when there have been no SYN packets from a host for
+</EM><BR>
+<EM>&gt; more than an MSL, the next SYN will be a valid SYN, since all old
+</EM><BR>
+<EM>&gt; duplicate SYN will have exited the network.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; From this it can be implied that if the server remembers the time
+</EM><BR>
+<EM>&gt; that the last SYN/CC was received, then if when the next SYN/CC
+</EM><BR>
+<EM>&gt; arrives is more than an MSL, it should be a valid SYN/CC, whether
+</EM><BR>
+<EM>&gt; or not the CC passes the check.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Proposal for processing the CC option
+</EM><BR>
+<EM>&gt; -------------------------------------
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The server maintains a table of HOST, CC and CLOCK values.  The CLOCK
+</EM><BR>
+<EM>&gt; is when CC was received from HOST.  If a CC arrives for a HOST that is
+</EM><BR>
+<EM>&gt; not in the table and there are empty slots in the table, TAO can be
+</EM><BR>
+<EM>&gt; used, and HOST and CC are added to the table with CLOCK = CURRENT_CLOCK.
+</EM><BR>
+<EM>&gt; If there is an entry, but it is more than 2 MSL old, the entry can be
+</EM><BR>
+<EM>&gt; ignored and treated as if it wasn't in the table.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There is a table for cached CC information.  Each entry contains:
+</EM><BR>
+<EM>&gt; 	TABLE[n].HOST
+</EM><BR>
+<EM>&gt; 	TABLE[n].CC
+</EM><BR>
+<EM>&gt; 	TABLE[n].CLOCK
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In addition, there are two values:
+</EM><BR>
+<EM>&gt; 	OLD_CLOCK
+</EM><BR>
+<EM>&gt; 	CURRENT_CLOCK
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; At start up:
+</EM><BR>
+<EM>&gt; 	OLD_CLOCK = CURRENT_CLOCK
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; SYN/CC arrives from &lt;host&gt;:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; if there exists a table entry TABLE[n] such that TABLE[n].HOST == SEG.SRC
+</EM><BR>
+<EM>&gt; then
+</EM><BR>
+<EM>&gt; 	if SEG.CC &gt; TABLE[n].CC or CURRENT_CLOCK - TABLE[n].CLOCK &gt; 2 MSL
+</EM><BR>
+<EM>&gt; 	then
+</EM><BR>
+<EM>&gt; 		TABLE[n].CC = SEG.CC
+</EM><BR>
+<EM>&gt; 		TAO = OK
+</EM><BR>
+<EM>&gt; 	else
+</EM><BR>
+<EM>&gt; 		TAO = NOT_OK
+</EM><BR>
+<EM>&gt; 	endif
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	TABLE[n].CLOCK = CURRENT_CLOCK.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; else SEG.SRC is not in the table
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	if CURRENT_CLOCK - OLD_CLOCK &gt; 2 MSL then
+</EM><BR>
+<EM>&gt; 		TAO = OK
+</EM><BR>
+<EM>&gt; 	else
+</EM><BR>
+<EM>&gt; 		TAO = NOT_OK
+</EM><BR>
+<EM>&gt; 	endif
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Find an empty entry in the table.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	if there is no empty entry, then
+</EM><BR>
+<EM>&gt; 		Find the oldest entry in the table.
+</EM><BR>
+<EM>&gt; 		OLD_CLOCK = TABLE[n].CLOCK
+</EM><BR>
+<EM>&gt; 	endif
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	TABLE[n].CLOCK = CURRENT_CLOCK
+</EM><BR>
+<EM>&gt; 	TABLE[n].CC = SEG.CC
+</EM><BR>
+<EM>&gt; 	TABLE[n].HOST = SEG.SRC
+</EM><BR>
+<EM>&gt; endif
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A few observations on the algorithm
+</EM><BR>
+<EM>&gt; -----------------------------------
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	1) Setting OLD_CLOCK = CURRENT_CLOCK at startup time forces
+</EM><BR>
+<EM>&gt; 	   all new connections to do a full 3-way handshake until the
+</EM><BR>
+<EM>&gt; 	   host has been up long enough for any old SYNs that were
+</EM><BR>
+<EM>&gt; 	   floating around in the network to trickle in.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	2) You only need to maintain the CC cache for hosts from
+</EM><BR>
+<EM>&gt; 	   which SYN/CCs have sent within the last MSL.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	3) The timeout period must be between 1 MSL and 2 MSL.
+</EM><BR>
+<EM>&gt; 	   1 MSL is the lower bound, because that is how long
+</EM><BR>
+<EM>&gt; 	   duplicates can be floating around.  2 MSL is the
+</EM><BR>
+<EM>&gt; 	   upper bound, because CC values can wrap anytime
+</EM><BR>
+<EM>&gt; 	   after 2 MSL.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	4) Once a SYN arrives and a control block is created, that
+</EM><BR>
+<EM>&gt; 	   control block will exist until any retransmitted or
+</EM><BR>
+<EM>&gt; 	   duplicate SYNs have either arrived or timed out in the
+</EM><BR>
+<EM>&gt; 	   network.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	5) Because of #4, the CC cache code is only used when a SYN
+</EM><BR>
+<EM>&gt; 	   arrives and there does not already exist a connection for
+</EM><BR>
+<EM>&gt; 	   that SYN.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	6) The current RFC is not at-most-one, and this proposal
+</EM><BR>
+<EM>&gt; 	   neither strengthens or weakens that situation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 			-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809091459.JAA29280@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1307.html">Vern Paxson: "moving the &quot;status of T/TCP&quot; discussion"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1305.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1317.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1306">[ date ]</A>
+<A HREF="index.html#1306">[ thread ]</A>
+<A HREF="subject.html#1306">[ subject ]</A>
+<A HREF="author.html#1306">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Which implementation is bett</TITLE>
+<META NAME="Author" CONTENT="ravi reddy (Ravi.Reddy@iona.com)">
+<META NAME="Subject" CONTENT="RE: Which implementation is better...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Which implementation is better...</H1>
+<!-- received="Wed Feb 14 14:06:17 2001" -->
+<!-- isoreceived="20010214190617" -->
+<!-- sent="Wed, 14 Feb 2001 18:53:21 -0000" -->
+<!-- isosent="20010214185321" -->
+<!-- name="ravi reddy" -->
+<!-- email="Ravi.Reddy@iona.com" -->
+<!-- subject="RE: Which implementation is better..." -->
+<!-- id="02c001c096b7$6721e4f0$1703020a@lukeskywalker.dublin.iona.ie" -->
+<!-- inreplyto="4.3.0.20010214191202.043c15a0@pop.free.fr" -->
+<STRONG>From:</STRONG> ravi reddy (<A HREF="mailto:Ravi.Reddy@iona.com?Subject=RE:%20Which%20implementation%20is%20better...&In-Reply-To=&lt;02c001c096b7$6721e4f0$1703020a@lukeskywalker.dublin.iona.ie&gt;"><EM>Ravi.Reddy@iona.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 14 2001 - 13:53:21 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2460.html">Mahmoud Chilali: "Re: Which implementation is better..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2460.html">Mahmoud Chilali: "Re: Which implementation is better..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2461">[ date ]</A>
+<A HREF="index.html#2461">[ thread ]</A>
+<A HREF="subject.html#2461">[ subject ]</A>
+<A HREF="author.html#2461">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;We do have a threshold. When the threshold is reached, we remove the
+<BR>
+listener FD from the select FD set and issue a listen() call of 0. When the
+<BR>
+FD count goes down, we put back the listener FD and reset the listen queue
+<BR>
+length. The only issue with this is that clients will wait for 75 seconds
+<BR>
+before timing out (listen() call of 0 is ignored by BSD implementations
+<BR>
+which allow one connection to go through to the complete connection queue
+<BR>
+and this client will indefinitely wait). Other than using client-level
+<BR>
+timeouts, we have no way to make these clients timeout before 75 seconds. If
+<BR>
+there is a way, please let me know.
+<BR>
+<P><EM>&gt; I personally prefer setting a max-connections threeshold (this should be
+</EM><BR>
+<EM>&gt; less than the number of fds per process), and if the threshold is reached,
+</EM><BR>
+<EM>&gt; accept the connection and close it immediately. The time this takes is
+</EM><BR>
+<EM>&gt; short enough compared to what you need as timeouts.
+</EM><BR>
+<P>&nbsp;&nbsp;What this does is it makes the listener thread unnecessarily spin (by
+<BR>
+accepting and closing)
+<BR>
+without doing any meaningful work.
+<BR>
+<P>&nbsp;&nbsp;Thanks,
+<BR>
+&nbsp;&nbsp;ravi.
+<BR>
+<P><EM>&gt; At 18:49 05/02/01 +0000, ravi reddy wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt;   Hi all,
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;   We have clients and servers in our product. When the server
+</EM><BR>
+<EM>&gt; runs out of
+</EM><BR>
+<EM>&gt; &gt;FDs, we usually remove the listener FD from the select set and
+</EM><BR>
+<EM>&gt; register it
+</EM><BR>
+<EM>&gt; &gt;back when any FD is freed. Are there any drawbacks with this solution?.
+</EM><BR>
+<EM>&gt; &gt;Currently we have connection timeouts and so the clients will
+</EM><BR>
+<EM>&gt; timeout fast
+</EM><BR>
+<EM>&gt; &gt;enough without waiting for server to accept the connections or until the
+</EM><BR>
+<EM>&gt; &gt;keepalive probes kickin. But infinite connection timeouts are
+</EM><BR>
+<EM>&gt; not also ruled
+</EM><BR>
+<EM>&gt; &gt;out in the implemenation.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;   What are the drawbacks of closing the listener socket and
+</EM><BR>
+<EM>&gt; binding it again
+</EM><BR>
+<EM>&gt; &gt;to the same port?. The only drawback I can think of right now is that the
+</EM><BR>
+<EM>&gt; &gt;port could be reused by the OS and the server which has closed
+</EM><BR>
+<EM>&gt; its listener
+</EM><BR>
+<EM>&gt; &gt;socket will not be able to bind to it.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;   Any help greatly appreciated.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;   regards,
+</EM><BR>
+<EM>&gt; &gt;   Ravi.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2460.html">Mahmoud Chilali: "Re: Which implementation is better..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2460.html">Mahmoud Chilali: "Re: Which implementation is better..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2453.html">der Mouse : "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2462.html">Alan Cox: "Re: Which implementation is better..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2461">[ date ]</A>
+<A HREF="index.html#2461">[ thread ]</A>
+<A HREF="subject.html#2461">[ subject ]</A>
+<A HREF="author.html#2461">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 14 2001 - 14:06:47 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

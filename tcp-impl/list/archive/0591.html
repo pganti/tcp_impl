@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Amr A. Awadallah (amr@hplms2.hpl.hp.com)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jun 25 14:12:02 1997" -->
+<!-- isoreceived="19970625181202" -->
+<!-- sent="Wed, 25 Jun 1997 14:10:38 -0700" -->
+<!-- isosent="19970625211038" -->
+<!-- name="Amr A. Awadallah" -->
+<!-- email="amr@hplms2.hpl.hp.com" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="33B1894E.5063@hpl.hp.com" -->
+<!-- inreplyto="199706252002.NAA03407@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Amr A. Awadallah (<A HREF="mailto:amr@hplms2.hpl.hp.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;33B1894E.5063@hpl.hp.com&gt;"><EM>amr@hplms2.hpl.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 17:10:38 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0590.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0586.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#591">[ date ]</A>
+<A HREF="index.html#591">[ thread ]</A>
+<A HREF="subject.html#591">[ subject ]</A>
+<A HREF="author.html#591">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; If following RFC 2001, cwnd increases by 1 for each ack, regardless of
+</EM><BR>
+<EM>&gt; how much new data was acked (provided it's &gt; 0).  So acking once every
+</EM><BR>
+<EM>&gt; 4 packets leads to cwnd opening *slower* (since the ack arrival rate is
+</EM><BR>
+<EM>&gt; lower) than acking every 2 packets.
+</EM><BR>
+<P>&nbsp;&nbsp;This not only means that the source would be slower (gives 
+<BR>
+advantage to other sources with a more frequent ACK rate), it also means
+<BR>
+that conservation of packets will be violated during the fast recovery
+<BR>
+period (cwnd inflation). The source is not sending a new packet into the
+<BR>
+net for each packet that leaves, it is sending a new packet into the net
+<BR>
+for each ACK it receives (regardless of how many packets this ACK might
+<BR>
+be ACKing).
+<BR>
+<P>&nbsp;&nbsp;I guess this explains why at the end of fast-recovery the source might
+<BR>
+have not released into the network as much packets as left, hence the
+<BR>
+window slides and (for large windows) a considerable number of packets
+<BR>
+are sent out back-to-back.
+<BR>
+<P>Even though tcp_input.c has this comment:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* When new data is acked, open the congestion window.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* If the window gives us less than ssthresh packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* in flight, open exponentially (maxseg per packet).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Otherwise open linearly: maxseg per window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* (maxseg^2 / cwnd per packet).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+<P>It still does the per ACK increment not per packet.
+<BR>
+<P>Thanks for the clarification,
+<BR>
+<P>-- Amr
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0590.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0586.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#591">[ date ]</A>
+<A HREF="index.html#591">[ thread ]</A>
+<A HREF="subject.html#591">[ subject ]</A>
+<A HREF="author.html#591">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 13:09:01 1999" -->
+<!-- isoreceived="19990204180901" -->
+<!-- sent="Thu, 4 Feb 1999 11:06:19 -0700 (MST)" -->
+<!-- isosent="19990204180619" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902041806.LAA25474@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041806.LAA25474@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 13:06:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1502.html">braden@ISI.EDU: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1502.html">braden@ISI.EDU: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1501">[ date ]</A>
+<A HREF="index.html#1501">[ thread ]</A>
+<A HREF="subject.html#1501">[ subject ]</A>
+<A HREF="author.html#1501">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041806.LAA25474@calcite.rhyolite.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I don't like SO_EXPLICITPUSH, because that means that the kernel
+</EM><BR>
+<EM>&gt; is trusting the application to remember to tell it when it is
+</EM><BR>
+<EM>&gt; done sending the data.  If the application forgets, then it could
+</EM><BR>
+<EM>&gt; adversly affect the performance below what would have happened
+</EM><BR>
+<EM>&gt; had SO_EXPLICITPUSH not been set.
+</EM><BR>
+<P>Good point.
+<BR>
+<P><EM>&gt;                                    I'd rather have the kernel
+</EM><BR>
+<EM>&gt; continue to be as aggressive as normal in sending out data, but
+</EM><BR>
+<EM>&gt; take the MSG_PUSH bit as a suggestion that it should be more
+</EM><BR>
+<EM>&gt; aggessive and transmit any delayed data, since no more data will
+</EM><BR>
+<EM>&gt; be written at this time.
+</EM><BR>
+<P>MSG_PUSH sounds interesting, but
+<BR>
+<P>&nbsp;&nbsp;- you would definitely need to pick some other name, since otherwise
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you would have hordes of experts up in arms when they saw the PUSH
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bit in the TCP header set or not set in concert with the MSG_PUSH
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flag in the system call.  Recall the continuing popularity of their
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;complaints and questions about the PUSH bit as sent by the BSD code.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;They would think that something in the API named *PUSH would be a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direct control on the TCP header bit, and never mind how much sense
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that makes.
+<BR>
+<P>&nbsp;&nbsp;- I bet that most applications that now need to turn set TCP_NODELAY
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would still need to use TCP_NODELAY.  In other words, what could you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do with MSG_PUSH that you could not do more efficiently (i.e. with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fewer CPU cycles) with writev()?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902041806.LAA25474@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1502.html">braden@ISI.EDU: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1500.html">Alan Cox: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1502.html">braden@ISI.EDU: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1501">[ date ]</A>
+<A HREF="index.html#1501">[ thread ]</A>
+<A HREF="subject.html#1501">[ subject ]</A>
+<A HREF="author.html#1501">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: time of queued connections i</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: time of queued connections if not reaped...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: time of queued connections if not reaped...</H1>
+<!-- received="Sat Feb  3 19:54:18 2001" -->
+<!-- isoreceived="20010204005418" -->
+<!-- sent="Sat, 3 Feb 2001 19:39:06 -0500 (EST)" -->
+<!-- isosent="20010204003906" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: time of queued connections if not reaped..." -->
+<!-- id="200102040039.TAA08515@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="time of queued connections if not reaped..." -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;200102040039.TAA08515@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Feb 03 2001 - 19:39:06 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2453">[ date ]</A>
+<A HREF="index.html#2453">[ thread ]</A>
+<A HREF="subject.html#2453">[ subject ]</A>
+<A HREF="author.html#2453">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; [...] an interface that inserts the application between the receipt
+</EM><BR>
+<EM>&gt;&gt; of the SYN and the sending of the SYN|ACK.
+</EM><BR>
+<P>I used something similar, way back when, albeit with DECnet rather than
+<BR>
+TCP.  As I recall the interface, and mapping it into TCP terms, the way
+<BR>
+it worked was that you set some socket option on the listening socket
+<BR>
+(with setsockopt()) and then accept() returned a socket that was still
+<BR>
+in SYN_RCVD, and you had to take explicit action to send the SYN-ACK
+<BR>
+(which of course you had to do before you could do much more than
+<BR>
+getpeername() on the new socket).
+<BR>
+<P>Of course, an application using this interface will be comparatively
+<BR>
+easy to DoS with a synflood, but that's unavoidable.
+<BR>
+<P><EM>&gt; I don't know of any TCP implementation that withholds the SYN-ACK
+</EM><BR>
+<EM>&gt; until the application accepts the connection.  I do know that if you
+</EM><BR>
+<EM>&gt; experiment with such a strategy, you will find that BSD-based
+</EM><BR>
+<EM>&gt; implementations of FTP will be unable to successfully establish a
+</EM><BR>
+<EM>&gt; data connection.  It's been a long time since I stumbled into this,
+</EM><BR>
+<EM>&gt; so the details are fuzzy, but basically you get into a deadlock where
+</EM><BR>
+<EM>&gt; the client doesn't try to accept the data connection until it
+</EM><BR>
+<EM>&gt; receives a message on the control connection, but the server doesn't
+</EM><BR>
+<EM>&gt; send that message on the control connection until the data connection
+</EM><BR>
+<EM>&gt; is established.
+</EM><BR>
+<P>All this means is that the listening side (client for PORT style,
+<BR>
+server for PASV style) mustn't turn on the relevant option on its data
+<BR>
+connection socket.  Since most applications don't want this option, the
+<BR>
+default should be off, which means that FTP code that's unaware of the
+<BR>
+option will behave correctly.  If an FTP client or server is modified
+<BR>
+to turn the option on, of course, it will have to also be modified to
+<BR>
+avoid deadlocking as a result.  I don't consider this a problem.
+<BR>
+<P>If you try to change the system-wide default, well, you've introduced a
+<BR>
+fundamental major change in the semantics of the interface, so it's no
+<BR>
+surprise if unchanged code breaks.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;200102040039.TAA08515@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2454.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2453">[ date ]</A>
+<A HREF="index.html#2453">[ thread ]</A>
+<A HREF="subject.html#2453">[ subject ]</A>
+<A HREF="author.html#2453">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sat Feb 03 2001 - 19:54:47 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

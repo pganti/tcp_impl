@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Thu Aug 17 19:46:35 2000" -->
+<!-- isoreceived="20000817234635" -->
+<!-- sent="Thu, 17 Aug 2000 16:40:24 -0700 (PDT)" -->
+<!-- isosent="20000817234024" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="Roam.SIMC.2.0.6.966555624.19307.kcpoon@jurassic" -->
+<!-- inreplyto="3.0.5.32.20000817152442.01258dd0@scamp.eng.ascend.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;Roam.SIMC.2.0.6.966555624.19307.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 17 2000 - 19:40:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2319.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2320.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2318">[ date ]</A>
+<A HREF="index.html#2318">[ thread ]</A>
+<A HREF="subject.html#2318">[ subject ]</A>
+<A HREF="author.html#2318">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; On typical servers, a new incoming connection usually implies that a daemon
+</EM><BR>
+<EM>&gt; will be spawn or something like that, in other words, resources will be
+</EM><BR>
+<EM>&gt; consumed. If that malicious person can get a view into how you are denying
+</EM><BR>
+<EM>&gt; his SYN attack, he might be able to tune the attack and kill your
+</EM><BR>
+<EM>&gt; server/router/etc.
+</EM><BR>
+<P>I think you need to be more specific on why the extra info can be used by
+<BR>
+an attacker to do more harm than without the info.  In the example above, 
+<BR>
+does an attacker need to know whether a server is busy or not before an
+<BR>
+attack can be launched?  Well, if it is not busy, make it busy by the attack!
+<BR>
+This is a DoF attack afterall.  If it is busy, will the attacker not launch
+<BR>
+a DoF attack?
+<BR>
+<P><EM>&gt; All I say is &quot;let's be careful&quot;. The less information you provide back to the
+</EM><BR>
+<EM>&gt; potentially malicious instigator, the lesser the chances that it will know
+</EM><BR>
+<EM>&gt; how to affect you worst.
+</EM><BR>
+<P>I will say that it really depends on what info it is.  For example, there
+<BR>
+may be a security problem if the RST is sent because of a duplicate SYN with
+<BR>
+wrong sequence number.  But let's postpone this discussion of potential
+<BR>
+security problem after the list of RST code is finalized.  Then we can talk
+<BR>
+about specific issues, not wasting time on some &quot;generic info...&quot;  IMHO, I
+<BR>
+don't believe that any extra info provided in a RST in reponse to a SYN or
+<BR>
+SYN/ACK is automatically a security hole.  We'll discuss that later, for
+<BR>
+sure (-:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;Roam.SIMC.2.0.6.966555624.19307.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2319.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2317.html">Ignacio Goyret: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2320.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2318">[ date ]</A>
+<A HREF="index.html#2318">[ thread ]</A>
+<A HREF="subject.html#2318">[ subject ]</A>
+<A HREF="author.html#2318">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

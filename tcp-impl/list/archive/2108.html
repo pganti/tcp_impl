@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Hung Solaris TCP</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Hung Solaris TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Hung Solaris TCP</H1>
+<!-- received="Fri Jun  2 20:10:30 2000" -->
+<!-- isoreceived="20000603001030" -->
+<!-- sent="Fri, 2 Jun 2000 17:02:33 -0700 (PDT)" -->
+<!-- isosent="20000603000233" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Hung Solaris TCP" -->
+<!-- id="Roam.SIMC.2.0.6.959990553.176.kcpoon@jurassic" -->
+<!-- inreplyto="39382ECA.555E23E6@pumatech.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Hung%20Solaris%20TCP&In-Reply-To=&lt;Roam.SIMC.2.0.6.959990553.176.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 02 2000 - 20:02:33 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2107.html">Kacheong Poon: "Re: Snoop maxcount"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2106.html">Wu-chang Feng: "Hung Solaris TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2108">[ date ]</A>
+<A HREF="index.html#2108">[ thread ]</A>
+<A HREF="subject.html#2108">[ subject ]</A>
+<A HREF="author.html#2108">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Has anyone seen problems with TCP hanging on Solaris when accessing a
+</EM><BR>
+<EM>&gt; web site over a lossy link?  I've tried hitting pages from
+</EM><BR>
+<EM>&gt; www.viajeya.com using Solaris 2.6 and Solaris 2.7 (11/99 version). 
+</EM><BR>
+<EM>&gt; When packets arrive ordered correctly, the request immediately
+</EM><BR>
+<EM>&gt; returns.  When the last couple of packets come back out of order, the
+</EM><BR>
+<EM>&gt; client TCP (in this case either a manual telnet or a squid cache
+</EM><BR>
+<EM>&gt; process) sits around indefinitely.....Here's a tcpdump trace of two
+</EM><BR>
+<EM>&gt; identical requests: one fails and the other is OK.
+</EM><BR>
+<P>Do you know what platform www.viajeya.com is?
+<BR>
+<P><EM>&gt; 14:45:17.805154 200.10.104.13.80 &gt; panamint.35323: FP 8965:9198(233)
+</EM><BR>
+<EM>&gt; ack 46 win 8715 (DF)
+</EM><BR>
+<EM>&gt; 14:45:17.805187 panamint.35323 &gt; 200.10.104.13.80: . ack 7505 win 8760
+</EM><BR>
+<EM>&gt; (DF)
+</EM><BR>
+<EM>&gt; 14:45:18.009141 200.10.104.13.80 &gt; panamint.35323: P 7505:8965(1460)
+</EM><BR>
+<EM>&gt; ack 46 win 8715 (DF)
+</EM><BR>
+<EM>&gt; 14:45:18.009166 panamint.35323 &gt; 200.10.104.13.80: . ack 9198 win 8760
+</EM><BR>
+<EM>&gt; (DF)
+</EM><BR>
+<P>panamint ack's up to 9198.  The version of Solaris you have does not store
+<BR>
+out of order FIN.  You can see that this ack does not ack the FIN, otherwise
+<BR>
+the ack would be 9199.  But the other side does not retransmit the FIN, and
+<BR>
+it should because FIN has not been ack'ed.  This causes the hang.  This is
+<BR>
+a bug in www.viajeya.com.
+<BR>
+<P>To get around this bug in www.viajeya.com, refer to Sun RFE 4330074.  I think
+<BR>
+the latest 2.6 patch should have this enhancement.  The change is to make
+<BR>
+Solaris' TCP record the out of order FIN info.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Hung%20Solaris%20TCP&In-Reply-To=&lt;Roam.SIMC.2.0.6.959990553.176.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2107.html">Kacheong Poon: "Re: Snoop maxcount"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2106.html">Wu-chang Feng: "Hung Solaris TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2109.html">Craig Partridge: "Re: Hung Solaris TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2108">[ date ]</A>
+<A HREF="index.html#2108">[ thread ]</A>
+<A HREF="subject.html#2108">[ subject ]</A>
+<A HREF="author.html#2108">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

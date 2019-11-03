@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: keep RST data nonstandardized fo</TITLE>
+<META NAME="Author" CONTENT="David L. Nicol (david@kasey.umkc.edu)">
+<META NAME="Subject" CONTENT="keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>keep RST data nonstandardized for the future!</H1>
+<!-- received="Tue Aug  1 17:23:25 2000" -->
+<!-- isoreceived="20000801212325" -->
+<!-- sent="Tue, 01 Aug 2000 16:08:10 -0500" -->
+<!-- isosent="20000801210810" -->
+<!-- name="David L. Nicol" -->
+<!-- email="david@kasey.umkc.edu" -->
+<!-- subject="keep RST data nonstandardized for the future!" -->
+<!-- id="39873C3A.B8B6C0AC@kasey.umkc.edu" -->
+<!-- inreplyto="20000801153643.B29080@malatesta.spider.com" -->
+<STRONG>From:</STRONG> David L. Nicol (<A HREF="mailto:david@kasey.umkc.edu?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;39873C3A.B8B6C0AC@kasey.umkc.edu&gt;"><EM>david@kasey.umkc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 01 2000 - 17:08:10 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2233.html">Joe Touch: "Re: The TCP RST"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2232.html">Ian Heavens: "TCP RSTs issues discussion"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2237.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2243.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2259.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2234">[ date ]</A>
+<A HREF="index.html#2234">[ thread ]</A>
+<A HREF="subject.html#2234">[ subject ]</A>
+<A HREF="author.html#2234">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+That would be the doubletree in Edinburgh?
+<BR>
+<P>Here's my contribution to the discussion:
+<BR>
+<P><P>I think that the fact that a RST can carry data is a built-in
+<BR>
+mechanism for extending TCP.  In my proposal for tcp connections with
+<BR>
+transparently migrating ends, the data portion of the RST is where I
+<BR>
+found to stick the additional information, since the &quot;reserved bits&quot;
+<BR>
+are apparently untouchable, although they would be good too.  (they
+<BR>
+are reserved for the army or something, right, in case they need to
+<BR>
+nationalize sprintlink all of a sudden for some reason, no?)
+<BR>
+<P><P>So I would be against declaring a STANDARD on what that data can
+<BR>
+be (Apple apparently includes the reset reason in ascii english) unless
+<BR>
+the standard still leaves some room for extension.
+<BR>
+<P><P>Ian Heavens wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This will be at 11.15 Wednesday in the hotel bar of the Doubletree
+</EM><BR>
+<EM>&gt; hotel.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Off the topic of this list, but I wonder if SCTP could benefit
+</EM><BR>
+<EM>&gt; from analysis of the experiences of TCP with RSTs, since it
+</EM><BR>
+<EM>&gt; is not widely deployed (e.g. an error code with the SCTP ABORT)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; cheers
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ian
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+</EM><BR>
+<EM>&gt; 8 John's Place, Leith, Edinburgh EH6 7EL.
+</EM><BR>
+<EM>&gt; Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;39873C3A.B8B6C0AC@kasey.umkc.edu&gt;">ian@spider.com</A>
+</EM><BR>
+<P><PRE>
+-- 
+                          David Nicol 816.235.1187 <A HREF="mailto:nicold@umkc.edu?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;39873C3A.B8B6C0AC@kasey.umkc.edu&gt;">nicold@umkc.edu</A>
+                                                    exec /bin/true
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2233.html">Joe Touch: "Re: The TCP RST"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2232.html">Ian Heavens: "TCP RSTs issues discussion"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2235.html">Ian Heavens: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2237.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2242.html">Jerry Toporek: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2243.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2245.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2259.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2323.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2234">[ date ]</A>
+<A HREF="index.html#2234">[ thread ]</A>
+<A HREF="subject.html#2234">[ subject ]</A>
+<A HREF="author.html#2234">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

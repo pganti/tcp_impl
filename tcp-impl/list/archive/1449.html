@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Question on initial sequence numbers</H1>
+<!-- received="Tue Jan  5 14:46:17 1999" -->
+<!-- isoreceived="19990105194617" -->
+<!-- sent="Tue, 5 Jan 1999 12:44:59 -0700 (MST)" -->
+<!-- isosent="19990105194459" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Question on initial sequence numbers" -->
+<!-- id="199901051944.MAA06903@calcite.rhyolite.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901051944.MAA06903@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 05 1999 - 14:44:59 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1448.html">Eric A. Hall: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1451.html">rames: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1458.html">Eric A. Hall: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1449">[ date ]</A>
+<A HREF="index.html#1449">[ thread ]</A>
+<A HREF="subject.html#1449">[ subject ]</A>
+<A HREF="author.html#1449">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901051944.MAA06903@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; Accepting new connections immediately after a quick reboot
+</EM><BR>
+<EM>&gt; &gt; would be 'breaking' that rule.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Almost every OS that I've ever tested breaks this rule, unfortunately.
+</EM><BR>
+<P>That rule is not broken if the system cannot be started in less than 2*MSL.
+<BR>
+Only systems that can do a genuine quick reboot are able to break that
+<BR>
+rule.  If the system is quiet for 120 seconds after being told to reboot
+<BR>
+and until the first user process runs, then the system cannot and does
+<BR>
+not break that rule.
+<BR>
+<P>Which systems have you tested that break that rule?
+<BR>
+<P>I can't think of a operating system that I've seen in recent years that
+<BR>
+could break that rule if it wanted to, because they boot soooo sloooowly.
+<BR>
+Windows 95, Windows 98, Windows NT Workstation 4.0, IRIX of all versions
+<BR>
+since it was renamed from &quot;UNIX&quot; in about 1987, all versions of SunOS and
+<BR>
+Solaris I've seen (albeit none newer ~1994), Linux in Redhat 5.1 and 5.2,
+<BR>
+NetBSD as of a few years ago, and FreeBSD through 2.2.7 are unable to
+<BR>
+break that rule unless you insist on the official, full MSL instead of
+<BR>
+the common BSD short value.  Some of those systems could break that rule
+<BR>
+even with the full 120 second MSL of RFC 793.  SHEESH!--Some could not
+<BR>
+break that rule even if the MSL were significantly longer than 120 seconds.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901051944.MAA06903@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1448.html">Eric A. Hall: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1450.html">Rick Jones: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1451.html">rames: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1458.html">Eric A. Hall: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1449">[ date ]</A>
+<A HREF="index.html#1449">[ thread ]</A>
+<A HREF="subject.html#1449">[ subject ]</A>
+<A HREF="author.html#1449">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

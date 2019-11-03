@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Multiple TCP source addresse</TITLE>
+<META NAME="Author" CONTENT="Richard Draves (richdr@microsoft.com)">
+<META NAME="Subject" CONTENT="RE: Multiple TCP source addresses?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Multiple TCP source addresses?</H1>
+<!-- received="Sat Dec 16 04:24:52 2000" -->
+<!-- isoreceived="20001216092452" -->
+<!-- sent="Fri, 15 Dec 2000 14:44:48 -0800" -->
+<!-- isosent="20001215224448" -->
+<!-- name="Richard Draves" -->
+<!-- email="richdr@microsoft.com" -->
+<!-- subject="RE: Multiple TCP source addresses?" -->
+<!-- id="7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com" -->
+<!-- inreplyto="Multiple TCP source addresses?" -->
+<STRONG>From:</STRONG> Richard Draves (<A HREF="mailto:richdr@microsoft.com?Subject=RE:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com&gt;"><EM>richdr@microsoft.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 15 2000 - 17:44:48 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2416">[ date ]</A>
+<A HREF="index.html#2416">[ thread ]</A>
+<A HREF="subject.html#2416">[ subject ]</A>
+<A HREF="author.html#2416">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm cc'ing <A HREF="mailto:multi6@ops.ietf.org?Subject=RE:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com&gt;">multi6@ops.ietf.org</A>, which was recently formed to discuss site
+<BR>
+multihoming issues like this, albeit in the context of IPv6 instead of IPv4.
+<BR>
+This is definitely an important problem to solve.
+<BR>
+<P>You're headed down the path to one possible solution, in which hosts have
+<BR>
+multiple addresses and are smart enough to try different combinations of
+<BR>
+src/dst address to find a working path.
+<BR>
+<P>There are other approaches that are more routing based. For example suppose
+<BR>
+your house has one address prefix, which was allocated out of a block
+<BR>
+assigned to your metro area/region. Your house network prefix is advertised
+<BR>
+inside all ISP networks in your region, but not to other regions. Only the
+<BR>
+shorter region prefix is advertised to other regions. Then routing protocols
+<BR>
+take care of finding a working path inside the metro region.
+<BR>
+<P>Rich
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: der Mouse [mailto:<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=RE:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com&gt;">mouse@Rodents.Montreal.QC.CA</A>]
+</EM><BR>
+<EM>&gt; Sent: Friday, December 15, 2000 6:20 AM
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Multiple TCP source addresses?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I've got a problem I'm trying to invent a solution to and I 
+</EM><BR>
+<EM>&gt; thought I'd
+</EM><BR>
+<EM>&gt; ask if there's any past work I should look at, or perhaps it's already
+</EM><BR>
+<EM>&gt; been solved and I just don't know it.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Most of the hosts on my home LAN are multihomed; I have address space
+</EM><BR>
+<EM>&gt; from two different places and I run both subnets over the same house
+</EM><BR>
+<EM>&gt; Ethernet.  (Network interfaces are configured to have both addresses.)
+</EM><BR>
+<EM>&gt; Sometimes one block of address space is reachable while the other one
+</EM><BR>
+<EM>&gt; isn't, and outgoing packets are routed to one of two tunnels (one to
+</EM><BR>
+<EM>&gt; each provider of address space) based on which subnet their source
+</EM><BR>
+<EM>&gt; addresses fall into.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This all works well in normal circumstances.  The problem is with
+</EM><BR>
+<EM>&gt; outgoing connections when one block of address space is 
+</EM><BR>
+<EM>&gt; unreachable for
+</EM><BR>
+<EM>&gt; some reason.  All the hosts have their default routes pointing to the
+</EM><BR>
+<EM>&gt; off-LAN gateway, but I had to pick one of its two addresses, and the
+</EM><BR>
+<EM>&gt; source address for the outgoing connection is always in the
+</EM><BR>
+<EM>&gt; corresponding subnet.  When that subnet is unreachable from the
+</EM><BR>
+<EM>&gt; destination host, outgoing connections fail even if I do have
+</EM><BR>
+<EM>&gt; connectivity to that host via the other subnet.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I could deal with the case where a subnet goes completely unreachable
+</EM><BR>
+<EM>&gt; with a routing protocol of some sort, perhaps.  But 
+</EM><BR>
+<EM>&gt; reachability is not
+</EM><BR>
+<EM>&gt; always all-or-nothing; depending on where the outage is, which hosts
+</EM><BR>
+<EM>&gt; can reach which subnet varies.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So I'd like to do something so that outgoing connections for which the
+</EM><BR>
+<EM>&gt; application has not specified a source address don't always try with
+</EM><BR>
+<EM>&gt; one source address and give up if that doesn't work; conceptually, I'd
+</EM><BR>
+<EM>&gt; like to try from all local addresses.  I was thinking of sending out
+</EM><BR>
+<EM>&gt; multiple SYNs, one for each local address; as soon as one gets
+</EM><BR>
+<EM>&gt; SYN-ACKed, that would commit the local address and SYN-ACKs for the
+</EM><BR>
+<EM>&gt; others would draw RSTs.  It does occur to me that I may want 
+</EM><BR>
+<EM>&gt; to do this
+</EM><BR>
+<EM>&gt; round-robin among the addresses, rather than in bursts, to avoid
+</EM><BR>
+<EM>&gt; creating unnecessary embryonic connections on the taget host in case
+</EM><BR>
+<EM>&gt; both addresses work.  (Of course, they would be torn down quickly in
+</EM><BR>
+<EM>&gt; response to the RST, but still.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Comments?  Thoughts?  Prior art?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 					der Mouse
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 			       <A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=RE:%20Multiple%20TCP%20source%20addresses?&In-Reply-To=&lt;7695E2F6903F7A41961F8CF888D87EA81C9BFB@red-msg-06.redmond.corp.microsoft.com&gt;">mouse@rodents.montreal.qc.ca</A>
+</EM><BR>
+<EM>&gt; 		     7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2417.html">Harald Koch: "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2415.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2413.html">der Mouse : "Multiple TCP source addresses?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2418.html">der Mouse : "Re: Multiple TCP source addresses?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2416">[ date ]</A>
+<A HREF="index.html#2416">[ thread ]</A>
+<A HREF="subject.html#2416">[ subject ]</A>
+<A HREF="author.html#2416">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Sat Dec 16 2000 - 04:25:21 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

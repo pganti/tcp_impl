@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: gaps in a tcp flow</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: gaps in a tcp flow">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: gaps in a tcp flow</H1>
+<!-- received="Wed Apr 30 15:51:10 2003" -->
+<!-- isoreceived="20030430195110" -->
+<!-- sent="Wed, 30 Apr 2003 15:36:08 -0400" -->
+<!-- isosent="20030430193608" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="Re: gaps in a tcp flow" -->
+<!-- id="200304301936.PAA01712@guns.lerc.nasa.gov" -->
+<!-- inreplyto="gaps in a tcp flow" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;200304301936.PAA01712@guns.lerc.nasa.gov&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 2003 - 15:36:08 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2943.html">Murali Bashyam: "Re: gaps in a tcp flow"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2941.html">karen mclane thomas: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2939.html">kunchanl: "gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2943.html">Murali Bashyam: "Re: gaps in a tcp flow"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2942">[ date ]</A>
+<A HREF="index.html#2942">[ thread ]</A>
+<A HREF="subject.html#2942">[ subject ]</A>
+<A HREF="author.html#2942">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+<P>------- Forwarded Message
+<BR>
+<P>Date: Wed, 30 Apr 2003 12:04:12 -0700
+<BR>
+From: Rick Jones &lt;<A HREF="mailto:rick_jones2@hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;200304301936.PAA01712@guns.lerc.nasa.gov&gt;">rick_jones2@hp.com</A>&gt;
+<BR>
+Reply-To: <A HREF="mailto:raj@cup.hp.com?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;200304301936.PAA01712@guns.lerc.nasa.gov&gt;">raj@cup.hp.com</A>
+<BR>
+Organization: the Unofficial HP
+<BR>
+To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20gaps%20in%20a%20tcp%20flow&In-Reply-To=&lt;200304301936.PAA01712@guns.lerc.nasa.gov&gt;">tcp-impl@lerc.nasa.gov</A>
+<BR>
+Subject: Re: gaps in a tcp flow
+<BR>
+<P><EM>&gt; The ACK for the SYN-ACK should not be delayed at all, and certainly
+</EM><BR>
+<EM>&gt; not by 70 ms, there is no aspect of TCP protocol that specifies such a
+</EM><BR>
+<EM>&gt; behaviour. So i'd guess that it is either the implementation or the
+</EM><BR>
+<EM>&gt; network that's causing this behaviour, although network seems less
+</EM><BR>
+<EM>&gt; probable.
+</EM><BR>
+<P>It is entirely possible that the ACK of a SYN|ACK could be delayed. 
+<BR>
+Particularly if the implementation is wanting to try to bundle the ACK 
+<BR>
+with the request data.
+<BR>
+<P>Here is a snippet of a netperf TCP_CRR test between an HP-UX 11 system
+<BR>
+(tardy)  and an HP-UX 11.11 system (sweb156):
+<BR>
+<P>13:00:14.077265 tardy.43873 &gt; sweb156.54430: S 217593471:217593471(0)
+<BR>
+win 32768 &lt;mss 1460,wscale 0,nop&gt; (DF)
+<BR>
+13:00:14.077399 sweb156.54430 &gt; tardy.43873: S 3147399939:3147399967(28)
+<BR>
+ack 217593472 win 4096
+<BR>
+13:00:14.077583 tardy.43873 &gt; sweb156.54430: P 1:2(1) ack 1 win 32768
+<BR>
+(DF)
+<BR>
+13:00:14.077806 sweb156.54430 &gt; tardy.43873: P 1:2(1) ack 2 win 4096
+<BR>
+13:00:14.077848 sweb156.54430 &gt; tardy.43873: F 2:2(0) ack 2 win 4096
+<BR>
+13:00:14.077888 tardy.43873 &gt; sweb156.54430: . ack 3 win 32768 (DF)
+<BR>
+13:00:14.077928 tardy.43873 &gt; sweb156.54430: F 2:2(0) ack 3 win 0 (DF)
+<BR>
+<P>Notice how the initial single byte request is piggy-backed on the ACK of
+<BR>
+the SYN|ACK from sweb156.
+<BR>
+<P>If you examine some of IBM's AIX SPECweb99* submittals - for example:
+<BR>
+<P><A HREF="http://www.spec.org/osg/web99ssl/results/res2003q1/web99ssl-20030217-00046.html">http://www.spec.org/osg/web99ssl/results/res2003q1/web99ssl-20030217-00046.html</A>
+<BR>
+<P>In the client notes you will see a setting that delays the ACK by the
+<BR>
+client of the SYN|ACK from the server.  It does the same thing (HP-UX
+<BR>
+does not it seems from above :) for the ACK of FINs (at least according
+<BR>
+to the discussion).
+<BR>
+<P>rick jones
+<BR>
+- -- 
+<BR>
+Wisdom Teeth are impacted, people are affected by the effects of events.
+<BR>
+these opinions are mine, all mine; HP might not want them anyway... :)
+<BR>
+feel free to post, OR email to raj in cup.hp.com  but NOT BOTH...
+<BR>
+<P>------- End of Forwarded Message
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2943.html">Murali Bashyam: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2941.html">karen mclane thomas: "Re: gaps in a tcp flow"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2939.html">kunchanl: "gaps in a tcp flow"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2943.html">Murali Bashyam: "Re: gaps in a tcp flow"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2942">[ date ]</A>
+<A HREF="index.html#2942">[ thread ]</A>
+<A HREF="subject.html#2942">[ subject ]</A>
+<A HREF="author.html#2942">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Apr 30 2003 - 15:51:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

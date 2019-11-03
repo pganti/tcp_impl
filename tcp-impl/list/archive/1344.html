@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft minutes for Chicago meeting</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="draft minutes for Chicago meeting">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft minutes for Chicago meeting</H1>
+<!-- received="Thu Oct  8 15:42:48 1998" -->
+<!-- isoreceived="19981008194248" -->
+<!-- sent="Thu, 08 Oct 1998 15:39:28 PDT" -->
+<!-- isosent="19981008223928" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="draft minutes for Chicago meeting" -->
+<!-- id="199810082239.PAA20057@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft%20minutes%20for%20Chicago%20meeting&In-Reply-To=&lt;199810082239.PAA20057@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Oct 08 1998 - 18:39:28 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1345.html">Mark Allman: "new mailing list location"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1343.html">Vern Paxson: "Re: tcp-impl archives?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1344">[ date ]</A>
+<A HREF="index.html#1344">[ thread ]</A>
+<A HREF="subject.html#1344">[ subject ]</A>
+<A HREF="author.html#1344">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Sorry these are so late ...  Please send us comments over the next
+<BR>
+few days and then we'll finalize them.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>TCPIMPL minutes
+<BR>
+42nd IETF, Chicago 
+<BR>
+August 28, 1998
+<BR>
+<P>Reported by Evi Nemeth, with editing by the chairs &amp; Sally Floyd.
+<BR>
+<P>Agenda:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.  Agenda bashing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.  Scott Bradner, intellectual property rights
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.  Status
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.  Known problems I-D
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.  Security problems
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.  RFC 2001 revision (congestion control)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.  WG closing after Orlando
+<BR>
+<P><P>-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+<BR>
+<P>1.  Agenda bashing:
+<BR>
+<P>No changes to the agenda.
+<BR>
+<P><P>2.  IPR (intellectual property rights) issues:
+<BR>
+<P>Scott Bradner reminded the group that if you know of intellectual
+<BR>
+property issues in your company on a topic and don't say so, then
+<BR>
+you cannot participate in the discussion and decisions regarding
+<BR>
+that topic.  This is outlined in RFC 2028.
+<BR>
+<P><P>3.  Status
+<BR>
+<P>The testing tools document is done, RFC 2398.  The larger initial
+<BR>
+window documents have been approved by IESG, and the 3 drafts will
+<BR>
+soon become RFCs.  Regarding the restart of idle connections, see
+<BR>
+draft-ietf-tcpimpl-restart, which Joe Touch reports will soon be
+<BR>
+revised for publication.
+<BR>
+<P><P>4.  Known problems
+<BR>
+<P>7 new ones have been documented since the LA meeting.  Bill Fenner
+<BR>
+described a new bug: if during a bi-directional transfer you are
+<BR>
+sending and so is the other end, but you're not reading the incoming
+<BR>
+data very fast, you can end up deadlocked with a full buffer.  For
+<BR>
+example, a multithreaded client-server where one thread is sending a
+<BR>
+lot, another is receiving a lot, but using one tcp connection.  The
+<BR>
+fix is to change an unsigned to an int and recognize -1 as a valid
+<BR>
+value.  Bill will explain it better and submit it.
+<BR>
+<P>There are 3 others which are less serious and also not yet
+<BR>
+addressed.  The document will be forwarded to the IESG without
+<BR>
+outlining these bugs.
+<BR>
+<P><P>5.  Security problems
+<BR>
+<P>There is a list of known problems:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Predictable initial sequence number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN flooding
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Land attack
+<BR>
+Phil Karn noted that the latter two are really denial of service
+<BR>
+attacks, and questioned the title of the section.
+<BR>
+<P><P>6.  RFC 2001 revision
+<BR>
+<P>High-level sketch of the revisions:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- removed ambiguities
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- fixes for fast retransmit and fast recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- added discussion of SACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- added larger initial window pointer
+<BR>
+<P>The discussion of the 2001 revision was a little chaotic at this
+<BR>
+point and went back and forth between several topics.  The comments
+<BR>
+about each topic have been grouped together for the minutes, and
+<BR>
+therefore the comments are somewhat out-of-order.
+<BR>
+<P>Sally Floyd described two separate modifications to the Fast Retransmit
+<BR>
+and Fast Recovery algorithms in RFC 2001.  The first modification is
+<BR>
+the NewReno algorithm, introduced in Janey Hoe's SIGCOMM 96 paper,
+<BR>
+which improves TCP's response to a &quot;partial ack&quot; received during Fast
+<BR>
+Recovery, acknowledging some but not all of the packets sent before
+<BR>
+Fast Recovery was initiated.  The preferred TCP algorithms would be
+<BR>
+those of Sack TCP.  However, when the SACK option is not available, the
+<BR>
+NewReno algorithm was described as a small but important change to make
+<BR>
+to Reno TCP, avoiding Reno TCP's well-documented problems with
+<BR>
+retransmit timeouts when multiple packets are dropped from a window of
+<BR>
+data.
+<BR>
+<P>The second modification described was the bugfix algorithm for avoiding
+<BR>
+unnecessary multiple fast retransmits.  This problem occurs in Reno
+<BR>
+when, after a retransmit timeout, packets are retransmitted that have
+<BR>
+already been received at the receiver.  When the TCP sender receives
+<BR>
+three duplicate ACKs acknowledging three retransmitted packets, the
+<BR>
+sender can incorrectly interpret this as a new instance of congestion.
+<BR>
+Simulations showed that the NewReno algorighm and the bugfix for
+<BR>
+avoiding-multiple-fast-retransmits are orthogonal - it is possible to
+<BR>
+implement one and not the other.  However, while it is possible to
+<BR>
+create scenarios with Reno or NewReno TCP where the bugfix for
+<BR>
+avoiding-multiple-fast-retransmits would be helpful, it is not 
+<BR>
+possible to create the pathological scenarios that can occur with Tahoe
+<BR>
+TCP (e.g., TCP with Fast Retransmit but without Fast Recovery).
+<BR>
+<P>Sally's slides can be found at:
+<BR>
+&quot;<A HREF="ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.ps">ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.ps</A>&quot; (postscript), and
+<BR>
+&quot;<A HREF="ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.pdf">ftp://ftp.ee.lbl.gov/talks/sf-tcpimpl-aug98.pdf</A>&quot; (PDF).
+<BR>
+<P>The chairs think that NewReno is a good thing; folks should implement it
+<BR>
+(solaris 2.6 might already) and put out an experimental RFC or include it
+<BR>
+(all or part) in 2001.
+<BR>
+<P>The decision was made to take this discussion to the mailing list and do an
+<BR>
+experimental RFC with NewReno, rather than include it in the bugs list 
+<BR>
+in RFC 2001.
+<BR>
+<P>There was then discussion of whether to include Sally's Reno
+<BR>
+modification for avoiding-multiple-fast-retransmits in the RFC 2001
+<BR>
+revision - how much experience with it do we need to include it?
+<BR>
+<P>Vern suggested that an experimental document with Sally's modification
+<BR>
+could come out at the same time, and be referenced by 2001.
+<BR>
+<P>Kacheong Poon (Sun) confirmed that some implementations of NewReno can
+<BR>
+behave like stop and go during retransmission (like in Janey Hoe's
+<BR>
+paper).  This occurs when multiple packets are dropped from a window of
+<BR>
+data, and NewReno TCP recovers by retransmitting at most one dropped
+<BR>
+packet per roundtrip time.
+<BR>
+<P>Sally said it is possible to implement NewReno with &quot;stop and go&quot;
+<BR>
+behavior, but that in an alternate implementation, included as an
+<BR>
+option in the NS simulator, the retransmit timer is reset on only the
+<BR>
+first retransmission.  In this case, instead of slowly recovering by
+<BR>
+retransmitting at most one dropped packet per roundtrip time,
+<BR>
+eventually the retransmit timer times out and the sender slow-starts.
+<BR>
+The first-order fix for problems with multiple packets dropped from a
+<BR>
+window of data is to use Sack, but when Sack is not available, NewReno
+<BR>
+with this implementation should not perform worse than Reno.
+<BR>
+<P>Sally and Kacheong Poon agreed to confer on different possible
+<BR>
+implementations of NewReno.
+<BR>
+<P>Phil Karn asked if we want to make TCP more aggressive in the face of
+<BR>
+multiple packets dropped.  Sally answered: multiple packets dropped in a
+<BR>
+window of data is one instance of congestion.  So cut the window in half,
+<BR>
+do one retransmit; if retransmitted packets get lost, then it's more serious
+<BR>
+and do slow start.
+<BR>
+<P>The RFC 2001 discussion continued with a discussion of ACKing every
+<BR>
+second full sized segment being a MUST and not a SHOULD.  A wording
+<BR>
+tweak is needed: that ACKing is *at least* every second full-sized
+<BR>
+packet, since some systems ACK every segment, and that's allowed.
+<BR>
+<P>&lt;There was a comment here about satellite environments which the
+<BR>
+&nbsp;note-taker didn't get recorded - anyone recall it?&gt;
+<BR>
+<P>Another issue arose concerning ACK every 2nd full sized segment --
+<BR>
+there's no way for the receiver to really know if the segments
+<BR>
+arriving are full-sized.  Resolution: loosen the language but word
+<BR>
+it so that today's TCPs are ok.
+<BR>
+<P>A question regarding definition of 3 duplicate ACKs - must they be
+<BR>
+consecutive?  Answer: yes, they need to be consecutive, but it's
+<BR>
+rare that they're not, so should not cause an implementation to be
+<BR>
+labeled non-conformant.
+<BR>
+<P>7.  WG closing after Orlando
+<BR>
+<P>2001 is almost done if NewReno is not included.  The plan is to
+<BR>
+close the working group after the next meeting (in Orlando).
+<BR>
+However, in discussion after adjournment, the issue was raised of
+<BR>
+documenting PMTU discovery issues, which may merit keeping the WG
+<BR>
+active for one more meeting.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1345.html">Mark Allman: "new mailing list location"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1343.html">Vern Paxson: "Re: tcp-impl archives?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1344">[ date ]</A>
+<A HREF="index.html#1344">[ thread ]</A>
+<A HREF="subject.html#1344">[ subject ]</A>
+<A HREF="author.html#1344">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

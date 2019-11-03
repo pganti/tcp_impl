@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sat Sep 16 00:35:46 2000" -->
+<!-- isoreceived="20000916043546" -->
+<!-- sent="Fri, 15 Sep 2000 22:28:41 -0600 (MDT)" -->
+<!-- isosent="20000916042841" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009160428.e8G4SfT15409@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009160428.e8G4SfT15409@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Sep 16 2000 - 00:28:41 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2330">[ date ]</A>
+<A HREF="index.html#2330">[ thread ]</A>
+<A HREF="subject.html#2330">[ subject ]</A>
+<A HREF="author.html#2330">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Satish Mynam &lt;<A HREF="mailto:mynam@cisco.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009160428.e8G4SfT15409@calcite.rhyolite.com&gt;">mynam@cisco.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009160428.e8G4SfT15409@calcite.rhyolite.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<P><EM>&gt; I was just wondering about many of the TCP implementations are using
+</EM><BR>
+<EM>&gt; a random number generator for the Initial Sequence Number(ISN)
+</EM><BR>
+<EM>&gt; generation for the new TCP connections.  Most of the implementations
+</EM><BR>
+<EM>&gt; (in the past) have been using the clock value in micro seconds to
+</EM><BR>
+<EM>&gt; generate the ISN.  
+</EM><BR>
+<P>How do you figure &quot;most implementations&quot; were doing that or similar?
+<BR>
+It's awfully hard to make any statement about &quot;most TCP implementations.&quot;
+<BR>
+<P>Some code I wrote at a previous employer did something like that but
+<BR>
+somewhat better...when the hardware had microsecond or nanosecond
+<BR>
+resolution.
+<BR>
+<P>Judging from customers using bogus test packages, RFC 1948 support is 
+<BR>
+a global checklist item, which is to say that anyone who wants to
+<BR>
+compete supports RFC 1948.
+<BR>
+<P>I say those test packages are bogus because they detect situations where
+<BR>
+initial sequence #'s are predictable on high speed LAN's but unpredictable
+<BR>
+in situations where initial sequence number predicting is a real threat
+<BR>
+(i.e. WAN's).  I also do not believe they detect all predictable sequence
+<BR>
+numbers in situations where it is a valid concern.  For example, if you
+<BR>
+have bad guys on your LAN's, you ought to worry about cleartext passwords
+<BR>
+for telnet, ftp, rlogin, and most Microsoft protocols first.
+<BR>
+<P>My realism/cynicism is moot, because many people use the tests or
+<BR>
+RFC 1948 support as checklist items.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Personally I feel, ...
+</EM><BR>
+<P>S. Bellovin's discussion of the issues in RFC 1948 is good, except that
+<BR>
+his discussion of the costs of MD5 hashing are dated.  CPU's are fast
+<BR>
+enough that the cost of MD5 rarely matters.
+<BR>
+I don't agree that MD5 hashes of secrets are always required....not
+<BR>
+that he says that, but that's what the test authors tell their customers.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009160428.e8G4SfT15409@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2330">[ date ]</A>
+<A HREF="index.html#2330">[ thread ]</A>
+<A HREF="subject.html#2330">[ subject ]</A>
+<A HREF="author.html#2330">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

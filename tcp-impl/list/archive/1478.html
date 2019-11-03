@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Sam Manthorpe (sm@bossette.engr.sgi.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb  3 17:34:15 1999" -->
+<!-- isoreceived="19990203223415" -->
+<!-- sent="Wed, 3 Feb 1999 14:30:57 -0800 (PST)" -->
+<!-- isosent="19990203223057" -->
+<!-- name="Sam Manthorpe" -->
+<!-- email="sm@bossette.engr.sgi.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902032230.OAA33831@bossette.engr.sgi.com" -->
+<!-- inreplyto="36B8B9A5.4BBBEA81@ehsco.com" -->
+<STRONG>From:</STRONG> Sam Manthorpe (<A HREF="mailto:sm@bossette.engr.sgi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902032230.OAA33831@bossette.engr.sgi.com&gt;"><EM>sm@bossette.engr.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 03 1999 - 17:30:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1479.html">Sam Manthorpe: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1477.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1476.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1478">[ date ]</A>
+<A HREF="index.html#1478">[ thread ]</A>
+<A HREF="subject.html#1478">[ subject ]</A>
+<A HREF="author.html#1478">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi Eric,
+<BR>
+<P>Eric A. Hall wrote:
+<BR>
+<EM>&gt; I'll bite.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Q: If Nagle is a problem for my application, I can just disable it
+</EM><BR>
+<EM>&gt; altogether. What benefit is there in changing Nagle so that it affects
+</EM><BR>
+<EM>&gt; ALL transactions instead of just the ones I'm troubled by?
+</EM><BR>
+<P>Because you just have to make one change to the kernel code instead
+<BR>
+of many changes to all applications which do bulk data transfer.  Moreover, 
+<BR>
+in some cases, you will have to introduce some special intelligence
+<BR>
+in the application so that it can decide _whether_ it is doing bulk
+<BR>
+transfer or not.  Why not just put this extra intelligence in the
+<BR>
+kernel.
+<BR>
+<P><EM>&gt; IE, by changing Nagle, you're going to be changing everything, and not
+</EM><BR>
+<EM>&gt; just those applications that are request/response-intensive. 
+</EM><BR>
+<P>The request/response-intensive applications should notice no difference,
+<BR>
+except where the responses consist of significant amounts of data.  I
+<BR>
+can't think of any cases where fixing this in the kernel would cause
+<BR>
+problems with other applications or for network utilisation; can anyone
+<BR>
+else?
+<BR>
+<P>-- Sam
+<BR>
+<P>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<BR>
+Sam Manthorpe, SGI.  tel: (650)933-2856 fax: (650)932-2856  <A HREF="mailto:sm@engr.sgi.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902032230.OAA33831@bossette.engr.sgi.com&gt;">sm@engr.sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1479.html">Sam Manthorpe: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1477.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1476.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1478">[ date ]</A>
+<A HREF="index.html#1478">[ thread ]</A>
+<A HREF="subject.html#1478">[ subject ]</A>
+<A HREF="author.html#1478">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RFC 1323 implementation</TITLE>
+<META NAME="Author" CONTENT="Jason Thorpe (thorpej@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: RFC 1323 implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RFC 1323 implementation</H1>
+<!-- received="Mon May  4 00:23:47 1998" -->
+<!-- isoreceived="19980504042347" -->
+<!-- sent="Mon, 04 May 1998 00:10:09 -0700" -->
+<!-- isosent="19980504071009" -->
+<!-- name="Jason Thorpe" -->
+<!-- email="thorpej@nas.nasa.gov" -->
+<!-- subject="Re: RFC 1323 implementation" -->
+<!-- id="199805040710.AAA04434@lestat.nas.nasa.gov" -->
+<!-- inreplyto="RFC 1323 implementation" -->
+<STRONG>From:</STRONG> Jason Thorpe (<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199805040710.AAA04434@lestat.nas.nasa.gov&gt;"><EM>thorpej@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon May 04 1998 - 03:10:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1125.html">Bachittar Singh Sembi: "tcpdump for win95"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1124">[ date ]</A>
+<A HREF="index.html#1124">[ thread ]</A>
+<A HREF="subject.html#1124">[ subject ]</A>
+<A HREF="author.html#1124">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Regarding Dave's RFC1323 survey (Dave, this is an update/correction to
+<BR>
+the one which Kevin sent to you earlier...):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. |_|   Window Scale Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. |_|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. |_|   Window Scale size based on receive buffer size
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. |_|   Shift values &gt; 14 are logged and treated as 14.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. |_|   Timestamps Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. |_|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7. |_|   RTT calculations based on Timestamps
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.4
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*8. |_|   Update TS.Recent if:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEG.TSval &gt;= TSrecent and SEG.SEQ &lt;= Last.ACK.sent
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 4.x
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9. |_|   PAWS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10. |_|   &quot;invalidate&quot; TS.Recent if idle &gt; 24 days.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix A:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*11. |_|   TCP Maxseg option: MSS = MTU - fixed IP/TCP header
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*12. |_|   On output: adjust TCP data length for TCP options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*13. |_|              adjust TCP data length for IP options
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix C:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*14. |_|   Disable Karn algorithm w/RTTM
+<BR>
+<P>* New/changed items from RFC 1323.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vendor: The NetBSD Foundation, Inc.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product: NetBSD
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 1.4 [1]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1 - 14
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 1.3.1 and earlier
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1 - 7 [2], 9 - 11, 14
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contacts: Kevin M. Lahey &lt;<A HREF="mailto:kml@netbsd.org?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199805040710.AAA04434@lestat.nas.nasa.gov&gt;">kml@netbsd.org</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jason R. Thorpe &lt;<A HREF="mailto:thorpej@netbsd.org?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199805040710.AAA04434@lestat.nas.nasa.gov&gt;">thorpej@netbsd.org</A>&gt;
+<BR>
+<P>[1] NetBSD 1.4 is not yet released, but the development sources which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;implement all checklist items are currently available as NetBSD 1.3E.
+<BR>
+<P>[2] Window scale values &gt; 14 are treated as 14, but not logged.  This is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;changed in NetBSD 1.4, where the illegal value and the peer which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;sent it is now logged.
+<BR>
+<P>Jason R. Thorpe                                       <A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199805040710.AAA04434@lestat.nas.nasa.gov&gt;">thorpej@nas.nasa.gov</A>
+<BR>
+NASA Ames Research Center                            Home: +1 408 866 1912
+<BR>
+NAS: M/S 258-5                                       Work: +1 650 604 0935
+<BR>
+Moffett Field, CA 94035                             Pager: +1 415 428 6939
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1125.html">Bachittar Singh Sembi: "tcpdump for win95"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1124">[ date ]</A>
+<A HREF="index.html#1124">[ thread ]</A>
+<A HREF="subject.html#1124">[ subject ]</A>
+<A HREF="author.html#1124">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

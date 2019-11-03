@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 16:54:56 1997" -->
+<!-- isoreceived="19970605205456" -->
+<!-- sent="Thu, 5 Jun 1997 16:48:51 -0700" -->
+<!-- isosent="19970605234851" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052348.AA07769@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 19:48:51 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0487.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0503.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0503.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#486">[ date ]</A>
+<A HREF="index.html#486">[ thread ]</A>
+<A HREF="subject.html#486">[ subject ]</A>
+<A HREF="author.html#486">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:perry@jekyll.piermont.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">perry@jekyll.piermont.com</A> Thu Jun  5 16:35:49 1997
+</EM><BR>
+<EM>&gt; X-Authentication-Warning: jekyll.piermont.com: [[UNIX: localhost]] didn't use HELO protocol
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">touch@isi.edu</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@relay.engr.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">tcp-impl@relay.engr.sgi.com</A>, <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">vjs@mica.denver.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TIME-WAIT truncation 
+</EM><BR>
+<EM>&gt; X-Reposting-Policy: redistribute only with permission
+</EM><BR>
+<EM>&gt; Date: Thu, 05 Jun 1997 19:35:42 -0400
+</EM><BR>
+<EM>&gt; From: &quot;Perry E. Metzger&quot; &lt;<A HREF="mailto:perry@piermont.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">perry@piermont.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">touch@ISI.EDU</A> writes:
+</EM><BR>
+<EM>&gt; &gt; &gt; From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+</EM><BR>
+<EM>&gt; &gt; &gt; &quot;Denying the connection attempts&quot; is a poor defense against a denial of
+</EM><BR>
+<EM>&gt; &gt; &gt; service attack such as SYN bombing, since causing you to deny
+</EM><BR>
+<EM>&gt; &gt; &gt; connection attemptss is the purpose for the SYM bombing.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; There is NO other solution to SYN attacks.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I think Vern is right in this instance -- and he's especially right
+</EM><BR>
+<EM>&gt; about the measures he listed to ameliorate such attacks. Make your
+</EM><BR>
+<EM>&gt; incoming queue large, make it fast to index, try to compress the TCBs
+</EM><BR>
+<EM>&gt; until you go to a full connection, and drop oldest (or random -- Vern
+</EM><BR>
+<EM>&gt; and I have disagreed on this) if you overflow.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is also the consensus among a lot of other folks, too, btw.
+</EM><BR>
+<P>To be more clear -
+<BR>
+<P>there are plenty of things you can do to push
+<BR>
+the cost of attacks out on the horizon -
+<BR>
+including buying more memory
+<BR>
+<P>however, in the end, the SYNs will impinge
+<BR>
+on the link BW or CPU processing overhead
+<BR>
+<P>In all cases, you can obviously:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buy more resources
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit the usage of the resources you have
+<BR>
+<P>Denying connection attempts is the only solution when
+<BR>
+you're out of resources. The two solutions proposed are:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- drop randomly
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- drop based on a validity check (cookies)
+<BR>
+<P>the former always works, but punishes all incoming connections
+<BR>
+equally
+<BR>
+<P>the latter punishes all incoming connections by slowing
+<BR>
+the processing of SYNs, but (apparently) this slowdown
+<BR>
+has been shown acceptable for some systems, and it also rewards
+<BR>
+'a-prior known good' connections with successful processing
+<BR>
+<P>The question remains:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- is this something that needs to be discussed in the RFC?
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(I'm asking - my first reaction is 'not yet - there
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are plenty of documented specs that aren't implemented
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correctly, or bugs in the documentations that deal with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;just basic operation, rather than security or performance)
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052348.AA07769@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0487.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0485.html">Perry E. Metzger: "Re: SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0503.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0503.html">Perry E. Metzger: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#486">[ date ]</A>
+<A HREF="index.html#486">[ thread ]</A>
+<A HREF="subject.html#486">[ subject ]</A>
+<A HREF="author.html#486">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

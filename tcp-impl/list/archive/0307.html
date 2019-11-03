@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (poon@cs.wisc.edu)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Wed Apr  2 18:06:47 1997" -->
+<!-- isoreceived="19970402230647" -->
+<!-- sent="Wed, 2 Apr 1997 20:01:36 -0600 (CST)" -->
+<!-- isosent="19970403020136" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="poon@cs.wisc.edu" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704030201.UAA02712@parmesan.cs.wisc.edu" -->
+<!-- inreplyto="TCP buffers" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704030201.UAA02712@parmesan.cs.wisc.edu&gt;"><EM>poon@cs.wisc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 21:01:36 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0306.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#307">[ date ]</A>
+<A HREF="index.html#307">[ thread ]</A>
+<A HREF="subject.html#307">[ subject ]</A>
+<A HREF="author.html#307">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704030201.UAA02712@parmesan.cs.wisc.edu&gt;">craig@aland.bbn.com</A>&gt;:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;In fact, I'd wager that the high RTO is due in part to the window size.
+</EM><BR>
+<P>Yes.
+<BR>
+<P><EM>&gt;Try a smaller window size (and set your MSS to 1KB or less) and see if
+</EM><BR>
+<EM>&gt;performance doesn't improve.  (It did for me over a dial-up link a few
+</EM><BR>
+<EM>&gt;years ago).
+</EM><BR>
+<P>A small window helps.  But ...
+<BR>
+<P><EM>&gt;Note too, in this case your machine knows it is connected to a dial-up
+</EM><BR>
+<EM>&gt;line and the link layer could therefore tell the IP and TCP layers about
+</EM><BR>
+<EM>&gt;the available path bandwidth and allow your TCP to set a rational window
+</EM><BR>
+<EM>&gt;size.
+</EM><BR>
+<P>As I mentioned in my mail, applications, like ftp, use setsockopt() to set
+<BR>
+the buffer size to a large value.  That is why I asked the question &quot;what
+<BR>
+should setsockopt(SO_RCVBUF) really mean to TCP?&quot;  If TCP knows that the
+<BR>
+link is bandwidth dominated, can it just ignore the setsockopt()?  Here I
+<BR>
+assume that setsockopt() affects the advertized window size, as in BSD.  One
+<BR>
+can say that it is the application problem.  But, say, in a LAN environment,
+<BR>
+a larger window is really needed.  And the application, like ftp, can
+<BR>
+improve performance by calling setsockopt() instead of using the default
+<BR>
+window size.  An application does not know the actual environment it runs
+<BR>
+on.
+<BR>
+<P>Does everyone agree that setsockopt() should not affect TCP's advertized
+<BR>
+window size?  The window size should be determined by TCP &quot;intelligently&quot;
+<BR>
+depending on the path and available buffer space instead of just using some
+<BR>
+default value.  If this is the right thing to do, I guess people should start
+<BR>
+thinking about how to do it.
+<BR>
+<P>In my PPP case, the link layer can know the link bandwidth.  But how about a
+<BR>
+machine connected to an Ethernet but the real link to the outside is a low
+<BR>
+speed PPP link?  I guess my questions in previous mail are still unanswered.
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704030201.UAA02712@parmesan.cs.wisc.edu&gt;">poon@cs.wisc.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0306.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0186.html">touch@ISI.EDU: "TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#307">[ date ]</A>
+<A HREF="index.html#307">[ thread ]</A>
+<A HREF="subject.html#307">[ subject ]</A>
+<A HREF="author.html#307">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

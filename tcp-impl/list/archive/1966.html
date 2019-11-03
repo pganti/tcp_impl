@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="John Hawkinson (jhawk@bbnplanet.com)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Fri, 28 Jan 2000 14:24:11 -0500" -->
+<!-- isoreceived="20000128192411" -->
+<!-- sent="Fri, 28 Jan 2000 14:24:11 -0500" -->
+<!-- isosent="20000128192411" -->
+<!-- name="John Hawkinson" -->
+<!-- email="jhawk@bbnplanet.com" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="20000128142411.I19709@jhawk-foo.bbnplanet.com" -->
+<!-- inreplyto="200001281853.MAA12312@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> John Hawkinson (<A HREF="mailto:jhawk@bbnplanet.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;20000128142411.I19709@jhawk-foo.bbnplanet.com&gt;"><EM>jhawk@bbnplanet.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 28 2000 - 14:24:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1967.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1970.html">Greg Minshall: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1966">[ date ]</A>
+<A HREF="index.html#1966">[ thread ]</A>
+<A HREF="subject.html#1966">[ subject ]</A>
+<A HREF="author.html#1966">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+This sounds kind of confusing.
+<BR>
+<P>dab writes:
+<BR>
+<EM>&gt; A lot of the time when we've seen this, it has been due to a
+</EM><BR>
+<EM>&gt; misconfiguration in a Cisco router that the local ISP uses to
+</EM><BR>
+<EM>&gt; connect to the backbone.  For example, UUNET defaults to using
+</EM><BR>
+<EM>&gt; a 4K or so MTU across the HDLC connection.  Cisco boxes have a
+</EM><BR>
+<EM>&gt; default 1500 MTU for HDLC connections. 
+</EM><BR>
+<P>Actually, it depends on the interface type. DS3 HDLC connections
+<BR>
+have a 4470 MTU, f'rinstance. T1s are 1500.
+<BR>
+<P><EM>&gt; If the local ISP box gets changed/replaced/reset/whatever, and the
+</EM><BR>
+<EM>&gt; configuration for the connection goes back to the default 1500 MTU,
+</EM><BR>
+<EM>&gt; you get the classic black-hole.
+</EM><BR>
+<P>I'm not certain why an ICMP frag failure doesn't get sent,
+<BR>
+let me see if I have the scenario correct:
+<BR>
+<P><EM>&gt; If you connect to a web server that has a 4K path to the back-bone,
+</EM><BR>
+<EM>&gt; and you advertise a 4K MSS, then it will attempt to send 4K packets.
+</EM><BR>
+<EM>&gt; They make it to the far side of the ISP connection, but then get
+</EM><BR>
+<EM>&gt; dropped by the Cisco box at the ISP because the packet is too long.
+</EM><BR>
+<P>Err, you're saying that an the MTU of one side of the interface does
+<BR>
+not agree with the MTU of the other side of the interface, and because
+<BR>
+IOS assumes it will never get a packet on an interface that is larger
+<BR>
+than the MTU for that interface, it has a problem when it receives
+<BR>
+such a packet?
+<BR>
+<P><EM>&gt; UUNET thinks 4K is just fine and sends the packet, the ISP box drops
+</EM><BR>
+<EM>&gt; it in hardware.  Because it doesn't get dropped by IP, no ICMP
+</EM><BR>
+<EM>&gt; message gets generated, and you have a black hole.
+</EM><BR>
+<P>Hmm...yes, though a counter does get incremented, I think.
+<BR>
+<P>I don't know whether it is reasonable to explore solutions
+<BR>
+to this problem that involve layering violations or handing
+<BR>
+partial packets to IP.
+<BR>
+<P>Some routing protocols attempt to look for problems like this,
+<BR>
+e.g. OSPF neighbors comparing MTUs and refusing to neighbor
+<BR>
+if this happens. Of course, presumably you have an interdomain
+<BR>
+case where the routing protocol is either &quot;static&quot; or &quot;BGP&quot;.
+<BR>
+<P>Perhaps, if it were not considered too ugly, a BGP option could be
+<BR>
+added to try to detect this misconfiguration and inform the
+<BR>
+administrator; this seems easier than trying to mandate a new protocol
+<BR>
+to check for this, or a PPP option (since so many links use &quot;cisco
+<BR>
+HDLC&quot;). It seems kind of odd, incidently, that cisco's CDP (&quot;cisco
+<BR>
+discovery protocol&quot;, which exchanges information about the
+<BR>
+name/version/ipaddress of routers on common links) fails to include
+<BR>
+MTU information....
+<BR>
+<P><EM>&gt; There are various tests you can do from your local side to
+</EM><BR>
+<EM>&gt; verify that this is indeed what is happening, and then you
+</EM><BR>
+<EM>&gt; can call up and complain to your ISP about having their
+</EM><BR>
+<EM>&gt; hardware misconfigured.
+</EM><BR>
+<EM>&gt; 	1) Ping the web server, if that works:
+</EM><BR>
+<EM>&gt; 	2) ping again with large packets (-s 10000)
+</EM><BR>
+<EM>&gt; 	3) Try the test to your ISP's router
+</EM><BR>
+<EM>&gt; 	4) try &quot;traceroute www.XXX.com 10000&quot;, because
+</EM><BR>
+<EM>&gt; 	   the return packets are small, that will
+</EM><BR>
+<EM>&gt; 	   succeed where pint -s 10000 won't.
+</EM><BR>
+<P>This is indistinguishable from an ICMP-filtering-induced
+<BR>
+PMTU blackhole, though.
+<BR>
+<P>--jhawk
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1967.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1965.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1970.html">Greg Minshall: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1966">[ date ]</A>
+<A HREF="index.html#1966">[ thread ]</A>
+<A HREF="subject.html#1966">[ subject ]</A>
+<A HREF="author.html#1966">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

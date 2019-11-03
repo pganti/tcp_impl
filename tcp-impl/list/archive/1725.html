@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Retransmissions without expl</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kacheong.poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Retransmissions without explanation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Retransmissions without explanation</H1>
+<!-- received="Thu May 20 19:59:09 1999" -->
+<!-- isoreceived="19990520235909" -->
+<!-- sent="Thu, 20 May 1999 16:57:45 -0700 (PDT)" -->
+<!-- isosent="19990520235745" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kacheong.poon@Eng.Sun.COM" -->
+<!-- subject="Re: Retransmissions without explanation" -->
+<!-- id="Roam.SIMC.2.0.6.927244665.1400.kcpoon@jurassic" -->
+<!-- inreplyto="yu8xd7zv4eje.fsf@sabre.sjf.novell.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kacheong.poon@Eng.Sun.COM?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;Roam.SIMC.2.0.6.927244665.1400.kcpoon@jurassic&gt;"><EM>kacheong.poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 20 1999 - 19:57:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1725">[ date ]</A>
+<A HREF="index.html#1725">[ thread ]</A>
+<A HREF="subject.html#1725">[ subject ]</A>
+<A HREF="author.html#1725">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Hmmm, I wonder if that statement holds in both senses: does doing all
+</EM><BR>
+<EM>&gt; of the extra measurements also not *improve* the quality of the RTO
+</EM><BR>
+<EM>&gt; computation?  I'd imagine that the key factor here would be transients
+</EM><BR>
+<EM>&gt; such as initial slowstart or path changes.
+</EM><BR>
+<P>In BSD TCP, I'd say taking more measurements does not improve the quality
+<BR>
+of RTO computation.  The reason is that the minimum is already 1s.  With
+<BR>
+normal terrestrial links, this is usually more than enough to guarantee that
+<BR>
+a segment has been lost.  So I guess the question should be asked in the
+<BR>
+context of TCP using fine grain timer.
+<BR>
+<P><EM>&gt; I'm pretty sure that I've seen at least one implementation which
+</EM><BR>
+<EM>&gt; doesn't do this.  To be honest, I was never quite able to figure out
+</EM><BR>
+<EM>&gt; how you could *not* do this.  But the point which I thought was worth
+</EM><BR>
+<EM>&gt; putting in writing somewhere is that you should only take a timeout if
+</EM><BR>
+<EM>&gt; you believe *all* the packets in flight have been dropped.  As opposed
+</EM><BR>
+<EM>&gt; to beleiving that *some* packet in flight was dropped.
+</EM><BR>
+<P>I think this may not be a good idea.  Look at an hypothetical example.  If
+<BR>
+TCP used your notion, and a connection just sent a segment out every 0.5
+<BR>
+RTO, then the timer would never fire even TCP did not get any acks at all!
+<BR>
+<EM>&gt;From a robustness point of view, I don't think this is a good practise.
+</EM><BR>
+<P><EM>&gt; Good to hear this.  I've been looking at this on and off for a little
+</EM><BR>
+<EM>&gt; while now and was pretty convinced that there needed to be either a
+</EM><BR>
+<EM>&gt; min RTO or a min deviation.  To my mind, the deviation term makes more
+</EM><BR>
+<EM>&gt; sense to impose a minimum on, because even on long paths I believe you
+</EM><BR>
+<EM>&gt; could still see the occasional spike in delay.
+</EM><BR>
+<P>I agree with this.  This is what we did in Solaris 7.  We put a minimum on the
+<BR>
+deviation.  And that is why I suggest people to set tcp_rexmit_interval_extra
+<BR>
+in Solaris 2.6, instead of setting tcp_rexmit_interval_min.  In 2.6, the
+<BR>
+smoothed deviation can go too low to be effective at all.  And there is the
+<BR>
+200ms delay ack timer which can be triggered after a long run of segments,
+<BR>
+when smoothed deviation can be much lower than 200ms.  Thus I suggest the
+<BR>
+minimum should be at least 200ms.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;Roam.SIMC.2.0.6.927244665.1400.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1725">[ date ]</A>
+<A HREF="index.html#1725">[ thread ]</A>
+<A HREF="subject.html#1725">[ subject ]</A>
+<A HREF="author.html#1725">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

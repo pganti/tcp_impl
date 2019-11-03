@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (hkchu@pacific-86.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;No slow start after timeout&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;No slow start after timeout&quot;</H1>
+<!-- received="Wed Mar 19 18:01:30 1997" -->
+<!-- isoreceived="19970319230130" -->
+<!-- sent="Wed, 19 Mar 1997 17:47:56 -0800" -->
+<!-- isosent="19970320014756" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="hkchu@pacific-86.Eng.Sun.COM" -->
+<!-- subject="Re: draft description of &quot;No slow start after timeout&quot;" -->
+<!-- id="199703200147.RAA23884@taipei.eng.sun.com" -->
+<!-- inreplyto="draft description of &quot;No slow start after timeout&quot;" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:hkchu@pacific-86.Eng.Sun.COM?Subject=Re:%20draft%20description%20of%20&quot;No%20slow%20start%20after%20timeout&quot;&In-Reply-To=&lt;199703200147.RAA23884@taipei.eng.sun.com&gt;"><EM>hkchu@pacific-86.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 20:47:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0173.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#174">[ date ]</A>
+<A HREF="index.html#174">[ thread ]</A>
+<A HREF="subject.html#174">[ subject ]</A>
+<A HREF="author.html#174">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; I don't agree that counting bytes can induce more burstiness.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Counting bytes can make a very large difference.  If the receiver does
+</EM><BR>
+<EM>&gt;ack-every-other, which many do, then the cwnd progression per RTT today
+</EM><BR>
+<EM>&gt;looks something like:
+</EM><BR>
+<P>If you have a simple delayed ack algorithm of acking every N packets,
+<BR>
+no matter which way you count (acks or bytes), you'll end up with a
+<BR>
+burstiness of N once you've got out of the slow-start phase. But by
+<BR>
+counting acks it'll take Rlog(W) with base (N+1)/N where R is the
+<BR>
+round-trip time and W is the window size in packets. N=1 gives Rlog2(W),
+<BR>
+the one described in VJ's 88' paper. When W is large, with an aggressive
+<BR>
+delayed ack of N &gt;&gt; 2, log(W) can be quite large.
+<BR>
+<P>E.g. W = 100 packets,	N=1 =&gt; log(W) = 6.6 (log base 2)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N=2 =&gt; log(W) = 11.4 (log base 1.5)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N=10 =&gt; log(W) = 48.3 (log base 1.1)
+<BR>
+<P>Counting bytes always gives Rlog2(W). It appears to be contributing
+<BR>
+to the burstiness of the traffic because it helps to get out of
+<BR>
+slow-start quicker, which should be considered a merit, not fault (IMHO).
+<BR>
+<P><EM>&gt;Furthermore, the proposed work-around won't fly: it violates RFC 2001,
+</EM><BR>
+<EM>&gt;which states that slow start is done by increasing cwnd by one MSS
+</EM><BR>
+<EM>&gt;per ack, and not by counting bytes ack'd.  This is not a minor difference,
+</EM><BR>
+<EM>&gt;and I disagree with:
+</EM><BR>
+<P>I'm pretty much aware of what the various RFCs say. But I thought we're
+<BR>
+also in the business of making recommendation for amendments if deemed
+<BR>
+necessary. Are we not?
+<BR>
+<P>Jerry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0173.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#174">[ date ]</A>
+<A HREF="index.html#174">[ thread ]</A>
+<A HREF="subject.html#174">[ subject ]</A>
+<A HREF="author.html#174">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

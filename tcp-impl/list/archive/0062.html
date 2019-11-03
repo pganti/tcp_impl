@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 20:36:52 1997" -->
+<!-- isoreceived="19970212013652" -->
+<!-- sent="Tue, 11 Feb 1997 15:31:27 -0400" -->
+<!-- isosent="19970211193127" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702112031.AA22266@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="3300CE76.2917@spider.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702112031.AA22266@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 14:31:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#62">[ date ]</A>
+<A HREF="index.html#62">[ thread ]</A>
+<A HREF="subject.html#62">[ subject ]</A>
+<A HREF="author.html#62">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; To be perfectly precise, the server won't &quot;wait&quot;; it should send
+</EM><BR>
+<EM>&gt; &gt; periodic probes. So in this case the server is still sending TCP
+</EM><BR>
+<EM>&gt; &gt; segments.  If it really is waiting for the client to send it
+</EM><BR>
+<EM>&gt; &gt; something, the server stack is broken.
+</EM><BR>
+<P><EM>&gt; I think we are using confusing nomenclature here.  The server HTTPD
+</EM><BR>
+<EM>&gt; process waits but the server TCP/IP continues to probe, is that it?
+</EM><BR>
+<P>Yes (on both points!).
+<BR>
+<P><EM>&gt; No, the client application has destroyed the _socket_; isn't the
+</EM><BR>
+<EM>&gt; connection still there, in FIN_WAIT_2, happily sending zero windows
+</EM><BR>
+<EM>&gt; in response to the server probes?
+</EM><BR>
+<P>I think now we need to look carefully at what it means to &quot;destroy&quot; a
+<BR>
+socket. Destroying a socket is more than just sending a FIN or
+<BR>
+RST. Two cases:
+<BR>
+<P>1) If the client wants to close the socket gracefully, the client TCP
+<BR>
+sends a FIN and waits for the server's FIN. This is the normal
+<BR>
+FIN_WAIT_1 &gt; FIN_WAIT_2 &gt; TIME_WAIT transition. This will not hang the
+<BR>
+server and the client is required to hang around reading data until
+<BR>
+the server is done.
+<BR>
+<P>2) If the client wants to close the socket immediately, and it doesn't
+<BR>
+care to receive any more data from the peer, it might as well just
+<BR>
+delete the control block. Any subsequent packets from the peer would
+<BR>
+solicit a RST. (Actually, a new state is probably called for, since
+<BR>
+you want RSTs to be generated on old packets, but you want to accept
+<BR>
+new connection requests provided that the sequence numbers of the new
+<BR>
+connection are high enough -- but there are some subtleties here).
+<BR>
+<P>It doesn't make sense to have the client send out a reset, and yet
+<BR>
+still be in FIN_WAIT_2 state. If it sends a reset, the server is
+<BR>
+supposed to delete its end and stop sending anything else. What will
+<BR>
+take the client out of the FIN_WAIT_2 state (normally, it is a FIN
+<BR>
+from the server!)?
+<BR>
+<P>If the client application is no longer associated with the socket,
+<BR>
+then data delivered to that connection can't be delivered to an
+<BR>
+application. It makes no sense for the client TCP to be advertising a
+<BR>
+window of 0 in that case. If it is, I'd say that stack is
+<BR>
+broken. Furthermore, it seems to me that the client should send back a
+<BR>
+RST in this case --- the data can't be delivered to the application,
+<BR>
+which means the sending TCP needs to be notified of a delivery
+<BR>
+failure.
+<BR>
+<P><EM>&gt; I would really like to see the network trace for this...
+</EM><BR>
+<P>That would be quite useful indeed!
+<BR>
+<P>Also, going back a few messages:
+<BR>
+<P><EM>&gt; The half duplex close is a MAY, but if it is implemented then
+</EM><BR>
+<EM>&gt; the RST transmission is a SHOULD.
+</EM><BR>
+<P>OK. I misunderstood that.
+<BR>
+<P><EM>&gt; ..I'm not suggesting that half duplex close be mandatory, but that
+</EM><BR>
+<EM>&gt; when it is used, RSTs are mandatory if received data is still
+</EM><BR>
+<EM>&gt; pending.
+</EM><BR>
+<P>I really don't see this as a big issue. I'd venture that in the vast
+<BR>
+majority of cases, at the exect time the client half-duplex closes a
+<BR>
+connection, there will be no received data queued by TCP (at the
+<BR>
+receiver), so this scenario won't happen frequently in practice. What
+<BR>
+is absolutely critical, however, is that any subsequent TCP packets
+<BR>
+that arrive for that connection cause a RST to be generated.
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#62">[ date ]</A>
+<A HREF="index.html#62">[ thread ]</A>
+<A HREF="subject.html#62">[ subject ]</A>
+<A HREF="author.html#62">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

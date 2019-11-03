@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RShankar@novell.com)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Wed Jun 28 14:47:34 2000" -->
+<!-- isoreceived="20000628184734" -->
+<!-- sent="Wed, 28 Jun 2000 12:33:53 -0600" -->
+<!-- isosent="20000628183353" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RShankar@novell.com" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="395A4511.DA898B5B@Novell.COM" -->
+<!-- inreplyto="200006281656.UAA01363@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RShankar@novell.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395A4511.DA898B5B@Novell.COM&gt;"><EM>RShankar@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 28 2000 - 14:33:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2186.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2186.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2187">[ date ]</A>
+<A HREF="index.html#2187">[ thread ]</A>
+<A HREF="subject.html#2187">[ subject ]</A>
+<A HREF="author.html#2187">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;395A4511.DA898B5B@Novell.COM&gt;">kuznet@ms2.inr.ac.ru</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hello!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; - OR if (SEG.ACK &gt; SND.WL2) [Set SND.WL2 = SEG.ACK]
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The same problem is present in Linux tcp implementation.
+</EM><BR>
+<P>The last time I looked at Linux, it seemed to have a totally different
+<BR>
+set of problems and was different from the BSD implementation. I don't
+<BR>
+recall anything further though.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; This idea was the first, which came to my head.
+</EM><BR>
+<EM>&gt; But then I understood that it is highly dubious.
+</EM><BR>
+<EM>&gt; Look, with this change SND.UNA==SND.WL2 _identically_ and
+</EM><BR>
+<EM>&gt; can be simple omitted from TCB state. Right? 8)8)
+</EM><BR>
+<EM>&gt; So, the idea is suspiciously good. 8)
+</EM><BR>
+<P>Strictly speaking, SND.WL2 looks redundant even in the existing
+<BR>
+implementation. SEG.ACK has to be &gt;= SND.UNA. Otherwise, this is an &quot;old
+<BR>
+ACK&quot; and we ignore it as per RFC 793, page 72. Also SEG.ACK has to be &lt;=
+<BR>
+SND.NXT. If an ACK is valid AND ACKs new data, SND.UNA would anyway get
+<BR>
+updated. And TCP ACKs are cumulative. That is, one could as well check
+<BR>
+SEG.ACK against SND.UNA instead of SND.WL2!  I don't know how SND.WL2
+<BR>
+can legally be &gt; SND.UNA :-)). i.e. we used the window information from
+<BR>
+the ACK, but didn't use the ACK itself. 
+<BR>
+<P>It appears that the SND.WL2 use is directly based on the comment on page
+<BR>
+43 of RFC 793. Since TCP ACKs are cumulative, it seems pretty trivial to
+<BR>
+detect out of order ACK segments - an out of order ACK won't pass the
+<BR>
+SEG.ACK &gt;= SND.UNA check on RFC 793, page 72.
+<BR>
+<P>Okay may be I am missing something seriously here :-)).
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; To all that I understood, RFC791 window update algorithm,
+</EM><BR>
+<EM>&gt; ignoring window updates with SEG.SEQ &lt; SND.WL1, is designed
+</EM><BR>
+<EM>&gt; in assumption that receiver MAY _shrink_ window deliberately.
+</EM><BR>
+<EM>&gt; In this case check SEG.SEQ &gt;= SND.WL1 prevents spurious window
+</EM><BR>
+<EM>&gt; reopening.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>Come to think of it, the intention of SEG.SEQ &gt; SND.WL1 check is not
+<BR>
+really that clear. A receiver can shrink the window using this loophole.
+<BR>
+Perhaps it was intended that way: If new data is being sent or new data
+<BR>
+is being ACKed (by the receiver), blindly use the window information
+<BR>
+provided by the receiver.
+<BR>
+<P>Note, however, that the only illegal window shrinking case is that of 
+<BR>
+pure ACKs containing window updates which shrink the window (i.e. they
+<BR>
+didn't get out of order, they were actually sent that way). As the
+<BR>
+current algorithms stand, one can shrink the window in a segment which
+<BR>
+has SEG.SEQ &gt; SND.WL1 or which has SEG.ACK &gt; SND.WL2 (eventhough this is
+<BR>
+strongly discouraged by RFC 1122).
+<BR>
+<P>The original RFC 793 algorithm didn't handle the case of pure window
+<BR>
+updates coming out of order. (i.e. SEG.SEQ == SND.WL1, SEG.ACK ==
+<BR>
+SND.WL2, SEG.WND specifies the updated window). This has been fixed in
+<BR>
+the BSD algorithm. Hence the check:
+<BR>
+<P>if ((SEG.ACK == SND.WL2)) &amp;&amp; (SEG.WND &gt; SND.WND))
+<BR>
+<P>Perhaps any of the original TCP implementors/RFC 793 writers can shed
+<BR>
+some light on this.
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+
+<BR><HR NOSHADE>
+<UL>
+<LI>text/x-vcard attachment: <A HREF="att-2187/01-RShankar.vcf">Card for Ramesh Shankar</A>
+</UL>
+<!-- attachment="01-RShankar.vcf" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2186.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2186.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2188.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2187">[ date ]</A>
+<A HREF="index.html#2187">[ thread ]</A>
+<A HREF="subject.html#2187">[ subject ]</A>
+<A HREF="author.html#2187">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: NewReno and the 2001 Revision</TITLE>
+<META NAME="Author" CONTENT="Tom Henderson (tomh@raptor.CS.Berkeley.EDU)">
+<META NAME="Subject" CONTENT="Re: NewReno and the 2001 Revision">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: NewReno and the 2001 Revision</H1>
+<!-- received="Tue Sep 15 13:21:05 1998" -->
+<!-- isoreceived="19980915172105" -->
+<!-- sent="Tue, 15 Sep 1998 13:19:27 -0700 (PDT)" -->
+<!-- isosent="19980915201927" -->
+<!-- name="Tom Henderson" -->
+<!-- email="tomh@raptor.CS.Berkeley.EDU" -->
+<!-- subject="Re: NewReno and the 2001 Revision" -->
+<!-- id="Pine.BSI.3.95.980915130928.7635A-100000@raptor.CS.Berkeley.EDU" -->
+<!-- inreplyto="199809111306.JAA06298@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Tom Henderson (<A HREF="mailto:tomh@raptor.CS.Berkeley.EDU?Subject=Re:%20NewReno%20and%20the%202001%20Revision&In-Reply-To=&lt;Pine.BSI.3.95.980915130928.7635A-100000@raptor.CS.Berkeley.EDU&gt;"><EM>tomh@raptor.CS.Berkeley.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 15 1998 - 16:19:27 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1313.html">Sam Michiels: "OO TCP implementations?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1311.html">previdso: "Sexual Harassment Video - Best Seller"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1312">[ date ]</A>
+<A HREF="index.html#1312">[ thread ]</A>
+<A HREF="subject.html#1312">[ subject ]</A>
+<A HREF="author.html#1312">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I've recently been looking at this issue quite closely.  This bug fix is
+<BR>
+very helpful in at least the following situation:  large file transfers over
+<BR>
+GEO (600ms RTT) paths for which the initial value of ssthresh is not cached 
+<BR>
+but is instead some large value.  Without the fix, the slow start overshoot 
+<BR>
+typically leads to multiple packet losses, which then leads to rebuilding 
+<BR>
+snd_cwnd linearly from a small value.  As an example of the type of 
+<BR>
+performance difference I've seen, a 10 MB file transfer over our GEO network 
+<BR>
+testbed consistently takes a 30% hit in throughput when SACK with Reno 
+<BR>
+congestion avoidance is used instead of SACK with ``NewReno.''  In general,
+<BR>
+for long transfers over a satellite path, it is very costly to unnecessarily
+<BR>
+reduce the congestion window while in linear growth phase.
+<BR>
+<P>I agree with the opinion that this is a bug fix and should not be considered
+<BR>
+experimental.  It covers a case for which the previous version of RFC 2001 
+<BR>
+was ambiguous (what to do if the ACK is a partial ACK).  However, I also
+<BR>
+believe that if the spec is to include this, it should fully specify the
+<BR>
+correct behavior upon receiving a partial new ACK.  In our SACK + NewReno 
+<BR>
+implementation, we also do the following:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- upon receiving a partial ACK, partially deflate the current snd_cwnd 
+<BR>
+by (the amount of new data acked minus one segment), resend the next 
+<BR>
+highest segment that has not yet been ACKed, and call tcp_output() to see if 
+<BR>
+a new segment can be sent.  The reason to do window inflation in Reno TCP is 
+<BR>
+to have the correct amount of outstanding data in the network when the 
+<BR>
+recovery ends.  If one does not deflate the window for partial ACKs, this 
+<BR>
+amount will be incorrect (overestimated).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- upon leaving fast recovery, set snd_cwnd to min(snd_ssthresh,
+<BR>
+current amount of outstanding data).  Window inflation may not successfully
+<BR>
+generate enough new transmissions for a number of reasons (e.g., sender is 
+<BR>
+receiver window limited, dup acks are lost), leading to a burst of packets 
+<BR>
+when the recovery phase ends.  Kevin Fall and Sally Floyd have previously 
+<BR>
+proposed a &quot;maxburst&quot; parameter that limits the number of segments that can be 
+<BR>
+sent in response to an ACK when leaving fast recovery phase.  However, we 
+<BR>
+found that a slow receiver can generate a lot of pure window updates right 
+<BR>
+after recovery ends, the effect of which can circumvent this maxburst 
+<BR>
+protection.  Setting snd_cwnd to be no more than the current amount of 
+<BR>
+outstanding data is effective in preventing this problem.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- avoid &quot;false fast retransmissions&quot; after a timeout as decribed by 
+<BR>
+Hoe in the 1996 Sigcomm paper.
+<BR>
+<P>--Tom Henderson
+<BR>
+<P>For those interested, more details on our TCP implementation and experimental
+<BR>
+results can be found in the following paper:
+<BR>
+<A HREF="http://www.cs.berkeley.edu/~tomh/papers/jsac99_abstract.html">http://www.cs.berkeley.edu/~tomh/papers/jsac99_abstract.html</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1313.html">Sam Michiels: "OO TCP implementations?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1311.html">previdso: "Sexual Harassment Video - Best Seller"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1309.html">Mark Allman: "NewReno and the 2001 Revision"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1336.html">Kacheong Poon: "Re: NewReno and the 2001 Revision"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1312">[ date ]</A>
+<A HREF="index.html#1312">[ thread ]</A>
+<A HREF="subject.html#1312">[ subject ]</A>
+<A HREF="author.html#1312">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

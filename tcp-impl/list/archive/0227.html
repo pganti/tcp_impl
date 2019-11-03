@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: PSH">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH</H1>
+<!-- received="Mon Mar 24 11:59:04 1997" -->
+<!-- isoreceived="19970324165904" -->
+<!-- sent="Mon, 24 Mar 97 19:16:54 GMT" -->
+<!-- isosent="19970324191654" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: PSH" -->
+<!-- id="5709.wsimpson@greendragon.com" -->
+<!-- inreplyto="PSH" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20PSH&In-Reply-To=&lt;5709.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 14:16:54 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0228.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0226.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0230.html">Jerry Toporek: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#227">[ date ]</A>
+<A HREF="index.html#227">[ thread ]</A>
+<A HREF="subject.html#227">[ subject ]</A>
+<A HREF="author.html#227">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I had written:
+<BR>
+<EM>&gt; &gt; I would also prefer that the API be _required_ to allow PSH to be set by
+</EM><BR>
+<EM>&gt; &gt; the application, although we don't document particular APIs.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; It may be a serious problem with Mac Open Transport, which is just being
+</EM><BR>
+<EM>&gt; &gt; widely deployed with MacOS 7.6.  That's Mentat based.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<P><EM>&gt; Date: Sat, 22 Mar 1997 23:19:08 -0800
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20PSH&In-Reply-To=&lt;5709.wsimpson@greendragon.com&gt;">jt@mentat.com</A> (Jerry Toporek)
+</EM><BR>
+<EM>&gt; What problem would that be?  The only one I am aware of is a bug which
+</EM><BR>
+<EM>&gt; resulted in the PSH bit not getting set when the URG bit was on.  That has
+</EM><BR>
+<EM>&gt; been fixed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Great!  What version of OT?  OT 1.1.1 is shipping in MacOS 7.6, but I'm
+<BR>
+still seeing the problem of improperly missing PSH in 1.1.2 (net update
+<BR>
+distribution).
+<BR>
+<P>How do you set the PSH bit in OT?
+<BR>
+<P>According to Vinnie Moscaritolo:
+<BR>
+#   Date: 12 Jun 96 00:59 GMT
+<BR>
+#   The push flag feature of MacTCP is not functional in the the OT MacTCP
+<BR>
+#   implementation. Setting or resetting it does not ripple down to the OT TCP.
+<BR>
+#   Futher there is no way to programmaticaly set the push flag (PSH bit in the
+<BR>
+#   header).
+<BR>
+<P>We had to revert our Mac web servers to MacTCP, where PSH works.
+<BR>
+Netscape hangs periodically when both ends of the connection are using
+<BR>
+OT, but works better when the server is using MacTCP.
+<BR>
+<P>FYI:
+<BR>
+<P>I also see no slow start when in the same /24, even tho not on the same
+<BR>
+subnet (physically divided /27).
+<BR>
+<P>I also see no slow start after idle.
+<BR>
+<P>I also see no Nagle algorithm.
+<BR>
+<P>I also see Ack-only packets immediately followed by data packets.
+<BR>
+<P>I also see about 10% retransmissions, when no packets were lost due to
+<BR>
+congestion.  RTT algorithm needs work.
+<BR>
+<P>I expect that this group will document all these behaviours as
+<BR>
+&quot;non-conforming&quot;.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20PSH&In-Reply-To=&lt;5709.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20PSH&In-Reply-To=&lt;5709.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0228.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0226.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0230.html">Jerry Toporek: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#227">[ date ]</A>
+<A HREF="index.html#227">[ thread ]</A>
+<A HREF="subject.html#227">[ subject ]</A>
+<A HREF="author.html#227">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Initial ssthresh</TITLE>
+<META NAME="Author" CONTENT="Graham Cope (G.Cope@ftel.co.uk)">
+<META NAME="Subject" CONTENT="Initial ssthresh">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Initial ssthresh</H1>
+<!-- received="Tue Sep 16 02:04:50 1997" -->
+<!-- isoreceived="19970916060450" -->
+<!-- sent="Tue, 16 Sep 1997 10:02:43 +0100" -->
+<!-- isosent="19970916090243" -->
+<!-- name="Graham Cope" -->
+<!-- email="G.Cope@ftel.co.uk" -->
+<!-- subject="Initial ssthresh" -->
+<!-- id="341E4B33.2CFE@ftel.co.uk" -->
+<!-- inreplyto="199709151007.DAA26153@taipei.eng.sun.com" -->
+<STRONG>From:</STRONG> Graham Cope (<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20Initial%20ssthresh&In-Reply-To=&lt;341E4B33.2CFE@ftel.co.uk&gt;"><EM>G.Cope@ftel.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 16 1997 - 05:02:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0730.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0737.html">Chetan Kumar: "TCP on Mobile IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#731">[ date ]</A>
+<A HREF="index.html#731">[ thread ]</A>
+<A HREF="subject.html#731">[ subject ]</A>
+<A HREF="author.html#731">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; That's what Solaris has (not delaying the ack of the first data segment)
+</EM><BR>
+<EM>&gt; for years, and one of the reason why we didn't discover the IW=1 vs
+</EM><BR>
+<EM>&gt; delayed-ack interoperability hiccup sooner (because we don't see this
+</EM><BR>
+<EM>&gt; on Solaris to Solaris testing).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We were compelled to add a new tcp tunable &quot;tcp_slow_start_initial&quot; in
+</EM><BR>
+<EM>&gt; Solaris 2.6 in order to circumvent this problem. For a complete story,
+</EM><BR>
+<EM>&gt; check out the following web page:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; <A HREF="http://www.sun.com/sun-on-net/performance/tcp.slowstart.html">http://www.sun.com/sun-on-net/performance/tcp.slowstart.html</A>
+</EM><BR>
+<P><P><P>I have developed a TCP simulation model that works as described in
+<BR>
+RFC2001 (+other RFCs). I have observed some strange start-up behaviour
+<BR>
+with TCP, which is related to the above, but to do with ssthresh, and
+<BR>
+not the initial window, IW.
+<BR>
+<P>I have a system with an Ethernet feeding into buffer (= a bridge or
+<BR>
+router) which transmits at slow speed (e.g. 64kbps).
+<BR>
+&nbsp;&nbsp;The window opens quite quickly, fills up the buffer, and delays go up
+<BR>
+quickly, resulting in time-outs and re-transmissions. For a few seconds
+<BR>
+the system is OK, but then it becomes highly congested, but eventually
+<BR>
+settles down.
+<BR>
+&nbsp;&nbsp;The basic problem is that ssthresh is set to 65535 bytes, and hence
+<BR>
+the cwnd initially opens (almost) exponentially fast, filling the
+<BR>
+upstream buffer quickly.
+<BR>
+<P>A solution is to set ssthresh = 1 (MSS). This gives a more controlled
+<BR>
+(linear) start-up. But, in a high speed network I guess that such a
+<BR>
+change would be detrimental (we want the window to open quickly).
+<BR>
+<P><P>I have only simulated this, so does anyone have comments on whether is
+<BR>
+is:
+<BR>
+<P>a) a real effect
+<BR>
+b) a bug in my understanding
+<BR>
+c) a bug in my model
+<BR>
+<P><P>Graham Cope
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0730.html">Rick Jones: "Re: what IW is being used today?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0725.html">Hsiao-keng Jerry Chu: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0732.html">Hsiao-keng Jerry Chu: "Re: Initial ssthresh"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0737.html">Chetan Kumar: "TCP on Mobile IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#731">[ date ]</A>
+<A HREF="index.html#731">[ thread ]</A>
+<A HREF="subject.html#731">[ subject ]</A>
+<A HREF="author.html#731">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:57 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="venkat venkatsubra (venkats@austin.ibm.com)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Fri Sep 17 10:27:03 1999" -->
+<!-- isoreceived="19990917142703" -->
+<!-- sent="Fri, 17 Sep 1999 09:18:15 -0500" -->
+<!-- isosent="19990917141815" -->
+<!-- name="venkat venkatsubra" -->
+<!-- email="venkats@austin.ibm.com" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="37E24DA7.318ADAF3@austin.ibm.com" -->
+<!-- inreplyto="199909151933.NAA25200@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> venkat venkatsubra (<A HREF="mailto:venkats@austin.ibm.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;"><EM>venkats@austin.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 17 1999 - 10:18:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1832.html">Fred Bauer: "INFOCOM 2000 Call For Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1830.html">mehra@us.ibm.com: "I'd like to unsubscribe from this list"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1810.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1812.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1831">[ date ]</A>
+<A HREF="index.html#1831">[ thread ]</A>
+<A HREF="subject.html#1831">[ subject ]</A>
+<A HREF="author.html#1831">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The following mail seems to indicate that NCR's MP-RAS
+<BR>
+Unix was having similar problem after they made changes
+<BR>
+to the Precedence bits handling in tcp input to conform to
+<BR>
+RFC 793. They did this change to pass one of the Unix'95
+<BR>
+Certification test. Now i think they got rid of this change
+<BR>
+(available in a later patch) - or giving the user an option
+<BR>
+to turn off/on this behaviour.
+<BR>
+<P><EM>&gt; Subject: TOS and PRECEDENCE bits
+</EM><BR>
+<EM>&gt; From: Bob Walpole &lt;<A HREF="mailto:bob.walpole@columbiasc.ncr.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;">bob.walpole@columbiasc.ncr.com</A>&gt;
+</EM><BR>
+<EM>&gt; Date: 1998/12/23
+</EM><BR>
+<EM>&gt; Newsgroups: comp.protocols.tcp-ip
+</EM><BR>
+<P><EM>&gt; Here's a specific scenario I have ran into a couple of times.
+</EM><BR>
+<EM>&gt; By default our TOS field is set to 0.
+</EM><BR>
+<EM>&gt; Most applications that set the TOS do not set the PRECEDENCE bits
+</EM><BR>
+<EM>&gt; anyway, at least in my limited experience.
+</EM><BR>
+<EM>&gt; Is IP allowed to tell TCP to reset the connection if the incoming
+</EM><BR>
+<EM>&gt; precedence bits do not match those stored in the inpcb for this
+</EM><BR>
+<EM>&gt; connection?
+</EM><BR>
+<EM>&gt; What should it do, if anything?
+</EM><BR>
+<EM>&gt; Is this specified anywhere?
+</EM><BR>
+<EM>&gt; I have seen precedence bits 110 (when the other interface was X.25) and
+</EM><BR>
+<EM>&gt; 100 (when the other interface was unkown) in packets from routers. This
+</EM><BR>
+<EM>&gt; causes the TCP connection to be reset.
+</EM><BR>
+<EM>&gt; If Iset ip_settos to 0, would it be reasonable to assume I do not wish
+</EM><BR>
+<EM>&gt; to check the value in the incoming packets?
+</EM><BR>
+<P>Venkat
+<BR>
+<P>Vernon Schryver wrote:
+<BR>
+<P><EM>&gt; &gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt;       5.  6 months later it's discvered that the redefinition causes one
+</EM><BR>
+<EM>&gt; &gt;           TCP to send resets.  The email describing this says
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;                 &gt; As it turns out, this is an archaically (sp) known
+</EM><BR>
+<EM>&gt; &gt;                 &gt; problem, with a pre-existing patch.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;           and elicits a reply:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;                 &gt; MacTCP is *old*, and has many more problems than
+</EM><BR>
+<EM>&gt; &gt;                 &gt; this.  Please tell your help desks that if they run
+</EM><BR>
+<EM>&gt; &gt;                 &gt; across users still using MacTCP, that they advise
+</EM><BR>
+<EM>&gt; &gt;                 &gt; them to upgrade to at least MacOS 7.5.3 (preferably
+</EM><BR>
+<EM>&gt; &gt;                 &gt; 7.5.5), which is free, and includes Open
+</EM><BR>
+<EM>&gt; &gt;                 &gt; Transport.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; See also the note this morning from someone reporting about what sounds
+</EM><BR>
+<EM>&gt; like the same problem with some Windows TCP code.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If only ancient MacTCP had the problem, you might, but only might get away
+</EM><BR>
+<EM>&gt; with declaring old MacTCP non-conformant.   That is basically what you
+</EM><BR>
+<EM>&gt; are proposing, to break an unknown number of existing implementations and
+</EM><BR>
+<EM>&gt; installations.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt;       6.  The question now is how many significant TCPs are actually
+</EM><BR>
+<EM>&gt; &gt;           effected, and, accordingly, how to fix the problem.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Agreed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; However, on general grounds the fait accompli argument is completely
+</EM><BR>
+<EM>&gt; inadmissable.  400 people participating in DiffServ meetings are not a
+</EM><BR>
+<EM>&gt; majority of the IETF, even if majorities mattered, which they don't.
+</EM><BR>
+<EM>&gt; Even if you accept the history as you have stated it (which I don't quite),
+</EM><BR>
+<EM>&gt; the onus for bearing fixing the problem lies with DiffServe, *NOT* TCP.
+</EM><BR>
+<EM>&gt; If a painless change can be made to TCP, then that would be great, and
+</EM><BR>
+<EM>&gt; would remove the burden from DiffServ.  If there is no painless TCP fix,
+</EM><BR>
+<EM>&gt; then the pain *MUST* be borne by DiffServ.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] That's the point of Last Call - if you care about where the IETF is going,
+</EM><BR>
+<EM>&gt; ] you are supposed to read <A HREF="mailto:ietf-announce@ietf.org?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;">ietf-announce@ietf.org</A> and see what is being
+</EM><BR>
+<EM>&gt; ] proposed.  You don't have to read all the documents, just the ones that
+</EM><BR>
+<EM>&gt; ] appear relevant.  The abstract of RFC 2474 is clear that the document is
+</EM><BR>
+<EM>&gt; ] about redefining the TOS byte.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; That is mistaken in several ways.  Even if the Last Call had said something
+</EM><BR>
+<EM>&gt; about breaking existing TCP, the onus would still be on DiffServ.  However,
+</EM><BR>
+<EM>&gt; given the established IETF culture and expectations, something that talks
+</EM><BR>
+<EM>&gt; about redefining the TOS byte would be assumed by knowledgable people to
+</EM><BR>
+<EM>&gt; upward compatiable and not break existing installations without explicitly
+</EM><BR>
+<EM>&gt; saying so, and not without a lot more main IETF list discussion than
+</EM><BR>
+<EM>&gt; the last call.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; By concidence, I had been trying to understand RFC 2474 before all of this
+</EM><BR>
+<EM>&gt; broke, and had assumed the intent of RFC 2474 was to be upward compatible.
+</EM><BR>
+<EM>&gt; The words in RFC 2474 are not entirely clear, but they do promise
+</EM><BR>
+<EM>&gt; significant upward compatibility.  Consider the start of section 4:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   The DS field will have a limited backwards compatibility with current
+</EM><BR>
+<EM>&gt;   practice, as described in this section.  Backwards compatibility is
+</EM><BR>
+<EM>&gt;   addressed in two ways.  First, there are per-hop behaviors that are
+</EM><BR>
+<EM>&gt;   already in widespread use (e.g., those satisfying the IPv4 Precedence
+</EM><BR>
+<EM>&gt;   queueing requirements specified in [RFC1812]), and we wish to permit
+</EM><BR>
+<EM>&gt;   their continued use in DS-compliant nodes. ...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] &gt; Since getting anything changed during Last Call is at best difficult
+</EM><BR>
+<EM>&gt; ]
+</EM><BR>
+<EM>&gt; ] The WG raised the issue of what depends on the current structure of the TOS
+</EM><BR>
+<EM>&gt; ] byte at length, had considerable discussion, and no one brought up the TCP
+</EM><BR>
+<EM>&gt; ] incompatibility.  It's not as though it wasn't high profile - 400+ people
+</EM><BR>
+<EM>&gt; ] attend each diffserv meeting.  But even so, it was on the radar as a
+</EM><BR>
+<EM>&gt; ] significant issue, and I think it would have been treated very seriously
+</EM><BR>
+<EM>&gt; ] as a last call comment.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I am confident of the good intentions of all concerned.  Still, when
+</EM><BR>
+<EM>&gt; balancing painful changes, which sub-community (or if you prefer, chunks
+</EM><BR>
+<EM>&gt; of code) must suffer most of the pain?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] &gt; Instead of requiring changes to an unknown but apparently significant
+</EM><BR>
+<EM>&gt; ] &gt; number of existing TCP implementations and literally uncountable TCP
+</EM><BR>
+<EM>&gt; ] &gt; installations, why not strengthen the DiffServ words about upward
+</EM><BR>
+<EM>&gt; ] &gt; compatibility?
+</EM><BR>
+<EM>&gt; ]
+</EM><BR>
+<EM>&gt; ] One of the key questions is: is it really a significant number of TCP
+</EM><BR>
+<EM>&gt; ] implementations?  That's why this discussion should happen on tcp-impl.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I agree that is a critical question.   The note this morning about
+</EM><BR>
+<EM>&gt; Windows 3.1 was extremely worrisome.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ] &gt; If the RFC 1349/RFC 1812 values of the IP TOS byte were
+</EM><BR>
+<EM>&gt; ] &gt; required to be get through unchanged (after possibly having been mapped
+</EM><BR>
+<EM>&gt; ] &gt; to other values and back again), would any existing combinations of
+</EM><BR>
+<EM>&gt; ] &gt; applications and host break?
+</EM><BR>
+<EM>&gt; ]
+</EM><BR>
+<EM>&gt; ] How do you know what to map them back to?  It's not a one-to-one mapping.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Which map is not 1:1 and does it matter?  Since RFC 2474 defines a lot
+</EM><BR>
+<EM>&gt; more potential behaviors than RFC 1812 and RFCX 1349, you obviously cannot
+</EM><BR>
+<EM>&gt; map DiffServ 1:1 onto RFC 1349.  However, in practice there are only about
+</EM><BR>
+<EM>&gt; 3 different RFC 1349 values.  It seems to me that requiring that DiffServ
+</EM><BR>
+<EM>&gt; preserve 3 values would completely would be painless for DiffServ, and
+</EM><BR>
+<EM>&gt; far wiser than declaring that an unknowable number of TCP implementations
+</EM><BR>
+<EM>&gt; and installations non-conformant and requiring them to be changed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I think the only commonly used RFC 1349 values are 0 (extremely common),
+</EM><BR>
+<EM>&gt; 0x10 (minimize delay), and 0x80 (maximize throughput).  See your nearest
+</EM><BR>
+<EM>&gt; BSD source trees.  I found all of those in the first 4.4BSD-Lite CDROM,
+</EM><BR>
+<EM>&gt; and I know that 0x10 has been creeping into other widely used applications,
+</EM><BR>
+<EM>&gt; partly because I've helped push it.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;37E24DA7.318ADAF3@austin.ibm.com&gt;">vjs@rhyolite.com</A>
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1832.html">Fred Bauer: "INFOCOM 2000 Call For Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1830.html">mehra@us.ibm.com: "I'd like to unsubscribe from this list"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1810.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1812.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1831">[ date ]</A>
+<A HREF="index.html#1831">[ thread ]</A>
+<A HREF="subject.html#1831">[ subject ]</A>
+<A HREF="author.html#1831">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:57 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

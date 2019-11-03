@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Out Of Band and Nagle</TITLE>
+<META NAME="Author" CONTENT="Francesco Potorti` (F.Potorti@cnuce.cnr.it)">
+<META NAME="Subject" CONTENT="Re: Out Of Band and Nagle">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Out Of Band and Nagle</H1>
+<!-- received="Thu Oct 16 09:21:06 1997" -->
+<!-- isoreceived="19971016132106" -->
+<!-- sent="Thu, 16 Oct 97 18:20 MET" -->
+<!-- isosent="19971016172000" -->
+<!-- name="Francesco Potorti`" -->
+<!-- email="F.Potorti@cnuce.cnr.it" -->
+<!-- subject="Re: Out Of Band and Nagle" -->
+<!-- id="m0xLsew-0001LLC@fly.cnuce.cnr.it" -->
+<!-- inreplyto="199710161547.IAA01853@feller.mentat.com" -->
+<STRONG>From:</STRONG> Francesco Potorti` (<A HREF="mailto:F.Potorti@cnuce.cnr.it?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;m0xLsew-0001LLC@fly.cnuce.cnr.it&gt;"><EM>F.Potorti@cnuce.cnr.it</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Oct 16 1997 - 13:20:00 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0782.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0780.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0780.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0782.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#781">[ date ]</A>
+<A HREF="index.html#781">[ thread ]</A>
+<A HREF="subject.html#781">[ subject ]</A>
+<A HREF="author.html#781">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>   &gt; 			      Suppose I note that I can force all the
+</EM><BR>
+<EM>   &gt;    data through the urgent point onto the wire, because I have enough
+</EM><BR>
+<EM>   &gt;    window, and I don't feel like it is so bad to exceed the congestion
+</EM><BR>
+<EM>   &gt;    window by a few MSS because the data is really *urgent* and I want
+</EM><BR>
+<EM>   &gt;    to do the application a favor and get it all delivered quickly...
+</EM><BR>
+<EM>   &gt;    This would be bad.  I would prefer to say that the sender should
+</EM><BR>
+<EM>   &gt;    not override any send rules when entering urgent mode, but a
+</EM><BR>
+<EM>   &gt;    zero-length segment won't get the job done (reliably).
+</EM><BR>
+<EM>   &gt;    
+</EM><BR>
+<EM>   &gt; Do you mean that a one-byte segment would do the job?
+</EM><BR>
+<EM>   &gt; 
+</EM><BR>
+<EM>   &gt; Wouldn't all the data from that point up to the urgent pointer be
+</EM><BR>
+<EM>   &gt; considered urgent data in that case?
+</EM><BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;Yes, it would.  Does that mean I have to force it all onto the wire
+<BR>
+&nbsp;&nbsp;&nbsp;without delay?  
+<BR>
+<P>I don't think so.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Try this example...  48K of unsent data, a 50K send
+<BR>
+&nbsp;&nbsp;&nbsp;window, a 2920 byte congestion window, and I am waiting for an ACK
+<BR>
+&nbsp;&nbsp;&nbsp;to open the congestion window.  I get an urgent mode send.  All
+<BR>
+&nbsp;&nbsp;&nbsp;48K+1 bytes are now &quot;urgent data&quot;.  It's all in window.  Do you
+<BR>
+&nbsp;&nbsp;&nbsp;want me to ignore the congestion window and send it all out
+<BR>
+&nbsp;&nbsp;&nbsp;immediately?  
+<BR>
+<P>Who?  Me?  Sure I wouldn't dare telling you how to send your data :-)
+<BR>
+<P>Seriously speaking, I was worried about the possible semantic change.
+<BR>
+The user only wants to send one byte of urgent data, and TCP sends all
+<BR>
+48KB of data as urgent.  Is this common behaviour on the part of a TCP
+<BR>
+stack?  Expected by applications?
+<BR>
+<P><PRE>
+-- 
+Francesco Potorti` (researcher)        Voice:    +39-50-593203
+Computer Network Division              Operator: +39-50-593211
+CNUCE-CNR, Via Santa Maria 36          Fax:      +39-50-904052
+56126 Pisa - Italy                     Email:    <A HREF="mailto:F.Potorti@cnuce.cnr.it?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;m0xLsew-0001LLC@fly.cnuce.cnr.it&gt;">F.Potorti@cnuce.cnr.it</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0782.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0780.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0780.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0782.html">Jerry Toporek: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#781">[ date ]</A>
+<A HREF="index.html#781">[ thread ]</A>
+<A HREF="subject.html#781">[ subject ]</A>
+<A HREF="author.html#781">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

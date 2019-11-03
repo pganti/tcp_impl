@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: query: using two write() cal</TITLE>
+<META NAME="Author" CONTENT="rajiv.chakravorty@philips.com (rajiv.chakravorty@philips.com)">
+<META NAME="Subject" CONTENT="Re: query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: query: using two write() calls in succession</H1>
+<!-- received="Mon Mar 26 11:23:04 2001" -->
+<!-- isoreceived="20010326162304" -->
+<!-- sent="Mon, 26 Mar 2001 18:15:53 +0200" -->
+<!-- isosent="20010326161553" -->
+<!-- name="rajiv.chakravorty@philips.com" -->
+<!-- email="rajiv.chakravorty@philips.com" -->
+<!-- subject="Re: query: using two write() calls in succession" -->
+<!-- id="0056890025022472000002L922*@MHS" -->
+<!-- inreplyto="query: using two write() calls in succession" -->
+<STRONG>From:</STRONG> <A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;0056890025022472000002L922*@MHS&gt;"><EM>rajiv.chakravorty@philips.com</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Mar 26 2001 - 11:15:53 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2482.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2481">[ date ]</A>
+<A HREF="index.html#2481">[ thread ]</A>
+<A HREF="subject.html#2481">[ subject ]</A>
+<A HREF="author.html#2481">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Please find my comments appended.
+<BR>
+<P>Regards,
+<BR>
+Rajiv Chakravorty
+<BR>
+<P><P><P><P><EM>&gt;This doesn't surprise me.  Without the delay, the first write()
+</EM><BR>
+<EM>&gt;generates an outgoing segment, sure, which draws an RST segment in
+</EM><BR>
+<EM>&gt;response from the peer - but the second write() occurs well before the
+</EM><BR>
+<EM>&gt;RST is received by the sending host.  Even on a fast LAN, this usually
+</EM><BR>
+<EM>&gt;takes at least a millisecond or so, and it's the rare machine that's so
+</EM><BR>
+<EM>&gt;slow as to be unable to do back-to-back writes in less than that.
+</EM><BR>
+<P><P>Yes, this was my first guess. But it doesnt happen this way. Actually,
+<BR>
+I think I am receiving the RST well before I perform the second write. 
+<BR>
+Here's the tcpdump output when the code is run on (Linux 2.2.16) without 1 sec 
+<BR>
+sleep between two writes (sorry for not enabling the relative time option):
+<BR>
+<P>client: wsasa3005
+<BR>
+www/server: asaehv.ce.philips.com
+<BR>
+<P>17:31:17.185481 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: S 1292046262:1292046262(0) win 32120 &lt;mss 1460,sackOK,timestamp 104441703 0,nop,wscale 0&gt; (DF)
+<BR>
+17:31:17.185986 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: S 3010001540:3010001540(0) ack 1292046263 win 8760 &lt;mss 1460&gt; (DF)
+<BR>
+17:31:17.186090 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 1:1(0) ack 1 win 32120 (DF)
+<BR>
+17:31:17.186250 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 1:2(1) ack 1 win 32120 (DF)
+<BR>
+17:31:17.233839 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 1:1(0) ack 2 win 8760 (DF)
+<BR>
+17:31:17.233891 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 2:34(32) ack 1 win 32120 (DF)
+<BR>
+17:31:17.247262 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 1:1461(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.247337 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 1461 win 30660 (DF)
+<BR>
+17:31:17.249255 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 1461:2921(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.250033 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 2921 win 30660 (DF)
+<BR>
+17:31:17.250391 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 2921:4243(1322) ack 34 win 8760 (DF)
+<BR>
+17:31:17.253254 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 4243:5703(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.254483 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 5703:7163(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.254546 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 7163 win 27740 (DF)
+<BR>
+17:31:17.256139 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 7163:8347(1184) ack 34 win 8760 (DF)
+<BR>
+17:31:17.257379 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 8347:9807(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.258604 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 9807:11267(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.258670 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 11267 win 26280 (DF)
+<BR>
+17:31:17.259607 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 11267:12451(1184) ack 34 win 8760 (DF)
+<BR>
+17:31:17.260026 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 12451 win 25096 (DF)
+<BR>
+17:31:17.261449 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 12451:13911(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.262677 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 13911:15371(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.262741 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 15371 win 23360 (DF)
+<BR>
+17:31:17.263905 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 15371:16831(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.264875 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 16831:17865(1034) ack 34 win 8760 (DF)
+<BR>
+17:31:17.266120 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: . 17865:19325(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.266203 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 19325 win 21900 (DF)
+<BR>
+17:31:17.267351 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 19325:20785(1460) ack 34 win 8760 (DF)
+<BR>
+17:31:17.268485 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: P 20785:21835(1050) ack 34 win 8760 (DF)
+<BR>
+17:31:17.270034 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 21835 win 19390 (DF)
+<BR>
+17:31:33.748842 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: F 21835:21835(0) ack 34 win 8760 (DF)
+<BR>
+17:31:33.748906 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: . 34:34(0) ack 21836 win 19389 (DF)
+<BR>
+17:31:37.250061 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: P 34:39(5) ack 21836 win 19389 (DF)
+<BR>
+17:31:37.250450 eth0 &lt; asaehv.ce.philips.com.www &gt; wsasa3005.asa-ehv.ce.philips.com.1181: R 3010023376:3010023376(0) win 8760 (DF)
+<BR>
+17:31:37.251146 eth0 &gt; wsasa3005.asa-ehv.ce.philips.com.1181 &gt; asaehv.ce.philips.com.www: R 67:67(0) ack 21836 win 32120 (DF)
+<BR>
+&nbsp;
+<BR>
+<P>As you can see, the client TCP receives the RST (450-061) = 389 microsecs
+<BR>
+after making the first write. I believe this time is sufficient enough for the
+<BR>
+client TCP to fail on the second write() call, that was made probably after it had received
+<BR>
+the RST. Or is it not ???
+<BR>
+<P>The other inconsistent behavior that I was talking about is that you can also see the client also
+<BR>
+generating an RST and sending it back to the server after it had received an RST, when the second 
+<BR>
+write() call was made slightly probably before 17:31:37.251146.
+<BR>
+<P>Please comment.
+<BR>
+<P><P><P>&nbsp;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2482.html">Rick Jones: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2480.html">der Mouse : "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2481">[ date ]</A>
+<A HREF="index.html#2481">[ thread ]</A>
+<A HREF="subject.html#2481">[ subject ]</A>
+<A HREF="author.html#2481">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Mar 26 2001 - 11:23:36 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

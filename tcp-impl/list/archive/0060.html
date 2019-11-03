@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 20:11:23 1997" -->
+<!-- isoreceived="19970212011123" -->
+<!-- sent="Tue, 11 Feb 1997 19:54:30 +0000" -->
+<!-- isosent="19970211195430" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="3300CE76.2917@spider.com" -->
+<!-- inreplyto="9702111928.AA15928@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;3300CE76.2917@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 14:54:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0059.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#60">[ date ]</A>
+<A HREF="index.html#60">[ thread ]</A>
+<A HREF="subject.html#60">[ subject ]</A>
+<A HREF="author.html#60">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thomas Narten wrote:
+<BR>
+<P><EM> &gt; 2C. Client aborts and sends either a FIN or RST
+</EM><BR>
+<EM>&gt; &gt;       (lets say a FIN to show the problem, and reasons for RST instead)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 3C. The client application has destroyed the socket, and it detached
+</EM><BR>
+<EM>&gt; &gt;       from the stack for that connection.
+</EM><BR>
+<EM>&gt; &gt;       From the client stack side, the connection no longer exists
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 3S Server continues to be in a write
+</EM><BR>
+<EM>&gt; &gt;    Server Stack goes to CLOSE_WAIT ( having received the FIN )
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; 4S Server will continue to write to the client, until it has exhausted
+</EM><BR>
+<EM>&gt; &gt;    its window. This is OK for a half-close.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 5S The window is exhausted, and the server will wait until the client
+</EM><BR>
+<EM>&gt; &gt;    opens the window. (window probes )
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; To be perfectly precise, the server won't &quot;wait&quot;; it should send
+</EM><BR>
+<EM>&gt; periodic probes. So in this case the server is still sending TCP
+</EM><BR>
+<EM>&gt; segments.  If it really is waiting for the client to send it
+</EM><BR>
+<EM>&gt; something, the server stack is broken.
+</EM><BR>
+<P>I think we are using confusing nomenclature here.  The server HTTPD
+<BR>
+process waits but the server TCP/IP continues to probe, is that it?
+<BR>
+<P><EM>&gt; &gt; 4C. The client should, but doesnt  send a RST upon receiving the
+</EM><BR>
+<EM>&gt; &gt;        remaining data from the server or window probes.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The client is clearly broken, and in a major way that just doesn't
+</EM><BR>
+<EM>&gt; make sense to me. In step 3C, the client has destroyed the
+</EM><BR>
+<EM>&gt; connection. Yet in step 4C, when the client gets a TCP segment for
+</EM><BR>
+<EM>&gt; which it doesn't have a control block, it does nothing, as opposed to
+</EM><BR>
+<EM>&gt; sending a RST.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>No, the client application has destroyed the _socket_; isn't the
+<BR>
+connection still there, in FIN_WAIT_2, happily sending zero windows
+<BR>
+in response to the server probes?
+<BR>
+<P>I would really like to see the network trace for this...
+<BR>
+<P>&nbsp;The client stack needs to be fixed; the fix is to follow the TCP spec,
+<BR>
+<EM>&gt; which has nothing to do with whether it issued a half-duplex close or
+</EM><BR>
+<EM>&gt; not.  Just what stack has this property, i.e., doesn't send RSTs when
+</EM><BR>
+<EM>&gt; receiving a TCP segment for which it has no associated connection?
+</EM><BR>
+<EM>&gt; This is majorly broken.
+</EM><BR>
+<P>Indeed, I can't imagine anyone getting away with this...if you opened a 
+<BR>
+connection to a port for which there was no listener, it would continue
+<BR>
+trying until it timed out rather than returning with ECONNREFUSED.
+<BR>
+<P>ian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0059.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0062.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#60">[ date ]</A>
+<A HREF="index.html#60">[ thread ]</A>
+<A HREF="subject.html#60">[ subject ]</A>
+<A HREF="author.html#60">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

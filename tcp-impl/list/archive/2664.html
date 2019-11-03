@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="Chris Trobridge (CTrobridge@baltimore.com)">
+<META NAME="Subject" CONTENT="RE: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP Checksum Interoperability</H1>
+<!-- received="Mon Apr  8 10:35:30 2002" -->
+<!-- isoreceived="20020408143530" -->
+<!-- sent="Mon, 8 Apr 2002 15:30:18 +0100 " -->
+<!-- isosent="20020408143018" -->
+<!-- name="Chris Trobridge" -->
+<!-- email="CTrobridge@baltimore.com" -->
+<!-- subject="RE: TCP Checksum Interoperability" -->
+<!-- id="F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com" -->
+<!-- inreplyto="TCP Checksum Interoperability" -->
+<STRONG>From:</STRONG> Chris Trobridge (<A HREF="mailto:CTrobridge@baltimore.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;"><EM>CTrobridge@baltimore.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 08 2002 - 10:30:18 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2665.html">Bob Braden: "IP TTL and TCP"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2664">[ date ]</A>
+<A HREF="index.html#2664">[ thread ]</A>
+<A HREF="subject.html#2664">[ subject ]</A>
+<A HREF="author.html#2664">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+FYI, The 'offending' stacks are PC/TCP (reception) and in Open VMS
+<BR>
+(transmission).
+<BR>
+<P>This is an age-old issue; the following dates from 1985(!):
+<BR>
+<P><A HREF="http://www-mice.cs.ucl.ac.uk/multimedia/misc/tcp_ip/8502.mm.www/0389.html">http://www-mice.cs.ucl.ac.uk/multimedia/misc/tcp_ip/8502.mm.www/0389.html</A>
+<BR>
+<P>I think RFC 1624 is missing the UDP case, where +0 means &quot;not calculated&quot;.
+<BR>
+Indeed, RFC 768 asserts that the two values (+0 and -0) are equivalent.
+<BR>
+<P>Part of the problem is that there isn't an RFC standard that deals with the
+<BR>
+issue of a zero checksum, apart from for UDP.
+<BR>
+<P>The protocol RFCs don't specify the details and the implementation RFCs
+<BR>
+(1071, 1141, 1624) state explicitly that they are not standards, &quot;It is not
+<BR>
+a standard, but a set of useful implementation techniques&quot;.
+<BR>
+<P>They are a very good idea but not mandatory.
+<BR>
+<P>That's why I said I thought the receiver wasn't compliant: it rejects -0 as
+<BR>
+invalid.
+<BR>
+<P>Chris
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: Lloyd Wood [mailto:<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">l.wood@eim.surrey.ac.uk</A>]
+</EM><BR>
+<EM>&gt; Sent: 05 April 2002 21:45
+</EM><BR>
+<EM>&gt; To: Michael Smith
+</EM><BR>
+<EM>&gt; Cc: '<A HREF="mailto:CTrobridge@baltimore.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">CTrobridge@baltimore.com</A>'; 'sra+<A HREF="mailto:ietf@hactrn.net?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">ietf@hactrn.net</A>'; 
+</EM><BR>
+<EM>&gt; '<A HREF="mailto:ietf@IETF.ORG?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">ietf@IETF.ORG</A>';
+</EM><BR>
+<EM>&gt; '<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">tcp-impl@grc.nasa.gov</A>'
+</EM><BR>
+<EM>&gt; Subject: RE: TCP Checksum Interoperability
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; On Fri, 5 Apr 2002, Michael Smith wrote:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; The last time this came up for a TCP implementation I used to
+</EM><BR>
+<EM>&gt; &gt; maintain, our interpretation of Robustness Principle applied to this
+</EM><BR>
+<EM>&gt; &gt; problem dictated that we shouldn't send segments with 
+</EM><BR>
+<EM>&gt; checksum fields
+</EM><BR>
+<EM>&gt; &gt; set to all ones (that is, we shouldn't send ~(+0)), but 
+</EM><BR>
+<EM>&gt; that we had to
+</EM><BR>
+<EM>&gt; &gt; accept either ~(+0) or ~(-0) in received segments.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Strictly speaking, either zero state is completely legal
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Not so. Please read RFC1624 sections 3-5.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; L.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;F86F34FDF1F9D411B7A40008C74C27B8537784@baltimore.com&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>-----------------------------------------------------------------------------------------------------------------
+<BR>
+The information contained in this message is confidential and is intended 
+<BR>
+for the addressee(s) only.  If you have received this message in error or 
+<BR>
+there are any problems please notify the originator immediately.  The 
+<BR>
+unauthorized use, disclosure, copying or alteration of this message is 
+<BR>
+strictly forbidden. Baltimore Technologies plc will not be liable for direct, 
+<BR>
+special, indirect or consequential damages arising from alteration of the 
+<BR>
+contents of this message by a third party or as a result of any virus being 
+<BR>
+passed on.
+<BR>
+&nbsp;
+<BR>
+This footnote confirms that this email message has been swept for Content
+<BR>
+Security threats, including computer viruses.
+<BR>
+<P><A HREF="http://www.baltimore.com">http://www.baltimore.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2665.html">Bob Braden: "IP TTL and TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2663.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2664">[ date ]</A>
+<A HREF="index.html#2664">[ thread ]</A>
+<A HREF="subject.html#2664">[ subject ]</A>
+<A HREF="author.html#2664">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Apr 08 2002 - 10:35:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Sat Jun 21 09:52:52 1997" -->
+<!-- isoreceived="19970621135252" -->
+<!-- sent="Sat, 21 Jun 97 16:18:09 GMT" -->
+<!-- isosent="19970621161809" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="6068.wsimpson@greendragon.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;6068.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jun 21 1997 - 12:18:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0545.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#546">[ date ]</A>
+<A HREF="index.html#546">[ thread ]</A>
+<A HREF="subject.html#546">[ subject ]</A>
+<A HREF="author.html#546">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:kennethw@VNET.IBM.COM?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;6068.wsimpson@greendragon.com&gt;">kennethw@VNET.IBM.COM</A>
+</EM><BR>
+<EM>&gt; &gt;Count me as strongly opposed.  One of the objectives of the TCP MIB was
+</EM><BR>
+<EM>&gt; &gt;to narrow the list to be as small as possible.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The TCP-MIB in RFC2012 has 19 objects where the first four:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;      tcpRtoAlgorthim
+</EM><BR>
+<EM>&gt;      tcpRtoMin
+</EM><BR>
+<EM>&gt;      tcpRtoMax
+</EM><BR>
+<EM>&gt;      tcpMaxConn
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Yes.  Your point?  Note that these are all values needed for MANAGING
+<BR>
+networks!  They tell the poor swamped network manager how and why the
+<BR>
+box is sending particular _rates_ of packets on the link.
+<BR>
+<P><P><EM>&gt; all allow an entity to see the configuration of a TCP. There are also
+</EM><BR>
+<EM>&gt; 10 global counters. All 14 of these objects are simple objects.
+</EM><BR>
+<EM>&gt; The first part of the proposal consists of add 3 to 4 simple objects
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;    tcpKeepAliveTimer
+</EM><BR>
+<EM>&gt;    tcpReceiveBufferSize
+</EM><BR>
+<EM>&gt;    tcpSendBufferSize
+</EM><BR>
+<EM>&gt;    tcpRestrictLowPorts
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+How do _any_ of these affect packets sent on the link?
+<BR>
+<P>Maybe keepalivetimer, but it cannot be mandatory, since there is a
+<BR>
+strong aversion to keepalive in this community!
+<BR>
+<P><P><EM>&gt; (tcpRestrictLowPorts may not be needed) to enhance configuration. I also
+</EM><BR>
+<EM>&gt; believe that all of the configuration objects should be defined as
+</EM><BR>
+<EM>&gt; read-write capable and not read-only to enable remote configuration. The
+</EM><BR>
+<EM>&gt; amount of storage that this adds isn't an issue.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+You think RTO algorithm is a remotely managable quantity?
+<BR>
+<P>You think buffersizes are a remotely managable quantity, on a global
+<BR>
+connection basis?
+<BR>
+<P>You think restricting low ports should be remotely managed?
+<BR>
+<P>And Perry thought there were security holes.  He ain't seen nothin' yet.
+<BR>
+<P>Folks, it is my personal opinion that there is some serious confusion
+<BR>
+here as to the purpose of SNMP, and I cannot see any purpose to
+<BR>
+continuing this discussion.  Please have a heart to heart with the O&amp;M
+<BR>
+Area Directors.
+<BR>
+<P><P><EM>&gt; &gt;The general rule for MIBs is:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Never add a variable unless more than 50% of the management stations
+</EM><BR>
+<EM>&gt; &gt;   will need to view it on a regular basis!
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I don't think that you mean this as an absolute since almost none
+</EM><BR>
+<EM>&gt; of the transport MIB work (AToMMIB for example) work would be useful
+</EM><BR>
+<EM>&gt; since I doubt that 50% or more of the current Management platforms
+</EM><BR>
+<EM>&gt; are doing ATM Management. I think that this needs to be considered
+</EM><BR>
+<EM>&gt; from the function being managed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+There's a good idea.  If you are using ATM for transport, just put this
+<BR>
+stuff in the already bloated ATM MIB.  You don't need TCP at all in that
+<BR>
+case....
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;6068.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;6068.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0545.html">kennethw@VNET.IBM.COM: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0547.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#546">[ date ]</A>
+<A HREF="index.html#546">[ thread ]</A>
+<A HREF="subject.html#546">[ subject ]</A>
+<A HREF="author.html#546">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

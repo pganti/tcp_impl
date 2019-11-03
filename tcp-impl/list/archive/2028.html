@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="James Carlson (carlson@ironbridgenetworks.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 20:54:42 2000" -->
+<!-- isoreceived="20000226015442" -->
+<!-- sent="25 Feb 2000 20:49:02 -0500" -->
+<!-- isosent="20000226014902" -->
+<!-- name="James Carlson" -->
+<!-- email="carlson@ironbridgenetworks.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="86d7pkka29.fsf@ironbridgenetworks.com" -->
+<!-- inreplyto="Pine.GSO.4.10.10002251025290.19392-100000@csapuntz-u1.cisco.com" -->
+<STRONG>From:</STRONG> James Carlson (<A HREF="mailto:carlson@ironbridgenetworks.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;86d7pkka29.fsf@ironbridgenetworks.com&gt;"><EM>carlson@ironbridgenetworks.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 20:49:02 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2027.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2028">[ date ]</A>
+<A HREF="index.html#2028">[ thread ]</A>
+<A HREF="subject.html#2028">[ subject ]</A>
+<A HREF="author.html#2028">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;86d7pkka29.fsf@ironbridgenetworks.com&gt;">csapuntz@cisco.com</A> (Costa Sapuntzakis) writes:
+<BR>
+<EM>&gt; The TCP RDMA option is not about accelerating sending of data. It's
+</EM><BR>
+<EM>&gt; about speeding up the receiving of bulk data.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The TCP RDMA option isn't proposing to only about accelerating servers.
+</EM><BR>
+<EM>&gt; It's about accelerating the receiver of data. In the case of NFS READ
+</EM><BR>
+<EM>&gt; RPCs, that's the NFS client.
+</EM><BR>
+<P>If you want to go fast on NFS client (and server!) operations, why not
+<BR>
+use the default UDP mode of operation?  You just set your receive
+<BR>
+offset to PAGE_SIZE-sizeof(READ3resok)-28-sizeof(layer_two), and
+<BR>
+you're all set to page flip.  If you want to get fancy, you build this
+<BR>
+offsetting magic into the device DMA.
+<BR>
+<P>As for TCP with arbitrary (unspecified) applications, it would make
+<BR>
+more sense to create a new &quot;map in TCP segment&quot; system call than to
+<BR>
+use RDMA.  Have this new call map in (read-only) raw system buffers to
+<BR>
+the user's address space containing the received in-order data (with
+<BR>
+packet headers and other nonsense), and copy out along a struct uio
+<BR>
+array pointing to the actual data the application should be examining.
+<BR>
+That gets you a zero data copy interface from driver to application
+<BR>
+without having to modify any peers.
+<BR>
+<P>(I hacked a copy of 4.4BSD to do zero data copy on transmit as well
+<BR>
+for an embedded system we're using here.  It was rather easy to do --
+<BR>
+I just replaced m_copydata with a new &quot;m_refcopy&quot; function that
+<BR>
+created read-only reference copies of the buffers for retransmit
+<BR>
+purposes.  TCP ack handling and m_free/m_prepend needed minor tweaks
+<BR>
+to get the reference counter logic right.)
+<BR>
+<P><EM>&gt; So, NFS has a  CPU overhead hit as compared to optimized storage host bus
+</EM><BR>
+<EM>&gt; adapters. The goal was to eliminate part of this hit, by getting rid of an
+</EM><BR>
+<EM>&gt; extra copy.
+</EM><BR>
+<P>That of course depends strongly on system architecture.  In any event,
+<BR>
+RDMA doesn't appear to help.  You could just as easily create a nifty
+<BR>
+Ethernet driver that copies only (say) the first 54 bytes of memory
+<BR>
+into main memory and leaves the rest in the queue until it determines
+<BR>
+the exact destination for the payload (or hits an exception case that
+<BR>
+requires harder work).  This would eliminate the extra memory copy and
+<BR>
+result in perfectly aligned receive data.  Such &quot;fast path&quot; code is
+<BR>
+quite common in well-designed systems.
+<BR>
+<P>I hope describing the 54-bytes-first algorithm here stops anyone from
+<BR>
+patenting the idea.  ;-}
+<BR>
+<P><PRE>
+-- 
+James Carlson, System Architect                     &lt;<A HREF="mailto:carlson@ibnets.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;86d7pkka29.fsf@ironbridgenetworks.com&gt;">carlson@ibnets.com</A>&gt;
+IronBridge Networks / 55 Hayden Avenue   71.246W   Vox:  +1 781 372 8132
+Lexington MA  02421-7996 / USA           42.423N   Fax:  +1 781 372 8090
+&quot;PPP Design and Debugging&quot; --- <A HREF="http://people.ne.mediaone.net/carlson/ppp">http://people.ne.mediaone.net/carlson/ppp</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2027.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2029.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2028">[ date ]</A>
+<A HREF="index.html#2028">[ thread ]</A>
+<A HREF="subject.html#2028">[ subject ]</A>
+<A HREF="author.html#2028">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@shield.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Mar  3 15:41:35 1999" -->
+<!-- isoreceived="19990303204135" -->
+<!-- sent="Wed, 3 Mar 1999 12:35:52 -0800 (PST)" -->
+<!-- isosent="19990303203552" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@shield.Eng.Sun.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199903032035.MAA07521@shield.eng.sun.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@shield.Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032035.MAA07521@shield.eng.sun.com&gt;"><EM>kcpoon@shield.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 03 1999 - 15:35:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1655.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1653.html">vijay singh: "TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1655.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1654">[ date ]</A>
+<A HREF="index.html#1654">[ thread ]</A>
+<A HREF="subject.html#1654">[ subject ]</A>
+<A HREF="author.html#1654">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;Of course, the problem with this (which is also what you can get
+</EM><BR>
+<EM>&gt;if you set TCP_NODELAY) is that you don't get a stream of full
+</EM><BR>
+<EM>&gt;sized packets followed by one small packet,
+</EM><BR>
+<EM>&gt;	send(1460); send(1460); send(1176);
+</EM><BR>
+<EM>&gt;	send(1460); send(1460); send(1176);
+</EM><BR>
+<EM>&gt;	send(500);
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;As opposed to the former which gives you:
+</EM><BR>
+<EM>&gt;	send(1460); send(1460); send(1176);
+</EM><BR>
+<EM>&gt;	send(1460); send(1460);
+</EM><BR>
+<EM>&gt;	send(1460);
+</EM><BR>
+<EM>&gt;	send(216);
+</EM><BR>
+<P>In this particular example, the number of packets is the same, I don't see a
+<BR>
+problem.  Yes, we can construct an example which with the &quot;one step further
+<BR>
+definition,&quot; tcp will send out more packets.  But if an app is well written
+<BR>
+and does appropriate buffering, I think that is OK.
+<BR>
+<P><EM>&gt;	recv(ACK 2920); pkts 1-2
+</EM><BR>
+<EM>&gt;		&lt;CW=3*1460, all data acked&gt;
+</EM><BR>
+<EM>&gt;		send(1460); send(1460); send(1460);
+</EM><BR>
+<EM>&gt;	recv(ACK 5840); pkts 3-4
+</EM><BR>
+<EM>&gt;		&lt;due to Nagle, defer final 1392 bytes&gt;
+</EM><BR>
+<EM>&gt;	&lt;delay for next ACK&gt;
+</EM><BR>
+<EM>&gt;	recv(ACK 7300);
+</EM><BR>
+<EM>&gt;		&lt;all outstanding data ACKed, send final piece&gt;
+</EM><BR>
+<EM>&gt;		send(1392);
+</EM><BR>
+<P>I think this last 1392 bytes should not be delayed, given that it is part
+<BR>
+of a send which should not be delayed.  If the sequence of packets are
+<BR>
+like
+<BR>
+<P>--&gt;	PKT3 (1460); PKT4 (1460); PKT5 (1460)
+<BR>
+&lt;--	ACK (4)
+<BR>
+<P>Solaris will not delay sending
+<BR>
+<P>--&gt;	PKT6 (1392)
+<BR>
+<P>Vernon brought up an interesting point in an earlier mail.  Apply Nagle
+<BR>
+either on send requests or on segments, but not both.  That means TCP
+<BR>
+will not apply Nagle check on sending packet if it is because of an ACK.
+<BR>
+When we consider the meaning of Nagle on per send basis, I think we should
+<BR>
+also think about that in the definition.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199903032035.MAA07521@shield.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1655.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1653.html">vijay singh: "TCP-offload on IBM mainframe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1655.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1654">[ date ]</A>
+<A HREF="index.html#1654">[ thread ]</A>
+<A HREF="subject.html#1654">[ subject ]</A>
+<A HREF="author.html#1654">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:39 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

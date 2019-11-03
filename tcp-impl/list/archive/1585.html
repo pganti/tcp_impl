@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 00:58:20 1999" -->
+<!-- isoreceived="19990217055820" -->
+<!-- sent="Tue, 16 Feb 1999 21:55:29 -0800" -->
+<!-- isosent="19990217055529" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36CA59D1.A56D07A3@ehsco.com" -->
+<!-- inreplyto="199902170316.UAA16861@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36CA59D1.A56D07A3@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 00:55:29 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1584.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1584.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1585">[ date ]</A>
+<A HREF="index.html#1585">[ thread ]</A>
+<A HREF="subject.html#1585">[ subject ]</A>
+<A HREF="author.html#1585">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; My intuition claims there are essentially no real applications that
+</EM><BR>
+<EM>&gt; fit that sketch
+</EM><BR>
+<P>On a lark I did a search for +&quot;nagle algorithm&quot; on AltaVista, and almost
+<BR>
+all references to it are things that explain what it is and then
+<BR>
+admonish the programmer from using it. I'm starting to wonder too if
+<BR>
+anybody actually disables it for non-interactive, non-realtime stuff.
+<BR>
+<P>Apple's OT devsite: <A HREF="http://developer.apple.com/qa/nw/nw26.html">http://developer.apple.com/qa/nw/nw26.html</A>
+<BR>
+Winsock FAQ:
+<BR>
+<A HREF="http://telin.rug.ac.be/~sid/Netwerken/Winsock/advanced.html#q15">http://telin.rug.ac.be/~sid/Netwerken/Winsock/advanced.html#q15</A>
+<BR>
+WinSock API:
+<BR>
+<A HREF="http://www.medusa.uni-bremen.de/intern/knowhow/winsock/winsock4.htm">http://www.medusa.uni-bremen.de/intern/knowhow/winsock/winsock4.htm</A>
+<BR>
+<P><EM>&gt; I do recall seeing something somewhere about HTTP 1.0 and maybe 1.1
+</EM><BR>
+<EM>&gt; versus the Nagle algorithm.  As I vaguely recall it, even the
+</EM><BR>
+<EM>&gt; proposed modified Nagle algorithm would still have to be turned off.
+</EM><BR>
+<P><A HREF="http://www.isi.edu/lsam/publications/phttp_tcp_interactions/">http://www.isi.edu/lsam/publications/phttp_tcp_interactions/</A>
+<BR>
+<P>In this particular test, disabling Nagle helped a lot since the data
+<BR>
+being returned from the HTTP server was sent as two writes (one for the
+<BR>
+MIME header and another for the data).
+<BR>
+<P><A HREF="http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html">http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html</A> also
+<BR>
+discusses the issue some, suggesting that Nagle made no effect on some
+<BR>
+pipelined transactions, while it did have an effect in others.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                            <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36CA59D1.A56D07A3@ehsco.com&gt;">ehall@ehsco.com</A>
++1-650-685-0557                                    <A HREF="http://www.ehsco.com">http://www.ehsco.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1584.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1584.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1586.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1585">[ date ]</A>
+<A HREF="index.html#1585">[ thread ]</A>
+<A HREF="subject.html#1585">[ subject ]</A>
+<A HREF="author.html#1585">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

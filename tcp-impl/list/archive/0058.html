@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 19:33:48 1997" -->
+<!-- isoreceived="19970212003348" -->
+<!-- sent="Tue, 11 Feb 1997 14:28:45 -0400" -->
+<!-- isosent="19970211182845" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702111928.AA15928@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199702111844.KAA25296@birdcage.mcom.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702111928.AA15928@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 13:28:45 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0059.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0071.html">C. Harald Koch: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#58">[ date ]</A>
+<A HREF="index.html#58">[ thread ]</A>
+<A HREF="subject.html#58">[ subject ]</A>
+<A HREF="author.html#58">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; notice the series of RSTs.  This is for each packet that was 'on its way'
+</EM><BR>
+<EM>&gt; when the client aborted.
+</EM><BR>
+<EM>&gt; It is these RSTs which cause the server's write() to return with an 
+</EM><BR>
+<EM>&gt; error, ie connection reset by peer...
+</EM><BR>
+<P>I think we're all in agreement that the above is exactly what is
+<BR>
+supposed to happen.
+<BR>
+<P><EM>&gt; The problem that occurs with a bad stack is that the server side
+</EM><BR>
+<EM>&gt; application will hang forever without the RSTs.
+</EM><BR>
+<P>What I haven't quite been able to get a handle on (until below) is
+<BR>
+just who has the bad stack (client or server), and in what way it is
+<BR>
+bad.
+<BR>
+<P><EM>&gt; 2C. Client aborts and sends either a FIN or RST 
+</EM><BR>
+<EM>&gt; 	(lets say a FIN to show the problem, and reasons for RST instead)
+</EM><BR>
+<P><EM>&gt; 3C. The client application has destroyed the socket, and it detached
+</EM><BR>
+<EM>&gt;  	from the stack for that connection. 
+</EM><BR>
+<EM>&gt; 	From the client stack side, the connection no longer exists
+</EM><BR>
+<P><EM>&gt; 3S Server continues to be in a write
+</EM><BR>
+<EM>&gt;    Server Stack goes to CLOSE_WAIT ( having received the FIN )
+</EM><BR>
+<EM>&gt;    
+</EM><BR>
+<EM>&gt; 4S Server will continue to write to the client, until it has exhausted
+</EM><BR>
+<EM>&gt;    its window. This is OK for a half-close.  
+</EM><BR>
+<P><EM>&gt; 5S The window is exhausted, and the server will wait until the client
+</EM><BR>
+<EM>&gt;    opens the window. (window probes )
+</EM><BR>
+<P>To be perfectly precise, the server won't &quot;wait&quot;; it should send
+<BR>
+periodic probes. So in this case the server is still sending TCP
+<BR>
+segments.  If it really is waiting for the client to send it
+<BR>
+something, the server stack is broken.
+<BR>
+<P><EM>&gt; 4C. The client should, but doesnt  send a RST upon receiving the
+</EM><BR>
+<EM>&gt; 	 remaining data from the server or window probes.
+</EM><BR>
+<P>The client is clearly broken, and in a major way that just doesn't
+<BR>
+make sense to me. In step 3C, the client has destroyed the
+<BR>
+connection. Yet in step 4C, when the client gets a TCP segment for
+<BR>
+which it doesn't have a control block, it does nothing, as opposed to
+<BR>
+sending a RST.
+<BR>
+<P>The client stack needs to be fixed; the fix is to follow the TCP spec,
+<BR>
+which has nothing to do with whether it issued a half-duplex close or
+<BR>
+not.  Just what stack has this property, i.e., doesn't send RSTs when
+<BR>
+receiving a TCP segment for which it has no associated connection?
+<BR>
+This is majorly broken.
+<BR>
+<P><EM>&gt; By [having the client] sending a RST instead of the FIN to abort the
+</EM><BR>
+<EM>&gt; connection, we can cause both the server side and client side stacks
+</EM><BR>
+<EM>&gt; to tear the connection down immediately, and avoid the half-close
+</EM><BR>
+<EM>&gt; where it gets caught.
+</EM><BR>
+<P>This is a hack that doesn't completely fix the problem. If the RST is
+<BR>
+lost, you have the same problem as before. It seems to me that the
+<BR>
+client stack needs to send RSTs like called for in the spec.
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0059.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0071.html">C. Harald Koch: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#58">[ date ]</A>
+<A HREF="index.html#58">[ thread ]</A>
+<A HREF="subject.html#58">[ subject ]</A>
+<A HREF="author.html#58">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

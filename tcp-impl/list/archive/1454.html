@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: fast booting &amp; 2*MSL</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: fast booting &amp; 2*MSL">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: fast booting &amp; 2*MSL</H1>
+<!-- received="Tue Jan  5 17:57:05 1999" -->
+<!-- isoreceived="19990105225705" -->
+<!-- sent="Tue, 05 Jan 1999 14:56:50 -0800" -->
+<!-- isosent="19990105225650" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: fast booting &amp; 2*MSL" -->
+<!-- id="369298B2.45CD1773@cup.hp.com" -->
+<!-- inreplyto="199901052212.PAA07375@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20fast%20booting%20&amp;%202*MSL&In-Reply-To=&lt;369298B2.45CD1773@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 05 1999 - 17:56:50 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1455.html">Rodney Van Meter: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1452.html">Vernon Schryver: "fast booting &amp; 2*MSL"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1457.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1457.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1454">[ date ]</A>
+<A HREF="index.html#1454">[ thread ]</A>
+<A HREF="subject.html#1454">[ subject ]</A>
+<A HREF="author.html#1454">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; ] Embedded systems with TCP/IP stacks in ROM are up in a matter of
+</EM><BR>
+<EM>&gt; ] seconds. See, for example, the AMD Net186 Network Appliance demo board
+</EM><BR>
+<EM>&gt; ] at
+</EM><BR>
+<EM>&gt; ] ...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That's another good point.  One saving grace is that such systems are not
+</EM><BR>
+<EM>&gt; likely to have WWW servers hit by zillions of clients.  They are also less
+</EM><BR>
+<EM>&gt; likely to originate TCP connections, and so can hope their peers will
+</EM><BR>
+<EM>&gt; honor TIME-WAIT and pick new port numbers.  They are also simpler and
+</EM><BR>
+<EM>&gt; could be fixed more easily.  On the other hand, their designers are even
+</EM><BR>
+<EM>&gt; more likely to take short cuts for speed over reliability and to feel
+</EM><BR>
+<EM>&gt; pressures to start working sooner after a reboot.
+</EM><BR>
+<P>There is no guarantee that an embedded web server will have the clients
+<BR>
+do the initial FIN is there? I suspect (not that I have any real
+<BR>
+data...) that concern for &quot;connection resources&quot; would be such that the
+<BR>
+embedded designer would be inclined to be aggressive in closing
+<BR>
+connections - ie not make much use of persistent connections where the
+<BR>
+chances are better that the client will initiate the close.
+<BR>
+<P>Those devices will have a fixed quantity of RAM etc right? I wonder if
+<BR>
+they will be written to stop accepting connections when there are no
+<BR>
+free control blocks (goodness), or if they will just decided to
+<BR>
+prematurely reuse a control blcok in TIME_WAIT (badness).
+<BR>
+<P><EM>&gt; ]                                                           Big systems
+</EM><BR>
+<EM>&gt; ] (VMS, MPE) take longer, but that's mostly due to hardware.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That must involve a definition of &quot;hardware&quot; other than the one I use.
+</EM><BR>
+<P>Some platforms have hardware (ok, really firmware) that is more
+<BR>
+aggressice (conservative?) in start-up self tests than others. MPE
+<BR>
+(well, MPE/XL or now MPE/iX) is an OS that runs on PA-RISC which can
+<BR>
+have some rather lengthy self-tests for cache and CPU's and such. Newer
+<BR>
+systems of such flavor can disable many of these tests (implemented
+<BR>
+under pressure from customers looking for faster boot times....) though
+<BR>
+it probably still takes at least a couple minutes for such systems to
+<BR>
+boot all the way to the point that they are exchanging TCP segments.
+<BR>
+Perhaps not a full four minute 2*MSL, but probably more than two
+<BR>
+minutes. There is continuing pressure to reduce that boot time further.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+today, an ACK takes just as many CPU cycles as a data segment...
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1455.html">Rodney Van Meter: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1453.html">Alan Cox: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1452.html">Vernon Schryver: "fast booting &amp; 2*MSL"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1457.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1457.html">Eric A. Hall: "Re: fast booting &amp; 2*MSL"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1454">[ date ]</A>
+<A HREF="index.html#1454">[ thread ]</A>
+<A HREF="subject.html#1454">[ subject ]</A>
+<A HREF="author.html#1454">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

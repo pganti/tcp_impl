@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP ack every other - perfor</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: TCP ack every other - performance issue?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP ack every other - performance issue?</H1>
+<!-- received="Fri Apr 17 18:07:05 1998" -->
+<!-- isoreceived="19980417220705" -->
+<!-- sent="Fri, 17 Apr 1998 18:03:44 -0700" -->
+<!-- isosent="19980418010344" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: TCP ack every other - performance issue?" -->
+<!-- id="3537FBF0.CD594D8C@cup.hp.com" -->
+<!-- inreplyto="199804180022.UAA00576@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;3537FBF0.CD594D8C@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 17 1998 - 21:03:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1069.html">David S. Miller: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1067.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1065.html">Mark Allman: "Re: TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1068">[ date ]</A>
+<A HREF="index.html#1068">[ thread ]</A>
+<A HREF="subject.html#1068">[ subject ]</A>
+<A HREF="author.html#1068">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mark Allman wrote:
+<BR>
+<EM>&gt; I think there IS a difference.  The initial window burst happens
+</EM><BR>
+<EM>&gt; once per connection (OK, maybe more if it goes idle).  If you use an
+</EM><BR>
+<EM>&gt; ACK interval of 4 segments the burst will happen much more often.
+</EM><BR>
+<EM>&gt; Not saying I think the burstiness that would be caused by an ACK
+</EM><BR>
+<EM>&gt; interval of 4 segments is acceptable or not, but I think it is
+</EM><BR>
+<EM>&gt; sufficiently different from the larger initial window proposal.
+</EM><BR>
+<P>I'm starting to generalize here - away from the specific of a
+<BR>
+four-segment ACK and more towards generic ACK avoidance.
+<BR>
+<P>I presume it would be bad if that added burstiness led to increased
+<BR>
+packet drops, but if no addional packet drops resulted (say in an
+<BR>
+intranet) there does seem to be a benefit as evidenced by the original
+<BR>
+poster's observed 8% gain.
+<BR>
+<P>If we assume that added packet drops resulted, what are the chances
+<BR>
+(under RED I presume) that the packet drops would be suffered by the
+<BR>
+non-bursty connections as opposed to ones that were not bursty. In other
+<BR>
+words, how likely is it that someone else feels the pain instead?
+<BR>
+<P>Now, I suspect that the original person's test was a long-lived
+<BR>
+connection like a netperf TCP_STREAM test, so the issue of initial slow
+<BR>
+start was moot, and the real world (tm) would not allow that to be moot.
+<BR>
+<P>In that case I suppose that a reciever wishing to avoid ACK's would have
+<BR>
+to have some smarts to know that slow-start was happening and ACK
+<BR>
+accordingly. If a burstiness resulted in packet losses for that
+<BR>
+connection, the receiver would see out of order packets, start sending
+<BR>
+immediate ACKs and (presumeably) start using an ACK policy sympatico
+<BR>
+with fast recovery/retransmit. 
+<BR>
+<P>Shouldn't the sender then arrive at a cwnd that was sufficient to allow
+<BR>
+his packets through in those bursts, and also have that sender (assuming
+<BR>
+it is only incrementing by one MSS per ACK regardless of the number of
+<BR>
+segments ACKed) be more conservative on its probing for additional cwnd?
+<BR>
+<P>I wonder if there is a theoretical sweet-spot somewhere for ACKs as a
+<BR>
+fraction of the perceived cwnd. As in an ACK for every 8% of cwnd, 25%,
+<BR>
+50%.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1069.html">David S. Miller: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1067.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1065.html">Mark Allman: "Re: TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1068">[ date ]</A>
+<A HREF="index.html#1068">[ thread ]</A>
+<A HREF="subject.html#1068">[ subject ]</A>
+<A HREF="author.html#1068">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

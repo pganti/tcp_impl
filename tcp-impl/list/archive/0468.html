@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 15:49:04 1997" -->
+<!-- isoreceived="19970605194904" -->
+<!-- sent="Thu, 5 Jun 1997 16:47:29 -0600" -->
+<!-- isosent="19970605224729" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052247.QAA06508@mica.denver.sgi.com" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052247.QAA06508@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:47:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0469.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0477.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0477.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#468">[ date ]</A>
+<A HREF="index.html#468">[ thread ]</A>
+<A HREF="subject.html#468">[ subject ]</A>
+<A HREF="author.html#468">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052247.QAA06508@mica.denver.sgi.com&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; &quot;Denying the connection attempts&quot; is a poor defense against a denial of
+</EM><BR>
+<EM>&gt; &gt; service attack such as SYN bombing, since causing you to deny
+</EM><BR>
+<EM>&gt; &gt; connection attemptss is the purpose for the SYM bombing.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There is NO other solution to SYN attacks. SYN attacks serve two purposes:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	- deny other SYN attempts (presumably legitimate)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	- deny service to ongoing (ESTABLISHED) connections
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There is no way to avoid denying access to other SYN attempts.
+</EM><BR>
+<EM>&gt; Ever purported solution, e.g., authenticating incoming SYNs
+</EM><BR>
+<EM>&gt; via digests, checking them against incoming lists, etc., have
+</EM><BR>
+<EM>&gt; the additional effect of slowing SYN processing in general, and consuming
+</EM><BR>
+<EM>&gt; CPU resources in general, both of which slow SYN processing for
+</EM><BR>
+<EM>&gt; the legitimate requests.
+</EM><BR>
+<P>Yes, those were obviously non-solutions when they were proposed last year
+<BR>
+in netnews groups.
+<BR>
+<P><P><EM>&gt; The best you can do is:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	1- prevent SYN attacks from consuming large numbers of resources
+</EM><BR>
+<EM>&gt; 		e.g., partition the TCB space, and limit the percentage
+</EM><BR>
+<EM>&gt; 		allocated to SYN_RCVD
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	2- prevent SYN attacks from consuming large amounts of CPU resources
+</EM><BR>
+<EM>&gt; 		e.g., limiting the frequency of processing SYN requests
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	3- prevent SYN attacks from affecting ESTABLISHED connections
+</EM><BR>
+<EM>&gt; 		e.g., via solutions #1 and #2 together.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	4- prevent SYN attacks from synchronizing and completely starving
+</EM><BR>
+<EM>&gt; 	   legitimate incoming SYNs
+</EM><BR>
+<EM>&gt; 		e.g., pick randomly from queued incoming SYNs, not 'end
+</EM><BR>
+<EM>&gt; 		of queue'
+</EM><BR>
+<P>There is one more thing you can do, and which the well known and widely
+<BR>
+implemented and deployed defenses do, and that is continue providing
+<BR>
+your normal services despite the SYM bombing.  #4 and drop-oldest with
+<BR>
+big listen queues, like RED in a different universe, is quite effective
+<BR>
+for that.
+<BR>
+<P><P><P><EM>&gt; &gt; The SYN bombing issue is long over and solved, essentially
+</EM><BR>
+<EM>&gt; &gt; independently of CERT, and certainly independently of any verifying by
+</EM><BR>
+<EM>&gt; &gt; you or ISI.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Geez - *US* meant this group. 
+</EM><BR>
+<P>This mailing list is also long after the fact for solving SYN bombing.
+<BR>
+<P>As I said, the SYN bombing problem was solved and new releases or
+<BR>
+patches distributed for major implementations last year or at least
+<BR>
+last winter.  I've recognized other names of some those directly
+<BR>
+involved among contributors to this list.
+<BR>
+<P><P><EM>&gt;                               Not me or ISI, though, if the SYN
+</EM><BR>
+<EM>&gt; bombing is so over and solved, why is the issue of parititioning
+</EM><BR>
+<EM>&gt; the processing and having to live with slower SYN processing 
+</EM><BR>
+<EM>&gt; still misunderstood?
+</EM><BR>
+<P>Could it be because except superficially, the problems are quite different?
+<BR>
+What problem doesn't involve partitioning and appropriate scaling?
+<BR>
+<P><P><EM>&gt; &gt; The solution to SYN bombing is 
+</EM><BR>
+<EM>&gt; &gt;     - use as large a listen queue as you can afford, and try to make
+</EM><BR>
+<EM>&gt; &gt;        the cost of each slot on the listen queue small and searching a
+</EM><BR>
+<EM>&gt; &gt;        big queue fast so you can afford more.  At least 30K slots is
+</EM><BR>
+<EM>&gt; &gt;        one recommendation.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;     - drop either the oldest or a random, pre-existing entry in your
+</EM><BR>
+<EM>&gt; &gt;        listen queue when it is full and a new SYN arrives.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; No. The solution is:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	- LIMIT the size of the listen queue to some percentage of 
+</EM><BR>
+<EM>&gt; 		the overall mbuf or TCB space
+</EM><BR>
+<P>You mean the system shouldn't crash?  Does such a goal really need
+<BR>
+stating here?
+<BR>
+<P>In fact, increasing the listen queue from its ridiculously tiny (in
+<BR>
+1997 if not 1982) size of 10 (or 15) to 100 or 1000 goes a long way to
+<BR>
+dealing with SYN bombs, as well as various similar side effects of
+<BR>
+dealing with large streams of HTTP hits.  I think Dave Borman's
+<BR>
+solution involves a specialized listen queue of 30,000 slots.  Details
+<BR>
+involve the cryptographic strength of the hash table used for the
+<BR>
+listen queue (assuming you use a hash table).
+<BR>
+<P><P><EM>&gt; 	- I don't know how to drop, but I know that picking randomly 
+</EM><BR>
+<EM>&gt; 	  works, if the queue can hold them - I do know that picking
+</EM><BR>
+<EM>&gt; 	  the newest one is wrong, since it allows the attacker to
+</EM><BR>
+<EM>&gt; 	  synchronize with the timeout of the SYN_RCVD states.
+</EM><BR>
+<P>It would be nice if there were archives of the mailing list in which
+<BR>
+this was hashed out last year.
+<BR>
+<P><P>As I recall, the relevant parameters for SYN bombing are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;L = listen queue length in slots
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;R = SYN bombing rate in SYNs/sec
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;T = RTT to the most distant legitimate client
+<BR>
+<P>Interesting and common values of L are 15 (i.e. 10*3/2), 100, 1000, and
+<BR>
+30,000.  Interesting values of T less than 300 ms for directly
+<BR>
+connected peers, and up to about 2 seconds for PPP/modems.  Interesting
+<BR>
+and currently relevant values of R range from 5 (people just tying to
+<BR>
+be a pain or real dumbies) to 200 (v.34 modem with VJ header
+<BR>
+compression) to 500 (ISDN) to 5000 as a generally agreed design limit.
+<BR>
+<P>Drop-oldest-entry in listen queue works fine provided T&lt;L/R when T&gt;L/R.
+<BR>
+Then drop-random protects with probability ((L-1)/L)**(T*R)
+<BR>
+<P>I like an explicit combination of drop-oldest with random-drop.
+<BR>
+Others like a hybrid drop-oldest-within-random-hash-bucket.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052247.QAA06508@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0469.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0467.html">touch@ISI.EDU: "SYN cookies"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0477.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0477.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#468">[ date ]</A>
+<A HREF="index.html#468">[ thread ]</A>
+<A HREF="subject.html#468">[ subject ]</A>
+<A HREF="author.html#468">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

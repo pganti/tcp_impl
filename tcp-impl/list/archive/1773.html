@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Automated TCP test</TITLE>
+<META NAME="Author" CONTENT="Vivek Kashyap (viv@sequent.com)">
+<META NAME="Subject" CONTENT="Re: Automated TCP test">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Automated TCP test</H1>
+<!-- received="Wed Jul  7 12:14:14 1999" -->
+<!-- isoreceived="19990707161414" -->
+<!-- sent="Wed, 7 Jul 1999 09:09:16 -0700 (PDT)" -->
+<!-- isosent="19990707160916" -->
+<!-- name="Vivek Kashyap" -->
+<!-- email="viv@sequent.com" -->
+<!-- subject="Re: Automated TCP test" -->
+<!-- id="199907071609.JAA10376@eng4.sequent.com" -->
+<!-- inreplyto="37833FF8.C7E36679@eth.ericsson.se" -->
+<STRONG>From:</STRONG> Vivek Kashyap (<A HREF="mailto:viv@sequent.com?Subject=Re:%20Automated%20TCP%20test&In-Reply-To=&lt;199907071609.JAA10376@eng4.sequent.com&gt;"><EM>viv@sequent.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 07 1999 - 12:09:16 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1772.html">Péter Krémer: "Automated TCP test"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1772.html">Péter Krémer: "Automated TCP test"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1773">[ date ]</A>
+<A HREF="index.html#1773">[ thread ]</A>
+<A HREF="subject.html#1773">[ subject ]</A>
+<A HREF="author.html#1773">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I had some time back found a problem not listed in rfc2525.  you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;might find it of interest:
+<BR>
+<P><P>---------------------------------------------------------------------
+<BR>
+<P>&nbsp;&nbsp;&nbsp;in certain situations the server fails to enter persist state.
+<BR>
+<P><P>=========================================================================
+<BR>
+<P><P>1) Scenario ... not entering persist state
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Seen on FreeBSD 2.2.6. A quick look at BSDlite code indicates
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it is present there too and so by implication in many BSD
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derived implementations&gt;
+<BR>
+<P><P>Server:                                         Client:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;listen,accept,read...                   connect,write, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In a loop                                               
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write                           read()..not reading all so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that the window fills up
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shutdown (..,SHUT_WR)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(app blocked on write)          
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send FIN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ack all data and window of 0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rcv FIN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rcv ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait in CLOSE_WAIT              wait in FIN_WAIT2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The server stays in CLOSE_WAIT state blocking the application.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The client is in FIN_WAIT2 awaiting a FIN from the server.
+<BR>
+<P>Analysis:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The server fails to enter the persist state because:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a FIN is received tcp immediately arranges to ACK it but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in BSDLite/FreeBSD 2.2.6 implementations it does not check for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry into persist mode if TF_ACKNOW/t_force flags are set.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thus the ACK is sent but TCP does not enter persist mode. So
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the server will not send any probes and there is no retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timer running. The client is in FIN_WAIT2 and might terminate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directly based on the FIN_WAIT2 timer.  In the case that I looked
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at the client machine had crashed.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thus the server will forever stay in CLOSE_WAIT since it is never
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;going to probe, so will never get a RST and hence the app will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;never get an indication of the peer having gone away. Of course,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if there is no FIN_WAIT2 timer implemented then both ends will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;always stay in their respective states.
+<BR>
+<P><P>Note: (based on BSD sockets API)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will occur only when a shutdown() is called since the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client side TCP is still willing to read data until a close or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shutdown(..,RD) is done. Therefore it is perfectly ok in sending
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a FIN and a window of 0.
+<BR>
+<P><P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We have been working on platform independent solution for automated TCP
+</EM><BR>
+<EM>&gt; tests. Although, we do not feel 100% ready, we decided to share our
+</EM><BR>
+<EM>&gt; experience with this forum and also looking forward to get valuable
+</EM><BR>
+<EM>&gt; feedback from you.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Briefly, we test TCP features without performing any modification to 
+</EM><BR>
+<EM>&gt; the tested implementation (using the black-box method).
+</EM><BR>
+<EM>&gt; The basic idea behind the applied methodology is to drive the TCP under
+</EM><BR>
+<EM>&gt; test into a specific state then apply a stimuli and check if we got the
+</EM><BR>
+<EM>&gt; right answer.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We believe that this approach is advantageous to the whole community,
+</EM><BR>
+<EM>&gt; since it gives a measure of correctness of implementations according to 
+</EM><BR>
+<EM>&gt; the RFC.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We have been working parallel to the discussions in this list and
+</EM><BR>
+<EM>&gt; managed to develop formal description of tests, based on previous
+</EM><BR>
+<EM>&gt; versions of &quot;Known TCP Implementation Problems (RFC 2525)&quot;. All test
+</EM><BR>
+<EM>&gt; cases are written in TTCN, an abstract notation, which has common use
+</EM><BR>
+<EM>&gt; in telecom protocol tests.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The use of such an abstraction allows TCP testers to write test scripts
+</EM><BR>
+<EM>&gt; based on this notation or use available tools for automatic compilation
+</EM><BR>
+<EM>&gt; and execution. We also performed these tests on 4 different
+</EM><BR>
+<EM>&gt; implementations (Linux, Solaris, FreeBSD and NT) and managed to detect
+</EM><BR>
+<EM>&gt; errors, which are not addressed by the RFC mentioned before. A
+</EM><BR>
+<EM>&gt; postscript version of the paper (submitted to INFOCOM2000)describing
+</EM><BR>
+<EM>&gt; method and experiences can be found online on
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; <A HREF="http://www.cs.columbia.edu/~hgs/papers/infocom2000/591-2818661292.ps">http://www.cs.columbia.edu/~hgs/papers/infocom2000/591-2818661292.ps</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; We are awaiting your comments,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Roland Gecse, Peter Kremer.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P><PRE>
+-- 
+Vivek Kashyap
+<A HREF="mailto:viv@sequent.com?Subject=Re:%20Automated%20TCP%20test&In-Reply-To=&lt;199907071609.JAA10376@eng4.sequent.com&gt;">viv@sequent.com</A>
+503 578 3422 (o)
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1774.html">Bhavesh Pathak - BasisComm: "doubts in rfc793"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1772.html">Péter Krémer: "Automated TCP test"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1772.html">Péter Krémer: "Automated TCP test"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1773">[ date ]</A>
+<A HREF="index.html#1773">[ thread ]</A>
+<A HREF="subject.html#1773">[ subject ]</A>
+<A HREF="author.html#1773">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:50 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

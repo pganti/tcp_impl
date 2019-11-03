@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Problem on TCP implementation on</TITLE>
+<META NAME="Author" CONTENT="Chetan Kumar (chetan@protocol.ece.iisc.ernet.in)">
+<META NAME="Subject" CONTENT="Problem on TCP implementation on Linux 2.0.30">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Problem on TCP implementation on Linux 2.0.30</H1>
+<!-- received="Wed Jan  7 15:22:49 1998" -->
+<!-- isoreceived="19980107202249" -->
+<!-- sent="Wed, 7 Jan 1998 13:51:39 +0000 (GMT)" -->
+<!-- isosent="19980107135139" -->
+<!-- name="Chetan Kumar" -->
+<!-- email="chetan@protocol.ece.iisc.ernet.in" -->
+<!-- subject="Problem on TCP implementation on Linux 2.0.30" -->
+<!-- id="Pine.LNX.3.95.980107131800.27481A-100000@protocol.ece.iisc.ernet.in" -->
+<STRONG>From:</STRONG> Chetan Kumar (<A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20Problem%20on%20TCP%20implementation%20on%20Linux%202.0.30&In-Reply-To=&lt;Pine.LNX.3.95.980107131800.27481A-100000@protocol.ece.iisc.ernet.in&gt;"><EM>chetan@protocol.ece.iisc.ernet.in</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jan 07 1998 - 08:51:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0869.html">aron@cs.rice.edu: "Clock granularity"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0867.html">Vern Paxson: "Re: Is there a revised rfc2001 ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0871.html">Alan Cox: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0871.html">Alan Cox: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0875.html">Shawn Ostermann: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#868">[ date ]</A>
+<A HREF="index.html#868">[ thread ]</A>
+<A HREF="subject.html#868">[ subject ]</A>
+<A HREF="author.html#868">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;
+<BR>
+Greetings !
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I am running redhat Linux 4,2 kernel 2.0.30, I have done series of
+<BR>
+experiments on my local lan with Linux hosts ( all hosts are 2.0.30),
+<BR>
+<P>I found the following results ( very briefly)
+<BR>
+<P>A-&gt;B
+<BR>
+<P>A &amp; B are Ethernet host and are on the same net. The transmission is good I
+<BR>
+do not find any
+<BR>
+packets retransmitted { I use tcpdump to snoop the packets on the sender
+<BR>
+host and use Tcptrace by Shawn Ostermann to analyze the results}
+<BR>
+<P>A-&gt;B-&gt;C
+<BR>
+<P>Where A &amp; C are on the different network and B is the gateway { though all
+<BR>
+of them are connected to a common hub I use subnet-masking to get two
+<BR>
+network}, all are Ethernet hosts In this case I see that there is around
+<BR>
+100% retransmission ( almost every packet is retransmitted) and of course
+<BR>
+the TCP throughput reduces. 
+<BR>
+<P>A-&gt;B-&gt;C-&gt;D
+<BR>
+<P>In this case A and D are wireless hosts (2 MBPS MTU 1500) and B and C are
+<BR>
+gateways. B and C are connected through Ethernet ( 10 MBPS), both these
+<BR>
+host are on my local lan. In this case I see there is around 120 to 130 %
+<BR>
+retransmission and the trough put decrease accordingly. 
+<BR>
+<P>In all the above experiments the medium was found to be error free and
+<BR>
+packet loss were minimal OR almost nil
+<BR>
+<P>These experiments resulted in conclusion that in Linux if the two end host
+<BR>
+are on different network the TCP do not behave normally. Making many
+<BR>
+unnecessary retransmission and under-utilizing the link capacity. 
+<BR>
+<P>As any one looked in to this case, I am trying to isolate the problem and
+<BR>
+make a proper analysis. If any one has to say any thing on this I will
+<BR>
+accept with thanks.
+<BR>
+<P>please send comments to my personel e-mail since I am not on the list
+<BR>
+<P>Thanks for any comments
+<BR>
+chetan . S
+<BR>
+<P>E-mail <A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20Problem%20on%20TCP%20implementation%20on%20Linux%202.0.30&In-Reply-To=&lt;Pine.LNX.3.95.980107131800.27481A-100000@protocol.ece.iisc.ernet.in&gt;">chetan@protocol.ece.iisc.ernet.in</A>
+<BR>
+<P>WEB PAGE - <A HREF="http://pclab.ece.iisc.ernet.in/chetan">http://pclab.ece.iisc.ernet.in/chetan</A>
+<BR>
+<P>Phone 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work place
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3092282
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3349218      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3347220
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0869.html">aron@cs.rice.edu: "Clock granularity"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0867.html">Vern Paxson: "Re: Is there a revised rfc2001 ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0871.html">Alan Cox: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0871.html">Alan Cox: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0875.html">Shawn Ostermann: "Re: Problem on TCP implementation on Linux 2.0.30"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#868">[ date ]</A>
+<A HREF="index.html#868">[ thread ]</A>
+<A HREF="subject.html#868">[ subject ]</A>
+<A HREF="author.html#868">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

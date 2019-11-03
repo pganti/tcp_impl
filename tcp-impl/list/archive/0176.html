@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH (was Re: draft descripti</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)</H1>
+<!-- received="Wed Mar 19 18:40:21 1997" -->
+<!-- isoreceived="19970319234021" -->
+<!-- sent="Wed, 19 Mar 97 18:34:30 PST" -->
+<!-- isosent="19970320023430" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<!-- id="9703200234.AA10929@mentat.com" -->
+<!-- inreplyto="PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=Re:%20PSH%20(was%20Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;)&In-Reply-To=&lt;9703200234.AA10929@mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 21:34:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#176">[ date ]</A>
+<A HREF="index.html#176">[ thread ]</A>
+<A HREF="subject.html#176">[ subject ]</A>
+<A HREF="author.html#176">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; So you are saying that the sender has to set the PSH bit just before the
+</EM><BR>
+<EM>&gt; &gt; receiver closes the window all the way, even if it has unsent data queued
+</EM><BR>
+<EM>&gt; &gt; and ready to go?  The &quot;definite implementation bug&quot; is on the receiver side.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; No, I meant the opposite: if the sender doesn't have any more data to send,
+</EM><BR>
+<EM>&gt; it needs to set PSH.  The receiver's window doesn't enter into it, it's
+</EM><BR>
+<EM>&gt; just the question of whether the sender at the moment could not possibly
+</EM><BR>
+<EM>&gt; send any more data.
+</EM><BR>
+<P>I certainly agree that if the sender has no more data to send, then it must
+<BR>
+set the PSH bit.  If it isn't doing that then the sender is more broken than
+<BR>
+the receiver.  I saw the term &quot;deadlock&quot; in the problem description, which
+<BR>
+I thought implied that neither side could proceed.  If the sender has more
+<BR>
+data to send, but is looking at a closed (or silly) window, then it can not
+<BR>
+proceed, and is under no obligation to show a PSH bit.
+<BR>
+<P>What concerns me is that some of this discussion has seemed to imply that a
+<BR>
+trace showing a sender which almost never turns on the PSH bit somehow implies
+<BR>
+that there is something wrong with the sender implementation.  This is clearly
+<BR>
+not true.  If the sender is faster than the receiver, meaning that the sender
+<BR>
+always has unsent data ready to go, then there is no obligation to turn on the
+<BR>
+PSH bit until the FIN goes out.  If there really is a receiver that will
+<BR>
+refuse to send any data upstream until it sees a PSH bit, and will in fact
+<BR>
+let its receive window shrink to zero as a result, then I hope we can all agree
+<BR>
+that this is a receiver problem, not a sender problem.
+<BR>
+<P>As for the question of what the receiver should do that is better, well almost
+<BR>
+anything, right?  Send data upstream immediately...  Count bytes and send data
+<BR>
+upstream when a threshold is reached...  Send everything upstream if a timer
+<BR>
+goes off...  Don't hold more than half the window...  All of the above!
+<BR>
+<P>jt
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0177.html">Vern Paxson: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#176">[ date ]</A>
+<A HREF="index.html#176">[ thread ]</A>
+<A HREF="subject.html#176">[ subject ]</A>
+<A HREF="author.html#176">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

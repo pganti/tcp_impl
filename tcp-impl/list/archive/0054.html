@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 18:24:40 1997" -->
+<!-- isoreceived="19970211232440" -->
+<!-- sent="Tue, 11 Feb 1997 18:06:16 +0000" -->
+<!-- isosent="19970211180616" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="3300B518.3C75@spider.com" -->
+<!-- inreplyto="9702111755.AA16096@ludwigia.raleigh.ibm.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;3300B518.3C75@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 13:06:16 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#54">[ date ]</A>
+<A HREF="index.html#54">[ thread ]</A>
+<A HREF="subject.html#54">[ subject ]</A>
+<A HREF="author.html#54">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Thomas Narten wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; My apologies for not being clear enough.  The scenario to which
+</EM><BR>
+<EM>&gt; &gt; I was referring  was a client TCP that does not support RFC1122
+</EM><BR>
+<EM>&gt; &gt; half duplex close with RST (it is a SHOULD, not a MUST).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Minor nit, but text on page 88 says &quot;MAY&quot;, not &quot;SHOULD&quot;:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;             A host MAY implement a &quot;half-duplex&quot; TCP close sequence, so
+</EM><BR>
+<EM>&gt;             that an application that has called CLOSE cannot continue to
+</EM><BR>
+<EM>&gt;             read data from the connection.  If such a host issues a
+</EM><BR>
+<EM>&gt;             CLOSE call while received data is still pending in TCP, or
+</EM><BR>
+<EM>&gt;             if new data is received after CLOSE is called, its TCP
+</EM><BR>
+<EM>&gt;             SHOULD send a RST to show that data was lost.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>The half duplex close is a MAY, but if it is implemented then
+<BR>
+the RST transmission is a SHOULD...I'm not suggesting that half
+<BR>
+duplex close be mandatory, but that when it is used, RSTs are mandatory
+<BR>
+if received data is still pending.
+<BR>
+<P><EM>&gt;  This causes the server process to hang if the client closes the
+</EM><BR>
+<EM>&gt; &gt; connection with traffic in the pipe.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I still don't understand this. Under no circumstances should a server
+</EM><BR>
+<EM>&gt; &quot;hang&quot; and stop (re)transmitting TCP segments if it has data it wants
+</EM><BR>
+<EM>&gt; to send or there is unacknowledged data in the pipe. If the client is
+</EM><BR>
+<EM>&gt; advertising a zero window, the server is required to periodically
+</EM><BR>
+<EM>&gt; probe. If the send window is full, the server must retransmit when
+</EM><BR>
+<EM>&gt; ACKs don't come back. If there is unsent data and the send window is
+</EM><BR>
+<EM>&gt; not full, the server will send. So the server should never &quot;hang&quot; as a
+</EM><BR>
+<EM>&gt; result of not sending TCP segments unless it is broken.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><EM>&gt; If the server is sending segments, but the client is responding to
+</EM><BR>
+<EM>&gt; them incorrectly (e.g., by silently discarding them), then the client
+</EM><BR>
+<EM>&gt; is broken.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;  Maybe it only happens for your second
+</EM><BR>
+<EM>&gt; &gt; scenario: if the server blocks on a write() when a send window of data
+</EM><BR>
+<EM>&gt; &gt; is unacknowledged;  if there is enough data to send then the send
+</EM><BR>
+<EM>&gt; &gt; window will go down to zero - presumably this ends up blocking the
+</EM><BR>
+<EM>&gt; &gt; write.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But normal TCP retransmit timers should take care of this case. The
+</EM><BR>
+<EM>&gt; server shouldn't stop transmitting.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; I think the sequence of events is as follows:
+</EM><BR>
+<EM>&gt; &gt; 1.  server  is blocked on write()
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Just because the server (more specifically, the calling application)
+</EM><BR>
+<EM>&gt; is blocked on a write call doesn't mean that TCP can stop sending
+</EM><BR>
+<EM>&gt; packets (i.e., it still needs to retransmit lost packets in order to
+</EM><BR>
+<EM>&gt; advance the window of the send window is full).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 2.  client closes normally and server ACKs (client in FIN-WAIT-2
+</EM><BR>
+<EM>&gt; &gt; and server in CLOSE-WAIT).  No RST because RFC1122 is not followed.
+</EM><BR>
+<EM>&gt; &gt; 3.  server never closes
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Seems to me that the server is never closing because it is not
+</EM><BR>
+<EM>&gt; retransmitting unacknowledged data.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; What am I missing?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>The application process hangs, not the server TCP. Maybe I'm 
+<BR>
+getting confused too.  My guess is the server TCP is
+<BR>
+continually probing at this point (and so the application process
+<BR>
+hangs).  I'll try and get a tcpdump of this behaviour (Josh, do
+<BR>
+you have one handy?) by modifying our TCP to not do RFC1122 RSTs.
+<BR>
+<P>ian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0053.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#54">[ date ]</A>
+<A HREF="index.html#54">[ thread ]</A>
+<A HREF="subject.html#54">[ subject ]</A>
+<A HREF="author.html#54">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

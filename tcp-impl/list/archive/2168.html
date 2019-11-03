@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Bob Braden (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 19:28:53 2000" -->
+<!-- isoreceived="20000616232853" -->
+<!-- sent="Fri, 16 Jun 2000 23:21:13 GMT" -->
+<!-- isosent="20000616232113" -->
+<!-- name="Bob Braden" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="200006162321.XAA00899@gra.isi.edu" -->
+<!-- inreplyto="Intentional Host Reordering of TCP Fragments" -->
+<STRONG>From:</STRONG> Bob Braden (<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 19:21:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2168">[ date ]</A>
+<A HREF="index.html#2168">[ thread ]</A>
+<A HREF="subject.html#2168">[ subject ]</A>
+<A HREF="author.html#2168">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Fri Jun 16 15:39:17 2000
+<BR>
+&nbsp;&nbsp;*&gt; Subject: Re: Intentional Host Reordering of TCP Fragments
+<BR>
+&nbsp;&nbsp;*&gt; To: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">braden@ISI.EDU</A> (Bob Braden)
+<BR>
+&nbsp;&nbsp;*&gt; Date: Fri, 16 Jun 2000 22:55:25 +0100 (BST)
+<BR>
+&nbsp;&nbsp;*&gt; Cc: <A HREF="mailto:nseddigh@nortelnetworks.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">nseddigh@nortelnetworks.com</A>, <A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">kuznet@ms2.inr.ac.ru</A>, <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+&nbsp;&nbsp;*&gt; In-Reply-To: &lt;<A HREF="mailto:200006162037.UAA00552@gra.isi.edu?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">200006162037.UAA00552@gra.isi.edu</A>&gt; from &quot;Bob Braden&quot; at Jun 16, 2000 08:37:45 PM
+<BR>
+&nbsp;&nbsp;*&gt; X-Mailer: ELM [version 2.5 PL1]
+<BR>
+&nbsp;&nbsp;*&gt; MIME-Version: 1.0
+<BR>
+&nbsp;&nbsp;*&gt; Content-Transfer-Encoding: 7bit
+<BR>
+&nbsp;&nbsp;*&gt; From: Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">alan@lxorguk.ukuu.org.uk</A>&gt;
+<BR>
+&nbsp;&nbsp;*&gt; Sender: <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162321.XAA00899@gra.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A>
+<BR>
+&nbsp;&nbsp;*&gt; Precedence: bulk
+<BR>
+&nbsp;&nbsp;*&gt; X-Lines: 16
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; order without having all the segment in a buffer at one time, since
+<BR>
+&nbsp;&nbsp;*&gt; &gt; applications certainly do not deliver bytes to the kernel in
+<BR>
+&nbsp;&nbsp;*&gt; &gt; reverse order.  And if they are all there at one time, you can
+<BR>
+&nbsp;&nbsp;*&gt; &gt; compute the checksum over it.  Oh, well.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; So you want to do two passes over the data then send not one pass over the
+<BR>
+&nbsp;&nbsp;*&gt; data sending as you go.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>I don't think I said two passes, but this is not the time/place to
+<BR>
+have this discussion (AGAIN!)
+<BR>
+<P>Bob
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2169.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2168">[ date ]</A>
+<A HREF="index.html#2168">[ thread ]</A>
+<A HREF="subject.html#2168">[ subject ]</A>
+<A HREF="author.html#2168">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

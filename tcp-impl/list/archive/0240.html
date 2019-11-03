@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace</H1>
+<!-- received="Mon Mar 24 23:31:59 1997" -->
+<!-- isoreceived="19970325043159" -->
+<!-- sent="Mon, 24 Mar 1997 23:22:46 -0800" -->
+<!-- isosent="19970325072246" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="Re: OT 1.1.2 trace" -->
+<!-- id="199703250722.XAA19533@feller.mentat.com" -->
+<!-- inreplyto="OT 1.1.2 trace" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=Re:%20OT%201.1.2%20trace&In-Reply-To=&lt;199703250722.XAA19533@feller.mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 25 1997 - 02:22:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0241.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0238.html">William Allen Simpson: "OT 1.1.2 trace"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0242.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#240">[ date ]</A>
+<A HREF="index.html#240">[ thread ]</A>
+<A HREF="subject.html#240">[ subject ]</A>
+<A HREF="author.html#240">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bill:
+<BR>
+<P><EM>&gt; Fri Feb 28 22:00:24 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; Ether: len 60 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; IP: len 40 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; TCP: 110-&gt;1024 Seq x8c84b464 Ack xcae7010 ACK Wnd 17520
+</EM><BR>
+...
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; *** Note that the Ack (above) with no data was immediately followed by
+</EM><BR>
+<EM>&gt;     data (below).  Must not be using delayed Ack, or delay too short.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Fri Feb 28 22:00:24 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; Ether: len 70 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; IP: len 56 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; TCP: 110-&gt;1024 Seq x8c84b464 Ack xcae7010 ACK PSH Wnd 17520 Data 16
+</EM><BR>
+<P>If I understand your timestamp correctly, the data followed the ACK in the
+<BR>
+same day, date, and year.  I'm going to go out on a limb and further guess
+<BR>
+that 22:00:24 is hr:mm:ss, and that you are concluding that because the data
+<BR>
+follows the ACK within a second that this is indicative of insufficient
+<BR>
+delayed ACK.  I have to say that this is the first time a stack based on our
+<BR>
+implementation has been accused of *not* delaying ACKs.
+<BR>
+<P>...
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Fri Feb 28 22:00:25 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; Ether: len 86 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; IP: len 71 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; TCP: 110-&gt;1024 Seq x8c84b492 Ack xcae702c ACK PSH Wnd 17520 Data 31
+</EM><BR>
+...
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; *** No separate Ack here, but we see a PSH (above) on a short data
+</EM><BR>
+<EM>&gt;     packet, inexplicably followed by a full data packet (below).
+</EM><BR>
+<EM>&gt;     That PSH proves that the buffer was idle.  AIMS must call OT
+</EM><BR>
+<EM>&gt;     separately, but no Nagle algorithm!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Fri Feb 28 22:00:25 1997 - e0 recv:
+</EM><BR>
+<EM>&gt; Ether: len 1514 00:00:c0:74:36:20-&gt;00:80:c7:5b:e8:a8 type IP
+</EM><BR>
+<EM>&gt; IP: len 1500 206.31.151.21-&gt;206.31.151.78 ihl 20 ttl 254 DF prot TCP
+</EM><BR>
+<EM>&gt; TCP: 110-&gt;1024 Seq x8c84b4b1 Ack xcae702c ACK Wnd 17520 Data 1460
+</EM><BR>
+<P>The first segment is short, but the PSH bit indicates that it is all we
+<BR>
+have seen.  There is no un-ACKed data, so out it goes.  The second segment
+<BR>
+is a full MSS.  You seem to have misinterpreted the Nagle algorithm.  Please
+<BR>
+go read it again.
+<BR>
+<P>This stuff is worse than I expected.  I'm going to bed.
+<BR>
+<P>jt
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0241.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0239.html">David S. Miller: "Re: OT 1.1.2 trace"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0238.html">William Allen Simpson: "OT 1.1.2 trace"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0242.html">William Allen Simpson: "Re: OT 1.1.2 trace"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#240">[ date ]</A>
+<A HREF="index.html#240">[ thread ]</A>
+<A HREF="subject.html#240">[ subject ]</A>
+<A HREF="author.html#240">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

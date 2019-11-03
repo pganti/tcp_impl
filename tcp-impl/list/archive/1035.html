@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: possible bug in PAWS</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@dm.cobaltmicro.com)">
+<META NAME="Subject" CONTENT="possible bug in PAWS">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>possible bug in PAWS</H1>
+<!-- received="Wed Mar 25 15:39:58 1998" -->
+<!-- isoreceived="19980325203958" -->
+<!-- sent="Wed, 25 Mar 1998 15:34:54 -0800" -->
+<!-- isosent="19980325233454" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@dm.cobaltmicro.com" -->
+<!-- subject="possible bug in PAWS" -->
+<!-- id="199803252334.PAA01546@dm.cobaltmicro.com" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20possible%20bug%20in%20PAWS&In-Reply-To=&lt;199803252334.PAA01546@dm.cobaltmicro.com&gt;"><EM>davem@dm.cobaltmicro.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 25 1998 - 18:34:54 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1034.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1037.html">Thomas Skibo: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1044.html">Vern Paxson: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1053.html">Matt Mathis: "Re: possible bug in PAWS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1035">[ date ]</A>
+<A HREF="index.html#1035">[ thread ]</A>
+<A HREF="subject.html#1035">[ subject ]</A>
+<A HREF="author.html#1035">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In the cases where an implementation uses fine grained timestamps
+<BR>
+for it's RFC1323 timestamp implementation, PAWS does a lot of stupid
+<BR>
+things if segments are re-ordered at all.  Here is one trace example
+<BR>
+of the behavior in question:
+<BR>
+<P>14:44:04.222503 dm.ftp-data &gt; fis.1451: . 377929:379377(1448) ack 1 win 31856 &lt;nop,nop,timestamp 201736 16805698&gt; (DF) [tos 0x8]
+<BR>
+14:44:04.236085 fis.edu.1451 &gt; dm.ftp-data: . ack 350417 win 30408 &lt;nop,nop,timestamp 16805700 201729,nop,nop, sack 3 {373585:375033}{369241:372137}{351865:367793} &gt; (DF) [tos 0x8]
+<BR>
+14:44:04.236129 dm.ftp-data &gt; fis.1451: . 379377:380825(1448) ack 1 win 31856 &lt;nop,nop,timestamp 201737 16805700&gt; (DF) [tos 0x8]
+<BR>
+<P>All is OK so far, then the trouble begins:
+<BR>
+<P>14:44:04.254084 fis.1451 &gt; dm.ftp-data: . ack 350417 win 30408 &lt;nop,nop,timestamp 16805702 201730,nop,nop, sack 2 {369241:376481}{351865:367793} &gt; (DF) [tos 0x8]
+<BR>
+14:44:04.257324 fis.1451 &gt; dm.ftp-data: . ack 350417 win 30408 &lt;nop,nop,timestamp 16805701 201729,nop,nop, sack 2 {369241:375033}{351865:367793} &gt; (DF) [tos 0x8]
+<BR>
+<P>These two segments were reordered (by whatever means) by the network.
+<BR>
+It is obvious for two reasons:
+<BR>
+<P>1) the timestamp sent by 'fis' in this trace decreases (also the
+<BR>
+&nbsp;&nbsp;&nbsp;echo'd one's do too...)
+<BR>
+2) the SACK options in the first ACK report further progress
+<BR>
+&nbsp;&nbsp;&nbsp;in the reassembly queue than the second one does
+<BR>
+<P>14:44:04.257357 dm.ftp-data &gt; fis.1451: . ack 1 win 31856 &lt;nop,nop,timestamp 201739 16805702&gt; (DF) [tos 0x8]
+<BR>
+<P>The second ack gets dropped, due to the PAWS test, and an ACK is
+<BR>
+returned as RFC1323 says should happen.
+<BR>
+<P>I only noticed this weird behavior with fine grained timestamps and
+<BR>
+ACK's from a receiver.
+<BR>
+<P>What happens when this happens to data segments?  This connection path
+<BR>
+being traced does reorder segments often, so I bet I can catch such a
+<BR>
+scenerio in action quite easy with some trying. (ie. senders data
+<BR>
+bearing packets get reordered, and the PAWS test drops them at the
+<BR>
+receiver).
+<BR>
+<P>The end result of this, is that over this link the bandwidth realized
+<BR>
+for bulk data transfer is halfed.
+<BR>
+<P>Comments?  Is this a true flaw in PAWS as specified or did I miss
+<BR>
+something?
+<BR>
+<P>Later,
+<BR>
+David S. Miller
+<BR>
+<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20possible%20bug%20in%20PAWS&In-Reply-To=&lt;199803252334.PAA01546@dm.cobaltmicro.com&gt;">davem@dm.cobaltmicro.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1034.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1036.html">braden@ISI.EDU: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1037.html">Thomas Skibo: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1044.html">Vern Paxson: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1053.html">Matt Mathis: "Re: possible bug in PAWS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1035">[ date ]</A>
+<A HREF="index.html#1035">[ thread ]</A>
+<A HREF="subject.html#1035">[ subject ]</A>
+<A HREF="author.html#1035">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

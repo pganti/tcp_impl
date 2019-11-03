@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Lite-2 TCP bug: Redundant FIN in</TITLE>
+<META NAME="Author" CONTENT="Jason Thorpe (thorpej@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution</H1>
+<!-- received="Thu Jul  9 12:17:04 1998" -->
+<!-- isoreceived="19980709161704" -->
+<!-- sent="Thu, 09 Jul 1998 11:59:55 -0700" -->
+<!-- isosent="19980709185955" -->
+<!-- name="Jason Thorpe" -->
+<!-- email="thorpej@nas.nasa.gov" -->
+<!-- subject="Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution" -->
+<!-- id="199807091859.LAA10452@lestat.nas.nasa.gov" -->
+<STRONG>From:</STRONG> Jason Thorpe (<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;199807091859.LAA10452@lestat.nas.nasa.gov&gt;"><EM>thorpej@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 09 1998 - 14:59:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1155.html">msbiz432d72581@hol.gr: "A NAASCAR Related Investment (3011)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1156">[ date ]</A>
+<A HREF="index.html#1156">[ thread ]</A>
+<A HREF="subject.html#1156">[ subject ]</A>
+<A HREF="author.html#1156">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi folks...
+<BR>
+<P>We've been tracking a bug in the NetBSD TCP for a while that caused
+<BR>
+connections to get stuck in CLOSING state.  We finally found the problem,
+<BR>
+it was a suggestion that fixes another bug, proposed in Stevens Vol 2.
+<BR>
+<P>Here is a summary of the original bug, from NetBSD problem report kern/3737:
+<BR>
+<P>&nbsp;----- snip -----
+<BR>
+<P>On page 1005 of &quot;TCP/IP Illustrated Vol.2&quot;, Exercise 29.5:
+<BR>
+<P>&quot;Figure 18.19 in Volume 1 and Figure 14 in RFC 793 both show four segments
+<BR>
+exchanged during a simultaneous close. But if we trace a simultaneous close
+<BR>
+between two Net/3 systems, or if we watch the close sequence following a self-
+<BR>
+connect on a Net/3 system, we see six segments, not four. The extra two 
+<BR>
+segments are a retransmission of the FIN by each end when the other's FIN
+<BR>
+is received. Where is the bug and what is the fix?&quot;
+<BR>
+<P>Answer on page 1090:
+<BR>
+<P>&quot;The bug is in the entry tcp_outflags[TCPS_CLOSING] shown in Figure 24.16.
+<BR>
+It specifies the TH_FIN flag, whereas the state transition diagram
+<BR>
+(Figure 24.15) doesn't specify that the FIN should be transmitted. To fix
+<BR>
+this, remove TH_FIN from the tcp_outflags entry for this state. The bug is
+<BR>
+relatively harmless - it just causes two extra segments to be exchanged - and
+<BR>
+a simultaneous close or a close following a self-connetc is rare.&quot;
+<BR>
+<P>&nbsp;----- snip -----
+<BR>
+<P>The fix suggested by Stevens has a nasty side-effect, however.  If the
+<BR>
+FIN transmitted during the transition to FIN_WAIT_1 is lost for whatever
+<BR>
+reason, and we receive a FIN from the peer (causing us to transition to
+<BR>
+CLOSING), retransmissions will not include FIN, and so you lose.
+<BR>
+<P>We reverted the Stevens fix, and so we're back to the original problem,
+<BR>
+which is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- User closes, we transition to FIN_WAIT_1 and send FIN to peer.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Peer closes, sends FIN without ACK, we transition to CLOSING
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and send an ACK to peer.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- BUT!  CLOSING's outflags has TH_FIN (because we need to send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN when we retransmit), but this FIN is redundant, and requires
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the other side to ACK it, thus bloating the packet count for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;simultaneous close.
+<BR>
+<P>The fix we have come up with is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If our state says &quot;FIN&quot;, and we have already sent a FIN,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and we are not retransmitting, clear FIN.
+<BR>
+<P>...and the patch, against NetBSD's tcp_output.c,v 1.40, but applicable
+<BR>
+to any Lite-2 tcp_output.c:
+<BR>
+<P>Index: tcp_output.c
+<BR>
+===================================================================
+<BR>
+RCS file: /cvsroot/src/sys/netinet/tcp_output.c,v
+<BR>
+retrieving revision 1.40
+<BR>
+diff -c -r1.40 tcp_output.c
+<BR>
+*** tcp_output.c	1998/07/07 00:04:59	1.40
+<BR>
+--- tcp_output.c	1998/07/09 19:15:49
+<BR>
+***************
+<BR>
+*** 334,339 ****
+<BR>
+--- 334,361 ----
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
++ 	 * This chunk of code avoids the following scenario:
+<BR>
++ 	 *
+<BR>
++ 	 *	- User closes, transitions to FIN_WAIT_1, and sends
+<BR>
++ 	 *	  a FIN to the peer.
+<BR>
++ 	 *
+<BR>
++ 	 *	- Peer sends FIN without ACK, we transition to CLOSING,
+<BR>
++ 	 *	  and send an ACK to the peer (TF_ACKNOW set in tcp_input()).
+<BR>
++ 	 *
+<BR>
++ 	 *	- CLOSING state requires FIN on retransmission, but
+<BR>
++ 	 *	  if we're not retransmitting, we will end up sending
+<BR>
++ 	 *	  a redundant FIN, which requires the other side to
+<BR>
++ 	 *	  transmit a redundant ACK.
+<BR>
++ 	 *
+<BR>
++ 	 * We avoid this by checking to see if our state says we should
+<BR>
++ 	 * send a FIN and we have already sent a FIN and are not
+<BR>
++ 	 * retransmitting.
+<BR>
++ 	 */
+<BR>
++ 	if ((flags &amp; TH_FIN) != 0 &amp;&amp; (tp-&gt;t_flags &amp; TF_SENTFIN) != 0 &amp;&amp;
+<BR>
++ 	    tp-&gt;snd_nxt != tp-&gt;snd_una)
+<BR>
++ 		flags &amp;= ~TH_FIN;
+<BR>
++ 
+<BR>
++ 	/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Send if we owe peer an ACK.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp-&gt;t_flags &amp; TF_ACKNOW)
+<BR>
+<P>Does this look like a reasonable solution to the problem?
+<BR>
+<P>Jason R. Thorpe                                       <A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20Lite-2%20TCP%20bug:%20Redundant%20FIN%20in%20CLOSING,%20proposed%20solution&In-Reply-To=&lt;199807091859.LAA10452@lestat.nas.nasa.gov&gt;">thorpej@nas.nasa.gov</A>
+<BR>
+NASA Ames Research Center                            Home: +1 408 866 1912
+<BR>
+NAS: M/S 258-5                                       Work: +1 650 604 0935
+<BR>
+Moffett Field, CA 94035                             Pager: +1 650 940 5942
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1157.html">Peter Warren: "Sniffer format specs available?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1155.html">msbiz432d72581@hol.gr: "A NAASCAR Related Investment (3011)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1159.html">Charles M. Hannum: "Re: Lite-2 TCP bug: Redundant FIN in CLOSING, proposed solution"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1156">[ date ]</A>
+<A HREF="index.html#1156">[ thread ]</A>
+<A HREF="subject.html#1156">[ subject ]</A>
+<A HREF="author.html#1156">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

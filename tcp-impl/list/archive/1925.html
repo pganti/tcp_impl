@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Usage of packet returned in ICMP</TITLE>
+<META NAME="Author" CONTENT="C. M. Heard/VVNET, Inc. (heard@vvnet.com)">
+<META NAME="Subject" CONTENT="Usage of packet returned in ICMP error messages">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Usage of packet returned in ICMP error messages</H1>
+<!-- received="Tue Nov 16 15:23:35 1999" -->
+<!-- isoreceived="19991116202335" -->
+<!-- sent="Tue, 16 Nov 1999 12:10:30 -0800 (PST)" -->
+<!-- isosent="19991116201030" -->
+<!-- name="C. M. Heard/VVNET, Inc." -->
+<!-- email="heard@vvnet.com" -->
+<!-- subject="Usage of packet returned in ICMP error messages" -->
+<!-- id="Pine.BSF.4.10.9911161206160.19909-100000@shell16.ba.best.com" -->
+<STRONG>From:</STRONG> C. M. Heard/VVNET, Inc. (<A HREF="mailto:heard@vvnet.com?Subject=Re:%20Usage%20of%20packet%20returned%20in%20ICMP%20error%20messages&In-Reply-To=&lt;Pine.BSF.4.10.9911161206160.19909-100000@shell16.ba.best.com&gt;"><EM>heard@vvnet.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 16 1999 - 15:10:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1924.html">Vern Paxson: "Re: a question about delayed ACK policy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1925">[ date ]</A>
+<A HREF="index.html#1925">[ thread ]</A>
+<A HREF="subject.html#1925">[ subject ]</A>
+<A HREF="author.html#1925">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Greetings,
+<BR>
+<P>The IETF MPLS (multi-protocol label switching) working group is currently
+<BR>
+discussing an internet draft &lt;draft-ietf-mpls-icmp-00.txt&gt; which proposes
+<BR>
+some modifications to ICMP error messages that are not entirely backward
+<BR>
+compatible with RFC 1812 (the router requirements document) and RFC 1122
+<BR>
+(the host requirements document).  Specifically, the draft proposes
+<BR>
+that when label-switching routers send an ICMP error message they will
+<BR>
+put a data structure containing the MPLS shim header immediately after
+<BR>
+the first 8 bytes of user data from the original datagram.  As most
+<BR>
+readers of this list are probably aware, RFC 1812 and RFC 1122 permit
+<BR>
+ICMP error message to contain more than 8 bytes of user data from the
+<BR>
+original datagram, but both documents specify that any user data which
+<BR>
+is returned will be copied from the original datagram without change.
+<BR>
+Thus, an application implemented in accordance with those RFCs that
+<BR>
+receives an ICMP error message formatted in accordance with the proposed
+<BR>
+draft could misinterpret the shim header structure as returned user data.
+<BR>
+<P>The question arises whether there are, in fact, any applications which
+<BR>
+make use of extra user data (beyond the first 8 bytes) that is returned
+<BR>
+in ICMP error messages.  If the readers of this list are aware of any
+<BR>
+such applications I would appreciate hearing about them.
+<BR>
+<P>Many thanks,
+<BR>
+<P>Mike
+<BR>
+<PRE>
+--
+C. M. Heard/VVNET, Inc.
+<A HREF="mailto:heard@vvnet.com?Subject=Re:%20Usage%20of%20packet%20returned%20in%20ICMP%20error%20messages&In-Reply-To=&lt;Pine.BSF.4.10.9911161206160.19909-100000@shell16.ba.best.com&gt;">heard@vvnet.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1924.html">Vern Paxson: "Re: a question about delayed ACK policy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1926.html">Vernon Schryver: "Re: Usage of packet returned in ICMP error messages"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1927.html">Bill Sommerfeld: "Re: Usage of packet returned in ICMP error messages"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1925">[ date ]</A>
+<A HREF="index.html#1925">[ thread ]</A>
+<A HREF="subject.html#1925">[ subject ]</A>
+<A HREF="author.html#1925">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

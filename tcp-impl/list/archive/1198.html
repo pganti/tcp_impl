@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revision RFC 2001 (draft-iet</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)</H1>
+<!-- received="Wed Aug 12 09:15:20 1998" -->
+<!-- isoreceived="19980812131520" -->
+<!-- sent="Wed, 12 Aug 1998 12:12:00 -0400" -->
+<!-- isosent="19980812161200" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<!-- id="199808121612.MAA04021@zippy.psc.edu" -->
+<!-- inreplyto="199808082021.QAA03488@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;199808121612.MAA04021@zippy.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 12 1998 - 12:12:00 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1199.html">David Borman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1197.html">CHRIS.BUCKMASTER@wemail.wisenergy.com: "unsubscribe"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1192.html">Mark Allman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1199.html">David Borman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1198">[ date ]</A>
+<A HREF="index.html#1198">[ thread ]</A>
+<A HREF="subject.html#1198">[ subject ]</A>
+<A HREF="author.html#1198">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+There is a problem with RFC2001 bis in regards to the definition of
+<BR>
+Maximum Segment Size.  The SYN negotiation mechanism gives the
+<BR>
+impression that MSS is a property of a connection.  However due to the
+<BR>
+nature of pMTU discovery, it is not assured that the the two ends of a
+<BR>
+connection agree on the MSS once the data starts flowing.  (The
+<BR>
+simplest example is two FDDI attached hosts w/ gigabit ethernet in the
+<BR>
+middle, but in one direction there is insufficient data to trigger pMTU
+<BR>
+discovery.  Another example is a pair of FDDI attached hosts with
+<BR>
+asymmetric routing one way through gigabit ethernet somewhere in the
+<BR>
+middle).
+<BR>
+<P>MSS is better described as a sender state variable, which may or may
+<BR>
+not agree with the other end of the connection.
+<BR>
+<P>As a consequence, algorithms that require the receiver to know the
+<BR>
+senders segment size can not, in general, be implemented correctly.
+<BR>
+<P>In the draft, the sentence &quot;Specifically, an ACK MUST be generated for
+<BR>
+every second full-sized segment.&quot;, is not sufficient to assure correct
+<BR>
+operation because the receiver can not identify segments which the
+<BR>
+sender considers to be full sized.
+<BR>
+<P>I suggest changing the paragraph to note that the classical delayed ACK
+<BR>
+specification predates pMTU discovery, and is no longer sufficient.
+<BR>
+Use the simpler, more explicit:
+<BR>
+&quot;An ACK MUST be generated for every second segment, regardless of
+<BR>
+size.  (replacing &quot;second&quot; by.....?)
+<BR>
+<P>Yes, all(?) existing implementation are non-conformant, and yes all(?)
+<BR>
+can be made to misbehave on real paths.  (In the above FDDI/ethernet
+<BR>
+examples most receivers send one ACK per six segments.  We have one
+<BR>
+trace where the receiver was ACKing every 2*4096 Bytes, but the sender
+<BR>
+was using 512 Byte segments, causing 17 packet bursts during
+<BR>
+slow-start).
+<BR>
+<P>This could also be introduced into known bugs.... 
+<BR>
+<P>I also suspect there is a parallel bug in the receiver side silly
+<BR>
+window avoidance.....
+<BR>
+<P>--MM--
+<BR>
+Sorry for the rushed tone - I travel this afternoon, and will not be
+<BR>
+at the IETF :-(
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1199.html">David Borman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1197.html">CHRIS.BUCKMASTER@wemail.wisenergy.com: "unsubscribe"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1192.html">Mark Allman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1199.html">David Borman: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1198">[ date ]</A>
+<A HREF="index.html#1198">[ thread ]</A>
+<A HREF="subject.html#1198">[ subject ]</A>
+<A HREF="author.html#1198">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: N connections</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: N connections">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: N connections</H1>
+<!-- received="Thu Apr 23 15:58:15 1998" -->
+<!-- isoreceived="19980423195815" -->
+<!-- sent="Thu, 23 Apr 1998 15:58:02 -0700" -->
+<!-- isosent="19980423225802" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: N connections" -->
+<!-- id="199804232258.PAA20392@aland.bbn.com" -->
+<!-- inreplyto="199804232243.PAA38472@bossette.engr.sgi.com" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20N%20connections&In-Reply-To=&lt;199804232258.PAA20392@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 18:58:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1094.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1093">[ date ]</A>
+<A HREF="index.html#1093">[ thread ]</A>
+<A HREF="subject.html#1093">[ subject ]</A>
+<A HREF="author.html#1093">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199804232243.PAA38472@bossette.engr.sgi.com?Subject=Re:%20N%20connections&In-Reply-To=&lt;199804232258.PAA20392@aland.bbn.com&gt;">199804232243.PAA38472@bossette.engr.sgi.com</A>&gt;, Sam Manthorpe writes:
+<BR>
+<P><EM>&gt;&gt; In particular, consider a case where all N connections are sending at their
+</EM><BR>
+<EM>&gt;&gt; full window size, W, and compare their congestion response with a single
+</EM><BR>
+<EM>&gt;&gt; connection sending with window size W*N.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; If a router drops a datagram to signal congestion, the single connection
+</EM><BR>
+<EM>&gt;&gt; will do a fast recovery and resume sending with window size of W(N/2).
+</EM><BR>
+<EM>&gt;&gt; With N connections, one connection will do a fast recover and resume sending
+</EM><BR>
+<EM>&gt;&gt; with window size W/2 -- so the N connections have an effective window of
+</EM><BR>
+<EM>&gt;&gt; W((2N-1)/2) or nearly twice as large as the single connection.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Yes, but it's even more complicated than that; the one connection is 
+</EM><BR>
+<EM>&gt;significantly less likely to experience subsequent loss after going
+</EM><BR>
+<EM>&gt;into fast-recovery than the N connections which make a much more modest
+</EM><BR>
+<EM>&gt;reduction and continue to overload the network.  As a result the N connections
+</EM><BR>
+<EM> &gt;,
+</EM><BR>
+<EM>&gt;seen as a whole, are likely to see more lost packets than the single
+</EM><BR>
+<EM>&gt;connection and are likely to undergo further window shrinkages.
+</EM><BR>
+<P>Well, yes and no.  Yes because the N connections have reduced sending not
+<BR>
+at all, they are presumably good candidates to have packets dropped.
+<BR>
+<P>But, unless we deploy something like RED, remember that there are results
+<BR>
+suggesting that TCP connections tend to synchronize in the bottleneck
+<BR>
+queue, with the result that the smallest TCP connection gets penalized more
+<BR>
+often than one would expect.  So we may nail one connection until we've
+<BR>
+driven it to a tiny window, then start reducing the next connection.
+<BR>
+<P>In any case, our behavior will, in no way, correctly approximate that of
+<BR>
+the N*W window size single TCP.
+<BR>
+<P>Craig
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1094.html">Sally Floyd: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1092.html">Sam Manthorpe: "Re: N connections"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1093">[ date ]</A>
+<A HREF="index.html#1093">[ thread ]</A>
+<A HREF="subject.html#1093">[ subject ]</A>
+<A HREF="author.html#1093">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BSD 4.4 TCP header predictio</TITLE>
+<META NAME="Author" CONTENT="Ramesh Shankar (RSHANKAR@novell.com)">
+<META NAME="Subject" CONTENT="Re: BSD 4.4 TCP header prediction code error - SecondaryEffect">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BSD 4.4 TCP header prediction code error - SecondaryEffect</H1>
+<!-- received="Thu, 20 Jan 2000 18:10:53 -0700" -->
+<!-- isoreceived="20000121011053" -->
+<!-- sent="Thu, 20 Jan 2000 18:10:53 -0700" -->
+<!-- isosent="20000121011053" -->
+<!-- name="Ramesh Shankar" -->
+<!-- email="RSHANKAR@novell.com" -->
+<!-- subject="Re: BSD 4.4 TCP header prediction code error - SecondaryEffect" -->
+<!-- id="s8874fbf.099@prv-mail25.provo.novell.com" -->
+<!-- inreplyto="BSD 4.4 TCP header prediction code error - SecondaryEffect" -->
+<STRONG>From:</STRONG> Ramesh Shankar (<A HREF="mailto:RSHANKAR@novell.com?Subject=Re:%20BSD%204.4%20TCP%20header%20prediction%20code%20error%20-%20SecondaryEffect&In-Reply-To=&lt;s8874fbf.099@prv-mail25.provo.novell.com&gt;"><EM>RSHANKAR@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jan 20 2000 - 20:10:53 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1977.html">alex r: "Re: TCP Options Header Fields"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1975.html">Stefan Savage: "strange duplicate ack behavior"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1976">[ date ]</A>
+<A HREF="index.html#1976">[ thread ]</A>
+<A HREF="subject.html#1976">[ subject ]</A>
+<A HREF="author.html#1976">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here is a stupid question related to the original Bramko fix:
+<BR>
+<P>The new check described in Brakmo is:
+<BR>
+<P>&amp;&amp; tp-&gt;t_dupacks &lt; tcprexmtthresh
+<BR>
+<P>Why shouldn't this simply be:
+<BR>
+<P>&amp;&amp; (tp-&gt;t_dupacks == 0)
+<BR>
+<P>instead?
+<BR>
+<P>BTW, t_dupacks is set to 0 when the window is deflatd in NetBSD 1.41 (TCP_INPUT.C line # 1234), FreeBSD3.31 (TCP_INPUT.C, line # 1388) and even in TCP/IP Illustrated vol2. (page 974, Fig 29.5,  line # 895).
+<BR>
+<P>Should t_dupacks be reset to 0 in some other place also?
+<BR>
+<P>Thanks,
+<BR>
+<P>S.R.
+<BR>
+<P><EM>&gt;&gt;&gt; Ali Irfan-FIA225 &lt;<A HREF="mailto:FIA225@email.mot.com?Subject=Re:%20BSD%204.4%20TCP%20header%20prediction%20code%20error%20-%20SecondaryEffect&In-Reply-To=&lt;s8874fbf.099@prv-mail25.provo.novell.com&gt;">FIA225@email.mot.com</A>&gt; 01/18/00 01:33PM &gt;&gt;&gt;
+</EM><BR>
+<P>In [Brakmo95], the authors identified the error in the Header Prediction
+<BR>
+Code due to which TCP fails to deflate the window after fast recovery
+<BR>
+causing an inappropriate amount of data to be sent into the network after
+<BR>
+recovery. This error has also been noted in [TCPImplErr] section 2.8,
+<BR>
+&quot;Failure of window deflation after loss recovery&quot;.  There is a secondary
+<BR>
+effect of the error in the header prediction code leading to inconsistent
+<BR>
+fast-retransmit behavior, which is outlined here.
+<BR>
+<P>In BSD4.4 TCP, during fast-recovery/fast-retransmit behavior, if cwnd
+<BR>
+exceeds ssthresh and a new ack arrives, the header-prediction part of the
+<BR>
+code gets exercised. This leads to failure to &quot;deflate&quot; the window causing
+<BR>
+large amount of data to be sent, as documented previously. Another
+<BR>
+consequence is that the dupack count (t_dupacks) does not get reset. The
+<BR>
+dupack count is above re-transmission threshold (usually 3). Subsequently,
+<BR>
+the code does not go into fast recovery/fast retransmit when three dupacks
+<BR>
+arrive. The dupack count gets reset after the arrival of a new ack following
+<BR>
+a timeout retransmission.
+<BR>
+<P>A snippet of a trace from a simulation showing this behavior is included.
+<BR>
+The simulation is for bulk transfer. Source always sends 512 byte segments
+<BR>
+and the advertised window is for 8 (4096 bytes).  The configuration for the
+<BR>
+forward path is Src(B) -&gt;10 ms latency -&gt; router (6 buffers) -&gt; 8 kbps link
+<BR>
+-&gt; dest(A). Return path for acks: Dest(A) -&gt; 10 ms latency -&gt; Src(B). The
+<BR>
+configuration is for low speed wireless/cellular links. 
+<BR>
+<P>(cwnd and ssthresh are expressed in #segments)
+<BR>
+<P><P>No. Time(s)   Src Dest  Seq No. Ack No. cwnd  ssthresh Comments
+<BR>
+1    21.399    A  B       .     18433   6.879     4
+<BR>
+2    21.399    B  A     20993     .       .       .
+<BR>
+3    21.911    A  B       .     18945   7.025     4
+<BR>
+4    21.911    B  A     21505     .       .       .
+<BR>
+5    21.911    B  A     22017     .       .       .    pkt dropped
+<BR>
+6    22.423    A  B       .     19457   7.167     4
+<BR>
+7    22.423    B  A     22529     .       .       .
+<BR>
+8    22.935    A  B       .     19969   7.306     4
+<BR>
+9    22.935    B  A     23041     .       .       .
+<BR>
+10   23.447    A  B       .     20481   7.443     4
+<BR>
+11   23.447    B  A     23553     .       .       .
+<BR>
+12   23.959    A  B       .     20993   7.578     4
+<BR>
+13   23.959    B  A     24065     .       .       .
+<BR>
+14   24.471    A  B       .     21505   7.710     4
+<BR>
+15   24.471    B  A     24577     .       .       .
+<BR>
+16   24.983    A  B       .     22017   7.839     4
+<BR>
+17   24.983    B  A     25089     .       .       .
+<BR>
+18   25.495    A  B       .     22017   7.839     4
+<BR>
+19   26.007    A  B       .     22017   7.839     4
+<BR>
+20   26.519    A  B       .     22017     6       3
+<BR>
+21   26.519    B  A     22017     .       .       .
+<BR>
+22   27.031    A  B       .     22017     7       3
+<BR>
+23   27.543    A  B       .     22017     8       3
+<BR>
+24   27.543    B  A     25601     .       .       .
+<BR>
+25   28.055    A  B       .     22017     9       3
+<BR>
+26   28.567    A  B       .     25601     9       3
+<BR>
+27   28.567    B  A     26113     .       .       .
+<BR>
+28   28.567    B  A     26625     .       .       .
+<BR>
+29   28.567    B  A     27137     .       .       .    primary symptom
+<BR>
+30   28.567    B  A     27649     .       .       .  (excessive xmission)
+<BR>
+31   28.567    B  A     28161     .       .       .
+<BR>
+32   28.567    B  A     28673     .       .       .    pkt dropped
+<BR>
+33   28.567    B  A     29185     .       .       .    pkt dropped
+<BR>
+34   29.079    A  B       .     26113     9       3
+<BR>
+35   29.079    B  A     29697     .       .       .
+<BR>
+36   29.591    A  B       .     26625     9       3
+<BR>
+37   29.591    B  A     30209     .       .       .
+<BR>
+38   30.103    A  B       .     27137     9       3
+<BR>
+39   30.103    B  A     30721     .       .       .
+<BR>
+40   30.615    A  B       .     27649     9       3
+<BR>
+41   30.615    B  A     31233     .       .       .
+<BR>
+42   31.127    A  B       .     28161     9       3
+<BR>
+43   31.127    B  A     31745     .       .       .
+<BR>
+44   31.639    A  B       .     28673     9       3
+<BR>
+45   31.639    B  A     32257     .       .       .
+<BR>
+46   32.151    A  B       .     28673     10      3
+<BR>
+47   32.663    A  B       .     28673     11      3
+<BR>
+48   33.175    A  B       .     28673     12      3    secondary symptom
+<BR>
+49   33.687    A  B       .     28673     13      3  (no fast retransmit)
+<BR>
+50   34.199    A  B       .     28673     14      3
+<BR>
+51   34.711    A  B       .     28673     15      3
+<BR>
+52   36.679    B  A     28673     .       1       4
+<BR>
+53   37.211    A  B       .     29185     2       4
+<BR>
+54   37.211    B  A     29185     .       .       .
+<BR>
+55   37.211    B  A     29697     .       .       .
+<BR>
+56   37.743    A  B       .     32769     3       4
+<BR>
+<P>References
+<BR>
+<P>[Brakmo95] L.S. Brakmo and L.L. Peterson, &quot;Performance Problems in BDS4.4
+<BR>
+TCP,&quot; Computer Communication Review , Vol 25, No. 5, October 1995, pg.
+<BR>
+69-86. <A HREF="http://www.cs.arizona.edu/xkernel/people/brakmo.html">http://www.cs.arizona.edu/xkernel/people/brakmo.html</A> 
+<BR>
+[TCPImplErr] RFC2525, Known TCP Implementation Problems, March 1999.
+<BR>
+<P>Irfan Ali
+<BR>
+Motorola, Network Solutions Sector
+<BR>
+1501 Shure Drive
+<BR>
+Arlington Heights, IL 60004
+<BR>
+Phone: (847)632-3281
+<BR>
+email: <A HREF="mailto:fia225@email.mot.com?Subject=Re:%20BSD%204.4%20TCP%20header%20prediction%20code%20error%20-%20SecondaryEffect&In-Reply-To=&lt;s8874fbf.099@prv-mail25.provo.novell.com&gt;">fia225@email.mot.com</A> 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1977.html">alex r: "Re: TCP Options Header Fields"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1975.html">Stefan Savage: "strange duplicate ack behavior"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1976">[ date ]</A>
+<A HREF="index.html#1976">[ thread ]</A>
+<A HREF="subject.html#1976">[ subject ]</A>
+<A HREF="author.html#1976">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

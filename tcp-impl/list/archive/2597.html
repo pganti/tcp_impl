@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Connection Establishment</TITLE>
+<META NAME="Author" CONTENT="Naidu, Venkata (Venkata.Naidu@Marconi.com)">
+<META NAME="Subject" CONTENT="RE: Connection Establishment">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Connection Establishment</H1>
+<!-- received="Wed Feb  6 14:09:03 2002" -->
+<!-- isoreceived="20020206190903" -->
+<!-- sent="Wed, 6 Feb 2002 14:03:42 -0500 " -->
+<!-- isosent="20020206190342" -->
+<!-- name="Naidu, Venkata" -->
+<!-- email="Venkata.Naidu@Marconi.com" -->
+<!-- subject="RE: Connection Establishment" -->
+<!-- id="39469E08BD83D411A3D900204840EC55762FAD@vie-msgusr-01.dc.fore.com" -->
+<!-- inreplyto="Connection Establishment" -->
+<STRONG>From:</STRONG> Naidu, Venkata (<A HREF="mailto:Venkata.Naidu@Marconi.com?Subject=RE:%20Connection%20Establishment&In-Reply-To=&lt;39469E08BD83D411A3D900204840EC55762FAD@vie-msgusr-01.dc.fore.com&gt;"><EM>Venkata.Naidu@Marconi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 06 2002 - 14:03:42 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2598.html">Bob Braden: "RE: Connection Establishment"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2596.html">Jeremy Harris - Network Service Providers Division: "RE: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2597">[ date ]</A>
+<A HREF="index.html#2597">[ thread ]</A>
+<A HREF="subject.html#2597">[ subject ]</A>
+<A HREF="author.html#2597">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jeremy:
+<BR>
+<P>-&gt; &gt;   Machine A initiates a connection to machine B.
+<BR>
+-&gt; &gt;   A sends a segment with ISN x, chosen according
+<BR>
+-&gt; &gt;   A's clock, and with SYN bit set to 1, this is the
+<BR>
+-&gt; &gt;   connection request message.
+<BR>
+-&gt; &gt; 	- the ACK flag is set to 0
+<BR>
+-&gt; &gt; 	- this segment is still a regular TCP segment; it
+<BR>
+-&gt; &gt; 	  can carry data too (piggyback 1)
+<BR>
+-&gt; 
+<BR>
+-&gt; I have implemented this; it works nicely.   However, the question
+<BR>
+-&gt; arises: how much data may be piggybacked on a SYN?  What window may
+<BR>
+-&gt; the sender assume?
+<BR>
+<P>&nbsp;&nbsp;Actually there are more interoperability issues here. An intelligent
+<BR>
+&nbsp;&nbsp;TCP implementation can make an educated guess. In other words,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Include as much data application gives in the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first connect request message
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- If it didn't get through, then in subsequent re-tries
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;either don't include any data or include less data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(with exponential back off with limited tries is one solution)
+<BR>
+<P>&nbsp;&nbsp;This is because, in order to interoperate with different TCP
+<BR>
+&nbsp;&nbsp;implementations. Other end has either:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- no support of piggyback data reception support, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- short of window (you don't know)
+<BR>
+<P>-&gt; &gt;       - however, if it does contain data, machine B
+<BR>
+-&gt; &gt;         cannot deliver the data to application until the
+<BR>
+-&gt; &gt;         connection is successfully established
+<BR>
+-&gt; 
+<BR>
+-&gt; As a nonstandard extension to TCP, I propose that this restriction
+<BR>
+-&gt; can be relaxed in certain situations:
+<BR>
+-&gt; 
+<BR>
+-&gt; IF
+<BR>
+-&gt; - The TCP and next layer up (&quot;ULP&quot;) are tightly-coupled 
+<BR>
+-&gt; (e.g. both in the
+<BR>
+-&gt;   kernel) and have a rich interface
+<BR>
+-&gt; - The ULP data consists of a request which
+<BR>
+-&gt; 	- does not require much processing
+<BR>
+-&gt; 	- does not modify any server state (bar stats counters, cache
+<BR>
+-&gt; 	  state etc)
+<BR>
+-&gt;   ( thus making the &quot;at-most-once&quot; property of TCP unneeded )
+<BR>
+-&gt; - The receiver system can adequately defend itself against DOS attack
+<BR>
+<P>&nbsp;&nbsp;&nbsp;That means, TCP should track type of applications (actually
+<BR>
+&nbsp;&nbsp;&nbsp;connections). TCP should know before hand that - when it receives
+<BR>
+&nbsp;&nbsp;&nbsp;data with a connect request, it SHOULD give only if the application
+<BR>
+&nbsp;&nbsp;&nbsp;has all the above requirements/constraints.
+<BR>
+<P>-&gt; I believe that an HTTP GET which hits an in-kernel cache 
+<BR>
+-&gt; satisfies the
+<BR>
+-&gt; above constraints; the transaction can then be reduced to a 
+<BR>
+-&gt; minimum of three packets.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Yes! I agree... this is a very good optimization for some
+<BR>
+&nbsp;&nbsp;&nbsp;applications
+<BR>
+<P>--Venkata Naidu
+<BR>
+<P><P>This e-mail and any attachments are confidential. If you are not the
+<BR>
+intended recipient, please notify us immediately by reply e-mail and then
+<BR>
+delete this message from your system. Do not copy this e-mail or any
+<BR>
+attachment, use the contents for any purposes, or disclose the contents to
+<BR>
+any other person: to do so could be a breach of confidence.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2598.html">Bob Braden: "RE: Connection Establishment"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2596.html">Jeremy Harris - Network Service Providers Division: "RE: Connection Establishment"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2592.html">Sebastian Zimmermann: "Connection Establishment"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2597">[ date ]</A>
+<A HREF="index.html#2597">[ thread ]</A>
+<A HREF="subject.html#2597">[ subject ]</A>
+<A HREF="author.html#2597">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Feb 06 2002 - 14:09:10 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

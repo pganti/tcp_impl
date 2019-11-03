@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SUBNETS</TITLE>
+<META NAME="Author" CONTENT="Sunil Kumar (krsunil@hotmail.com)">
+<META NAME="Subject" CONTENT="Re: SUBNETS">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SUBNETS</H1>
+<!-- received="Wed Jun  9 14:36:25 1999" -->
+<!-- isoreceived="19990609183625" -->
+<!-- sent="Wed, 09 Jun 1999 18:09:46 GMT" -->
+<!-- isosent="19990609180946" -->
+<!-- name="Sunil Kumar" -->
+<!-- email="krsunil@hotmail.com" -->
+<!-- subject="Re: SUBNETS" -->
+<!-- id="19990609180947.20114.qmail@hotmail.com" -->
+<!-- inreplyto="SUBNETS" -->
+<STRONG>From:</STRONG> Sunil Kumar (<A HREF="mailto:krsunil@hotmail.com?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;"><EM>krsunil@hotmail.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 09 1999 - 14:09:46 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1741">[ date ]</A>
+<A HREF="index.html#1741">[ thread ]</A>
+<A HREF="subject.html#1741">[ subject ]</A>
+<A HREF="author.html#1741">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello Simon
+<BR>
+<P>IP address consists of 4 octets ranging from
+<BR>
+0.0.0.0 to 255.255.255.255
+<BR>
+<P>This range is further divided into different classes to make
+<BR>
+certain things easier
+<BR>
+<P>Class A: First octet can be between 0 to 126 (2 power 24 - 2 IP add)
+<BR>
+Class B: First octet can be between 128 to 191(2 power 16 - 2 IP add)
+<BR>
+Class C: First octet can be between 192 to 223(2 power 8 -2 IP add)
+<BR>
+Class D: First octet can be between 224 to 239 (multicast)
+<BR>
+Class E: remaining address
+<BR>
+<P>However defining IP addresses in this way restricts the allocation of
+<BR>
+IP address in terms of numbers of IP addresses needed.
+<BR>
+<P>Like if you need 10000 IP addresses for ur organization, you have to
+<BR>
+take Class B address, since class C address can only have 254 addresses . 
+<BR>
+But while taking Class B address, you are wasting 55000
+<BR>
+IP addresses as Class B can have near to 65000 IP addresses.
+<BR>
+<P>Here comes the term of subnets. We divide each class based networks
+<BR>
+into different subnets so that do use maximum IP addresses.
+<BR>
+Like if you need 1000 IP address. A class B network can be subneted
+<BR>
+into 64 subnetworks by using 6 bit subnet mask each having 1024 IP
+<BR>
+address. Note u can only subnet on power of 2. One of the 1024
+<BR>
+subnetwork is allocated to you and remaining can be used by other
+<BR>
+organizations.
+<BR>
+<P>Maximum ip address for a particular subnetwork is maximum possible
+<BR>
+addresses -2. Since u cant use ALL one's and ALL zeros.
+<BR>
+<P>So in this case u can use 1022 IP addresses.
+<BR>
+<P>Hope it clear a bit
+<BR>
+<P>Regards
+<BR>
+<P>Sunil Kumar
+<BR>
+<P><P><EM>&gt;From: &quot;Paul Simon&quot; &lt;<A HREF="mailto:psimon@pudikgraphics.com?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">psimon@pudikgraphics.com</A>&gt;
+</EM><BR>
+<EM>&gt;To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt;Subject: SUBNETS
+</EM><BR>
+<EM>&gt;Date: Wed, 09 Jun 1999 09:41:43 -0500
+</EM><BR>
+<EM>&gt;MIME-Version: 1.0
+</EM><BR>
+<EM>&gt;From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">owner-tcp-impl@lerc.nasa.gov</A> Wed Jun 09 10:54:23 1999
+</EM><BR>
+<EM>&gt;Received: from [139.88.112.33] by hotmail.com (1.5) with SMTP id 
+</EM><BR>
+<EM>&gt;MHotMailB927F53E013FD10170768B587021CCEE0; Wed Jun 09 10:54:23 1999
+</EM><BR>
+<EM>&gt;Received: (from listserv@localhost)by lombok-fi.lerc.nasa.gov (NASA LeRC 
+</EM><BR>
+<EM>&gt;8.9.1.1/8.9.1) id KAA03158for tcp-impl-outgoing; Wed, 9 Jun 1999 10:49:01 
+</EM><BR>
+<EM>&gt;-0400 (EDT)
+</EM><BR>
+<EM>&gt;Received: from mail.pudikgraphics.com (fw01.lerc.nasa.gov 
+</EM><BR>
+<EM>&gt;[139.88.145.14])by lombok-fi.lerc.nasa.gov (NASA LeRC 8.9.1.1/8.9.1) with 
+</EM><BR>
+<EM>&gt;ESMTP id KAA03150for &lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">tcp-impl@lerc.nasa.gov</A>&gt;; Wed, 9 Jun 1999 10:48:59 
+</EM><BR>
+<EM>&gt;-0400 (EDT)
+</EM><BR>
+<EM>&gt;Received: from pudikgraphics.com ([206.151.190.196])          by 
+</EM><BR>
+<EM>&gt;mail.pudikgraphics.com (Netscape Messaging Server 3.5)           with ESMTP 
+</EM><BR>
+<EM>&gt;id 462 for &lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">tcp-impl@lerc.nasa.gov</A>&gt;;          Wed, 9 Jun 1999 09:48:52 
+</EM><BR>
+<EM>&gt;-0500
+</EM><BR>
+<EM>&gt;Message-ID: &lt;<A HREF="mailto:375E7D27.17A4D109@pudikgraphics.com?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">375E7D27.17A4D109@pudikgraphics.com</A>&gt;
+</EM><BR>
+<EM>&gt;Organization: Pudik Graphics, Inc.
+</EM><BR>
+<EM>&gt;X-Mailer: Mozilla 4.6 [en] (Win95; I)
+</EM><BR>
+<EM>&gt;X-Accept-Language: en-US
+</EM><BR>
+<EM>&gt;Sender: <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20SUBNETS&In-Reply-To=&lt;19990609180947.20114.qmail@hotmail.com&gt;">owner-tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt;Precedence: bulk
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Can any one explain the /subnet and number of IP's in each subnet block?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;--
+</EM><BR>
+<EM>&gt;  Thanks,
+</EM><BR>
+<EM>&gt;  Paul T. Simon
+</EM><BR>
+<EM>&gt;  Pudik Graphics, Inc.
+</EM><BR>
+<EM>&gt;  www.pudikgraphics.com
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><P>_______________________________________________________________
+<BR>
+Get Free Email and Do More On The Web. Visit <A HREF="http://www.msn.com">http://www.msn.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1740.html">Paul Simon: "SUBNETS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1741">[ date ]</A>
+<A HREF="index.html#1741">[ thread ]</A>
+<A HREF="subject.html#1741">[ subject ]</A>
+<A HREF="author.html#1741">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

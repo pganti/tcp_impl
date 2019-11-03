@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Thu Mar 27 14:19:39 1997" -->
+<!-- isoreceived="19970327191939" -->
+<!-- sent="Thu, 27 Mar 1997 22:35:35 +0100" -->
+<!-- isosent="19970327213535" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="199703272135.WAA03127@regin.dna.lth.se" -->
+<!-- inreplyto="5743.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703272135.WAA03127@regin.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Mar 27 1997 - 16:35:35 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0277.html">der Mouse : "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0278.html">der Mouse : "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#276">[ date ]</A>
+<A HREF="index.html#276">[ thread ]</A>
+<A HREF="subject.html#276">[ subject ]</A>
+<A HREF="author.html#276">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703272135.WAA03127@regin.dna.lth.se&gt;">wsimpson@greendragon.com</A>&gt; writes:
+<BR>
+<EM>&gt;In regards to both queries, you seem to have missed that these
+</EM><BR>
+<EM>&gt;discussions are all in the sections on delayed Ack.  So, why did they
+</EM><BR>
+<EM>&gt;discuss holding time, RTT, inter-packet arrival time?  All are applied
+</EM><BR>
+<EM>&gt;to delayed Ack.
+</EM><BR>
+<P>Yes, it is in the section on delayed ACK, but in that section it
+<BR>
+is located in the discussion that starts out:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will assume that sender of the data uses the optional  algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;described  in  the  TCP  specification,  in which the roundtrip delay is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;measured using an exponential decay smoothing algorithm.  Retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;of a segment occurs if the measured delay for that segment  exceeds  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;smoothed  average  by  some  factor.  To see how retransmission might be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;triggered, one must consider the pattern  of  segment  arrivals  at  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;receiver.
+<BR>
+<P>The remainder of the section goes on to discuss the conditions under which
+<BR>
+a retransmission is triggered. This discusses how the RTO is computed
+<BR>
+on the sender side, and what factors should be taken into account,
+<BR>
+on the sender side, so that the RTO is not to short, this includes
+<BR>
+taking into account how much the receiver delays the ACK and what
+<BR>
+the holding time is. This discussion extends until the end of the
+<BR>
+section.
+<BR>
+<P>Packet interarrival time is discussed somewhat earlier in that section:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This algorithm will insure that the timer, although set, is  seldom
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;used.    The  interval  of  the  timer is related to the expected inter-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;segment delay, which is in turn a function  of  the  particular  network
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;through  which  the  data  is  flowing.    For the Arpanet, a reasonable
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;interval seems to be 200 to 300 milliseconds.  Appendix A  describes  an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;adaptive algorithm for measuring this delay.
+<BR>
+<P>I can find no support in the RFC for placing a lower bound on the timeout,
+<BR>
+beyond the discussion that notes that we prefer it if the timeout for
+<BR>
+a delayed ack never gets fired. On the other hand, we should also not
+<BR>
+delay an ack excessively, since that can cause an unnecessary retransmission
+<BR>
+by the sender. I'll come back to this below.
+<BR>
+<P><EM>&gt;&gt; Note that you on a pure receiving link you have no RTT measure.
+</EM><BR>
+<EM>&gt;&gt; If you use the initial srtt and mdev settings on your link you are
+</EM><BR>
+<EM>&gt;&gt; essentially setting the ATO to a constant on a pure receiver.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;Yes (yielding the ceiling value), and the problem is?
+</EM><BR>
+<P>I'll address this below.
+<BR>
+<P><EM>&gt;And &quot;pure receiver&quot; happens in which protocol?  TCP always provides at
+</EM><BR>
+<EM>&gt;least one round trip estimate.
+</EM><BR>
+<P>This is not always true. If you have to retransmit your SYN packet you will
+<BR>
+have no valid estimate (unless you are using timestamps). Also, if the
+<BR>
+function describing your transmission time is dominated by
+<BR>
+the length of the packet you are sending (for example if you are
+<BR>
+sending over a PPP link), then even if you do get a valid RTT measure
+<BR>
+on your SYN handshake it will be much lower than the actual RTT on the
+<BR>
+link. On a link with an MTU of 1500 this will be out by a factor
+<BR>
+of around 37. This is less of an issue of you are using low granularity
+<BR>
+timers, but I think it would be wise to avoid setting any new
+<BR>
+requirements that assume that timers only have a resolution of 500 ms.
+<BR>
+Now, at this point one might be tempted to argue that this supports placing
+<BR>
+a lower bound on the ATO (Ack Timeout), say of 100ms. I think this is
+<BR>
+a mistake.
+<BR>
+<P><EM>&gt;Remember, it is always OK to have a larger value, as that is the intent
+</EM><BR>
+<EM>&gt;-- the timer should rarely be used, other events should happen sooner.
+</EM><BR>
+<P>If the timer will never get used, don't bother setting it. The reality
+<BR>
+is that the timer will get fired, and in fact there are circumstances
+<BR>
+in which we want it to get fired.
+<BR>
+<P><EM>&gt;All these strategies are to find an acceptable _lower_ bound for more
+</EM><BR>
+<EM>&gt;interactive traffic.
+</EM><BR>
+<P>I disagree, I feel there is no acceptable lower bound. I have two
+<BR>
+reasons.
+<BR>
+<P>First, delaying ACK's distorts the RTT calculation on the
+<BR>
+sender side. If the delay is less than the granularity with which
+<BR>
+the sender measures RTT, then the distortion is minimal, although
+<BR>
+we can still get some distortion when a delay causes the RTT
+<BR>
+measure to increase by 1. If the delay is larger than the
+<BR>
+granularity with which the sender measures the RTT, the distortion
+<BR>
+is more significant. This leads to an inflated estimate of the RTT
+<BR>
+on the sender. On a very high speed network this can be many times
+<BR>
+larger than the real round trip time, leading to long fallow periods (relative
+<BR>
+to the speed of the transmission medium) during which we are
+<BR>
+simply waiting for a retransmission timeout to occur.
+<BR>
+<P>Second, any time we actually fire the delayed ack timer, due to a
+<BR>
+pause in the stream of packets in the sender, the sooner we fire it,
+<BR>
+the better. This is because if we wait to long to fire it, the sender
+<BR>
+might conclude that a packet has been lost, and it should now resend,
+<BR>
+when in fact no packet has been lost. The problem is worse if
+<BR>
+you happen to loose some of the ACKs preceeding the one you are currently
+<BR>
+delaying. Again, this is mostly a non issue if you happen to measure RTT
+<BR>
+with a granularity of 500 ms. In that case you never retransmit before 500 ms.
+<BR>
+If the ATO happens to hit the ceiling of 500 ms then you will still get this
+<BR>
+spurious retransmission, but not otherwise. Note that this problem will
+<BR>
+almost never happen if you fix the ATO to 200 ms as done in BSD (it can
+<BR>
+only happen if some preceeding ACKs got lost).
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703272135.WAA03127@regin.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0277.html">der Mouse : "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0278.html">der Mouse : "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#276">[ date ]</A>
+<A HREF="index.html#276">[ thread ]</A>
+<A HREF="subject.html#276">[ subject ]</A>
+<A HREF="author.html#276">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Need a clarification on use of A</TITLE>
+<META NAME="Author" CONTENT="A. Joseph Dupre III (joe@midnight.com)">
+<META NAME="Subject" CONTENT="Need a clarification on use of ACK Flag.....">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Need a clarification on use of ACK Flag.....</H1>
+<!-- received="Wed Jul 21 10:44:02 1999" -->
+<!-- isoreceived="19990721144402" -->
+<!-- sent="Wed, 21 Jul 1999 10:27:57 -0400" -->
+<!-- isosent="19990721142757" -->
+<!-- name="A. Joseph Dupre III" -->
+<!-- email="joe@midnight.com" -->
+<!-- subject="Need a clarification on use of ACK Flag....." -->
+<!-- id="199907211427.KAA09643@morning.midnight.com" -->
+<STRONG>From:</STRONG> A. Joseph Dupre III (<A HREF="mailto:joe@midnight.com?Subject=Re:%20Need%20a%20clarification%20on%20use%20of%20ACK%20Flag.....&In-Reply-To=&lt;199907211427.KAA09643@morning.midnight.com&gt;"><EM>joe@midnight.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 21 1999 - 10:27:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1776.html">Dennis Connors: "Call for Papers, WOSBIS 99"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1777">[ date ]</A>
+<A HREF="index.html#1777">[ thread ]</A>
+<A HREF="subject.html#1777">[ subject ]</A>
+<A HREF="author.html#1777">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>I could use some help interpretting the below section of RFC 793:
+<BR>
+<P><EM>&gt;From RFC 793: (page 16)
+</EM><BR>
+=======================
+<BR>
+&nbsp;&nbsp;&nbsp;Acknowledgment Number:  32 bits
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the ACK control bit is set this field contains the value of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;next sequence number the sender of the segment is expecting to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive.  Once a connection is established this is always sent.
+<BR>
+<P><P>One vendor who we are trying to interoperate with has interpreted the
+<BR>
+above lines to mean that an ACK control bit MUST always be SET on
+<BR>
+every packet that is sent by our TCP after reaching ESTABLISHED state.
+<BR>
+This means setting the ACK flag on data segments, FIN, and RST.
+<BR>
+<P>However, when looking at the state machine below from RFC 793, it does not
+<BR>
+show the ACK Flag being set on FIN packets for example.  When looking
+<BR>
+at Steven's TCP/IP Illustrated #1, one transition from FIN_WAIT_1 to 
+<BR>
+TIME_WAIT has an explicit FIN,ACK as the receive event that causes
+<BR>
+that transition.
+<BR>
+<P><P>Any help people can provide me in understanding the appropriate use of
+<BR>
+the ACK control flag would be greatly appreciated.  Particularly if
+<BR>
+there is a section of the RFC 793 that clears this up or some other
+<BR>
+RFC such as 1122, pointing me at that would be great.
+<BR>
+<P><P><P><P>-------------------------------------------------------------------------------
+<BR>
+<P>September 1981                                                          
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Transmission Control Protocol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functional Specification
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------+ ---------\      active OPEN  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  CLOSED |            \    -----------  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------+&lt;---------\   \   create TCB  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|     ^              \   \  snd SYN    
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passive OPEN |     |   CLOSE        \   \           
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------ |     | ----------       \   \         
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create TCB  |     | delete TCB         \   \       
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V     |                      \   \     
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------+            CLOSE    |    \   
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  LISTEN |          ---------- |     |  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------+          delete TCB |     |  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rcv SYN      |     |     SEND              |     |  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----------   |     |    -------            |     V  
+<BR>
+&nbsp;+---------+      snd SYN,ACK  /       \   snd SYN          +---------+
+<BR>
+&nbsp;|         |&lt;-----------------           ------------------&gt;|         |
+<BR>
+&nbsp;|   SYN   |                    rcv SYN                     |   SYN   |
+<BR>
+&nbsp;|   RCVD  |&lt;-----------------------------------------------|   SENT  |
+<BR>
+&nbsp;|         |                    snd ACK                     |         |
+<BR>
+&nbsp;|         |------------------           -------------------|         |
+<BR>
+&nbsp;+---------+   rcv ACK of SYN  \       /  rcv SYN,ACK       +---------+
+<BR>
+&nbsp;&nbsp;&nbsp;|           --------------   |     |   -----------                  
+<BR>
+&nbsp;&nbsp;&nbsp;|                  x         |     |     snd ACK                    
+<BR>
+&nbsp;&nbsp;&nbsp;|                            V     V                                
+<BR>
+&nbsp;&nbsp;&nbsp;|  CLOSE                   +---------+                              
+<BR>
+&nbsp;&nbsp;&nbsp;| -------                  |  ESTAB  |                              
+<BR>
+&nbsp;&nbsp;&nbsp;| snd FIN                  +---------+                              
+<BR>
+&nbsp;&nbsp;&nbsp;|                   CLOSE    |     |    rcv FIN                     
+<BR>
+&nbsp;&nbsp;&nbsp;V                  -------   |     |    -------                     
+<BR>
+&nbsp;+---------+          snd FIN  /       \   snd ACK          +---------+
+<BR>
+&nbsp;|  FIN    |&lt;-----------------           ------------------&gt;|  CLOSE  |
+<BR>
+&nbsp;| WAIT-1  |------------------                              |   WAIT  |
+<BR>
+&nbsp;+---------+          rcv FIN  \                            +---------+
+<BR>
+&nbsp;&nbsp;&nbsp;| rcv ACK of FIN   -------   |                            CLOSE  |  
+<BR>
+&nbsp;&nbsp;&nbsp;| --------------   snd ACK   |                           ------- |  
+<BR>
+&nbsp;&nbsp;&nbsp;V        x                   V                           snd FIN V  
+<BR>
+&nbsp;+---------+                  +---------+                   +---------+
+<BR>
+&nbsp;|FINWAIT-2|                  | CLOSING |                   | LAST-ACK|
+<BR>
+&nbsp;+---------+                  +---------+                   +---------+
+<BR>
+&nbsp;&nbsp;&nbsp;|                rcv ACK of FIN |                 rcv ACK of FIN |  
+<BR>
+&nbsp;&nbsp;&nbsp;|  rcv FIN       -------------- |    Timeout=2MSL -------------- |  
+<BR>
+&nbsp;&nbsp;&nbsp;|  -------              x       V    ------------        x       V  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;\ snd ACK                 +---------+delete TCB         +---------+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;------------------------&gt;|TIME WAIT|------------------&gt;| CLOSED  |
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---------+                   +---------+
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP Connection State Diagram
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Figure 6.
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Page 23]
+<BR>
+<P><P>...............................................................................
+<BR>
+&nbsp;A. Joseph Dupre III   : Midnight Networks 205B Lowell St. Wilmington, MA 01887
+<BR>
+&nbsp;Software Engineer     : Vox 781/890-1001 
+<BR>
+&nbsp;<A HREF="mailto:joe@midnight.com?Subject=Re:%20Need%20a%20clarification%20on%20use%20of%20ACK%20Flag.....&In-Reply-To=&lt;199907211427.KAA09643@morning.midnight.com&gt;">joe@midnight.com</A>      : Fax 781/890-0028 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** Midnight Networks is hiring! ***
+<BR>
+&nbsp;&nbsp;&nbsp;*** Come check out our job opportunities- www.midnight.com/jobs.html ***
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1776.html">Dennis Connors: "Call for Papers, WOSBIS 99"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1778.html">David Borman: "Re: Need a clarification on use of ACK Flag....."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1777">[ date ]</A>
+<A HREF="index.html#1777">[ thread ]</A>
+<A HREF="subject.html#1777">[ subject ]</A>
+<A HREF="author.html#1777">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

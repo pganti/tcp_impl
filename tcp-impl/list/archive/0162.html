@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;N</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;No slow start after timeout&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;No slow start after timeout&quot;</H1>
+<!-- received="Wed Mar 19 11:38:50 1997" -->
+<!-- isoreceived="19970319163850" -->
+<!-- sent="Wed, 19 Mar 1997 11:26:58 PST" -->
+<!-- isosent="19970319192658" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: draft description of &quot;No slow start after timeout&quot;" -->
+<!-- id="199703191926.LAA22874@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Tue, 18 Mar 1997 23:20:56 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft%20description%20of%20&quot;No%20slow%20start%20after%20timeout&quot;&In-Reply-To=&lt;199703191926.LAA22874@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 14:26:58 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0171.html">Mark Allman: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#162">[ date ]</A>
+<A HREF="index.html#162">[ thread ]</A>
+<A HREF="subject.html#162">[ subject ]</A>
+<A HREF="author.html#162">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Right. But my suggestion aims at &quot;working around&quot; a performance
+</EM><BR>
+<EM>&gt; problem caused by a remote client delaying acks too aggressively.
+</EM><BR>
+<P>I think working around performance problems due to non-compliant
+<BR>
+implementations has considerably less appeal than working around
+<BR>
+interoperability problems (such as keep-alives).  It'd really be much
+<BR>
+better to fix the non-compliant implementation.
+<BR>
+<P>Furthermore, the proposed work-around won't fly: it violates RFC 2001,
+<BR>
+which states that slow start is done by increasing cwnd by one MSS
+<BR>
+per ack, and not by counting bytes ack'd.  This is not a minor difference,
+<BR>
+and I disagree with:
+<BR>
+<P><EM>&gt; I don't agree that counting bytes can induce more burstiness.
+</EM><BR>
+<P>Counting bytes can make a very large difference.  If the receiver does
+<BR>
+ack-every-other, which many do, then the cwnd progression per RTT today
+<BR>
+looks something like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT	acks received	cwnd	segments pending
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0	0		1	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1	1		2	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2	1		3	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3	1		4	1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4	2		6	1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5	3		9	1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6	5		14	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7	7		21	0
+<BR>
+<P>where &quot;acks received&quot; is how many acks will arrive if the receiver
+<BR>
+does ack-every-other and delays single-segment acks long enough that
+<BR>
+they carry over to the next RTT (&quot;segments pending&quot;).
+<BR>
+<P>But with counting bytes it looks like:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RTT	segments ack'd	cwnd	acks pending
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0	0		1	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1	1		2	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2	2		4	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3	4		8	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4	8		16	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5	16		32	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6	32		64	0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7	64		128	0
+<BR>
+<P>That's a lot burstier!
+<BR>
+<P>You can get the same rapid cwnd growth if the receiver acks every segment
+<BR>
+instead of every-other, but with the significant benefit that the new data
+<BR>
+is much more spread out of the RTT due to self-clocking, so a lot less
+<BR>
+bursty.  That case worries me a lot less than the counting-bytes case
+<BR>
+(and is standard-compliant).
+<BR>
+<P>Consequently, I think we need a good ahead from the IRTF and/or RFC 2001
+<BR>
+before advocating counting bytes instead of packets.
+<BR>
+<P><EM>&gt; real culprit is excessive delayed acks.
+</EM><BR>
+<P>Agreed - need to fix these.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0163.html">Vern Paxson: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0161.html">Richard Fox: "RE: draft description of &quot;No initial slow start&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0171.html">Mark Allman: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#162">[ date ]</A>
+<A HREF="index.html#162">[ thread ]</A>
+<A HREF="subject.html#162">[ subject ]</A>
+<A HREF="author.html#162">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Anomalous TCP behaviour?</TITLE>
+<META NAME="Author" CONTENT="Anupama Sundaresan (anu@ittc.ukans.edu)">
+<META NAME="Subject" CONTENT="Anomalous TCP behaviour?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Anomalous TCP behaviour?</H1>
+<!-- received="Thu, 10 Feb 2000 16:57:36 -0600 (CST)" -->
+<!-- isoreceived="20000210225736" -->
+<!-- sent="Thu, 10 Feb 2000 16:57:36 -0600 (CST)" -->
+<!-- isosent="20000210225736" -->
+<!-- name="Anupama Sundaresan" -->
+<!-- email="anu@ittc.ukans.edu" -->
+<!-- subject="Anomalous TCP behaviour?" -->
+<!-- id="Pine.SO4.4.02.10002101651560.3194-100000@mill.ittc.ukans.edu" -->
+<!-- inreplyto="200001261903.TAA08209@orchard.arlington.ma.us" -->
+<STRONG>From:</STRONG> Anupama Sundaresan (<A HREF="mailto:anu@ittc.ukans.edu?Subject=Re:%20Anomalous%20TCP%20behaviour?&In-Reply-To=&lt;Pine.SO4.4.02.10002101651560.3194-100000@mill.ittc.ukans.edu&gt;"><EM>anu@ittc.ukans.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 10 2000 - 17:57:36 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1983.html">Mark Allman: "test"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1981.html">Luigi Rizzo: "new dummynet page"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1940.html">Spencer Dawkins: "RE: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1940.html">Spencer Dawkins: "RE: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1941.html">der Mouse: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1943.html">Mark Allman: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1946.html">Stefan Savage: "RE: Anomalous TCP behaviour?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1982">[ date ]</A>
+<A HREF="index.html#1982">[ thread ]</A>
+<A HREF="subject.html#1982">[ subject ]</A>
+<A HREF="author.html#1982">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A few days back I had voiced a few doubts about whether TCP was
+<BR>
+transmitting packets outoforder. Thanks to all the replies I carried out
+<BR>
+some tests which proved that it was indeed tcpdump which was missing out
+<BR>
+packets presumably because of limited buffering and because it is swamped
+<BR>
+by a huge volume of packets.
+<BR>
+<P><P>The starting sequence number is 1577980427. The following is a printk output
+<BR>
+at the transmitter.
+<BR>
+<P>Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578416928
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578416928    ---&gt; 1st Txion
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578418376
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578418376
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578419824
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578419824
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578421272
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578422720
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578424168
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578425616
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578421272
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578422720
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578424168
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578427064
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578428512
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578429960
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578425616
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578427064
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578428512
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578431408
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578432856
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578434304
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578429960
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578431408
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578432856
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578435752
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578437200
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578438648
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578434304
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578435752
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578437200
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578438648
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578439428
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578439428
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578440876
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578440876
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578442324
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578442324
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578443772
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578445220
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in send: 1578446668
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578443772
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578445220
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578446668
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  Seq # in Eth 1578416928   ---&gt; ReTxion
+<BR>
+Feb  9 21:13:24 testbed5 kernel:  tp-&gt;total_rexmits 1 sk-&gt;daddr 561900929
+<BR>
+sk-&gt;prot-&gt;retransmits 1
+<BR>
+<P>The seq# 1578416928 is retransmitted. But tcpdump output at the transmitter
+<BR>
+shows that this packet was not transmitted for the first time. The very same
+<BR>
+packet is denoted by the seq# 436501 
+<BR>
+(1578416928 - 1577980427(starting seq#) = 436501)
+<BR>
+<P>testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 422689:424137(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 424137:425585(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 425585:427033(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 427033:428481(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 428481:429929(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 429929:431377(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 424137
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 427033
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 429929
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 432825
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 435721
+<BR>
+## The first transmission is not recorded by tcpdump. Infact the transmission
+<BR>
+of 18156 bytes (between 431377 and 449553) is not recorded by tcpdump
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 449533:450981(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 450981:452429(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 452429:453877(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 453877:455325(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 455325:456773(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 456773:458221(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 459001:460449(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 460449:461897(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 461897:463345(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 463345:464793(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 466241:467689(1448)
+<BR>
+## the retransmission occurs here which looks like an outoforder packet since
+<BR>
+the first transmission was not recorded by tcpdump
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 436501:437949(1448)
+<BR>
+<P><P>Whereas the dump output at the receiver shows that the transmitter has indeed
+<BR>
+transmitted all the packets (that too in order and NOT out of order) but it is
+<BR>
+tcpdump at the Txr which is missing out some packets
+<BR>
+<P>Dump o/p at Rxr:
+<BR>
+<P>We can see that the packets between 431377 and 449553 are received except for a
+<BR>
+loss starting from 436501
+<BR>
+<P>testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 429929:431377(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 431377:432825(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 432825
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 432825:434273(1448)
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 434273:435721(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 435721
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 435721:436501(780)
+<BR>
+#loss of a segment between 436501 and 437949
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 437949:439397(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 439397:440845(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 440845:442293(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 442293:443741(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 443741:445189(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 445189:446637(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 446637:448085(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 448085:449533(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 449533:450981(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 450981:452429(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+testbed5.ittc.ukans.edu.1028 testbed4.ittc.ukans.edu.5001: 452429:453877(1448)
+<BR>
+testbed4.ittc.ukans.edu.5001 testbed5.ittc.ukans.edu.1028: ack 436501
+<BR>
+<P>Thanks,
+<BR>
+Anu.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1983.html">Mark Allman: "test"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1981.html">Luigi Rizzo: "new dummynet page"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1950.html">Bill Sommerfeld: "Re: SV: Anomalous TCP behaviour?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1940.html">Spencer Dawkins: "RE: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1940.html">Spencer Dawkins: "RE: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1941.html">der Mouse: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1943.html">Mark Allman: "Re: Anomalous TCP behaviour?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1946.html">Stefan Savage: "RE: Anomalous TCP behaviour?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1982">[ date ]</A>
+<A HREF="index.html#1982">[ thread ]</A>
+<A HREF="subject.html#1982">[ subject ]</A>
+<A HREF="author.html#1982">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

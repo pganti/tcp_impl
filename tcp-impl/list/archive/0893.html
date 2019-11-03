@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: discrepancy in TIME_WAIT sta</TITLE>
+<META NAME="Author" CONTENT="Michael C. Richardson (mcr@sandelman.ottawa.on.ca)">
+<META NAME="Subject" CONTENT="Re: discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Sun Jan 11 10:36:08 1998" -->
+<!-- isoreceived="19980111153608" -->
+<!-- sent="Sun, 11 Jan 1998 13:29:41 -0500" -->
+<!-- isosent="19980111182941" -->
+<!-- name="Michael C. Richardson" -->
+<!-- email="mcr@sandelman.ottawa.on.ca" -->
+<!-- subject="Re: discrepancy in TIME_WAIT state handling" -->
+<!-- id="199801111829.NAA04270@istari.sandelman.ottawa.on.ca" -->
+<!-- inreplyto="199801110750.XAA25734@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Michael C. Richardson (<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801111829.NAA04270@istari.sandelman.ottawa.on.ca&gt;"><EM>mcr@sandelman.ottawa.on.ca</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jan 11 1998 - 13:29:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0894.html">Hari Balakrishnan: "Re: Clock granularity"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0892.html">Alan Cox: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#893">[ date ]</A>
+<A HREF="index.html#893">[ thread ]</A>
+<A HREF="subject.html#893">[ subject ]</A>
+<A HREF="author.html#893">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt;&gt;&gt; &quot;Vern&quot; == Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801111829.NAA04270@istari.sandelman.ottawa.on.ca&gt;">vern@ee.lbl.gov</A>&gt; writes:
+</EM><BR>
+<EM>    &gt;&gt; Unix utilities like rsh relies on the BSD behavior to work in UNIX &lt;-&gt;
+</EM><BR>
+<EM>    &gt;&gt; UNIX communication. So it's not just being unlucky, i.e. this case
+</EM><BR>
+<EM>    &gt;&gt; happens all the time in Solaris when one logout and rlogin back in the
+</EM><BR>
+<EM>    &gt;&gt; same machine within 2MSL time.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Vern&gt; Doesn't rsh just use a different ephemeral port and avoid the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Vern&gt; problem entirely?
+<BR>
+<P>&nbsp;&nbsp;RSH uses bindresvport(), which just does:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(i=1023; i--; i&gt;0) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try to bind(2) local port i.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>&nbsp;&nbsp;So, whether or not the local machine has a previous socket in TIME_WAIT
+<BR>
+depends on which end did the active close.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;:!mcr!:            |  Sandelman Software Works Corporation, Ottawa, ON  
+<BR>
+&nbsp;&nbsp;&nbsp;Michael Richardson |Network and security consulting and contract programming
+<BR>
+&nbsp;Personal: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html">http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html</A>&quot;&gt;<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801111829.NAA04270@istari.sandelman.ottawa.on.ca&gt;">mcr@sandelman.ottawa.on.ca</A>&lt;/A&gt;. PGP key available.
+<BR>
+&nbsp;Corporate: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/SSW/">http://www.sandelman.ottawa.on.ca/SSW/</A>&quot;&gt;<A HREF="mailto:sales@sandelman.ottawa.on.ca?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801111829.NAA04270@istari.sandelman.ottawa.on.ca&gt;">sales@sandelman.ottawa.on.ca</A>&lt;/A&gt;. 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0894.html">Hari Balakrishnan: "Re: Clock granularity"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0892.html">Alan Cox: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#893">[ date ]</A>
+<A HREF="index.html#893">[ thread ]</A>
+<A HREF="subject.html#893">[ subject ]</A>
+<A HREF="author.html#893">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

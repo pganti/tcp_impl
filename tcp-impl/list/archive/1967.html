@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Fri, 28 Jan 2000 14:01:30 -0600 (CST)" -->
+<!-- isoreceived="20000128200130" -->
+<!-- sent="Fri, 28 Jan 2000 14:01:30 -0600 (CST)" -->
+<!-- isosent="20000128200130" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="200001282001.OAA12473@frantic.bsdi.com" -->
+<!-- inreplyto="TCP MSS option value" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001282001.OAA12473@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 28 2000 - 15:01:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1968.html">Rick Jones: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1967">[ date ]</A>
+<A HREF="index.html#1967">[ thread ]</A>
+<A HREF="subject.html#1967">[ subject ]</A>
+<A HREF="author.html#1967">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+John,
+<BR>
+<P><EM>&gt; Date: Fri, 28 Jan 2000 14:24:11 -0500
+</EM><BR>
+<EM>&gt; From: John Hawkinson &lt;<A HREF="mailto:jhawk@bbnplanet.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001282001.OAA12473@frantic.bsdi.com&gt;">jhawk@bbnplanet.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: TCP MSS option value
+</EM><BR>
+...
+<BR>
+<EM>&gt; Err, you're saying that an the MTU of one side of the interface does
+</EM><BR>
+<EM>&gt; not agree with the MTU of the other side of the interface, and because
+</EM><BR>
+<EM>&gt; IOS assumes it will never get a packet on an interface that is larger
+</EM><BR>
+<EM>&gt; than the MTU for that interface, it has a problem when it receives
+</EM><BR>
+<EM>&gt; such a packet?
+</EM><BR>
+<P>Yes, they get tossed.
+<BR>
+<P><EM>&gt; &gt; UUNET thinks 4K is just fine and sends the packet, the ISP box drops
+</EM><BR>
+<EM>&gt; &gt; it in hardware.  Because it doesn't get dropped by IP, no ICMP
+</EM><BR>
+<EM>&gt; &gt; message gets generated, and you have a black hole.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Hmm...yes, though a counter does get incremented, I think.
+</EM><BR>
+<P>On Cisco routers, there is a &quot;giants&quot; statistic that gets
+<BR>
+incremented when this happens.  But you need access to the
+<BR>
+router to see that...
+<BR>
+<P>...
+<BR>
+<EM>&gt; &gt; There are various tests you can do from your local side to
+</EM><BR>
+<EM>&gt; &gt; verify that this is indeed what is happening, and then you
+</EM><BR>
+<EM>&gt; &gt; can call up and complain to your ISP about having their
+</EM><BR>
+<EM>&gt; &gt; hardware misconfigured.
+</EM><BR>
+<EM>&gt; &gt; 	1) Ping the web server, if that works:
+</EM><BR>
+<EM>&gt; &gt; 	2) ping again with large packets (-s 10000)
+</EM><BR>
+<EM>&gt; &gt; 	3) Try the test to your ISP's router
+</EM><BR>
+<EM>&gt; &gt; 	4) try &quot;traceroute www.XXX.com 10000&quot;, because
+</EM><BR>
+<EM>&gt; &gt; 	   the return packets are small, that will
+</EM><BR>
+<EM>&gt; &gt; 	   succeed where pint -s 10000 won't.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is indistinguishable from an ICMP-filtering-induced
+</EM><BR>
+<EM>&gt; PMTU blackhole, though.
+</EM><BR>
+<P>Not neccessarily.  If the web site is behind an ICMP-filtering
+<BR>
+router at the remote end, you'll be able to do &quot;ping -s 10000&quot;
+<BR>
+to the machines in front of the firewall.  If it is the ISP's
+<BR>
+router that is misconfigured, the &quot;ping -s 10000&quot; will fail on
+<BR>
+anything after your local ISP router, but the traceroute will
+<BR>
+succeed.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001282001.OAA12473@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1968.html">Rick Jones: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1967">[ date ]</A>
+<A HREF="index.html#1967">[ thread ]</A>
+<A HREF="subject.html#1967">[ subject ]</A>
+<A HREF="author.html#1967">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

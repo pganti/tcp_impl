@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: detecting loss of retransmit</TITLE>
+<META NAME="Author" CONTENT="Sally Floyd (floyd@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: detecting loss of retransmitted packets in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: detecting loss of retransmitted packets in TCP</H1>
+<!-- received="Tue Dec 23 10:49:23 1997" -->
+<!-- isoreceived="19971223154923" -->
+<!-- sent="Tue, 23 Dec 1997 09:57:11 PST" -->
+<!-- isosent="19971223175711" -->
+<!-- name="Sally Floyd" -->
+<!-- email="floyd@ee.lbl.gov" -->
+<!-- subject="Re: detecting loss of retransmitted packets in TCP" -->
+<!-- id="199712231757.JAA25647@owl.ee.lbl.gov" -->
+<!-- inreplyto="detecting loss of retransmitted packets in TCP" -->
+<STRONG>From:</STRONG> Sally Floyd (<A HREF="mailto:floyd@ee.lbl.gov?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;199712231757.JAA25647@owl.ee.lbl.gov&gt;"><EM>floyd@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Dec 23 1997 - 12:57:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0858.html">Vern Paxson: "Re: When to reset TCP's timer?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0856.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0831.html">Mohit Aron: "detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0864.html">Curtis Villamizar: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0864.html">Curtis Villamizar: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#857">[ date ]</A>
+<A HREF="index.html#857">[ thread ]</A>
+<A HREF="subject.html#857">[ subject ]</A>
+<A HREF="author.html#857">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;	I have a question concerning TCP behaviour. Current TCP implementations
+</EM><BR>
+<EM>&gt;resort to a timeout when a retransmitted packet is lost. 
+</EM><BR>
+...
+<BR>
+<EM>&gt;The sender can easily detect loss of a retransmitted segment by counting the
+</EM><BR>
+<EM>&gt;number of duplicate ACKs received (if more than 9 are received, then the
+</EM><BR>
+<EM>&gt;sender can assume that the retransmitted packet was also lost). 
+</EM><BR>
+...
+<BR>
+<EM>&gt;The purpose of a retransmission timeout - clearing packets in the
+</EM><BR>
+<EM>&gt;network - can also be achieved by slow-start.
+</EM><BR>
+<P><EM>&gt;I'd be glad to know opinions about this.
+</EM><BR>
+<P>My own opinion in the past has been that it is best to be conservative
+<BR>
+in the face of retransmitted packets that are themselves dropped.  This
+<BR>
+issue has also come up in the context of SACK TCP.  With SACK TCP, it
+<BR>
+is considerably easier to detect retransmitted packets that are
+<BR>
+themselves dropped, and several SACK implementations eliminate the
+<BR>
+retransmit timeout in this case.
+<BR>
+<P>As you indicate, the choices for reacting to a retransmitted packet
+<BR>
+that is itself dropped include the following:
+<BR>
+(1) waiting for a retransmit timeout;
+<BR>
+(2) re-retransmitting one packet and slow-starting;
+<BR>
+(3) re-retransmitting dropped packets and sending new packets, subject 
+<BR>
+&nbsp;&nbsp;to cutting the congestion window in half for each window of data in
+<BR>
+&nbsp;&nbsp;which one or more packets are dropped, and subject to the constraint
+<BR>
+&nbsp;&nbsp;the outgoing packets need to be clocked by incoming dup acks.
+<BR>
+<P>I don't know which of these three is best for the network, in a
+<BR>
+scenario of sudden heavy congestion when all TCPs are using the same
+<BR>
+algorithm.  Quite possibly it is not a critical issue one way or
+<BR>
+another, though (2) and (3) represent rather different choices.  But in
+<BR>
+general, I think it is good to explicitly think of TCP's retransmit
+<BR>
+timers as effectively one of TCP's congestion control mechanisms, for
+<BR>
+times of heavy congestion (e.g., when a retransmitted packet is itself
+<BR>
+dropped?, or when the congestion window is too small for three dup acks
+<BR>
+to be received after a packet loss), to understand how they affect TCP
+<BR>
+dynamics in times of high congestion, and to understand which of these
+<BR>
+effects we should be careful to retain.
+<BR>
+<P>- Sally
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0858.html">Vern Paxson: "Re: When to reset TCP's timer?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0856.html">Graham Cope: "Re: When to reset TCP's timer?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0831.html">Mohit Aron: "detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0864.html">Curtis Villamizar: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0864.html">Curtis Villamizar: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#857">[ date ]</A>
+<A HREF="index.html#857">[ thread ]</A>
+<A HREF="subject.html#857">[ subject ]</A>
+<A HREF="author.html#857">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

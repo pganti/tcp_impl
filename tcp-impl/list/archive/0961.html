@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: question about Nagle algorit</TITLE>
+<META NAME="Author" CONTENT="David Mosberger (davidm@hpl.hp.com)">
+<META NAME="Subject" CONTENT="Re: question about Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: question about Nagle algorithm</H1>
+<!-- received="Wed Feb 18 11:28:36 1998" -->
+<!-- isoreceived="19980218162836" -->
+<!-- sent="Wed, 18 Feb 1998 10:37:44 -0800" -->
+<!-- isosent="19980218183744" -->
+<!-- name="David Mosberger" -->
+<!-- email="davidm@hpl.hp.com" -->
+<!-- subject="Re: question about Nagle algorithm" -->
+<!-- id="199802181837.KAA08535@napali.hpl.hp.com" -->
+<!-- inreplyto="9802181551.AA28848@meghana.watson.ibm.com" -->
+<STRONG>From:</STRONG> David Mosberger (<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;199802181837.KAA08535@napali.hpl.hp.com&gt;"><EM>davidm@hpl.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 13:37:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#961">[ date ]</A>
+<A HREF="index.html#961">[ thread ]</A>
+<A HREF="subject.html#961">[ subject ]</A>
+<A HREF="author.html#961">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi Erich,
+<BR>
+<P><EM>&gt;&gt;&gt;&gt;&gt; On Wed, 18 Feb 1998 10:51:03 -0500 (EST), Erich Nahum &lt;<A HREF="mailto:nahum@watson.ibm.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;199802181837.KAA08535@napali.hpl.hp.com&gt;">nahum@watson.ibm.com</A>&gt; said:
+</EM><BR>
+<P>&nbsp;&nbsp;Erich&gt; David Mosberger writes:
+<BR>
+<EM>  &gt;&gt; [Solution 1:] The solution is to inhibit the sending of new TCP
+</EM><BR>
+<EM>  &gt;&gt; segments when new outgoing data arrives from the user if any
+</EM><BR>
+<EM>  &gt;&gt; previously transmitted data on the connection remains
+</EM><BR>
+<EM>  &gt;&gt; unacknowledged.
+</EM><BR>
+<EM>  &gt;&gt; 
+</EM><BR>
+<EM>  &gt;&gt; [Solution 2:] The solution is to inhibit the sending of new small
+</EM><BR>
+<EM>  &gt;&gt; TCP segments when new outgoing data arrives from the user if the
+</EM><BR>
+<EM>  &gt;&gt; previously transmitted data on the connection was small and
+</EM><BR>
+<EM>  &gt;&gt; remains unacknowledged (small == less than max. segment size).
+</EM><BR>
+<P>&nbsp;&nbsp;Erich&gt; I believe the BSD derived TCP's follow solution 2 above;
+<BR>
+&nbsp;&nbsp;Erich&gt; certainly AIX does.  The only difference between 1 and 2 as
+<BR>
+&nbsp;&nbsp;Erich&gt; you describe them above seems to be the size of the segment
+<BR>
+&nbsp;&nbsp;Erich&gt; in question.  Solution 1 forces TCP to behave in something
+<BR>
+&nbsp;&nbsp;Erich&gt; similar to a stop-and-wait flow control protocol, i.e., even
+<BR>
+&nbsp;&nbsp;Erich&gt; if the segment is a full MTU size wait for ACKs to come back.
+<BR>
+&nbsp;&nbsp;Erich&gt; The spirit of the Nagle algorithm is to reduce the use of
+<BR>
+&nbsp;&nbsp;Erich&gt; small packets.  Solution 2 means `have at most one
+<BR>
+&nbsp;&nbsp;Erich&gt; outstanding small packet per conversation.'
+<BR>
+<P>I think the BSD implementation is more accuratly described as: &quot;no
+<BR>
+small segments when there is any data in flight&quot;.  Solution 2 would be
+<BR>
+&quot;no small segments when the previously sent and unacknowledged segment
+<BR>
+was small&quot;.
+<BR>
+<P>However, the issue has become kind of moot because I found a realistic
+<BR>
+case where the behavior of Solution 1 would produce better results
+<BR>
+than Solution 2 (I won't bore anyone with the details), so there is no
+<BR>
+clear advantage to Solution 2.
+<BR>
+<P>Thanks,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--david
+<BR>
+<PRE>
+-- 
+David Mosberger; HP Labs; 1501 Page Mill Rd MS 1U17; Palo Alto, CA 94304-1126
+<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20question%20about%20Nagle%20algorithm&In-Reply-To=&lt;199802181837.KAA08535@napali.hpl.hp.com&gt;">davidm@hpl.hp.com</A>          voice: (650) 236-2575          fax: (650) 857-5100
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0953.html">Erich Nahum: "Re: question about Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#961">[ date ]</A>
+<A HREF="index.html#961">[ thread ]</A>
+<A HREF="subject.html#961">[ subject ]</A>
+<A HREF="author.html#961">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

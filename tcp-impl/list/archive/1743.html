@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Nagle -- again</TITLE>
+<META NAME="Author" CONTENT="Greg Minshall (minshall@siara.com)">
+<META NAME="Subject" CONTENT="Nagle -- again">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Nagle -- again</H1>
+<!-- received="Thu Jun 17 22:32:28 1999" -->
+<!-- isoreceived="19990618023228" -->
+<!-- sent="Thu, 17 Jun 1999 19:27:13 -0700" -->
+<!-- isosent="19990618022713" -->
+<!-- name="Greg Minshall" -->
+<!-- email="minshall@siara.com" -->
+<!-- subject="Nagle -- again" -->
+<!-- id="199906180227.TAA01525@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Greg Minshall (<A HREF="mailto:minshall@siara.com?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906180227.TAA01525@red.mtv.siara.com&gt;"><EM>minshall@siara.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 17 1999 - 22:27:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1744.html">bob packer: "tcp mss question"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1748.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1748.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1750.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1754.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1758.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1759.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1760.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1762.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1763.html">Vernon Schryver: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1764.html">braden@ISI.EDU: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1766.html">Vernon Schryver: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1769.html">Joe Touch: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1743">[ date ]</A>
+<A HREF="index.html#1743">[ thread ]</A>
+<A HREF="subject.html#1743">[ subject ]</A>
+<A HREF="author.html#1743">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+All and sundry,
+<BR>
+<P>We last talked about this in March.  The I-D i had submitted last fall has 
+<BR>
+either expired or is about to expire.  So...
+<BR>
+<P>My plan is to submit the updated version of my I-D (that i sent to this list a 
+<BR>
+long time ago -- Fri, 26 Feb 1999) to the Internet Drafts directory (soon, 
+<BR>
+given that the cut-off for the Oslo IETF is coming up, and i don't want it to 
+<BR>
+be &quot;out of print&quot; that long).
+<BR>
+<P>There was, at the end of our previous discussions, still some amount of 
+<BR>
+controversy.  I guess that will flare up again, and we will talk about it.  
+<BR>
+After that, my hope is to submit the I-D as an experimental RFC (but, we will 
+<BR>
+see!).
+<BR>
+<P><P>By the way, since our discussions in March, i (and some others) have published 
+<BR>
+a short paper on one of the scenarios that made me feel like a modified Nagle 
+<BR>
+would be a &quot;good thing&quot;.  A postscript version of that paper is online at
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="http://www.cc.gatech.edu/fac/Ellen.Zegura/wisp99/papers/minshall.ps">http://www.cc.gatech.edu/fac/Ellen.Zegura/wisp99/papers/minshall.ps</A>
+<BR>
+<P>(it was presented at the &quot;workshop on internet server performance&quot; at the 
+<BR>
+beginning of May).  Note that the &quot;implementation of a modified version of 
+<BR>
+Nagle&quot; reported in the paper -- which didn't give all that great results -- 
+<BR>
+was *NOT* an implementation of the modified version of Nagle as suggested in 
+<BR>
+the I-D.  However, the paper gives both a good explanation of how application 
+<BR>
+developers may not be doing the right buffering, and thus see many more 
+<BR>
+&quot;Nagle+delayed ACK&quot; delays than they need have seen, as well as of how, even 
+<BR>
+with &quot;perfect buffering&quot;, applications may have the trailing packet of some 
+<BR>
+responses delayed; the first motivates us to educate application developers, 
+<BR>
+the second motivates us (me, at least) to modify Nagle slightly to remove this 
+<BR>
+class of delay.
+<BR>
+<P>Cheers,  Greg
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1744.html">bob packer: "tcp mss question"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1742.html">Keith Owens: "Re: SUBNETS"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1748.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1748.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1750.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1754.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1758.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1759.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1760.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1762.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1763.html">Vernon Schryver: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1764.html">braden@ISI.EDU: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1766.html">Vernon Schryver: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1769.html">Joe Touch: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1743">[ date ]</A>
+<A HREF="index.html#1743">[ thread ]</A>
+<A HREF="subject.html#1743">[ subject ]</A>
+<A HREF="author.html#1743">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

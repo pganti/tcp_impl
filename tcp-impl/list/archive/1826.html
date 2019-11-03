@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Problems with Path MTU D</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Problems with Path MTU Discovery</H1>
+<!-- received="Thu Sep 16 13:27:22 1999" -->
+<!-- isoreceived="19990916172722" -->
+<!-- sent="Thu, 16 Sep 1999 10:18:42 -0700 (PDT)" -->
+<!-- isosent="19990916171842" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TCP Problems with Path MTU Discovery" -->
+<!-- id="199909161718.KAA00389@rum.isi.edu" -->
+<!-- inreplyto="TCP Problems with Path MTU Discovery" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161718.KAA00389@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 16 1999 - 13:18:42 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1827.html">David Borman: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1825.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1827.html">David Borman: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1826">[ date ]</A>
+<A HREF="index.html#1826">[ thread ]</A>
+<A HREF="subject.html#1826">[ subject ]</A>
+<A HREF="author.html#1826">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Geert Jan de Groot &lt;<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909161718.KAA00389@rum.isi.edu&gt;">GeertJan.deGroot@bsdi.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: TCP Problems with Path MTU Discovery 
+</EM><BR>
+<EM>&gt; Date: Thu, 16 Sep 1999 04:39:42 +0200
+</EM><BR>
+...
+<BR>
+<EM>&gt; First, a quicky at the end of the document:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;3.3.   Determining MSS from PMTU
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;     The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+</EM><BR>
+<EM>&gt;       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt; &gt;     determined values to determine the MSS to advertise.
+</EM><BR>
+<EM>&gt; &gt;     This results in an advertised MSS that is smaller than the largest
+</EM><BR>
+<EM>&gt; &gt;     MTU the system can receive.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I would like to change the marked sentence with:
+</EM><BR>
+<EM>&gt; The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt; the largest MTU of all interfaces on the system.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Rationale: assume a TCP connect happens over an ethernet interface.
+</EM><BR>
+<EM>&gt; While the TCP session is alive, routing changes and the session is
+</EM><BR>
+<EM>&gt; now routed over an FDDI interface. If mss would have been 1460 (ethernet),
+</EM><BR>
+<EM>&gt; we would see micrograms on the FDDI interface unneccesary.
+</EM><BR>
+<EM>&gt; I just want to make the original text more explicit, that's all.
+</EM><BR>
+<P>Advertising the largest of all interfaces at the _start_ of
+<BR>
+a connection won't help a connection that changes interfaces
+<BR>
+while it is running.
+<BR>
+<P>The advertised MSS need only be as large as the MTU of
+<BR>
+the outgoing interface during connection start.
+<BR>
+<P>(if there is reason to re-check or re-try larger MTUs
+<BR>
+later, that needs to be addressed separately).
+<BR>
+<P><EM>&gt; &gt;     TCP should notice that the connection is timing out.  After several
+</EM><BR>
+<EM>&gt; &gt;     timeouts, TCP should attempt to send smaller packets, perhaps turn-
+</EM><BR>
+<EM>&gt; &gt;     ing off the DF flag for each packet.  If this succeeds, it should
+</EM><BR>
+<EM>&gt; &gt;     continue to turn off PMTUD for the connection for some reasonable
+</EM><BR>
+<EM>&gt; &gt;     period of time, after which it should probe again to try to deter-
+</EM><BR>
+<EM>&gt; &gt;     mine if the path has changed.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I am not sure if I agree with this. First, there is a huge performance
+</EM><BR>
+<EM>&gt; impact; second, there is ambiguity between packets dropped because of
+</EM><BR>
+<EM>&gt; MTU problems and packets dropped because of congestion. The side effect
+</EM><BR>
+<EM>&gt; of the suggestion above is that congestion might lead to sending
+</EM><BR>
+<EM>&gt; micrograms unneccesary.
+</EM><BR>
+<EM>&gt; Second, this requires changes in the web server config, while it's
+</EM><BR>
+<EM>&gt; the _client_ path that's broken. I see no big incentive for webserver
+</EM><BR>
+<EM>&gt; maintainers to install this workaround if it becomes available.
+</EM><BR>
+<P>Interesting idea - that backoff includes packet size, as well
+<BR>
+as frequency. Whether that is useful depends not on whether there
+<BR>
+is congestion, but on what is congested.
+<BR>
+<P>If there is output port contention at a router, smaller packet sizes
+<BR>
+may be a good way to go here.
+<BR>
+<P>If the router queue slots grab fixed chunks of memory, or if
+<BR>
+the problem is per-packet processing (i.e., if the problem is
+<BR>
+per-packet, not per-byte) then only time-based backoff will help.
+<BR>
+<P>Very interesting reseach - might be worthwhile to mention
+<BR>
+as a possibility, but until someone specs it more precisely and
+<BR>
+implements it, it may be premature to reccommend.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1827.html">David Borman: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1825.html">Smith, Allyn D: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1827.html">David Borman: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1826">[ date ]</A>
+<A HREF="index.html#1826">[ thread ]</A>
+<A HREF="subject.html#1826">[ subject ]</A>
+<A HREF="author.html#1826">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

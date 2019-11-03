@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 21:24:45 1999" -->
+<!-- isoreceived="19990916012445" -->
+<!-- sent="Wed, 15 Sep 1999 18:23:02 -0700 (PDT)" -->
+<!-- isosent="19990916012302" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="199909160123.SAA29842@rum.isi.edu" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160123.SAA29842@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 21:23:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1824.html">Geoff Huston: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1819">[ date ]</A>
+<A HREF="index.html#1819">[ thread ]</A>
+<A HREF="subject.html#1819">[ subject ]</A>
+<A HREF="author.html#1819">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Alan Hannan &lt;<A HREF="mailto:alan@globalcenter.net?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160123.SAA29842@rum.isi.edu&gt;">alan@globalcenter.net</A>&gt;
+</EM><BR>
+<EM>&gt; To: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160123.SAA29842@rum.isi.edu&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160123.SAA29842@rum.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>, <A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909160123.SAA29842@rum.isi.edu&gt;">vjs@calcite.rhyolite.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP's handling of IP precedence
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Is it the case that Diffserv:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; 	- intends these bits to be used for TCP connections?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   No.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 	- intends that they change after a connection is established?
+</EM><BR>
+<EM>&gt; &gt; 		or would that constitute the need for 
+</EM><BR>
+<EM>&gt; &gt; 		a TCP extension to renegotiate?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Kind of, but not really.
+</EM><BR>
+<P>I don't understand how the first question can be 
+<BR>
+a &quot;No&quot; and the second question is relevant.
+<BR>
+<P>However...
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt;   Rather, Diffserv intends that they change while the connection is
+</EM><BR>
+<EM>&gt;   being established.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Remember that what happens is that the initiator tries to setup a 
+</EM><BR>
+<EM>&gt;   tcp session w/ TOS=0; but en route to the receiver, a router
+</EM><BR>
+<EM>&gt;   changes the DS bits from the original [as specificed by the
+</EM><BR>
+<EM>&gt;   initiator] to something else.  The receiver then 'plays along'
+</EM><BR>
+<EM>&gt;   because he doesn't know any better, and the initiator doesn't get
+</EM><BR>
+<EM>&gt;   back what he wants, so he breaks the connection.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Ideally, the 'initiator' would negotiate the TOS w/ the receiver,
+</EM><BR>
+<EM>&gt;   but this doesn't happen.
+</EM><BR>
+<P>Why shouldn't this happen like ICMP redirects or PMTU - some sort
+<BR>
+of NACK at the ICMP level to the source?
+<BR>
+<P>I.e., &quot;ideally, the initiator would negotiate with the network,
+<BR>
+then ask the receiver for something known&quot;...
+<BR>
+<P>??
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1818.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1820.html">Alan Hannan: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1824.html">Geoff Huston: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1819">[ date ]</A>
+<A HREF="index.html#1819">[ thread ]</A>
+<A HREF="subject.html#1819">[ subject ]</A>
+<A HREF="author.html#1819">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:56 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

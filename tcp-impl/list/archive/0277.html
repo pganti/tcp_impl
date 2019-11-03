@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: PSH">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH</H1>
+<!-- received="Fri Mar 28 05:11:53 1997" -->
+<!-- isoreceived="19970328101153" -->
+<!-- sent="Fri, 28 Mar 1997 08:06:32 -0500 (EST)" -->
+<!-- isosent="19970328130632" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: PSH" -->
+<!-- id="199703281306.IAA13523@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="PSH" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20PSH&In-Reply-To=&lt;199703281306.IAA13523@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 28 1997 - 08:06:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0278.html">der Mouse : "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0276.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#277">[ date ]</A>
+<A HREF="index.html#277">[ thread ]</A>
+<A HREF="subject.html#277">[ subject ]</A>
+<A HREF="author.html#277">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Looking at the trace I sent, you will note that message 1 packet #3
+</EM><BR>
+<EM>&gt; is shorter than MSS and has the PSH set, while message 2 packet #2 is
+</EM><BR>
+<EM>&gt; shorter than MSS and does _not_ have the PSH set.
+</EM><BR>
+<P><EM>&gt; In both cases, this occurs at the CRLF CRLF between the SMTP headers
+</EM><BR>
+<EM>&gt; and the body.  Presumably, multiple application calls to the stack.
+</EM><BR>
+<P><EM>&gt; In either case, had the API allowed the application to set PSH,
+</EM><BR>
+<P>...nothing in particular would have happened, even if the application
+<BR>
+had chosen to take advantage of it.  To cure this particular lossage,
+<BR>
+you need to (a) have the stack _not_ set PSH at the end of every
+<BR>
+application write, and (b) if the stack has a timeout that would make
+<BR>
+it send non-PSHed data anyway, ensure that the application does the
+<BR>
+first body write soon enough that this timeout doesn't trip.
+<BR>
+<P>The case of mesasge 2 packet #2 is stranger because of the missing PSH;
+<BR>
+if the stack sends a less-than-MSS packet without PSH, then either it's
+<BR>
+sending into a restricted window[%] or it's broken because it drained
+<BR>
+its available data without setting PSH...assuming of course that
+<BR>
+something (such as path MTU discovery) hasn't caused it to lower its
+<BR>
+effective MSS for the connection.  I'm considering only the case of
+<BR>
+message 1 packet #3 here, and I don't have the trace itself at hand.
+<BR>
+<P>[%] Even if the sending stack does silly window avoidance, such packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;can be generated; if the peer insists on advertising a tiny window,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;you've got to eventually decide it's not being silly and send a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;tiny segment into it.
+<BR>
+<P>I will note that if the stack _does_ time out and send the last header
+<BR>
+packet on its own initiative, this can cause the time between that and
+<BR>
+the first body packet to be arbitrarily short, because the application
+<BR>
+can write the first body data an arbitrarily short time after this
+<BR>
+timeout occurs.
+<BR>
+<P><EM>&gt; This is a documented case where the lack of a PSH ([...]) caused
+</EM><BR>
+<EM>&gt; additional network packet load and concomitant additional
+</EM><BR>
+<EM>&gt; retransmissions.
+</EM><BR>
+<P>More likely it's the stack forcing a PSH at the end of each application
+<BR>
+write; less likely than that, it could have been the application being
+<BR>
+slow.  Allowing the application layer to set PSH wouldn't help unless
+<BR>
+accompanied by having the stack not supply a PSH at the end of every
+<BR>
+application data write.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20PSH&In-Reply-To=&lt;199703281306.IAA13523@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0278.html">der Mouse : "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0276.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#277">[ date ]</A>
+<A HREF="index.html#277">[ thread ]</A>
+<A HREF="subject.html#277">[ subject ]</A>
+<A HREF="author.html#277">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

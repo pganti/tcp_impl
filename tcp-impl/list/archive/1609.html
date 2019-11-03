@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: dynamic rwin adjustments</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: dynamic rwin adjustments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: dynamic rwin adjustments</H1>
+<!-- received="Tue Feb 23 19:49:45 1999" -->
+<!-- isoreceived="19990224004945" -->
+<!-- sent="Tue, 23 Feb 1999 17:43:17 -0700 (MST)" -->
+<!-- isosent="19990224004317" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: dynamic rwin adjustments" -->
+<!-- id="199902240043.RAA22527@calcite.rhyolite.com" -->
+<!-- inreplyto="dynamic rwin adjustments" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20dynamic%20rwin%20adjustments&In-Reply-To=&lt;199902240043.RAA22527@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 23 1999 - 19:43:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1609">[ date ]</A>
+<A HREF="index.html#1609">[ thread ]</A>
+<A HREF="subject.html#1609">[ subject ]</A>
+<A HREF="author.html#1609">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20dynamic%20rwin%20adjustments&In-Reply-To=&lt;199902240043.RAA22527@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; Anybody doing anything with dynamic default rwin sizes? Like, if the
+</EM><BR>
+<EM>&gt; incoming connection request is from a local node whose RTT is already
+</EM><BR>
+<EM>&gt; known, set window for X? or, probably better, if connection request is
+</EM><BR>
+<EM>&gt; from a remote system with no defined route, assume high-latency RTT
+</EM><BR>
+<EM>&gt; equal to previous remote connections and set rwin to X?
+</EM><BR>
+<P>Why bother, at least using tactics like those?  The RTT is only one of
+<BR>
+the parameters for computing the window size that gives you maximum
+<BR>
+throughput.  Given an RTT of 1 msec, 100 msec or 100 usec, what window
+<BR>
+would you recommend?  Besides, for many TCP connections, more throughput
+<BR>
+than can be provided by 4 MSS worth of window is useless and will not and
+<BR>
+cannot be used.
+<BR>
+<P>What resources are you conserving or better utilizing by adjusting your
+<BR>
+window?  Why not just advertise a 2 GByte receive window for all
+<BR>
+connections?  I can see two reasons, worst case buffer space used and the
+<BR>
+buffer space in the router(s) just beyond the big bottleneck(s) in the
+<BR>
+path.  You care about the former because it's not nice to have a packet
+<BR>
+arrive when you have nowhere to put it.  You might care about the latter,
+<BR>
+because having a lot of bytes waiting in that router means they're more
+<BR>
+likely to be discarded or to contribute to latency on your other incoming
+<BR>
+traffic.   However, the other guy's congestion window is also supposed to
+<BR>
+worry about such things.
+<BR>
+<P>The paper recently mentioned here about dynamically adjusting receive
+<BR>
+windows looks interesting.  As I understand it, their idea is to adjust
+<BR>
+receive windows based on the out-going congestion window and/or recent
+<BR>
+receive throughput and a notion of fairness.  Their plan seems intended
+<BR>
+to give every connection the largest window that maximizes total system
+<BR>
+throughput, while honoring the familiar operating system notion of fairness
+<BR>
+or at least avoiding starvation.  (I'd repeat the URL of the paper, but
+<BR>
+I think I've lost it.)
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20dynamic%20rwin%20adjustments&In-Reply-To=&lt;199902240043.RAA22527@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1608.html">Eric A. Hall: "dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1609">[ date ]</A>
+<A HREF="index.html#1609">[ thread ]</A>
+<A HREF="subject.html#1609">[ subject ]</A>
+<A HREF="author.html#1609">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: SYN bombing defense (was: TIME-W</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="SYN bombing defense (was: TIME-WAIT truncation)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>SYN bombing defense (was: TIME-WAIT truncation)</H1>
+<!-- received="Thu Jun  5 15:33:42 1997" -->
+<!-- isoreceived="19970605193342" -->
+<!-- sent="Fri, 06 Jun 1997 00:28:23 +0200" -->
+<!-- isosent="19970605222823" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="SYN bombing defense (was: TIME-WAIT truncation)" -->
+<!-- id="199706052228.AAA05808@rekk.dna.lth.se" -->
+<!-- inreplyto="199706052150.PAA06270@mica.denver.sgi.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20SYN%20bombing%20defense%20(was:%20TIME-WAIT%20truncation)&In-Reply-To=&lt;199706052228.AAA05808@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 18:28:23 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0463.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0460.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#464">[ date ]</A>
+<A HREF="index.html#464">[ thread ]</A>
+<A HREF="subject.html#464">[ subject ]</A>
+<A HREF="author.html#464">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Straying from the original topic (note subject change):
+<BR>
+<P>Vernon Schryver &lt;<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20SYN%20bombing%20defense%20(was:%20TIME-WAIT%20truncation)&In-Reply-To=&lt;199706052228.AAA05808@rekk.dna.lth.se&gt;">vjs@mica.denver.sgi.com</A>&gt; writes:
+<BR>
+<EM>&gt;The SYN bombing issue is long over and solved, essentially
+</EM><BR>
+<EM>&gt;independently of CERT, and certainly independently of any verifying by
+</EM><BR>
+<EM>&gt;you or ISI.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The solution to SYN bombing is 
+</EM><BR>
+<EM>&gt;    - use as large a listen queue as you can afford, and try to make
+</EM><BR>
+<EM>&gt;       the cost of each slot on the listen queue small and searching a
+</EM><BR>
+<EM>&gt;       big queue fast so you can afford more.  At least 30K slots is
+</EM><BR>
+<EM>&gt;       one recommendation.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;    - drop either the oldest or a random, pre-existing entry in your
+</EM><BR>
+<EM>&gt;       listen queue when it is full and a new SYN arrives.
+</EM><BR>
+<P>A few remarks about SYN bombing. First, the approach Vernon
+<BR>
+outlines above is not the only known solution. There is the
+<BR>
+SYN cookie solution designed by Dan Bernstein and myself, and the
+<BR>
+RST cookie solution which I designed independently based on
+<BR>
+the idea of SYN cookies. SYN cookies have been implemented
+<BR>
+for several TCP stacks. To my knowledge RST cookies have only
+<BR>
+been implemented for the Linux TCP stack.
+<BR>
+<P>For those unfamiliar, both of these defenses rely on sending out a
+<BR>
+cryptographic challange cookie in response to a SYN packet after the
+<BR>
+listen queue size passes some threshold value. The server side then
+<BR>
+simply forgets that the original SYN ever occured. If the client side
+<BR>
+side manages to respond to the challange, the server either recontructs
+<BR>
+the original SYN from the information carried in the response (SYN cookie),
+<BR>
+or adds the client address to a &quot;verified&quot; list and waits for
+<BR>
+the client to retry (RST cookies) (verified clients are forgotten
+<BR>
+after some reasonable timeout).
+<BR>
+<P>Both of these defenses can sustain normal operation against extremely
+<BR>
+high attack rates without increasing the backlog queue size. In robustness
+<BR>
+testing of the Linux implementation we have flooded a machine as
+<BR>
+fast as a 100 base-T ethernet would allow. This was around 20000 connection
+<BR>
+attempts a second. The machine under attack was still able to take incoming
+<BR>
+connections from across the Atlantic without noticable delay, at least until
+<BR>
+we increased the packet rate to the point that the ethernet was taking 50%
+<BR>
+packet loss. I don't even want to think about how big a backlog queue you
+<BR>
+would need to survive that kind of attack rate with a random drop strategy.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20SYN%20bombing%20defense%20(was:%20TIME-WAIT%20truncation)&In-Reply-To=&lt;199706052228.AAA05808@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0463.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0460.html">Vernon Schryver: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0465.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#464">[ date ]</A>
+<A HREF="index.html#464">[ thread ]</A>
+<A HREF="subject.html#464">[ subject ]</A>
+<A HREF="author.html#464">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

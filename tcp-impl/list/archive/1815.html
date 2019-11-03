@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 19:56:35 1999" -->
+<!-- isoreceived="19990915235635" -->
+<!-- sent="Wed, 15 Sep 1999 17:53:26 -0600 (MDT)" -->
+<!-- isosent="19990915235326" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP's handling of IP precedence" -->
+<!-- id="199909152353.RAA29875@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909152353.RAA29875@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 19:53:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1814.html">Scott Bradner: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1817.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1815">[ date ]</A>
+<A HREF="index.html#1815">[ thread ]</A>
+<A HREF="subject.html#1815">[ subject ]</A>
+<A HREF="author.html#1815">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Scott Bradner &lt;<A HREF="mailto:sob@harvard.edu?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909152353.RAA29875@calcite.rhyolite.com&gt;">sob@harvard.edu</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; I think the only commonly used RFC 1349 values are 0 (extremely common),
+</EM><BR>
+<EM>&gt; &gt; 0x10 (minimize delay), and 0x80 (maximize throughput). 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; what about the other side of the coin - what level of support is
+</EM><BR>
+<EM>&gt; there in the current Internet infrastructure for these?
+</EM><BR>
+<P>What do you mean by &quot;current Internet infrastructure&quot;?  While what the
+<BR>
+500-1000 biggest routers in the Internet might do is interesting, there
+<BR>
+are other important areas.  I count at least the following:
+<BR>
+&nbsp;&nbsp;1. corporate WANs
+<BR>
+&nbsp;&nbsp;2. LANs ranging from a handful to a gross of 802.3, FDDI, HIPPI, etc. nets
+<BR>
+&nbsp;&nbsp;3. embedded systems
+<BR>
+&nbsp;&nbsp;4. paths between hosts on The Intenret.
+<BR>
+<P>Surveying all of those sounds hard.  However, if you look at the first
+<BR>
+4.4BSD-Lite CDROM, you'll find that the SLIP driver looks for 0x10 (low
+<BR>
+delay).  I think my PPP code is far from the only PPP to support TOS
+<BR>
+queuing.  I think I've seen requirements documents for Tbit/sec routers
+<BR>
+that mentioned support for TOS queuing (but maybe they'll end up doing
+<BR>
+DiffServ).  Cisco was slow to support TOS queuing, but I think it's been
+<BR>
+in the IOS for at least 2 and maybe 4 years.
+<BR>
+<P>Note that where TOS queuing is most important in The Internet is the
+<BR>
+opposite of where (I think) DiffServ is important.  People keep talking
+<BR>
+about charging different $$$ rates based on DiffServ bits, and that matters
+<BR>
+where streams from many customers meet.  TOS queuing matters most where
+<BR>
+the queues are longest, and that happens where the link speed differences
+<BR>
+are highest, at the edges in the remote access servers.  The owner of the
+<BR>
+canonical Ascend PPP ISDN or modem box won't care how the customer's bits
+<BR>
+are marked, but the customer does care about seeing telnet and NTP queued
+<BR>
+ahead of FTP data.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;199909152353.RAA29875@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1814.html">Scott Bradner: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1817.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1815">[ date ]</A>
+<A HREF="index.html#1815">[ thread ]</A>
+<A HREF="subject.html#1815">[ subject ]</A>
+<A HREF="author.html#1815">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

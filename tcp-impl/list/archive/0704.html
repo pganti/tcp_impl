@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep  9 04:50:50 1997" -->
+<!-- isoreceived="19970909085050" -->
+<!-- sent="Tue, 9 Sep 1997 07:47:47 -0400 (EDT)" -->
+<!-- isosent="19970909114747" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709091147.HAA12063@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709091147.HAA12063@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 09 1997 - 07:47:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0705.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0703.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0705.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#704">[ date ]</A>
+<A HREF="index.html#704">[ thread ]</A>
+<A HREF="subject.html#704">[ subject ]</A>
+<A HREF="author.html#704">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Another thing we need to add to the list of tcp issues appears to be
+</EM><BR>
+<EM>&gt; properly handling of MTU discovery in the presence of no ICMP.  [...]
+</EM><BR>
+<EM>&gt; suggests we must make correct behaviour in the presence of failure of
+</EM><BR>
+<EM>&gt; mtu discovery a SHOULD
+</EM><BR>
+<P>What _is_ correct behavior in the presence of a peer aggressively
+<BR>
+attempting to break the protocols?  Dropping all ICMP strikes me a bit
+<BR>
+like dropping all ACK-only packets - there comes a point where you have
+<BR>
+to throw up your hands and say &quot;sorry, the peer is broken&quot;.  I'd say we
+<BR>
+should come down hard on anyone who drops so aggressively that MTU
+<BR>
+discovery can't work; I see no reason to encourage such behavior by
+<BR>
+making everybody else jump through hoops to do something near-optimal
+<BR>
+when faced with it.
+<BR>
+<P>Or does your &quot;correct behavior&quot; mean just &quot;doesn't exhibit a
+<BR>
+network-harming failure mode&quot;?  In that case, I agree - but that
+<BR>
+applies to _every_ peer; there's no reason to single out those that
+<BR>
+aggressively drop ICMP.
+<BR>
+<P><EM>&gt; The number of big name web sites demonstrating a total lack of clues
+</EM><BR>
+<EM>&gt; in configuring their firewall and hosts (block ICMP, mtu discovery
+</EM><BR>
+<EM>&gt; on) - big names too -
+</EM><BR>
+<P>- is no excuse to let them redefine the protocols.
+<BR>
+<P>To pick an analogy from a layer higher up the stack, there are lots of
+<BR>
+sites with NAT boxes (often also playing firewall).  Such boxes break
+<BR>
+FTP when the data connection active side is the &quot;outside&quot; machine (ie,
+<BR>
+PORT mode when FTPing out, PASV mode when FTPing in).  But I don't see
+<BR>
+people attempting to &quot;fix&quot; FTP because of this.  (Indeed, one such box
+<BR>
+I have encountered actually modifies the data passing over the FTP
+<BR>
+control connection to kludge around this, which is even uglier than the
+<BR>
+original problem.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709091147.HAA12063@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0705.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0703.html">Alan Cox: "Re: what IW is being used today?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0705.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#704">[ date ]</A>
+<A HREF="index.html#704">[ thread ]</A>
+<A HREF="subject.html#704">[ subject ]</A>
+<A HREF="author.html#704">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:49 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

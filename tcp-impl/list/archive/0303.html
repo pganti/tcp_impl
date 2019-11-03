@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: scheduling and agenda for Me</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (poon@cs.wisc.edu)">
+<META NAME="Subject" CONTENT="Re: scheduling and agenda for Memphis">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: scheduling and agenda for Memphis</H1>
+<!-- received="Wed Apr  2 13:43:51 1997" -->
+<!-- isoreceived="19970402184351" -->
+<!-- sent="Wed, 2 Apr 1997 15:39:39 -0600 (CST)" -->
+<!-- isosent="19970402213939" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="poon@cs.wisc.edu" -->
+<!-- subject="Re: scheduling and agenda for Memphis" -->
+<!-- id="199704022139.PAA01961@parmesan.cs.wisc.edu" -->
+<!-- inreplyto="scheduling and agenda for Memphis" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20scheduling%20and%20agenda%20for%20Memphis&In-Reply-To=&lt;199704022139.PAA01961@parmesan.cs.wisc.edu&gt;"><EM>poon@cs.wisc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 02 1997 - 16:39:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0304.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0291.html">Vern Paxson: "scheduling and agenda for Memphis"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#303">[ date ]</A>
+<A HREF="index.html#303">[ thread ]</A>
+<A HREF="subject.html#303">[ subject ]</A>
+<A HREF="author.html#303">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20scheduling%20and%20agenda%20for%20Memphis&In-Reply-To=&lt;199704022139.PAA01961@parmesan.cs.wisc.edu&gt;">vern@ee.lbl.gov</A>&gt;:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;Problems awaiting description (and email haggling) [20 min]
+</EM><BR>
+<EM>&gt;	Initial RTO too low
+</EM><BR>
+<EM>&gt;	RTO estimation on slow links
+</EM><BR>
+<EM>&gt;----
+</EM><BR>
+<P>I have a question about first few RTO estimations on slow links, sort of
+<BR>
+combining the 2 problems above.  As I understand, in BSD, the smoothed RTT
+<BR>
+(t_srtt) is initialized to 0 and RTT variance (t_rttvar) is initialized so
+<BR>
+that RTO is 3 seconds, required by RFC 1122.  Becuase of t_srtt being 0, the
+<BR>
+first RTT measurement will override the t_rttvar and t_srtt to get a RTO of
+<BR>
+3 times the measured RTT.  On slow links, as various people on the list have
+<BR>
+pointed out, the first measured RTT is usually an underestimate of RTT.  The
+<BR>
+two sides may first exchange a few small segments, and then later send full
+<BR>
+segments, which can be as large as 30 times the small segments.  Isn't this
+<BR>
+typical for HTTP?  And for slow links, the transmission time is significantly
+<BR>
+larger.
+<BR>
+<P>My question is, is it better if t_srtt is not initialized to 0, but to, say,
+<BR>
+a small value.  Then the first few RTO estimations will have a bigger
+<BR>
+variance part and will converge (much?) slower to the &quot;real&quot; RTT.  Actually,
+<BR>
+by just reading the RFC, it seems that this is what is intended, instead of
+<BR>
+BSD's first RTT measurement overriding the initial t_srtt and t_rttvar
+<BR>
+values.  Correct me if I am wrong.  The RFC also mentions that TCP should
+<BR>
+be reasonably insensitive to those initial values because of Karn and 
+<BR>
+Jacobson's algorithms.  I guess this is only true if the TCP connection is
+<BR>
+not short lived, like the current HTTP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20scheduling%20and%20agenda%20for%20Memphis&In-Reply-To=&lt;199704022139.PAA01961@parmesan.cs.wisc.edu&gt;">poon@cs.wisc.edu</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0304.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0302.html">Craig Partridge: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0291.html">Vern Paxson: "scheduling and agenda for Memphis"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#303">[ date ]</A>
+<A HREF="index.html#303">[ thread ]</A>
+<A HREF="subject.html#303">[ subject ]</A>
+<A HREF="author.html#303">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

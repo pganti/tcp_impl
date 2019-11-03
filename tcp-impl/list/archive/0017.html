@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BOF Description</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (jerry.chu@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: BOF Description">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BOF Description</H1>
+<!-- received="Mon Nov 25 11:29:47 1996" -->
+<!-- isoreceived="19961125162947" -->
+<!-- sent="Mon, 25 Nov 1996 03:19:14 -0800" -->
+<!-- isosent="19961125111914" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="jerry.chu@Eng.Sun.COM" -->
+<!-- subject="Re: BOF Description" -->
+<!-- id="199611251119.DAA08030@jurassic.eng.sun.com" -->
+<!-- inreplyto="BOF Description" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:jerry.chu@Eng.Sun.COM?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611251119.DAA08030@jurassic.eng.sun.com&gt;"><EM>jerry.chu@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 25 1996 - 06:19:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0018.html">Thomas Narten: "Re: BOF Discussion Topics"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0016.html">William Allen Simpson: "Re: BOF Description"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0001.html">Steve Alexander: "BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0022.html">W. Richard Stevens: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#17">[ date ]</A>
+<A HREF="index.html#17">[ thread ]</A>
+<A HREF="subject.html#17">[ subject ]</A>
+<A HREF="author.html#17">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;The objective of this meeting is to decide how to best address known
+</EM><BR>
+<EM>&gt;problems in existing implementations of the current TCP standard(s).
+</EM><BR>
+<P>Sometimes it's the lack of details in the specification that cause
+<BR>
+implementation defects. Of course the line between specification and
+<BR>
+implementation is not all that clear. Sometimes I wish the original TCP
+<BR>
+state diagram had been augmented with all possible input to each state,
+<BR>
+including all combinations of header bits, good/bad sequence number,
+<BR>
+good/bad ack number... so that us TCP implementors could just check
+<BR>
+the diagram to do the right thing w/o worrying about recurring bugs.
+<BR>
+The extreme could even be simply feeding a complete spec to a protocol
+<BR>
+complier to get the &quot;implementation&quot;, so that all of us can focus on new,
+<BR>
+less well-defined/understood areas of the protocol.
+<BR>
+<P><EM>&gt;- The Comer/Lin study on probing TCP implementations.  As I recall, the main
+</EM><BR>
+<EM>&gt;  implementation problems they found regard zero-window probes in SunOS
+</EM><BR>
+<EM>&gt;  4.0.3 and Solaris 2.1.  I don't know the status of whether these have
+</EM><BR>
+<EM>&gt;  been fixed (I would certainly guess they have), if someone knows, please
+</EM><BR>
+<P>Those versions are antique. So any statements regarding bugs on them are
+<BR>
+likely to be outdated. (We normally ask our customers running older
+<BR>
+versions to move up to Solaris 2.4 or later, or SunOS 4.1.3 or later if
+<BR>
+they want to stick to SunOS.)
+<BR>
+<P>Yes, the zero-win probe bug was fixed a while back in Solaris. The bug
+<BR>
+had to do with the code failing to recognize zero-win probe state, and
+<BR>
+use snd_nxt instead of snd_una as th_seq. I'll verify SunOS later.
+<BR>
+<P><EM>&gt;Solaris 2.3 sometimes only acks if the segment
+</EM><BR>
+<EM>&gt;has PSH set or if the delayed ack timer expires.
+</EM><BR>
+<P>The Mentat-derived Solaris TCP implementation adopted a delayed ack
+<BR>
+approach where in the streamlined case acks are delayed until either
+<BR>
+half of the window is filled, or when the delayed ack timer fires. The
+<BR>
+timer has a default value of 50ms.
+<BR>
+<P>The delayed ack scheme helps to cut down CPU time in a LAN environment,
+<BR>
+but is controversial in a WAN (e.g. the Internet) environment where
+<BR>
+frequent feedback from the other side is considered necessary to keep Van's
+<BR>
+algorithm functioning. We're still debating what the best approach is...
+<BR>
+<P><EM>&gt;- Solaris 2.3 does not recognize FIN's set on packets received out
+</EM><BR>
+<EM>&gt;  of sequence.
+</EM><BR>
+<P>True. Our reassembly code currently doesn't record out-of-order FIN, and
+<BR>
+rely on the remote to retransmit the FIN. This may be fixed soon.
+<BR>
+<P><EM>&gt;- SunOS omits generating dup acks for packets received above a
+</EM><BR>
+<EM>&gt;  sequence hole.
+</EM><BR>
+<P>Are you referring to the latest version (414)?
+<BR>
+<P><EM>&gt;- Solaris 2.3 and 2.4 have a bug in the fast recovery code so they
+</EM><BR>
+<EM>&gt;  don't send packets when they could.
+</EM><BR>
+<P>I wouldn't call this a bug, (is rstevens' &quot;TCP ... fast recovery&quot; a BCP
+<BR>
+already?) and I don't see how it could happen right away. But there
+<BR>
+are known deficiencies in this area that will be addressed soon in
+<BR>
+Solaris, especially concerning a large window size where a burst of
+<BR>
+packets got dropped:
+<BR>
+<P>1. Vanilla fast retransmit code can only handle the first dropped packet.
+<BR>
+It is possible to enhance the code to handle more than one drop w/o
+<BR>
+resorting to SACK. (Sally Floyd described one in her paper.)
+<BR>
+<P>2. The timer gets backed off multiple times due to multiple drops from
+<BR>
+one window. This *bug* probably exists in many implementations.
+<BR>
+<P>Another problematic area for us has been RTO estimation. With the growth
+<BR>
+and load of the Internet causing large variation of RTTs, and the ever
+<BR>
+increasing combinations of bandwidth-delay, the orignal algorithm
+<BR>
+recommened by Van may need an overhaul.
+<BR>
+<P>I also have some issues regarding window management and ISS calculation
+<BR>
+I'll post later.
+<BR>
+<P>Jerry Chu
+<BR>
+Internet Engineering
+<BR>
+SunSoft
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0018.html">Thomas Narten: "Re: BOF Discussion Topics"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0016.html">William Allen Simpson: "Re: BOF Description"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0001.html">Steve Alexander: "BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0022.html">W. Richard Stevens: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#17">[ date ]</A>
+<A HREF="index.html#17">[ thread ]</A>
+<A HREF="subject.html#17">[ subject ]</A>
+<A HREF="author.html#17">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

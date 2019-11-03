@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: New problem for TCPIMPL &quot;kn</TITLE>
+<META NAME="Author" CONTENT="Bernie Volz (VOLZ@PROCESS.COM)">
+<META NAME="Subject" CONTENT="New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Tue Feb 17 11:24:18 1998" -->
+<!-- isoreceived="19980217162418" -->
+<!-- sent="Tue, 17 Feb 1998 14:20 -0500" -->
+<!-- isosent="19980217192056" -->
+<!-- name="Bernie Volz" -->
+<!-- email="VOLZ@PROCESS.COM" -->
+<!-- subject="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="009C1F37AEFBFBD2.2E27@PROCESS.COM" -->
+<STRONG>From:</STRONG> Bernie Volz (<A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;009C1F37AEFBFBD2.2E27@PROCESS.COM&gt;"><EM>VOLZ@PROCESS.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 17 1998 - 14:20:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0946.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0947.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0949.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0959.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0963.html">Vern Paxson: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#944">[ date ]</A>
+<A HREF="index.html#944">[ thread ]</A>
+<A HREF="subject.html#944">[ subject ]</A>
+<A HREF="author.html#944">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi:
+<BR>
+<P>Here's another &quot;problem&quot; to consider adding to the TCPIMPL &quot;Known
+<BR>
+Problems&quot; I-D. Vern suggested I ask the list for feedback as to whether
+<BR>
+this should be added and whether people had any comments in general
+<BR>
+regarding it.
+<BR>
+<P>If you have suggestions for improving the text associated with it, I'm
+<BR>
+very interested.
+<BR>
+<P>- Bernie Volz
+<BR>
+&nbsp;&nbsp;Process Software
+<BR>
+<P>3.x. Failure to open window on close
+<BR>
+<P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resource management
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When an application closes a connection in such a way that it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can no longer read any received data, the TCP must assure that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it discards this data and opens the receive window if it was
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not open.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It may be open for discussion as to whether the TCP should
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;simply abort the connection, by sending a RST, in this case (as
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it likely would should any additional data be received).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aborting the connection might provide an indication to the peer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that data has been discarded.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to open the window or reset the connection can lead
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to permanently hung TCP connections. Further, these connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will consume resources - processing time, memory, and network
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bandwidth. Note that since the window is closed, the peer TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will be doing periodic persists.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Failure to open the window or reset the connection can lead
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to permanently hung TCP connections. Further, these connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will consume resources.
+<BR>
+<P>Trace file demonstrating it:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:46.04 A &gt; B: S 458659166:458659166(0) win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:46.04 B &gt; A: S 792320000:792320000(0) ack 458659167
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:46.04 A &gt; B: . ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.55.80 A &gt; B: . 1:513(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.55.80 A &gt; B: . 513:1025(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:55.83 B &gt; A: . ack 1025 win 3072
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.55.84 A &gt; B: . 1025:1537(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.55.84 A &gt; B: . 1537:2049(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.55.85 A &gt; B: . 2049:2561(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:56.03 B &gt; A: . ack 2561 win 1536
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.56.05 A &gt; B: . 2561:3073(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.56.06 A &gt; B: . 3073:3585(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11.56.06 A &gt; B: . 3585:4097(512) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:56.23 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:58.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:11:58.16 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:00.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:00.16 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:02.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:02.16 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:05.37 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:05.37 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:06.36 B &gt; A: F 1:1(0) ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:06.37 A &gt; B: . ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:11.78 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:11.78 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:24.59 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:24.60 B &gt; A: . ack 4097 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:50.22 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:12:50.22 B &gt; A: . ack 4097 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Machine B in the trace above does not drop received data when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the socket is &quot;closed&quot; by the application (in this case, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;application process was terminated). This occured at
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;approximately 13:12:06.36 and resulted in the FIN being sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in response to the close. However, because there is no longer an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;application to deliver the data to, the TCP should have dropped
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all of the received data and reopened the window, which it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;failed to do.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: The persistence probes done by Machine A are the older
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style (resending the last octet to solicit an ACK).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: Machine B also does not set the PSH bit when sending the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN (as is recommended).
+<BR>
+<P>Trace file demonstrating correct behavoir
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:29.24 C &gt; D: S 73445554:73445554(0) win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:29.24 D &gt; C: S 36050296:36050296(0) ack 73445555
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;win 4096 &lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:29.25 C &gt; D: . ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:30.78 C &gt; D: . 1:1461(1460) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:30.79 C &gt; D: . 1461:2921(1460) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:30.80 D &gt; C: . ack 2921 win 1176 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:32.75 C &gt; D: . 2921:4097(1176) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:32.82 D &gt; C: . ack 4097 win 0 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:34.76 C &gt; D: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:34.84 D &gt; C: . ack 4097 win 0 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:36.34 D &gt; C: FP 1:1(0) ack 4097 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:36.34 C &gt; D: . 4097:5557(1460) ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:36.34 D &gt; C: R 36050298:36050298(0) win 24576
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:36.34 C &gt; D: . 5557:7017(1460) ack 2 win 4096 (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13:48:36.34 D &gt; C: R 36050298:36050298(0) win 24576
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this trace, the application process is terminated on Machine
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D at approximately 13:48:36.34 and it sends the FIN with the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window opened again (since it properly discarded the previously
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;received data). Machine C promptly sends more data, causing 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Machine D to reset the connection since it can not deliver the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data to the application.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: The persistence probes done by Machine D are the older
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;style (resending the last octet to solicit an ACK).
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0943.html">Graham Cope: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0945.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0946.html">Rick Jones: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0947.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0949.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0951.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0952.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0959.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0962.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0963.html">Vern Paxson: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#944">[ date ]</A>
+<A HREF="index.html#944">[ thread ]</A>
+<A HREF="subject.html#944">[ subject ]</A>
+<A HREF="author.html#944">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

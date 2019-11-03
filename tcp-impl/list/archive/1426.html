@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Question on initial sequence num</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 12:34:52 1999" -->
+<!-- isoreceived="19990104173452" -->
+<!-- sent="Mon, 4 Jan 1999 09:24:42 -0800" -->
+<!-- isosent="19990104172442" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Question on initial sequence numbers" -->
+<!-- id="199901041724.AA21892@gra.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041724.AA21892@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 12:24:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1425.html">Mark Allman: "tcpimpl meeting minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1431.html">der Mouse : "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1436.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1439.html">David Borman: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1442.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1443.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1445.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1447.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1449.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1455.html">Rodney Van Meter: "RE: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1426">[ date ]</A>
+<A HREF="index.html#1426">[ thread ]</A>
+<A HREF="subject.html#1426">[ subject ]</A>
+<A HREF="author.html#1426">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The following question came to me, but since it seems highly relevant
+<BR>
+to this list, I am forwarding it (with permission).  In any replies,
+<BR>
+please include the CC: to Richard Berke, who is not on this list.
+<BR>
+<P>Bob Braden
+<BR>
+<P>----- Begin Included Message -----
+<BR>
+<P><EM>&gt;From <A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041724.AA21892@gra.isi.edu&gt;">Richard_Berke@troweprice.com</A> Wed Dec 23 12:49:32 1998
+</EM><BR>
+X-Mailer: Novell GroupWise 5.5
+<BR>
+Date: Wed, 23 Dec 1998 15:52:48 -0500
+<BR>
+From: &quot;Richard Berke&quot; &lt;<A HREF="mailto:Richard_Berke@troweprice.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041724.AA21892@gra.isi.edu&gt;">Richard_Berke@troweprice.com</A>&gt;
+<BR>
+To: &lt;<A HREF="mailto:Braden@ISI.EDU?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041724.AA21892@gra.isi.edu&gt;">Braden@ISI.EDU</A>&gt;
+<BR>
+Subject: Initial TCP seq numbers - dispute w/ Microsoft
+<BR>
+Mime-Version: 1.0
+<BR>
+Content-Type: text/plain; charset=US-ASCII
+<BR>
+Content-Disposition: inline
+<BR>
+Content-Transfer-Encoding: 8bit
+<BR>
+X-MIME-Autoconverted: from quoted-printable to 8bit by zephyr.isi.edu id MAA16448
+<BR>
+Content-Length: 2244
+<BR>
+X-Lines: 18
+<BR>
+<P>Bob Braden-
+<BR>
+<P>I have been reading RFCs 793, 1072, 1185, and 1323 expecially regarding initial TCP sequence numbers, wrapping of the sequence numbers, and session boundaries.   I ran into a dispute with Microsoft over their TCP stack behavior, and am trying to cite the RFCs.   I hope you can help, or point me in the right direction. 
+<BR>
+<P>As I glean from the RFCs, the initial TCP sequence number of a session must be selected in a way that eliminates confusion whether subsequent packets belong to a previous session.   The old way was to use increasing sequence numbers, driven by clock cycles.   As higher transmission rates became possible, the lifetime of the TCP sequence number space decreased until it became under 3 minutes for 100 Mbps.   The maximum segment lifetime is the key factor here.   A proposed extension to the algorithm incorporates a timestamp field along with the TCP sequence number field. 
+<BR>
+<P>In a packet trace of a recent session with a Microsoft server and a client, I saw a TCP session finish normally with a FIN/ACK.  About a minute later, the client requested a new session, during which it pulled a data file from the server.  The client and server used the same TCP ports as in the previous session.  The server indicated in its  SYN ACK a TCP sequence number of 2+million LOWER than the sequence number it had used to send data at the end of the previous session.  The rest of the sequence numbers in the session did increase after the initial number.  The session proceeded and completed without apparent errors to the data file.
+<BR>
+<P>Microsoft asserts this behavior is okay.  In fact, they tell me that in the near future they will be selecting initial TCP sequence numbers at random as a technique to thwart hijacking of TCP sessions.   Microsoft asserts that there is no regard in the client for the prior session TCP once the FINish process completes successfully.  I don't find support for this position in the RFC's; I find the reverse.
+<BR>
+<P>Is Microsoft lucky that it works?  Are they non-compliant, but in a benign way?
+<BR>
+Am I misunderstanding the requirement for increasing TCP sequence numbers for new sessions?
+<BR>
+<P>Thanks for your patience and sharing your understanding,
+<BR>
+Richard Berke
+<BR>
+RPM Consulting
+<BR>
+<A HREF="mailto:rberke@rpm.com?Subject=Re:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;199901041724.AA21892@gra.isi.edu&gt;">rberke@rpm.com</A>
+<BR>
+<P><P><P>----- End Included Message -----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1425.html">Mark Allman: "tcpimpl meeting minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1427.html">Alan Cox: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1431.html">der Mouse : "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1436.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1439.html">David Borman: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1442.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1443.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1445.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1447.html">Sankar Ramamoorthi: "RE: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1449.html">Vernon Schryver: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1455.html">Rodney Van Meter: "RE: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1426">[ date ]</A>
+<A HREF="index.html#1426">[ thread ]</A>
+<A HREF="subject.html#1426">[ subject ]</A>
+<A HREF="author.html#1426">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

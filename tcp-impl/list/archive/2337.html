@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sun Sep 17 12:53:05 2000" -->
+<!-- isoreceived="20000917165305" -->
+<!-- sent="Sun, 17 Sep 2000 10:46:55 -0600 (MDT)" -->
+<!-- isosent="20000917164655" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009171646.e8HGkt420858@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009171646.e8HGkt420858@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Sep 17 2000 - 12:46:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2339.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2337">[ date ]</A>
+<A HREF="index.html#2337">[ thread ]</A>
+<A HREF="subject.html#2337">[ subject ]</A>
+<A HREF="author.html#2337">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009171646.e8HGkt420858@calcite.rhyolite.com&gt;">ak@muc.de</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt;  - in addition to (or even instead of) a static secret that you feed to
+</EM><BR>
+<EM>&gt; &gt;   MD5, you should use something that even the host cannot know in advance,
+</EM><BR>
+<EM>&gt; &gt;   such as a fine granularity real time clock.  It's also nice to throw
+</EM><BR>
+<EM>&gt; &gt;   into the pot things with at least some bits of entropy such as the
+</EM><BR>
+<EM>&gt; &gt;   memory addresses of TSP's and buffers containing packets such as the SYN.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; At least on Linux hashing the addresses of packets in would not help very
+</EM><BR>
+<EM>&gt; much: A SYN data payload is &lt;= 64bytes, so it would always end up in the
+</EM><BR>
+<EM>&gt; same zone of the zone allocator. For 64byte allocations there are only a few
+</EM><BR>
+<EM>&gt; pages in that zone, which are predictable. Brute forcing the possible
+</EM><BR>
+<EM>&gt; addresses in the zone is quite possible (only a few thousand candidates) 
+</EM><BR>
+<EM>&gt; For the brute force attack you only need the ISN of a single SYN.
+</EM><BR>
+<P>I don't understand what is meant there.  &quot;Brute force&quot; here does not mean
+<BR>
+the same as when you are searching for a key.  The ISN attacker gets only
+<BR>
+a single guess for each initial sequence number attack.  If there are a
+<BR>
+few thousand possible addresses for the buffer containing the SYN and if
+<BR>
+the probability of the SYN landing in each buffer is uniform (yes, probably
+<BR>
+false, but the reality is probably as good), then no matter how many times
+<BR>
+the bad guy tries, the odds for each try are 1 in several thousand.
+<BR>
+<P>I did not say to use only the buffer address, but to let it contribute
+<BR>
+its bits of entropy to the stew.
+<BR>
+<P>You cannot randomize the entire 32-bits of the ISN.  The bits in the ISN
+<BR>
+that you can make random are only about 16, assuming you value the
+<BR>
+robustness of ensuring connection retries don't have overlapping windows.
+<BR>
+I think that in real life, that last is a vastly bigger worry than bad
+<BR>
+guys guessing ISN's, since you've doubtless turned off .rhosts.
+<BR>
+<P>Thus, no matter what you do, the odds of any single ISN attack working
+<BR>
+are no worse than 1 in perhaps 100,000.  Because of the birthday paradox,
+<BR>
+the bad guy can expect to succeed after about the square root of number
+<BR>
+of bits you can randomize in the ISN.  Odds of 1 in 100,000 are about the
+<BR>
+same as 1 in several 1000, because even with 1:100,000, the bad guy
+<BR>
+can expect to succed once in every 300 or 400 tries.
+<BR>
+<P><P><EM>&gt; &gt; On a 10 MHz Ethernet, packets (including the SYN) arrive with milliseconds
+</EM><BR>
+<EM>&gt; &gt; of jitter and so more entropy than you can use for the ISN, provided you
+</EM><BR>
+<EM>&gt; &gt; have a clock that ticks microseconds or better.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; iirc that was proposed but rejected because it could possible allow an
+</EM><BR>
+<EM>&gt; attacker with a sniffer on your local ethernet to maintain a copy of your
+</EM><BR>
+<EM>&gt; entropy pool.
+</EM><BR>
+<P>&quot;Proposed but rejected&quot; by whom and with what authority over other
+<BR>
+competent designers?  I doubt whoever rejected it understood the natures
+<BR>
+of local ethernets, sniffers, clocks, local Ethernets, and pools of
+<BR>
+entropy.  As I said before, if you have to worry about ISN's on
+<BR>
+your LAN, then you're dead.
+<BR>
+&nbsp;&nbsp;1. even if you completely randomize the ISN, a local bad guy can win
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;with only 32,000 tries because of the birthday paradox, and on a local
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;LAN, 32,000 tries is not a problem.  
+<BR>
+&nbsp;&nbsp;2. local Ethernets have far worse security problems than ISN guessing.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The wise person ignores ISN guessing on LAN's.
+<BR>
+&nbsp;&nbsp;3. the arrival time of a packet at one Ethernet station (e.g. the 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;sniffer) differs from the arrival time at any other station by a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;difficult to predict amount that as much as a slot time or 64
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;microseconds.
+<BR>
+&nbsp;&nbsp;4. even if the bad guy knows the propagation delay to the target, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;target's clock will jitter due to interrupt latency and even noise in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the clock (see NTP discussions) by at least a few bits at microsecond
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;resolutions and lots of bits at nanosecond resolutions.  (I guess with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;GHz 80*86's, even PC's can hope to have nanosecond clocks.)
+<BR>
+&nbsp;&nbsp;5. then there are bridges (i.e. &quot;switches&quot;) that randomize transmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;delays in Ethernets.  100 MHz Ethernet packets have less absolute jitter
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;due to CSMA/CD, but more bridges to increase queuing noise.
+<BR>
+&nbsp;&nbsp;7. the trick in any entropy pool situation, including this one and
+<BR>
+&nbsp;&nbsp;&nbsp;/dev/random, is not finding a single perfect source of true randomness
+<BR>
+&nbsp;&nbsp;&nbsp;(never mind the nonsense in &quot;true randomness&quot;), but to find enough
+<BR>
+&nbsp;&nbsp;&nbsp;entropy from enough sources.  Even the arrival times of Ethernet packets
+<BR>
+&nbsp;&nbsp;&nbsp;contains only 5 or 6 bits of entropy, those 5 or 6 bits are valuable.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009171646.e8HGkt420858@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2336.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2338.html">Barney Wolff: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2339.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2342.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2337">[ date ]</A>
+<A HREF="index.html#2337">[ thread ]</A>
+<A HREF="subject.html#2337">[ subject ]</A>
+<A HREF="author.html#2337">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

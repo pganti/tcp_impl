@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Tue Aug 18 20:35:36 1998" -->
+<!-- isoreceived="19980819003536" -->
+<!-- sent="Tue, 18 Aug 1998 23:33:52 -0400 (EDT)" -->
+<!-- isosent="19980819033352" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808190333.XAA25284@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808190333.XAA25284@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 18 1998 - 23:33:52 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1222.html">slochml@thewebsitedoctor.com: "Ad:     re your site"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1220.html">Vern Paxson: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1224.html">Vern Paxson: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1221">[ date ]</A>
+<A HREF="index.html#1221">[ thread ]</A>
+<A HREF="subject.html#1221">[ subject ]</A>
+<A HREF="author.html#1221">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; If the socket is already in FIN_WAIT_2, another shutdown()-for-sends
+</EM><BR>
+<EM>&gt;&gt; will, as I read it, forcibly both directions (soisdisconnected) and
+</EM><BR>
+<EM>&gt;&gt; start the 2MSL timer.
+</EM><BR>
+<P><EM>&gt; If the socket is already in FIN_WAIT_2, the application must have
+</EM><BR>
+<EM>&gt; already called close() or shutdown() on it.
+</EM><BR>
+<P>True enough.
+<BR>
+<P><EM>&gt; Calling shutdown() again certainly seems to disconnect the socket but
+</EM><BR>
+<EM>&gt; I don't think any reasonable application will cause shutdown() twice
+</EM><BR>
+<EM>&gt; on a socket. 
+</EM><BR>
+<P>I disagree.  It's entirely plausible to me that two different software
+<BR>
+layers could each want to shut down the socket's send side and each be
+<BR>
+unaware of the other's existence.
+<BR>
+<P><EM>&gt; Ideally speaking though, the second shutdown should be unsuccessful
+</EM><BR>
+<EM>&gt; rather than disconnecting the socket.
+</EM><BR>
+<P>I'd prefer to see it succeed but (since it's already done) do nothing.
+<BR>
+<P>I'm definitely not convinced there are no other paths to getting that
+<BR>
+timer armed on a socket that can still receive data.  I guess my
+<BR>
+question for tcp-impl is actually &quot;am I correct that it is
+<BR>
+inappropriate to start such a timer on a connection that can still
+<BR>
+receive data?&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808190333.XAA25284@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1222.html">slochml@thewebsitedoctor.com: "Ad:     re your site"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1220.html">Vern Paxson: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1224.html">Vern Paxson: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1221">[ date ]</A>
+<A HREF="index.html#1221">[ thread ]</A>
+<A HREF="subject.html#1221">[ subject ]</A>
+<A HREF="author.html#1221">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

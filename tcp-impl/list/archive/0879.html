@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: discrepancy in TIME_WAIT state h</TITLE>
+<META NAME="Author" CONTENT="David Mosberger (davidm@hpl.hp.com)">
+<META NAME="Subject" CONTENT="discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Fri Jan  9 10:27:44 1998" -->
+<!-- isoreceived="19980109152744" -->
+<!-- sent="Fri, 9 Jan 1998 10:14:56 -0800" -->
+<!-- isosent="19980109181456" -->
+<!-- name="David Mosberger" -->
+<!-- email="davidm@hpl.hp.com" -->
+<!-- subject="discrepancy in TIME_WAIT state handling" -->
+<!-- id="199801091814.KAA03091@napali.hpl.hp.com" -->
+<STRONG>From:</STRONG> David Mosberger (<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801091814.KAA03091@napali.hpl.hp.com&gt;"><EM>davidm@hpl.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 09 1998 - 13:14:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0878.html">Greg Miller: "Re: TCP Question"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0883.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0889.html">Hsiao-keng Jerry Chu: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#879">[ date ]</A>
+<A HREF="index.html#879">[ thread ]</A>
+<A HREF="subject.html#879">[ subject ]</A>
+<A HREF="author.html#879">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Yesterday I found a serious performance problem that may occur when
+<BR>
+connecting a client on a box running HP-UX 10.20 to a server running
+<BR>
+NT 4.0 (w/service pack 3 installed).  It turns out that the TCP in NT
+<BR>
+4.0 appears to handle a special case in the TIME_WAIT state
+<BR>
+differently from any BSD-derived TCP I have seen so far.
+<BR>
+<P>Let me first recap the behavior of BSD-derived TCPs: when a connection
+<BR>
+is in TIME_WAIT state and a SYN segment is received with a sequence
+<BR>
+number that is higher than the last received sequence number for the
+<BR>
+connection in TIME_WAIT state, then the existing connection is dropped
+<BR>
+immediately and the SYN is considered to be part of a new TCP
+<BR>
+connection.
+<BR>
+<P>The behavior of TCP as implemented in NT 4.0 SP3 (and possibly other
+<BR>
+versions of NT and Windows 95) appears to be different: when a new SYN
+<BR>
+segment is received for a connection in TIME_WAIT state, NT
+<BR>
+essentially ignores the SYN and simply sends back the last ACK for the
+<BR>
+existing connection.
+<BR>
+<P>Both the BSD and the NT behavior are fine as long as they're not
+<BR>
+mixed.  However, when trying to talk from a BSD-derived box to an NT
+<BR>
+box, serious performance problems may occur if the BSD box gets
+<BR>
+unlucky and happens to reuse a port number within the TIME_WAIT period
+<BR>
+of the NT box.  The tcpdump trace below illustrates the problem (the
+<BR>
+output has been edited for easier reading; the original trace is
+<BR>
+available by request):
+<BR>
+<P>------------------------------------------------------
+<BR>
+first connection:
+<BR>
+<P>42.55 hpux.1025 &gt; nt40.80: S 192192000:192192000(0) win 16384
+<BR>
+42.55 nt40.80 &gt; hpux.1025: S 251663359:251663359(0) ack 192192001 win 8760
+<BR>
+42.55 hpux.1025 &gt; nt40.80: . ack 251663360 win 16384 (DF)
+<BR>
+42.55 hpux.1025 &gt; nt40.80: P 192192001:192192067(66) ack 251663360 win 16384
+<BR>
+42.56 nt40.80 &gt; hpux.1025: P 251663360:251664583(1223) ack 192192067 win 8694
+<BR>
+42.56 nt40.80 &gt; hpux.1025: F 251664583:251664583(0) ack 192192067 win 8694
+<BR>
+42.56 hpux.1025 &gt; nt40.80: . ack 251664584 win 15161 (DF)
+<BR>
+42.56 hpux.1025 &gt; nt40.80: F 192192067:192192067(0) ack 251664584 win 16384
+<BR>
+42.56 nt40.80 &gt; hpux.1025: . ack 192192068 win 8694 (DF)
+<BR>
+<P>second connection:
+<BR>
+<P>42.57 hpux.1025 &gt; nt40.80: S 192256000:192256000(0) win 16384 &lt;mss 1460&gt; (DF)
+<BR>
+42.57 nt40.80 &gt; hpux.1025: . ack 192192068 win 8694 (DF)
+<BR>
+42.57 hpux.1025 &gt; nt40.80: R 192192068:192192068(0) win 16384
+<BR>
+------------------------------------------------------
+<BR>
+<P>As the trace shows, a TCP connection exist between 42.55 seconds and
+<BR>
+42.56 seconds between ports 1025 and 80.  At the end of this
+<BR>
+connection, the NT 4.0 box (nt40) is in TIME_WAIT state as the FINs in
+<BR>
+both directions have been sent and acknowledged.  Then, at 42.57
+<BR>
+seconds, the hpux box attempts to create a new connection with the old
+<BR>
+port numbers (since BSD-derived TCP implementations consider this all
+<BR>
+right).  nt40 responds to this SYN packet by re-sending the last ACK
+<BR>
+for the first connection.  The hpux box in turn responds with a RESET
+<BR>
+since it was expecting a SYN segment from the nt40 box.  This
+<BR>
+SYN/ACK/RESET game repeats itself until the nt40 box moves the first
+<BR>
+connection out of the TIME_WAIT state, at which point the connection
+<BR>
+establishment proceeds normally.
+<BR>
+<P>To summarize, the apparent discrepancy between the TIME_WAIT state
+<BR>
+handling in BSD-derived TCPs and NT 4.0 TCP may result in serious and
+<BR>
+hard to detect performance degradation because TCP connections may be
+<BR>
+delayed for up to the duration of the TIME_WAIT period (i.e., 1-2
+<BR>
+minutes for most systems).  Note that this scenario is not academic: a
+<BR>
+busy client that has most of its TCP port numbers in use could quite
+<BR>
+easily run into this problem.  The problem is hard to detect because
+<BR>
+it occurs only intermittently (when the BSD-derived box gets
+<BR>
+&quot;unlucky&quot;) and because the connection establishment only gets delayed
+<BR>
+(albeit by a fairly large amount of time).
+<BR>
+<P>I'm interested to hear other people's opinion on what the correct
+<BR>
+behavior for this case is and suggestions on how to fix the current
+<BR>
+situation.
+<BR>
+<P>I'd like to thank Vern Paxon and Rick Jones for some initial
+<BR>
+discussions on this problem.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--david
+<BR>
+<PRE>
+-- 
+David Mosberger; HP Labs; 1501 Page Mill Rd MS 1U17; Palo Alto, CA 94304-1126
+<A HREF="mailto:davidm@hpl.hp.com?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801091814.KAA03091@napali.hpl.hp.com&gt;">davidm@hpl.hp.com</A>          voice: (650) 236-2575          fax: (650) 857-5100
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0878.html">Greg Miller: "Re: TCP Question"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0880.html">Kacheong Poon: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0883.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0889.html">Hsiao-keng Jerry Chu: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#879">[ date ]</A>
+<A HREF="index.html#879">[ thread ]</A>
+<A HREF="subject.html#879">[ subject ]</A>
+<A HREF="author.html#879">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

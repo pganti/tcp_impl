@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Congestion window problem</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: Congestion window problem">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Congestion window problem</H1>
+<!-- received="Thu Oct 21 12:50:18 1999" -->
+<!-- isoreceived="19991021165018" -->
+<!-- sent="Thu, 21 Oct 1999 11:40:25 -0500 (CDT)" -->
+<!-- isosent="19991021164025" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: Congestion window problem" -->
+<!-- id="199910211640.LAA02223@frantic.bsdi.com" -->
+<!-- inreplyto="Congestion window problem" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20Congestion%20window%20problem&In-Reply-To=&lt;199910211640.LAA02223@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Oct 21 1999 - 12:40:25 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1899.html">Jamshid Mahdavi: "Re: Congestion window problem"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1899.html">Jamshid Mahdavi: "Re: Congestion window problem"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1898">[ date ]</A>
+<A HREF="index.html#1898">[ thread ]</A>
+<A HREF="subject.html#1898">[ subject ]</A>
+<A HREF="author.html#1898">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Zoran,
+<BR>
+<P><EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Congestion%20window%20problem&In-Reply-To=&lt;199910211640.LAA02223@frantic.bsdi.com&gt;">owner-tcp-impl@lerc.nasa.gov</A> Thu Oct 21 10:56:03 1999
+</EM><BR>
+<EM>&gt; Date: Thu, 21 Oct 1999 10:37:41 -0400
+</EM><BR>
+<EM>&gt; From: Zoran Kostic &lt;<A HREF="mailto:kostic@research.att.com?Subject=Re:%20Congestion%20window%20problem&In-Reply-To=&lt;199910211640.LAA02223@frantic.bsdi.com&gt;">kostic@research.att.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Congestion%20window%20problem&In-Reply-To=&lt;199910211640.LAA02223@frantic.bsdi.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Congestion window problem
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;   Is the following scenario a legitimate problem:
+</EM><BR>
+<P>No.
+<BR>
+<P><EM>&gt; * Receive window is fully open
+</EM><BR>
+<EM>&gt; * Congestion window is 5 wide, all five segments (1,2,3,4,5) got
+</EM><BR>
+<EM>&gt; transmitted,
+</EM><BR>
+<EM>&gt;    waiting for ACQs
+</EM><BR>
+<EM>&gt; * Segment 2 is being timed
+</EM><BR>
+<EM>&gt; * Channel is poor
+</EM><BR>
+<EM>&gt; * Timeout happens
+</EM><BR>
+<EM>&gt; * Congestion window collapses to 1
+</EM><BR>
+<EM>&gt; * Segment 1 which is the first unacked segment gets transmitted
+</EM><BR>
+<EM>&gt; * Segment 1 is timed
+</EM><BR>
+<EM>&gt; * Segments1,2,3 get acqs but 4 and 5 are not ACQed
+</EM><BR>
+<EM>&gt; * Retransmit timer has stopped since 1 was acked
+</EM><BR>
+<P>This is the problem.  The retransmit timer continues to run
+<BR>
+as long as there is outstanding, un-acked data, so getting
+<BR>
+segment 1 acked does not turn of the retransmit timer, since
+<BR>
+4 and 5 are still outstanding.
+<BR>
+<P><EM>&gt; * Congestion window became of size 2, but no new segments can be
+</EM><BR>
+<EM>&gt; accepted
+</EM><BR>
+<EM>&gt;    into the window since 4 and 5 occupy the space in the window
+</EM><BR>
+<EM>&gt; * Channel is still poor, no Acqs are comming and Nothing is being timed
+</EM><BR>
+<EM>&gt; now so
+</EM><BR>
+<EM>&gt;    the timeout can not occur -&gt; therefore no segment will get
+</EM><BR>
+<EM>&gt; retransmitted,
+</EM><BR>
+<EM>&gt;    the window can not grow .... we are stuck
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If this is not a problem, could you comment on where the error in
+</EM><BR>
+<EM>&gt; thinking is,
+</EM><BR>
+<EM>&gt; or which mechanism pulls us out of trouble.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Zoran Kostic, AT&amp;T
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20Congestion%20window%20problem&In-Reply-To=&lt;199910211640.LAA02223@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1899.html">Jamshid Mahdavi: "Re: Congestion window problem"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1899.html">Jamshid Mahdavi: "Re: Congestion window problem"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1898">[ date ]</A>
+<A HREF="index.html#1898">[ thread ]</A>
+<A HREF="subject.html#1898">[ subject ]</A>
+<A HREF="author.html#1898">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

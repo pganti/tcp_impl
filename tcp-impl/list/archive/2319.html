@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Ignacio Goyret (igoyret@lucent.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Thu Aug 17 20:19:03 2000" -->
+<!-- isoreceived="20000818001903" -->
+<!-- sent="Thu, 17 Aug 2000 16:39:36 -0700" -->
+<!-- isosent="20000817233936" -->
+<!-- name="Ignacio Goyret" -->
+<!-- email="igoyret@lucent.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="3.0.5.32.20000817163936.0129e7d0@scamp.eng.ascend.com" -->
+<!-- inreplyto="399C6E67.E0035F85@isi.edu" -->
+<STRONG>From:</STRONG> Ignacio Goyret (<A HREF="mailto:igoyret@lucent.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;3.0.5.32.20000817163936.0129e7d0@scamp.eng.ascend.com&gt;"><EM>igoyret@lucent.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 17 2000 - 19:39:36 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2320.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2318.html">Kacheong Poon: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2316.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2319">[ date ]</A>
+<A HREF="index.html#2319">[ thread ]</A>
+<A HREF="subject.html#2319">[ subject ]</A>
+<A HREF="author.html#2319">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; &gt;
+</EM><BR>
+<EM>&gt;&gt; &gt;Only if they're trying to hack your statistics or debugging.
+</EM><BR>
+<EM>&gt;&gt; &gt;I don't think (pls correct me if this is not the case) that
+</EM><BR>
+<EM>&gt;&gt; &gt;anyone is proposing different receiver actions based on these
+</EM><BR>
+<EM>&gt;&gt; &gt;codes; it's just for diagnoses, right?
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; Any information shot back to the sender of a SYN is potential information
+</EM><BR>
+<EM>&gt;&gt; for a hacker. 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Yes! A SYN/ACK is info, the window size is info, etc.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;How does this _add_ compromises, is the question...
+</EM><BR>
+<P>The info you listed is non-critical.
+<BR>
+<P>What I meant were the specific codes that have been suggested, such as
+<BR>
+&quot;application abort&quot;, &quot;bad precedence&quot;, &quot;bad security&quot;, &quot;low memory&quot;, etc.
+<BR>
+This type of information is quite interesting for someone trying to do
+<BR>
+damage. All he would need to do is repeat the same SYN ad nauseum, and
+<BR>
+if he keeps getting &quot;application abort&quot;, he is well on his way to crash
+<BR>
+your server. Is this compromise enough?
+<BR>
+<P>Responding with &quot;bad precedence&quot; or &quot;bad security&quot; is synonymous with inviting
+<BR>
+him to try a few other values. This _adds_ compromise.
+<BR>
+<P>A simple empty RST doesn't give him any of this information so he doesn't know
+<BR>
+if you are just not listening on that port or that you rejected his attempt.
+<BR>
+He can't use the information of why you rejected a particular connection attempt
+<BR>
+against you because he doesn't know it. Adding a code to the RST provides this
+<BR>
+attacker with the information he needs to fine-tune his attack to bring your
+<BR>
+server down.
+<BR>
+<P><P><EM>&gt;If you're that worried about hackers, use IPSEC.
+</EM><BR>
+<P>Regarding IPSEC, remember that there are many reasons to use TCP _without_ IPSEC,
+<BR>
+a web server is a good example. We (or at least I) want to be able to build boxes
+<BR>
+that are sturdy enough and can withstand some attacks. A code in an RST sent in
+<BR>
+response to a SYN or SYN/ACK as suggested just adds vulnerabilities.
+<BR>
+<P>Again, sending RST information elsewhere in the state machine doesn't bother me
+<BR>
+as much.
+<BR>
+<P>I _do_ see the debugging value in the idea, but I worry that it opens Pandora's box.
+<BR>
+<P>Cheers,
+<BR>
+-Ignacio
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2320.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2318.html">Kacheong Poon: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2316.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2321.html">Joe Touch: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2319">[ date ]</A>
+<A HREF="index.html#2319">[ thread ]</A>
+<A HREF="subject.html#2319">[ subject ]</A>
+<A HREF="author.html#2319">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

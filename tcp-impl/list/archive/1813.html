@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP's handling of IP precede</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="RE: TCP's handling of IP precedence">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP's handling of IP precedence</H1>
+<!-- received="Wed Sep 15 17:33:29 1999" -->
+<!-- isoreceived="19990915213329" -->
+<!-- sent="Wed, 15 Sep 1999 17:07:45 -0400" -->
+<!-- isosent="19990915210745" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="RE: TCP's handling of IP precedence" -->
+<!-- id="236F133B43F4D211A4B00090273C79DC0E0C9B@rv-ex-2.rsvl.unisys.com" -->
+<!-- inreplyto="TCP's handling of IP precedence" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C9B@rv-ex-2.rsvl.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 15 1999 - 17:07:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1814.html">Scott Bradner: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1812.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1813">[ date ]</A>
+<A HREF="index.html#1813">[ thread ]</A>
+<A HREF="subject.html#1813">[ subject ]</A>
+<A HREF="author.html#1813">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+All of the arguments presented on how DiffServ got to this point are good
+<BR>
+ones, yet, through all of the formal processes, postings, and debates, this
+<BR>
+one issue of TCPs handling of IP precedence still remains.  The result of
+<BR>
+the formal process is that the DiffServ design
+<BR>
+overlooked/ignored/didn't-fully-comprehend the impact of something and now
+<BR>
+potentially many applications and TCP implementations may pay the penalty.
+<BR>
+I'm not saying the formal process was wrong, but maybe there was something
+<BR>
+missing from it.  I understand that it's probably too late to change the
+<BR>
+DiffServ spec now, but perhaps we can learn something from this.
+<BR>
+<P><EM>&gt;From what I can tell, several red flags went up that should have caused a
+</EM><BR>
+closer scrutiny on the impact of the DiffServ DS field:
+<BR>
+1. Redefining a long existing protocol header byte.  This one is a big red
+<BR>
+flag.  This should rarely be allowed.  Because the proper use of the
+<BR>
+precedence bits was somewhat weakly defined, you are bound to get many
+<BR>
+variations in the enforcement and handling of those bits.
+<BR>
+2. Redefining a long existing protocol header byte defined by the DoD.
+<BR>
+Bigger red flag.
+<BR>
+3. When it was discovered that even one TCP checked the precedence, it
+<BR>
+should have triggered the thought: &quot;Hey, here's a TCP that enforces the
+<BR>
+precedence validation so, I wonder if there might be others?&quot;
+<BR>
+<P>I also monitor the end2end-interest and tcp-impl lists and don't recall
+<BR>
+seeing any mention of the redefinition of the TOS byte.
+<BR>
+<P>Oh well.  Sigh...  I'm off to making sure my TCP's comply with the new
+<BR>
+definition.
+<BR>
+<P>Al Smith
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Vern Paxson [mailto:<A HREF="mailto:vern@ee.lbl.gov?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C9B@rv-ex-2.rsvl.unisys.com&gt;">vern@ee.lbl.gov</A>]
+<BR>
+Sent: Wednesday, September 15, 1999 11:16 AM
+<BR>
+To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C9B@rv-ex-2.rsvl.unisys.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: TCP's handling of IP precedence
+<BR>
+<P><P>Vernon Schryver writes:
+<BR>
+<P><EM>&gt; If you think about it for a momenet, that reasoning is obviously
+</EM><BR>
+incorrect.
+<BR>
+<EM>&gt; It assumes that everyone is required to read all IETF documents.
+</EM><BR>
+<P>That's the point of Last Call - if you care about where the IETF is going,
+<BR>
+you are supposed to read <A HREF="mailto:ietf-announce@ietf.org?Subject=RE:%20TCP's%20handling%20of%20IP%20precedence&In-Reply-To=&lt;236F133B43F4D211A4B00090273C79DC0E0C9B@rv-ex-2.rsvl.unisys.com&gt;">ietf-announce@ietf.org</A> and see what is being
+<BR>
+proposed.  You don't have to read all the documents, just the ones that
+<BR>
+appear relevant.  The abstract of RFC 2474 is clear that the document is
+<BR>
+about redefining the TOS byte.
+<BR>
+<P><EM>&gt; Since getting anything changed during Last Call is at best difficult
+</EM><BR>
+<P>The WG raised the issue of what depends on the current structure of the TOS
+<BR>
+byte at length, had considerable discussion, and no one brought up the TCP
+<BR>
+incompatibility.  It's not as though it wasn't high profile - 400+ people
+<BR>
+attend each diffserv meeting.  But even so, it was on the radar as a
+<BR>
+significant issue, and I think it would have been treated very seriously
+<BR>
+as a last call comment.
+<BR>
+<P><EM>&gt; Instead of requiring changes to an unknown but apparently significant
+</EM><BR>
+<EM>&gt; number of existing TCP implementations and literally uncountable TCP
+</EM><BR>
+<EM>&gt; installations, why not strengthen the DiffServ words about upward
+</EM><BR>
+<EM>&gt; compatibility?
+</EM><BR>
+<P>One of the key questions is: is it really a significant number of TCP
+<BR>
+implementations?  That's why this discussion should happen on tcp-impl.
+<BR>
+<P><EM>&gt; If the RFC 1349/RFC 1812 values of the IP TOS byte were
+</EM><BR>
+<EM>&gt; required to be get through unchanged (after possibly having been mapped
+</EM><BR>
+<EM>&gt; to other values and back again), would any existing combinations of
+</EM><BR>
+<EM>&gt; applications and host break?
+</EM><BR>
+<P>How do you know what to map them back to?  It's not a one-to-one mapping.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1814.html">Scott Bradner: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1812.html">Joe Touch: "Re: TCP's handling of IP precedence"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1816.html">Vernon Schryver: "RE: TCP's handling of IP precedence"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1813">[ date ]</A>
+<A HREF="index.html#1813">[ thread ]</A>
+<A HREF="subject.html#1813">[ subject ]</A>
+<A HREF="author.html#1813">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:55 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

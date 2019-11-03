@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Justin T. Gibbs (gibbs@FreeBSD.org)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 00:16:56 2000" -->
+<!-- isoreceived="20000225051656" -->
+<!-- sent="Thu, 24 Feb 2000 22:13:07 -0700" -->
+<!-- isosent="20000225051307" -->
+<!-- name="Justin T. Gibbs" -->
+<!-- email="gibbs@FreeBSD.org" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002250513.WAA01485@caspian.plutotech.com" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.951442454.3237.kcpoon@jurassic" -->
+<STRONG>From:</STRONG> Justin T. Gibbs (<A HREF="mailto:gibbs@FreeBSD.org?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250513.WAA01485@caspian.plutotech.com&gt;"><EM>gibbs@FreeBSD.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 00:13:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2003.html">Pete Zaitcev: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1995.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2008.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2008.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2004">[ date ]</A>
+<A HREF="index.html#2004">[ thread ]</A>
+<A HREF="subject.html#2004">[ subject ]</A>
+<A HREF="author.html#2004">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; The performance impact of RDMA is quite a bit larger than SACK, so
+</EM><BR>
+<EM>&gt;&gt; I don't know that your example is relevant.  All the big vendors
+</EM><BR>
+<EM>&gt;&gt; implement zero-copy in some shape or form and since RDMA is a scheme
+</EM><BR>
+<EM>&gt;&gt; to make zero-copy work in more cases, I'm sure it will be picked up
+</EM><BR>
+<EM>&gt;&gt; if the proposal is deemed sane.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Can you elaborate on this?  Suppose TCP &quot;blindly&quot; does zero copy everything to
+</EM><BR>
+<EM>&gt;an app's buffer (for example, to a web browser's receive buffer) without
+</EM><BR>
+<EM>&gt;RDMA.  Then the browser app looks at the data and displays it.  What is the
+</EM><BR>
+<EM>&gt;difference RDMA makes in this case?  Yes, RDMA can separate different messages
+</EM><BR>
+<EM>&gt;in the buffer.  But this can also be done by the browser app, not by TCP.
+</EM><BR>
+<P>You seem to be saying that in the common case zero copy is achievable.
+<BR>
+Most implementations I've seen require the network driver to make
+<BR>
+a guess about where the payload will be in an incoming packet so the header
+<BR>
+can be stripped off and the payload dmaed to an aligned area.   A page
+<BR>
+flip is then performed to get the data where the user wants it,
+<BR>
+imposing the restriction that your  payload be page sized so you don't
+<BR>
+leave gaps in the user's destination buffer.  Certainly, with a more
+<BR>
+intelligent network adapter that knows every protocol you can determine
+<BR>
+exactly where the data is in each packet.  If you add connection tracking
+<BR>
+and sequence number sniffing to the nic with a mechanism to register user
+<BR>
+buffers to connections, you can get zero copy every time*.  Unfortunately
+<BR>
+this is not very general purpose solution.  The point of RDMA seems to be
+<BR>
+to allow nic manufacturers to add support for a single tcp option that, at
+<BR>
+the very least, allows the nic to align the payload for you.  Add RID
+<BR>
+registration with the nic and you get the payload exactly where you want it
+<BR>
+too.  All without too much state information kept by the nic.
+<BR>
+<P>* This technique has been implemented with custom firmware on  Alteon
+<BR>
+&nbsp;&nbsp;Gig-E cards for a product I work on.
+<BR>
+&nbsp;&nbsp;single protocol
+<BR>
+<PRE>
+--
+Justin
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2003.html">Pete Zaitcev: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1995.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2008.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2008.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2004">[ date ]</A>
+<A HREF="index.html#2004">[ thread ]</A>
+<A HREF="subject.html#2004">[ subject ]</A>
+<A HREF="author.html#2004">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

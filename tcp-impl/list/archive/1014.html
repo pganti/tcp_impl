@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: increasing TCP's initial window</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="increasing TCP's initial window">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>increasing TCP's initial window</H1>
+<!-- received="Mon Mar 23 23:46:01 1998" -->
+<!-- isoreceived="19980324044601" -->
+<!-- sent="Mon, 23 Mar 1998 23:44:11 PST" -->
+<!-- isosent="19980324074411" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="increasing TCP's initial window" -->
+<!-- id="199803240744.XAA14025@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Mon, 23 Mar 1998 17:33:35 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20increasing%20TCP's%20initial%20window&In-Reply-To=&lt;199803240744.XAA14025@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 24 1998 - 02:44:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1015.html">Mark Allman: "Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1013.html">Joe Touch: "Slow-start restart - discussion of fixes"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1014">[ date ]</A>
+<A HREF="index.html#1014">[ thread ]</A>
+<A HREF="subject.html#1014">[ subject ]</A>
+<A HREF="author.html#1014">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+One of the main topics for discussion at next week's tcpimpl meeting is
+<BR>
+increasing TCP's initial window to 3 or 4 segments.  (We already found
+<BR>
+rough consensus for an increase to 2 segments at last December's DC
+<BR>
+meeting.)  We'd really like to have some discussion of this change on the
+<BR>
+mailing list prior to the meeting.  To this end, Sally Floyd put together
+<BR>
+the appended note in order to summarize the issues and encourage discussion.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P>--------------------------------------------------
+<BR>
+<P>Here is the summary:
+<BR>
+<P>(1) At the last tcpimpl meeting, we had rough consensus for allowing
+<BR>
+a TCP Initial Window (IW) of two segments, and agreed to revisit
+<BR>
+at this meeting the question of initial windows of three or four
+<BR>
+segments.
+<BR>
+<P>(2) Mark Allman and I have revised the internet-draft
+<BR>
+draft-floyd-incr-init-win-01.txt, to reflect the current state of the
+<BR>
+discussion.   The revised draft adds the following specifications and/or
+<BR>
+clarifications:
+<BR>
+<P>&nbsp;&nbsp;(a) The increased IW would only apply after the initial SYN/ACK handshake.
+<BR>
+&nbsp;&nbsp;(b) If the SYN or SYN-ack had to be retransmitted, then the side
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;retransmitting it must start with IW=1.
+<BR>
+&nbsp;&nbsp;(c) A more lengthy discussion of interactions with the &quot;Don't Fragment&quot; (DF)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;bit, including a recommendation to recompute the IW if the segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;size is changed during Path MTU Discovery.
+<BR>
+<P>(3) The new I-D also covers some additional simulation and other results:
+<BR>
+<P>&nbsp;&nbsp;(a) A description of the bursts of two and three segments common during
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;slow-start, and of the four-segment bursts common whan a single
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;delayed-ACK is dropped.
+<BR>
+&nbsp;&nbsp;(b) Studies by [HAGT98] showing that the use of larger initial windows
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;decreases HTTP transfer time, for experiments in a satellite environment.
+<BR>
+&nbsp;&nbsp;(c) Studies by [PN98] investigating the impact of larger initial windows
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;on competing traffic in a simulation scenario with both HTTP and FTP flows.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The larger initial windows decreased HTTP transfer times and at the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;same time slightly increased the segment drop rate.
+<BR>
+&nbsp;&nbsp;(d) Studies by [Mor97] showing that in a heavily-congested network,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;initial windows of four segments can **increase** HTTP transfer times
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and increase the segment drop rate.
+<BR>
+<P>My own assessment of the discussion to date is that there is a
+<BR>
+reasonably-solid consensus in favor of allowing an IW of three segments
+<BR>
+(for MSS &lt; 2190 bytes).  It is not clear to me if there is a consensus
+<BR>
+in favor of allowing an IW of four segments (for MSS &lt;= 1095 bytes).
+<BR>
+<P>- Sally
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1015.html">Mark Allman: "Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1013.html">Joe Touch: "Slow-start restart - discussion of fixes"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1014">[ date ]</A>
+<A HREF="index.html#1014">[ thread ]</A>
+<A HREF="subject.html#1014">[ subject ]</A>
+<A HREF="author.html#1014">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

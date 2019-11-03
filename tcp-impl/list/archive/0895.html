@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="Mohit Aron (aron@cs.rice.edu)">
+<META NAME="Subject" CONTENT="delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>delayed ACKs</H1>
+<!-- received="Mon Jan 12 08:14:52 1998" -->
+<!-- isoreceived="19980112131452" -->
+<!-- sent="Mon, 12 Jan 1998 10:00:43 -0600 (CST)" -->
+<!-- isosent="19980112160043" -->
+<!-- name="Mohit Aron" -->
+<!-- email="aron@cs.rice.edu" -->
+<!-- subject="delayed ACKs" -->
+<!-- id="199801121600.KAA11396@cs.rice.edu" -->
+<STRONG>From:</STRONG> Mohit Aron (<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121600.KAA11396@cs.rice.edu&gt;"><EM>aron@cs.rice.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 11:00:43 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0896.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0894.html">Hari Balakrishnan: "Re: Clock granularity"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0897.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0897.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0900.html">Mark Allman: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0902.html">Scott Lawrence: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0903.html">Jaume Linares: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0905.html">Barney Wolff: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0906.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0907.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0911.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0912.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0914.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0915.html">Henrik Frystyk Nielsen: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0919.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0920.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0922.html">braden@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0923.html">Hsiao-keng Jerry Chu: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0924.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0927.html">$B: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0928.html">Subir Varma: "RE: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#895">[ date ]</A>
+<A HREF="index.html#895">[ thread ]</A>
+<A HREF="subject.html#895">[ subject ]</A>
+<A HREF="author.html#895">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is there some work that demonstrates how important it is to delay 
+<BR>
+the ACKs in the Internet ? 
+<BR>
+<P>The disadvantages of delaying the ACKs appear to be the following:
+<BR>
+<P>i) The slow-start and congestion avoidance at the sender get slower as these
+<BR>
+&nbsp;&nbsp;&nbsp;do not increase the window based on the bytes acknowledged, but rather on
+<BR>
+&nbsp;&nbsp;&nbsp;the number of ACKs received (which are halved).
+<BR>
+ii) A retransmission timeout of less than 200ms cannot be used as it would 
+<BR>
+&nbsp;&nbsp;&nbsp;lead to spurious retransmissions when the receiver delays the ACKs for
+<BR>
+&nbsp;&nbsp;&nbsp;200ms (at least for the BSD implementations).
+<BR>
+iii) When TCP options are used (such as the timestamp option), a TCP receiver 
+<BR>
+&nbsp;&nbsp;&nbsp;would ACK every 3 segments as shown in [1].
+<BR>
+iv) Some other unfortunate interactions due to delayed ACKs are demonstrated in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;[2].
+<BR>
+<P><P>The advantages of using delayed ACKs can be enumerated as follows:
+<BR>
+<P>i) Enables the piggybacking of ACKs on any data segments that might be sent
+<BR>
+&nbsp;&nbsp;&nbsp;by the receiver.
+<BR>
+ii) Reduces the number of ACKs in the network as well as reduces the number of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;ACKs that the sender needs to process.
+<BR>
+<P><P>As most of the traffic on the Internet is web traffic, it is questionable how
+<BR>
+beneficial is i). Most of the HTTP traffic consists of short requests by
+<BR>
+clients that are served by servers - so there's not much opportunity for
+<BR>
+piggybacking here. FTP starts up two different TCP connections for the two
+<BR>
+sides of data transfer, so there's not much piggypacking opportunities for 
+<BR>
+FTP traffic too. I'm not aware of any work that demonstrates how important is
+<BR>
+ii). At least reducing the ACKs in the network doesn't appear to provide much
+<BR>
+benefit as ACKs are typically quite small in size as compared to data segments.
+<BR>
+<P><P><P><P><P><P>1. L. Brakmo and L. Peterson. Performance Problems in 4.4BSD TCP, ACM CCR, 
+<BR>
+&nbsp;&nbsp;&nbsp;Oct 1995.
+<BR>
+<P>2. J. Heidmann. Performance Interactions between P-HTTP and TCP
+<BR>
+&nbsp;&nbsp;&nbsp;Implementations, ACM CCR, Apr 1997.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0896.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0894.html">Hari Balakrishnan: "Re: Clock granularity"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0897.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0897.html">Alan Cox: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0900.html">Mark Allman: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0902.html">Scott Lawrence: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0903.html">Jaume Linares: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0905.html">Barney Wolff: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0906.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0907.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0911.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0912.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0914.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0915.html">Henrik Frystyk Nielsen: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0919.html">David Borman: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0920.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0922.html">braden@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0923.html">Hsiao-keng Jerry Chu: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0924.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0927.html">$B: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0928.html">Subir Varma: "RE: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#895">[ date ]</A>
+<A HREF="index.html#895">[ thread ]</A>
+<A HREF="subject.html#895">[ subject ]</A>
+<A HREF="author.html#895">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Mon Jun 30 23:56:38 1997" -->
+<!-- isoreceived="19970701035638" -->
+<!-- sent="Tue, 1 Jul 97 04:11:45 GMT" -->
+<!-- isosent="19970701041145" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="6162.wsimpson@greendragon.com" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6162.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jul 01 1997 - 00:11:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0606.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#604">[ date ]</A>
+<A HREF="index.html#604">[ thread ]</A>
+<A HREF="subject.html#604">[ subject ]</A>
+<A HREF="author.html#604">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm marking the ones I care about:
+<BR>
+<P><EM>&gt;         - How to compute RTO when timing more than one packet per RTT
+</EM><BR>
+<EM>&gt;           (i.e., how to adjust the constants for the exponentially weighted
+</EM><BR>
+<EM>&gt;           moving average)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Uh, sounds like it could be harmful.  Why?
+<BR>
+<P><P><EM>&gt;         - Is the initial slow-start cwnd going to be increased, and if
+</EM><BR>
+<EM>&gt;           so, to what?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+minimum( 2*MSS remote, 2*MSS local calculated from MTU );
+<BR>
+<P><P><EM>&gt;         - How long a sending pause merits a new slow-start
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Simple, use delayed-Ack TO (DATO)!  If you already released the channel
+<BR>
+that long, you have to assume that someone else has begun to fill it, at
+<BR>
+least with 1/2 DATO bandwidth worth of packets.  And it won't hurt as
+<BR>
+much to slow start when there already has been your own delay.
+<BR>
+<P><P><EM>&gt;         - Is it time to revisit constants like MSL and initial RTO?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Yeah, drop MSL to no more than 30 seconds, but IRTO should stay at
+<BR>
+current level (3 seconds).  Actually, I have to hand tune IRTO to 5-6
+<BR>
+seconds on 14.4Kbps modems here to completely avoid early unnecessary
+<BR>
+retransmissions, but 3-4 seconds works fine for 28.8Kbps.  Modem speeds
+<BR>
+are finally getting closer to the design speeds for the ARPAnet....
+<BR>
+<P>Also, MinRTO should be 200 ms and DATO should be 200-300 ms, never
+<BR>
+shorter.  It would save a heck of a lot of useless retransmissions I see
+<BR>
+every day.  I'm guessing that a couple stacks are using around 50 ms for
+<BR>
+each, and that's much too short, even at T3!  All it takes is one burp
+<BR>
+of congestion, and I see an avalanche effect.
+<BR>
+<P>Of course, my numbers are imperical, based on many years of playing with
+<BR>
+slow WAN links.  I'm afraid all the research is looking at fast links.
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6162.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;6162.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0603.html">Curtis Villamizar: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0606.html">Eric.Schenk@dna.lth.se: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#604">[ date ]</A>
+<A HREF="index.html#604">[ thread ]</A>
+<A HREF="subject.html#604">[ subject ]</A>
+<A HREF="author.html#604">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

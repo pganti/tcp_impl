@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: PSH (was Re: draft description o</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="PSH (was Re: draft description of &quot;No initial slow start&quot;)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>PSH (was Re: draft description of &quot;No initial slow start&quot;)</H1>
+<!-- received="Wed Mar 19 13:38:36 1997" -->
+<!-- isoreceived="19970319183836" -->
+<!-- sent="Wed, 19 Mar 1997 13:26:24 PST" -->
+<!-- isosent="19970319212624" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<!-- id="199703192126.NAA23874@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Wed, 19 Mar 1997 11:58:15 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20PSH%20(was%20Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;)&In-Reply-To=&lt;199703192126.NAA23874@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 16:26:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0164.html">Vern Paxson: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0167.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0169.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0170.html">sparker@Eng.Sun.COM: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0172.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0173.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0176.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#165">[ date ]</A>
+<A HREF="index.html#165">[ thread ]</A>
+<A HREF="subject.html#165">[ subject ]</A>
+<A HREF="author.html#165">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I would like to see the last sentence in the previous paragraph
+</EM><BR>
+<EM>&gt;  clarified to something like this:
+</EM><BR>
+<P>Sounds good, I've added this.
+<BR>
+<P><EM>&gt; As an aside, I observed in your examples that the sending TCP never 
+</EM><BR>
+<EM>&gt; sets the PSH bit except in the first segment. I hope the PSH bit is 
+</EM><BR>
+<EM>&gt; eventually set and is not shown in your traces because these are trace 
+</EM><BR>
+<EM>&gt; fragments and not because the sender is behaving badly.
+</EM><BR>
+<P>Yes, the sending TCP in that trace does indeed set PSH now and then.
+<BR>
+I just poked through a couple hundred traces I have lying around
+<BR>
+(representing maybe six different TCPs) and all of them set PSH at
+<BR>
+least once.
+<BR>
+<P><EM>&gt; The misbehaving TCP did not always set the PSH bit in the last data
+</EM><BR>
+<EM>&gt; segment but still expected that data to be delivered to the application.
+</EM><BR>
+<P>This looks like it's okay.  RFC 793 (section 3.7, page 41) says:
+<BR>
+<P>&nbsp;&nbsp;The CLOSE user call implies a push function, as does the FIN control
+<BR>
+&nbsp;&nbsp;flag in an incoming segment.
+<BR>
+<P>and I didn't see wording in RFC 1122 overruling this, though maybe I missed it.
+<BR>
+<P>Rich Fox wrote:
+<BR>
+<P><EM>&gt; I have seen a number of implementations that seem to depend on the PSH
+</EM><BR>
+<EM>&gt; bit.
+</EM><BR>
+<P>If this means that they won't ultimately deliver all of the data if
+<BR>
+the last segment doesn't include a PSH, then that definitely seems worth
+<BR>
+documenting.  (A bit hard to show from a trace, I guess ...)
+<BR>
+<P><EM>&gt; ... I would like to see the RFC amended to say the PSH bit is advisory
+</EM><BR>
+<EM>&gt; on when to deliver data to the app but a stack should deliver data
+</EM><BR>
+<EM>&gt; regardless of the PSH bit.
+</EM><BR>
+<P>Maybe this should instead be worded in terms of: stacks must ultimately
+<BR>
+deliver data even if they don't ever receive a PSH?  (Because in 793,
+<BR>
+beginning of section 2.8, it sounds like PSH is mandatory and not advisory.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0164.html">Vern Paxson: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0167.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0169.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0170.html">sparker@Eng.Sun.COM: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0172.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0173.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0176.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0179.html">Smith, Allyn D: "RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#165">[ date ]</A>
+<A HREF="index.html#165">[ thread ]</A>
+<A HREF="subject.html#165">[ subject ]</A>
+<A HREF="author.html#165">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

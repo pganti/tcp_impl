@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;F</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Mon Mar 24 15:50:54 1997" -->
+<!-- isoreceived="19970324205054" -->
+<!-- sent="Mon, 24 Mar 1997 18:42:22 -0500" -->
+<!-- isosent="19970324234222" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703242342.SAA04944@brookfield.ans.net" -->
+<!-- inreplyto="199703220153.UAA18921@MAILSERV-2HIGH.FTP.COM" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703242342.SAA04944@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 18:42:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0231.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#232">[ date ]</A>
+<A HREF="index.html#232">[ thread ]</A>
+<A HREF="subject.html#232">[ subject ]</A>
+<A HREF="author.html#232">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199703220153.UAA18921@MAILSERV-2HIGH.FTP.COM?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703242342.SAA04944@brookfield.ans.net&gt;">199703220153.UAA18921@MAILSERV-2HIGH.FTP.COM</A>&gt;, Larry Backman writes
+<BR>
+:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; ||These machines often had 2-4 MB of memory even in the old days but
+</EM><BR>
+<EM>&gt; ||needed to stuff everything into 640KB for purely stupid reasons.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; ||It doesn't matter why these implementations are broken, the fact
+</EM><BR>
+<EM>&gt; ||remains that they are broken and their performance will be poor.  If
+</EM><BR>
+<EM>&gt; ||this leads to the conclusion that it is not possible to implement TCP
+</EM><BR>
+<EM>&gt; ||in a way that TCP will not perform poorly on some hardware platform
+</EM><BR>
+<EM>&gt; ||with too little memory or software platform that can't allocate memory
+</EM><BR>
+<EM>&gt; ||for some reason, then it must simply be accepted that these
+</EM><BR>
+<EM>&gt; ||implementations cannot conform to the RFC and will perform poorly.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; I'll do my best not to resent this and take it personally.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Can we refrain from emotionally charged words like &quot;broken&quot; and &quot;stupid&quot;
+</EM><BR>
+<EM>&gt; and try and work with each other to clarify things and improve the TCP space?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; All protocol implementations have corners into which they don't want to
+</EM><BR>
+<EM>&gt; go for a variety of platform specific reasons.  The mark in my
+</EM><BR>
+<EM>&gt; mind, of a good protocol implementation is how said implementation goes
+</EM><BR>
+<EM>&gt; into those corners and behaves under adverse circumstances in those
+</EM><BR>
+<EM>&gt; corners.  My intent in exposing my dirty laundry was to share hard
+</EM><BR>
+<EM>&gt; won knowledge we at FTP found in one of those corners and to seek
+</EM><BR>
+<EM>&gt; advice, which I got, in how to smooth and improve our behavior
+</EM><BR>
+<EM>&gt; in those corners.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Please feel free to suggest how I can improve my product, please don't
+</EM><BR>
+<EM>&gt; tell me my product is broken for doing the best balancing act it
+</EM><BR>
+<EM>&gt; could under the circusmstances for which it was aimed.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; L.
+</EM><BR>
+<P><P>What is considered the right thing for a TCP implementation to do
+<BR>
+should not be constrained or in any way influenced by what is best to
+<BR>
+accomodate a software platform design decision based on backward
+<BR>
+compatibility to the Intel 8088.  Today about the only thing with that
+<BR>
+little addressable memory will be a small appliance which is hardly a
+<BR>
+candidate for high speed TCP applications.  Any software platform
+<BR>
+design in which the memory is physically available but inaccessible
+<BR>
+(ie: 640KB limits) has serious shortcomings.  I appologize for using
+<BR>
+such emotionally charged words to describe it.
+<BR>
+<P>Your point is taken.
+<BR>
+<P>My point is that very small amounts of available buffer space must
+<BR>
+imply very low end-to-end performance.  The practice of advertising
+<BR>
+buffering that you don't have should be strongly discouraged.  
+<BR>
+<P>Curtis
+<BR>
+<P>btw- I meant to imply that DOS was broken, not someones software's DOS
+<BR>
+TCP stack if that's any consolation.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0231.html">Curtis Villamizar: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#232">[ date ]</A>
+<A HREF="index.html#232">[ thread ]</A>
+<A HREF="subject.html#232">[ subject ]</A>
+<A HREF="author.html#232">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Fri Aug 21 08:51:28 1998" -->
+<!-- isoreceived="19980821125128" -->
+<!-- sent="Fri, 21 Aug 1998 17:46:55 +0100 (BST)" -->
+<!-- isosent="19980821164655" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="m0z9uL1-000aNFC@the-village.bc.nu" -->
+<!-- inreplyto="199808211530.LAA26284@jekyll.piermont.com" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;m0z9uL1-000aNFC@the-village.bc.nu&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 21 1998 - 12:46:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1262.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1260.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1260.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1235.html">Vernon Schryver: "RE: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1261">[ date ]</A>
+<A HREF="index.html#1261">[ thread ]</A>
+<A HREF="subject.html#1261">[ subject ]</A>
+<A HREF="author.html#1261">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt; Im not arguing that der Mouse is doing the right thing in his circumstances.
+</EM><BR>
+<EM>&gt; &gt; But we can't make every random faulty piece of equipment an item to assess
+</EM><BR>
+<EM>&gt; &gt; when evaluating the need for keepalives.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It isn't a &quot;faulty piece of equipment&quot;.
+</EM><BR>
+<P>Well with RFC compliant keepalives his sessions get killed right ?
+<BR>
+<P>Yes - He said so
+<BR>
+<P>Therefore the firewall is buggy against the RFC's it should have been
+<BR>
+configured with respect to.
+<BR>
+<P>I cannot see how anyone can argue otherwise. Thats why its not relevant
+<BR>
+to the keepalive argument. a) its not RFC spec b) its fixable without
+<BR>
+breaking the rfc spec externally.
+<BR>
+<P><EM>&gt; &gt; In the firewall case a firewall itself can (and should have) been
+</EM><BR>
+<EM>&gt; &gt; generating its own state checks.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Great, another piece of code to force people to write when it is just
+</EM><BR>
+<EM>&gt; as easy to just leave the, what, dozen lines of code dealing with this 
+</EM><BR>
+<EM>&gt; alone?
+</EM><BR>
+<P>Suppose I have a firewall that doesnt do state checks by spoofing 
+<BR>
+keepalives internally. Now I sell it to 3ciscoscendnet  and their bright
+<BR>
+marketing people provide a nice windows configuration disk that sets the
+<BR>
+40,000 corporate windows PC's to use 5 minute keepalives. Now sell those
+<BR>
+to every major corporation.
+<BR>
+<P>Fixing the firewall would have been the right thing to do - obviously. And
+<BR>
+furthermore as my initial comment showed you can fix that without changes
+<BR>
+to the client PC's by spoofing keepalives and stealing the ack in the firewall
+<BR>
+itself [sure der mouse can't in this case but on that issue he is [pardon the
+<BR>
+insult] a user.
+<BR>
+<P>This is completely seperate to the issue of &quot;are keepalives good or bad&quot;
+<BR>
+&quot;Is 2hrs now overlong as a limit&quot; &quot;should we standardise knobs for setting
+<BR>
+it&quot;. All Im pointing out is that said misimplemented firewall is not relevant
+<BR>
+to the discussion. It is broken. Vern's http server resource point is relevant
+<BR>
+as are his comments on packet size. And those are worth listening to.
+<BR>
+<P>Now I'll buy a lot of Vern's arguments for shorter keepalives due to resource
+<BR>
+issues and the fact a protocol keepalive is no less resource using.
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1262.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1260.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1260.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1235.html">Vernon Schryver: "RE: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1261">[ date ]</A>
+<A HREF="index.html#1261">[ thread ]</A>
+<A HREF="subject.html#1261">[ subject ]</A>
+<A HREF="author.html#1261">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:53 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

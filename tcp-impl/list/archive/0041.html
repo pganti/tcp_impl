@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: cleaning up TIME_WAIT states</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@hpisrdq.cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: cleaning up TIME_WAIT states">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: cleaning up TIME_WAIT states</H1>
+<!-- received="Mon Jan 20 21:38:23 1997" -->
+<!-- isoreceived="19970121023823" -->
+<!-- sent="Mon, 20 Jan 1997 13:27:38 -0800" -->
+<!-- isosent="19970120212738" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@hpisrdq.cup.hp.com" -->
+<!-- subject="Re: cleaning up TIME_WAIT states" -->
+<!-- id="32E3E34A.5B1D@cup.hp.com" -->
+<!-- inreplyto="9701202047.AA00148@fore.co.uk" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@hpisrdq.cup.hp.com?Subject=Re:%20cleaning%20up%20TIME_WAIT%20states&In-Reply-To=&lt;32E3E34A.5B1D@cup.hp.com&gt;"><EM>raj@hpisrdq.cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 20 1997 - 16:27:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0040.html">Ian Heavens: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0040.html">Ian Heavens: "Re: cleaning up TIME_WAIT states"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#41">[ date ]</A>
+<A HREF="index.html#41">[ thread ]</A>
+<A HREF="subject.html#41">[ subject ]</A>
+<A HREF="author.html#41">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Ian Heavens wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; W. Richard Stevens wrote:
+</EM><BR>
+<EM>&gt; &gt; it's better to work on the problem at the server.  Trying to get all the
+</EM><BR>
+<EM>&gt; &gt; different clients that are out there (most are PC stacks, I'd guess) to
+</EM><BR>
+<EM>&gt; &gt; implement something new sounds impossible.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You make an interesting point - it's always easier to improve the
+</EM><BR>
+<EM>&gt; quality of servers, which must be more robust, support more connections
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; that generally act as clients that need the most improvement.  Sounds
+</EM><BR>
+<EM>&gt; like a dual approach of fixing the server side first if possible, but
+</EM><BR>
+<EM>&gt; making recommendations for the clients, might be a good idea.
+</EM><BR>
+<P>Or gack, the three-pronged attack of getting the applications that
+<BR>
+behave poorly to do somethig a bit better? I suspect it is much easier
+<BR>
+to get people to download new versions of web browser foo that say
+<BR>
+shutdown first than it is to get them to upgrade their stack, and it is
+<BR>
+probably easier to get poeple to update webserver foo than the server
+<BR>
+stack. Or at least it looks like the web server and browser software is
+<BR>
+roolling with greater frequency than the transport implementations.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; When BSDI upgraded their stack this past summer to make their Web server
+</EM><BR>
+<EM>&gt; &gt; &quot;faster&quot;, they moved all the connections in the TIME_WAIT state onto their
+</EM><BR>
+<EM>&gt; &gt; own queue, to get them out of the tcp_slowtimo() function.  I'd bet that's
+</EM><BR>
+<EM>&gt; &gt; the majority of the CPU savings right there.  (I've always thought that the
+</EM><BR>
+<EM>&gt; &gt; BSD tcp_{slow,fast}timo() functions must be one of the biggest bottlenecks
+</EM><BR>
+<EM>&gt; &gt; on a busy system.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I agree.  PCB lookup costs have been analysed (the Sequent paper on
+</EM><BR>
+<EM>&gt; efficient demultiplexing &amp; Jeff Mogul's &quot;Case for Persistent HTTP&quot; and
+</EM><BR>
+<EM>&gt; &quot;Network Behaviour of a Busy Web Server and its Clients&quot;). I wonder about
+</EM><BR>
+<EM>&gt; the effect of timer traversals of thousands of PCBs, especially on the
+</EM><BR>
+<EM>&gt; cache.
+</EM><BR>
+<P>I suspect that many (bletch :) commercial stacks are getting tuned-up to
+<BR>
+handle large numbers of TIME_WAITs quite well. For some examples, you
+<BR>
+might look at the SPECweb96 results on www.specbench.org. There are some
+<BR>
+systems being benchmarked at over 1000 connections per second for
+<BR>
+fifteen minutes or more, which is a decent number of connections in the
+<BR>
+TIME_WAIT state at either 60 or 240 2*MSL.
+<BR>
+<P><EM>&gt; &gt; If memory is then a problem (I think the BSDI code still saves the inpcb{}
+</EM><BR>
+<EM>&gt; &gt; and the tcpcb{}; 384 bytes if my memory is right) then I'd bet you could
+</EM><BR>
+<EM>&gt; &gt; save a lot less state information for the TIME_WAIT state, similar to the
+</EM><BR>
+<EM>&gt; &gt; savings they obtained with the changes to help with the SYN flood attacks
+</EM><BR>
+<EM>&gt; &gt; this fall.  If you could reduce the amount of state information down to
+</EM><BR>
+<EM>&gt; &gt; 32 bytes, then you have increased by one order or magnitude the number of
+</EM><BR>
+<EM>&gt; &gt; these TIME_WAIT connections for a given amount of memory.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Jeff Mogul's conclusions in his SIGCOMM paper were that memory occupancy
+</EM><BR>
+<EM>&gt; was not a problem (less than a Mbyte of state for TIME-WAIT connections
+</EM><BR>
+<EM>&gt; in a busy web server) - at least for a web server.  I think you could get
+</EM><BR>
+<P>That depends on your definition of busy, the sice of the PCB, and the
+<BR>
+length of the TIME_WAIT state. At a high enough connection per second
+<BR>
+level, the memory occupied by TIME_WAITs can be rather larger than the
+<BR>
+web servers URL working-set - even for something like SPECweb96, which
+<BR>
+increases the working-set as the square-root of the requested load.
+<BR>
+<P><EM>&gt; the state down to about 13 bytes (1 address + 2 ports + some bits) and
+</EM><BR>
+<P>Wouldn't we want a sequence number in there, or are we precluding the
+<BR>
+possibility of restarting a connection in TIME_WAIT?
+<BR>
+<P><EM>&gt; The perceived costs of TIME-WAIT are still too high, if people are
+</EM><BR>
+<EM>&gt; reducing the MSL from the (low) 60 seconds down to 10 seconds, or zero;
+</EM><BR>
+<EM>&gt; in addition it looks like a lot of RSTs are being used to avoid it
+</EM><BR>
+<EM>&gt; (5-10% on the DEC election server: see <A HREF="ftp://ftp.digital.com/pub/DEC/traces/netstat">ftp://ftp.digital.com/pub/DEC/traces/netstat</A>).
+</EM><BR>
+<EM>&gt; I think this should be flagged as a concern of the TCP implementors'
+</EM><BR>
+<EM>&gt; working group.
+</EM><BR>
+<P>Indeed, lets make sure that abortive close does not get out of hand.
+<BR>
+<P>rick jones
+<BR>
+<A HREF="http://www.cup.hp.com/netperf/NetperfPage.html">http://www.cup.hp.com/netperf/NetperfPage.html</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0040.html">Ian Heavens: "Re: cleaning up TIME_WAIT states"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0040.html">Ian Heavens: "Re: cleaning up TIME_WAIT states"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0042.html">Simon Spero: "Re: cleaning up TIME_WAIT states"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#41">[ date ]</A>
+<A HREF="index.html#41">[ thread ]</A>
+<A HREF="subject.html#41">[ subject ]</A>
+<A HREF="author.html#41">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

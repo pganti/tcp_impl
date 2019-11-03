@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP Slow-Start</TITLE>
+<META NAME="Author" CONTENT="Chadi M. BARAKAT (Chadi.Barakat@sophia.inria.fr)">
+<META NAME="Subject" CONTENT="TCP Slow-Start">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP Slow-Start</H1>
+<!-- received="Thu Feb 25 07:52:04 1999" -->
+<!-- isoreceived="19990225125204" -->
+<!-- sent="Thu, 25 Feb 1999 13:44:19 +0100" -->
+<!-- isosent="19990225124419" -->
+<!-- name="Chadi M. BARAKAT" -->
+<!-- email="Chadi.Barakat@sophia.inria.fr" -->
+<!-- subject="TCP Slow-Start" -->
+<!-- id="36D545A3.64812927@sophia.inria.fr" -->
+<STRONG>From:</STRONG> Chadi M. BARAKAT (<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20TCP%20Slow-Start&In-Reply-To=&lt;36D545A3.64812927@sophia.inria.fr&gt;"><EM>Chadi.Barakat@sophia.inria.fr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 25 1999 - 07:44:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1618.html">Eric A. Hall: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1616.html">Vernon Schryver: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1620.html">Neal Cardwell: "Re: TCP Slow-Start"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1620.html">Neal Cardwell: "Re: TCP Slow-Start"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1617">[ date ]</A>
+<A HREF="index.html#1617">[ thread ]</A>
+<A HREF="subject.html#1617">[ subject ]</A>
+<A HREF="author.html#1617">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello, 
+<BR>
+<P>I am interested in my current work in the slow start phase of TCP. It is
+<BR>
+clear that this algorithm is necessary to increase gradually the
+<BR>
+congestion window so that to not overwhelm the network buffers and to
+<BR>
+activate smoothly the ACK clock. At the beginning of the connection, it
+<BR>
+serves also to estimate the available capacity of the network. 
+<BR>
+But such slow increase deteriorates the performance of the protocol when
+<BR>
+long delay paths such as satellite links are crossed by the connection.
+<BR>
+Large initial window avoids some Round Trips at the beginning of the
+<BR>
+connection but it may result in losses because this initial window is
+<BR>
+transmitted in a burst. I think that the appropriate solution to this
+<BR>
+problem is a kind of available bandwidth estimation. However, estimating
+<BR>
+the available bandwidth is difficult to be implemented. I am
+<BR>
+investigating another solution which lets TCP send many packets at the
+<BR>
+beginning of the connection but not in a bursty manner as with large
+<BR>
+initial window.
+<BR>
+<P>A timer of value smaller than timeout (saying 50ms or 100ms) is set when
+<BR>
+the first packet is sent. This timer is canceled when an ACK is
+<BR>
+received. If the timer expires, this means that an ACK has not been
+<BR>
+received. The source supposes here that a long delay path has been
+<BR>
+crossed by the connection and therefore it transmits a new packet and
+<BR>
+sets again the timer. The absence of an ACK may be due to the loss of
+<BR>
+the first packet. This loss is still detected via timeout.  
+<BR>
+This timer is set in the first Round Trip Time at the beginning of the
+<BR>
+connection. We can set it also whenever a timeout occurs. Once we
+<BR>
+receive an ACK, a normal slow start is done. The window is increased by
+<BR>
+one MSS for every new ACK.
+<BR>
+<P>This solution results in many packets transmitted at the beginning of
+<BR>
+the connection (proportional to RTT) but spaced so that to not overload
+<BR>
+the network. It functions only in case of long delay paths. With small
+<BR>
+RTTs, an ACK is received before the expiration of the added timer and a
+<BR>
+single packet is thus transmitted in the first RTT (the delayed ACK at
+<BR>
+the receiver may affect this behavior). I think that spreading out the
+<BR>
+first packets sent during slow start may result in separate bursts
+<BR>
+during the subsequent RTTs. It is known that bursts sent during slow
+<BR>
+start overload the network buffers due to their high rate. Reducing the
+<BR>
+size of these bursts may avoid some losses. 
+<BR>
+<P>The idea is at the beginning, I don't know exactly what will be its
+<BR>
+negative effect on TCP and on the network. Also, the overload it causes 
+<BR>
+to the operating system must be investigated. Any feedback on this issue
+<BR>
+will be very appreciated. 
+<BR>
+<P>Thanks in advance 
+<BR>
+<P>Chadi
+<BR>
+<PRE>
+-- 
+                    **  Chadi Mohamad BARAKAT  **
+           <A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+                                  /\
+PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20TCP%20Slow-Start&In-Reply-To=&lt;36D545A3.64812927@sophia.inria.fr&gt;">Chadi.Barakat@sophia.inria.fr</A>
+2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1618.html">Eric A. Hall: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1616.html">Vernon Schryver: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1620.html">Neal Cardwell: "Re: TCP Slow-Start"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1620.html">Neal Cardwell: "Re: TCP Slow-Start"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1617">[ date ]</A>
+<A HREF="index.html#1617">[ thread ]</A>
+<A HREF="subject.html#1617">[ subject ]</A>
+<A HREF="author.html#1617">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

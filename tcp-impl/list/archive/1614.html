@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Idle Restart Algorithms</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="RE: Idle Restart Algorithms">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Idle Restart Algorithms</H1>
+<!-- received="Wed Feb 24 16:29:52 1999" -->
+<!-- isoreceived="19990224212952" -->
+<!-- sent="Wed, 24 Feb 1999 13:20:56 -0800 (PST)" -->
+<!-- isosent="19990224212056" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="RE: Idle Restart Algorithms" -->
+<!-- id="199902242120.NAA18230@rum.isi.edu" -->
+<!-- inreplyto="Idle Restart Algorithms" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 24 1999 - 16:20:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1615.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1614">[ date ]</A>
+<A HREF="index.html#1614">[ thread ]</A>
+<A HREF="subject.html#1614">[ subject ]</A>
+<A HREF="author.html#1614">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Wed Feb 24 11:45:45 1999
+</EM><BR>
+<EM>&gt; From: Venkat Padmanabhan &lt;<A HREF="mailto:padmanab@microsoft.com?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">padmanab@microsoft.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: &quot;'<A HREF="mailto:mcmanus@appliedtheory.com?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">mcmanus@appliedtheory.com</A>'&quot; &lt;<A HREF="mailto:mcmanus@appliedtheory.com?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">mcmanus@appliedtheory.com</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: &quot;'<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">tcp-impl@lerc.nasa.gov</A>'&quot; &lt;<A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902242120.NAA18230@rum.isi.edu&gt;">tcp-impl@lerc.nasa.gov</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: RE: Idle Restart Algorithms
+</EM><BR>
+<EM>&gt; Date: Wed, 24 Feb 1999 11:21:41 -0800
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I think you've outlined the issues very well. Here are a few comments.
+</EM><BR>
+...
+<BR>
+<EM>&gt; explicit protocol mechanism to &quot;hedge&quot; any bets (guesses) we may 
+</EM><BR>
+<EM>&gt; make about the appropriate window size after an idle period. With 
+</EM><BR>
+<EM>&gt; such a mechanism in place, it may be okay to err on the side of being 
+</EM><BR>
+<EM>&gt; too aggressive (i.e., using a larger window size than appropriate). 
+</EM><BR>
+<EM>&gt; The mechanism I used was priority dropping -- i.e., packets sent 
+</EM><BR>
+<EM>&gt; when the sender is unsure of the appropriateness of congestion window
+</EM><BR>
+<EM>&gt; size are assigned a low drop priority. This would shield (to an extent)
+</EM><BR>
+<EM>&gt; other traffic in the event of the guess being incorrect. While
+</EM><BR>
+<EM>&gt; priority dropping is a simple mechanism and similar in spirit to
+</EM><BR>
+<EM>&gt; some of the diffserv mechanisms being considered, the Internet is
+</EM><BR>
+<EM>&gt; not quite ready for it yet. More information on this work is available
+</EM><BR>
+<EM>&gt; from:
+</EM><BR>
+<EM>&gt; <A HREF="http://www.cs.berkeley.edu/~padmanab/papers/gi98.ps">http://www.cs.berkeley.edu/~padmanab/papers/gi98.ps</A>
+</EM><BR>
+<EM>&gt; <A HREF="http://www.cs.berkeley.edu/~padmanab/phd-thesis.html">http://www.cs.berkeley.edu/~padmanab/phd-thesis.html</A> (Chapter 8)
+</EM><BR>
+<P>There was a version of something similar developed at UPenn,
+<BR>
+as a follow-on to my own dissertation (Mirage), in which 
+<BR>
+the send window was constant, and split into two sub-windows,
+<BR>
+the boundary of which varied with the feedback. It would have
+<BR>
+differened from Venkat's only in that the scheme was always
+<BR>
+running, and that the overall window was constant (a function
+<BR>
+of the upperbound RTT*BW, but stable compared to the boundary).
+<BR>
+<P>The only reference I have to this is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Univ. Penn. CS Tech Report
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MS-CIS-94-55 (DISTRIBUTED SYSTEMS LAB 80) 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control by bandwidth-delay tradeoff in 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;very high-speed networks: the case of window-based control 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hyogon Kim, David J. Farber
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1615.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1614">[ date ]</A>
+<A HREF="index.html#1614">[ thread ]</A>
+<A HREF="subject.html#1614">[ subject ]</A>
+<A HREF="author.html#1614">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RFC Editor: RFC 2582 on NewReno</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="RFC Editor: RFC 2582 on NewReno Modification to TCP's Fast Recovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RFC Editor: RFC 2582 on NewReno Modification to TCP's Fast Recovery</H1>
+<!-- received="Fri Apr  9 15:04:22 1999" -->
+<!-- isoreceived="19990409190422" -->
+<!-- sent="Fri, 09 Apr 1999 15:01:47 -0400" -->
+<!-- isosent="19990409190147" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="RFC Editor: RFC 2582 on NewReno Modification to TCP's Fast Recovery" -->
+<!-- id="199904091901.PAA14957@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 09 1999 - 15:01:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1696.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1694.html">Mark Allman: "RFC Editor: RFC 2581 on TCP Congestion Control"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1695">[ date ]</A>
+<A HREF="index.html#1695">[ thread ]</A>
+<A HREF="subject.html#1695">[ subject ]</A>
+<A HREF="author.html#1695">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+FYI...
+<BR>
+<P>------- Forwarded Message
+<BR>
+<P>To: IETF-Announce:;@ietf.org
+<BR>
+Subject: RFC 2582 on NewReno Modification to TCP's Fast Recovery
+<BR>
+Cc: <A HREF="mailto:rfc-ed@ISI.EDU?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">rfc-ed@ISI.EDU</A>
+<BR>
+Date: Fri, 09 Apr 1999 10:37:58 -0700
+<BR>
+From: RFC Editor &lt;<A HREF="mailto:rfc-ed@ISI.EDU?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">rfc-ed@ISI.EDU</A>&gt;
+<BR>
+<P><P>- --NextPart
+<BR>
+<P><P>A new Request for Comments is now available in online RFC libraries.
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 2582: 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Title: 	    The NewReno Modification to TCP's Fast Recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Author(s):  S. Floyd, T. Henderson
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status:     Experimental
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:       April 1999
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mailbox:    <A HREF="mailto:floyd@acm.org?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">floyd@acm.org</A>, <A HREF="mailto:tomh@cs.berkeley.edu?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">tomh@cs.berkeley.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pages:      12
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Characters: 29393
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Updates/Obsoletes/See Also: None  
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I-D Tag:    draft-ietf-tcpimpl-newreno-02.txt
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;URL:        <A HREF="ftp://ftp.isi.edu/in-notes/rfc2582.txt">ftp://ftp.isi.edu/in-notes/rfc2582.txt</A>
+<BR>
+<P><P>RFC 2001 documents the following four intertwined TCP congestion
+<BR>
+control algorithms: Slow Start, Congestion Avoidance, Fast Retransmit,
+<BR>
+and Fast Recovery.  RFC 2581 explicitly allows certain modifications
+<BR>
+of these algorithms, including modifications that use the TCP
+<BR>
+Selective Acknowledgement (SACK) option, and modifications that
+<BR>
+respond to &quot;partial acknowledgments&quot; (ACKs which cover new data, but
+<BR>
+not all the data outstanding when loss was detected) in the absence of
+<BR>
+SACK.  This document describes a specific algorithm for responding to
+<BR>
+partial acknowledgments, referred to as NewReno.  This response to
+<BR>
+partial acknowledgments was first proposed by Janey Hoe.
+<BR>
+<P>This document is the product of the TCP Implementation Working Group
+<BR>
+of the IETF.
+<BR>
+<P>This memo defines an Experimental Protocol for the Internet community.
+<BR>
+It does not specify an Internet standard of any kind.  Discussion and
+<BR>
+suggestions for improvement are requested.  Distribution of this memo
+<BR>
+is unlimited.
+<BR>
+<P>This announcement is sent to the IETF list and the RFC-DIST list.
+<BR>
+Requests to be added to or deleted from the IETF distribution list
+<BR>
+should be sent to IETF-REQUEST@IETF.ORG.  Requests to be
+<BR>
+added to or deleted from the RFC-DIST distribution list should
+<BR>
+be sent to RFC-DIST-REQUEST@RFC-EDITOR.ORG.
+<BR>
+<P>Details on obtaining RFCs via FTP or EMAIL may be obtained by sending
+<BR>
+an EMAIL message to <A HREF="mailto:rfc-info@RFC-EDITOR.ORG?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">rfc-info@RFC-EDITOR.ORG</A> with the message body 
+<BR>
+help: ways_to_get_rfcs.  For example:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To: <A HREF="mailto:rfc-info@RFC-EDITOR.ORG?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">rfc-info@RFC-EDITOR.ORG</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subject: getting rfcs
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;help: ways_to_get_rfcs
+<BR>
+<P>Requests for special distribution should be addressed to either the
+<BR>
+author of the RFC in question, or to RFC-Manager@RFC-EDITOR.ORG.  Unless
+<BR>
+specifically noted otherwise on the RFC itself, all RFCs are for
+<BR>
+unlimited distribution.echo 
+<BR>
+Submissions for Requests for Comments should be sent to
+<BR>
+RFC-EDITOR@RFC-EDITOR.ORG.  Please consult RFC 2223, Instructions to RFC
+<BR>
+Authors, for further information.
+<BR>
+<P><P>Joyce K. Reynolds and Alegre Ramos
+<BR>
+USC/Information Sciences Institute
+<BR>
+<P>...
+<BR>
+<P>Below is the data which will enable a MIME compliant Mail Reader 
+<BR>
+implementation to automatically retrieve the ASCII version
+<BR>
+of the RFCs.
+<BR>
+<P>- --NextPart
+<BR>
+Content-Type: Multipart/Alternative; Boundary=&quot;OtherAccess&quot;
+<BR>
+<P>- --OtherAccess
+<BR>
+Content-Type:  Message/External-body;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access-type=&quot;mail-server&quot;;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;server=&quot;<A HREF="mailto:RFC-INFO@RFC-EDITOR.ORG?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">RFC-INFO@RFC-EDITOR.ORG</A>&quot;
+<BR>
+<P>Content-Type: text/plain
+<BR>
+Content-ID: &lt;<A HREF="mailto:990409103016.RFC@RFC-EDITOR.ORG?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">990409103016.RFC@RFC-EDITOR.ORG</A>&gt;
+<BR>
+<P>RETRIEVE: rfc
+<BR>
+DOC-ID: rfc2582
+<BR>
+<P>- --OtherAccess
+<BR>
+Content-Type:   Message/External-body;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name=&quot;rfc2582.txt&quot;;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;site=&quot;ftp.isi.edu&quot;;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access-type=&quot;anon-ftp&quot;;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directory=&quot;in-notes&quot;
+<BR>
+<P>Content-Type: text/plain
+<BR>
+Content-ID: &lt;<A HREF="mailto:990409103016.RFC@RFC-EDITOR.ORG?Subject=Re:%20RFC%20Editor:%20RFC%202582%20on%20NewReno%20Modification%20to%20TCP's%20Fast%20Recovery&In-Reply-To=&lt;199904091901.PAA14957@guns.lerc.nasa.gov&gt;">990409103016.RFC@RFC-EDITOR.ORG</A>&gt;
+<BR>
+<P>- --OtherAccess--
+<BR>
+- --NextPart--
+<BR>
+<P><P>------- End of Forwarded Message
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1696.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1694.html">Mark Allman: "RFC Editor: RFC 2581 on TCP Congestion Control"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1695">[ date ]</A>
+<A HREF="index.html#1695">[ thread ]</A>
+<A HREF="subject.html#1695">[ subject ]</A>
+<A HREF="author.html#1695">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Wed Sep 10 07:36:13 1997" -->
+<!-- isoreceived="19970910113613" -->
+<!-- sent="Wed, 10 Sep 1997 08:33:29 -0600" -->
+<!-- isosent="19970910143329" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709101433.IAA11180@mica.denver.sgi.com" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 10 1997 - 10:33:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0718.html">Guy Romano: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0716.html">Jason Thorpe: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0718.html">Guy Romano: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#717">[ date ]</A>
+<A HREF="index.html#717">[ thread ]</A>
+<A HREF="subject.html#717">[ subject ]</A>
+<A HREF="author.html#717">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, vjs
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; I never followed through on implementing Black Hole Detection
+</EM><BR>
+<EM>&gt; because it didn't seem to me that the hassels of developing the
+</EM><BR>
+<EM>&gt; code was worth the payback.
+</EM><BR>
+<P>That has my vote.  Let 'em fix their routers instead of bloating
+<BR>
+everyone else's kernels.
+<BR>
+<P><P>] To: &quot;Kevin M. Lahey&quot; &lt;<A HREF="mailto:kml@nas.nasa.gov?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">kml@nas.nasa.gov</A>&gt;
+<BR>
+] Cc: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox), <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+<BR>
+] From: Jason Thorpe &lt;<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">thorpej@nas.nasa.gov</A>&gt;
+<BR>
+<P>] ...
+<BR>
+] I think the best approach here is to keep it simple - after your
+<BR>
+] threshold of timeouts, simply say &quot;Ok, someone along the path is
+<BR>
+] being lame&quot;, and fall back on a `traditional' segment size computation
+<BR>
+] (such as BSD's MTU-for-local-addresses-else-default-mss hack).  I would
+<BR>
+] think that this would be a corner case (and thus not worth the effort of
+<BR>
+] a more complex solution), and maybe the resulting less-than-optimal
+<BR>
+] performance will convince people to fix their firewalls?
+<BR>
+<P><P>Note that the MTU-for-local-addresses-else-default-mss hack is not
+<BR>
+relevant.  A pair of BSD systems will have negogated a MSS at the
+<BR>
+beginning of the TCP connection that is no larger than the smallest of
+<BR>
+their two local MTU's.
+<BR>
+<P>As I said last night, I have fairly good evidence that occassionally
+<BR>
+PMTU Discovery is broken not by firewalls near HTTP server, but
+<BR>
+elsewhere.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709101433.IAA11180@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0718.html">Guy Romano: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0716.html">Jason Thorpe: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0718.html">Guy Romano: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#717">[ date ]</A>
+<A HREF="index.html#717">[ thread ]</A>
+<A HREF="subject.html#717">[ subject ]</A>
+<A HREF="author.html#717">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

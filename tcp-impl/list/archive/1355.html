@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: old TCP options</TITLE>
+<META NAME="Author" CONTENT="braden@ISI.EDU (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: old TCP options">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: old TCP options</H1>
+<!-- received="Sun Nov  1 13:04:23 1998" -->
+<!-- isoreceived="19981101180423" -->
+<!-- sent="Sun, 1 Nov 1998 09:57:17 -0800" -->
+<!-- isosent="19981101175717" -->
+<!-- name="braden@ISI.EDU" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: old TCP options" -->
+<!-- id="199811011757.AA07037@gra.isi.edu" -->
+<!-- inreplyto="old TCP options" -->
+<STRONG>From:</STRONG> <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20old%20TCP%20options&In-Reply-To=&lt;199811011757.AA07037@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Sun Nov 01 1998 - 12:57:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1354.html">scj2@gs4.revnet.com: "ISM Corp has acquired 4.7 mill to begin production Stock up 100 percent"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1352.html">Eric A. Hall: "old TCP options"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1355">[ date ]</A>
+<A HREF="index.html#1355">[ thread ]</A>
+<A HREF="subject.html#1355">[ subject ]</A>
+<A HREF="author.html#1355">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; &gt;
+<BR>
+&nbsp;&nbsp;*&gt; &gt;Did anybody ever make use of any of the expiremental or legacy TCP
+<BR>
+&nbsp;&nbsp;*&gt; &gt;options, such as NAK, Echo and Alternative Checksums? Are these options
+<BR>
+&nbsp;&nbsp;*&gt; &gt;seen much today, still?
+<BR>
+&nbsp;&nbsp;*&gt; &gt;
+<BR>
+&nbsp;&nbsp;*&gt; &gt;Thanks
+<BR>
+&nbsp;&nbsp;*&gt; &gt;
+<BR>
+&nbsp;&nbsp;*&gt; &gt;-- 
+<BR>
+&nbsp;&nbsp;*&gt; &gt;Eric A. Hall                                            <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20old%20TCP%20options&In-Reply-To=&lt;199811011757.AA07037@gra.isi.edu&gt;">ehall@ehsco.com</A>
+<BR>
+&nbsp;&nbsp;*&gt; &gt;+1-650-685-0557                                    <A HREF="http://www.ehsco.com">http://www.ehsco.com</A>
+<BR>
+<P><P>I don't recognized NAK (see list below, taken from the IANA page).
+<BR>
+Echo has been superceded by TSOPT, which certainly is implemented.
+<BR>
+<P>Bob Braden
+<BR>
+<P><P>Kind   Length   Meaning                           Reference
+<BR>
+----   ------   -------------------------------   ---------
+<BR>
+&nbsp;&nbsp;0        -    End of Option List                 [RFC793]
+<BR>
+&nbsp;&nbsp;1        -    No-Operation                       [RFC793]
+<BR>
+&nbsp;&nbsp;2        4    Maximum Segment Size               [RFC793]
+<BR>
+&nbsp;&nbsp;3        3    WSOPT - Window Scale              [RFC1323]
+<BR>
+&nbsp;&nbsp;4        2    SACK Permitted                    [RFC1072]
+<BR>
+&nbsp;&nbsp;5        N    SACK                              [RFC1072]
+<BR>
+&nbsp;&nbsp;6        6    Echo (obsoleted by option 8)      [RFC1072]
+<BR>
+&nbsp;&nbsp;7        6    Echo Reply (obsoleted by option 8)[RFC1072]
+<BR>
+&nbsp;&nbsp;8       10    TSOPT - Time Stamp Option         [RFC1323]
+<BR>
+&nbsp;&nbsp;9        2    Partial Order Connection Permitted[RFC1693]
+<BR>
+&nbsp;10        3    Partial Order Service Profile     [RFC1693]
+<BR>
+&nbsp;11             CC                                 [Braden]
+<BR>
+&nbsp;12             CC.NEW                             [Braden]
+<BR>
+&nbsp;13             CC.ECHO                            [Braden]
+<BR>
+&nbsp;14         3   TCP Alternate Checksum Request    [RFC1146]
+<BR>
+&nbsp;15         N   TCP Alternate Checksum Data       [RFC1146]
+<BR>
+&nbsp;16             Skeeter                           [Knowles]
+<BR>
+&nbsp;17             Bubba                             [Knowles]
+<BR>
+&nbsp;18         3   Trailer Checksum Option    [Subbu &amp; Monroe]
+<BR>
+&nbsp;19        18   MD5 Signature Option              [RFC2385]
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1354.html">scj2@gs4.revnet.com: "ISM Corp has acquired 4.7 mill to begin production Stock up 100 percent"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1352.html">Eric A. Hall: "old TCP options"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1356.html">Eric A. Hall: "Re: old TCP options"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1355">[ date ]</A>
+<A HREF="index.html#1355">[ thread ]</A>
+<A HREF="subject.html#1355">[ subject ]</A>
+<A HREF="author.html#1355">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

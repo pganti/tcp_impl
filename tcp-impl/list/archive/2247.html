@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: keep RST data nonstandardize</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: keep RST data nonstandardized for the future!">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: keep RST data nonstandardized for the future!</H1>
+<!-- received="Wed Aug  2 15:30:33 2000" -->
+<!-- isoreceived="20000802193033" -->
+<!-- sent="Wed, 2 Aug 2000 16:17:12 +0100" -->
+<!-- isosent="20000802151712" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: keep RST data nonstandardized for the future!" -->
+<!-- id="20000802161712.B29891@malatesta.spider.com" -->
+<!-- inreplyto="39877CAC.6AFF6211@ehsco.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;20000802161712.B29891@malatesta.spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 02 2000 - 11:17:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2239.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2247">[ date ]</A>
+<A HREF="index.html#2247">[ thread ]</A>
+<A HREF="subject.html#2247">[ subject ]</A>
+<A HREF="author.html#2247">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I don't think it's so important that applications get the text
+<BR>
+..though useful, it will involve us with socket and other API issues.
+<BR>
+tcpdump or on the wire analysis, or syslog, is enough reason to do it.
+<BR>
+<P>On Tue, Aug 01, 2000 at 06:43:09PM -0700, Eric A. Hall wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Perhaps an FTP/SMTP/... like response format would be useful - &lt;n&gt;
+</EM><BR>
+<EM>&gt; &gt; digit code followed by a delimiter (space) followed by human readable
+</EM><BR>
+<EM>&gt; &gt; text. That way, TCP itself and/or application can decode the numeric
+</EM><BR>
+<EM>&gt; &gt; code and understand it and the application could also display the
+</EM><BR>
+<EM>&gt; &gt; returned message for the human to read.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I think it's pretty unlikely that applications will get the text if TCP
+</EM><BR>
+<EM>&gt; is burning down the connection. Another problem with reverse
+</EM><BR>
+<EM>&gt; standardization around data in the stream is that not everbody who does
+</EM><BR>
+<EM>&gt; it already will be compliant with whatever approach is finished.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>I think Mentat-derived TCP stacks are the only ones
+<BR>
+<P><EM>&gt; Getting explicit errors out of the data stream seems like the best way
+</EM><BR>
+<EM>&gt; to go if there's real interest in this. Maybe a TCP option would be a
+</EM><BR>
+<EM>&gt; better way to handle a standardized format (as opposed to the legacy ad
+</EM><BR>
+<EM>&gt; hoc approach), since that would allow for explicit codes, types and
+</EM><BR>
+<EM>&gt; text, the latter of which could be explicitly passed to the application.
+</EM><BR>
+<EM>&gt; Another benefit of using an option is that it would be ignored by legacy
+</EM><BR>
+<EM>&gt; implementations as a matter of course.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>Either approach would work (similar API issues I guess).  RST+data
+<BR>
+has advantage that there's running code (and we know receivers can
+<BR>
+handle it, as opposed to a new option - presumably with the RST,
+<BR>
+so the only difference is the TCP header length and a TCP option code.
+<BR>
+I think I may have mentioned this in the draft, (better go and read it :-).  
+<BR>
+Oh, we'd have to apply for a TCP option whereas RFC 1122 alread pwermits
+<BR>
+data in the TCP
+<BR>
+<P>ian
+<BR>
+<P><P>ian 
+<BR>
+<EM>&gt; -- 
+</EM><BR>
+<EM>&gt; Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+</EM><BR>
+<EM>&gt; Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</EM><BR>
+<P><PRE>
+-- 
+Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20keep%20RST%20data%20nonstandardized%20for%20the%20future!&In-Reply-To=&lt;20000802161712.B29891@malatesta.spider.com&gt;">ian@spider.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2248.html">Jerry Toporek: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2246.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2239.html">Eric A. Hall: "Re: keep RST data nonstandardized for the future!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2240.html">Ignacio Goyret: "RE: keep RST data nonstandardized for the future!"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2247">[ date ]</A>
+<A HREF="index.html#2247">[ thread ]</A>
+<A HREF="subject.html#2247">[ subject ]</A>
+<A HREF="author.html#2247">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

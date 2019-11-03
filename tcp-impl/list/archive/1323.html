@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Wed Sep 16 14:39:52 1998" -->
+<!-- isoreceived="19980916183952" -->
+<!-- sent="Wed, 16 Sep 1998 14:39:12 -0700 (PDT)" -->
+<!-- isosent="19980916213912" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809162139.OAA05778@rum.isi.edu" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 16 1998 - 17:39:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1322.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1323">[ date ]</A>
+<A HREF="index.html#1323">[ thread ]</A>
+<A HREF="subject.html#1323">[ subject ]</A>
+<A HREF="author.html#1323">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; To: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">craig@aland.bbn.com</A>, <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">jg@pa.dec.com</A>, <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">braden@ISI.EDU</A>, <A HREF="mailto:rstevens@kohala.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">rstevens@kohala.com</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:mycroft@mit.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">mycroft@mit.edu</A>, <A HREF="mailto:perry@piermont.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">perry@piermont.com</A>, <A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">aron@cs.rice.edu</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162139.OAA05778@rum.isi.edu&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: status of T/TCP
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+...
+<BR>
+<EM>&gt; &gt; &gt; Another example: my machine at MIT to Inria's web server (in France):
+</EM><BR>
+<EM>&gt; &gt; &gt; RTT is ~125 milliseconds.  (And we have our own line to Inria) 2X this
+</EM><BR>
+<EM>&gt; &gt; &gt; is 250 milliseconds. 
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; BTW2 - why are you doubling the RTT?
+</EM><BR>
+...
+<BR>
+<EM>&gt; How do you anticipate a new user's first visit to a web site (without
+</EM><BR>
+<EM>&gt; burning infinite bandwidth?
+</EM><BR>
+<P>You don't - that's the one you have to just wait.
+<BR>
+<P>However, T/TCP won't help this either - if it really is the first
+<BR>
+time you're there, you take a 3-way handshake to establish state.
+<BR>
+T/TCP helps only for subsequent connections.
+<BR>
+<P>(just to round out the original discussion on T/TCP, which is where we started)
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1322.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1323">[ date ]</A>
+<A HREF="index.html#1323">[ thread ]</A>
+<A HREF="subject.html#1323">[ subject ]</A>
+<A HREF="author.html#1323">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

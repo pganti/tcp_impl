@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: RFC 1323 implementation</TITLE>
+<META NAME="Author" CONTENT="Dave Marquardt (marquard@austin.ibm.com)">
+<META NAME="Subject" CONTENT="Re: RFC 1323 implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: RFC 1323 implementation</H1>
+<!-- received="Tue Apr 28 07:31:03 1998" -->
+<!-- isoreceived="19980428113103" -->
+<!-- sent="Tue, 28 Apr 1998 09:27:57 -0500" -->
+<!-- isosent="19980428142757" -->
+<!-- name="Dave Marquardt" -->
+<!-- email="marquard@austin.ibm.com" -->
+<!-- subject="Re: RFC 1323 implementation" -->
+<!-- id="199804281427.JAA23412@taklimakan.austin.ibm.com" -->
+<!-- inreplyto="199804272048.PAA15364@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> Dave Marquardt (<A HREF="mailto:marquard@austin.ibm.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804281427.JAA23412@taklimakan.austin.ibm.com&gt;"><EM>marquard@austin.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 28 1998 - 10:27:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1115">[ date ]</A>
+<A HREF="index.html#1115">[ thread ]</A>
+<A HREF="subject.html#1115">[ subject ]</A>
+<A HREF="author.html#1115">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Mon, 27 Apr 1998 15:48:47 -0500 (CDT)  David Borman wrote:
+<BR>
+<EM>&gt; I've not had any responses to my request for vendor implementations
+</EM><BR>
+<EM>&gt; of RFC 1323, needed for advancing RFC 1323 in the standards process.
+</EM><BR>
+<EM>&gt; So, 1) I've dredged up the list of implementations from July, 1993,
+</EM><BR>
+<EM>&gt; and attached it to the end of this message, and 2) I've added
+</EM><BR>
+<EM>&gt; &quot;<A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804281427.JAA23412@taklimakan.austin.ibm.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>&quot; to the Cc: list, hopefully to find
+</EM><BR>
+<EM>&gt; more vendors that have RFC 1323 implemented.  Please send me updates,
+</EM><BR>
+<EM>&gt; I'm sure there are many.
+</EM><BR>
+<P>Hi.  Here's the information for 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vendor: IBM
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product: AIX
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 4
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AIX has a network option (like a sysctl on BSD systems) to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;turn RFC 1323 on or off systemwide.  AIX also has a TCP level
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket option TCP_RFC1323 to turn RFC 1323 on or off per
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;socket.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When RFC 1323 processing is &quot;on&quot; for a socket, we implement
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;these checklist items:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1-3,5-6,8-12,14
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact: Dave Marquardt, <A HREF="mailto:marquard@austin.ibm.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804281427.JAA23412@taklimakan.austin.ibm.com&gt;">marquard@austin.ibm.com</A>
+<BR>
+<PRE>
+--
+Dave Marquardt
+SMTP: <A HREF="mailto:marquard@austin.ibm.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804281427.JAA23412@taklimakan.austin.ibm.com&gt;">marquard@austin.ibm.com</A>
+VNET: MARQUARD at AUSTIN
+T/L 678-1139
++1 512 838-1139
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1114.html">David Borman: "RFC 1323 implementation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1115">[ date ]</A>
+<A HREF="index.html#1115">[ thread ]</A>
+<A HREF="subject.html#1115">[ subject ]</A>
+<A HREF="author.html#1115">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

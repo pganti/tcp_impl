@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 18:33:55 1999" -->
+<!-- isoreceived="19990204233355" -->
+<!-- sent="Thu, 4 Feb 1999 16:30:54 -0700 (MST)" -->
+<!-- isosent="19990204233054" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902042330.QAA01201@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042330.QAA01201@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 18:30:54 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1510.html">Mohan Parthasarathy: "iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1508.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1516.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1509">[ date ]</A>
+<A HREF="index.html#1509">[ thread ]</A>
+<A HREF="subject.html#1509">[ subject ]</A>
+<A HREF="author.html#1509">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042330.QAA01201@calcite.rhyolite.com&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; As I tried to say earlier, it's almost 20 years too late for such
+</EM><BR>
+<EM>&gt; &gt; considerations.  The PUSH bit irrevocably means what it now means,
+</EM><BR>
+<P><EM>&gt; I think there is a mis-understanding here.  Setting MSG_PUSH means
+</EM><BR>
+<EM>&gt; push this data through (and set the PUSH flag when it gets to TCP).
+</EM><BR>
+<EM>&gt; Lack of the MSG_PUSH does not mean that the data is not sent, nor
+</EM><BR>
+<EM>&gt; that the PUSH flag will not be set.  At least that's my thinking.
+</EM><BR>
+<EM>&gt; But this may just be support for your agument to call it something
+</EM><BR>
+<EM>&gt; else than MSG_PUSH.
+</EM><BR>
+<P>I think we agree.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; Maybe so, but I've doubts. ...
+</EM><BR>
+<P><EM>&gt; Well, I've tossed around the idea of MSG_PUSH off and on for many years,
+</EM><BR>
+<EM>&gt; and the fact that I haven't done anything about it sort of says that I
+</EM><BR>
+<EM>&gt; haven't even convinced myself that it is really needed.
+</EM><BR>
+<P>I had thoughts along those lines, but forgot to be offensive by mentioning
+<BR>
+them.
+<BR>
+<P><P><EM>&gt; I do think the change to Nagle is good (supported by the fact that
+</EM><BR>
+<EM>&gt; I implemented it in BSD/OS over 2 years ago).
+</EM><BR>
+<P>Yes.
+<BR>
+Although I'm not convinced that BSD/OS sees really high traffic or as
+<BR>
+many installations as other systems.  Yes, BSD/OS is used on lots of
+<BR>
+web servers (and others such as this box), but I think the really big
+<BR>
+servers use boxes bigger than you can get with 80*86 CPU's.  The HP
+<BR>
+report is the overwhelming endorsement.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; The question is are there enough real-world situations where this
+</EM><BR>
+<EM>&gt; would be worth-while.
+</EM><BR>
+<P>Attempts to change to ancient, extremely popular API's are awfully painful
+<BR>
+for eveyrone, and often unsuccessful in various ways.  Winsock 2.0 is an
+<BR>
+example of how more or less necessary changes can get out of hand.  (I've
+<BR>
+found the complications around select, non-blocking I/O, and WIN32 messages
+<BR>
+in winsock 2.0 ... engrossing.)
+<BR>
+<P><P><EM>&gt; A other question is, if you have the modification to Nagle, how
+</EM><BR>
+<EM>&gt; many of those carefully written applications that use TCP_NODELAY
+</EM><BR>
+<EM>&gt; could drop use of it?  Or would they still need TCP_NODELAY/MSG_NDELAY
+</EM><BR>
+<EM>&gt; because they send multiple requests without waiting for a response
+</EM><BR>
+<EM>&gt; to the first request?
+</EM><BR>
+<P>Maybe I don't understand the proposed modification, but I have the
+<BR>
+impression that the answer to that question is &quot;most of them.&quot;  It
+<BR>
+seems the modification helps only two sets of cases:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;1. bad code that does write-write-read-write-write-read-...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;2. odd cases such as write(&gt;1 segment but not a MBbyte)
+<BR>
+<P>If you have an application that involves lots of small random writes mixed
+<BR>
+with random reads, then TCP_NODELAY/MSG_NDELAY is unavoidable.  Perhaps
+<BR>
+X clients, as someone said.  Certain the code I'm currently bashing.
+<BR>
+<P><P><EM>&gt; &gt; The biggest trouble with MSG_NDELAY is the same as with writev().
+</EM><BR>
+<EM>&gt; &gt; You'd have it where you don't really needed it (e.g. BSD systems)
+</EM><BR>
+<EM>&gt; &gt; but not where you do need it (e.g. winsock).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Patient: Doctor, it hurts when I do this.
+</EM><BR>
+<EM>&gt; Doctor: Then don't do that.
+</EM><BR>
+<EM>&gt; :-)
+</EM><BR>
+<P>&quot;If wishes were horses, then beggars would ride&quot;
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902042330.QAA01201@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1510.html">Mohan Parthasarathy: "iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1508.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1516.html">Art Shelest: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1509">[ date ]</A>
+<A HREF="index.html#1509">[ thread ]</A>
+<A HREF="subject.html#1509">[ subject ]</A>
+<A HREF="author.html#1509">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

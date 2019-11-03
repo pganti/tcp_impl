@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Fri Aug 21 09:25:24 1998" -->
+<!-- isoreceived="19980821132524" -->
+<!-- sent="Fri, 21 Aug 1998 12:23:06 -0400 (EDT)" -->
+<!-- isosent="19980821162306" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808211623.MAA13747@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211623.MAA13747@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 21 1998 - 12:23:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1263.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1261.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1264.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1264.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1262">[ date ]</A>
+<A HREF="index.html#1262">[ thread ]</A>
+<A HREF="subject.html#1262">[ subject ]</A>
+<A HREF="author.html#1262">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt; Im not arguing that der Mouse is doing the right thing in his
+</EM><BR>
+<EM>&gt;&gt;&gt; circumstances.  But we can't make every random faulty piece of
+</EM><BR>
+<EM>&gt;&gt;&gt; equipment an item to assess when evaluating the need for
+</EM><BR>
+<EM>&gt;&gt;&gt; keepalives.
+</EM><BR>
+<EM>&gt;&gt; It isn't a &quot;faulty piece of equipment&quot;.
+</EM><BR>
+<EM>&gt; Well with RFC compliant keepalives his sessions get killed right ?
+</EM><BR>
+<EM>&gt; Yes - He said so
+</EM><BR>
+<P>Then I misspoke.  Sessions get killed in two circumstances: when they
+<BR>
+don't have keepalives on, or when they do but the keepalives are
+<BR>
+insufficiently frequent.  If the application turns keepalives on, and
+<BR>
+I-the-admin crank the idle time down far enough (both of which are
+<BR>
+fully compliant as far as I know), sessions survive just fine.
+<BR>
+<P>My setup is noncompliant in only one respect: keepalives are forced on
+<BR>
+regardless of whether the application requests them.  I did this purely
+<BR>
+as a practical matter to avoid having to add a switch to every network
+<BR>
+program I use to make it turn on keepalives on command.  This is not
+<BR>
+really part of what I wished to discuss, since it's clearly
+<BR>
+noncompliant, I *know* it's noncompliant, and I'm not recommending it
+<BR>
+except to people also stuck in such situations.  (See RFC-1122 4.2.3.6
+<BR>
+for more.)
+<BR>
+<P><EM>&gt; Therefore the firewall is buggy against the RFC's it should have been
+</EM><BR>
+<EM>&gt; configured with respect to.
+</EM><BR>
+<P>Stateful firewalls perforce are, aren't they?  If a connection breaks
+<BR>
+just because an intermediate box crashes and reboots, doesn't that
+<BR>
+violate some RFC?  (If it doesn't, it ought to! :-)
+<BR>
+<P>It's also pretty much independent of whether keepalives should be
+<BR>
+available.  One thing I have gotten quite clearly out of this thread is
+<BR>
+that the community is divided on whether keepalives are good....
+<BR>
+<P><EM>&gt; All Im pointing out is that said misimplemented firewall is not
+</EM><BR>
+<EM>&gt; relevant to the discussion.
+</EM><BR>
+<P>Only if you wish to retreat from reality into the ivory tower.  One of
+<BR>
+the things TCP stacks have to do is be useful in the real world.  I
+<BR>
+would much rather not have to deal with that damn firewall, but I do,
+<BR>
+so I'm very glad that the TCP implementation I'm using gives me the
+<BR>
+tools with which to do so.
+<BR>
+<P>Perhaps it *isn't* relevant, actually; it's not clear to me what the
+<BR>
+discussion is discussing....
+<BR>
+<P><EM>&gt; Now I'll buy a lot of Vern's arguments for shorter keepalives due to
+</EM><BR>
+<EM>&gt; resource issues and the fact a protocol keepalive is no less resource
+</EM><BR>
+<EM>&gt; using.
+</EM><BR>
+<P>I'd say that settable-per-connection values would be good; httpd could
+<BR>
+set five minutes, sshd could set two hours, whatever.  Wouldn't even be
+<BR>
+very difficult to do, at least in the NetBSD code - I may do it when I
+<BR>
+get back from next week's vacation.
+<BR>
+<P>If it's too hard, or too resource-consumptive, to keep per-connection
+<BR>
+time values, it would, it seems to me, be reasonable to do something
+<BR>
+like have an initial idle time of five minutes, and if the peer
+<BR>
+responds to that keepalive, goose the idle time up to two hours or so
+<BR>
+for all future keepalives - the idea being that basically all
+<BR>
+connections are either very transient (for which even five minutes is
+<BR>
+perhaps a bit long) or reasonably long-lived (the sort of thing for
+<BR>
+which the two-hour default was designed).
+<BR>
+<P>But the values still need to be tuneable; there's still that trading
+<BR>
+house that wants keepalives on its LAN with idle=30sec intvl=1sec
+<BR>
+count=5.... :-)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211623.MAA13747@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1263.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1261.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1264.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1264.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1262">[ date ]</A>
+<A HREF="index.html#1262">[ thread ]</A>
+<A HREF="subject.html#1262">[ subject ]</A>
+<A HREF="author.html#1262">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:53 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: detecting loss of retransmit</TITLE>
+<META NAME="Author" CONTENT="Graham Cope (G.Cope@ftel.co.uk)">
+<META NAME="Subject" CONTENT="Re: detecting loss of retransmitted packets in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: detecting loss of retransmitted packets in TCP</H1>
+<!-- received="Mon Nov 24 03:48:55 1997" -->
+<!-- isoreceived="19971124084855" -->
+<!-- sent="Mon, 24 Nov 1997 11:42:34 +0000" -->
+<!-- isosent="19971124114234" -->
+<!-- name="Graham Cope" -->
+<!-- email="G.Cope@ftel.co.uk" -->
+<!-- subject="Re: detecting loss of retransmitted packets in TCP" -->
+<!-- id="3479682A.5705@ftel.co.uk" -->
+<!-- inreplyto="199711211921.NAA05247@klio.cs.rice.edu" -->
+<STRONG>From:</STRONG> Graham Cope (<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20detecting%20loss%20of%20retransmitted%20packets%20in%20TCP&In-Reply-To=&lt;3479682A.5705@ftel.co.uk&gt;"><EM>G.Cope@ftel.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 24 1997 - 06:42:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0844.html">Ian Heavens: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0842.html">Alan Cox: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0837.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0845.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0845.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#843">[ date ]</A>
+<A HREF="index.html#843">[ thread ]</A>
+<A HREF="subject.html#843">[ subject ]</A>
+<A HREF="author.html#843">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Mohit Aron wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; Sender transmits packets 1, 2, ... 10. Packet 1 gets lost. The retransmission
+</EM><BR>
+<EM>&gt; &gt; &gt; of packet 1 upon getting 3 duplicate ACKs also gets lost. The duplicate ACKs
+</EM><BR>
+<EM>&gt; &gt; &gt; generated due to packets 5 - 10 cause the sender to send new packets (11
+</EM><BR>
+<EM>&gt; &gt; &gt; - 15).
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; I don't believe that this will happen, if based on taking rfc 2001's
+</EM><BR>
+<EM>&gt; &gt; description of fast recovery literally (see P4).
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; This is because cwnd is set to ssthresh + 3*seg_size, after ssthresh has
+</EM><BR>
+<EM>&gt; &gt; been halved. As I've coded it, this usually causes my simulation model
+</EM><BR>
+<EM>&gt; &gt; to stop sending, becausethe halving of ssthresh is not compensated by
+</EM><BR>
+<EM>&gt; &gt; adding 2*seg_size. If it had taken the old, un-halved ssthresh, it would
+</EM><BR>
+<EM>&gt; &gt; be OK.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is completely incorrect. The primary reason behind fast recovery is
+</EM><BR>
+<EM>&gt; to send half the segments that were sent before detecting the loss. Just
+</EM><BR>
+<EM>&gt; to satisfy you, here's how it will happen:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Congestion window before detecting loss = 10
+</EM><BR>
+<EM>&gt; ssthresh after detecting loss = 10/2 = 5
+</EM><BR>
+<EM>&gt; congestion window immediately after detecting loss = 5+3 = 8
+</EM><BR>
+<EM>&gt; Amount of unacknowledged data in the network = 10
+</EM><BR>
+<P>Thus ACKs for segment 5-10 will push the window to 13, and hence
+<BR>
+segments 11-13 will be sent, and not 11-15 as in your last e-mail. The
+<BR>
+duplicate ACKs for these would then cause segments 14-16 to be sent,
+<BR>
+etc.
+<BR>
+&nbsp;&nbsp;&nbsp;Subsequent loss, would, I agree, give further linear reduction. As to
+<BR>
+your supposition about going straight into slow-start, I must think
+<BR>
+about.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Congestion window is now increased upon getting every duplicate ACK. As soon
+</EM><BR>
+<EM>&gt; as it becomes greater than 10 (amount of unacknowledged data), the sender would
+</EM><BR>
+<EM>&gt; start sending again.
+</EM><BR>
+<P><P>Thanks for the clarification.
+<BR>
+<P>I think describing my previous relpy as 'completely incorrect' is a
+<BR>
+little harsh. In order to 'start sending again', it must first 'stop'.
+<BR>
+<P>In your above example TCP does in fact stop sending, until either:
+<BR>
+a) Two more ACKs arrive, which should happen fairly soon provided no
+<BR>
+other segments were lost, or
+<BR>
+b) An ACK for a presumed lost (but possibly delayed) segment arrives, in
+<BR>
+which case the window moves forward, cwnd gets reset to ssthresh, etc.
+<BR>
+<P>Although I admit that such a 'stop' might better be termed a (very
+<BR>
+temporary) stall, which would only really be detrimental on high BW
+<BR>
+networks (as you state).
+<BR>
+<P><P><P>Graham Cope
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0844.html">Ian Heavens: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0842.html">Alan Cox: "Re: RSTs and Half Duplex Close bug"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0837.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0845.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0845.html">Mohit Aron: "Re: detecting loss of retransmitted packets in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#843">[ date ]</A>
+<A HREF="index.html#843">[ thread ]</A>
+<A HREF="subject.html#843">[ subject ]</A>
+<A HREF="author.html#843">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

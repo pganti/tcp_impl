@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Thu Apr  3 06:53:21 1997" -->
+<!-- isoreceived="19970403115321" -->
+<!-- sent="Thu, 03 Apr 1997 09:46:49 -0400" -->
+<!-- isosent="19970403134649" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="9704031446.AA16468@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199704030336.TAA01455@aland.bbn.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;9704031446.AA16468@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 03 1997 - 08:46:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0314.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#311">[ date ]</A>
+<A HREF="index.html#311">[ thread ]</A>
+<A HREF="subject.html#311">[ subject ]</A>
+<A HREF="author.html#311">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;9704031446.AA16468@ludwigia.raleigh.ibm.com&gt;">craig@aland.bbn.com</A>&gt; writes:
+<BR>
+<P><EM>&gt; Yes, you've got a point.  The API should allow you to increase window size,
+</EM><BR>
+<EM>&gt; but only so large as makes sense from the link layer.  Currently BSD doesn't
+</EM><BR>
+<EM>&gt; do that.
+</EM><BR>
+<P>IMO, letting the API adjust the window size is a hack. What if you
+<BR>
+have a LAN at home with a dedicated router that connects to the
+<BR>
+internet via a 28.8 modem? 
+<BR>
+<P>You really want the window size to match bandwidth X delay of the
+<BR>
+*path* being used, and you want that to be done automajically by
+<BR>
+TCP. The fundamental problem is that by dumping packets onto the path,
+<BR>
+you *increase* the delay artificially, as the sender's packets start
+<BR>
+sitting in queues. The actual max delay you get then is often *much*
+<BR>
+larger than what anybody wants. As you point out, the actual max delay
+<BR>
+is generally a function of the router.
+<BR>
+<P><EM>&gt; TCP tries to find the correct window size given the bandwidth
+</EM><BR>
+<EM>&gt; available.
+</EM><BR>
+<P>I don't think this is quite true. It tries to find the correct window
+<BR>
+size for the bandwidth X delay.  That is, it comes pretty close to
+<BR>
+finding the right sending *rate* (to match bandwidth) but it asks the
+<BR>
+network to buffer more packets than is needed to maintain that sending
+<BR>
+rate. It is this unfortunate &quot;over buffering&quot; that TCP does that is I
+<BR>
+think the cause of Jim's concern.
+<BR>
+<P>This (obviously) goes beyond the scope of this WG, but it seems like
+<BR>
+some of the results from TCP Vegas could be of use here. Vegas seems
+<BR>
+to do a better job of keeping extra (i.e., queued) packets out of the
+<BR>
+network. That is, if instantaneous throughput doesn't increase when
+<BR>
+the send window is increased, the send window is made a bit smaller
+<BR>
+(i.e., perhaps one segment smaller). In contrast, current TCPs simply
+<BR>
+increase the windows until there is a loss (at this point there is too
+<BR>
+much buffered in the network), and then decrease the window size by a
+<BR>
+*large* amount (i.e., to 1/2 its previous value).
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0308.html">Craig Partridge: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0313.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0314.html">Luigi Rizzo: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#311">[ date ]</A>
+<A HREF="index.html#311">[ thread ]</A>
+<A HREF="subject.html#311">[ subject ]</A>
+<A HREF="author.html#311">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

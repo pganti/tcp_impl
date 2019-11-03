@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft description of &quot;Exces</TITLE>
+<META NAME="Author" CONTENT="Scott Dawson (sdawson@eecs.umich.edu)">
+<META NAME="Subject" CONTENT="draft description of &quot;Excessively short keepalive connection timeout&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft description of &quot;Excessively short keepalive connection timeout&quot;</H1>
+<!-- received="Tue Apr 29 12:17:06 1997" -->
+<!-- isoreceived="19970429161706" -->
+<!-- sent="Tue, 29 Apr 1997 14:44:39 -0400" -->
+<!-- isosent="19970429184439" -->
+<!-- name="Scott Dawson" -->
+<!-- email="sdawson@eecs.umich.edu" -->
+<!-- subject="draft description of &quot;Excessively short keepalive connection timeout&quot;" -->
+<!-- id="969378238.0005@hypermail.dummy" -->
+<STRONG>From:</STRONG> Scott Dawson (<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20draft%20description%20of%20&quot;Excessively%20short%20keepalive%20connection%20timeout&quot;&In-Reply-To=&lt;969378238.0005@hypermail.dummy&gt;"><EM>sdawson@eecs.umich.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 29 1997 - 14:44:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0351.html">Scott Dawson: "Comment request for a couple &quot;Known TCP Implementation Problems&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0349.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0352.html">Scott Dawson: "draft description of &quot;Excessively short keepalive connection timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#350">[ date ]</A>
+<A HREF="index.html#350">[ thread ]</A>
+<A HREF="subject.html#350">[ subject ]</A>
+<A HREF="author.html#350">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Excessively short keepalive connection timeout
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keep-alive is a mechanism  for checking whether an idle  connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is  still alive.  According  to  RFC-1122, keepalive should only be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invoked  in server    applications    that might otherwise     hang
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indefinitely  and   consume resources   unnecessarily if  a  client
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crashes or aborts a connection during a network failure.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC-1122   also specifies  that   if  a  keep-alive mechanism    is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implemented   it  MUST NOT  interpret  failure   to respond to  any
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specific probe as  a dead connection.  The RFC  does not  specify a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;particular mechanism for timing  out a connection when  no response
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is received  for keepalive probes.   However, if the mechanism does
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not allow ample time for recovery from network congestion or delay,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections may be timed out unnecessarily.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-critical
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is possible for the network connection between two peer machines
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to become congested  or to exhibit packet  loss at the time  that a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive  probe  is  sent on  a  connection.   If  the keep-alive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mechanism   does    not allow    sufficient time   before  dropping
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections in  the face of  unacknowledged probes, connections may
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be dropped even when both peers of a connection are still alive.
+<BR>
+<P>Relevant RFCs'
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 specifies  that the keep-alive  mechanism may be provided.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It does not specify a   mechanism for determining dead  connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;when keepalive probes are not acknowledged.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using the   Orchestra tool at the  peer  of the machine  using
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive.   After connection  establishment, incoming keep-alives
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;were dropped by Orchestra to simulate a dead connection.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:11:12.040000 A &gt; B: 22666019:0 win 8192 datasz 4 SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:11:12.060000 B &gt; A: 2496001:22666020 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:11:12.130000 A &gt; B: 22666020:2496002 win 8760 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:11:12.150000 B &gt; A: 2496001:22666020 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:11:12.180000 A &gt; B: 22666020:2496002 win 8760 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:23:00.680000 A &gt; B: 22666019:2496002 win 8760 datasz 1 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:23:01.770000 A &gt; B: 22666019:2496002 win 8760 datasz 1 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:23:02.870000 A &gt; B: 22666019:2496002 win 8760 datasz 1 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:23.03.970000 A &gt; B: 22666019:2496002 win 8760 datasz 1 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00:23.05.070000 A &gt; B: 22666019:2496002 win 8760 datasz 1 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial five packets are the SYN exchange for connection setup.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About   two  hours later, the keepalive     timer fires because the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection has been idle.  Keepalive probes are transmitted a total
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of 5 times, with a 1 second spacing between probes, after which the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection  is dropped.  This  is problematic  because  a 5  second
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network  outage  at the  time of  the  first probe  results  in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection being killed.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using  the  Orchestra tool at  the peer  of the  machine using
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive.  After  connection establishment,  incoming keep-alives
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;were dropped by Orchestra to simulate a dead connection.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:01:52.130000 A &gt; B: 1804412929:0 win 4096 datasz 4 SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:01:52.360000 B &gt; A: 16512001:1804412930 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:01:52.410000 A &gt; B: 1804412930:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:01:52.440000 B &gt; A: 17612001:1804412930 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:01:52.520000 A &gt; B: 1804412930:16512002 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:01:57.170000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:03:12.220000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:04:27.270000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:05:42.320000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:06:57.370000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:08:12.420000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:09:27.480000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:10:43.290000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:11:57.580000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18:13:12.630000 A &gt; B: 1804412929:16512002 win 4096 datasz 0 RST ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In  this trace, when    the keep-alive timer expires,  9  keepalive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probes are sent at 75 second intervals.  75  seconds after the last
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probe  is sent,  a final RST  segment is  sent indicating that  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection has been closed.  This   implementation waits about   11
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minutes  before  timing   out  the connection,   while    the first
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementation shown allows only 5 seconds.
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Dawson97].
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For implementations   manifesting this problem,  it  shows up  on a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet trace  after the keepalive timer  fires if  the peer machine
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiving the keepalive   does not respond.  Usually  the keepalive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timer will  fire at least two  hours after keepalive  is turned on,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;but it may be sooner if the  timer value has been configured lower,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or if the   keepalive  mechanism violates the  specification   (see
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insufficient  interval   between   keepalives  problem).   In  this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example,  suppressing the response of  the peer to keepalive probes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;was    accomplished using the   Orchestra   toolkit,  which  can be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;configured  to drop packets.   It   could also  have  been done  by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;creating a connection, turning  on keepalive, and disconnecting the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network connection at the receiver machine.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This  problem can be fixed  by using a  different method for timing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out keepalives that allows a longer period of time to elapse before
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dropping the connection.  For example, the algorithm for timing out
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on dropped data could be used.  Another possibility is an algorithm
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such as the  one shown in the trace  above, which sends 9 probes at
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;75 second  intervals and then waits an  additional 75 seconds for a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response before closing the connection.
+<BR>
+<P>6. References
+<BR>
+<P>[Dawson97]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S.  Dawson,  F.   Jahanian, and  T.   Mitton, &quot;Experiments   on Six
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commercial  TCP Implementations  Using  a Software  Fault Injection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tool,&quot; to  appear  in  Software Practice &amp;    Experience,  1997.  A
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;technical  report version of   this   paper  can be  obtained    at
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="ftp://rtcl.eecs.umich.edu/outgoing/sdawson/CSE-TR-298-96.ps.gz">ftp://rtcl.eecs.umich.edu/outgoing/sdawson/CSE-TR-298-96.ps.gz</A>.
+<BR>
+<P>7. Author's Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Scott Dawson &lt;<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20draft%20description%20of%20&quot;Excessively%20short%20keepalive%20connection%20timeout&quot;&In-Reply-To=&lt;969378238.0005@hypermail.dummy&gt;">sdawson@eecs.umich.edu</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Real-Time Computing Laboratory
+<BR>
+&nbsp;&nbsp;&nbsp;EECS Building
+<BR>
+&nbsp;&nbsp;&nbsp;University of Michigan
+<BR>
+&nbsp;&nbsp;&nbsp;Ann Arbor, MI  48109-2122
+<BR>
+&nbsp;&nbsp;&nbsp;USA
+<BR>
+&nbsp;&nbsp;&nbsp;Phone: +1 313/763-5363
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0351.html">Scott Dawson: "Comment request for a couple &quot;Known TCP Implementation Problems&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0349.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0352.html">Scott Dawson: "draft description of &quot;Excessively short keepalive connection timeout&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#350">[ date ]</A>
+<A HREF="index.html#350">[ thread ]</A>
+<A HREF="subject.html#350">[ subject ]</A>
+<A HREF="author.html#350">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

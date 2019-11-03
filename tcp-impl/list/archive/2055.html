@@ -1,0 +1,459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: I-D: a tcp extension to allow tr</TITLE>
+<META NAME="Author" CONTENT="David L. Nicol (david@kasey.umkc.edu)">
+<META NAME="Subject" CONTENT="I-D: a tcp extension to allow transfer of virtual circuits">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>I-D: a tcp extension to allow transfer of virtual circuits</H1>
+<!-- received="Fri Mar 17 20:29:07 2000" -->
+<!-- isoreceived="20000318012907" -->
+<!-- sent="Sat, 18 Mar 2000 01:20:34 +0000" -->
+<!-- isosent="20000318012034" -->
+<!-- name="David L. Nicol" -->
+<!-- email="david@kasey.umkc.edu" -->
+<!-- subject="I-D: a tcp extension to allow transfer of virtual circuits" -->
+<!-- id="38D2D9E2.2201AC88@kasey.umkc.edu" -->
+<STRONG>From:</STRONG> David L. Nicol (<A HREF="mailto:david@kasey.umkc.edu?Subject=Re:%20I-D:%20a%20tcp%20extension%20to%20allow%20transfer%20of%20virtual%20circuits&In-Reply-To=&lt;38D2D9E2.2201AC88@kasey.umkc.edu&gt;"><EM>david@kasey.umkc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 17 2000 - 20:20:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2056.html">Wu-chang Feng: "Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2054.html">Joe Touch: "Re: Announcing X-Bone VPN/overlay software release"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2055">[ date ]</A>
+<A HREF="index.html#2055">[ thread ]</A>
+<A HREF="subject.html#2055">[ subject ]</A>
+<A HREF="author.html#2055">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+Experimental                                                  David
+<BR>
+Nicol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;University of Missouri - Kansas
+<BR>
+City
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;March
+<BR>
+2000				
+<BR>
+<P><P><P>a tcp extension to allow transfer of virtual circuits
+<BR>
+<P><P>Status of this memo
+<BR>
+<P>this request for comments is being written after realizing that several
+<BR>
+independent problems could be solved by the method described herein,
+<BR>
+which works entirely at the transport layer.  I would like to see this
+<BR>
+proposal considered for adoption as an IETF standard, if it is deemed
+<BR>
+acceptable.  In particular, the physical format of the commands, beyond
+<BR>
+that it may make sense to encapsulate them in the data portion of
+<BR>
+invalid
+<BR>
+reset packets, is left to be determined by discussion.
+<BR>
+<P><P><P>Summary
+<BR>
+<P>the TCP virtual circuit as defined in Jon Postel's 1981 standard and
+<BR>
+subsequently clarified offers no facility for moving an end point of
+<BR>
+an established virtual circuit to a different peer.  There are
+<BR>
+situations
+<BR>
+in which this would be desirable.  This memo suggests a method of 
+<BR>
+implementing such a mechanism in such a way that it will co-exist
+<BR>
+seamlessly with nonextended TCP, and will work over any link layer that
+<BR>
+supports the TCP transport layer abstraction.
+<BR>
+<P><P><P>1: INTRODUCTION
+<BR>
+<P><P>Thinking about migratable sockets and load sharing, 
+<BR>
+I realized that there is an entire class of unimplemented interface
+<BR>
+problems, such as how to move a running xterm from one display
+<BR>
+to another, and how to implement &quot;user roaming&quot; without channeling
+<BR>
+all network traffic through a central forwarding agent, which
+<BR>
+could all be solved without making massive changes to all existing
+<BR>
+socket based applications, by adding a new primitive to TCP allowing
+<BR>
+a peer to &quot;transfer&quot; its end of a virtual circuit to another machine.
+<BR>
+<P>2: IMPLEMENTATION OF THE TRANSFER IMPERATIVE EVENT
+<BR>
+<P>This primitive would be a communication wedged into the cracks in
+<BR>
+current
+<BR>
+TCP implementation, either by claiming a &quot;reserved control bit&quot;
+<BR>
+or by sending information in the data space of a RST segment.
+<BR>
+<P>Packing information into a RST packet looks more doable at this time,
+<BR>
+since the RST segment has some spare data area in it, and the
+<BR>
+implementation
+<BR>
+guidleines in the standard include a variety of situations in which RST
+<BR>
+segments are to be dropped.
+<BR>
+<P>The primitives would include &quot;prepare-to-accept transfer from
+<BR>
+host:socket&quot;
+<BR>
+to which the response would be a host identifier:socket number which the
+<BR>
+connection could be transferred to; and &quot;transfer to host:socket&quot; which
+<BR>
+would cause the requested peer to send further packets in the stream
+<BR>
+being
+<BR>
+transferred to the new host.
+<BR>
+<P><P>Or the transfer could take place in a single step, by sending extended
+<BR>
+RST packets to both peers which are to synchronize and carry on the
+<BR>
+virtual
+<BR>
+circuit.
+<BR>
+<P><P>3: ONE EXAMPLE OF LIFE MADE EASIER BY USE OF THIS EXTENSION
+<BR>
+<P><P>As an example of this extension in use, imagine a situation in which you
+<BR>
+have an x-application running on host A, displayed on display server B,
+<BR>
+and you wish to move the display to display server C.
+<BR>
+<P><P>A:3841 &lt;-----&gt; B:6000 ESTABLISHED
+<BR>
+C
+<BR>
+<P><P>To transfer the window, B would open a connection to the X-server on C
+<BR>
+and
+<BR>
+display a placeholding window there, with similar characteristics as the
+<BR>
+window A is displaying on B.
+<BR>
+<P>A:3861 &lt;------&gt; B:6000 ESTABLISHED
+<BR>
+C:6000 &lt;------&gt; B:3094 ESTABLISHED
+<BR>
+<P><P>To this point, all has been accomplished with current TCP.  Using
+<BR>
+current
+<BR>
+standards, an extended X-server may relay the packets from A to C via B,
+<BR>
+however there is no way to phase B's role out.
+<BR>
+<P>The extension I am proposing in this message would allow B to send a
+<BR>
+message to A and C, so that A and C continue a data stream with each
+<BR>
+other,
+<BR>
+without B being involved any more.
+<BR>
+<P>B would accomplish this by sending A a transfer initation message on the
+<BR>
+A:3861-B:6000 channel, stating
+<BR>
+<P>&quot;prepare to transfer this channel to C:6000, passively.&quot;
+<BR>
+<P>This message could take the form of an invalid RST segment including a
+<BR>
+data block with enough information to carry the message.
+<BR>
+<P>A replies with the number of a socket on A which would be able to
+<BR>
+accept this new connection with C.  Usually this will be the current
+<BR>
+socket number, but there may be cases when a new number will need to 
+<BR>
+be selected.
+<BR>
+<P>In these rare cases, A reestablishes the connection being reset for
+<BR>
+transfer and initiates a transfer of the A-B circuit to a new port
+<BR>
+number on A which will not collide with an existing A-C virtual circuit.
+<BR>
+<P><P>This has the effect of A initiating a connection open, or opening a
+<BR>
+socket with the same number as the one connected to B, for listening.
+<BR>
+<P>A:3861 &lt;------&gt; B:6000 TRANSFERING
+<BR>
+C:6000 &lt;------&gt; B:3094 ESTABLISHED
+<BR>
+A:3861                 LISTEN
+<BR>
+<P>A can then send B another extended RST packet, indicating that
+<BR>
+it is ready to transfer the connection to C.
+<BR>
+<P>A noncompliant TCP will of course ignore an invalid reset segment.
+<BR>
+<P>This preliminary step having succeeded, B now sends C a message
+<BR>
+on the C:6000 &lt;------&gt; B:3094 channel, stating
+<BR>
+<P><P>&quot;transfer this connection to A:3861, actively&quot;
+<BR>
+<P>A and C now establish the new connection, using a slow start.
+<BR>
+<P>A:3861 &lt;------&gt; B:6000
+<BR>
+C:6000 &lt;------&gt; B:3094
+<BR>
+A:3861 &lt;------&gt; C:6000
+<BR>
+<P><P>and close their connections with B.
+<BR>
+<P>A:3861 &lt;------&gt; C:6000
+<BR>
+<P>4: NO EFFECT ON HIGHER LAYERS
+<BR>
+<P>There will be no indication that this has occurred, above the transport
+<BR>
+layer: it will be indistinguishable from a normal traffic hiccup.
+<BR>
+<P>On receipt of ACK of FIN packets, B's system call, if it had been
+<BR>
+blocking
+<BR>
+for completion of the transfer function, can return with a success code.
+<BR>
+<P>5: FAST TRANSFERRING WITH KNOWN-COMPLIANT TCP
+<BR>
+<P>If it is known in advance that both peers' TCPs support transferring,
+<BR>
+the extended RSTs could be sent to both, immediately, and then again,
+<BR>
+in case of a port number collission.
+<BR>
+<P>6. SECURITY IMPLICATIONS
+<BR>
+<P>To prevent connection transfer being used as a way to tunnel through
+<BR>
+common firewall implementations, the resulting connection must be
+<BR>
+nominally established as if it were new.
+<BR>
+<P><P>7. STATUS DISINFORMATION
+<BR>
+<P>For backwards compatability with applications that may rely on functions
+<BR>
+such as getpeername and sin_port member data, the transfer messages may
+<BR>
+include an option flag &quot;OPT_REMEMBER&quot; which will cause the TCP software
+<BR>
+to
+<BR>
+remember what the original host:socket was, instead of the current peer,
+<BR>
+after
+<BR>
+a transfer, for purposes of responding to status requests.
+<BR>
+<P><P>8. USE CASE: ROAMING
+<BR>
+<P>To use this extension to aid roaming, transfers would be arranged by the
+<BR>
+&quot;home server&quot; after connections are established, instead of the home
+<BR>
+server
+<BR>
+continuing to forward all traffic.
+<BR>
+<P>9. USE CASE: PROCESS MIGRATION LOAD BALANCING
+<BR>
+<P>In process migration based load balancing, tcp connections (with
+<BR>
+compliant peers)
+<BR>
+could be transferred at migration time and handled by the TCP on the
+<BR>
+host machine.
+<BR>
+<P><P><P>terminology:
+<BR>
+<P>In the above example, the &quot;B&quot; host is the &quot;transfer initiating peer.&quot;
+<BR>
+A and C are &quot;transfer end peers.&quot;
+<BR>
+<P><P><P><P>On backwards compatability:
+<BR>
+<P>I believe that the RST loading method would be the best way to implement
+<BR>
+these extensions.  The TCP wishing to initiate the transfer could send
+<BR>
+RST
+<BR>
+packets to both peers, containing the full description of the current
+<BR>
+connection and the connection to be established, actively.  A TCP
+<BR>
+compliant with
+<BR>
+this standard will attempt a simultaneous open with the new peer instead
+<BR>
+of the old one, and send an acknowledgement. An old TCP will merely
+<BR>
+reset
+<BR>
+the current connection as if there had been a problem, and the transfer 
+<BR>
+initiating peer can return from the transferring function with an error
+<BR>
+code.
+<BR>
+<P><P>FUNCTIONAL SPECIFICATION:
+<BR>
+<P>The privelege to perform the transfer operation will need to
+<BR>
+be carefully delegated by the implementing operating system.
+<BR>
+Since circuit transfer operations may be initiated by a process
+<BR>
+outside the scope of the local connection name, both fully
+<BR>
+specified &lt;local socket, foreign socket&gt; pairs will need to appear
+<BR>
+in the invocation of a circuit transfer initation call, such as
+<BR>
+<P>Join
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Format: JOIN (
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first local address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first local port,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first foreign address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first foreign port,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second local address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second local port,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second foreign address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second foreign port
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+<BR>
+<P>This call would cause the two fully specified connections
+<BR>
+to be validated for existence and establishment, and then
+<BR>
+combined as described in the example.
+<BR>
+<P>Transfer
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Format: TRANSFER (
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local port,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreign port,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second foreign address, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second foreign port
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+<BR>
+<P>This call would be in effect similar to a http Location: directive;
+<BR>
+causing an extended RST to be sent, which would indicate that the
+<BR>
+connection would be better carried out with the TCP at the second
+<BR>
+link and port, which doesn't know you're coming, but which may be
+<BR>
+better prepared to provide the desired service.  Widely adopted
+<BR>
+implementation of this extension could greatly ease design of graceful
+<BR>
+load balancing, as after a server is operating at capacity instead
+<BR>
+of merely saying &quot;Sorry, full up!&quot; it could explicitly and instantly
+<BR>
+(no waiting for backup MX records to propagate through the DNS) refer
+<BR>
+the connection to another server.
+<BR>
+<P><P><P><P><P><P><P><P><P><P><P>references: rfcs 793, 2414, 1379, 2525, 721, 875
+<BR>
+<P><P><P>Author:
+<BR>
+David Nicol 
+<BR>
+<A HREF="mailto:davidnicol@davidnicol.com?Subject=Re:%20I-D:%20a%20tcp%20extension%20to%20allow%20transfer%20of%20virtual%20circuits&In-Reply-To=&lt;38D2D9E2.2201AC88@kasey.umkc.edu&gt;">davidnicol@davidnicol.com</A>
+<BR>
+post office box 45163
+<BR>
+kansas city Missouri 64171
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2056.html">Wu-chang Feng: "Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2054.html">Joe Touch: "Re: Announcing X-Bone VPN/overlay software release"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2055">[ date ]</A>
+<A HREF="index.html#2055">[ thread ]</A>
+<A HREF="subject.html#2055">[ subject ]</A>
+<A HREF="author.html#2055">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

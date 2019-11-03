@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 13:32:48 1998" -->
+<!-- isoreceived="19980112183248" -->
+<!-- sent="Mon, 12 Jan 1998 21:19:48 GMT" -->
+<!-- isosent="19980112211948" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="199801122119.VAA04946@rum.isi.edu" -->
+<!-- inreplyto="delayed ACKs" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801122119.VAA04946@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 16:19:48 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0925.html">Curtis Villamizar: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0923.html">Hsiao-keng Jerry Chu: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0927.html">$B: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#924">[ date ]</A>
+<A HREF="index.html#924">[ thread ]</A>
+<A HREF="subject.html#924">[ subject ]</A>
+<A HREF="author.html#924">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt;i) The slow-start and congestion avoidance at the sender get slower as these
+</EM><BR>
+<EM>&gt; &gt;   do not increase the window based on the bytes acknowledged, but rather on
+</EM><BR>
+<EM>&gt; &gt;   the number of ACKs received (which are halved).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This can be remedied by increasing the cwnd according to bytes-acked, not
+</EM><BR>
+<EM>&gt; # of acks, which i proposed a year ago, but wasn't received well...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Jerry Chu
+</EM><BR>
+<EM>&gt; Internet Engineering
+</EM><BR>
+<P>I don't know if we ever got back to these, but there are two
+<BR>
+related issues:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- CWND increase by # bytes ACK'd only (as above)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- delayed-ACK when any two segments received
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not wait for two full segments
+<BR>
+<P><P>The general notion is that there are conflicting uses of the
+<BR>
+following terms:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- segment
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- full segment
+<BR>
+<P>Both above fall into this category (increase by full segment, not actual;
+<BR>
+wait for full segments, not actual). Are there any others??
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801122119.VAA04946@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0925.html">Curtis Villamizar: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0923.html">Hsiao-keng Jerry Chu: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0927.html">$B: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#924">[ date ]</A>
+<A HREF="index.html#924">[ thread ]</A>
+<A HREF="subject.html#924">[ subject ]</A>
+<A HREF="author.html#924">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="Bob Braden (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Sat, 22 Jan 2000 00:11:15 GMT" -->
+<!-- isoreceived="20000122001115" -->
+<!-- sent="Sat, 22 Jan 2000 00:11:15 GMT" -->
+<!-- isosent="20000122001115" -->
+<!-- name="Bob Braden" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="200001220011.AAA07222@gra.isi.edu" -->
+<!-- inreplyto="TCP MSS option value" -->
+<STRONG>From:</STRONG> Bob Braden (<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001220011.AAA07222@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 21 2000 - 19:11:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1962">[ date ]</A>
+<A HREF="index.html#1962">[ thread ]</A>
+<A HREF="subject.html#1962">[ subject ]</A>
+<A HREF="author.html#1962">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Please help me understand what RFC2581 intends regarding the value
+<BR>
+&nbsp;&nbsp;*&gt; advertised in the MSS option when other options (e.g., Timestamp) are going
+<BR>
+&nbsp;&nbsp;*&gt; to be used.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Suppose the MTU is 1500 bytes, and after the 3-way handshake a host is
+<BR>
+&nbsp;&nbsp;*&gt; going to be sending on each segment 12 bytes of TCP options:  Timestamp
+<BR>
+&nbsp;&nbsp;*&gt; plus two NOPs.  RFC879, &quot;TCP Maximum Segment Size,&quot; says &quot;THE TCP MAXIMUM
+<BR>
+&nbsp;&nbsp;*&gt; SEGMENT SIZE IS THE IP MAXIMUM DATAGRAM SIZE MINUS FORTY&quot; (all capital
+<BR>
+&nbsp;&nbsp;*&gt; letters in  RFC879).  This implies that the host should advertise MSS=1460,
+<BR>
+&nbsp;&nbsp;*&gt; but as  RFC 879 notes, when it was written there were &quot;no TCP header
+<BR>
+&nbsp;&nbsp;*&gt; options ... defined that would normally be sent at the same time as data
+<BR>
+&nbsp;&nbsp;*&gt; segments.&quot;  RFC 1011 states &quot;The TCP Maximum Segment Size is the IP Maximum
+<BR>
+&nbsp;&nbsp;*&gt; Datagram Size minus forty,&quot; but sending TCP options with data segments was
+<BR>
+&nbsp;&nbsp;*&gt; still an obscure subject when that was written.   Section 4.2.2.6, &quot;Maximum
+<BR>
+&nbsp;&nbsp;*&gt; Segment Size Option,&quot; of RFC1122, &quot;Host Requirements -- Communications
+<BR>
+&nbsp;&nbsp;*&gt; Layers,&quot;  does not explicitly say what value to advertise in the MSS
+<BR>
+&nbsp;&nbsp;*&gt; option, but it gives a formula for Eff.snd.MSS, &quot;the maximum size of a
+<BR>
+&nbsp;&nbsp;*&gt; segment that TCP really sends,&quot; that is based on SendMSS, &quot;the MSS value
+<BR>
+&nbsp;&nbsp;*&gt; received from the remote host,&quot; and the TCPhdrsize.  If one solves that
+<BR>
+<P>Ed,
+<BR>
+<P>The MSS option is NOT intended as an MTU discovery mechanism.  It
+<BR>
+gives the max segment size the TCP receive and reassemble.  It does
+<BR>
+not, and is not intended to, tell the sender how large a segment to
+<BR>
+send.
+<BR>
+<P>It is strictly true, but perhaps irrelevant, that RFC 1122 does not
+<BR>
+specify what value to send in an MSS option.  However, it DOES
+<BR>
+give an upper bound on the value (MMS_R - 40) and a recommendation:
+<BR>
+determine MMS_R as specified in sections 3.3.3 and 3.4 (I see it
+<BR>
+should have referenced 3.3.2 also.)  When you dig down through
+<BR>
+all that, you find that MMS_R = EMTU_R - 20, where EMTU_R is
+<BR>
+the largest datagram IP can receive and reassemble... in other
+<BR>
+words, 65532.
+<BR>
+<P>So the recommended answer is:  65532 - 20 - 20 bytes should be
+<BR>
+sent in an MSS option.
+<BR>
+<P>So, back in the early days (early 1980s) the Berkeley Unix folks were
+<BR>
+trying to make TCP work well, and they (re-)discovered that IP
+<BR>
+fragmentation was a Bad Idea.  Rather than fix the protocol (by
+<BR>
+inventing MTU Path Discovery), they put in a hack: set the MSS down to
+<BR>
+the local interface MTU and hope.  This worked OK for awhile but was
+<BR>
+not really the right answer.  The (perhaps painful) discussion in RFC
+<BR>
+1122 was an attempt by a bunch of IETFers to set this business
+<BR>
+straight.
+<BR>
+<P>Note that the value you should send in the MSS option has no relation
+<BR>
+to the appearance of TCP options.  That is the problem of the sender
+<BR>
+only.  What the sender has to do is complex.  When I implemented
+<BR>
+the 1323 extensions and also T/TCP, I had to do considerable
+<BR>
+hacking on the BSD TCP machinery to get right the logic that
+<BR>
+determines a segment size to send. (I thought this was written
+<BR>
+up somewhere, but I cannot find it in any of the relevant RFCs
+<BR>
+now; maybe it was a comment in the T/TCP code).
+<BR>
+<P>Hope this helps,
+<BR>
+<P>Bob Braden
+<BR>
+<P>&nbsp;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1963.html">Bill Sommerfeld: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1962">[ date ]</A>
+<A HREF="index.html#1962">[ thread ]</A>
+<A HREF="subject.html#1962">[ subject ]</A>
+<A HREF="author.html#1962">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

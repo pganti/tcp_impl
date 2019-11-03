@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 21:00:38 1997" -->
+<!-- isoreceived="19970212020038" -->
+<!-- sent="Tue, 11 Feb 1997 15:53:21 -0400" -->
+<!-- isosent="19970211195321" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702112053.AA11910@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="199702112008.MAA26403@birdcage.mcom.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702112053.AA11910@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 14:53:21 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0064.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#65">[ date ]</A>
+<A HREF="index.html#65">[ thread ]</A>
+<A HREF="subject.html#65">[ subject ]</A>
+<A HREF="author.html#65">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702112053.AA11910@ludwigia.raleigh.ibm.com&gt;">josh@birdcage.mcom.com</A> (Josh Cohen) writes:
+<BR>
+<P><EM>&gt; &gt; All this does is (unreliably) kludge around a bug in the transport
+</EM><BR>
+<EM>&gt; &gt; stack. There is no guarantee that RST will ever make it to the server
+</EM><BR>
+<EM>&gt; &gt; (witness all the connections that get waylaid in FIN_WAIT_2...) And
+</EM><BR>
+<P><EM>&gt; Yes, but its a much greater chance than zero, which is what happens
+</EM><BR>
+<EM>&gt; now.
+</EM><BR>
+<P>If you need to modify the client, might as well modify it correctly.
+<BR>
+No sense in adding a kludge to get around a bug in your own stack. :-)
+<BR>
+<P><EM>&gt; &gt; If the server's stack is not dropping the connection to RTX exhaustion,
+</EM><BR>
+<EM>&gt; &gt; that is a bug in the server stack. If it is indeed dropping the
+</EM><BR>
+<P><EM>&gt; No.  It the client window is full, the window probes will continue
+</EM><BR>
+<EM>&gt; forever.
+</EM><BR>
+<P>Ah, but if the server sends a TCP segment to the client, the client
+<BR>
+should send a RST. If the client is returning an ACK with a window of
+<BR>
+0, that is clearly not right (if it is the case that the client
+<BR>
+application has &quot;destroyed&quot; the socket and is no longer reading data).
+<BR>
+<P><EM>&gt; I think this statement is true:
+</EM><BR>
+<EM>&gt; There will be no retransmit.  There cant be a retransmit if the window
+</EM><BR>
+<EM>&gt; is closed.
+</EM><BR>
+<P>I don't think the above has meaning. Whether the server TCP is
+<BR>
+retransmitting a data segment, or sending a probe, the effect should
+<BR>
+be the same. The client either returns a RST, or an ACK saying what
+<BR>
+the current window size is. The apparent bug is (which needs to be
+<BR>
+verified via a packet trace) that the client is not sending back the
+<BR>
+correct response.
+<BR>
+<P><EM>&gt; In Stevens, TCP/IP Illustrated, page 325:
+</EM><BR>
+<EM>&gt; &quot;The characteristic of the persist state that is different from the 
+</EM><BR>
+<EM>&gt; retransmission timout in Chapter 21 is that TCP 'never' gives up sending
+</EM><BR>
+<EM>&gt; window probes.
+</EM><BR>
+<P>Unless, of course, the peer returns a RST. Also, this assumes that the
+<BR>
+peer continues to return ACKs saying the window is still 0. 
+<BR>
+<P><EM>&gt; I need to check if the bad stack is responding, at all, to the
+</EM><BR>
+<EM>&gt; probes, and to find out: what happens to TCP if the probes are
+</EM><BR>
+<EM>&gt; simply unacknowledged?
+</EM><BR>
+<P>If no ACK are returned, the sender should timeout the connection the
+<BR>
+same way as it does when retransmitting data.
+<BR>
+<P><EM>&gt; Well, this is a tough issue.  if a connection is to be aborted, the
+</EM><BR>
+<EM>&gt; only way to have the server discard data it wants to send, the only
+</EM><BR>
+<EM>&gt; way appears to be via RST.
+</EM><BR>
+<P>I think that this actually has a happy resolution. We probably all
+<BR>
+agree that RST needs to be sent. We're just disagreeing as to the
+<BR>
+precise conditions. I'm arguing that the TCP spec already handles this
+<BR>
+case, and the client stack is (currently) doing the wrong thing. You
+<BR>
+are suggesting a modification to the client stack to kludge around the
+<BR>
+the symptoms of the problem.
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0066.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0064.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0069.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#65">[ date ]</A>
+<A HREF="index.html#65">[ thread ]</A>
+<A HREF="subject.html#65">[ subject ]</A>
+<A HREF="author.html#65">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

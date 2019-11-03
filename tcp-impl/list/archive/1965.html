@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Fri, 28 Jan 2000 12:53:16 -0600 (CST)" -->
+<!-- isoreceived="20000128185316" -->
+<!-- sent="Fri, 28 Jan 2000 12:53:16 -0600 (CST)" -->
+<!-- isosent="20000128185316" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="200001281853.MAA12312@frantic.bsdi.com" -->
+<!-- inreplyto="TCP MSS option value" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 28 2000 - 13:53:16 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1964.html">der Mouse: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1970.html">Greg Minshall: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1965">[ date ]</A>
+<A HREF="index.html#1965">[ thread ]</A>
+<A HREF="subject.html#1965">[ subject ]</A>
+<A HREF="author.html#1965">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">owner-tcp-impl@lerc.nasa.gov</A> Fri Jan 28 11:40:55 2000
+</EM><BR>
+<EM>&gt; To: Bob Braden &lt;<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">braden@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">tcp-impl@grc.nasa.gov</A>, <A HREF="mailto:brittone@us.ibm.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">brittone@us.ibm.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP MSS option value 
+</EM><BR>
+<EM>&gt; Date: Fri, 28 Jan 2000 11:15:17 -0500
+</EM><BR>
+<EM>&gt; From: Bill Sommerfeld &lt;<A HREF="mailto:sommerfeld@orchard.arlington.ma.us?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">sommerfeld@orchard.arlington.ma.us</A>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; The MSS option is NOT intended as an MTU discovery mechanism.  It
+</EM><BR>
+<EM>&gt; &gt; gives the max segment size the TCP receive and reassemble.  It does
+</EM><BR>
+<EM>&gt; &gt; not, and is not intended to, tell the sender how large a segment to
+</EM><BR>
+<EM>&gt; &gt; send.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Well, given that it provides an upper bound on segment size, it is
+</EM><BR>
+<EM>&gt; *pragmatically* the only knob you can use when attempting to
+</EM><BR>
+<EM>&gt; interoperate with systems not under your control with broken PMTUd
+</EM><BR>
+<EM>&gt; blackhole detection living in PMTUd black holes (like many web servers
+</EM><BR>
+<EM>&gt; living behind firewalls which block all ICMP).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Try surfing the web from behind a path with a bottleneck IP MTU of
+</EM><BR>
+<EM>&gt; 1480 some time..  if you advertise an MSS greater than 1440, you'll
+</EM><BR>
+<EM>&gt; never see a full page from many servers..
+</EM><BR>
+<P>A lot of the time when we've seen this, it has been due to a
+<BR>
+misconfiguration in a Cisco router that the local ISP uses to
+<BR>
+connect to the backbone.  For example, UUNET defaults to using
+<BR>
+a 4K or so MTU across the HDLC connection.  Cisco boxes have a
+<BR>
+default 1500 MTU for HDLC connections.  If the local ISP box
+<BR>
+gets changed/replaced/reset/whatever, and the configuration for
+<BR>
+the connection goes back to the default 1500 MTU, you get the
+<BR>
+classic black-hole.  If you connect to a web server that has
+<BR>
+a 4K path to the back-bone, and you advertise a 4K MSS, then
+<BR>
+it will attempt to send 4K packets.  They make it to the far
+<BR>
+side of the ISP connection, but then get dropped by the Cisco
+<BR>
+box at the ISP because the packet is too long.  UUNET thinks
+<BR>
+4K is just fine and sends the packet, the ISP box drops it in
+<BR>
+hardware.  Because it doesn't get dropped by IP, no ICMP
+<BR>
+message gets generated, and you have a black hole.
+<BR>
+<P>There are various tests you can do from your local side to
+<BR>
+verify that this is indeed what is happening, and then you
+<BR>
+can call up and complain to your ISP about having their
+<BR>
+hardware misconfigured.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Ping the web server, if that works:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ping again with large packets (-s 10000)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) Try the test to your ISP's router
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) try &quot;traceroute www.XXX.com 10000&quot;, because
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the return packets are small, that will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;succeed where pint -s 10000 won't.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200001281853.MAA12312@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1964.html">der Mouse: "Re: TCP MSS option value"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1961.html">brittone@us.ibm.com: "TCP MSS option value"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1966.html">John Hawkinson: "Re: TCP MSS option value"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1970.html">Greg Minshall: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1965">[ date ]</A>
+<A HREF="index.html#1965">[ thread ]</A>
+<A HREF="subject.html#1965">[ subject ]</A>
+<A HREF="author.html#1965">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

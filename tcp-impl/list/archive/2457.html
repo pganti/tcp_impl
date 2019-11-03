@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: time of queued connections i</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: time of queued connections if not reaped...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: time of queued connections if not reaped...</H1>
+<!-- received="Mon Feb  5 14:22:25 2001" -->
+<!-- isoreceived="20010205192225" -->
+<!-- sent="Mon, 05 Feb 2001 11:11:13 -0800" -->
+<!-- isosent="20010205191113" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: time of queued connections if not reaped..." -->
+<!-- id="3A7EFAD1.7B2741D5@cup.hp.com" -->
+<!-- inreplyto="00d501c08df6$e9f78d40$1703020a@lukeskywalker.dublin.iona.ie" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;3A7EFAD1.7B2741D5@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 05 2001 - 14:11:13 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2458.html">Craig Partridge: "Re: time of queued connections if not reaped..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2456.html">ravi reddy: "Which implementation is better..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2457">[ date ]</A>
+<A HREF="index.html#2457">[ thread ]</A>
+<A HREF="subject.html#2457">[ subject ]</A>
+<A HREF="author.html#2457">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+ravi reddy wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; My guess would be probably not. The client will be able to send data -
+</EM><BR>
+<EM>&gt; &gt; the connection is ESTABLISHED, and that data will likely be accepted and
+</EM><BR>
+<EM>&gt; &gt; ACKed. My guess would be that those connections in the listen queue will
+</EM><BR>
+<EM>&gt; &gt; stay there for quite a long time.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Assuming client sends data for the ESTABLISHED connection which is queued
+</EM><BR>
+<EM>&gt; in the socket receive buffer on the server side and the data fills the
+</EM><BR>
+<EM>&gt; buffer, then I presume the client's TCP will never get any ACKs for the
+</EM><BR>
+<EM>&gt; additional data sent and will eventually timeout which is the retransmission
+</EM><BR>
+<EM>&gt; timeout.
+</EM><BR>
+<P>While there are some stacks that &quot;lie&quot; about their window and amount of
+<BR>
+data they can store, 99 times out of ten, if the receive socket buffer
+<BR>
+is full, the sender has a zero window, and so unless it is broken, will
+<BR>
+not be sending and data that will be dropped without an ACK.
+<BR>
+<P><EM>&gt; &gt; Basically until the client gets fed-up with a lack of response and closes.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   Any idea of the situations when it would get fed up.
+</EM><BR>
+<P>Client-level timeouts, people sitting at keyboards hitting ^C, or &quot;STOP&quot;
+<BR>
+buttons. That sort of thing.
+<BR>
+<P><EM>&gt; &gt; Or, you explicitly accept and close them yourself.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   In my case server won't accept() or close() the connections as it is out
+</EM><BR>
+<EM>&gt; of FDs and it will do so only if the FD count goes down. The problem here is
+</EM><BR>
+<EM>&gt; that any data sent by client using the ESTABLISHED connection will be put
+</EM><BR>
+<EM>&gt; into socket receive buffer and will probably be ACKed. But if I issue an
+</EM><BR>
+<EM>&gt; accept() call, it will reap a connection from the listen queue and will
+</EM><BR>
+<EM>&gt; overlay the connection onto a FD whose creation will fail as the server is
+</EM><BR>
+<EM>&gt; out of FDs.
+</EM><BR>
+<P>Just what is your FD limit? On the &quot;enterprise ready&quot; :) platforms, or
+<BR>
+at least two with which I'm slghtly familiar, the per-process FD limit
+<BR>
+is either 32768 or 60000 - the kernel being configured apropriately.
+<BR>
+<P><P><EM>&gt; &gt; If you really want those connections to go away without more direct
+</EM><BR>
+<EM>&gt; &gt; intervention, you might want to use an interface that inserts the
+</EM><BR>
+<EM>&gt; &gt; application between the receipt of the SYN and the sending of the
+</EM><BR>
+<EM>&gt; &gt; SYN|ACK. I _think_ XTI is or can be such an interface. In that case, you
+</EM><BR>
+<EM>&gt; &gt; would simply stop taking the request notificatoins and the clients would
+</EM><BR>
+<EM>&gt; &gt; timeout on their connects.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   This is out of question right now with the tight schedules.
+</EM><BR>
+<P>As others have pointed-out, which the XTI interface routines and their
+<BR>
+descriptions imply what I thought would happen, the actual
+<BR>
+implementations may not behave quite that way.
+<BR>
+<P>rick
+<BR>
+<PRE>
+-- 
+<A HREF="ftp://ftp.cup.hp.com/dist/networking/misc/rachel/">ftp://ftp.cup.hp.com/dist/networking/misc/rachel/</A>
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2458.html">Craig Partridge: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2456.html">ravi reddy: "Which implementation is better..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2457">[ date ]</A>
+<A HREF="index.html#2457">[ thread ]</A>
+<A HREF="subject.html#2457">[ subject ]</A>
+<A HREF="author.html#2457">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Feb 05 2001 - 14:22:55 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

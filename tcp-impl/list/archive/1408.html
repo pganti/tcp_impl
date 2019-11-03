@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: put on your PMTU discovery t</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: put on your PMTU discovery thinking caps">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: put on your PMTU discovery thinking caps</H1>
+<!-- received="Fri Dec  4 09:18:15 1998" -->
+<!-- isoreceived="19981204141815" -->
+<!-- sent="Fri, 4 Dec 1998 09:15:16 -0500 (EST)" -->
+<!-- isosent="19981204141516" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: put on your PMTU discovery thinking caps" -->
+<!-- id="199812041415.JAA28478@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="put on your PMTU discovery thinking caps" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812041415.JAA28478@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 04 1998 - 09:15:16 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1408">[ date ]</A>
+<A HREF="index.html#1408">[ thread ]</A>
+<A HREF="subject.html#1408">[ subject ]</A>
+<A HREF="author.html#1408">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; [...] pitfalls &amp; problems of implementing PMTU discovery [...]
+</EM><BR>
+<P><EM>&gt; Even though some of these problems aren't related to TCP
+</EM><BR>
+<EM>&gt; implementation, some are, and it's not clear there's a better home
+</EM><BR>
+<EM>&gt; for discussing them than tcpimpl.
+</EM><BR>
+<P>...especially since discussing how to make a PMTU implementation deal
+<BR>
+with them *is* squarely in tcpimpl's charter (at least as I understand
+<BR>
+it).  The difference between a black hole due to an overloaded ATM
+<BR>
+switch and a black hole due to firewalled ICMP may be interesting in
+<BR>
+some respects, but the end systems really don't care about details of
+<BR>
+*why* their packets aren't getting through; all they care is *that*
+<BR>
+they aren't, and they're not hearing back about it.
+<BR>
+<P>Besides, how to do IP-over-ATM in a way that doesn't suffer from such
+<BR>
+problems is arguably on-charter anyway. :-)  If enough ATM cells make
+<BR>
+it through to reconstruct the packet's headers, you can send back a
+<BR>
+meaningful ICMP without needing to get all of the payload.  I'm not
+<BR>
+sure which ICMP you should send, though.  Need-frag doesn't really
+<BR>
+apply.  Source quench, maybe, since it amounts to &quot;I'm overloaded&quot;?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812041415.JAA28478@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1409.html">Kevin M. Lahey: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1408">[ date ]</A>
+<A HREF="index.html#1408">[ thread ]</A>
+<A HREF="subject.html#1408">[ subject ]</A>
+<A HREF="author.html#1408">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

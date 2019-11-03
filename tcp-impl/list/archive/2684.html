@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: [e2e] ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Marcel Waldvogel (marcel@news.m.wanda.ch)">
+<META NAME="Subject" CONTENT="Re: [e2e] ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: [e2e] ECN &amp; PMTU</H1>
+<!-- received="Wed Apr 10 04:27:09 2002" -->
+<!-- isoreceived="20020410082709" -->
+<!-- sent="Wed, 10 Apr 2002 10:04:42 +0200" -->
+<!-- isosent="20020410080442" -->
+<!-- name="Marcel Waldvogel" -->
+<!-- email="marcel@news.m.wanda.ch" -->
+<!-- subject="Re: [e2e] ECN &amp; PMTU" -->
+<!-- id="3CB3F21A.2060006@news.m.wanda.ch" -->
+<!-- inreplyto="3CB3BE57.2655E29C@netlab.hcltech.com" -->
+<STRONG>From:</STRONG> Marcel Waldvogel (<A HREF="mailto:marcel@news.m.wanda.ch?Subject=Re:%20[e2e]%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB3F21A.2060006@news.m.wanda.ch&gt;"><EM>marcel@news.m.wanda.ch</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 10 2002 - 04:04:42 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2685.html">WSEAS NEWSLETTER: "(no subject)"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2684">[ date ]</A>
+<A HREF="index.html#2684">[ thread ]</A>
+<A HREF="subject.html#2684">[ subject ]</A>
+<A HREF="author.html#2684">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Arun Prasad wrote:
+<BR>
+<EM> &gt; Ya, I agree that...... But the method by which PMTU discovery is done
+</EM><BR>
+<EM> &gt; can be changed to avoid packet drops (if dropping a packet is
+</EM><BR>
+<EM> &gt; costly... I think yes, because it triggers Retransmissions....). We
+</EM><BR>
+<EM> &gt; might rethink about implementing PMTU discovery like the ECN like
+</EM><BR>
+<EM> &gt; mechanism, with this new proposal..... The idea is there should be
+</EM><BR>
+<EM> &gt; someother bit like the DF bit, say IF bit (Inform on Fragmentation) in
+</EM><BR>
+<EM> &gt; the IP header..... This IF bit will be set by the Transport layers if
+</EM><BR>
+<EM> &gt; it is planning to do the PMTU discovery..... The router upon receiving
+</EM><BR>
+<EM> &gt; a packet of size greater than the MTU size of the Egress interface and
+</EM><BR>
+<EM> &gt; the IF bit is set in the IP header... then IP layer there will go
+</EM><BR>
+<EM> &gt; ahead fragmenting the packet and sending it to the destination..., but
+</EM><BR>
+<EM> &gt; also send an ICMP &quot;Message too Long&quot; message to the Sender..... The
+</EM><BR>
+<EM> &gt; router also sets the DF bit, and unsets the IF bit in the IP header of
+</EM><BR>
+<EM> &gt; the fragment packets (which ensure no more fragmentation is done on
+</EM><BR>
+<EM> &gt; the packet....) ..................The sender upon receiving the ICMP
+</EM><BR>
+<EM> &gt; packet will just update his PMTU... Thus there is no Packet drops...
+</EM><BR>
+<EM> &gt; so the procedure of PMTU discovery will not trigger any
+</EM><BR>
+<EM> &gt; Retransmissions.... (which is expensive, because the transport layer
+</EM><BR>
+<EM> &gt; shrinks the Congestion window if it senses that a packe is dropped...)
+</EM><BR>
+<P>I like the idea of an &quot;Inform-on-Fragmentation&quot; bit, as this would get
+<BR>
+the PMTU right within one RTT *and* not require any retransmits. I do
+<BR>
+not agree with your DF/IF interaction, instead I propose my own rules
+<BR>
+(downward compatible, single RTT, no retransmit (exception below)):
+<BR>
+<P>* IF overrides DF.
+<BR>
+&nbsp;&nbsp;Any IF-capable router will ignore DF on packets that have IF set. IF
+<BR>
+&nbsp;&nbsp;is more powerful than DF, but DF will be needed during a transition
+<BR>
+&nbsp;&nbsp;period.
+<BR>
+* Routers do not modify the IF/DF bits.
+<BR>
+&nbsp;&nbsp;When the sender sets IF and DF (probably the common case), there is
+<BR>
+&nbsp;&nbsp;no need for that.
+<BR>
+* Routers send back an &quot;ICMP Fragmentation needed,&quot; indicating it was
+<BR>
+&nbsp;&nbsp;due to IF.
+<BR>
+&nbsp;&nbsp;This is preferably done only on the first fragment (i.e., offset=0).
+<BR>
+* IF-capable routers that don't want to/can't fully perform
+<BR>
+&nbsp;&nbsp;fragmentation (e.g., IPv6) shorten the packet into the first
+<BR>
+&nbsp;&nbsp;fragment.
+<BR>
+&nbsp;&nbsp;The &quot;Fragmentation needed&quot; message then contains the information
+<BR>
+&nbsp;&nbsp;that the packet needs to be resent.
+<BR>
+<P>-Marcel
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2685.html">WSEAS NEWSLETTER: "(no subject)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2683.html">mbashyam: "Re: [Tsvwg] Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2684">[ date ]</A>
+<A HREF="index.html#2684">[ thread ]</A>
+<A HREF="subject.html#2684">[ subject ]</A>
+<A HREF="author.html#2684">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Apr 10 2002 - 04:27:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

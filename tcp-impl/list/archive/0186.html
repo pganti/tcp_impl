@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP buffers</H1>
+<!-- received="Fri Mar 21 10:43:39 1997" -->
+<!-- isoreceived="19970321154339" -->
+<!-- sent="Fri, 21 Mar 1997 10:38:11 -0800" -->
+<!-- isosent="19970321183811" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="TCP buffers" -->
+<!-- id="199703211838.AA07697@ash.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199703211838.AA07697@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 13:38:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0282.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0284.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0304.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0305.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0307.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0317.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0323.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0333.html">Vern Paxson: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#186">[ date ]</A>
+<A HREF="index.html#186">[ thread ]</A>
+<A HREF="subject.html#186">[ subject ]</A>
+<A HREF="author.html#186">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199703211838.AA07697@ash.isi.edu&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'll give an example....  (in the HTTP context)...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Say your TCP can have 32Kbytes in transit (is advertizing such a window), 
+</EM><BR>
+<EM>&gt; to a client on a slow line. I think, for example, my Alpha advertizes 
+</EM><BR>
+<EM>&gt; a window of that order. It may mean it takes 5-10 seconds to empty a buffer 
+</EM><BR>
+<EM>&gt; once the server has sent a window full of data (given current modems).
+</EM><BR>
+<P>There are two seperable issues here. One is window size, the other
+<BR>
+is socket buffer size. They are not explicitly related - changing
+<BR>
+one has indirect effects on the other, but the socket is not
+<BR>
+directly controlling the TCP window.
+<BR>
+<P>You can never have more than one window 'in flight' - in the 
+<BR>
+network. The rest is stuck somewhere else - in the socket buffers
+<BR>
+on the ends. There is no signalling protocol for clients to 
+<BR>
+request servers to reduce their socket buffer sizes.
+<BR>
+<P>This does not appear to be a TCP issue at all, at that point.
+<BR>
+<P>The exception is the PSH - which is supposed to flush data
+<BR>
+end-to-end all the way to the application, but sadly the API
+<BR>
+doesn't really require this. This is a bug in the spec, not
+<BR>
+the implementation.
+<BR>
+<P>(the indirect relationship is that the TCP send window never 
+<BR>
+becomes larger than the socket buffer, but it can certainly
+<BR>
+be smaller).
+<BR>
+<P>I agree this is an interesting issue, but probably can be taken 
+<BR>
+to the end-2-end group or somewhere else, rather than tcp-impl
+<BR>
+(can someone confirm?)
+<BR>
+<P>Joe
+<BR>
+<P><P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199703211838.AA07697@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0185.html">Thomas Narten: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0192.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0282.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0284.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0297.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0298.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0300.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0301.html">Jim Gettys: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0304.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0305.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0307.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0310.html">Larry Backman: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0312.html">Craig Partridge: "re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0316.html">touch@ISI.EDU: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0317.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0323.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0333.html">Vern Paxson: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#186">[ date ]</A>
+<A HREF="index.html#186">[ thread ]</A>
+<A HREF="subject.html#186">[ subject ]</A>
+<A HREF="author.html#186">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

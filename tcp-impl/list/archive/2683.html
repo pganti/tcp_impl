@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: [Tsvwg] Re: ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="mbashyam (mbashyam@cisco.com)">
+<META NAME="Subject" CONTENT="Re: [Tsvwg] Re: ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: [Tsvwg] Re: ECN &amp; PMTU</H1>
+<!-- received="Wed Apr 10 01:51:55 2002" -->
+<!-- isoreceived="20020410055155" -->
+<!-- sent="Tue, 09 Apr 2002 22:53:00 -0700" -->
+<!-- isosent="20020410055300" -->
+<!-- name="mbashyam" -->
+<!-- email="mbashyam@cisco.com" -->
+<!-- subject="Re: [Tsvwg] Re: ECN &amp; PMTU" -->
+<!-- id="3CB3D33B.D10D0E82@cisco.com" -->
+<!-- inreplyto="3CB3BE57.2655E29C@netlab.hcltech.com" -->
+<STRONG>From:</STRONG> mbashyam (<A HREF="mailto:mbashyam@cisco.com?Subject=Re:%20[Tsvwg]%20Re:%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB3D33B.D10D0E82@cisco.com&gt;"><EM>mbashyam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 10 2002 - 01:53:00 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2684.html">Marcel Waldvogel: "Re: [e2e] ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2683">[ date ]</A>
+<A HREF="index.html#2683">[ thread ]</A>
+<A HREF="subject.html#2683">[ subject ]</A>
+<A HREF="author.html#2683">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Arun Prasad wrote:
+<BR>
+<P><EM>&gt; Srivathsa wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt; &gt;     Why cant we generalise this stuff.... ie.,  the need here is some way to
+</EM><BR>
+<EM>&gt; &gt; &gt; communicate between the intermediate router and the endpoint.... Not sure
+</EM><BR>
+<EM>&gt; &gt; &gt; which of the two ways is advantageous, but cant we use the same method for
+</EM><BR>
+<EM>&gt; &gt; &gt; both..... ie.,
+</EM><BR>
+<EM>&gt; &gt; &gt; As for the PMTU discovery, the intermediate router can send an ICMP message
+</EM><BR>
+<EM>&gt; &gt; &gt; to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+</EM><BR>
+<EM>&gt; &gt; &gt; endpoint will do all appropriate actions as it does when it receives the packet set
+</EM><BR>
+<EM>&gt; &gt; &gt; with ECN-ECHO flag (as in present ECN procedure...)
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt; or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+</EM><BR>
+<EM>&gt; &gt; &gt; that might be slighly tough, considering the Backward compatibility....)
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; You cant use a ECN-like-mechanism for PMTU discovery.   As soon as an
+</EM><BR>
+<EM>&gt; &gt; intermediate router discovers that the packet (with DontFragment bit set
+</EM><BR>
+<EM>&gt; &gt; ) is too large for one of its outbound interfaces,   it will have to
+</EM><BR>
+<EM>&gt; &gt; discard the packet.  I.e it cant relay the packet to the
+</EM><BR>
+<EM>&gt; &gt; destination.      In ECN scenario,  packet can still be relayed further.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;             Ya, I agree that......  But the  method by which PMTU discovery is done
+</EM><BR>
+<EM>&gt; can be changed to avoid packet drops (if dropping a packet is costly... I think
+</EM><BR>
+<EM>&gt; yes, because it triggers Retransmissions....). We might rethink about implementing PMTU
+</EM><BR>
+<EM>&gt; discovery like the ECN like mechanism, with this new proposal..... The idea is
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; there should be  someother bit like the DF bit, say IF bit (Inform on Fragmentation) in the
+</EM><BR>
+<EM>&gt; IP header..... This IF bit will be set by the Transport layers if it is planning to do the PMTU
+</EM><BR>
+<EM>&gt; discovery.....  The router upon receiving a packet of size greater than the MTU size of the
+</EM><BR>
+<EM>&gt; Egress interface and the IF bit is set in the IP header... then IP layer there will go ahead
+</EM><BR>
+<EM>&gt;  fragmenting the packet and sending it to the destination..., but also send an ICMP
+</EM><BR>
+<EM>&gt; &quot;Message too Long&quot; message to the Sender.....  The router also sets the DF bit, and
+</EM><BR>
+<EM>&gt; unsets the IF bit in the IP header of the fragment packets (which ensure no more
+</EM><BR>
+<EM>&gt; fragmentation is done on the packet....)  ..................The sender upon receiving the ICMP
+</EM><BR>
+<EM>&gt; packet will just update his PMTU... Thus there is no Packet drops... so the procedure of
+</EM><BR>
+<EM>&gt; PMTU discovery will not  trigger any Retransmissions.... (which is expensive, because
+</EM><BR>
+<EM>&gt; the transport layer shrinks the Congestion window if it senses that a packe is dropped...)
+</EM><BR>
+<P>I dont understand, PMTU discovery requires that TCP go into a retransmission of all its
+<BR>
+unacknowledged packets if there is a change in MSS.
+<BR>
+<P>Also in ur scheme by forwarding the fragments with DF bit on won't u  be triggering
+<BR>
+drops in a downstream router with a smaller next hop MTU than the just announced
+<BR>
+PMTU ?
+<BR>
+<P>Murali
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Not sure whether this is already discussed or proposed etc...
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thanks
+</EM><BR>
+<EM>&gt; -arun
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; -Srivathsa
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; ****************************************************************
+</EM><BR>
+<EM>&gt; V.Arun Prasad
+</EM><BR>
+<EM>&gt; HCL Technologies Ltd.
+</EM><BR>
+<EM>&gt; 51, Jawaharlal Nehru Road,
+</EM><BR>
+<EM>&gt; Ekkattuthangal,
+</EM><BR>
+<EM>&gt; Guindy Industrial Estate,
+</EM><BR>
+<EM>&gt; Chennai - 600097.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Contact # : 9144 - 2334174
+</EM><BR>
+<EM>&gt;             9144 - 2334181
+</EM><BR>
+<EM>&gt;             extn : 233
+</EM><BR>
+<EM>&gt; ****************************************************************
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; _______________________________________________
+</EM><BR>
+<EM>&gt; tsvwg mailing list
+</EM><BR>
+<EM>&gt; <A HREF="mailto:tsvwg@ietf.org?Subject=Re:%20[Tsvwg]%20Re:%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB3D33B.D10D0E82@cisco.com&gt;">tsvwg@ietf.org</A>
+</EM><BR>
+<EM>&gt; https://www1.ietf.org/mailman/listinfo/tsvwg
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2684.html">Marcel Waldvogel: "Re: [e2e] ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2683">[ date ]</A>
+<A HREF="index.html#2683">[ thread ]</A>
+<A HREF="subject.html#2683">[ subject ]</A>
+<A HREF="author.html#2683">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Apr 10 2002 - 01:52:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

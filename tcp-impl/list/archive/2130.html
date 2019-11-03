@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 03:59:27 2000" -->
+<!-- isoreceived="20000612075927" -->
+<!-- sent="Mon, 12 Jun 2000 00:53:12 PDT" -->
+<!-- isosent="20000612075312" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="200006120753.e5C7rCC13513@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Mon, 12 Jun 2000 08:56:24 PDT" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;200006120753.e5C7rCC13513@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 03:53:12 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2129.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2130">[ date ]</A>
+<A HREF="index.html#2130">[ thread ]</A>
+<A HREF="subject.html#2130">[ subject ]</A>
+<A HREF="author.html#2130">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; the problem i see is that the delay should be tuned to the
+</EM><BR>
+<EM>&gt; bottleneck bandwidth -- i.e. it should be larger than the transmit
+</EM><BR>
+<EM>&gt; time for a packet or two.
+</EM><BR>
+<P>The paper discusses this a bit.  Basically, yes, if you're worrying about
+<BR>
+single packet reorderings.  But if you are only affected by double-packet
+<BR>
+reorderings (which is the case for lowering the threshold to 2), then this
+<BR>
+is much less of a problem, because it requires a very large reordering
+<BR>
+elsewhere in the network (one large enough that a packet is delayed by
+<BR>
+more than the link's propagation time for the packet):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\footnote{ However, as noted above, some network paths have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;substantial \emph{minimum} reordering times.  For today's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slower-rate paths, these times can well exceed the $20$~msec figure
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;we have explored.  For such paths prone to reordering, we would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expect any approach based on delaying $\wait = 20$~msec to lead to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;significant, unnecessary retransmissions, and poor performance.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is considerably diminished for $N_d = 2$ because then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;we must have quite substantial (in terms of time) reordering in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order to generate enough dups to falsely trigger fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission.}
+<BR>
+<P><EM>&gt; that's an interesting observation, because the sender knows the
+</EM><BR>
+<EM>&gt; RTT already (not accurately, though). So the heuristic could be something
+</EM><BR>
+<EM>&gt; like &quot;do a fast retransmit and assume congestion after N dupacks
+</EM><BR>
+<EM>&gt; _or_ 1 RTT from the last in-sequence ack, whichever comes first&quot; ?
+</EM><BR>
+<P>If I'm wrong about the above, then perhaps; but I think you can indeed
+<BR>
+get away with just waiting for 20 msec.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2129.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2130">[ date ]</A>
+<A HREF="index.html#2130">[ thread ]</A>
+<A HREF="subject.html#2130">[ subject ]</A>
+<A HREF="author.html#2130">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

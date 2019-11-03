@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: discrepancy in TIME_WAIT sta</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (Jerry.Chu@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Sat Jan 10 16:08:41 1998" -->
+<!-- isoreceived="19980110210841" -->
+<!-- sent="Sat, 10 Jan 1998 15:52:26 -0800" -->
+<!-- isosent="19980110235226" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="Jerry.Chu@eng.Sun.COM" -->
+<!-- subject="Re: discrepancy in TIME_WAIT state handling" -->
+<!-- id="199801102352.PAA13986@taipei.eng.sun.com" -->
+<!-- inreplyto="discrepancy in TIME_WAIT state handling" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:Jerry.Chu@eng.Sun.COM?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;199801102352.PAA13986@taipei.eng.sun.com&gt;"><EM>Jerry.Chu@eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jan 10 1998 - 18:52:26 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0888.html">Steve Alexander: "Re: Clock granularity"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#889">[ date ]</A>
+<A HREF="index.html#889">[ thread ]</A>
+<A HREF="subject.html#889">[ subject ]</A>
+<A HREF="author.html#889">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;Both the BSD and the NT behavior are fine as long as they're not
+</EM><BR>
+<EM>&gt;mixed.  However, when trying to talk from a BSD-derived box to an NT
+</EM><BR>
+<EM>&gt;box, serious performance problems may occur if the BSD box gets
+</EM><BR>
+<EM>&gt;unlucky and happens to reuse a port number within the TIME_WAIT period
+</EM><BR>
+<EM>&gt;of the NT box.
+</EM><BR>
+<P>Unix utilities like rsh relies on the BSD behavior to work in UNIX &lt;-&gt;
+<BR>
+UNIX communication. So it's not just being unlucky, i.e. this case
+<BR>
+happens all the time in Solaris when one logout and rlogin back in
+<BR>
+the same machine within 2MSL time.
+<BR>
+<P><EM>&gt;The HP, receiving an ACK, sends a RST.
+</EM><BR>
+<EM>&gt;	it is the HP's responsibility not to reuse 
+</EM><BR>
+<EM>&gt;	the port numbers for 2*MSL from this time
+</EM><BR>
+<P>Hmmm, i don't think this is described in any TCP specs, or is commonly
+<BR>
+implemented, although it seems like one way of fixing the TWA hazard
+<BR>
+below.
+<BR>
+<P><EM>&gt;The NT receives the RST, goes to LISTEN and deletes the TCB, and returns.
+</EM><BR>
+<P>This is the typical TIME-WAIT assassination hazard. See rfc1337. An easy
+<BR>
+fix is to not truncate the TIME-WAIT TCB.
+<BR>
+<P><EM>&gt;Oops, I think I misinterpreted my trace as far as what happens after
+</EM><BR>
+<EM>&gt;HP sent the RST.  In the trace, the second connection goes through
+</EM><BR>
+<EM>&gt;after roughly 3 seconds.  I first assumed that this was due to a
+</EM><BR>
+<EM>&gt;(mis-)configured NT box with 2*MSL=3 seconds.  However, looking at the
+</EM><BR>
+<EM>&gt;trace more carefully, I found that the first retransmission of the SYN
+</EM><BR>
+<EM>&gt;of the second connection succeeds, so it may indeed be that NT had
+</EM><BR>
+<EM>&gt;deleted the TCB in response to HP's RST.
+</EM><BR>
+<P>So this is strictly a performance concern, not a violation of the spec
+<BR>
+(except the TWA hazard, which I wonder if anyone is actively addressing).
+<BR>
+We've had a slightly different problem that went on un-noticed in this
+<BR>
+area for months because it only happened when one rlogin back to the
+<BR>
+same machine. The additional 3sec was taken as sluggish machine...
+<BR>
+<P>Jerry
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0888.html">Steve Alexander: "Re: Clock granularity"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0890.html">Vern Paxson: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#889">[ date ]</A>
+<A HREF="index.html#889">[ thread ]</A>
+<A HREF="subject.html#889">[ subject ]</A>
+<A HREF="author.html#889">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

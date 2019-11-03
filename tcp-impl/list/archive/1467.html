@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: CVS Update@vger.rutgers.edu:</TITLE>
+<META NAME="Author" CONTENT="Andi Kleen (ak@muc.de)">
+<META NAME="Subject" CONTENT="Re: CVS Update@vger.rutgers.edu: linux">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: CVS Update@vger.rutgers.edu: linux</H1>
+<!-- received="Mon Jan 18 16:32:56 1999" -->
+<!-- isoreceived="19990118213256" -->
+<!-- sent="Mon, 18 Jan 1999 22:17:17 +0100" -->
+<!-- isosent="19990118211717" -->
+<!-- name="Andi Kleen" -->
+<!-- email="ak@muc.de" -->
+<!-- subject="Re: CVS Update@vger.rutgers.edu: linux" -->
+<!-- id="19990118221717.A664@kali.munich.netsurf.de" -->
+<!-- inreplyto="199901180639.WAA04907@dm.cobaltmicro.com" -->
+<STRONG>From:</STRONG> Andi Kleen (<A HREF="mailto:ak@muc.de?Subject=Re:%20CVS%20Update@vger.rutgers.edu:%20linux&In-Reply-To=&lt;19990118221717.A664@kali.munich.netsurf.de&gt;"><EM>ak@muc.de</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 18 1999 - 16:17:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1466.html">Peter Sivo: "Re:  spam through this list"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1469.html">Kacheong Poon: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1470.html">Kacheong Poon: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1467">[ date ]</A>
+<A HREF="index.html#1467">[ thread ]</A>
+<A HREF="subject.html#1467">[ subject ]</A>
+<A HREF="author.html#1467">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sun, Jan 17, 1999 at 10:39:18PM -0800, David S. Miller wrote:
+<BR>
+<EM>&gt;    Date: Sun, 17 Jan 1999 13:07:20 +0100
+</EM><BR>
+<EM>&gt;    From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20CVS%20Update@vger.rutgers.edu:%20linux&In-Reply-To=&lt;19990118221717.A664@kali.munich.netsurf.de&gt;">ak@muc.de</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;    If I understand RFC2018.8 (Data Receiver Reneging) correctly they
+</EM><BR>
+<EM>&gt;    require reporting the last received sack block (even if it was
+</EM><BR>
+<EM>&gt;    discarded) so that the sender has the best possible idea about
+</EM><BR>
+<EM>&gt;    'forward process' on the connection. Linux violates that currently.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I still don't understand.  If we discard it, why should we report a
+</EM><BR>
+<EM>&gt; SACK about it?  It sounds to me like the RFC is asking us to
+</EM><BR>
+<EM>&gt; acknowledge data not in our queue, that simply does not make any
+</EM><BR>
+<EM>&gt; sense.
+</EM><BR>
+<P>A SACK is not a real ack, the 2018 requires that all data is kept
+<BR>
+in the retransmit queue until it is acked by the &quot;classic&quot; ack field.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; I might be missing something critical, if so please help me
+</EM><BR>
+<EM>&gt; understand.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But how I see it right now the RFC simply makes no sense.
+</EM><BR>
+<P>I am not sure if I understand the intentions of the RFC correctly,
+<BR>
+but for me it looks the authors valued the information about forward progress
+<BR>
+(to update the neighbour entry?) as more important as the delay the
+<BR>
+additional SACK may cause (the sender will eat an timeout to clear the 
+<BR>
+SACK flags in the retransmit queue). I assume they had some good reasons
+<BR>
+to specify that, but maybe that is a good question for the tcpimpl group
+<BR>
+cc'ed there, maybe someone there can shed light on this. 
+<BR>
+<P>-Andi
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1466.html">Peter Sivo: "Re:  spam through this list"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1468.html">William Li: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1469.html">Kacheong Poon: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1470.html">Kacheong Poon: "Re: CVS Update@vger.rutgers.edu: linux"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1467">[ date ]</A>
+<A HREF="index.html#1467">[ thread ]</A>
+<A HREF="subject.html#1467">[ subject ]</A>
+<A HREF="author.html#1467">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

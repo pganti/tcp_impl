@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 10:00:30 1997" -->
+<!-- isoreceived="19970430140030" -->
+<!-- sent="Wed, 30 Apr 1997 10:58:27 -0600" -->
+<!-- isosent="19970430165827" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301658.KAA17505@mica.denver.sgi.com" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301658.KAA17505@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 12:58:27 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0386.html">Matt Mathis: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0384.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0387.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#385">[ date ]</A>
+<A HREF="index.html#385">[ thread ]</A>
+<A HREF="subject.html#385">[ subject ]</A>
+<A HREF="author.html#385">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+As for turning on the option only when (your equivalent to) sb_max
+<BR>
+is large--I think most of the time you'll find it desirable to 
+<BR>
+run systems with a large sb_max.  A system-wide switch on the scaling
+<BR>
+option is awfully coarse.
+<BR>
+<P><P><P><EM>&gt; From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301658.KAA17505@mica.denver.sgi.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt; I believe jt is correct; there have been no problems with SYN options.
+</EM><BR>
+<P>I did not realize you received copies of all trouble reports sent to
+<BR>
+SGI's hotline, not to mention all bug reports in SGI's internal database.
+<BR>
+<P><P><EM>&gt;   *&gt; I have some very clear memories of problems with systems that assumed
+</EM><BR>
+<EM>&gt;   *&gt; window sizes cannot be larger than 32765, and I don't mean only boxes
+</EM><BR>
+<EM>&gt;   *&gt; running flavors of UNIX.  One was a fancy 'scope/logic analyzer that
+</EM><BR>
+<EM>&gt;   *&gt; when crazy and sent one byte every couple of minutes in what looked
+</EM><BR>
+<EM>&gt;   *&gt; like some kind of window probe.  Such experiences tend to make you
+</EM><BR>
+<EM>&gt;   *&gt; conservative in what you send.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Yes, and that is exactly why large windows can only be used if BOTH
+</EM><BR>
+<EM>&gt; sides indicate ability to deal with them.  Which is why a system that
+</EM><BR>
+<EM>&gt; understands large windows but does not want to enlarge its own window
+</EM><BR>
+<EM>&gt; should send a window option with zero.
+</EM><BR>
+<P>That makes sense only if you also agree that no systems fall over
+<BR>
+when they receive the TCP option itself.
+<BR>
+<P>As of about 1989, I do not agree with that premise.  I reserve
+<BR>
+judgement for 1997.
+<BR>
+<P><P><EM>&gt;   *&gt; I changed SGI's default window size to 60K because it improved
+</EM><BR>
+<EM>&gt;   *&gt; performance significantly in interesting cases, but is there a
+</EM><BR>
+<EM>&gt;   *&gt; significant harm to being conservative in sending the window shift
+</EM><BR>
+<EM>&gt;   *&gt; option?  Again, in how many applications does active-opener not set a
+</EM><BR>
+<EM>&gt;   *&gt; large SO_RCVBUF but the passive opener wants to receive big windows?
+</EM><BR>
+<EM>&gt;   *&gt; How many of those do not have the active-opener not set a large
+</EM><BR>
+<EM>&gt;   *&gt; SO_SNDBUF?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This is not a popularity contest.
+</EM><BR>
+<P>That is true.  We are all adults and will make our own decisions on our
+<BR>
+on criteria and live with the consequences.  You are welcome to your
+<BR>
+opinions and also free to say whatever bad things you want about me. 
+<BR>
+I reserve the reciprocal priviledges.
+<BR>
+<P><P><EM>&gt;                                    But how about an FTP data connection?
+</EM><BR>
+<EM>&gt; It has data flowing only one way, so only the receiver needs to use
+</EM><BR>
+<EM>&gt; the large window size.  The sender does not want to tie up receive
+</EM><BR>
+<EM>&gt; buffer space unnecessarily.
+</EM><BR>
+<P>Some systems do not &quot;tie up receive buffer space&quot; as the result of
+<BR>
+the application's SO_RCVBUF or SO_SNDBUF.  Some do not even have
+<BR>
+a meaningful sb_max, including some based on 4.*BSD socket code.
+<BR>
+<P>A file copy data connection might quite plausibly want to have a large
+<BR>
+SO_SNDBUF size to minimized context switches.  To repeat that point for
+<BR>
+at least the third time in different words, if you don't set SO_SNDBUF
+<BR>
+to more than 8K, you might not get very impressive ttcp or netperf
+<BR>
+numbers, even if your system is running at a very high clock rate.
+<BR>
+<P><P><EM>&gt;                              And some systems simply do not have
+</EM><BR>
+<EM>&gt; enough buffering capacity to allow a large window at all.
+</EM><BR>
+<P>That is a red herring, since in those situations it is
+<BR>
+best to not use the scaling option at all in either direction.
+<BR>
+<P><EM>&gt;                                                            An
+</EM><BR>
+<EM>&gt; assymmetry of window sizes seems quite natural, to me.
+</EM><BR>
+<P>Assmetric window sizes do make sense.  That is one reason I repeatedly
+<BR>
+mentiond SO_SNDBUF.  Please note that &quot;SND&quot; is not the same string as
+<BR>
+&quot;RCV&quot;.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301658.KAA17505@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0386.html">Matt Mathis: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0384.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0387.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#385">[ date ]</A>
+<A HREF="index.html#385">[ thread ]</A>
+<A HREF="subject.html#385">[ subject ]</A>
+<A HREF="author.html#385">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

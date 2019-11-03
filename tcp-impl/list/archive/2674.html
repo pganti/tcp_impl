@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Arun Prasad (arun@netlab.hcltech.com)">
+<META NAME="Subject" CONTENT="ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>ECN &amp; PMTU</H1>
+<!-- received="Tue Apr  9 00:44:46 2002" -->
+<!-- isoreceived="20020409044446" -->
+<!-- sent="Tue, 09 Apr 2002 10:09:47 +0530" -->
+<!-- isosent="20020409043947" -->
+<!-- name="Arun Prasad" -->
+<!-- email="arun@netlab.hcltech.com" -->
+<!-- subject="ECN &amp; PMTU" -->
+<!-- id="3CB27092.7680BC16@netlab.hcltech.com" -->
+<!-- inreplyto="3CB20DBE.3B687309@cisco.com" -->
+<STRONG>From:</STRONG> Arun Prasad (<A HREF="mailto:arun@netlab.hcltech.com?Subject=Re:%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB27092.7680BC16@netlab.hcltech.com&gt;"><EM>arun@netlab.hcltech.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 09 2002 - 00:39:47 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2667.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling(2nd try)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2674">[ date ]</A>
+<A HREF="index.html#2674">[ thread ]</A>
+<A HREF="subject.html#2674">[ subject ]</A>
+<A HREF="author.html#2674">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi all,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Some doubts on the procedure followed for PMTU (Path mtu) discovery and
+<BR>
+ECN method.....
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The doubt is not related to the procedure as such, but the relation between the
+<BR>
+two procedures stated above......
+<BR>
+Tcp and Sctp uses ICMP message to handle the PMTU discovery procedure....
+<BR>
+ie., the intermediate router will send an ICMP messge of &quot;Message too Long&quot;
+<BR>
+to the end point sending the data packet of size greater than the MTU size of some
+<BR>
+intermediate path to the destination.....
+<BR>
+<P>For ECN, the intermediate router should set the appropriate bits in the IP header
+<BR>
+(if it supports ECN ....) whenever there is congestion and risk of packet drops
+<BR>
+is high....... The endpoints then correct their Congestion window accordingly and
+<BR>
+help in reducing the Congestion in the intermediate router.....
+<BR>
+<P>Why, we adopt two different methods to carry out similar (in the sense, both are
+<BR>
+related to the Intermediate routers....)?????
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Why cant we generalise this stuff.... ie.,  the need here is some way to
+<BR>
+communicate between the intermediate router and the endpoint.... Not sure
+<BR>
+which of the two ways is advantageous, but cant we use the same method for
+<BR>
+both..... ie.,
+<BR>
+As for the PMTU discovery, the intermediate router can send an ICMP message
+<BR>
+to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+<BR>
+endpoint will do all appropriate actions as it does when it receives the packet set
+<BR>
+with ECN-ECHO flag (as in present ECN procedure...)
+<BR>
+<P>or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+<BR>
+that might be slighly tough, considering the Backward compatibility....)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;What we can achieve by this is the simplicity  in the router implementation,
+<BR>
+which doesnt need to do different procedure for different features of the Transport
+<BR>
+layer..... and by maintaining this uniformity, the future extentions which demands a
+<BR>
+similar requirement can use the same way......
+<BR>
+<P>I could have missed some points....
+<BR>
+<P>Any comments on this????
+<BR>
+<P><P>Thanks
+<BR>
+-arun
+<BR>
+<PRE>
+--
+****************************************************************
+V.Arun Prasad
+HCL Technologies Ltd.
+51, Jawaharlal Nehru Road,
+Ekkattuthangal,
+Guindy Industrial Estate,
+Chennai - 600097.
+<P>Contact # : 9144 - 2334174
+            9144 - 2334181
+            extn : 233
+****************************************************************
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2673.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2667.html">Murali Bashyam: "Re: Unacceptable ACK in SYN_RCVD state handling(2nd try)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2675.html">Jacob Heitz: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2681.html">Srivathsa: "Re: ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2674">[ date ]</A>
+<A HREF="index.html#2674">[ thread ]</A>
+<A HREF="subject.html#2674">[ subject ]</A>
+<A HREF="author.html#2674">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Apr 09 2002 - 00:44:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

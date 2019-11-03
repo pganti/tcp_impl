@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: initial window size</TITLE>
+<META NAME="Author" CONTENT="David St. Germain (David@StGermain.com)">
+<META NAME="Subject" CONTENT="Re: initial window size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: initial window size</H1>
+<!-- received="Thu Mar 29 13:14:34 2001" -->
+<!-- isoreceived="20010329181434" -->
+<!-- sent="Thu, 29 Mar 2001 13:01:01 -0500" -->
+<!-- isosent="20010329180101" -->
+<!-- name="David St. Germain" -->
+<!-- email="David@StGermain.com" -->
+<!-- subject="Re: initial window size" -->
+<!-- id="004d01c0b87a$38a78f00$0654c0d8@crans1.ri.home.com" -->
+<!-- inreplyto="3AC32220.584EFFDD@jack.see.plym.ac.uk" -->
+<STRONG>From:</STRONG> David St. Germain (<A HREF="mailto:David@StGermain.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;004d01c0b87a$38a78f00$0654c0d8@crans1.ri.home.com&gt;"><EM>David@StGermain.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 29 2001 - 13:01:01 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2492.html">Bogdan Ghita: "Re: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2492.html">Bogdan Ghita: "Re: initial window size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2493">[ date ]</A>
+<A HREF="index.html#2493">[ thread ]</A>
+<A HREF="subject.html#2493">[ subject ]</A>
+<A HREF="author.html#2493">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It's always been my understanding that the default initial window size is
+<BR>
+512K for purposes of flow control (avoiding the overflow of sender's and
+<BR>
+receiver's buffers) and to avoid fragmentation of the TCP PDU until the
+<BR>
+MTU - and max receive window - can be negotiated.
+<BR>
+<P><P>Dave.
+<BR>
+<P><P><P>----- Original Message -----
+<BR>
+From: &quot;Bogdan Ghita&quot; &lt;<A HREF="mailto:b.ghita@jack.see.plym.ac.uk?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;004d01c0b87a$38a78f00$0654c0d8@crans1.ri.home.com&gt;">b.ghita@jack.see.plym.ac.uk</A>&gt;
+<BR>
+To: &quot;arun&quot; &lt;<A HREF="mailto:arun@netlab.hcltech.com?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;004d01c0b87a$38a78f00$0654c0d8@crans1.ri.home.com&gt;">arun@netlab.hcltech.com</A>&gt;
+<BR>
+Cc: &lt;<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20initial%20window%20size&In-Reply-To=&lt;004d01c0b87a$38a78f00$0654c0d8@crans1.ri.home.com&gt;">tcp-impl@grc.nasa.gov</A>&gt;
+<BR>
+Sent: Thursday, March 29, 2001 6:53 AM
+<BR>
+Subject: Re: initial window size
+<BR>
+<P><P><EM>&gt; Hello arun,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The purpose of a small value for TCP initial window is to limit the
+</EM><BR>
+<EM>&gt; inital 'train' of packets. It is up to each TCP sender to decide the
+</EM><BR>
+<EM>&gt; value, but the higher this value the higher the possibility to end up
+</EM><BR>
+<EM>&gt; with a congestion, because the sender would transmit, without 'probing'
+</EM><BR>
+<EM>&gt; the network, all these packets back-to-back. The main problem is usually
+</EM><BR>
+<EM>&gt; not the TCP receiver not being able to cope with the data, but the path
+</EM><BR>
+<EM>&gt; betwen the sender and the receiver being congested.
+</EM><BR>
+<EM>&gt; This is why the initial window has, preferably, a low value
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Bogdan
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; arun wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; hi
+</EM><BR>
+<EM>&gt; &gt;  Iam new to this. My doubt is this. With what criteria the intial window
+</EM><BR>
+for TCP is calculated and set. From the tcp code of
+<BR>
+<EM>&gt; &gt; linux, I can interpret that the allowable receive buffer is set to a
+</EM><BR>
+value 32767. The initial window should be less than this
+<BR>
+<EM>&gt; &gt; value. Can any one of u explain me why the initial window is chosen less
+</EM><BR>
+than 32767 and how is that calculation go.
+<BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Thanks
+</EM><BR>
+<EM>&gt; &gt; -arun
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2492.html">Bogdan Ghita: "Re: initial window size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2492.html">Bogdan Ghita: "Re: initial window size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2494.html">Oleg Vishnepolsky: "RE: initial window size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2493">[ date ]</A>
+<A HREF="index.html#2493">[ thread ]</A>
+<A HREF="subject.html#2493">[ subject ]</A>
+<A HREF="author.html#2493">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Mar 29 2001 - 13:15:03 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

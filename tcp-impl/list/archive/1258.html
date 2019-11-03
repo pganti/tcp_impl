@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 23:46:25 1998" -->
+<!-- isoreceived="19980821034625" -->
+<!-- sent="Fri, 21 Aug 1998 02:45:09 -0400 (EDT)" -->
+<!-- isosent="19980821064509" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808210645.CAA10729@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808210645.CAA10729@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 21 1998 - 02:45:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1259.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1257.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1262.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1258">[ date ]</A>
+<A HREF="index.html#1258">[ thread ]</A>
+<A HREF="subject.html#1258">[ subject ]</A>
+<A HREF="author.html#1258">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt; So what is [the reason I want keepalives]?  Connections through a
+</EM><BR>
+<EM>&gt;&gt;&gt; stateful firewall that drops state if it sees no traffic for a
+</EM><BR>
+<EM>&gt;&gt;&gt; relatively short period.
+</EM><BR>
+<EM>&gt;&gt; &quot;I'd like to jam the internet because my firewall is faulty&quot;.
+</EM><BR>
+<EM>&gt; Pardon my flame, but, *what*?????
+</EM><BR>
+<EM>&gt; You can argue that keepalives cause all sorts of problems, but a
+</EM><BR>
+<EM>&gt; short packet every two hours on idle connections is going to jam the
+</EM><BR>
+<EM>&gt; internet?  Especially when most connections aren't set for
+</EM><BR>
+<EM>&gt; keepalives?
+</EM><BR>
+<P>Thanks for coming to my defense, Perry, but in this case neither of
+<BR>
+those arguments works: I had to set the keepalive interval way down
+<BR>
+(four minutes or so) because the damn firewall drops state if the
+<BR>
+connection idles longer than that, and I had to create a kernel config
+<BR>
+option to force keepalives even on connections that didn't ask for them
+<BR>
+because the alternative was to go change damn near every network
+<BR>
+program I used to turn on keepalives.
+<BR>
+<P>That said, I still don't feel the least bit guilty about &quot;jam[ming] the
+<BR>
+internet&quot; with these keepalives.  What's the alternative?  Application
+<BR>
+level keepalives that are probably at least twice as big in bytes and
+<BR>
+usually twice as big in packets?  And besides all that, what the hell
+<BR>
+difference does it make to anyone how I choose to use the bandwidth I
+<BR>
+use?  I ship around lots of bits that many people would call irrelevant
+<BR>
+already, but all of a sudden one tiny packet each way every few minutes
+<BR>
+throws you into a tizzy.  A week's worth of keepalives is roughly 2500
+<BR>
+packets each way - small packets, maybe 64 bytes each?  That's around
+<BR>
+150K-160K.  One background GIF on a web page can equal that - each time
+<BR>
+it's used!
+<BR>
+<P>And *that* said, I'll note that I do agree the firewall is broken.
+<BR>
+Unfortunately replacing it is not a decision I am empowered to make.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808210645.CAA10729@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1259.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1257.html">Perry E. Metzger: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1262.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1258">[ date ]</A>
+<A HREF="index.html#1258">[ thread ]</A>
+<A HREF="subject.html#1258">[ subject ]</A>
+<A HREF="author.html#1258">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:53 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

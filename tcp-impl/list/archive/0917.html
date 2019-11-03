@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 11:20:12 1998" -->
+<!-- isoreceived="19980112162012" -->
+<!-- sent="Mon, 12 Jan 1998 11:13:34 -0800" -->
+<!-- isosent="19980112191334" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="34BA6B5E.E4CA501B@cup.hp.com" -->
+<!-- inreplyto="199801121857.SAA04185@rum.isi.edu" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA6B5E.E4CA501B@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 14:13:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0918.html">Jonathan M. Bresler: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0916.html">Jaume Linares: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0912.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0914.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#917">[ date ]</A>
+<A HREF="index.html#917">[ thread ]</A>
+<A HREF="subject.html#917">[ subject ]</A>
+<A HREF="author.html#917">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA6B5E.E4CA501B@cup.hp.com&gt;">touch@ISI.EDU</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA6B5E.E4CA501B@cup.hp.com&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; &gt; Organization: HP 9000 Network Performance
+</EM><BR>
+<EM>&gt; &gt; To: &quot;TCP Implementor's List&quot; &lt;<A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA6B5E.E4CA501B@cup.hp.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>&gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; That being the case, most of the rest of the time, the problems I have
+</EM><BR>
+<EM>&gt; &gt; seen with applications (such as web servers) has been that they are not
+</EM><BR>
+<EM>&gt; &gt; making &quot;apropriate&quot; calls to send their data - for instance, sending the
+</EM><BR>
+<EM>&gt; &gt; http headers and the http data in separate calls to send() instead of
+</EM><BR>
+<EM>&gt; &gt; one call to writev() or something.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There are other problems - not disabling Nagle, not correcting
+</EM><BR>
+<EM>&gt; socket buffer sizes, etc...
+</EM><BR>
+<P>I agree about the socket buffer sizes, but I'm not fololowing you on
+<BR>
+Nagle - why should a web server disable Nagle if it is presenting the
+<BR>
+http headers and data to the transport at the same time.
+<BR>
+<P><EM>&gt; &gt; Put another way, all &quot;logically associated&quot; (I am sure there is a better
+</EM><BR>
+<EM>&gt; &gt; term) data should be presented to the transport at the same time.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That's an artifact of leaving Nagle's algorithm on (by default), and
+</EM><BR>
+<EM>&gt; trying to anticipate it at the application layer.
+</EM><BR>
+<P>I would have thought that presenting as much data to the transport was
+<BR>
+goodness in and of itself and did not imply applications trying to
+<BR>
+anticipate an implementation specific?
+<BR>
+<P>OK, sitting here typing I think I may have figured-out one area you
+<BR>
+might consider disabling Nagle. Were you alluding to pipelined requests?
+<BR>
+I could see where three http requests sent on a single connection could
+<BR>
+have the second and third delayed if they were smaller that MSS/2 (I
+<BR>
+guess that generalizes to MSS/(N-1)?)
+<BR>
+<P>That being the case, should Nagle be disabled, or would it be better to
+<BR>
+have the application tell the transport that there will be no more data
+<BR>
+coming for a while - &quot;fflush&quot; for a TCP connection? 
+<BR>
+<P>Same question for the server.
+<BR>
+<P>rick jones
+<BR>
+<P>Even with Nagle on, I would think that pipelined requests &quot;degenerate&quot;
+<BR>
+into nothing worse than one at a time, with the added connectoin
+<BR>
+overhead, and sometimes have more than one at a time, so it is still
+<BR>
+goodness right?
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0918.html">Jonathan M. Bresler: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0916.html">Jaume Linares: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0912.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0914.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#917">[ date ]</A>
+<A HREF="index.html#917">[ thread ]</A>
+<A HREF="subject.html#917">[ subject ]</A>
+<A HREF="author.html#917">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

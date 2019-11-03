@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP problems with IP options</TITLE>
+<META NAME="Author" CONTENT="Jason Thorpe (thorpej@nas.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: TCP problems with IP options and path MTU discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP problems with IP options and path MTU discovery</H1>
+<!-- received="Sat Mar 21 20:37:57 1998" -->
+<!-- isoreceived="19980322013757" -->
+<!-- sent="Sat, 21 Mar 1998 20:25:49 -0800" -->
+<!-- isosent="19980322042549" -->
+<!-- name="Jason Thorpe" -->
+<!-- email="thorpej@nas.nasa.gov" -->
+<!-- subject="Re: TCP problems with IP options and path MTU discovery" -->
+<!-- id="199803220425.UAA24429@lestat.nas.nasa.gov" -->
+<!-- inreplyto="TCP problems with IP options and path MTU discovery" -->
+<STRONG>From:</STRONG> Jason Thorpe (<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;199803220425.UAA24429@lestat.nas.nasa.gov&gt;"><EM>thorpej@nas.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 21 1998 - 23:25:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1003.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0994.html">Kevin M. Lahey: "TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1004">[ date ]</A>
+<A HREF="index.html#1004">[ thread ]</A>
+<A HREF="subject.html#1004">[ subject ]</A>
+<A HREF="author.html#1004">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sat, 21 Mar 1998 20:11:02 PST 
+<BR>
+&nbsp;Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;199803220425.UAA24429@lestat.nas.nasa.gov&gt;">vern@ee.lbl.gov</A>&gt; wrote:
+<BR>
+<P><EM> &gt; But why would it not do this if-and-only-if an IP option is used??
+</EM><BR>
+<EM> &gt; 
+</EM><BR>
+<EM> &gt; I just groveled through the 4.4BSD source and couldn't find anything in
+</EM><BR>
+<EM> &gt; there that would lead to the ICMP_UNREACH_NEEDFRAG not being propagated
+</EM><BR>
+<EM> &gt; if IP options are used, but being propagated if they aren't.
+</EM><BR>
+<EM> &gt; 
+</EM><BR>
+<EM> &gt; If I understand the original description of the problem, it's that MTU
+</EM><BR>
+<EM> &gt; discovery stops working if-and-only-if an IP option is used (source
+</EM><BR>
+<EM> &gt; routing; maybe others?).  And I still don't see how this can be!
+</EM><BR>
+<P>Right... and if the PMTU engine uses the MTU in the ICMP message to
+<BR>
+size the next segment (which is, BTW, the MTU it would have used to size
+<BR>
+the segment in the first place, since it's the hosts own outgoing
+<BR>
+interface), it's going to lose because IP is going to tack the option on,
+<BR>
+which TCP didn't account for.
+<BR>
+<P>I think Bernie's comment makes perfect sense :-)
+<BR>
+<P>Kevin - Have you determined if needs-frag is sent back to ourselves or
+<BR>
+if it's black hole-like?
+<BR>
+<P>Vern - I think everyone here is in agreement that PMTU is busted in
+<BR>
+this case, but the fact that Kevin was able to observe it on a number
+<BR>
+of different operating systems made it worth mentioning here...  Maybe
+<BR>
+this is worth adding to known-bugs?
+<BR>
+<P>Jason R. Thorpe                                       <A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20TCP%20problems%20with%20IP%20options%20and%20path%20MTU%20discovery&In-Reply-To=&lt;199803220425.UAA24429@lestat.nas.nasa.gov&gt;">thorpej@nas.nasa.gov</A>
+<BR>
+NASA Ames Research Center                            Home: +1 408 866 1912
+<BR>
+NAS: M/S 258-5                                       Work: +1 650 604 0935
+<BR>
+Moffett Field, CA 94035                             Pager: +1 415 428 6939
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1003.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0994.html">Kevin M. Lahey: "TCP problems with IP options and path MTU discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1005.html">Vern Paxson: "Re: TCP problems with IP options and path MTU discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1004">[ date ]</A>
+<A HREF="index.html#1004">[ thread ]</A>
+<A HREF="subject.html#1004">[ subject ]</A>
+<A HREF="author.html#1004">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

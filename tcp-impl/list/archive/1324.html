@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Wed Sep 16 15:11:42 1998" -->
+<!-- isoreceived="19980916191142" -->
+<!-- sent="Wed, 16 Sep 1998 16:10:26 -0600 (MDT)" -->
+<!-- isosent="19980916221026" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809162210.QAA09931@calcite.rhyolite.com" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162210.QAA09931@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 16 1998 - 18:10:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1325.html">sparker@Eng.Sun.COM: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1323.html">Joe Touch: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1324">[ date ]</A>
+<A HREF="index.html#1324">[ thread ]</A>
+<A HREF="subject.html#1324">[ subject ]</A>
+<A HREF="author.html#1324">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162210.QAA09931@calcite.rhyolite.com&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt; BTW - some of this latency is the modem being too clever about
+</EM><BR>
+<EM>&gt; &gt; buffering and compressing. Shutting it down might decrease the latency.
+</EM><BR>
+<EM>&gt; &gt; Another part is the use of large packets - it might be better to have
+</EM><BR>
+<EM>&gt; &gt; smaller packets with additional overhead. The overall transaction latency
+</EM><BR>
+<EM>&gt; &gt; would increase, but the time to first portion of response would decrease.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Sure.  The right thing to do (if HTTP did not have such verbose request
+</EM><BR>
+<EM>&gt; response headers) would be to turn off all modem compression, and
+</EM><BR>
+<EM>&gt; send the HTML content compressed.  Deflate compression does very
+</EM><BR>
+<EM>&gt; much better than anything in modems.
+</EM><BR>
+<P>Modems tend to use LZW, always (I trust) with at least 10-bit and at least
+<BR>
+sometimes more.  Judging from what Paul Mackerras has told me of his
+<BR>
+comparisons between BSD Compress (RFC 1977) and Deflate (RFC 1979) in his
+<BR>
+widely used `pppd`, the difference between Deflate and your typical modem
+<BR>
+on the data that is compressed should be about the difference you see
+<BR>
+between `compress` and `gzip`, or around a 10% improvement in compression
+<BR>
+ratio but at a ~2X cost in CPU cycles, and mostly on the side that does
+<BR>
+not have cycles to waste, the HTTP server.
+<BR>
+<P>Since most ISP's do not run hardware that supports VJ header compression,
+<BR>
+a modem using 12 or 14-bit LZW will be able to good things to those
+<BR>
+45-byte TCP/IP/PPP headers, which will probably almost always excede what
+<BR>
+the modem loses by using LZW over the application-data.
+<BR>
+<P>In other words, I bet that if you measure things, you'll find that
+<BR>
+turning off v.42+v.42bis improves latencies (and only when the link
+<BR>
+is mostly idle, as with `ping`) but always hurts throughput, even
+<BR>
+when moving pre-compressed application-data.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; TCP connection vs. T/TCP.  Conventional TCP takes two...  I want to
+</EM><BR>
+<EM>&gt; get one of them back...
+</EM><BR>
+<P>If you get it back, then how do you deal with the modified form of SYN
+<BR>
+attack?  As has been said repeatedly recently, an extra intial RTT paid
+<BR>
+by someone before the server commits any significant resources to the
+<BR>
+request seems necessary to defend against that attack.
+<BR>
+I've claimed that random-drop in the application would help, but people
+<BR>
+tend to not like random ideas.  Besides, even I admit it would help only
+<BR>
+when the ratio of good to bad connection attempts is small.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809162210.QAA09931@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1325.html">sparker@Eng.Sun.COM: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1323.html">Joe Touch: "Re: status of T/TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1331.html">Jim Gettys: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1324">[ date ]</A>
+<A HREF="index.html#1324">[ thread ]</A>
+<A HREF="subject.html#1324">[ subject ]</A>
+<A HREF="author.html#1324">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

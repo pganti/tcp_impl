@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Lloyd Wood (l.wood@eim.surrey.ac.uk)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 11:06:43 2000" -->
+<!-- isoreceived="20000612150643" -->
+<!-- sent="Mon, 12 Jun 2000 15:51:20 +0100 (BST)" -->
+<!-- isosent="20000612145120" -->
+<!-- name="Lloyd Wood" -->
+<!-- email="l.wood@eim.surrey.ac.uk" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="Pine.GSO.4.21.0006121501230.19478-100000@petra.ee.surrey.ac.uk" -->
+<!-- inreplyto="000a01bfd373$4672ed60$2c071fd1@NTRG.com" -->
+<STRONG>From:</STRONG> Lloyd Wood (<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;Pine.GSO.4.21.0006121501230.19478-100000@petra.ee.surrey.ac.uk&gt;"><EM>l.wood@eim.surrey.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 10:51:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2133.html">Greg Minshall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2123.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2135.html">Jamal Hadi Salim: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2135.html">Jamal Hadi Salim: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2138.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2132">[ date ]</A>
+<A HREF="index.html#2132">[ thread ]</A>
+<A HREF="subject.html#2132">[ subject ]</A>
+<A HREF="author.html#2132">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sun, 11 Jun 2000, Eric A. Hall wrote:
+<BR>
+<P><EM>&gt; In this case though it
+</EM><BR>
+<EM>&gt; seems to be a given that a parrallel switch will most likely cause a
+</EM><BR>
+<EM>&gt; significant amount of reordering to occur naturally which is an unplanned
+</EM><BR>
+<EM>&gt; phenomenon for TCP.
+</EM><BR>
+<P>yes.
+<BR>
+<P><EM>&gt; But it also probably depends on the end-to-end bandwidth, too. Reordering
+</EM><BR>
+<EM>&gt; probably won't be a problem on end-to-end connections that are only a
+</EM><BR>
+<EM>&gt; fraction of the bandwidth, since they won't get into the parrallel switch
+</EM><BR>
+<EM>&gt; fast enough to get out-of-ordered by the switch (unless the feeds are more
+</EM><BR>
+<EM>&gt; than a fraction, which is not the scenario). 
+</EM><BR>
+<P>unfortunately, TCP is extremely bursty in how it sends segments
+<BR>
+back-to-back (especially as it opens a window). As a result of this,
+<BR>
+reordering will still occur when the end-to-end connection occupies a
+<BR>
+tiny fraction of the available bandwidth.
+<BR>
+<P>(This could be avoided by widely implementing rate-based pacing in
+<BR>
+&nbsp;TCP, but rate-based pacing has been shown to suffer when used against
+<BR>
+&nbsp;the more-aggressive traditionally bursty TCP [*], so there's no
+<BR>
+&nbsp;incentive for deploying that. We're stuck at a local maximum on the
+<BR>
+&nbsp;surface of TCP performance.)
+<BR>
+<P>[*] <A HREF="http://www.cs.washington.edu/homes/savage/">http://www.cs.washington.edu/homes/savage/</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Understanding the Performance of TCP Pacing,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Amit Aggarwal, Stefan Savage, and Tom Anderson,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Proceedings of the 2000 IEEE Infocom Conference, Tel-Aviv,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Israel, March, 2000.
+<BR>
+<P><P><EM>&gt; Such a product would likely end up becoming self-selective in its market.
+</EM><BR>
+<EM>&gt; Maybe technically the product can reorder data all it wants, but the market
+</EM><BR>
+<EM>&gt; won't want a product that does it.
+</EM><BR>
+<P>if reordering resulting from parallelism leads to a product with
+<BR>
+faster overall throughput, there's some incentive to deploy the
+<BR>
+product and then related improvements to TCP.
+<BR>
+<P>(people buy computers based on MHz ratings; they'll buy networking
+<BR>
+&nbsp;hardware based on Gbps throughput. What the actual performance
+<BR>
+&nbsp;_seen_ turns out to be is almost secondary...)
+<BR>
+<P>L. 
+<BR>
+<P>&lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;Pine.GSO.4.21.0006121501230.19478-100000@petra.ee.surrey.ac.uk&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2133.html">Greg Minshall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2131.html">Mika.Liljeberg@nokia.com: "RE: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2123.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2135.html">Jamal Hadi Salim: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2135.html">Jamal Hadi Salim: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2138.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2132">[ date ]</A>
+<A HREF="index.html#2132">[ thread ]</A>
+<A HREF="subject.html#2132">[ subject ]</A>
+<A HREF="author.html#2132">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

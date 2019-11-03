@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="kuznet@ms2.inr.ac.ru (kuznet@ms2.inr.ac.ru)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Thu Jun 29 13:16:49 2000" -->
+<!-- isoreceived="20000629171649" -->
+<!-- sent="Thu, 29 Jun 2000 21:01:47 +0400 (MSK DST)" -->
+<!-- isosent="20000629170147" -->
+<!-- name="kuznet@ms2.inr.ac.ru" -->
+<!-- email="kuznet@ms2.inr.ac.ru" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="200006291701.VAA15375@ms2.inr.ac.ru" -->
+<!-- inreplyto="395A536F.7CA35A6E@Novell.COM" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;200006291701.VAA15375@ms2.inr.ac.ru&gt;"><EM>kuznet@ms2.inr.ac.ru</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 29 2000 - 13:01:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2192.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2190.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2191">[ date ]</A>
+<A HREF="index.html#2191">[ thread ]</A>
+<A HREF="subject.html#2191">[ subject ]</A>
+<A HREF="author.html#2191">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello!
+<BR>
+<P><EM>&gt; I am not sure what you mean by &quot;not accepted due to the first rule&quot;.
+</EM><BR>
+<P>Seems, I understand source of misunderstanding. 8)
+<BR>
+<P>That guy, who fixed RFC algorithm old days, forgot to add one level
+<BR>
+of parenthesis in hurry. 8)
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (((tiflags &amp; TH_ACK) &amp;&amp; SEQ_LT(tp-&gt;snd_wl1, ti-&gt;ti_seq)) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;snd_wl1 == ti-&gt;ti_seq &amp;&amp; (SEQ_LT(tp-&gt;snd_wl2, ti-&gt;ti_ack)) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;snd_wl2 == ti-&gt;ti_ack &amp;&amp; tiwin &gt; tp-&gt;snd_wnd))) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^
+<BR>
+<P>Well, accepting window update with arbitrary seq _only_ from dupacks,
+<BR>
+but ignoring it for real good acks is evident misprint. 8)
+<BR>
+<P>It does not change anything but adding more mess.
+<BR>
+<P><P>So, do you see something wrong in:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if ((tiflags &amp; TH_ACK) &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SEQ_LT(tp-&gt;snd_una, ti-&gt;ti_ack) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEQ_LT(tp-&gt;snd_wl1, ti-&gt;ti_seq) ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tp-&gt;snd_wl1==ti-&gt;ti_seq &amp;&amp; tiwin &gt; tp-&gt;snd_wnd)))
+<BR>
+<P>I.e. 
+<BR>
+<P>1. new ACK always updates window.
+<BR>
+2. dupack updates window, if it advances SND.WL1,
+<BR>
+&nbsp;&nbsp;&nbsp;or its SEG.SEQ==SND.WL1, but advertised window increases.
+<BR>
+<P>SND.WL2 is not used, it is ==SND.UNA.
+<BR>
+<P>Alexey
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2192.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2190.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2196.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2191">[ date ]</A>
+<A HREF="index.html#2191">[ thread ]</A>
+<A HREF="subject.html#2191">[ subject ]</A>
+<A HREF="author.html#2191">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

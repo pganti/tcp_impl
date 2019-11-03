@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Initial TCP seq numbers - di</TITLE>
+<META NAME="Author" CONTENT="Manish Patel(x67071) (mpatel@BayNetworks.COM)">
+<META NAME="Subject" CONTENT="Re: Initial TCP seq numbers - dispute w/ Microsoft">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Initial TCP seq numbers - dispute w/ Microsoft</H1>
+<!-- received="Mon Jan  4 15:30:35 1999" -->
+<!-- isoreceived="19990104203035" -->
+<!-- sent="Mon, 04 Jan 1999 15:24:44 -0500" -->
+<!-- isosent="19990104202444" -->
+<!-- name="Manish Patel(x67071)" -->
+<!-- email="mpatel@BayNetworks.COM" -->
+<!-- subject="Re: Initial TCP seq numbers - dispute w/ Microsoft" -->
+<!-- id="3691238C.695678E2@baynetworks.com" -->
+<!-- inreplyto="m0zxG5U-0007U1C@the-village.bc.nu" -->
+<STRONG>From:</STRONG> Manish Patel(x67071) (<A HREF="mailto:mpatel@BayNetworks.COM?Subject=Re:%20Initial%20TCP%20seq%20numbers%20-%20dispute%20w/%20Microsoft&In-Reply-To=&lt;3691238C.695678E2@baynetworks.com&gt;"><EM>mpatel@BayNetworks.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 15:24:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1433.html">Alan Cox: "SACK behaviour"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1437.html">Vijay G. Bharadwaj: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1434">[ date ]</A>
+<A HREF="index.html#1434">[ thread ]</A>
+<A HREF="subject.html#1434">[ subject ]</A>
+<A HREF="author.html#1434">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Alan Cox wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Apparently, if the connection uses the same ports and IP addresses, it
+</EM><BR>
+<EM>&gt; &gt; should not
+</EM><BR>
+<EM>&gt; &gt; matter if the sequence number is recycled because the previous control
+</EM><BR>
+<EM>&gt; &gt; block is
+</EM><BR>
+<EM>&gt; &gt; already gone and it does not remember to create any conflict.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P><P><EM>&gt; Common misconception.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The 2 minute drain time means all segments from the start of the wait time
+</EM><BR>
+<EM>&gt; have left the network, it does not mean all control blocks are dead.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I agree that if the segments from the previous session arrives
+<BR>
+after new connection(with same socket pair) starts can cause the
+<BR>
+problem.
+<BR>
+But, there should not be any duplicate control block. If the new
+<BR>
+connection is established using the same port and IP address,
+<BR>
+the old block must be dead, otherwise the new connection must be using
+<BR>
+different port or should be rejected if compels to use the same port.
+<BR>
+<P>Please see my comments below and advise.
+<BR>
+<P><P><EM>&gt; Alan
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P><P><EM>&gt; In a packet trace of a recent session with a Microsoft server and a client, I saw a TCP session finish normally with a FIN/ACK.  About a minute later, the client requested a new session, during which it pulled a data file from the server.  The client and server used the same TCP ports as in the previous session.  The server indicated in its  SYN ACK a TCP sequence number of 2+million LOWER than the sequence number it had used to send data at the end of the previous session.  The rest of the sequ
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Microsoft asserts this behavior is okay.  In fact, they tell me that in the near future they will be selecting initial TCP sequence numbers at random as a technique to thwart hijacking of TCP sessions.   Microsoft asserts that there is no regard in the client for the prior session TCP once the FINish process completes successfully.  I don't find support for this position in the RFC's; I find the reverse.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is Microsoft lucky that it works?  Are they non-compliant, but in a benign way?
+</EM><BR>
+<EM>&gt; Am I misunderstanding the requirement for increasing TCP sequence numbers for new sessions?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seems like it works because receiving FIN and closing gracefully
+<BR>
+reflects that
+<BR>
+there is no delayed segment from previous connection.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;How many possibilities that a segment from the old connection would
+<BR>
+arrive?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. The packet is lost in the network or delayed by a great time.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Receiving end will not process FIN an OSS)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. The ack for that packet got lost.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Sending end will not forward window and/or send FIN)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;So, in any case the the old connection would not have closed gracefully
+<BR>
+and the
+<BR>
+new connection would have different socket.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lower sequence number could only be a problem in case of RST, where
+<BR>
+there is a
+<BR>
+possibility of previous session segment arrival.
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If above is not true, let me know.
+<BR>
+<P>Thanks,
+<BR>
+<P><P><P><PRE>
+-- 
+__            __
+__Manish Patel__
+ ____________________________________________________________________
+| mailto:<A HREF="mailto:mpatel@baynetworks.com?Subject=Re:%20Initial%20TCP%20seq%20numbers%20-%20dispute%20w/%20Microsoft&In-Reply-To=&lt;3691238C.695678E2@baynetworks.com&gt;">mpatel@baynetworks.com</A> (978) 916 7071    _____            ® |
+|____/|\__/|\_______/|\_______/|\___/|____/|____/|     |___/|___/|___|
+    / | \/ | \     / |_\     / | \ / |   / |   /_|___ _|  / |__/ |
+   /  /\/  /\/|   / |  /|   /  /\ /  /  /  /   |    /|   / |  /  /
+  /  / /  / / |  /  |_/ |  /  /  /  /  /  /   _|___/ |  /  |_/  /
+  | /  | /  | /  | /  | /  | /   | /   | /   |     | /  | /  | /
+  |/   |/   |/   |/   |/   |/    |/    |/    |_____|/   |/   |/
+ ____________________________________________________________________
+| Bay Networks Inc., 600 Technology Park, Billerica, MA 01821.       |
+|____________________________________________________________________|
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1433.html">Alan Cox: "SACK behaviour"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1430.html">Alan Cox: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1435.html">Craig Partridge: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1437.html">Vijay G. Bharadwaj: "Re: Initial TCP seq numbers - dispute w/ Microsoft"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1434">[ date ]</A>
+<A HREF="index.html#1434">[ thread ]</A>
+<A HREF="subject.html#1434">[ subject ]</A>
+<A HREF="author.html#1434">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

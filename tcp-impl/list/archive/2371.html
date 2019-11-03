@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Thu Sep 21 10:39:14 2000" -->
+<!-- isoreceived="20000921143914" -->
+<!-- sent="Thu, 21 Sep 2000 08:31:05 -0600 (MDT)" -->
+<!-- isosent="20000921143105" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="200009211431.e8LEV5M26131@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009211431.e8LEV5M26131@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 21 2000 - 10:31:05 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2370.html">Dave Hudson: "Re: Dynamic Network Architecture"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2374.html">der Mouse : "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2371">[ date ]</A>
+<A HREF="index.html#2371">[ thread ]</A>
+<A HREF="subject.html#2371">[ subject ]</A>
+<A HREF="author.html#2371">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Charles Esson&quot; &lt;<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009211431.e8LEV5M26131@calcite.rhyolite.com&gt;">charlese@cvs.com.au</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; If you don't see the syn I think it is fair enough to say we don't see the
+</EM><BR>
+<EM>&gt; rest of the session.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; So it's a one sided conversation hoping that the server is lisening.
+</EM><BR>
+<P>Yes, it might be an rsh command that does something like
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;echo badguy::0:0:&amp;:/:/bin/sh &gt;&gt; /etc/passwd
+<BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; If I am close enough to guess the clock value surly I am not on the wrong
+</EM><BR>
+<EM>&gt; side of a router; or are we to assume a deterministic router.
+</EM><BR>
+<P>Contrary to one claim in this thread, even being on the same Ethernet
+<BR>
+segment as the target is *not* sufficient to predict or even determine
+<BR>
+the time at which the target receives your packets to closer than several
+<BR>
+dozen microseconds.  You can get to several dozen microseconds only in
+<BR>
+exceptional cases where both the target and the attack machine have
+<BR>
+unusually good clocks and clock synchronization software.  Consider
+<BR>
+that a change in relative dates of 10 usec per second needs crystals
+<BR>
+differing by only one part in 10**5.  I've known expensive, commercial
+<BR>
+systems with clocks worse than one part in 10**4 without NTP, `timed`,
+<BR>
+or other network time protocols, and not much better than 10**5 with
+<BR>
+time protocols and kernel software adjustments to the crystal's frequency.
+<BR>
+<P><EM>&gt; I'm sorry but if I am going to do this I am going to do it where I can see
+</EM><BR>
+<EM>&gt; the reply and I aren't going to bother guessing the ISN. I am going to wait
+</EM><BR>
+<EM>&gt; for the server to give it to me; they tend to do that.
+</EM><BR>
+<P>As I've said several times before, if you're where you can see the reply
+<BR>
+(e.g. on the same segment), then there are likely to be other, much easier
+<BR>
+attacks available.  For example, if you can see ISN's to attack rlogin
+<BR>
+and rsh, then you can probably also see cleartext rlogin passwords.
+<BR>
+<P>On the other hand, guessing ISN's is sometimes called the Mitnick Attack,
+<BR>
+because its use from afar is not theoretical.  
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009211431.e8LEV5M26131@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2372.html">Bob Braden: "Re: Dynamic Network Architecture"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2370.html">Dave Hudson: "Re: Dynamic Network Architecture"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2374.html">der Mouse : "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2371">[ date ]</A>
+<A HREF="index.html#2371">[ thread ]</A>
+<A HREF="subject.html#2371">[ subject ]</A>
+<A HREF="author.html#2371">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Thu Sep 21 2000 - 10:39:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

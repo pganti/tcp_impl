@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: more on TCP buffering</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: more on TCP buffering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: more on TCP buffering</H1>
+<!-- received="Fri Mar 21 17:07:06 1997" -->
+<!-- isoreceived="19970321220706" -->
+<!-- sent="Fri, 21 Mar 1997 17:00:39 -0800" -->
+<!-- isosent="19970322010039" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: more on TCP buffering" -->
+<!-- id="199703220100.AA17678@ash.isi.edu" -->
+<!-- inreplyto="more on TCP buffering" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703220100.AA17678@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 20:00:39 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0210.html">Curtis Villamizar: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0208.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#209">[ date ]</A>
+<A HREF="index.html#209">[ thread ]</A>
+<A HREF="subject.html#209">[ subject ]</A>
+<A HREF="author.html#209">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Thomas Narten &lt;<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703220100.AA17678@ash.isi.edu&gt;">narten@raleigh.ibm.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; It seems like fixing the PSH (push) bit is a more direct fix, which
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; too is not specified sufficiently right now. That bit is intended
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; to flush buffers out at the sender, and force received data up
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; to the application at the receiver. Unfortunately, the API doesn't
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; specify a preemptive callback or interrupt at the receiver when PSH
+</EM><BR>
+<EM>&gt;&gt;&gt;&gt; is received.
+</EM><BR>
+<P><EM>&gt;&gt;&gt;I think you read a bit much into PSH. PSH means tell the TCP
+</EM><BR>
+<EM>&gt;&gt;&gt;implementations that they are no longer allowed to continue holding
+</EM><BR>
+<EM>&gt;&gt;&gt;queued data (at the sender or receiver) in the hopes that by delaying,
+</EM><BR>
+<EM>&gt;&gt;&gt;more will come along shortly (making subsequent transfer - sender to
+</EM><BR>
+<EM>&gt;&gt;&gt;receiver, receiver to application - more efficient). I do not
+</EM><BR>
+<P>RFC1122 says that
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP MAY implement PUSH flags on SEND calls.  If PUSH flags
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are not implemented, then the sending TCP: (1) must not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer data indefinitely, and (2) MUST set the PSH bit in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the last buffered segment (i.e., when there is no more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queued data to be sent).
+<BR>
+<P>BSD and NET/3 implementations do the latter ONLY.
+<BR>
+<P><EM>&gt; I don't see the issue at all. Where is ambiguity in the spec? Which
+</EM><BR>
+<P>The &quot;old timers&quot; I'm talking about would claim that section (page 83)
+<BR>
+of RFC1122 talking about sending PSH up to the application:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The discussion in RFC-793 on pages 48, 50, and 74
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erroneously implies that a received PSH flag must be passed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to the application layer.  Passing a received PSH flag to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the application layer is now OPTIONAL.
+<BR>
+<P>Granted, whether this is by call-back or as a read-only bit, it's not
+<BR>
+quite what 'urgent' pointers do. I want PSH to be an in-band version of
+<BR>
+URG, which would allow signalling for client/server applciations. URG
+<BR>
+is useful more for OOB interrupts, like 'cancel'.
+<BR>
+<P>(in fact, persistent HTTP/TCP would do better to use
+<BR>
+URG for cancel than to RST the connection).
+<BR>
+<P>The ambiguity is that RFC1122 states (page 83) that
+<BR>
+PSH may or may not be implemented at the SEND interface, and
+<BR>
+that it also states that (in DISCUSSION)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generally, an interactive application protocol must set
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the PUSH flag at least in the last SEND call in each
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command or response sequence.  A bulk transfer protocol
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;like FTP should set the PUSH flag on the last segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of a file or when necessary to prevent buffer deadlock.
+<BR>
+<P>The problem is that current implementations lack this interface, but
+<BR>
+do not preclude their use for interactive applications.
+<BR>
+<P>Any implementation that is intended to support interactive use 
+<BR>
+(it appears) _must_ implement an API access to the PSH bit at 
+<BR>
+the SEND.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20more%20on%20TCP%20buffering&In-Reply-To=&lt;199703220100.AA17678@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0210.html">Curtis Villamizar: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0208.html">Alan Cox: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0187.html">touch@ISI.EDU: "more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#209">[ date ]</A>
+<A HREF="index.html#209">[ thread ]</A>
+<A HREF="subject.html#209">[ subject ]</A>
+<A HREF="author.html#209">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Mika.Liljeberg@nokia.com (Mika.Liljeberg@nokia.com)">
+<META NAME="Subject" CONTENT="RE: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 07:15:57 2000" -->
+<!-- isoreceived="20000612111557" -->
+<!-- sent="Mon, 12 Jun 2000 14:01:24 +0300" -->
+<!-- isosent="20000612110124" -->
+<!-- name="Mika.Liljeberg@nokia.com" -->
+<!-- email="Mika.Liljeberg@nokia.com" -->
+<!-- subject="RE: network device and tcp-flow packet ordering" -->
+<!-- id="593F7F3472A5D211B99B0008C7EAA08A034A85B7@eseis02nok" -->
+<!-- inreplyto="network device and tcp-flow packet ordering" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Mika.Liljeberg@nokia.com?Subject=RE:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;593F7F3472A5D211B99B0008C7EAA08A034A85B7@eseis02nok&gt;"><EM>Mika.Liljeberg@nokia.com</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 07:01:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2132.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2133.html">Greg Minshall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2131">[ date ]</A>
+<A HREF="index.html#2131">[ thread ]</A>
+<A HREF="subject.html#2131">[ subject ]</A>
+<A HREF="author.html#2131">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>I am thinking that a sender could treat retransmission timout
+<BR>
+as a fast retransmit if it has received at least one dupack
+<BR>
+in the meantime. If there are no dupacks, congestion is the
+<BR>
+probable cause for the timeout. However, if the sender is
+<BR>
+receiving dupacks something must be getting through. The sender
+<BR>
+could still do a normal fast retransmit on 3rd dupack as usual.
+<BR>
+<P>This would be a very simple change to existing implementations
+<BR>
+and, assuming reasonable window sizes, would probably increase
+<BR>
+fast retransmit opportunities considerably. No hard data on this
+<BR>
+though.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MikaL
+<BR>
+<P><P><EM>&gt; &gt; increase in false retransmits.  It also works for the 
+</EM><BR>
+<EM>&gt; *sender* to wait
+</EM><BR>
+<EM>&gt; &gt; 20 msec before entering fast retransmission on the 2nd dup 
+</EM><BR>
+<EM>&gt; ack, and in
+</EM><BR>
+<EM>&gt; &gt; that case you only need to deploy the change on the sender side.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; that's an interesting observation, because the sender knows the
+</EM><BR>
+<EM>&gt; RTT already (not accurately, though). So the heuristic could 
+</EM><BR>
+<EM>&gt; be something
+</EM><BR>
+<EM>&gt; like &quot;do a fast retransmit and assume congestion after N dupacks
+</EM><BR>
+<EM>&gt; _or_ 1 RTT from the last in-sequence ack, whichever comes first&quot; ?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	cheers
+</EM><BR>
+<EM>&gt; 	luigi
+</EM><BR>
+<EM>&gt; -----------------------------------+--------------------------
+</EM><BR>
+<EM>&gt; -----------
+</EM><BR>
+<EM>&gt;   Luigi RIZZO, <A HREF="mailto:luigi@iet.unipi.it?Subject=RE:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;593F7F3472A5D211B99B0008C7EAA08A034A85B7@eseis02nok&gt;">luigi@iet.unipi.it</A>  . Dip. di Ing. dell'Informazione
+</EM><BR>
+<EM>&gt;   <A HREF="http://www.iet.unipi.it/~luigi/">http://www.iet.unipi.it/~luigi/</A>  . Universita` di Pisa
+</EM><BR>
+<EM>&gt;   TEL/FAX: +39-050-568.533/522     . via Diotisalvi 2, 56126 
+</EM><BR>
+<EM>&gt; PISA (Italy)
+</EM><BR>
+<EM>&gt;   Mobile   +39-347-0373137
+</EM><BR>
+<EM>&gt; -----------------------------------+--------------------------
+</EM><BR>
+<EM>&gt; -----------
+</EM><BR>
+<EM>&gt; &gt; 		Vern
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2132.html">Lloyd Wood: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2133.html">Greg Minshall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2131">[ date ]</A>
+<A HREF="index.html#2131">[ thread ]</A>
+<A HREF="subject.html#2131">[ subject ]</A>
+<A HREF="author.html#2131">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

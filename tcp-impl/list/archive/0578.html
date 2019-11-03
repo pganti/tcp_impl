@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re:  ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  ICMP must fragment and IPsec</H1>
+<!-- received="Wed Jun 25 11:42:43 1997" -->
+<!-- isoreceived="19970625154243" -->
+<!-- sent="Wed, 25 Jun 1997 13:40:55 -0500 (CDT)" -->
+<!-- isosent="19970625184055" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re:  ICMP must fragment and IPsec" -->
+<!-- id="199706251840.NAA06674@frantic.BSDI.COM" -->
+<!-- inreplyto=" ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jun 25 1997 - 14:40:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0577.html">Greg Miller: "Re: Input Needed - Testing Tools for TCP..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#578">[ date ]</A>
+<A HREF="index.html#578">[ thread ]</A>
+<A HREF="subject.html#578">[ subject ]</A>
+<A HREF="author.html#578">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Mon Jun 23 10:16:21 1997
+</EM><BR>
+<EM>&gt; Date: Mon, 23 Jun 1997 09:04:58 -0600
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:TCP-IMPL@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">TCP-IMPL@cthulhu.engr.sgi.com</A>, <A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">VOLZ@PROCESS.COM</A> (Bernie Volz)
+</EM><BR>
+<EM>&gt; Subject: Re:  ICMP must fragment and IPsec
+</EM><BR>
+<EM>&gt; Precedence: bulk
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: <A HREF="mailto:VOLZ@PROCESS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">VOLZ@PROCESS.COM</A> (Bernie Volz)
+</EM><BR>
+<EM>&gt; &gt; To: vjs, <A HREF="mailto:TCP-IMPL@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">TCP-IMPL@cthulhu.engr.sgi.com</A>, <A HREF="mailto:IPSEC@TIS.COM?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">IPSEC@TIS.COM</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; (I'm sending only to the TCP-IMPL list)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; Please don't confuse MSS with MTU. The Maximum Segment Size has
+</EM><BR>
+<EM>&gt; &gt; *NOTHING* to do with MTU. The MSS reflects what the maximum segment
+</EM><BR>
+<EM>&gt; &gt; size a TCP implementation is willing and able to receive and that
+</EM><BR>
+<EM>&gt; &gt; has nothing to do with the MTU of an interface.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; For example ... if MSS was MTU, what would happen if a multi-homed host
+</EM><BR>
+<EM>&gt; &gt; with an Ethernet and FDDI interface switched a connection from Ethernet
+</EM><BR>
+<EM>&gt; &gt; (w/MTU of 1500) to FDDI (w/MTU of 4352). You would *NOT* have wanted TCP
+</EM><BR>
+<EM>&gt; &gt; to send an MSS with only 1500.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; On the contrary, please understand the meaning and use of the MSS, and
+</EM><BR>
+<EM>&gt; particularly the use of the MSS in preventing fragmentation.  If the
+</EM><BR>
+<EM>&gt; MSS were only the maximum TCP segment that you could reassemble from
+</EM><BR>
+<EM>&gt; IP fragments, then practically every system would request 64K.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If your TCP implementation follows the (at least de facto) standard,
+</EM><BR>
+<EM>&gt; you will use an MSS of 1500 if the interface your host used to send
+</EM><BR>
+<EM>&gt; its first packets for the TCP connection was the Ethernet interface.
+</EM><BR>
+<EM>&gt; Moreover, a case can be made in that if a routing change might ever
+</EM><BR>
+<EM>&gt; cause the TCP connection to switch from an intial choice of your FDDI
+</EM><BR>
+<EM>&gt; interface to the Ethernet interface, then you negotiate an MSS of 1500
+</EM><BR>
+<EM>&gt; in order to prevent fragmentation.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">vjs@sgi.com</A>
+</EM><BR>
+<P>Vernon,
+<BR>
+I disagree with you and agree with Bernie.  If you have both an
+<BR>
+FDDI and and ethernet interface, it makes sense to use an MSS of 4352,
+<BR>
+not 1500.  Then, if routing changes from the ethernet to the FDDI,
+<BR>
+the Path MTU code can discover the larger MTU.  But if you sent a
+<BR>
+1500 MSS, you're stuck.
+<BR>
+<P>Most systems should be able to send an MSS of 65535, but it is
+<BR>
+an optimization to use the MTU of the largest/outgoing interface.
+<BR>
+And in the bad old days, hosts weren't smart enough to use
+<BR>
+smaller packets when presented with a large MSS, so using the
+<BR>
+MTU of the outing interface made much more sense.  But in todays
+<BR>
+world, there's no reason to limit yourself to small MSS values.
+<BR>
+The biggest problem with PMTU is all the hosts that still stick
+<BR>
+in 576 in the MSS because the other host is not &quot;local&quot;.  Using
+<BR>
+1500 instead of 4352 when you have both FDDI and Ethernet is
+<BR>
+the same sort of problem, only not as severe.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706251840.NAA06674@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0577.html">Greg Miller: "Re: Input Needed - Testing Tools for TCP..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#578">[ date ]</A>
+<A HREF="index.html#578">[ thread ]</A>
+<A HREF="subject.html#578">[ subject ]</A>
+<A HREF="author.html#578">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

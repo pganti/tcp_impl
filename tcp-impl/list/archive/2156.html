@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Craig Partridge (craig@aland.bbn.com)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 09:20:19 2000" -->
+<!-- isoreceived="20000616132019" -->
+<!-- sent="Fri, 16 Jun 2000 09:14:24 -0400" -->
+<!-- isosent="20000616131424" -->
+<!-- name="Craig Partridge" -->
+<!-- email="craig@aland.bbn.com" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="200006161314.JAA22742@aland.bbn.com" -->
+<!-- inreplyto="3949A10F.F1847DD1@cvs.com.au" -->
+<STRONG>From:</STRONG> Craig Partridge (<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006161314.JAA22742@aland.bbn.com&gt;"><EM>craig@aland.bbn.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 09:14:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2157.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2155.html">Narsimharao Nagampalli: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2156">[ date ]</A>
+<A HREF="index.html#2156">[ thread ]</A>
+<A HREF="subject.html#2156">[ subject ]</A>
+<A HREF="author.html#2156">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:3949A10F.F1847DD1@cvs.com.au?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006161314.JAA22742@aland.bbn.com&gt;">3949A10F.F1847DD1@cvs.com.au</A>&gt;, Charles Esson writes:
+<BR>
+<P><EM>&gt;&lt;rant&gt;
+</EM><BR>
+<P>A fun rant and it has lots of things we could argue about.  But there is
+<BR>
+one point where I think I can shed some light (rather than just rant back :-)).
+<BR>
+<P><EM>&gt;If  you send packets in parallel surly it would be better to add a
+</EM><BR>
+<EM>&gt;sequence number  when dividing the input stream up, then use and remove
+</EM><BR>
+<EM>&gt;that sequence number when putting it back together, assuming you have
+</EM><BR>
+<EM>&gt;control over how the stream is put back together.
+</EM><BR>
+<P>The problem is more much more complex than simply ordering.  Suppose we
+<BR>
+did this -- just put a sequence number on every packet at the link level
+<BR>
+when we went parallel, and then put it back together at the next hop.  (You
+<BR>
+can do this analysis for reordering at the end, too, just simpler this way).
+<BR>
+<P>OK, so consider the following situation:
+<BR>
+<P><P>Single link A -&gt; Splitter -&gt; 2 parallel links -&gt; Ordering Node -&gt; Single Link B
+<BR>
+<P>Further suppose that single link A is very fast (much much faster than the
+<BR>
+downstream links).  This assumption just makes the analysis more clear (you
+<BR>
+can have A be closer in speed).  Second, assume the rate of Link B is
+<BR>
+R, and the rate of the 2 parallel links is R/2 each (so R in aggregate).
+<BR>
+<P>Now imagine that you receive a packet stream of the form, one maximum size
+<BR>
+packet, called M, followed by 1 minimum size packet, called m.
+<BR>
+<P>Assume we put sequence numbers on each packet but that their cost is
+<BR>
+negligible.
+<BR>
+<P>Now, look at the link performance.
+<BR>
+<P>At the splitter, we get M, and start sending it on one of the parallel lines.
+<BR>
+Ignoring delay, M will take time (2M/R) to transmit.  Packet m arrives
+<BR>
+almost immediately after M (recall link A is fast) and gets sent on the
+<BR>
+second line.  Packet m takes time (2m/R).  So packet m arrives first.
+<BR>
+Indeed, since m is the minimum packet size and M is the max, the last
+<BR>
+bit of m arrives around the time the m-th bit of M arrives.
+<BR>
+<P>We want to put packets back in order before sending on link B.  So packet
+<BR>
+m has to wait and link B is left idle.  The idle time is the remaining
+<BR>
+time for packet M to arrive (which is roughly ((2M-m)/R)).  At that point
+<BR>
+we have all of M, and can send M and then m along.
+<BR>
+<P>It is useful to figure out how long it takes to send packet m from the time
+<BR>
+it enters the splitter until the time it leaves the ordering node.
+<BR>
+<P>If the parallel links were one single link, it would take time (M+m)/R to send
+<BR>
+m, because it has to wait for M to serialize and then itself.    But because
+<BR>
+we've gone parallel AND choose to delay m until M arrives to send in order,
+<BR>
+the time is (3M+m)/R.  So it takes roughly THREE times as long to get m
+<BR>
+from one end to the other, all because we put sequence numbers on.
+<BR>
+<P>The exact cost varies -- the key point here is not so much the time delay
+<BR>
+as the fact that the splitter has data (packet m) which is not being sent
+<BR>
+while it waits for packet M to arrive.  Unused bits are like unused
+<BR>
+hotel room nights: you can't reuse them and they increase the overhead.
+<BR>
+<P>That's why most people don't like simple sequence numbers for maintaining
+<BR>
+packet order.
+<BR>
+<P>Craig
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2157.html">Nabil Seddigh: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2155.html">Narsimharao Nagampalli: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2152.html">Charles Esson: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2154.html">Jamal Hadi Salim: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2156">[ date ]</A>
+<A HREF="index.html#2156">[ thread ]</A>
+<A HREF="subject.html#2156">[ subject ]</A>
+<A HREF="author.html#2156">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

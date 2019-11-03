@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Intentional Host Reordering</TITLE>
+<META NAME="Author" CONTENT="Bob Braden (braden@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Intentional Host Reordering of TCP Fragments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Intentional Host Reordering of TCP Fragments</H1>
+<!-- received="Fri Jun 16 16:45:39 2000" -->
+<!-- isoreceived="20000616204539" -->
+<!-- sent="Fri, 16 Jun 2000 20:37:45 GMT" -->
+<!-- isosent="20000616203745" -->
+<!-- name="Bob Braden" -->
+<!-- email="braden@ISI.EDU" -->
+<!-- subject="Re: Intentional Host Reordering of TCP Fragments" -->
+<!-- id="200006162037.UAA00552@gra.isi.edu" -->
+<!-- inreplyto="Intentional Host Reordering of TCP Fragments" -->
+<STRONG>From:</STRONG> Bob Braden (<A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Intentional%20Host%20Reordering%20of%20TCP%20Fragments&In-Reply-To=&lt;200006162037.UAA00552@gra.isi.edu&gt;"><EM>braden@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 16 2000 - 16:37:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2165.html">Howard Berkey: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2163.html">kuznet@ms2.inr.ac.ru: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2164">[ date ]</A>
+<A HREF="index.html#2164">[ thread ]</A>
+<A HREF="subject.html#2164">[ subject ]</A>
+<A HREF="author.html#2164">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; I apologize, the word &quot;reordering&quot; applies to the cases
+<BR>
+&nbsp;&nbsp;*&gt; when some order ever existed. 8) There is no order for fragments,
+<BR>
+&nbsp;&nbsp;*&gt; but that one, which sending host generated.
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P>This statement is, at best, misleading.  Of course there is a natural
+<BR>
+order for IP fragments, big-endian like all other network transmission!
+<BR>
+<P>It seems curious to me that an OS can create the fragments in reverse
+<BR>
+order without having all the segment in a buffer at one time, since
+<BR>
+applications certainly do not deliver bytes to the kernel in
+<BR>
+reverse order.  And if they are all there at one time, you can
+<BR>
+compute the checksum over it.  Oh, well.
+<BR>
+<P>The Linux approximation to a trailing checksum is only the latest
+<BR>
+skirmish in the long-running war over whether TCP trailing checksums
+<BR>
+would really help performance (assuming lack of brain damage in
+<BR>
+hardware and software).  One of the early battles in that war was the
+<BR>
+Berkeley trailer system (BSD was the Linux of the 1980s, remember?),
+<BR>
+and community consensus eventually killed it as a Bad Idea (see RFC
+<BR>
+1122 section 2.3.1).  The battle recurs every couple of years on some
+<BR>
+large mailing list.  No one is every convinced, but the consensus
+<BR>
+usually seems to emerge that TCP trailing checksums are not very
+<BR>
+useful for performance.
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; &gt; BTW, if you have an algorithm that allows you to do
+<BR>
+&nbsp;&nbsp;*&gt; &gt; 100% accurate Layer-4 classification (without caching) 
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 100% accurate algorithm, which classifies IP packets using keys
+<BR>
+&nbsp;&nbsp;*&gt; contained in payload, does not exist, cannot exist and must not exist.
+<BR>
+&nbsp;&nbsp;*&gt; It is in contradiction with basic principles of IP.
+<BR>
+<P>Yes. Protocols that need MF classification had better not do any IP
+<BR>
+fragmentation.  EG the Int-Serv specs say that explicitly, and they
+<BR>
+provide mechanisms to inform the sender of the E2E MTU so it can avoid
+<BR>
+fragmentation.
+<BR>
+<P>None of this has much to do with TCP, so this discussion is on
+<BR>
+the wrong list.
+<BR>
+<P>Bob Braden
+<BR>
+<P>&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; If such pseudo-router really wants to do this, it must:
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; 1. Be sure that no other paths from the source to the destination exist.
+<BR>
+&nbsp;&nbsp;*&gt; 2. Gather all the fragments before doing any decisions. The situation,
+<BR>
+&nbsp;&nbsp;*&gt;    when different fragments get different QoS must be excluded
+<BR>
+&nbsp;&nbsp;*&gt;    __completely__, otherwise this QoS loses a sense.
+<BR>
+&nbsp;&nbsp;*&gt;    BTW, moving closer to the subject, only after this it should
+<BR>
+&nbsp;&nbsp;*&gt;    issue them in the same order, which they were received in. 8)8)8)
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+&nbsp;&nbsp;*&gt; Alexey
+<BR>
+&nbsp;&nbsp;*&gt; 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2165.html">Howard Berkey: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2163.html">kuznet@ms2.inr.ac.ru: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2150.html">Nabil Seddigh: "Intentional Host Reordering of TCP Fragments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2167.html">Alan Cox: "Re: Intentional Host Reordering of TCP Fragments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2164">[ date ]</A>
+<A HREF="index.html#2164">[ thread ]</A>
+<A HREF="subject.html#2164">[ subject ]</A>
+<A HREF="author.html#2164">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

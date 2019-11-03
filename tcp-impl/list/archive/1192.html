@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revision RFC 2001 (draft-iet</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)</H1>
+<!-- received="Sat Aug  8 13:22:36 1998" -->
+<!-- isoreceived="19980808172236" -->
+<!-- sent="Sat, 08 Aug 1998 16:21:05 -0400" -->
+<!-- isosent="19980808202105" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<!-- id="199808082021.QAA03488@guns.lerc.nasa.gov" -->
+<!-- inreplyto="revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20revision%20RFC%202001%20(draft-ietf-tcpimpl-cong-control-00.txt)&In-Reply-To=&lt;199808082021.QAA03488@guns.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Aug 08 1998 - 16:21:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1193.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-poduri-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1191.html">Kacheong Poon: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1182.html">Vern Paxson: "revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1198.html">Matt Mathis: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1198.html">Matt Mathis: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1192">[ date ]</A>
+<A HREF="index.html#1192">[ thread ]</A>
+<A HREF="subject.html#1192">[ subject ]</A>
+<A HREF="author.html#1192">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+KC-
+<BR>
+<P>Thanks for the note.  This is all my fault.  Part of it is the
+<BR>
+wording, and part is a portion of the algorithm that was left out.  
+<BR>
+<P><EM>&gt;     B.  Instead of reducing cwnd to ssthresh upon receipt of the first
+</EM><BR>
+<EM>&gt;         non-duplicate ACK received (step 5), the sender should wait
+</EM><BR>
+<EM>&gt;         until an ACK covering send_high is received.  In addition, each
+</EM><BR>
+<EM>&gt;         duplicate ACK received should continue to artificially inflate
+</EM><BR>
+<EM>&gt;         cwnd by 1 MSS.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     C.  A non-duplicate ACK that does not cover send_high, followed by 3
+</EM><BR>
+<EM>&gt;         duplicate ACKs should not reduce ssthresh or cwnd but SHOULD
+</EM><BR>
+<EM>&gt;         trigger a retransmission.  A non-duplicate ACK that does not
+</EM><BR>
+<EM>&gt;         cover send_high SHOULD NOT cause any adjustment in cwnd.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Consider this case.  Both ssthresh and cwnd are 7*MSS.  Suppose
+</EM><BR>
+<EM>&gt; sender sends segments 1-6.  1 and 5 are dropped.  After getting 3
+</EM><BR>
+<EM>&gt; dup ACKs for segments 2-4, sender fast retransmits 1.  Ssthresh is
+</EM><BR>
+<EM>&gt; now 3*MSS and cwnd is set to 6*MSS.  Dup ACK for 6 is received and
+</EM><BR>
+<EM>&gt; cwnd is inflated to 7*MSS.  Thus one more segment, 7, can be sent.
+</EM><BR>
+<EM>&gt; This is fast recovery.  A non-dup ACK, for 1-4, is then received.
+</EM><BR>
+<EM>&gt; By B &amp; C, cwnd stays at 7*MSS.  By waiting in B, do you mean that
+</EM><BR>
+<EM>&gt; the sender should not send anything after getting this non-dup
+</EM><BR>
+<EM>&gt; ACK?
+</EM><BR>
+<P>In this case &quot;waiting&quot; means that cwnd should not be reduced to
+<BR>
+ssthresh until receiving the first non-dup ACK that also covers
+<BR>
+send_high.  The fast retransmit algorithm, as specified in the draft
+<BR>
+in steps 1 - 5 can cause multiple fast retransmits for a window of
+<BR>
+data.  This is not a problem, except that this also causes cwnd and
+<BR>
+ssthresh to be reduced multiple times.  So, what we are saying is,
+<BR>
+let multiple fast retransmits happen, but ssthresh and cwnd should
+<BR>
+be reduced once per &quot;loss event&quot;.  So, cwnd should not be reduced to
+<BR>
+ssthresh upon receipt of a non-dup ACK, but wait for the receipt of
+<BR>
+a non-dup ACK that also covers send_high to make the reduction.
+<BR>
+<P><EM>&gt; If fast recovery is not stopped, then sender can now send segments
+</EM><BR>
+<EM>&gt; 8-11. Is this burst considered harmful?  If cwnd stays the same
+</EM><BR>
+<EM>&gt; after getting a non-dup ACK for n segments that does not cover
+</EM><BR>
+<EM>&gt; send_high, TCP can send out n segments in a burst.  If we want to
+</EM><BR>
+<EM>&gt; follow the same idea behind fast recovery, cwnd can be reduced by
+</EM><BR>
+<EM>&gt; number of segments acked when a non-dup ACK is received.  Ssthresh
+</EM><BR>
+<EM>&gt; can stay the same.  After send_high is ack'ed, cwnd is set to
+</EM><BR>
+<EM>&gt; ssthresh and everything continues.  
+</EM><BR>
+<P>Exactly right.  That should be captured in the algorithm, but it is
+<BR>
+not.  If we don't reduce cwnd upon receipt of a partial ACK (non-dup
+<BR>
+ACK that doesnt cover send_high) we run the risk of injecting more
+<BR>
+data than appropriate into the network during recovery.  
+<BR>
+<P>Thanks,
+<BR>
+allman
+<BR>
+<P><P><PRE>
+---
+<A HREF="http://gigahertz.lerc.nasa.gov/~mallman/">http://gigahertz.lerc.nasa.gov/~mallman/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1193.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-poduri-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1191.html">Kacheong Poon: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1182.html">Vern Paxson: "revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1198.html">Matt Mathis: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1198.html">Matt Mathis: "Re: revision RFC 2001 (draft-ietf-tcpimpl-cong-control-00.txt)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1192">[ date ]</A>
+<A HREF="index.html#1192">[ thread ]</A>
+<A HREF="subject.html#1192">[ subject ]</A>
+<A HREF="author.html#1192">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

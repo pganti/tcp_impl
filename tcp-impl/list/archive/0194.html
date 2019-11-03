@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: PSH / &quot;Failure to retain ab</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="PSH / &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>PSH / &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Fri Mar 21 11:14:02 1997" -->
+<!-- isoreceived="19970321161402" -->
+<!-- sent="Fri, 21 Mar 1997 11:02:40 PST" -->
+<!-- isosent="19970321190240" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="PSH / &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703211902.LAA29226@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Fri, 21 Mar 1997 13:23:24 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703211902.LAA29226@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Mar 21 1997 - 14:02:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0195.html">Vern Paxson: "Re: Need slow start after idle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0200.html">Richard Fox: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0200.html">Richard Fox: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0214.html">Larry Backman: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0220.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0221.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0224.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0225.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0226.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#194">[ date ]</A>
+<A HREF="index.html#194">[ thread ]</A>
+<A HREF="subject.html#194">[ subject ]</A>
+<A HREF="author.html#194">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It looks like two separate threads have now merged into a hybrid.  Here's
+<BR>
+my take on untangling it.
+<BR>
+<P>One issue is the problem of senders not setting PSH even when they have no
+<BR>
+more data to send.  It appears the consensus is that that's simply broken,
+<BR>
+and should be documented as an implementation problem.
+<BR>
+<P>A quite separate issue arose when I floated the idea of amending the TCP
+<BR>
+spec so that receivers MUST NOT routinely discard above-sequence data,
+<BR>
+rather than SHOULD NOT.  This led to interesting discussion of scenarios in
+<BR>
+which, due to memory constraints, the receiver might need to discard
+<BR>
+above-sequence data, and that has evolved into discussion of whether it's
+<BR>
+okay to shrink the offered window, instead of advertising more window than
+<BR>
+you actually have buffer.  This latter discussion looks like it may drift
+<BR>
+into general window-shrinking issues; that's fine, but I don't want to lose
+<BR>
+sight of the original question about failing to retain data.
+<BR>
+<P>So let me ask:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.  Do we have agreement over the sender-should-set-PSH issue,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that it's an implementation problem we should document?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.  Can we resolve the failure-to-retain by using wording that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receivers must not &quot;routinely&quot; fail to do so?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This come about because for the implementation where I observed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this, as far as it could tell it simply never bothered retaining
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence data, even though it had plenty of memory.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I suspect this was to simplify the implementation, but it seems
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clear that because of the bad congestion properties of this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;behavior, it should be fixed.  So I'm trying to separate 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;routinely&quot; doing so from &quot;occasionally&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Perhaps a different way to put it is that a TCP must have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mechanism in place that allows it to retain a full window's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worth of above-sequence data, without delving into specifics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of when that mechanism might not be exercised.
+<BR>
+<P>- Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0195.html">Vern Paxson: "Re: Need slow start after idle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0193.html">Thomas Narten: "Re: more on TCP buffering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0200.html">Richard Fox: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0200.html">Richard Fox: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0214.html">Larry Backman: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0220.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0221.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0224.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0225.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0226.html">William Allen Simpson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#194">[ date ]</A>
+<A HREF="index.html#194">[ thread ]</A>
+<A HREF="subject.html#194">[ subject ]</A>
+<A HREF="author.html#194">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

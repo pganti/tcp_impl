@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  ICMP must fragment and IPsec</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re:  ICMP must fragment and IPsec">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  ICMP must fragment and IPsec</H1>
+<!-- received="Sun Jun 22 16:36:09 1997" -->
+<!-- isoreceived="19970622203609" -->
+<!-- sent="Sun, 22 Jun 1997 17:33:49 -0600" -->
+<!-- isosent="19970622233349" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re:  ICMP must fragment and IPsec" -->
+<!-- id="199706222333.RAA23828@mica.denver.sgi.com" -->
+<!-- inreplyto=" ICMP must fragment and IPsec" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706222333.RAA23828@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jun 22 1997 - 19:33:49 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0558.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0578.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0588.html">touch@ISI.EDU: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0595.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0596.html">Larry Backman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0597.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#554">[ date ]</A>
+<A HREF="index.html#554">[ thread ]</A>
+<A HREF="subject.html#554">[ subject ]</A>
+<A HREF="author.html#554">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; To: <A HREF="mailto:ipsec@tis.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706222333.RAA23828@mica.denver.sgi.com&gt;">ipsec@tis.com</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706222333.RAA23828@mica.denver.sgi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; CC: vjs (Vernon Schryver)
+</EM><BR>
+<P><EM>&gt;   One way might be to have an ICMP or TCP option that requests the
+</EM><BR>
+<EM>&gt; other end to provide a response, giving the size of the largest
+</EM><BR>
+<EM>&gt; fragment received. This would be enclosed in the SA that the TCP data
+</EM><BR>
+<EM>&gt; is flowing in. This is in some sense a variation of the TCP MSS option.
+</EM><BR>
+<P>What is this &quot;other end&quot;?
+<BR>
+If talking to the other end of a TCP connection were enough, then the
+<BR>
+MSS negotiation would be enough and the Path MTU Discovery mechanism
+<BR>
+would not be needed.  In fact, the MSS negotiation is often not enough
+<BR>
+because a vast number of boxes between the ends might legitimately tell
+<BR>
+you to reduce your MTU.  The boxes in the path vary, as routes change.
+<BR>
+Not only might every router that might sometimes be in the path need to
+<BR>
+send a reduce-MTU indication of some kind, but so might bridges (e.g
+<BR>
+FDDI-Ethernet bridges that necessarily IP fragment, honor the DF bit,
+<BR>
+and send the ICMP message.)
+<BR>
+<P>The trouble with authenticating path MTU information (regardless of its
+<BR>
+form) is key distribution.  How would you get the right key to all of
+<BR>
+the boxes that might be in the path so that you could trust them?
+<BR>
+Given the implications for the security of the keys in sending them to
+<BR>
+every router in the net that might touch youyr packets, who would want
+<BR>
+to?  You can't just determine that a box is who it says it is.  After
+<BR>
+you authenticate box99.bad.guy.com as the sender of the ICMP error
+<BR>
+message telling you to use an MTU of 68, what do you do?
+<BR>
+<P>The only response to worries about path MTU messages, as well as source
+<BR>
+quences, port, net, and host Unreachables, and many other such
+<BR>
+indications is to be to cross your fingers and ignore any that would
+<BR>
+have serious consequences, such as an message telling you to use an MTU
+<BR>
+of 68.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt;   I can't think of many cases in the current deployed internet where
+</EM><BR>
+<EM>&gt; the MTU might change during a connection. Usually, the smallest MTU is
+</EM><BR>
+<EM>&gt; on the edges at that 28.8 (or that 2400 baud modem) link, and that
+</EM><BR>
+<EM>&gt; isn't likely to change suddendly. I can see mobileip possibly changing
+</EM><BR>
+<EM>&gt; this. If/when mobileip is deployed en-mass, it will definitely include
+</EM><BR>
+<EM>&gt; IPsec.
+</EM><BR>
+<P>There is a vast amount of topology on the edges, what with ATM (9180),
+<BR>
+FDDI (4352), Ethernet (1500 or 1492), PPP (256 to more than 1500), and
+<BR>
+Frame Relay.
+<BR>
+<P>Besides, if you stay away from the edges and in the center where routes
+<BR>
+don't flap among links with different MTU's, you may as well fix your
+<BR>
+MTU=1500 and forget Path MTU discover.
+<BR>
+<P><P><EM>&gt;   Getting Path MTU information back to the sending TCP is not an
+</EM><BR>
+<EM>&gt; unsurmountable challenge to VPN uses of IPsec, but it isn't easy.
+</EM><BR>
+<P>On the contrary, I think the key distribution problem is insurmountable
+<BR>
+and makes authenticated path MTU information impossible.  For example,
+<BR>
+look at any real life network and see how many FDDI-EThernet bridges
+<BR>
+there are that have not been given a IP address (manually or by bootp
+<BR>
+or DHCP) and so cannot send the ICMP message when the drop an packet
+<BR>
+with the DF bit set.  If people cannot manage to set their IP addresses
+<BR>
+(thus wrecking not only MTU discovery but SNMP), how can you expect
+<BR>
+them to do something useful about keys?
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20%20ICMP%20must%20fragment%20and%20IPsec&In-Reply-To=&lt;199706222333.RAA23828@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0555.html">Michael C. Richardson: "Re: ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0557.html">Bernie Volz: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0558.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0578.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0580.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0588.html">touch@ISI.EDU: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0595.html">David Borman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0596.html">Larry Backman: "Re:  ICMP must fragment and IPsec"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0597.html">Vernon Schryver: "Re:  ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#554">[ date ]</A>
+<A HREF="index.html#554">[ thread ]</A>
+<A HREF="subject.html#554">[ subject ]</A>
+<A HREF="author.html#554">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

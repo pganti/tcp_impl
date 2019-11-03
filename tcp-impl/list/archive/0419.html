@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP performance in asymmetri</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: TCP performance in asymmetric networks">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP performance in asymmetric networks</H1>
+<!-- received="Thu May 22 12:58:47 1997" -->
+<!-- isoreceived="19970522165847" -->
+<!-- sent="Thu, 22 May 1997 15:49:07 -0400" -->
+<!-- isosent="19970522194907" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: TCP performance in asymmetric networks" -->
+<!-- id="199705221949.PAA04093@brookfield.ans.net" -->
+<!-- inreplyto="c=US%a=_%p=hybrid%l=ENTERPRISE-970522184030Z-14563@enterprise.hybrid.com" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20TCP%20performance%20in%20asymmetric%20networks&In-Reply-To=&lt;199705221949.PAA04093@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 22 1997 - 15:49:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#419">[ date ]</A>
+<A HREF="index.html#419">[ thread ]</A>
+<A HREF="subject.html#419">[ subject ]</A>
+<A HREF="author.html#419">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;c=US%a=_%p=hybrid%l=ENTERPRISE-970522184030Z-14563@enterprise.hybri
+<BR>
+d.com&gt;, Subir Varma writes:
+<BR>
+<EM>&gt; Hello,
+</EM><BR>
+<EM>&gt;         Most of the emerging broadband access networks are asymmetric in
+</EM><BR>
+<EM>&gt; nature, i.e., high BW in the downstream direction and low BW in the
+</EM><BR>
+<EM>&gt; upstream direction. Examples include HFC, ADSL, Satellite, Wireless
+</EM><BR>
+<EM>&gt; access networks. In these systems, TCP Tahoe shows better performance as
+</EM><BR>
+<EM>&gt; compared to TCP Reno. This problem has been analyzed by Lakshman et.al.
+</EM><BR>
+<EM>&gt; in their paper &quot;Window based error recovery and flow control with a slow
+</EM><BR>
+<EM>&gt; ack channel: A study of TCP/IP performance&quot;, available at
+</EM><BR>
+<EM>&gt; <A HREF="http://tesla.csl.uiuc.edu/~madhow/publications.html">http://tesla.csl.uiuc.edu/~madhow/publications.html</A>. The reason for this
+</EM><BR>
+...
+<BR>
+<P>Put RED at the bottleneck and this becomes a non-issue and then Reno
+<BR>
+performs better.
+<BR>
+<P>There is a fix for TCP Reno that (me thinks) is now making it into the
+<BR>
+BSD variants (and so should be in SysV variants in 3-5 years and
+<BR>
+pee-cees in 5-10?).  With this Reno should also perform better.
+<BR>
+<P>SACK also fixes this.
+<BR>
+<P><EM>&gt; - What is the present state of migration of the major TCP stacks from
+</EM><BR>
+<EM>&gt; Tahoe to Reno? In light of the fact that more and more end systems will
+</EM><BR>
+<EM>&gt; be at the asymmetric links in the next few years, it may be a good idea
+</EM><BR>
+<EM>&gt; to continue with TCP Tahoe until SACK is available.
+</EM><BR>
+<P>That's sort of off topic, but...  An off the cuff (also somewhat glib
+<BR>
+and possibly wrong) estimate is: workstations - mostly Reno already
+<BR>
+though Solaris is something completely different (and a very poor
+<BR>
+performer), PCs and Macs - mostly still trying to figure out what fast
+<BR>
+retransmit does and why they need it (some notable exceptions, I think
+<BR>
+ftp software is well beyond this).  What matters is what the sender
+<BR>
+does, so for web access it matters what the server does.
+<BR>
+<P>So IMO if you do Reno, do the &quot;newreno&quot; fix until you can do SACK
+<BR>
+rather than fall back to Tahoe.
+<BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0418.html">Subir Varma: "TCP performance in asymmetric networks"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0420.html">Alan Cox: "Re: TCP performance in asymmetric networks"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#419">[ date ]</A>
+<A HREF="index.html#419">[ thread ]</A>
+<A HREF="subject.html#419">[ subject ]</A>
+<A HREF="author.html#419">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

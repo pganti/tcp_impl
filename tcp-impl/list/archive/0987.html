@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: I-D ACTION:draft-ietf-tcpimp</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt</H1>
+<!-- received="Sat Mar 14 11:50:49 1998" -->
+<!-- isoreceived="19980314165049" -->
+<!-- sent="Sat, 14 Mar 1998 11:49:14 PST" -->
+<!-- isosent="19980314194914" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt" -->
+<!-- id="199803141949.LAA16479@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Fri, 13 Mar 1998 08:38:59 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20I-D%20ACTION:draft-ietf-tcpimpl-prob-03.txt&In-Reply-To=&lt;199803141949.LAA16479@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 14 1998 - 14:49:14 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0988.html">Vern Paxson: "Re: I-D ACTION:draft-ietf-tcpimpl-needdoc-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0986.html">Vern Paxson: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0991.html">Mark Allman: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#987">[ date ]</A>
+<A HREF="index.html#987">[ thread ]</A>
+<A HREF="subject.html#987">[ subject ]</A>
+<A HREF="author.html#987">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here are the significant diffs between the latest version and the previous
+<BR>
+one.  One new problem was added, &quot;Failure to RST on close with data pending&quot;,
+<BR>
+per the discussion on the mailing list a couple of weeks ago.  The other
+<BR>
+changes are clarifications or correctness tweaks.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>@@ -126,7 +129,9 @@
+<BR>
+&nbsp;Why the problem is viewed as a problem.
+<BR>
+&nbsp;.IP &quot;Relevant RFCs&quot; 5
+<BR>
+&nbsp;Brief discussion of the RFCs with respect to which the problem is viewed
+<BR>
+-as an implementation error.
+<BR>
++as an implementation error.  These RFCs often qualify behavior using
+<BR>
++terms such as MUST, SHOULD, MAY, and others written capitalized.
+<BR>
++See RFC 2119 for the exact interpretation of these terms.
+<BR>
+&nbsp;.IP &quot;Trace file demonstrating the problem&quot; 5
+<BR>
+&nbsp;One or more ASCII trace files demonstrating the problem, if applicable.
+<BR>
+&nbsp;These may in the future be replaced with URLs to on-line traces.
+<BR>
+@@ -1118,26 +1131,24 @@
+<BR>
+&nbsp;10:27:55.09 D &gt; C: . ack 8 win 8754 (DF)
+<BR>
+&nbsp;.fi
+<BR>
+&nbsp;
+<BR>
++Here, Machine D sends a FIN with 40 bytes of data even
+<BR>
++before the original 10 octets have been acknowledged. This is
+<BR>
++correct behavior as it provides for the highest performance.
+<BR>
++
+<BR>
+&nbsp;.IP References 5
+<BR>
+&nbsp;This problem is documented in [Dawson97].
+<BR>
+&nbsp;
+<BR>
+&nbsp;.IP &quot;How to detect&quot; 5
+<BR>
+&nbsp;For implementations manifesting this problem, it shows up on a packet
+<BR>
+-trace.  If the connection is left idle, the keepalive probes will
+<BR>
+-arrive closer together than the two hour minimum.
+<BR>
++trace.
+<BR>
+&nbsp;
+<BR>
+-Here, Machine D sends a FIN with 40 bytes of data even
+<BR>
+-before the original 10 octets have been acknowledged. This is
+<BR>
+-correct behavoir as it provides for the highest performance.
+<BR>
+@@ -1146,8 +1157,8 @@
+<BR>
+&nbsp;
+<BR>
+&nbsp;.IP Significance 5
+<BR>
+&nbsp;Potentially serious for TCP endpoints that manage large numbers
+<BR>
+-of connections, due to exhaustion of memory available for managing
+<BR>
+-connection state.
+<BR>
++of connections, due to exhaustion of memory and/or process slots
+<BR>
++available for managing connection state.
+<BR>
+&nbsp;
+<BR>
+&nbsp;.IP Implications 5
+<BR>
+&nbsp;Failure to send the RST can lead to permanently hung TCP
+<BR>
+@@ -1263,10 +1272,189 @@
+<BR>
+&nbsp;client &gt; server D=80 S=59500 Rst Seq=597 Len=0 Win=0
+<BR>
+&nbsp;.fi
+<BR>
+&nbsp;
+<BR>
++&quot;client&quot; sends a number of RSTs, one in response to each incoming packet
+<BR>
++from &quot;server&quot;.  One might wonder why &quot;server&quot; keeps sending data packets
+<BR>
++after it has received a RST from &quot;client&quot;; the explanation is that &quot;server&quot;
+<BR>
++had already transmitted all five of the data packets before receiving
+<BR>
++the first RST from &quot;client&quot;, so it is too late to avoid transmitting them.
+<BR>
++
+<BR>
+&nbsp;.IP &quot;How to detect&quot; 5
+<BR>
+&nbsp;The problem can be detected by inspecting packet traces of a
+<BR>
+&nbsp;large, interrupted bulk transfer.
+<BR>
+&nbsp;
+<BR>
++.Pb
+<BR>
++.IP &quot;Name of Problem&quot; 5
+<BR>
++Failure to RST on close with data pending
+<BR>
++
+<BR>
++.IP Classification 5
+<BR>
++Resource management
+<BR>
++
+<BR>
++.IP Description 5
+<BR>
++When an application closes a connection in such a way that it
+<BR>
++can no longer read any received data, the TCP SHOULD, per
+<BR>
++section 4.2.2.13 of RFC 1122, send a RST if there is any unread
+<BR>
++received data, or if any new data is received. A TCP that fails
+<BR>
++to do so exhibits &quot;Failure to RST on close with data pending&quot;.
+<BR>
++
+<BR>
++Note that, for some TCPs, this situation can be caused by an
+<BR>
++application &quot;crashing&quot; while a peer is sending data.
+<BR>
++
+<BR>
++We have observed a number of TCPs that exhibit this problem.
+<BR>
++The problem is less serious if any subsequent data sent to the
+<BR>
++now-closed connection endpoint elicits a RST (see illustration
+<BR>
++below).
+<BR>
++
+<BR>
++.IP Significance 5
+<BR>
++This problem is most significant for endpoints that engage
+<BR>
++in large numbers of connections, as their ability to do so
+<BR>
++will be curtailed as they leak away resources.
+<BR>
++
+<BR>
++.IP Implications 5
+<BR>
++Failure to reset the connection can lead to permanently hung
+<BR>
++connections, in which the remote endpoint takes no further action
+<BR>
++to tear down the connection because it is waiting on the local TCP
+<BR>
++to first take some action.  This is particularly the case if the
+<BR>
++local TCP also allows the advertised window to go to zero, and
+<BR>
++fails to tear down the connection when the remote TCP engages in
+<BR>
++&quot;persist&quot; probes (see example below).
+<BR>
++
+<BR>
++.IP &quot;Relevant RFCs&quot; 5
+<BR>
++RFC 1122 section 4.2.2.13.  Also, 4.2.2.17 for the zero-window probing
+<BR>
++discussion below.
+<BR>
++
+<BR>
++.IP &quot;Trace file demonstrating it&quot; 5
+<BR>
++Made using tcpdump.  No drop information available.
+<BR>
++
+<BR>
++.nf
+<BR>
++13:11:46.04 A &gt; B: S 458659166:458659166(0) win 4096
+<BR>
++                    &lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
++13:11:46.04 B &gt; A: S 792320000:792320000(0) ack 458659167
+<BR>
++                    win 4096
+<BR>
++13:11:46.04 A &gt; B: . ack 1 win 4096 (DF)
+<BR>
++13:11.55.80 A &gt; B: . 1:513(512) ack 1 win 4096 (DF)
+<BR>
++13:11.55.80 A &gt; B: . 513:1025(512) ack 1 win 4096 (DF)
+<BR>
++13:11:55.83 B &gt; A: . ack 1025 win 3072
+<BR>
++13:11.55.84 A &gt; B: . 1025:1537(512) ack 1 win 4096 (DF)
+<BR>
++13:11.55.84 A &gt; B: . 1537:2049(512) ack 1 win 4096 (DF)
+<BR>
++13:11.55.85 A &gt; B: . 2049:2561(512) ack 1 win 4096 (DF)
+<BR>
++13:11:56.03 B &gt; A: . ack 2561 win 1536
+<BR>
++13:11.56.05 A &gt; B: . 2561:3073(512) ack 1 win 4096 (DF)
+<BR>
++13:11.56.06 A &gt; B: . 3073:3585(512) ack 1 win 4096 (DF)
+<BR>
++13:11.56.06 A &gt; B: . 3585:4097(512) ack 1 win 4096 (DF)
+<BR>
++13:11:56.23 B &gt; A: . ack 4097 win 0
+<BR>
++13:11:58.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
++13:11:58.16 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:00.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
++13:12:00.16 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:02.16 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
++13:12:02.16 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:05.37 A &gt; B: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
++13:12:05.37 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:06.36 B &gt; A: F 1:1(0) ack 4097 win 0
+<BR>
++13:12:06.37 A &gt; B: . ack 2 win 4096 (DF)
+<BR>
++13:12:11.78 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
++13:12:11.78 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:24.59 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
++13:12:24.60 B &gt; A: . ack 4097 win 0
+<BR>
++13:12:50.22 A &gt; B: . 4096:4097(1) ack 2 win 4096 (DF)
+<BR>
++13:12:50.22 B &gt; A: . ack 4097 win 0
+<BR>
++.fi
+<BR>
++
+<BR>
++Machine B in the trace above does not drop received data when
+<BR>
++the socket is &quot;closed&quot; by the application (in this case, the
+<BR>
++application process was terminated). This occured at
+<BR>
++approximately 13:12:06.36 and resulted in the FIN being sent
+<BR>
++in response to the close. However, because there is no longer an
+<BR>
++application to deliver the data to, the TCP should have instead
+<BR>
++sent a RST.
+<BR>
++
+<BR>
++Note: Machine A's zero-window probing is also broken.  It is
+<BR>
++resending old data, rather than new data. Section 3.7 in RFC 793
+<BR>
++and Section 4.2.2.17 in RFC 1122 discuss zero-window probing.
+<BR>
++
+<BR>
++.IP &quot;Trace file demonstrating better behavior&quot; 5
+<BR>
++Made using tcpdump.  No drop information available.
+<BR>
++
+<BR>
++Better, but still not fully correct, behavior, per the discussion below.
+<BR>
++We show this behavior because it has been observed for a number of
+<BR>
++different TCP implementations.
+<BR>
++
+<BR>
++.nf
+<BR>
++13:48:29.24 C &gt; D: S 73445554:73445554(0) win 4096
+<BR>
++                    &lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
++13:48:29.24 D &gt; C: S 36050296:36050296(0) ack 73445555
+<BR>
++                    win 4096 &lt;mss 1460,wscale 0,eol&gt; (DF)
+<BR>
++13:48:29.25 C &gt; D: . ack 1 win 4096 (DF)
+<BR>
++13:48:30.78 C &gt; D: . 1:1461(1460) ack 1 win 4096 (DF)
+<BR>
++13:48:30.79 C &gt; D: . 1461:2921(1460) ack 1 win 4096 (DF)
+<BR>
++13:48:30.80 D &gt; C: . ack 2921 win 1176 (DF)
+<BR>
++13:48:32.75 C &gt; D: . 2921:4097(1176) ack 1 win 4096 (DF)
+<BR>
++13:48:32.82 D &gt; C: . ack 4097 win 0 (DF)
+<BR>
++13:48:34.76 C &gt; D: . 4096:4097(1) ack 1 win 4096 (DF)
+<BR>
++13:48:34.84 D &gt; C: . ack 4097 win 0 (DF)
+<BR>
++13:48:36.34 D &gt; C: FP 1:1(0) ack 4097 win 4096 (DF)
+<BR>
++13:48:36.34 C &gt; D: . 4097:5557(1460) ack 2 win 4096 (DF)
+<BR>
++13:48:36.34 D &gt; C: R 36050298:36050298(0) win 24576
+<BR>
++13:48:36.34 C &gt; D: . 5557:7017(1460) ack 2 win 4096 (DF)
+<BR>
++13:48:36.34 D &gt; C: R 36050298:36050298(0) win 24576
+<BR>
++.fi
+<BR>
++
+<BR>
++In this trace, the application process is terminated on Machine
+<BR>
++D at approximately 13:48:36.34.  Its TCP sends the FIN with the
+<BR>
++window opened again (since it discarded the previously received
+<BR>
++data).  Machine C promptly sends more data, causing Machine D to
+<BR>
++reset the connection since it cannot deliver the data to the
+<BR>
++application. Ideally, Machine D SHOULD send a RST instead of
+<BR>
++dropping the data and re-opening the receive window.
+<BR>
++
+<BR>
++Note: Machine C's zero-window probing is broken, the same
+<BR>
++as in the example above.
+<BR>
++
+<BR>
++
+<BR>
++.IP &quot;Trace file demonstrating correct behavior&quot; 5
+<BR>
++Made using tcpdump.  No losses reported.
+<BR>
++
+<BR>
++.nf
+<BR>
++14:12:02.19 E &gt; F: S 1143360000:1143360000(0) win 4096
+<BR>
++14:12:02.19 F &gt; E: S 1002988443:1002988443(0) ack 1143360001
+<BR>
++                    win 4096 &lt;mss 1460&gt; (DF)
+<BR>
++14:12:02.19 E &gt; F: . ack 1 win 4096
+<BR>
++14:12:10.43 E &gt; F: . 1:513(512) ack 1 win 4096
+<BR>
++14:12:10.61 F &gt; E: . ack 513 win 3584 (DF)
+<BR>
++14:12:10.61 E &gt; F: . 513:1025(512) ack 1 win 4096
+<BR>
++14:12:10.61 E &gt; F: . 1025:1537(512) ack 1 win 4096
+<BR>
++14:12:10.81 F &gt; E: . ack 1537 win 2560 (DF)
+<BR>
++14:12:10.81 E &gt; F: . 1537:2049(512) ack 1 win 4096
+<BR>
++14:12:10.81 E &gt; F: . 2049:2561(512) ack 1 win 4096
+<BR>
++14:12:10.81 E &gt; F: . 2561:3073(512) ack 1 win 4096
+<BR>
++14:12:11.01 F &gt; E: . ack 3073 win 1024 (DF)
+<BR>
++14:12:11.01 E &gt; F: . 3073:3585(512) ack 1 win 4096
+<BR>
++14:12:11.01 E &gt; F: . 3585:4097(512) ack 1 win 4096
+<BR>
++14:12:11.21 F &gt; E: . ack 4097 win 0 (DF)
+<BR>
++14:12:15.88 E &gt; F: . 4097:4098(1) ack 1 win 4096
+<BR>
++14:12:16.06 F &gt; E: . ack 4097 win 0 (DF)
+<BR>
++14:12:20.88 E &gt; F: . 4097:4098(1) ack 1 win 4096
+<BR>
++14:12:20.91 F &gt; E: . ack 4097 win 0 (DF)
+<BR>
++14:12:21.94 F &gt; E: R 1002988444:1002988444(0) win 4096
+<BR>
++.fi
+<BR>
++
+<BR>
++When the application terminates at 14:12:21.94, F immediately
+<BR>
++sends a RST.
+<BR>
++
+<BR>
++Note: Machine E's zero-window probing is (finally) correct.
+<BR>
++
+<BR>
++.IP &quot;How to detect&quot; 5
+<BR>
++The problem can often be detected by inspecting packet traces of a
+<BR>
++transfer in which the receiving application terminates abnormally.
+<BR>
++When doing so, there can be an ambiguity (if only looking at the trace)
+<BR>
++as to whether the receiving TCP did indeed have unread data that
+<BR>
++it could now no longer deliver.  To provoke this to happen, it may
+<BR>
++help to suspend the receiving application so that it fails to consume
+<BR>
++any data, eventually exhausting the advertised window.  At this point,
+<BR>
++since the advertised window is zero, we know that the receiving TCP has
+<BR>
++undelivered data buffered up.  Terminating the application process then
+<BR>
++should suffice to test the correctness of the TCP's behavior.
+<BR>
++
+<BR>
+&nbsp;.Pa
+<BR>
+&nbsp;Security Considerations
+<BR>
+&nbsp;
+<BR>
+@@ -1319,6 +1507,9 @@
+<BR>
+&nbsp;.IP [RFC1122] 5
+<BR>
+&nbsp;R. Braden, Editor, &quot;Requirements for Internet Hosts -- Communication Layers,&quot;
+<BR>
+&nbsp;Oct. 1989.
+<BR>
++.IP [RFC2119] 5
+<BR>
++S. Bradner, &quot;Key words for use in RFCs to Indicate Requirement Levels,&quot;
+<BR>
++Mar. 1997.
+<BR>
+&nbsp;.IP [Dawson97] 5
+<BR>
+&nbsp;S. Dawson, F. Jahanian, and T. Mitton, &quot;Experiments on Six Commercial
+<BR>
+&nbsp;TCP Implementations Using a Software Fault Injection Tool,&quot; to appear
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0988.html">Vern Paxson: "Re: I-D ACTION:draft-ietf-tcpimpl-needdoc-00.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0986.html">Vern Paxson: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0991.html">Mark Allman: "Re: I-D ACTION:draft-ietf-tcpimpl-prob-03.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#987">[ date ]</A>
+<A HREF="index.html#987">[ thread ]</A>
+<A HREF="subject.html#987">[ subject ]</A>
+<A HREF="author.html#987">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Calculations of ISN for new TCP</TITLE>
+<META NAME="Author" CONTENT="Satish Mynam (mynam@cisco.com)">
+<META NAME="Subject" CONTENT="Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Calculations of ISN for new TCP sessions</H1>
+<!-- received="Fri Sep 15 22:36:48 2000" -->
+<!-- isoreceived="20000916023648" -->
+<!-- sent="Fri, 15 Sep 2000 17:17:17 -0700 (PDT)" -->
+<!-- isosent="20000916001717" -->
+<!-- name="Satish Mynam" -->
+<!-- email="mynam@cisco.com" -->
+<!-- subject="Calculations of ISN for new TCP sessions" -->
+<!-- id="200009160017.RAA22029@jindo.cisco.com" -->
+<STRONG>From:</STRONG> Satish Mynam (<A HREF="mailto:mynam@cisco.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009160017.RAA22029@jindo.cisco.com&gt;"><EM>mynam@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 15 2000 - 20:17:17 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2328.html">Florian-Daniel Otel: "ECN (RFC2481) question"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2333.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2329">[ date ]</A>
+<A HREF="index.html#2329">[ thread ]</A>
+<A HREF="subject.html#2329">[ subject ]</A>
+<A HREF="author.html#2329">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>I was just wondering about many of the TCP implementations are using
+<BR>
+a random number generator for the Initial Sequence Number(ISN)
+<BR>
+generation for the new TCP connections.  Most of the implementations
+<BR>
+(in the past) have been using the clock value in micro seconds to
+<BR>
+generate the ISN.  I was looking at the NetBSD code at which was using
+<BR>
+a random number generator function random() to generate the ISN.  Some
+<BR>
+older implementations are still using the clock() value.
+<BR>
+<P>Does any of the RFCs specify which is the correct method to use for
+<BR>
+ISN? I was going through some RFC but have'nt found much on this
+<BR>
+subject.
+<BR>
+<P>Personally I feel, random number generation of the ISN is better (if
+<BR>
+we choose a better random number generator) as it will be difficult to
+<BR>
+predict the sequence numbers of the new TCP sessions.  This prevents
+<BR>
+any intruder attacks (who is guessing the sequence number) difficult
+<BR>
+to take over the TCP session(in case of ISN attacks).
+<BR>
+<P><P><P>Any comments?
+<BR>
+<P><P>Thank You,
+<BR>
+Satish
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2328.html">Florian-Daniel Otel: "ECN (RFC2481) question"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2330.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2331.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2333.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2346.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2356.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2329">[ date ]</A>
+<A HREF="index.html#2329">[ thread ]</A>
+<A HREF="subject.html#2329">[ subject ]</A>
+<A HREF="author.html#2329">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: a question about SYN attack</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: a question about SYN attack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: a question about SYN attack</H1>
+<!-- received="Wed Oct 13 18:04:54 1999" -->
+<!-- isoreceived="19991013220454" -->
+<!-- sent="Wed, 13 Oct 1999 11:20:02 -0500 (CDT)" -->
+<!-- isosent="19991013162002" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: a question about SYN attack" -->
+<!-- id="969378667.0022@hypermail.dummy" -->
+<!-- inreplyto="a question about SYN attack" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0022@hypermail.dummy&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Oct 13 1999 - 12:20:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1863.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1861.html">Rick Jones: "queue limits for DSL and modems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1849.html">william Li: "a question about SYN attack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1863.html">David Borman: "Re: a question about SYN attack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1862">[ date ]</A>
+<A HREF="index.html#1862">[ thread ]</A>
+<A HREF="subject.html#1862">[ subject ]</A>
+<A HREF="author.html#1862">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Subject: Re: a question about SYN attack 
+</EM><BR>
+<EM>&gt; From: Jason Thorpe &lt;<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0022@hypermail.dummy&gt;">thorpej@nas.nasa.gov</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Tue, 12 Oct 1999 15:20:16 -0700
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; On Tue, 12 Oct 1999 11:49:24 -0700 
+</EM><BR>
+<EM>&gt;  Zachary Amsden &lt;<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0022@hypermail.dummy&gt;">zamsden@cthulhu.engr.sgi.com</A>&gt; wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  &gt; One discussion of SYN attacks is found below:
+</EM><BR>
+<EM>&gt;  &gt; 
+</EM><BR>
+<EM>&gt;  &gt; <A HREF="ftp://koobera.math.uic.edu/www/syncookies/archive">ftp://koobera.math.uic.edu/www/syncookies/archive</A>
+</EM><BR>
+<EM>&gt;  &gt; 
+</EM><BR>
+<EM>&gt;  &gt; Zachary Amsden
+</EM><BR>
+<EM>&gt;  &gt; <A HREF="mailto:zamsden@engr.sgi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0022@hypermail.dummy&gt;">zamsden@engr.sgi.com</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; NetBSD also implements the Borman &quot;SYN cache&quot; (it's based on the original
+</EM><BR>
+<EM>&gt; published BSDI diff, but has changed rather significantly since then).  In
+</EM><BR>
+<EM>&gt; NetBSD, it is used for all passive embryonic connections (unlike the BSD/OS
+</EM><BR>
+<EM>&gt; version, which was activated only when the system was under &quot;attack&quot;).
+</EM><BR>
+<P>I don't agree with NetBSD's decision to push all connections through
+<BR>
+the SYN cache, as the SYN cache introduces a situation where valid
+<BR>
+connections won't be established.  Specifically, we don't do retransmission
+<BR>
+of the SYN/ACK out of the SYN cache (since it is assumed that when we
+<BR>
+are under attack, retransmitting all the SYN/ACKs will take up a lot of
+<BR>
+extra cycles for which there will be no benifit).  This means that if
+<BR>
+we respond with a SYN/ACK to a valid connection, the returning ACK gets
+<BR>
+lost, and there is no initial data coming from the client, then the
+<BR>
+connection hangs, since ACKs are not retransmitted.
+<BR>
+<P>My view is that when we are under a SYN flood attack, we're willing to
+<BR>
+take the risk that some connections might hang, but when we are not
+<BR>
+under attack we want to be as robust as possible, meaning we do the
+<BR>
+SYN/ACK retransmissions as necessary.
+<BR>
+<P>Has NetBSD done something to address this issue?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20a%20question%20about%20SYN%20attack&In-Reply-To=&lt;969378667.0022@hypermail.dummy&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1863.html">David Borman: "Re: a question about SYN attack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1861.html">Rick Jones: "queue limits for DSL and modems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1849.html">william Li: "a question about SYN attack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1863.html">David Borman: "Re: a question about SYN attack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1862">[ date ]</A>
+<A HREF="index.html#1862">[ thread ]</A>
+<A HREF="subject.html#1862">[ subject ]</A>
+<A HREF="author.html#1862">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

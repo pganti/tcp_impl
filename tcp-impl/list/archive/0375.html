@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Failure to send window scale opt</TITLE>
+<META NAME="Author" CONTENT="Greg Miller (gmiller@mci.net)">
+<META NAME="Subject" CONTENT="Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 07:42:37 1997" -->
+<!-- isoreceived="19970430114237" -->
+<!-- sent="Wed, 30 Apr 1997 10:31:00 -0400" -->
+<!-- isosent="19970430143100" -->
+<!-- name="Greg Miller" -->
+<!-- email="gmiller@mci.net" -->
+<!-- subject="Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301431.KAA28093@postoffice.Reston.mci.net" -->
+<STRONG>From:</STRONG> Greg Miller (<A HREF="mailto:gmiller@mci.net?Subject=Re:%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301431.KAA28093@postoffice.Reston.mci.net&gt;"><EM>gmiller@mci.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 10:31:00 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0376.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0377.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0377.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0379.html">Matt Mathis: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0382.html">Fred Bohle: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0395.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0400.html">Ran Atkinson: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#375">[ date ]</A>
+<A HREF="index.html#375">[ thread ]</A>
+<A HREF="subject.html#375">[ subject ]</A>
+<A HREF="author.html#375">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'd like to get some feedback from the list on a behavior I've observed from 
+<BR>
+a particular TCP implementation. This implementation supports RFC1323 window 
+<BR>
+scaling. It sends the window scaling option with a scale factor determined by 
+<BR>
+the size of the socket receive buffer (SO_RCVBUF), as one would expect. 
+<BR>
+However, this implementation sends the window scale option on an active open 
+<BR>
+only if a shift of 1 or more is required for the given socket buffer size 
+<BR>
+(i.e., it nevers sends an option with shift.cnt == 0).
+<BR>
+<P>The result of this behavior is that the TCP that does the passive open is 
+<BR>
+prevented from using window scaling if the TCP that does the active open is 
+<BR>
+using a receive buffer smaller than 65535 bytes. Failure to send the window 
+<BR>
+scale option on the SYN prevents the option from appearing on the SYN/ACK.
+<BR>
+<P>On this subject, RFC1323 says:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;[...]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Thus, a TCP that is prepared to scale windows should send the option, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;even if its own scale factor is 1. 
+<BR>
+<P>The spec says &quot;should&quot; and not &quot;MUST&quot; or even &quot;SHOULD&quot; so I think it'd be 
+<BR>
+hard to call this behavior broken. It is unfortunate though. Comments?
+<BR>
+<P>Greg
+<BR>
+<P><PRE>
+----
+Gregory J. Miller
+vBNS Engineering
+MCI Telecommunications              
+Reston, VA 20191                                     <A HREF="mailto:gmiller@mci.net?Subject=Re:%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301431.KAA28093@postoffice.Reston.mci.net&gt;">gmiller@mci.net</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0376.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0374.html">Perry E. Metzger: "Re: TCP keep-alives &amp; Reality bites"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0377.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0377.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0379.html">Matt Mathis: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0382.html">Fred Bohle: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0395.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0400.html">Ran Atkinson: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#375">[ date ]</A>
+<A HREF="index.html#375">[ thread ]</A>
+<A HREF="subject.html#375">[ subject ]</A>
+<A HREF="author.html#375">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

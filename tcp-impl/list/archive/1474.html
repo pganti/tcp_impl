@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: out-of-window SYNs ... what</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: out-of-window SYNs ... what to do?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: out-of-window SYNs ... what to do?</H1>
+<!-- received="Tue Jan 26 09:39:33 1999" -->
+<!-- isoreceived="19990126143933" -->
+<!-- sent="Tue, 26 Jan 1999 08:30:02 -0600 (CST)" -->
+<!-- isosent="19990126143002" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: out-of-window SYNs ... what to do?" -->
+<!-- id="199901261430.IAA10865@frantic.bsdi.com" -->
+<!-- inreplyto="out-of-window SYNs ... what to do?" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20out-of-window%20SYNs%20...%20what%20to%20do?&In-Reply-To=&lt;199901261430.IAA10865@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jan 26 1999 - 09:30:02 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1474">[ date ]</A>
+<A HREF="index.html#1474">[ thread ]</A>
+<A HREF="subject.html#1474">[ subject ]</A>
+<A HREF="author.html#1474">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Jason,
+<BR>
+<P><EM>&gt; Subject: out-of-window SYNs ... what to do?
+</EM><BR>
+<EM>&gt; From: Jason Thorpe &lt;<A HREF="mailto:thorpej@nas.nasa.gov?Subject=Re:%20out-of-window%20SYNs%20...%20what%20to%20do?&In-Reply-To=&lt;199901261430.IAA10865@frantic.bsdi.com&gt;">thorpej@nas.nasa.gov</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Tue, 26 Jan 1999 03:06:04 -0800
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; So, consider the following scenario:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	(1) client.1023 mounts server.2049.  This causes a TCP connection
+</EM><BR>
+<EM>&gt; 	    to be established.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	(2) Power cord on client is pulled, and reinserted.  Client reboots.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Now, at this point, you have the server in ESTABLISHED state for this
+</EM><BR>
+<EM>&gt; connection.  The client thinks here is no connection.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 	(3) client.1023 mounts server.2049.  This causes a TCP connection
+</EM><BR>
+<EM>&gt; 	    to be established.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ...except, the connection never completes.  Indeed, server never sends SYN,ACK
+</EM><BR>
+<EM>&gt; because out-of-window SYNs are simply dropped on the floor.
+</EM><BR>
+<P>This is a bug.  The out-of-window SYN should have been acked before it was
+<BR>
+dropped.  In Established state, the first check is to see if the packet is
+<BR>
+in the window.  If it isn't, then an ACK is to be generated and the packet
+<BR>
+dropped.  See page 69 of RFC 793.  To make this even clearer, look down at
+<BR>
+page 71, where it says:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;fourth, check the SYN bit, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the SYN is not in the window this step would not be reached
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and an ack would have been sent in the first step (sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number check).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20out-of-window%20SYNs%20...%20what%20to%20do?&In-Reply-To=&lt;199901261430.IAA10865@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1473.html">Jason Thorpe: "out-of-window SYNs ... what to do?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1474">[ date ]</A>
+<A HREF="index.html#1474">[ thread ]</A>
+<A HREF="subject.html#1474">[ subject ]</A>
+<A HREF="author.html#1474">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 14:08:57 1997" -->
+<!-- isoreceived="19970605180857" -->
+<!-- sent="Thu, 5 Jun 1997 14:03:21 -0700" -->
+<!-- isosent="19970605210321" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052103.AA07483@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052103.AA07483@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 17:03:21 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0452.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0450.html">Andy W. Barclay: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0452.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#451">[ date ]</A>
+<A HREF="index.html#451">[ thread ]</A>
+<A HREF="subject.html#451">[ subject ]</A>
+<A HREF="author.html#451">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:backman@ftp.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052103.AA07483@ash.isi.edu&gt;">backman@ftp.com</A> (Larry Backman)
+</EM><BR>
+<EM>&gt; Originating-Client: tunes.ftp.com
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ||It would have been &quot;correct&quot; do stop accepting new connections.
+</EM><BR>
+<EM>&gt; ||However, because the MSL on which TIME_WAIT depends
+</EM><BR>
+<EM>&gt; ||is not specified (each site is free to determine it), it
+</EM><BR>
+<EM>&gt; ||would be most correct to have changed the MSL, which is
+</EM><BR>
+<EM>&gt; ||what some recent OS patches for web performance do.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; ||I.e., MSL currently is around 2 minutes; the OS patches
+</EM><BR>
+<EM>&gt; ||drop that to 15 seconds.
+</EM><BR>
+<EM>&gt; ||
+</EM><BR>
+<EM>&gt; whoa!  The way I read 1122 and friends MSL is to be set to 2 minutes
+</EM><BR>
+<EM>&gt; and it would take an act of God and Jon postel to change it.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; On rescanning 1122 quickly I see it notes that it was set arbitarily to
+</EM><BR>
+<EM>&gt; 2 minutes but I seem to recall some serious math around slow WAN links
+</EM><BR>
+<EM>&gt; leading tyo that 2 minute figure.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Which perhaps brings up a very interesting topic for the list -
+</EM><BR>
+<EM>&gt; default values like MSL, initial RTT and backoff array.
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yes!
+<BR>
+<P>RSF793 indicates: 
+<BR>
+<P>&nbsp;&nbsp;For this specification the MSL is taken to be 2 minutes.  This
+<BR>
+&nbsp;&nbsp;is an engineering choice, and may be changed if experience indicates
+<BR>
+&nbsp;&nbsp;it is desirable to do so.
+<BR>
+<P>Which seems to contraindicate:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- MSL *MUST* me 2 minutes for TCP according to RFC793
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- MSL may be changed if experience warrants
+<BR>
+<P>I could see the OS patches using the latter interpretation.
+<BR>
+I would hope this is one of the things we could clear up.
+<BR>
+<P>Joe
+<BR>
+<P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052103.AA07483@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0452.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0450.html">Andy W. Barclay: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0452.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#451">[ date ]</A>
+<A HREF="index.html#451">[ thread ]</A>
+<A HREF="subject.html#451">[ subject ]</A>
+<A HREF="author.html#451">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

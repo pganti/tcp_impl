@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: using RST to indicate busy</TITLE>
+<META NAME="Author" CONTENT="Marc Slemko (marcs@znep.com)">
+<META NAME="Subject" CONTENT="RE: using RST to indicate busy">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: using RST to indicate busy</H1>
+<!-- received="Tue Mar 24 13:32:29 1998" -->
+<!-- isoreceived="19980324183229" -->
+<!-- sent="Tue, 24 Mar 1998 14:30:27 -0700 (MST)" -->
+<!-- isosent="19980324213027" -->
+<!-- name="Marc Slemko" -->
+<!-- email="marcs@znep.com" -->
+<!-- subject="RE: using RST to indicate busy" -->
+<!-- id="Pine.BSF.3.95.980324141712.9590N-100000@alive.znep.com" -->
+<!-- inreplyto="009C3AC7E56A28BF.85D4@PROCESS.COM" -->
+<STRONG>From:</STRONG> Marc Slemko (<A HREF="mailto:marcs@znep.com?Subject=RE:%20using%20RST%20to%20indicate%20busy&In-Reply-To=&lt;Pine.BSF.3.95.980324141712.9590N-100000@alive.znep.com&gt;"><EM>marcs@znep.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 24 1998 - 16:30:27 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1024.html">Vern Paxson: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1022.html">Oleg Vishnepolsky: "Re: using RST to indicate busy"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1019.html">Bernie Volz: "RE: using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1020.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1023">[ date ]</A>
+<A HREF="index.html#1023">[ thread ]</A>
+<A HREF="subject.html#1023">[ subject ]</A>
+<A HREF="author.html#1023">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Tue, 24 Mar 1998, Bernie Volz wrote:
+<BR>
+<P>[...]
+<BR>
+<EM>&gt; The same large software company near Seattle does send RST when
+</EM><BR>
+<EM>&gt; the socket queue is full and it can't accept another connection (this
+</EM><BR>
+<EM>&gt; was especially bad in earlier releases of that company's TCP/IP software
+</EM><BR>
+<EM>&gt; when the backlog could only be set to a small number of connection). The
+</EM><BR>
+<EM>&gt; normal (4.4BSD) practice is to simply ignore the SYN and allow the
+</EM><BR>
+<EM>&gt; normal TCP retransmission of the SYN to &quot;try again&quot; a short time later.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Since this large software company chose to RST instead, I think they
+</EM><BR>
+<EM>&gt; decided that they also needed to retry several times and hence that is
+</EM><BR>
+<EM>&gt; what their &quot;connect&quot; implementation does.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I did, a long while ago, suggest to their developers that they change
+</EM><BR>
+<EM>&gt; this behavoir to be more in line with standard practices. But alas ...
+</EM><BR>
+<P>This would be the same company that decides they need to send a RST to
+<BR>
+terminate connections from their popular HTTP client.  The only answer I
+<BR>
+could ever get about why they do this is because this other company did it
+<BR>
+with their popular HTTP client, so it had to be a desirable way of doing
+<BR>
+things, regardless of how broken it may be (and it does cause real-world
+<BR>
+problems).  
+<BR>
+<P>I was under the odd impression that TCP did something where it magically
+<BR>
+resent the SYN if it didn't get a response.  I was also under the odd
+<BR>
+impression that by simply ignoring the SYN if the server was too busy (in
+<BR>
+whatever way you want to define busy) would result in all clients properly
+<BR>
+retrying the connection at some later time.  This idea seems to make sense
+<BR>
+to me because it uses TCP's established retransmission method and requires
+<BR>
+nothing of clients except that they comply with the spec while still
+<BR>
+offering the server a second chance if it is too busy at a particular
+<BR>
+moment.
+<BR>
+<P>If a server wishes to send a RST instead, I can't see that it is horrible.
+<BR>
+All it means is that the server is saying that the connection can not be
+<BR>
+made, period, and that it must have no expectation that the client would
+<BR>
+take it upon itself to retry the connection without user intervention.
+<BR>
+<P>Modifying your client to automatically retry the connection using its own
+<BR>
+(possibly very broken and harmful) retransmissions methods is, however, a
+<BR>
+different matter that I find difficult to justify.  The only possible
+<BR>
+justification I can think of is that, for whatever reason, the server is
+<BR>
+normally unable to handle the load being placed on it and is often having
+<BR>
+to do such things.  In that case, implementing your own retransmission
+<BR>
+timeouts in this method would result in the perception of better
+<BR>
+performance, however the real problem is that the server's TCP stack or
+<BR>
+application program is unable to handle the requests.
+<BR>
+<P>If I were cynical, I would suggest that the reason for my first complaint
+<BR>
+(RST terminating connections) is due to other limitations in some vendors
+<BR>
+(both Unix and NT) stacks WRT large numbers of sockets in TIME_WAIT.
+<BR>
+<P>I am always disappointed when vendors try to force their methods by sheer
+<BR>
+market force without discussion or consideration of technical merit, but
+<BR>
+thats the way things have always been.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1024.html">Vern Paxson: "Re: using RST to indicate busy"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1022.html">Oleg Vishnepolsky: "Re: using RST to indicate busy"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1019.html">Bernie Volz: "RE: using RST to indicate busy"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1020.html">Scott Lawrence: "Re: using RST to indicate busy"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1023">[ date ]</A>
+<A HREF="index.html#1023">[ thread ]</A>
+<A HREF="subject.html#1023">[ subject ]</A>
+<A HREF="author.html#1023">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:31 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

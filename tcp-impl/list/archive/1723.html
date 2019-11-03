@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Retransmissions without expl</TITLE>
+<META NAME="Author" CONTENT="Jamshid Mahdavi (mahdavi@novell.com)">
+<META NAME="Subject" CONTENT="Re: Retransmissions without explanation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Retransmissions without explanation</H1>
+<!-- received="Thu May 20 17:17:13 1999" -->
+<!-- isoreceived="19990520211713" -->
+<!-- sent="20 May 1999 14:28:05 -0700" -->
+<!-- isosent="19990520212805" -->
+<!-- name="Jamshid Mahdavi" -->
+<!-- email="mahdavi@novell.com" -->
+<!-- subject="Re: Retransmissions without explanation" -->
+<!-- id="yu8xd7zv4eje.fsf@sabre.sjf.novell.com" -->
+<!-- inreplyto="Thu, 20 May 1999 13:15:59 PDT&quot;" -->
+<STRONG>From:</STRONG> Jamshid Mahdavi (<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;yu8xd7zv4eje.fsf@sabre.sjf.novell.com&gt;"><EM>mahdavi@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 20 1999 - 17:28:05 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1725.html">Kacheong Poon: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1723">[ date ]</A>
+<A HREF="index.html#1723">[ thread ]</A>
+<A HREF="subject.html#1723">[ subject ]</A>
+<A HREF="author.html#1723">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Mark Allman and I are just finishing final copy for a paper to appear in
+</EM><BR>
+<EM>&gt; SIGCOMM '99 that looks in detail at a number of these tradeoffs.  We'll send
+</EM><BR>
+<EM>&gt; an announcement to the list within a couple of days.  The brief version is:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	(1) The moving average coefficients don't matter, so even though
+</EM><BR>
+<EM>&gt; 	    you're running a lot more measurements through it with RTTM
+</EM><BR>
+<EM>&gt; 	    than previously, that has little effect on the effectiveness of
+</EM><BR>
+<EM>&gt; 	    the RTO computation.
+</EM><BR>
+<P>Hmmm, I wonder if that statement holds in both senses: does doing all
+<BR>
+of the extra measurements also not *improve* the quality of the RTO
+<BR>
+computation?  I'd imagine that the key factor here would be transients
+<BR>
+such as initial slowstart or path changes.
+<BR>
+<P><EM>&gt; 	(2) Finer granularity clocks are a win primarily because there's
+</EM><BR>
+<EM>&gt; 	    less chance of the deviation being computed as 0 ticks (your
+</EM><BR>
+<EM>&gt; 	    last point above).  Below 100 msec you get diminishing benefit
+</EM><BR>
+<EM>&gt; 	    as you make the granularity finer.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	(3) You don't really have to worry about things like timing the
+</EM><BR>
+<EM>&gt; 	    last packet in flight because RTO has an implicit last-RTT term
+</EM><BR>
+<EM>&gt; 	    added into it (because the timer is restarted as new data is
+</EM><BR>
+<EM>&gt; 	    sent; pointed out by Reiner Ludwig).
+</EM><BR>
+<P>I'm pretty sure that I've seen at least one implementation which
+<BR>
+doesn't do this.  To be honest, I was never quite able to figure out
+<BR>
+how you could *not* do this.  But the point which I thought was worth
+<BR>
+putting in writing somewhere is that you should only take a timeout if
+<BR>
+you believe *all* the packets in flight have been dropped.  As opposed
+<BR>
+to beleiving that *some* packet in flight was dropped.
+<BR>
+<P><EM>&gt; 	(4) The #1 biggest effect on how well the estimator performs is its
+</EM><BR>
+<EM>&gt; 	    minimum value - there definitely should be a minimum RTO.
+</EM><BR>
+<P>Good to hear this.  I've been looking at this on and off for a little
+<BR>
+while now and was pretty convinced that there needed to be either a
+<BR>
+min RTO or a min deviation.  To my mind, the deviation term makes more
+<BR>
+sense to impose a minimum on, because even on long paths I believe you
+<BR>
+could still see the occasional spike in delay.
+<BR>
+<P>--J
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1724.html">Rick Jones: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1725.html">Kacheong Poon: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1723">[ date ]</A>
+<A HREF="index.html#1723">[ thread ]</A>
+<A HREF="subject.html#1723">[ subject ]</A>
+<A HREF="author.html#1723">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

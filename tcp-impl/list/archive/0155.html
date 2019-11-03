@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;F</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Wed Mar 19 06:36:46 1997" -->
+<!-- isoreceived="19970319113646" -->
+<!-- sent="Wed, 19 Mar 1997 09:28:40 -0500" -->
+<!-- isosent="19970319142840" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="Re: draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703191428.JAA11995@MAILSERV-2HIGH.FTP.COM" -->
+<!-- inreplyto="draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703191428.JAA11995@MAILSERV-2HIGH.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 09:28:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0159.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0203.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#155">[ date ]</A>
+<A HREF="index.html#155">[ thread ]</A>
+<A HREF="subject.html#155">[ subject ]</A>
+<A HREF="author.html#155">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+||Name of problem: Failure to retain above-sequence data
+<BR>
+||
+<BR>
+||Category: Congestion control, performance
+<BR>
+||
+<BR>
+||Description:
+<BR>
+||        When a TCP receives an &quot;above sequence&quot; segment, meaning one with a
+<BR>
+||        sequence number exceeding RCV.NXT but below RCV.NXT+RCV.WND, it
+<BR>
+||        SHOULD queue the segment for later delivery (RFC 1122, 4.2.2.20).
+<BR>
+||        A TCP that fails to do so is said to exhibit &quot;Failure to retain
+<BR>
+||        above-sequence data&quot;.
+<BR>
+||
+<BR>
+||        It may sometimes be appropriate for a TCP to discard above-sequence
+<BR>
+||        data to reclaim memory.  If they do so only rarely, then we would
+<BR>
+||        not consider them to exhibit this problem.  Instead, the particular
+<BR>
+||        concern is with TCPs that always discard above-sequence data.
+<BR>
+||
+<BR>
+Comment from the old PC/TCP for DOS days.  In a limited memory
+<BR>
+environment such as DOS in days gone by, and very possibly
+<BR>
+in various network computers, handheld widgets, etc. in  days to
+<BR>
+come, a stack has to balence very carefully network behavior with
+<BR>
+system behavior.
+<BR>
+<P>The old DOS stack was bound by limitations of memory that caused its
+<BR>
+default buffer management to have 3-5 MTU sized packets and 10-20
+<BR>
+NFS RPC sized packets.  That &lt;10K memory chunk was all that could
+<BR>
+be taken from the system environment without affecting system behavior
+<BR>
+and performance in other ways.
+<BR>
+<P>Our old out of sequence policy was to retain 1 and only one out of sequence
+<BR>
+packet provided the SN of that packet was not more than 1 MTU above the
+<BR>
+last received &amp; ack'ed packet.  Combined with a carefully selected receive
+<BR>
+window of not more than 3*MTU this policy balanced system memory,
+<BR>
+window size and lost packets reasonably well.  However, if you upped
+<BR>
+the window size to higher multiples of the MTU - say 5*MTU or 8K all
+<BR>
+bets were off.
+<BR>
+<P>Our algorithm worked because the window size was controlled to reflect the
+<BR>
+out of sequence retention policy. It seems to me that modifying your
+<BR>
+2nd para. in the SHOULD above slightly to indicate that in cases where 
+<BR>
+a TCP host is memory limited - that a combination of window size 
+<BR>
+management and limited out of sequence retention can be used to 
+<BR>
+balance memory usage and network behavior.
+<BR>
+<P>While its easy to dismiss our old DOS memory issues as obselete, the
+<BR>
+underlying issues of low memory TCP implementations will undoubtably
+<BR>
+resurface from time to time as TCP is pushed onto smaller and cheaper
+<BR>
+devices.
+<BR>
+<P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0154.html">Luigi Rizzo: "Re: draft description of &quot;No initial slow start&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0156.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0159.html">Luigi Rizzo: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0203.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#155">[ date ]</A>
+<A HREF="index.html#155">[ thread ]</A>
+<A HREF="subject.html#155">[ subject ]</A>
+<A HREF="author.html#155">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

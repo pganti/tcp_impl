@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: my 2p worth</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (iheavens@fore.co.uk)">
+<META NAME="Subject" CONTENT="my 2p worth">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>my 2p worth</H1>
+<!-- received="Fri Nov 29 20:40:07 1996" -->
+<!-- isoreceived="19961130014007" -->
+<!-- sent="Fri, 29 Nov 1996 20:17:35 +0000" -->
+<!-- isosent="19961129201735" -->
+<!-- name="Ian Heavens" -->
+<!-- email="iheavens@fore.co.uk" -->
+<!-- subject="my 2p worth" -->
+<!-- id="329F44DF.14A5@fore.co.uk" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:iheavens@fore.co.uk?Subject=Re:%20my%202p%20worth&In-Reply-To=&lt;329F44DF.14A5@fore.co.uk&gt;"><EM>iheavens@fore.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Nov 29 1996 - 15:17:35 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#33">[ date ]</A>
+<A HREF="index.html#33">[ thread ]</A>
+<A HREF="subject.html#33">[ subject ]</A>
+<A HREF="author.html#33">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The following occurred to me:
+<BR>
+<P>1.It would be interesting to know how many independent
+<BR>
+&nbsp;&nbsp;TCP implementations exist, and the rough proportions in
+<BR>
+&nbsp;&nbsp;which they are represented.  Once the derivation of
+<BR>
+&nbsp;&nbsp;an implementation is known, one can deduce a lot about the
+<BR>
+&nbsp;&nbsp;kind of bugs it has (e.g. anything derived from BSD 4.4 is
+<BR>
+&nbsp;&nbsp;likely to have similar bugs).
+<BR>
+<P>2. It used to be the case that there were bugs in common implementations
+<BR>
+&nbsp;&nbsp;that you had to workaround (e.g. BSD4.3 did a strange telnet echo
+<BR>
+&nbsp;&nbsp;negotiation to ascertain whether the peer was BSD4.2 or BSD4.3- maybe
+<BR>
+&nbsp;&nbsp;not a violation but surprising if the peer TCP is neither).  Since
+<BR>
+&nbsp;&nbsp;these are impossible to find except by rigorous interoperability
+<BR>
+&nbsp;&nbsp;testing, it would be enormously useful to have these listed.  OK,
+<BR>
+&nbsp;&nbsp;the idea is to get the buggy implementations fixed but in the 
+<BR>
+&nbsp;&nbsp;short term it is a good idea to workaround flaws in e.g. BSD TCP/IP.
+<BR>
+&nbsp;&nbsp;I guess this is what we're discussing, but adding a workaround
+<BR>
+&nbsp;&nbsp;if it exists would be nice.
+<BR>
+<P>3.  Most of the bugs mentioned are protocol issues or end-to-end
+<BR>
+&nbsp;&nbsp;&nbsp;performance issues on a single connection.  Is it within scope to
+<BR>
+&nbsp;&nbsp;&nbsp;mention scalability issues, e.g. supporting large numbers of
+<BR>
+&nbsp;&nbsp;&nbsp;connections in TIME-WAIT?  This would reduce some of the problems
+<BR>
+&nbsp;&nbsp;&nbsp;with RSTs.  I tried to summarise the issues, mostly researched
+<BR>
+&nbsp;&nbsp;&nbsp;by Jeff Mogul (and the Sequent SIGCOMM paper) in section 5.1
+<BR>
+&nbsp;&nbsp;&nbsp;of draft-heavens-problems-rsts-03.txt.  
+<BR>
+<P>4.  Are there bugs that crop up persistently in independent TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;implementations?  e.g. mishandling of queued data for transmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;when a close is issued?  These would point to the most difficult
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;issues.
+<BR>
+<P>5.   Should we separate buggy implementations of algorithms and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inappropriate (or debatable) algorithms?   
+<BR>
+<P>regards
+<BR>
+<P>ian
+<BR>
+<P><PRE>
+-- 
+Ian Heavens, Fore Systems.  email: <A HREF="mailto:iheavens@eu.fore.com?Subject=Re:%20my%202p%20worth&In-Reply-To=&lt;329F44DF.14A5@fore.co.uk&gt;">iheavens@eu.fore.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0032.html">Pedro Roque: "Re: slow-start related performance bugs in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0034.html">Vern Paxson: "Re: my 2p worth"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0035.html">touch@ISI.EDU: "Re: my 2p worth"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#33">[ date ]</A>
+<A HREF="index.html#33">[ thread ]</A>
+<A HREF="subject.html#33">[ subject ]</A>
+<A HREF="author.html#33">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

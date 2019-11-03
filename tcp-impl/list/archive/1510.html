@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: iss calculation during TIME_WAIT</TITLE>
+<META NAME="Author" CONTENT="Mohan Parthasarathy (Mohan.Parthasarathy@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="iss calculation during TIME_WAIT ressurection ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>iss calculation during TIME_WAIT ressurection ?</H1>
+<!-- received="Thu Feb  4 19:32:08 1999" -->
+<!-- isoreceived="19990205003208" -->
+<!-- sent="Thu, 4 Feb 1999 16:22:56 -0800 (PST)" -->
+<!-- isosent="19990205002256" -->
+<!-- name="Mohan Parthasarathy" -->
+<!-- email="Mohan.Parthasarathy@eng.Sun.COM" -->
+<!-- subject="iss calculation during TIME_WAIT ressurection ?" -->
+<!-- id="199902050022.QAA00546@locked.eng.sun.com" -->
+<STRONG>From:</STRONG> Mohan Parthasarathy (<A HREF="mailto:Mohan.Parthasarathy@eng.Sun.COM?Subject=Re:%20iss%20calculation%20during%20TIME_WAIT%20ressurection%20?&In-Reply-To=&lt;199902050022.QAA00546@locked.eng.sun.com&gt;"><EM>Mohan.Parthasarathy@eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 19:22:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1511.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1527.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1510">[ date ]</A>
+<A HREF="index.html#1510">[ thread ]</A>
+<A HREF="subject.html#1510">[ subject ]</A>
+<A HREF="author.html#1510">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+RFC1122 states that
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a connection is closed actively, it MUST linger in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIME-WAIT state for a time 2xMSL (Maximum Segment Lifetime).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, it MAY accept a new SYN from the remote TCP to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reopen the connection directly from TIME-WAIT state, if it:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)  assigns its initial sequence number for the new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection to be larger than the largest sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number it used on the previous connection incarnation,
+<BR>
+<P>Looking at BSD code, it used the &quot;rcv_nxt&quot; field to calculate the new
+<BR>
+iss :
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tiflags &amp; TH_SYN &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_state == TCPS_TIME_WAIT &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEQ_GT(ti-&gt;ti_seq, tp-&gt;rcv_nxt)) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iss = tp-&gt;rcv_nxt + TCP_ISSINCR;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp = tcp_close(tp);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto findpcb;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P>Is this a bug in the TCP code ? Should it not use snd_nxt ?
+<BR>
+<P>thanks
+<BR>
+-mohan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1511.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1509.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1515.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1527.html">David Borman: "Re: iss calculation during TIME_WAIT ressurection ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1510">[ date ]</A>
+<A HREF="index.html#1510">[ thread ]</A>
+<A HREF="subject.html#1510">[ subject ]</A>
+<A HREF="author.html#1510">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

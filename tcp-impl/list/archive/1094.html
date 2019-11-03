@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Sally Floyd (floyd@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Thu Apr 23 16:15:08 1998" -->
+<!-- isoreceived="19980423201508" -->
+<!-- sent="Thu, 23 Apr 1998 16:13:13 PDT" -->
+<!-- isosent="19980423231313" -->
+<!-- name="Sally Floyd" -->
+<!-- email="floyd@ee.lbl.gov" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="199804232313.QAA23028@owl.ee.lbl.gov" -->
+<!-- inreplyto="Last Call for draft-floyd-incr-init-win-02.txt" -->
+<STRONG>From:</STRONG> Sally Floyd (<A HREF="mailto:floyd@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;199804232313.QAA23028@owl.ee.lbl.gov&gt;"><EM>floyd@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Apr 23 1998 - 19:13:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1093.html">Craig Partridge: "Re: N connections"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1100.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1100.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1094">[ date ]</A>
+<A HREF="index.html#1094">[ thread ]</A>
+<A HREF="subject.html#1094">[ subject ]</A>
+<A HREF="author.html#1094">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; initial window).  The change proposed in the I-D alters a
+</EM><BR>
+<EM>&gt;&gt; _parameter_, not any of TCP's fundamental congestion control
+</EM><BR>
+<EM>&gt;&gt; algorithms.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The same argument is true of using 1 gigabyte initial windows and a 3 
+</EM><BR>
+<EM>&gt;nanosecond initial rtt. Something that is clearly bogus. That fact we
+</EM><BR>
+<EM>&gt;are changing only parameters doesnt mean its right.
+</EM><BR>
+<P>The ID itself does not make the argument that it is ok to
+<BR>
+allow an initial window of four segments because the number four
+<BR>
+is, after all, just a parameter.  I agree completely that initial
+<BR>
+windows of 1 gigabyte would be disastrous for the Internet.
+<BR>
+<P>The ID makes the specific argument (in Section 5, on &quot;Disadvantages of
+<BR>
+Larger Initial Windows for the Network&quot;) that critical concerns are
+<BR>
+whether the change threatens congestion collapse by allowing a
+<BR>
+significant increase in the number of duplicate packets transmitted, or
+<BR>
+a significant increase in the number of packets sent on congested links
+<BR>
+that are dropped later in the network.
+<BR>
+<P>Duplicate packets:
+<BR>
+The ID argues (in Appendix 13) that for an initial window
+<BR>
+of at most four packets, there are some scenarios where a single
+<BR>
+duplicate packet could be sent that would not have been send otherwise,
+<BR>
+but that is all.  
+<BR>
+<P>Dropped packets:
+<BR>
+The ID says (in Section 5) that is an increased danger of packets on
+<BR>
+congested links that are dropped later in the network only if there is
+<BR>
+an increased packet drop rate due to the larger initial windows.  To
+<BR>
+what extend does an initial window of four packets increase the packet
+<BR>
+drop rate?  (Recall that this is an initial window that is only
+<BR>
+permitted after a successful transmission and acknowledgement of a
+<BR>
+single SYN or SYN/ACK packet.)  All the available evidence from
+<BR>
+simulations is that in an environment with up to 10% packet drops,
+<BR>
+increasing the initial window from one to four packets does not
+<BR>
+significantly increase the packet drop rate.  (The packet drop rate
+<BR>
+does get increased from M% to (M+1)%, however, for some simulations
+<BR>
+with high congestion and a world dominated by web mice.)
+<BR>
+<P>Consider a network where flows routinely send bursts of three packets.
+<BR>
+Any TCP connection that has at least six packets to send, and sends
+<BR>
+the first three packets without drops, will send the next three packets
+<BR>
+in a back-to-back burst, in the current environment with delayed-ACK
+<BR>
+receivers (Section 6).  In the current Internet, even if you have an
+<BR>
+environment with a 20% drop rate in the forward direction (and no drops
+<BR>
+in the reverse direction, for simplicity of analysis), over half of the
+<BR>
+flows will get their first three packets through without drops, and
+<BR>
+will send their next three packets in a back-to-back burst.  My
+<BR>
+argument would be that even in a world with nontrivial congestion where
+<BR>
+average congestion windows are less than four packets, having flows
+<BR>
+start with a four-packet initial window after the SYN/ACK exchange does
+<BR>
+not dramatically increase the packet drop rate (assuming Poisson
+<BR>
+arrival times for session starting times, which is a reasonable
+<BR>
+assumption).  I have not done the analysis to back up this claim, but
+<BR>
+there are a number of simulation studies reported in the internet
+<BR>
+draft.  However, starting connections with a 1 gigabyte initial window
+<BR>
+**would** dramatically and disastrously increase the packet drop rate.
+<BR>
+(With a 20% drop rate, there are not that many flows that would be
+<BR>
+sending 1 gigabyte bursts in the normal course of events.)  So a four
+<BR>
+segment initial window, in my opinion, is fine, while a 1 gigabyte
+<BR>
+initial window would not be fine.
+<BR>
+<P>- Sally
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1095.html">Mohit Aron: "Re: N connections"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1093.html">Craig Partridge: "Re: N connections"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1072.html">Vern Paxson: "Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1100.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1100.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1094">[ date ]</A>
+<A HREF="index.html#1094">[ thread ]</A>
+<A HREF="subject.html#1094">[ subject ]</A>
+<A HREF="author.html#1094">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

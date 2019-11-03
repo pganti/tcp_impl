@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP buffers</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@brookfield.ans.net)">
+<META NAME="Subject" CONTENT="Re: TCP buffers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP buffers</H1>
+<!-- received="Mon Apr 14 09:41:20 1997" -->
+<!-- isoreceived="19970414134120" -->
+<!-- sent="Mon, 14 Apr 1997 12:34:07 -0400" -->
+<!-- isosent="19970414163407" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@brookfield.ans.net" -->
+<!-- subject="Re: TCP buffers" -->
+<!-- id="199704141634.MAA02296@brookfield.ans.net" -->
+<!-- inreplyto="199704102307.SAA00822@parmesan.cs.wisc.edu" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@brookfield.ans.net?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704141634.MAA02296@brookfield.ans.net&gt;"><EM>curtis@brookfield.ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 14 1997 - 12:34:07 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0330.html">Matt Mathis: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#331">[ date ]</A>
+<A HREF="index.html#331">[ thread ]</A>
+<A HREF="subject.html#331">[ subject ]</A>
+<A HREF="author.html#331">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199704102307.SAA00822@parmesan.cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704141634.MAA02296@brookfield.ans.net&gt;">199704102307.SAA00822@parmesan.cs.wisc.edu</A>&gt;, Kacheong Poon writes:
+<BR>
+<EM>&gt; Included message from <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704141634.MAA02296@brookfield.ans.net&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox):
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;----
+</EM><BR>
+<EM>&gt; &gt;A high RTT requires a high window size to avoid pipeline stalls. It sounds
+</EM><BR>
+<EM>&gt; &gt;like you are talking more about some of the cases SACK handles. SACK I think
+</EM><BR>
+<EM>&gt; &gt;is beyond this list
+</EM><BR>
+<EM>&gt; &gt;----
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A high RTO may be due to long queue in a slow link.  For example, a student
+</EM><BR>
+<EM>&gt; dials in to school from home to access school's web pages.  The link is low
+</EM><BR>
+<EM>&gt; latency (~5ms) and low bandwidth (maybe 14.4Kbps).  And the RTO can get to a
+</EM><BR>
+<EM>&gt; high value because of long queue, in turn because of large window, in the
+</EM><BR>
+<EM>&gt; dial in server.  I guess the list may not be interested in this situation
+</EM><BR>
+<EM>&gt; because it does not affect the Internet at large.  But I think if TCP uses a
+</EM><BR>
+<EM>&gt; good estimate of the bandwidth delay product as the window size instead of
+</EM><BR>
+<EM>&gt; an arbitrary big window, the problem will be solved for this case and other
+</EM><BR>
+<EM>&gt; cases like high latency low bandwidth...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; And I am waiting to see SACK to be widely deployed...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 							Poon.
+</EM><BR>
+<EM>&gt; 							<A HREF="mailto:poon@cs.wisc.edu?Subject=Re:%20TCP%20buffers&In-Reply-To=&lt;199704141634.MAA02296@brookfield.ans.net&gt;">poon@cs.wisc.edu</A>
+</EM><BR>
+<P>At (14.4 kbps / 8 b/B) * 0.005 sec, you get about 9KB/sec through the
+<BR>
+pipe.  One 552 byte packet takes 50 msec.  If you keep 8 in flight
+<BR>
+(buffer size of 4KB) you get a 400 msec delay.  If you try to keep
+<BR>
+32KB in flight, either you get a long delay or at some point the queue
+<BR>
+overflows.  If your queue holds the whole 32KB, you get a long delay
+<BR>
+but no loss and TCP goes as fast as it possibly can (exactly link
+<BR>
+speed).  If you take an isolated loss and your sender implements fast
+<BR>
+retransmit and fast recovery correctly, you halve the amount of
+<BR>
+packets in flight from the point of loss.  If you take multiple
+<BR>
+losses, you can have the window size more than once and also end up
+<BR>
+with a timeout.  That is where the fix to fast recovery is needed.
+<BR>
+<P>The fix, proposed by Sally Floyd in the appendix of one of her papers,
+<BR>
+is to remain in fast recovery until the ACK progression has advanced
+<BR>
+all the way to the last packet transmitted when the dupplicate ACKs
+<BR>
+where noticed.  Luigi Rizzo has implemented this for FreeBSD TCP in
+<BR>
+his SACK and TSACK code.  Luigi gives credit to J. Hoe but doesn't
+<BR>
+give a reference, so maybe it was independently discovered.  See the
+<BR>
+description of Newreno at <A HREF="http://www.iet.unipi.it/~luigi/sack.html">http://www.iet.unipi.it/~luigi/sack.html</A>.
+<BR>
+<P>The scope of this WG is to identify errors in implementing TCP.  I'm
+<BR>
+not sure what error if any you are suggesting the WG document since
+<BR>
+TCP makes no estimate of the delay-bandwidth product other than
+<BR>
+backing off when a loss occurs.  If you think it should, then that is
+<BR>
+a matter for the research community who would be happy to review a
+<BR>
+well thought out proposal to fix TCP when you have one.
+<BR>
+<P>The sort of fix for fast recovery described above might be slightly
+<BR>
+out of scope for this WG since it is just emerging from the research
+<BR>
+community in BSD TCPs.  Or it might not be.  Vern?
+<BR>
+<P>Curtis
+<BR>
+<P>ps- If you are having the problems with a particular host on the
+<BR>
+sender end, there is a good chance it doesn't do fast retransmit
+<BR>
+and/or it retransmits more than it has to after the drop occurs.
+<BR>
+These are implemention errors already documented by this WG.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0330.html">Matt Mathis: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0327.html">Kacheong Poon: "Re: TCP buffers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0332.html">Fred Bohle: "Re: TCP buffers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#331">[ date ]</A>
+<A HREF="index.html#331">[ thread ]</A>
+<A HREF="subject.html#331">[ subject ]</A>
+<A HREF="author.html#331">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

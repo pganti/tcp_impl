@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 17:57:47 2000" -->
+<!-- isoreceived="20000225225747" -->
+<!-- sent="Fri, 25 Feb 2000 15:50:49 -0700 (MST)" -->
+<!-- isosent="20000225225049" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002252250.PAA15085@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002252250.PAA15085@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 17:50:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2026.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2033.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2025">[ date ]</A>
+<A HREF="index.html#2025">[ thread ]</A>
+<A HREF="subject.html#2025">[ subject ]</A>
+<A HREF="author.html#2025">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Costa Sapuntzakis &lt;<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002252250.PAA15085@calcite.rhyolite.com&gt;">csapuntz@cisco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Today, you have specialized silicon that for simple bus protocols
+</EM><BR>
+<EM>&gt; (SCSI parallel interface and ATA) will directly take transfer blocks
+</EM><BR>
+<EM>&gt; between the device and the buffer cache. This is not currently done
+</EM><BR>
+<EM>&gt; with TCP, to the best of my knowledge. ...
+</EM><BR>
+<P>It might be good to investigate the history of Protocol Engines Inc.,
+<BR>
+including its goals, the reasons for its failure as a business, and what
+<BR>
+it achieved technically.  A skewed history might be:
+<BR>
+&nbsp;1. founded to make silicon for XTP, a nominally faster protocol than TCP.
+<BR>
+&nbsp;2. when XTP protocol and the XTP chips got bogged down, shifted to making
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;chips to help TCP go wire speed over FDDI.
+<BR>
+&nbsp;3. other people made TCP go wire speed over FDDI without any special
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;silicon or new to protocols.  That took some wind out of XTP's sails,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and tore the sails driving PEI's TCP acclerator chips.
+<BR>
+&nbsp;&nbsp;4. standard standards committee problems with XTP didn't help PEI's other
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;sails.
+<BR>
+<P>If you ask me, SCSI/IP and RDMA have striking parallels to #1 and #2. 
+<BR>
+I bet you'll meet parallels to #3 before any real deployment.  You've
+<BR>
+started to see #4 in some of the suggested improvements to RDMA today.
+<BR>
+It's not that the suggestions are not good ideas.  That problem is that
+<BR>
+committees cannot say no to good ideas, while the one thing that matters
+<BR>
+above all in any design task is saying no to almost everything.
+<BR>
+<P>Protocol Engines and XTP were based on the unexamined assumption that TCP
+<BR>
+is very difficult to implement and an unavoidably slow protocol.  Most
+<BR>
+people just knew those &quot;facts&quot; 15 years ago.  I think RDMA suffers a
+<BR>
+similar problem.  Instead of starting by assuming that a new protocol is
+<BR>
+needed for a new goal, if you actually look within the existing boundaries,
+<BR>
+you'll often find a solution.  Often the inside solution is better than
+<BR>
+any possible extension of the protocol.  Protocol extensions require more
+<BR>
+bandwidth and more processing on both sender and receiver.  They also have
+<BR>
+problems gaining enough marketshare to survive.
+<BR>
+<P>Please don't misunderstand me.  Greg didn't include my name among
+<BR>
+the authors on one of the XTP specs because I said XTP was a stupid
+<BR>
+idea.  I still like lots of XTP.  I also think that many of the
+<BR>
+XTP ideas can be *and have been* applied to TCP implementations.
+<BR>
+<P><P><EM>&gt; However, in the case of most storage protocols, you don't want
+</EM><BR>
+<EM>&gt; the data in the receive buffer. You want it in the buffer cache, so
+</EM><BR>
+<EM>&gt; there is a copy to the buffer cache.
+</EM><BR>
+<P>Which NFS implementation written in the last 10 or at least 5 years and
+<BR>
+intended to be fast doesn't move data between the buffer cache near the
+<BR>
+disk and the buffer cache near the application with zero (0) copies?
+<BR>
+Page flipping to and from buffer caches is especially easy, because
+<BR>
+buffer caches tend to be page aligned, and file systems like to move
+<BR>
+data in page-sized or larger chunks.
+<BR>
+<P><P><EM>&gt; So, NFS has a  CPU overhead hit as compared to optimized storage host bus
+</EM><BR>
+<EM>&gt; adapters. The goal was to eliminate part of this hit, by getting rid of an
+</EM><BR>
+<EM>&gt; extra copy.
+</EM><BR>
+<P>How can you have fewer than zero copies?
+<BR>
+<P><EM>&gt; Now, this proposal doesn't fix the interrupt overhead problem. 
+</EM><BR>
+<EM>&gt; Optimized FC/SCSI NICs have one interrupt/transfer or less.
+</EM><BR>
+<P>Interrupts are killers, and so for that last 5 or 10 years, a competetive
+<BR>
+NFS system has had about 0.1 interrupts per packet.  The trick is not
+<BR>
+reducing the ratio of interrupts/packet, but reducing it only so far that
+<BR>
+things don't slow down, and increasing the ratio when the total system
+<BR>
+(client &amp; server) moves into a regime that requires more interrupts.
+<BR>
+<P><P>] From: Michael Krause &lt;<A HREF="mailto:krause@cup.hp.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002252250.PAA15085@calcite.rhyolite.com&gt;">krause@cup.hp.com</A>&gt;
+<BR>
+<P>] It ain't free and there are plenty of reasons to avoid copying data since 
+<BR>
+] ...
+<BR>
+] touching the buffers themselves.  Also, one could use this technology with 
+<BR>
+] storage devices to bypass the server and send data to one or more NICs for 
+<BR>
+] remote access - RDMA is still quite good for this type of operation and 
+<BR>
+] does not involve touching the data.
+<BR>
+<P>There are other, much easier ways to separate data and control
+<BR>
+information in the receiver than being forced to parse optional
+<BR>
+new bits in TCP or IP headers.
+<BR>
+<P>For 10 years, network interfaces in commercial UNIX systems have been
+<BR>
+putting the headers (including RPC/XDR) of incoming NFS traffic in one
+<BR>
+place (a &quot;small mbuf&quot;) and the data in another place (the buffer cache)
+<BR>
+without extra copies, and without parsing any headers, not to mention
+<BR>
+new header bits with the nasty problems of TCP or IP options.
+<BR>
+And this despite the fact that the RPC/XDR stuff is between variable length
+<BR>
+(recall the NFS group list) and a hard to predict length.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002252250.PAA15085@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2026.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2033.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2025">[ date ]</A>
+<A HREF="index.html#2025">[ thread ]</A>
+<A HREF="subject.html#2025">[ subject ]</A>
+<A HREF="author.html#2025">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

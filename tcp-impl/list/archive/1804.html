@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Problems with Path MTU D</TITLE>
+<META NAME="Author" CONTENT="Mike Fisk (mfisk@lanl.gov)">
+<META NAME="Subject" CONTENT="Re: TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Problems with Path MTU Discovery</H1>
+<!-- received="Tue Sep 14 16:15:26 1999" -->
+<!-- isoreceived="19990914201526" -->
+<!-- sent="Tue, 14 Sep 1999 14:11:43 -0600 (MDT)" -->
+<!-- isosent="19990914201143" -->
+<!-- name="Mike Fisk" -->
+<!-- email="mfisk@lanl.gov" -->
+<!-- subject="Re: TCP Problems with Path MTU Discovery" -->
+<!-- id="Pine.LNX.4.05.9909141338510.29510-300000@pescado.lanl.gov" -->
+<!-- inreplyto="199909141415.IAA21077@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Mike Fisk (<A HREF="mailto:mfisk@lanl.gov?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;Pine.LNX.4.05.9909141338510.29510-300000@pescado.lanl.gov&gt;"><EM>mfisk@lanl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 14 1999 - 16:11:43 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1805.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1803.html">Ahmed Karmouch: "Workshop on  Mobile Agents for Telecommunication Applications, Ottawa-Canada"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1802.html">Vernon Schryver: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1821.html">Geert Jan de Groot: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1804">[ date ]</A>
+<A HREF="index.html#1804">[ thread ]</A>
+<A HREF="subject.html#1804">[ subject ]</A>
+<A HREF="author.html#1804">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Tue, 14 Sep 1999, Vernon Schryver wrote:
+<BR>
+<P><EM>&gt; I have a nit you might wisely ignore.  Some versions of `ping` can also
+</EM><BR>
+<EM>&gt; set the DF bit to probe for broken routers that do not generate the ICMP
+</EM><BR>
+<EM>&gt; message or that filter ICMP messages.  The `ping` in IRIX is one.  I think
+</EM><BR>
+<EM>&gt; the `ping` in NetBSD is another.  Perhaps someday the `ping` in BSD/OS
+</EM><BR>
+<EM>&gt; will be still another.   In other words, I've been flogging the hacks in
+</EM><BR>
+<EM>&gt; ftp.rhyolite.com:src/ping.tar.Z.  I suggest you *not* mention my vanity
+</EM><BR>
+<EM>&gt; domain.
+</EM><BR>
+<P>As long as we're mentioning tools....
+<BR>
+<P>The LBL traceroute also has an option (-F) to set the DF bit.  When used
+<BR>
+with small and large packets, this can be used to find PMTUD blackholes.
+<BR>
+<P>First, there is a bug in the code for little endian machines that prevents
+<BR>
+that bit from actually being set.  The second attachment to this message
+<BR>
+is the patch for that.
+<BR>
+<P>Second, when it receives an ICMP Need Fragmentation reponse, it doesn't
+<BR>
+report what MTU the router will accept.  As an aid for traversing networks
+<BR>
+with various MTUs, I also made a patch that not only prints that value,
+<BR>
+but will then continue the trace with the smaller MTU. That patch is the
+<BR>
+first attachment to this message.  
+<BR>
+<P>I sent these patches back to LBL in May, but never got a response.  I
+<BR>
+don't know if anyone is listening to <A HREF="mailto:traceroute@ee.lbl.gov?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;Pine.LNX.4.05.9909141338510.29510-300000@pescado.lanl.gov&gt;">traceroute@ee.lbl.gov</A> anymore.
+<BR>
+<P>Here's a sample of the output:
+<BR>
+<P>$ ./traceroute -F www.unm.edu 4352
+<BR>
+traceroute to musca.unm.edu (129.24.57.2), 30 hops max, 4352 byte packets
+<BR>
+&nbsp;1  lanl-gw.lanl.gov (192.16.1.1)  1.311 ms  1.166 ms  1.262 ms
+<BR>
+&nbsp;2  esnet-rt1.lanl.gov (192.16.1.241)  2.003 ms  1.926 ms  2.029 ms
+<BR>
+&nbsp;3  lanl-technet.lanl.gov (192.16.1.246)  3.176 ms  8.990 ms  2.981 ms
+<BR>
+&nbsp;4  lanl-technet.lanl.gov (192.16.1.246)  3.098 ms !F&lt;=1479 Resending with 1479 byte packets:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;206.206.125.17 (206.206.125.17)  90.907 ms  69.811 ms
+<BR>
+&nbsp;5  rtn.nm.org (129.121.1.1)  81.085 ms  48.157 ms  90.253 ms
+<BR>
+&nbsp;6  198.59.130.49 (198.59.130.49)  94.900 ms  103.146 ms  95.326 ms
+<BR>
+&nbsp;7  198.83.5.2 (198.83.5.2)  73.320 ms  73.084 ms  73.236 ms
+<BR>
+&nbsp;8  198.83.226.33 (198.83.226.33)  124.882 ms  74.908 ms  74.436 ms
+<BR>
+&nbsp;9  musca.unm.edu (129.24.57.2)  76.494 ms  75.609 ms  81.826 ms
+<BR>
+<P>=====================================================================
+<BR>
+Mike Fisk                   | (505)667-5119 | MS B255
+<BR>
+Network Engineering (CIC-5) |               | Los Alamos National Lab
+<BR>
+<A HREF="mailto:mfisk@lanl.gov?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;Pine.LNX.4.05.9909141338510.29510-300000@pescado.lanl.gov&gt;">mfisk@lanl.gov</A>              | FAX: 665-7793 | Los Alamos, NM  87545
+<BR>
+<P>
+<BR><HR NOSHADE>
+<UL>
+<LI>TEXT/PLAIN attachment: <A HREF="att-1804/01-traceroute-1.4a5-pmtu.patch">traceroute-1.4a5-pmtu.patch</A>
+</UL>
+<!-- attachment="01-traceroute-1.4a5-pmtu.patch" -->
+
+<BR><HR NOSHADE>
+<UL>
+<LI>TEXT/PLAIN attachment: <A HREF="att-1804/02-traceroute-1.4a5-df.patch">traceroute-1.4a5-df.patch</A>
+</UL>
+<!-- attachment="02-traceroute-1.4a5-df.patch" -->
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1805.html">Vernon Schryver: "Re: TCP's handling of IP precedence"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1803.html">Ahmed Karmouch: "Workshop on  Mobile Agents for Telecommunication Applications, Ottawa-Canada"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1802.html">Vernon Schryver: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1821.html">Geert Jan de Groot: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1804">[ date ]</A>
+<A HREF="index.html#1804">[ thread ]</A>
+<A HREF="subject.html#1804">[ subject ]</A>
+<A HREF="author.html#1804">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

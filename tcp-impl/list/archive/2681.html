@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ECN &amp; PMTU</TITLE>
+<META NAME="Author" CONTENT="Srivathsa (sriva@lucent.com)">
+<META NAME="Subject" CONTENT="Re: ECN &amp; PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ECN &amp; PMTU</H1>
+<!-- received="Tue Apr  9 16:11:08 2002" -->
+<!-- isoreceived="20020409201108" -->
+<!-- sent="Tue, 09 Apr 2002 17:08:42 -0400" -->
+<!-- isosent="20020409210842" -->
+<!-- name="Srivathsa" -->
+<!-- email="sriva@lucent.com" -->
+<!-- subject="Re: ECN &amp; PMTU" -->
+<!-- id="3CB3585A.7E7C670C@lucent.com" -->
+<!-- inreplyto="3CB27092.7680BC16@netlab.hcltech.com" -->
+<STRONG>From:</STRONG> Srivathsa (<A HREF="mailto:sriva@lucent.com?Subject=Re:%20ECN%20&amp;%20PMTU&In-Reply-To=&lt;3CB3585A.7E7C670C@lucent.com&gt;"><EM>sriva@lucent.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 09 2002 - 17:08:42 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2680.html">Eric A. Hall: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2681">[ date ]</A>
+<A HREF="index.html#2681">[ thread ]</A>
+<A HREF="subject.html#2681">[ subject ]</A>
+<A HREF="author.html#2681">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Arun Prasad wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi all,
+</EM><BR>
+<EM>&gt;     Some doubts on the procedure followed for PMTU (Path mtu) discovery and
+</EM><BR>
+<EM>&gt; ECN method.....
+</EM><BR>
+<EM>&gt;     The doubt is not related to the procedure as such, but the relation between the
+</EM><BR>
+<EM>&gt; two procedures stated above......
+</EM><BR>
+<EM>&gt; Tcp and Sctp uses ICMP message to handle the PMTU discovery procedure....
+</EM><BR>
+<EM>&gt; ie., the intermediate router will send an ICMP messge of &quot;Message too Long&quot;
+</EM><BR>
+<EM>&gt; to the end point sending the data packet of size greater than the MTU size of some
+</EM><BR>
+<EM>&gt; intermediate path to the destination.....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; For ECN, the intermediate router should set the appropriate bits in the IP header
+</EM><BR>
+<EM>&gt; (if it supports ECN ....) whenever there is congestion and risk of packet drops
+</EM><BR>
+<EM>&gt; is high....... The endpoints then correct their Congestion window accordingly and
+</EM><BR>
+<EM>&gt; help in reducing the Congestion in the intermediate router.....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Why, we adopt two different methods to carry out similar (in the sense, both are
+</EM><BR>
+<EM>&gt; related to the Intermediate routers....)?????
+</EM><BR>
+<P>Arun,
+<BR>
+&nbsp;&nbsp;&nbsp;I dont really see how the 2 situations are similar.
+<BR>
+In the PMTU case,  the network is in normal state.
+<BR>
+<P>In the ECN case, there is a congestion at the router. The router cant
+<BR>
+afford to pump more packets into the network.  In the earlier internet,
+<BR>
+the source quench mechanism was used to combat congestion  (i.e router
+<BR>
+sends an ICMP to the source).  In a quick evolution, routers started
+<BR>
+using a packet-drop mechanism to combat congestion (It didnt make sense
+<BR>
+to pump more packets into a congested network).  Now, ECN is being
+<BR>
+recommended to combat congestion VERY EARLY. 
+<BR>
+&nbsp;&nbsp;i.e PMTU-like-mechanism cant be used for ECN.
+<BR>
+<P><P><EM>&gt;     Why cant we generalise this stuff.... ie.,  the need here is some way to
+</EM><BR>
+<EM>&gt; communicate between the intermediate router and the endpoint.... Not sure
+</EM><BR>
+<EM>&gt; which of the two ways is advantageous, but cant we use the same method for
+</EM><BR>
+<EM>&gt; both..... ie.,
+</EM><BR>
+<EM>&gt; As for the PMTU discovery, the intermediate router can send an ICMP message
+</EM><BR>
+<EM>&gt; to the endpoint carrying a message &quot;CONGESTION&quot;, by receiving this the
+</EM><BR>
+<EM>&gt; endpoint will do all appropriate actions as it does when it receives the packet set
+</EM><BR>
+<EM>&gt; with ECN-ECHO flag (as in present ECN procedure...)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; or vice versa ( ie., adopt the method followed by ECN  for PMTU discovery aslo,
+</EM><BR>
+<EM>&gt; that might be slighly tough, considering the Backward compatibility....)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><P>You cant use a ECN-like-mechanism for PMTU discovery.   As soon as an
+<BR>
+intermediate router discovers that the packet (with DontFragment bit set
+<BR>
+) is too large for one of its outbound interfaces,   it will have to
+<BR>
+discard the packet.  I.e it cant relay the packet to the
+<BR>
+destination.      In ECN scenario,  packet can still be relayed further.
+<BR>
+<P>-Srivathsa
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2680.html">Eric A. Hall: "Re: [Tsvwg] ECN &amp; PMTU"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2674.html">Arun Prasad: "ECN &amp; PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2682.html">Arun Prasad: "Re: ECN &amp; PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2681">[ date ]</A>
+<A HREF="index.html#2681">[ thread ]</A>
+<A HREF="subject.html#2681">[ subject ]</A>
+<A HREF="author.html#2681">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Apr 09 2002 - 16:11:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

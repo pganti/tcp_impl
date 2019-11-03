@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: OUT PUT of TCPDUMP</TITLE>
+<META NAME="Author" CONTENT="Chetan Kumar (chetan@protocol.ece.iisc.ernet.in)">
+<META NAME="Subject" CONTENT="OUT PUT of TCPDUMP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>OUT PUT of TCPDUMP</H1>
+<!-- received="Wed Nov  5 23:31:43 1997" -->
+<!-- isoreceived="19971106043143" -->
+<!-- sent="Thu, 6 Nov 1997 12:57:07 +0000 (GMT)" -->
+<!-- isosent="19971106125707" -->
+<!-- name="Chetan Kumar" -->
+<!-- email="chetan@protocol.ece.iisc.ernet.in" -->
+<!-- subject="OUT PUT of TCPDUMP" -->
+<!-- id="Pine.LNX.3.95.971106123844.5623A-100000@protocol.ece.iisc.ernet.in" -->
+<STRONG>From:</STRONG> Chetan Kumar (<A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20OUT%20PUT%20of%20TCPDUMP&In-Reply-To=&lt;Pine.LNX.3.95.971106123844.5623A-100000@protocol.ece.iisc.ernet.in&gt;"><EM>chetan@protocol.ece.iisc.ernet.in</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Nov 06 1997 - 07:57:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0799.html">lucero7@juno.com: "CREATE MULTIPLE STREAMS OF INCOME!!!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0804.html">Wu-chang Feng: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0806.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0808.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#800">[ date ]</A>
+<A HREF="index.html#800">[ thread ]</A>
+<A HREF="subject.html#800">[ subject ]</A>
+<A HREF="author.html#800">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The following is the output of tcpdump for connection between
+<BR>
+<P>wlan-&gt; running redhat linux 2.0.30; running netscape to download a file
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from the proxy server.
+<BR>
+<P>ibmh8-&gt; IMB AIX Version 4 , proxy server.
+<BR>
+<P>12:30:19.160434 ibmh8.3128 &gt; wlan.16065: P 6144:6656(512) ack 1 win 16060 (ttl 60, id 3134)
+<BR>
+12:30:19.180434 wlan.16065 &gt; ibmh8.3128: . ack 6656 win 31744 (DF) (ttl 64, id 48911)
+<BR>
+12:30:19.180434 wlan.16065 &gt; ibmh8.3128: . ack 6656 win 31744 (DF) (ttl 63, id 48911)
+<BR>
+12:30:19.200434 ibmh8.3128 &gt; wlan.16065: P 6656:7168(512) ack 1 win 16060 (ttl 60, id 3137)
+<BR>
+12:30:19.220434 wlan.16065 &gt; ibmh8.3128: . ack 7168 win 31744 (DF) (ttl 64, id 48912)
+<BR>
+12:30:19.220434 wlan.16065 &gt; ibmh8.3128: . ack 7168 win 31744 (DF) (ttl 63, id 48912)
+<BR>
+12:30:19.360434 ibmh8.3128 &gt; wlan.16065: P 7168:7680(512) ack 1 win 16060 (ttl 60, id 3148)
+<BR>
+12:30:19.380434 wlan.16065 &gt; ibmh8.3128: . ack 7680 win 31744 (DF) (ttl 64, id 48913)
+<BR>
+12:30:19.380434 wlan.16065 &gt; ibmh8.3128: . ack 7680 win 31744 (DF) (ttl 63, id 48913)
+<BR>
+<P>Now my question is that as I can see my 'wlan' is sending two
+<BR>
+acknowledgement for every tcp segment it is receiving from the proxy
+<BR>
+server.
+<BR>
+<P>Both the acknowledgements are send at the same instant, as I can see from
+<BR>
+the time stamp, also the ttl is reduced by one for the second
+<BR>
+acknowledgement. 
+<BR>
+<P>Can anybody explain why this is happening.
+<BR>
+<P>&nbsp;Thanks for any response
+<BR>
+<P>chetan . S
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;::::::::::: TREE SAVES THOSE WHO SAVE TREES ::::::::::::
+<BR>
+<P><P>E-mail <A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20OUT%20PUT%20of%20TCPDUMP&In-Reply-To=&lt;Pine.LNX.3.95.971106123844.5623A-100000@protocol.ece.iisc.ernet.in&gt;">chetan@protocol.ece.iisc.ernet.in</A>
+<BR>
+<P>WEB PAGE - <A HREF="http://pclab.ece.iisc.ernet.in/chetan">http://pclab.ece.iisc.ernet.in/chetan</A>
+<BR>
+<P>Snail mail
+<BR>
+&nbsp;#104 ,East Park Road,
+<BR>
+8 th Cross,Malleshwarm,
+<BR>
+Bangalore,
+<BR>
+Karnataka,India.
+<BR>
+pin 560003.
+<BR>
+<P>Phone 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work place
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3092282
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3349218      
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(080)3347220
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0799.html">lucero7@juno.com: "CREATE MULTIPLE STREAMS OF INCOME!!!"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0801.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0804.html">Wu-chang Feng: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0806.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0808.html">Vern Paxson: "Re: OUT PUT of TCPDUMP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#800">[ date ]</A>
+<A HREF="index.html#800">[ thread ]</A>
+<A HREF="subject.html#800">[ subject ]</A>
+<A HREF="author.html#800">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

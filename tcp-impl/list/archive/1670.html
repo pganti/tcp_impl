@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Counting ACKs in NewReno</TITLE>
+<META NAME="Author" CONTENT="Chadi M. BARAKAT (Chadi.Barakat@sophia.inria.fr)">
+<META NAME="Subject" CONTENT="Re: Counting ACKs in NewReno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Counting ACKs in NewReno</H1>
+<!-- received="Mon Mar 15 05:09:24 1999" -->
+<!-- isoreceived="19990315100924" -->
+<!-- sent="Mon, 15 Mar 1999 11:01:11 +0100" -->
+<!-- isosent="19990315100111" -->
+<!-- name="Chadi M. BARAKAT" -->
+<!-- email="Chadi.Barakat@sophia.inria.fr" -->
+<!-- subject="Re: Counting ACKs in NewReno" -->
+<!-- id="36ECDA67.BFB7878D@sophia.inria.fr" -->
+<!-- inreplyto="85256733.0002563A.00@D51MTA03.pok.ibm.com" -->
+<STRONG>From:</STRONG> Chadi M. BARAKAT (<A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;36ECDA67.BFB7878D@sophia.inria.fr&gt;"><EM>Chadi.Barakat@sophia.inria.fr</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 15 1999 - 05:01:11 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1670">[ date ]</A>
+<A HREF="index.html#1670">[ thread ]</A>
+<A HREF="subject.html#1670">[ subject ]</A>
+<A HREF="author.html#1670">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello,
+<BR>
+<P>The idea with the three duplicate ACKs of the fast retransmit algorithm
+<BR>
+is to eliminate any possibility for packet reordering. It is supposed
+<BR>
+that the receipt of three packets after the missing one is a good signal
+<BR>
+of the loss of this packet. So it is retransmitted without waiting for a
+<BR>
+timeout. Now, in New Reno, the first loss in a window required three
+<BR>
+duplicate ACKs, but once a partial ACK is received, the source can
+<BR>
+conclude directly that this packet is lost and it doesn't need the wait
+<BR>
+for any additional dup ACK, for this reason it doesn't change its dup
+<BR>
+ACKs counter. Why? because a partial ACK is sent most probably in
+<BR>
+response to the retransmission of the previous loss in the same window,
+<BR>
+so at least one Roundtrip time has passed since the first transmission
+<BR>
+of the missing packet. This roundtrip is enough to take a decision that
+<BR>
+the packet is lost. You can consider that the three dup ACKs counted at
+<BR>
+the begining of Fast Recovery is used by the source to fast retransmit
+<BR>
+any further loss in the same window.
+<BR>
+<P>Now for the value of the dup ACK counter at the end of fast Recovery, I
+<BR>
+think that here the value of this counter doesn't count a lot. Setting
+<BR>
+it to zero may prohibit the source from detecting some losses as you
+<BR>
+show in your exemple. Also taking the number of duplicate ACKs into
+<BR>
+account may cause a problem because we are not sure if these duplicate
+<BR>
+ACKs correspond to packets sent before or after the loss. A duplicate
+<BR>
+ACK for a packet sent before the missing packet is not a signal for the
+<BR>
+loss of this packet. I propose here to not count on the counter and
+<BR>
+instead to stretch the Fast Recovery phase to cover the new packets sent
+<BR>
+during Fast Recovery. Let X be the highest sequence number sent when the
+<BR>
+Fast Recovery phase is called, let Y be the highest sequence number sent
+<BR>
+when the last loss in the window is retransmitted. When an ACK for this
+<BR>
+loss is received, if this ACK askes for a packet less than Y than we can
+<BR>
+conclude that this packet is also lost without waiting for dup ACKs
+<BR>
+because at least one Roundtrip time has passed since its transmission.
+<BR>
+Now if the ACK carries a sequence number more than or equal to Y than
+<BR>
+dup ACK can be set to zero and normal Fast Retransmit can be used to
+<BR>
+detect the subsequent losses.
+<BR>
+<P>Chadi
+<BR>
+<PRE>
+-- 
+                    **  Chadi Mohamad BARAKAT  **
+           <A HREF="http://www.inria.fr/mistral/personnel/Chadi.Barakat">http://www.inria.fr/mistral/personnel/Chadi.Barakat</A>
+                                  /\
+PhD Student - MISTRAL - INRIA    /  \   <A HREF="mailto:Chadi.Barakat@sophia.inria.fr?Subject=Re:%20Counting%20ACKs%20in%20NewReno&In-Reply-To=&lt;36ECDA67.BFB7878D@sophia.inria.fr&gt;">Chadi.Barakat@sophia.inria.fr</A>
+2004, Route des Lucioles BP 93   \  /   Phone : + 33 4 92 38 71 99
+06902 Sophia Antipolis - France   \/    Cell  : + 33 6 10 42 36 30
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1669.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1668.html">mrosu@us.ibm.com: "Counting ACKs in NewReno"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1671.html">Kacheong Poon: "Re: Counting ACKs in NewReno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1670">[ date ]</A>
+<A HREF="index.html#1670">[ thread ]</A>
+<A HREF="subject.html#1670">[ subject ]</A>
+<A HREF="author.html#1670">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:40 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

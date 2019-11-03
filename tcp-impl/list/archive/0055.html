@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Josh Cohen (josh@birdcage.mcom.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 18:55:55 1997" -->
+<!-- isoreceived="19970211235555" -->
+<!-- sent="Tue, 11 Feb 1997 10:44:56 -0800 (PST)" -->
+<!-- isosent="19970211184456" -->
+<!-- name="Josh Cohen" -->
+<!-- email="josh@birdcage.mcom.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702111844.KAA25296@birdcage.mcom.com" -->
+<!-- inreplyto="3300B518.3C75@spider.com" -->
+<STRONG>From:</STRONG> Josh Cohen (<A HREF="mailto:josh@birdcage.mcom.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702111844.KAA25296@birdcage.mcom.com&gt;"><EM>josh@birdcage.mcom.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 13:44:56 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0056.html">Josh Cohen: "minor clarification"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#55">[ date ]</A>
+<A HREF="index.html#55">[ thread ]</A>
+<A HREF="subject.html#55">[ subject ]</A>
+<A HREF="author.html#55">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; What am I missing?
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+see below...
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The application process hangs, not the server TCP. Maybe I'm 
+</EM><BR>
+<EM>&gt; getting confused too.  My guess is the server TCP is
+</EM><BR>
+<EM>&gt; continually probing at this point (and so the application process
+</EM><BR>
+<EM>&gt; hangs).  I'll try and get a tcpdump of this behaviour (Josh, do
+</EM><BR>
+<EM>&gt; you have one handy?) by modifying our TCP to not do RFC1122 RSTs.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+I dont have the misbehaving one handy, Ill try to find it.
+<BR>
+<P>It seems that there is some confusion.. Let me take a stab at summarizing
+<BR>
+the problem.
+<BR>
+<P>Lets have a look at a time when RFC1122 is comes into play:
+<BR>
+<P><P>Note that in trace 1, the client is the active closer.
+<BR>
+You'll see an initial RST which is presuably from the SO_LINGER,
+<BR>
+but then a series of like 5 or so RSTs.  I presume that these
+<BR>
+are from the 'data in pipe' or rfc 1122 issue we talked about.
+<BR>
+<P>TRACE 1  'STOP' with RST
+<BR>
+&nbsp;&nbsp;1   0.00000     birdcage -&gt; orac.early.com TCP D=80 S=59500 Syn Seq=1463588337 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;2   0.08457 orac.early.com -&gt; birdcage     TCP D=59500 S=80 Syn Ack=1463588338 Seq=693680153 Len=0 Win=8760
+<BR>
+&nbsp;&nbsp;3   0.00009     birdcage -&gt; orac.early.com TCP D=80 S=59500     Ack=693680154 Seq=1463588338 Len=0 Win=8760
+<BR>
+<P>&nbsp;[..  snip , normal data ..]
+<BR>
+<P>&nbsp;44   0.00009     birdcage -&gt; orac.early.com TCP D=80 S=59500     Ack=693714559 Seq=1463588596 Len=0 Win=8760
+<BR>
+&nbsp;45   0.00972 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693714559 Len=1460 Win=8760
+<BR>
+&nbsp;46   0.00368     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=8760
+<BR>
+[ client sends a RST to abort.  The server is in the process of sending
+<BR>
+&nbsp;&nbsp;a lot of data, eg the HTTP response... This could be a FIN, too ]
+<BR>
+<P>&nbsp;47   0.04554 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693716019 Len=1460 Win=8760
+<BR>
+&nbsp;48   0.00011     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=0
+<BR>
+&nbsp;49   0.01098 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693717479 Len=1460 Win=8760
+<BR>
+&nbsp;50   0.00008     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=0
+<BR>
+&nbsp;51   0.03070 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693718939 Len=1460 Win=8760
+<BR>
+&nbsp;52   0.00013     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=0
+<BR>
+&nbsp;53   0.00500 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693720399 Len=892 Win=8760
+<BR>
+&nbsp;54   0.00007     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=0
+<BR>
+&nbsp;55   0.01253 orac.early.com -&gt; birdcage     TCP D=59500 S=80     Ack=1463588596 Seq=693721291 Len=1460 Win=8760
+<BR>
+&nbsp;56   0.00007     birdcage -&gt; orac.early.com TCP D=80 S=59500 Rst Seq=1463588596 Len=0 Win=0
+<BR>
+<P>notice the series of RSTs.  This is for each packet that was 'on its way'
+<BR>
+when the client aborted.
+<BR>
+It is these RSTs which cause the server's write() to return with an 
+<BR>
+error, ie connection reset by peer...
+<BR>
+The problem that occurs with a bad stack is that the server side
+<BR>
+application will hang forever without the RSTs.
+<BR>
+<P>Assuming we are in the middle of this connection before the first
+<BR>
+RST was sent. ( Im demonstrating a bad stack scenario )
+<BR>
+<P>1S = step 1, Server side
+<BR>
+1C = step 1, client side
+<BR>
+<P>1S. Server is in a write() sending data to the client
+<BR>
+<P>1C. User hits STOP or something, the application does a close().
+<BR>
+<P>2C. Client aborts and sends either a FIN or RST 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(lets say a FIN to show the problem, and reasons for RST instead)
+<BR>
+<P>3C. The client application has destroyed the socket, and it detached
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from the stack for that connection. 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From the client stack side, the connection no longer exists
+<BR>
+<P>3S Server continues to be in a write
+<BR>
+&nbsp;&nbsp;&nbsp;Server Stack goes to CLOSE_WAIT ( having received the FIN )
+<BR>
+&nbsp;&nbsp;&nbsp;
+<BR>
+4S Server will continue to write to the client, until it has exhausted
+<BR>
+&nbsp;&nbsp;&nbsp;its window. This is OK for a half-close.  
+<BR>
+<P>5S The window is exhausted, and the server will wait until the client
+<BR>
+&nbsp;&nbsp;&nbsp;opens the window. (window probes )
+<BR>
+<P>4C. The client should, but doesnt  send a RST upon receiving the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remaining data from the server or window probes.
+<BR>
+<P>Once this state is acheived, the application on the server side
+<BR>
+will never return from the write(), and the stack will sit in 
+<BR>
+CLOSE_WAIT forever.  The evil client side has 'gone away'.
+<BR>
+<P>By sending a RST instead of the FIN to abort the connection, we can
+<BR>
+cause both the server side and client side stacks to tear the connection
+<BR>
+down immediately, and avoid the half-close where it gets caught.
+<BR>
+<P>The most common manifestation of the problem on the server side is
+<BR>
+that web server admins find that over time, their server threads or
+<BR>
+processes become hung.
+<BR>
+<P>Unfortunately, the bad stack implementation is in widespread use,
+<BR>
+and the current versions of it *still* do not fix the problem.
+<BR>
+<P><PRE>
+-- 
+-----------------------------------------------------------------------------
+Josh Cohen				        Netscape Communications Corp.
+Netscape Fire Department	       
+Server Engineering
+<A HREF="mailto:josh@netscape.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702111844.KAA25296@birdcage.mcom.com&gt;">josh@netscape.com</A>                       <A HREF="http://home.netscape.com/people/josh/">http://home.netscape.com/people/josh/</A>
+-----------------------------------------------------------------------------
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0056.html">Josh Cohen: "minor clarification"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0072.html">Scott Dawson: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#55">[ date ]</A>
+<A HREF="index.html#55">[ thread ]</A>
+<A HREF="subject.html#55">[ subject ]</A>
+<A HREF="author.html#55">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

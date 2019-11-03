@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Nagle -- again</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Nagle -- again">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Nagle -- again</H1>
+<!-- received="Thu Jun 24 00:20:55 1999" -->
+<!-- isoreceived="19990624042055" -->
+<!-- sent="Wed, 23 Jun 1999 21:19:09 -0700 (PDT)" -->
+<!-- isosent="19990624041909" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Nagle -- again" -->
+<!-- id="199906240419.VAA15240@rum.isi.edu" -->
+<!-- inreplyto="Nagle -- again" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906240419.VAA15240@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 24 1999 - 00:19:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1749.html">Sam Manthorpe: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1743.html">Greg Minshall: "Nagle -- again"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1750">[ date ]</A>
+<A HREF="index.html#1750">[ thread ]</A>
+<A HREF="subject.html#1750">[ subject ]</A>
+<A HREF="author.html#1750">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:sm@bossette.engr.sgi.com?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906240419.VAA15240@rum.isi.edu&gt;">sm@bossette.engr.sgi.com</A> (Sam Manthorpe)
+</EM><BR>
+<EM>&gt; Subject: Re: Nagle -- again
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906240419.VAA15240@rum.isi.edu&gt;">touch@ISI.EDU</A> (Joe Touch)
+</EM><BR>
+<EM>&gt; Date: Wed, 23 Jun 1999 20:57:58 -0700 (PDT)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906240419.VAA15240@rum.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>, <A HREF="mailto:minshall@siara.com?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906240419.VAA15240@rum.isi.edu&gt;">minshall@siara.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Joe Touch wrote:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; One observation - the paper indicates that there _must_ be at least
+</EM><BR>
+<EM>&gt; &gt; one ACK every two packets. This is not strictly required, at least
+</EM><BR>
+<EM>&gt; &gt; last time I checked. 
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I've been meaning to bring that up for a while.  The `ack every other
+</EM><BR>
+<EM>&gt; segment' algorithm recommended in RFC-1122 is bad news for high bandwidth,
+</EM><BR>
+<EM>&gt; low packet size media.  In particular I'm thinking of gigabit Ethernet
+</EM><BR>
+<EM>&gt; without jumbograms.  When we get an ack for every 2 packets, i.e. one
+</EM><BR>
+<EM>&gt; ack for every ~2920 bytes of application data, then if we want to obtain a 
+</EM><BR>
+<EM>&gt; TCP goodput of, say, 600 Mbits/sec on a single connection, then our 
+</EM><BR>
+<EM>&gt; sending machine will be receiving approx. 26000 ACKs per second which 
+</EM><BR>
+<EM>&gt; places a substuntial load on the sending hosts's stack (interrupt 
+</EM><BR>
+<EM>&gt; processing, IP packet processing, TCP processing).
+</EM><BR>
+<P>This is indeed problem. However, it appears that a significant part
+<BR>
+of the issue is the lack of a reasonable sized MTU, i.e., sticking
+<BR>
+with non jumbograms. Relying on ACK reduction alone won't fix that. 
+<BR>
+<P>The key issue is whether ACK clocking is important. It is implicit,
+<BR>
+but only if the ACK frequency is high enough. If ACKs are less
+<BR>
+frequent, the source becomes more bursty (allowed to send K packets
+<BR>
+when an ACK arrives).
+<BR>
+<P><EM>&gt;     (a) the SHOULD in RFC-1122 should remain a SHOULD and not become
+</EM><BR>
+<EM>&gt; 	a MUST, IMO
+</EM><BR>
+<P>It seems useful to require _either_ a minimum acceptable ACK frequency
+<BR>
+or a separate clocking mechanism that spaces transmission. This could
+<BR>
+be something negotiated on a per-pair basis.
+<BR>
+<P><EM>&gt;     (b)	I'm sure there is a clever algorithm to be found that decides
+</EM><BR>
+<EM>&gt; 	when the optimal time to send an ACK is; anybody got any ideas?
+</EM><BR>
+<P>Clever, _and_ runs as needed for a gigabit, if you please :-) 
+<BR>
+<P><P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1749.html">Sam Manthorpe: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1743.html">Greg Minshall: "Nagle -- again"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1751.html">Vern Paxson: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1750">[ date ]</A>
+<A HREF="index.html#1750">[ thread ]</A>
+<A HREF="subject.html#1750">[ subject ]</A>
+<A HREF="author.html#1750">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

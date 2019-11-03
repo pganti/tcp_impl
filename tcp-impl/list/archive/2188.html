@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="kuznet@ms2.inr.ac.ru (kuznet@ms2.inr.ac.ru)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Wed Jun 28 15:20:54 2000" -->
+<!-- isoreceived="20000628192054" -->
+<!-- sent="Wed, 28 Jun 2000 23:12:32 +0400 (MSK DST)" -->
+<!-- isosent="20000628191232" -->
+<!-- name="kuznet@ms2.inr.ac.ru" -->
+<!-- email="kuznet@ms2.inr.ac.ru" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="200006281912.XAA04185@ms2.inr.ac.ru" -->
+<!-- inreplyto="395A4511.DA898B5B@Novell.COM" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;200006281912.XAA04185@ms2.inr.ac.ru&gt;"><EM>kuznet@ms2.inr.ac.ru</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Jun 28 2000 - 15:12:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2187.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2187.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2188">[ date ]</A>
+<A HREF="index.html#2188">[ thread ]</A>
+<A HREF="subject.html#2188">[ subject ]</A>
+<A HREF="author.html#2188">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello!
+<BR>
+<P><EM>&gt; The last time I looked at Linux, it seemed to have a totally different
+</EM><BR>
+<EM>&gt; set of problems and was different from the BSD implementation.
+</EM><BR>
+<P>They coincide in this place literally.
+<BR>
+<P><P><P><EM>&gt; Strictly speaking, SND.WL2 looks redundant even in the existing
+</EM><BR>
+<EM>&gt; implementation. SEG.ACK has to be &gt;= SND.UNA. Otherwise, this is an &quot;old
+</EM><BR>
+<EM>&gt; ACK&quot; and we ignore it as per RFC 793, page 72. Also SEG.ACK has to be &lt;=
+</EM><BR>
+<EM>&gt; SND.NXT. If an ACK is valid AND ACKs new data, SND.UNA would anyway get
+</EM><BR>
+<EM>&gt; updated. And TCP ACKs are cumulative. That is, one could as well check
+</EM><BR>
+<EM>&gt; SEG.ACK against SND.UNA instead of SND.WL2!  I don't know how SND.WL2
+</EM><BR>
+<EM>&gt; can legally be &gt; SND.UNA :-)). i.e. we used the window information from
+</EM><BR>
+<EM>&gt; the ACK, but didn't use the ACK itself. 
+</EM><BR>
+<P>SND.UNA cannot be less than SND.WL2, certainly.
+<BR>
+<P>But it can be greater, when window update is not accepted due
+<BR>
+to the first rule.
+<BR>
+<P>In this case SND.WL2 is frozen before SND.UNA and the first duplicate
+<BR>
+ACK with SEG.ACK==SND.UNA will change window. See?
+<BR>
+Normally, dupacks only increase window. But dupack with SEG.SEQ &gt; SND.WL1
+<BR>
+is allowed to shrink it.
+<BR>
+<P><P><EM>&gt; Note, however, that the only illegal window shrinking case is that of 
+</EM><BR>
+<EM>&gt; pure ACKs containing window updates which shrink the window (i.e. they
+</EM><BR>
+<EM>&gt; didn't get out of order, they were actually sent that way). As the
+</EM><BR>
+<EM>&gt; current algorithms stand, one can shrink the window in a segment which
+</EM><BR>
+<EM>&gt; has SEG.SEQ &gt; SND.WL1 or which has SEG.ACK &gt; SND.WL2 (eventhough this is
+</EM><BR>
+<EM>&gt; strongly discouraged by RFC 1122).
+</EM><BR>
+<P>Unfortunately, it was not enough strongly discouraged to force people
+<BR>
+working on wireless devices to forget about idea to use this hole. 8)8)
+<BR>
+Look at rfc2757.
+<BR>
+<P><P><P><EM>&gt; The original RFC 793 algorithm didn't handle the case of pure window
+</EM><BR>
+<EM>&gt; updates coming out of order. (i.e. SEG.SEQ == SND.WL1, SEG.ACK ==
+</EM><BR>
+<EM>&gt; SND.WL2, SEG.WND specifies the updated window). This has been fixed in
+</EM><BR>
+<EM>&gt; the BSD algorithm.
+</EM><BR>
+<P>RFC793 forgot not only this. The case of SEG.ACK==SND.UNA
+<BR>
+is completely forgotten on that page. 8)
+<BR>
+<P>Yes, I think all this chapter is one big bug yet.
+<BR>
+<P><P>Probably, correct approach prioritizes ACK and SEQ updates
+<BR>
+in backward order, so that check should look like:
+<BR>
+<P>if (SEG.ACK &gt; SND.UNA ||
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;(SEG.ACK == SND.UNA &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(SEG.SEQ &gt; SND.WL || (SEG.SEQ == SND.WL &amp;&amp; SEG.WIN &gt; SND.WND)))) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SND.WND = SEG.WND;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SND.WL = SEG.WL;
+<BR>
+}
+<BR>
+<P><P>Alexey Kuznetsov
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2187.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2187.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2189.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2188">[ date ]</A>
+<A HREF="index.html#2188">[ thread ]</A>
+<A HREF="subject.html#2188">[ subject ]</A>
+<A HREF="author.html#2188">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

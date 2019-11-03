@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Lloyd Wood (l.wood@eim.surrey.ac.uk)">
+<META NAME="Subject" CONTENT="Re: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: network device and tcp-flow packet ordering</H1>
+<!-- received="Sat Jun 10 22:11:32 2000" -->
+<!-- isoreceived="20000611021132" -->
+<!-- sent="Sun, 11 Jun 2000 02:59:29 +0100 (BST)" -->
+<!-- isosent="20000611015929" -->
+<!-- name="Lloyd Wood" -->
+<!-- email="l.wood@eim.surrey.ac.uk" -->
+<!-- subject="Re: network device and tcp-flow packet ordering" -->
+<!-- id="Pine.GSO.4.21.0006110117520.15333-100000@petra.ee.surrey.ac.uk" -->
+<!-- inreplyto="200006101223.IAA07080@aland.bbn.com" -->
+<STRONG>From:</STRONG> Lloyd Wood (<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;Pine.GSO.4.21.0006110117520.15333-100000@petra.ee.surrey.ac.uk&gt;"><EM>l.wood@eim.surrey.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jun 10 2000 - 21:59:29 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2120.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2118.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2123.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2121">[ date ]</A>
+<A HREF="index.html#2121">[ thread ]</A>
+<A HREF="subject.html#2121">[ subject ]</A>
+<A HREF="author.html#2121">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Sat, 10 Jun 2000, Craig Partridge wrote:
+<BR>
+<P><EM>&gt; There's no RFC that says it.
+</EM><BR>
+<P>thank goodness. hurrah. etc.
+<BR>
+<P><P><EM>&gt; However, Jon Bennett, Nick Shectman and I published a paper showing how
+</EM><BR>
+<EM>&gt; packet reordering really trashes TCP performance in IEEE/ACM Trans. on
+</EM><BR>
+<EM>&gt; Networking last year.
+</EM><BR>
+<P>imo this really indicates a problem with the state of the art of TCP's
+<BR>
+congestion algorithms; TCP deserves to be trashed, and fast recovery
+<BR>
+could be a lot more flexible here. (cf section IV C of that Dec. 1999
+<BR>
+paper.)
+<BR>
+<P>relevant work I don't think has been mentioned in this thread yet:
+<BR>
+<P><A HREF="http://www.ietf.org/internet-drafts/draft-allman-tcp-lossrec-00.txt">http://www.ietf.org/internet-drafts/draft-allman-tcp-lossrec-00.txt</A>
+<BR>
+<P>draft-allman-tcp-lossrec-00.txt [Enhancing TCP's Loss Recovery Using
+<BR>
+Early Duplicate Acknowledgment Response, M. Allman, H. Balakrishnan,
+<BR>
+S. Floyd]
+<BR>
+<P>This draft discusses selectively _lowering_ the fast recovery
+<BR>
+threshold under certain specific low-window conditions (and cites the
+<BR>
+paper Craig mentions above).
+<BR>
+<P>AFAIK there are as yet no concrete implementation proposals for TCP to
+<BR>
+selectively _raise_ this threshold in the face of continual
+<BR>
+misordered delivery.
+<BR>
+<P>(no doubt because that's a much less conservative and open-ended
+<BR>
+&nbsp;change that would require a lot more study of the dynamics under a
+<BR>
+&nbsp;wide range of conditions, and probably some experimental operational
+<BR>
+&nbsp;observation as well).
+<BR>
+<P>Raising the TCP sender's 3-dupack threshold to increase its tolerance
+<BR>
+when experiencing packet/ack reordering won't restore the level of TCP
+<BR>
+goodput to that of a perfectly ordered flow, which is the maximum
+<BR>
+bound - but you can improve throughput and gradually approach that
+<BR>
+bound as you raise the threshold. (I've shown this in simulation for
+<BR>
+part of a submitted paper.)
+<BR>
+<P>Work done within the network reordering a flow of in-transit packets
+<BR>
+is work wasted on not doing useful delivery.
+<BR>
+<P>imo any packet network should be _encouraged_ to gratuitously misorder
+<BR>
+packets (especially if locally appropriate for delivery efficiency)
+<BR>
+without worrying about the endeffects - it's the easiest way to keep
+<BR>
+the equipment simple (cf the workconserving appendix to Bennett et
+<BR>
+al's paper).
+<BR>
+<P>Having all the network work like hell to maintain the illusion that an
+<BR>
+ordered circuit-like flow can be maintained all the time is a Crime
+<BR>
+Against Nature. (Well, entropy.)
+<BR>
+<P>Put reordering complexity in the receiver where it belongs. Once.
+<BR>
+Not in every implementation of every protocol in every switch.
+<BR>
+Improve TCP, and build *simpler* fast packet networks.
+<BR>
+<P>L.
+<BR>
+<P>read can this understand you perfectly the point you if. Yoda as does.
+<BR>
+<P>&lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=Re:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;Pine.GSO.4.21.0006110117520.15333-100000@petra.ee.surrey.ac.uk&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2120.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2118.html">Craig Partridge: "Re: network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2122.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2123.html">Eric A. Hall: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2121">[ date ]</A>
+<A HREF="index.html#2121">[ thread ]</A>
+<A HREF="subject.html#2121">[ subject ]</A>
+<A HREF="author.html#2121">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

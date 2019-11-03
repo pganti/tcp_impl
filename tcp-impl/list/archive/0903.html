@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="Jaume Linares (jlinares@mat.upc.es)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 09:59:32 1998" -->
+<!-- isoreceived="19980112145932" -->
+<!-- sent="Mon, 12 Jan 1998 18:25:12 +0000" -->
+<!-- isosent="19980112182512" -->
+<!-- name="Jaume Linares" -->
+<!-- email="jlinares@mat.upc.es" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="34BA6008.51C6@mat.upc.es" -->
+<!-- inreplyto="199801121600.KAA11396@cs.rice.edu" -->
+<STRONG>From:</STRONG> Jaume Linares (<A HREF="mailto:jlinares@mat.upc.es?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;34BA6008.51C6@mat.upc.es&gt;"><EM>jlinares@mat.upc.es</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 13:25:12 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0902.html">Scott Lawrence: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#903">[ date ]</A>
+<A HREF="index.html#903">[ thread ]</A>
+<A HREF="subject.html#903">[ subject ]</A>
+<A HREF="author.html#903">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delayed acks could be interesting when there is an assymetric link and
+<BR>
+the bandwith in the reverse direction is smaller than the forward
+<BR>
+direction (for example in wireless cable modem networs, direct broadcast
+<BR>
+satellite networks and Asymmetric Digital Subscriber Loop (ASDL)). In
+<BR>
+that case there is a limitation of the throughput achievable due to the
+<BR>
+transmission of acks, and it's necessary to decrease the amount of acks.
+<BR>
+See paper &quot;The Effects of Asymmetry on TCP Performance&quot; at
+<BR>
+<A HREF="http://daedalus.cs.berkeley.edu/">http://daedalus.cs.berkeley.edu/</A>
+<BR>
+<P>Jaume
+<BR>
+<P><P>Mohit Aron wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt;          is there some work that demonstrates how important it is to delay
+</EM><BR>
+<EM>&gt; the ACKs in the Internet ?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The disadvantages of delaying the ACKs appear to be the following:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; i) The slow-start and congestion avoidance at the sender get slower as these
+</EM><BR>
+<EM>&gt;    do not increase the window based on the bytes acknowledged, but rather on
+</EM><BR>
+<EM>&gt;    the number of ACKs received (which are halved).
+</EM><BR>
+<EM>&gt; ii) A retransmission timeout of less than 200ms cannot be used as it would
+</EM><BR>
+<EM>&gt;    lead to spurious retransmissions when the receiver delays the ACKs for
+</EM><BR>
+<EM>&gt;    200ms (at least for the BSD implementations).
+</EM><BR>
+<EM>&gt; iii) When TCP options are used (such as the timestamp option), a TCP receiver
+</EM><BR>
+<EM>&gt;    would ACK every 3 segments as shown in [1].
+</EM><BR>
+<EM>&gt; iv) Some other unfortunate interactions due to delayed ACKs are demonstrated in
+</EM><BR>
+<EM>&gt;     [2].
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The advantages of using delayed ACKs can be enumerated as follows:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; i) Enables the piggybacking of ACKs on any data segments that might be sent
+</EM><BR>
+<EM>&gt;    by the receiver.
+</EM><BR>
+<EM>&gt; ii) Reduces the number of ACKs in the network as well as reduces the number of
+</EM><BR>
+<EM>&gt;     ACKs that the sender needs to process.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; As most of the traffic on the Internet is web traffic, it is questionable how
+</EM><BR>
+<EM>&gt; beneficial is i). Most of the HTTP traffic consists of short requests by
+</EM><BR>
+<EM>&gt; clients that are served by servers - so there's not much opportunity for
+</EM><BR>
+<EM>&gt; piggybacking here. FTP starts up two different TCP connections for the two
+</EM><BR>
+<EM>&gt; sides of data transfer, so there's not much piggypacking opportunities for
+</EM><BR>
+<EM>&gt; FTP traffic too. I'm not aware of any work that demonstrates how important is
+</EM><BR>
+<EM>&gt; ii). At least reducing the ACKs in the network doesn't appear to provide much
+</EM><BR>
+<EM>&gt; benefit as ACKs are typically quite small in size as compared to data segments.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1. L. Brakmo and L. Peterson. Performance Problems in 4.4BSD TCP, ACM CCR,
+</EM><BR>
+<EM>&gt;    Oct 1995.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 2. J. Heidmann. Performance Interactions between P-HTTP and TCP
+</EM><BR>
+<EM>&gt;    Implementations, ACM CCR, Apr 1997.
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0902.html">Scott Lawrence: "Re: delayed ACKs"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0904.html">Mohit Aron: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#903">[ date ]</A>
+<A HREF="index.html#903">[ thread ]</A>
+<A HREF="subject.html#903">[ subject ]</A>
+<A HREF="author.html#903">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Doubletree RST 'BOF' meeting</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: Doubletree RST 'BOF' meeting note">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Doubletree RST 'BOF' meeting note</H1>
+<!-- received="Thu Aug  3 13:43:47 2000" -->
+<!-- isoreceived="20000803174347" -->
+<!-- sent="Thu, 03 Aug 2000 10:33:24 -0700" -->
+<!-- isosent="20000803173324" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: Doubletree RST 'BOF' meeting note" -->
+<!-- id="3989ACE4.2E14B8E7@ehsco.com" -->
+<!-- inreplyto="63D30D6E10CFD11190A90000F805FE8602BEBFD0@lespaul.process.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 03 2000 - 13:33:24 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2265.html">Rick Jones: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2253.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting note"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2264">[ date ]</A>
+<A HREF="index.html#2264">[ thread ]</A>
+<A HREF="subject.html#2264">[ subject ]</A>
+<A HREF="author.html#2264">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It might be better to break it into network-vs-application errors, where 
+<BR>
+&quot;Network&quot; is the transport layer and below, while &quot;Application&quot; is the
+<BR>
+application layer and higher.
+<BR>
+<P>For example, network class errors would be &quot;out-of-sequence SYN&quot; or &quot;no
+<BR>
+listener&quot; or &quot;timeout&quot; or whatever. Conversely, application class errors
+<BR>
+could be &quot;disk space unavailable&quot; or &quot;unauthorized host&quot; or the like.
+<BR>
+<P><P>Bernie Volz wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It depends how one defines transient.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A RST in response to a SYN could well be considered transient because either
+</EM><BR>
+<EM>&gt; there is no listener on the destination port or perhaps there is but the
+</EM><BR>
+<EM>&gt; backlog is full (some stacks drop the SYN in this case rather than sending
+</EM><BR>
+<EM>&gt; an RST, others send (or did send) an RST). That listener may appear at any
+</EM><BR>
+<EM>&gt; time in the future.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'm also not sure what permanent means in this context either. A RST is
+</EM><BR>
+<EM>&gt; always &quot;permanent&quot; for that connection. And, predicting whether the same
+</EM><BR>
+<EM>&gt; condition will occur in the future is rather difficult.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: Craig Partridge [mailto:<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;">craig@aland.bbn.com</A>]
+</EM><BR>
+<EM>&gt; Sent: Thursday, August 03, 2000 10:32 AM
+</EM><BR>
+<EM>&gt; To: Ian Heavens
+</EM><BR>
+<EM>&gt; Cc: Craig Partridge; <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;">tcp-impl@grc.nasa.gov</A>; <A HREF="mailto:mankin@east.isi.edu?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;">mankin@east.isi.edu</A>;
+</EM><BR>
+<EM>&gt; <A HREF="mailto:tgl@sss.pgh.pa.us?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;">tgl@sss.pgh.pa.us</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Doubletree RST 'BOF' meeting note
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In message &lt;<A HREF="mailto:20000803145741.A642@malatesta.spider.com?Subject=Re:%20Doubletree%20RST%20'BOF'%20meeting%20note&In-Reply-To=&lt;3989ACE4.2E14B8E7@ehsco.com&gt;">20000803145741.A642@malatesta.spider.com</A>&gt;, Ian Heavens writes:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt;Sounds a good approach...the only thing is I'm not sure how many
+</EM><BR>
+<EM>&gt; &gt;severity levels one could define for a RST....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Well the existing scheme envisions two types: transient and permanent
+</EM><BR>
+<EM>&gt; errors and then a bunch of subcodes.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Now I'm not sure there's any transient condition that provokes an RST,
+</EM><BR>
+<EM>&gt; but perhaps...
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Craig
+</EM><BR>
+<P><PRE>
+-- 
+Eric A. Hall                                      <A HREF="http://www.ehsco.com/">http://www.ehsco.com/</A>
+Internet Core Protocols        <A HREF="http://www.oreilly.com/catalog/coreprot/">http://www.oreilly.com/catalog/coreprot/</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2265.html">Rick Jones: "Re: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2263.html">Bernie Volz: "RE: keep RST data nonstandardized for the future!"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2253.html">Bernie Volz: "RE: Doubletree RST 'BOF' meeting note"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2264">[ date ]</A>
+<A HREF="index.html#2264">[ thread ]</A>
+<A HREF="subject.html#2264">[ subject ]</A>
+<A HREF="author.html#2264">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

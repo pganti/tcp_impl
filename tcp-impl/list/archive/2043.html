@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="David R. Cheriton (cheriton@cisco.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Sun Feb 27 17:28:58 2000" -->
+<!-- isoreceived="20000227222858" -->
+<!-- sent="Sun, 27 Feb 2000 14:17:24 -0800" -->
+<!-- isosent="20000227221724" -->
+<!-- name="David R. Cheriton" -->
+<!-- email="cheriton@cisco.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="3.0.3.32.20000227141724.006bd2d4@ruby.cisco.com" -->
+<!-- inreplyto="E12P6GM-0000Qe-00@the-village.bc.nu" -->
+<STRONG>From:</STRONG> David R. Cheriton (<A HREF="mailto:cheriton@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;3.0.3.32.20000227141724.006bd2d4@ruby.cisco.com&gt;"><EM>cheriton@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Feb 27 2000 - 17:17:24 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2042.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2043">[ date ]</A>
+<A HREF="index.html#2043">[ thread ]</A>
+<A HREF="subject.html#2043">[ subject ]</A>
+<A HREF="author.html#2043">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 04:09 PM 2/27/00 +0000, Alan Cox wrote:
+<BR>
+<EM>&gt;&gt; understand all the protocols that are amased over TCP. To do it in silicon
+</EM><BR>
+<EM>&gt;&gt; it will probably make sense for a subset.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;You dont want to do it in silicon. Forget doing all this in silicon. We have
+</EM><BR>
+<EM>&gt;this funky stuff called software. The silicon needs no RDMA support to do
+</EM><BR>
+<EM>&gt;sensible work in the API and the underlying OS are sensibly designed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P>I think it would be useful to get more quantitative.  I like to
+<BR>
+think all of us in this discussion are well aware that some level
+<BR>
+of performance can be achieved in software.  I'm not seeing where
+<BR>
+&quot;sensibly designed&quot; leads us WRT to OSs, because, if they arent now
+<BR>
+by whatever definition you are using, it seems pretty academic, as
+<BR>
+they say.
+<BR>
+&nbsp;&nbsp;Clearly, data is being received from hardware and software does not
+<BR>
+get to touch it until it has been stored to some memory.  My 
+<BR>
+assumption is that the storage system memory is arranged in fixed
+<BR>
+size pages of disk/file pages.  Without hardware RDMA to the storage
+<BR>
+level, I believe one requires an extra copy, from whatever the
+<BR>
+hardware delivers to what the storage system expects.  Either
+<BR>
+you use twice the bandwidth in the storage system memory system or
+<BR>
+or else you have a separate memory system for the network, and
+<BR>
+have software/processor power adequate to copy between at wire
+<BR>
+speed (with all the associated support facilities for this processor.)
+<BR>
+&nbsp;Unless there is something wrong with this reasoning,
+<BR>
+it seems like a cost issue of providing the above hardware resources
+<BR>
+vs. providing a NIC chip that can RDMA.  
+<BR>
+<P>My guessitimate is that the software-only approach would be easily
+<BR>
+10 times more expensive here at the higher speed rates, of 10 Gbps.
+<BR>
+If there is serious doubt about the merits of real hardware support,
+<BR>
+we should try to quantify costs further at these speed ranges, IMHO.
+<BR>
+<P><EM>&gt;&gt; You can look at it as a simple way to enable the protocl stack and the
+</EM><BR>
+<EM>&gt;&gt; application to completely separate the protocol state machine (defined by
+</EM><BR>
+<EM>&gt;&gt; headers and/or trailers) from the payload.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The two are tied together. You have to parse the TCP option stream to get
+</EM><BR>
+<EM>&gt;the ident in the first place. You can't act on the RDMAID until you
+</EM><BR>
+<EM>&gt;have checked the packet is syntactically valid and you've processed
+</EM><BR>
+<EM>&gt;the options including handling the SACK data mixed in with it.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;It might also be fragmented of course.
+</EM><BR>
+What you need to do &gt;&gt;in the common case&lt;&lt; before processing the RDMA
+<BR>
+option is relatively simple and a very small portion of the
+<BR>
+overall protocol state machines, so I presume your comment is
+<BR>
+asking for more careful wording? Or do you really disagree with the
+<BR>
+fundamental point?
+<BR>
+<P><EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; As for the vulnerability to attacks with a good size RDMAID and some
+</EM><BR>
+<EM>&gt;&gt; imagination you can get the same level of protection as with the TCP
+</EM><BR>
+<EM>&gt;&gt; sequence number (even a bit better because sequence numbers can be guessed
+</EM><BR>
+<EM>&gt;&gt; from context).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;The tcp sequence number protects against ordering errors not against DMAing
+</EM><BR>
+<EM>&gt;crap into the wrong buffer.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Different game, different cost if you lose.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+It would help me to have a more careful definition of the types of
+<BR>
+attacks you have in mind.  In an unsecure network with intruders,
+<BR>
+presumably I can end up with bad data in the right buffer
+<BR>
+or right data in the wrong buffer without using RDMA.
+<BR>
+Do you view we have made things worse, and if so, how?
+<BR>
+or are you objecting to us not making things better?
+<BR>
+<P><P><EM>&gt;Alan
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+David Cheriton
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2042.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2044.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2043">[ date ]</A>
+<A HREF="index.html#2043">[ thread ]</A>
+<A HREF="subject.html#2043">[ subject ]</A>
+<A HREF="author.html#2043">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

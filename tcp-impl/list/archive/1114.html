@@ -1,0 +1,627 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RFC 1323 implementation</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="RFC 1323 implementation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RFC 1323 implementation</H1>
+<!-- received="Mon Apr 27 13:53:36 1998" -->
+<!-- isoreceived="19980427175336" -->
+<!-- sent="Mon, 27 Apr 1998 15:48:47 -0500 (CDT)" -->
+<!-- isosent="19980427204847" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="RFC 1323 implementation" -->
+<!-- id="199804272048.PAA15364@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Apr 27 1998 - 16:48:47 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1113.html">Alan Cox: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1118.html">Sam Manthorpe: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1119.html">Romney White: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1122.html">Craig Buffinton: "RE: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1114">[ date ]</A>
+<A HREF="index.html#1114">[ thread ]</A>
+<A HREF="subject.html#1114">[ subject ]</A>
+<A HREF="author.html#1114">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>I've not had any responses to my request for vendor implementations
+<BR>
+of RFC 1323, needed for advancing RFC 1323 in the standards process.
+<BR>
+So, 1) I've dredged up the list of implementations from July, 1993,
+<BR>
+and attached it to the end of this message, and 2) I've added
+<BR>
+&quot;<A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>&quot; to the Cc: list, hopefully to find
+<BR>
+more vendors that have RFC 1323 implemented.  Please send me updates,
+<BR>
+I'm sure there are many.
+<BR>
+<P>To make things easier, here is an implementation checklist, with
+<BR>
+some specific items of interest.  (Additions to this checklist
+<BR>
+are welcome.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. |_|   Window Scale Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. |_|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. |_|   Window Scale size based on receive buffer size
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 2.3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. |_|   Shift values &gt; 14 are logged and treated as 14.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. |_|   Timestamps Option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. |_|   Only send in SYN/ACK if received in SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7. |_|   RTT calculations based on Timestamps
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 3.4
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*8. |_|   Update TS.Recent if:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEG.TSval &gt;= TSrecent and SEG.SEQ &lt;= Last.ACK.sent
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Section 4.x
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9. |_|   PAWS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10. |_|   &quot;invalidate&quot; TS.Recent if idle &gt; 24 days.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix A:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*11. |_|   TCP Maxseg option: MSS = MTU - fixed IP/TCP header
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*12. |_|   On output: adjust TCP data length for TCP options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*13. |_|              adjust TCP data length for IP options
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_  Appendix C:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*14. |_|   Disable Karn algorithm w/RTTM
+<BR>
+<P>* New/changed items from RFC 1323.
+<BR>
+<P><P>I'll start the ball rolling by adding:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vendor: Berkeley Software Design, Inc.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Product: BSD/OS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 4.0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1-14
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 3.0+patches/3.1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1-12, 14
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version: 2.1 &amp; earlier
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checklist items: 1-7, 9-12, 14
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact: David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P>So, please send me your updates.  I'd rather not depend on
+<BR>
+an implementation list that is 5 years old.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><EM>&gt; From <A HREF="mailto:tcplw-relay@cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">tcplw-relay@cray.com</A> Tue Jul 27 13:54:53 1993
+</EM><BR>
+<EM>&gt; Received: by hemlock.cray.com
+</EM><BR>
+<EM>&gt; 	id AA08715; 4.1/CRI-5.6; Tue, 27 Jul 93 13:54:56 CDT
+</EM><BR>
+<EM>&gt; Received: from cray.com (timbuk.cray.com) by hemlock.cray.com
+</EM><BR>
+<EM>&gt; 	id AA08711; 4.1/CRI-5.6; Tue, 27 Jul 93 13:54:53 CDT
+</EM><BR>
+<EM>&gt; Received: from frenzy.cray.com by cray.com (4.1/CRI-MX 2.19)
+</EM><BR>
+<EM>&gt; 	id AA15875; Tue, 27 Jul 93 13:54:51 CDT
+</EM><BR>
+<EM>&gt; Received: by frenzy.cray.com
+</EM><BR>
+<EM>&gt; 	id AA05161; 4.1/CRI-5.6; Tue, 27 Jul 93 13:55:45 CDT
+</EM><BR>
+<EM>&gt; Date: Tue, 27 Jul 93 13:55:45 CDT
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:dab@berserkly.cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">dab@berserkly.cray.com</A> (David A. Borman)
+</EM><BR>
+<EM>&gt; Message-Id: &lt;<A HREF="mailto:9307271855.AA05161@frenzy.cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">9307271855.AA05161@frenzy.cray.com</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcplw@cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">tcplw@cray.com</A>
+</EM><BR>
+<EM>&gt; Subject: 1323 implementations
+</EM><BR>
+<EM>&gt; Status: R
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I had an action item from the TCPLW WG meeting in Amsterdam to update
+</EM><BR>
+<EM>&gt; the list of implementations of the TCP Extensions in RFC 1323.
+</EM><BR>
+<EM>&gt; Attached is what I have currently, based on the survey that I did
+</EM><BR>
+<EM>&gt; last December.  If your implementation is not here, please send me
+</EM><BR>
+<EM>&gt; the relevent information.  If you have updated information on your
+</EM><BR>
+<EM>&gt; implementation, please send me that information also.  Thanks.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 			-David Borman, <A HREF="mailto:dab@cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">dab@cray.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ----------
+</EM><BR>
+<EM>&gt; TCP extensions implementations as of 12/18/92
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Cray Research, Inc
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: Unicos
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT caluculations (7.0 &amp; later)
+</EM><BR>
+<EM>&gt; 		PAWS (7.0 and later)
+</EM><BR>
+<EM>&gt; 		Obsolete Echo and Echo Reply (6.0 &amp; 6.1)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status: Supported Product
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		Mods available for UNICOS 6.0
+</EM><BR>
+<EM>&gt; 		Unicos 6.1, 7.0, 7.C
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Tested with:
+</EM><BR>
+<EM>&gt; 		Van Jacobson's code and
+</EM><BR>
+<EM>&gt; 		many others (see below)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt; 		The 6.0 and 6.1 versions do not support Timestamps,
+</EM><BR>
+<EM>&gt; 		RTT calculations or PAWS.  They use the obsoleted
+</EM><BR>
+<EM>&gt; 		Echo and Echo Reply options defined in RFC 1072.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		The 7.0 and 7.C versions will send both a Timestamp
+</EM><BR>
+<EM>&gt; 		and an Echo option in SYN packets.  SYN/ACK packets
+</EM><BR>
+<EM>&gt; 		will contain either a Timestamp or an Echo, but not
+</EM><BR>
+<EM>&gt; 		both, depending on what was received in the SYN packet.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Support for the Echo/Echo Reply options will go away
+</EM><BR>
+<EM>&gt; 		in a future release.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		The window scale must be set with an explicit
+</EM><BR>
+<EM>&gt; 		setsockopt() call, and the use of Timestamps is
+</EM><BR>
+<EM>&gt; 		tied to the Window Scale option.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		If a Window Scale is received in a SYN packet, and
+</EM><BR>
+<EM>&gt; 		the application hasn't specified otherwise, the
+</EM><BR>
+<EM>&gt; 		Window Scale is automatically turned around in the
+</EM><BR>
+<EM>&gt; 		SYN/ACK with the same value.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		6.1 has no applications (other than nettest) that
+</EM><BR>
+<EM>&gt; 		take advantage of expanded windows.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Ftp and ftpd are the only additional applications that
+</EM><BR>
+<EM>&gt; 		have been enhanced in 7.0 and 7.C to use expanded windows.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: David Borman, <A HREF="mailto:dab@cray.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">dab@cray.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Interlink Computer Sciences
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: SNSTCP/access 1.0.1
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status: Supported Product
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		PTF MP10497 or PTF MP10498 for 1.1
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Tested with: Cray UNICOS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt; 		The code is enabled for port 21 and other ports if they
+</EM><BR>
+<EM>&gt; 		specify &gt; 64k of buffer space.  Some implementations do
+</EM><BR>
+<EM>&gt; 		not like this option and fail.  We provide a patch to
+</EM><BR>
+<EM>&gt; 		turn off this option for all cases.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Fred Bohle, <A HREF="mailto:fab@interlink.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">fab@interlink.com</A>  (301)-317-6600
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Silicon Graphics, Inc
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: a future release of IRIX
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT calculations
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status: Supported Product
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		&quot;Real Soon Now&quot; (probably spring '93)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Tested with: Cray UNICOS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt; 		Time-stamps are tied to window scaling and window scaling
+</EM><BR>
+<EM>&gt; 		options will only be used on connections when a send or
+</EM><BR>
+<EM>&gt; 		receive buffer is explicitely set to &gt;64K.  All other
+</EM><BR>
+<EM>&gt; 		connections will not use any of the options.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Old style (RFC 1072) echo/echo-reply options will be
+</EM><BR>
+<EM>&gt; 		ignored.  Only the RFC 1323 combined time-stamp/reply
+</EM><BR>
+<EM>&gt; 		option is supported.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Thomas Skibo, <A HREF="mailto:skibo@sgi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">skibo@sgi.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; University of Illinois
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: Patch to 4.3BSD Net-2 release
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT calculations
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 		
+</EM><BR>
+<EM>&gt; 	Status: Experimental/research/prototype
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		Anonymous ftp from uxc.cso.uiuc.edu:/pub/tcplw.shar.Z
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Tested with: Cray UNICOS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt; 		Protocol control blocks are held in mbuf clusters.  This
+</EM><BR>
+<EM>&gt; 		is very inefficient.  Should probably use kmem_alloc() to
+</EM><BR>
+<EM>&gt; 		allocate pcbs.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		There are problems with handling of options when a socket
+</EM><BR>
+<EM>&gt; 		in TIME_WAIT gets a new connection request (i.e. the other
+</EM><BR>
+<EM>&gt; 		side is using SOREUSEADDR).  This can cause the window
+</EM><BR>
+<EM>&gt; 		scaling options to be ignored in those cases.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		FINs aren't taken into account when deciding to update
+</EM><BR>
+<EM>&gt; 		TS.recent (for the echo reply).  A fix for this is mentioned
+</EM><BR>
+<EM>&gt; 		in the README file with the patch.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		The PAWS check shouldn't drop segments when ts_recent is
+</EM><BR>
+<EM>&gt; 		zero (i.e. invalid).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Thomas Skibo, <A HREF="mailto:skibo@sgi.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">skibo@sgi.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Sandia National Laboratories
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Doug Brown, <A HREF="mailto:cdbrown@sandia.gov?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">cdbrown@sandia.gov</A>  (505)845-8699
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: Patch to SunOS 4.1.1, 4.1.2
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT calculations
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status: Experimental/research/prototype
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		Contact <A HREF="mailto:cdbrown@sandia.gov?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">cdbrown@sandia.gov</A> for availability
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt;                 For window sizes above approx 160K bytes, the throughput
+</EM><BR>
+<EM>&gt; 		drops off noticably.  I suspect some kind of memory
+</EM><BR>
+<EM>&gt; 		management problems in SunOS, but don't know for sure.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Tested with: Cray UNICOS 6.0 (Window Scaling only)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Information Sciences Institute (ISI)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Bob Braden &amp; Liming Wei, <A HREF="mailto:braden@isi.edu?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">braden@isi.edu</A> &amp; lwei@isi.ed
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: Patch to Sun OS 4.1
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT calculations
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status:
+</EM><BR>
+<EM>&gt; 		Contact <A HREF="mailto:braden@isi.edu?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">braden@isi.edu</A> or lwei@isi.ed
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Sun Microsystems Computer Corporations
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Contact: Jim Fiori, <A HREF="mailto:jim.fiori@east.sun.com?Subject=Re:%20RFC%201323%20implementation&In-Reply-To=&lt;199804272048.PAA15364@frantic.bsdi.com&gt;">jim.fiori@east.sun.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Product: SunOS 4.1.X
+</EM><BR>
+<EM>&gt; 		Window Scale
+</EM><BR>
+<EM>&gt; 		Timestamps w/ RTT calculations
+</EM><BR>
+<EM>&gt; 		PAWS
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Status: Product, available for purchase
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Availability:
+</EM><BR>
+<EM>&gt; 		This is available as a Sun Consulting Special. These are
+</EM><BR>
+<EM>&gt; 		software specials that are purchased on an &quot;as-is&quot; basis.
+</EM><BR>
+<EM>&gt; 		For more information contact your Sun sales rep. The name
+</EM><BR>
+<EM>&gt; 		of the product is CONSULT-TCPLFN.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	Caveats/Problems:
+</EM><BR>
+<EM>&gt; 		The timestamps/PAWS must be turned on per application
+</EM><BR>
+<EM>&gt; 		via setsockopt calls. The large windows can
+</EM><BR>
+<EM>&gt; 		be turned on per application via setsockopt calls.
+</EM><BR>
+<EM>&gt; 		There are new options for both. In addition, the
+</EM><BR>
+<EM>&gt; 		default send and receive space (kernel variables) can
+</EM><BR>
+<EM>&gt; 		be set to use the large windows.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1113.html">Alan Cox: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1115.html">Dave Marquardt: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1116.html">Fred Bohle : "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1118.html">Sam Manthorpe: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1119.html">Romney White: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1122.html">Craig Buffinton: "RE: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1123.html">Hsiao-keng Jerry Chu: "Re: RFC 1323 implementation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1124.html">Jason Thorpe: "Re: RFC 1323 implementation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1114">[ date ]</A>
+<A HREF="index.html#1114">[ thread ]</A>
+<A HREF="subject.html#1114">[ subject ]</A>
+<A HREF="author.html#1114">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

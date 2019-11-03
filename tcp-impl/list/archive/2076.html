@@ -1,0 +1,971 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Bad implementation of TCP fast r</TITLE>
+<META NAME="Author" CONTENT="Ragon Philippe (phragon@dial.oleane.com)">
+<META NAME="Subject" CONTENT="Bad implementation of TCP fast retransmit by Microsoft ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Bad implementation of TCP fast retransmit by Microsoft ?</H1>
+<!-- received="Sun Apr 30 12:02:12 2000" -->
+<!-- isoreceived="20000430160212" -->
+<!-- sent="Sun, 30 Apr 2000 17:47:52 +0200" -->
+<!-- isosent="20000430154752" -->
+<!-- name="Ragon Philippe" -->
+<!-- email="phragon@dial.oleane.com" -->
+<!-- subject="Bad implementation of TCP fast retransmit by Microsoft ?" -->
+<!-- id="4.3.2.20000430153031.00a8e520@pop.dial.oleane.com" -->
+<STRONG>From:</STRONG> Ragon Philippe (<A HREF="mailto:phragon@dial.oleane.com?Subject=Re:%20Bad%20implementation%20of%20TCP%20fast%20retransmit%20by%20Microsoft%20?&In-Reply-To=&lt;4.3.2.20000430153031.00a8e520@pop.dial.oleane.com&gt;"><EM>phragon@dial.oleane.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Apr 30 2000 - 11:47:52 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2077.html">Sally Floyd: "Re: Question regarding direction TCP/IP development"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2075.html">Paula DuFour: "Question regarding direction TCP/IP development"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2076">[ date ]</A>
+<A HREF="index.html#2076">[ thread ]</A>
+<A HREF="subject.html#2076">[ subject ]</A>
+<A HREF="author.html#2076">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Being involved in the development of a radio network, I had to study the 
+<BR>
+trace of an HTTP session that performed very badly in order to assess 
+<BR>
+whether it was due to the radio part of the network. I am attaching the 
+<BR>
+trace captured on the server, because I would like to have the opinion of 
+<BR>
+experts on this list to confirm / infirm my conclusions.
+<BR>
+<P>Context :
+<BR>
+The client (Internet Explorer) is running on a Windows 95 laptop connected 
+<BR>
+to a radio mobile phone.
+<BR>
+The server (Internet Information Server 4) is running on a Windows NT 4 SP6 
+<BR>
+desktop on an Ethernet LAN.
+<BR>
+A tunneling protocol is used between intermediate nodes physically 
+<BR>
+connected by an Ethernet network ==&gt; MTU is set to 1450 on the client 
+<BR>
+discounting for the tunnel overhead, in order to avoid fragmentation and 
+<BR>
+re-assembly at tunnel end-points ==&gt; the client proposes an MSS of 1410
+<BR>
+The radio link introduces an important latency that results in a measured 
+<BR>
+RTT of 9s for a full-size downlink (server to client) packet that is well 
+<BR>
+over the initial RTO of 3s of TCP implementation of Microsoft. In order to 
+<BR>
+study the downloading of a large image without being annoyed by this 
+<BR>
+discrepancy between the assumed RTT and the real one, a persistent HTTP 
+<BR>
+connection is opened to request a short page first (frame 1 to 14) to train 
+<BR>
+TCP. Like that, when the request for the large image is issued (frame 15) 
+<BR>
+the RTO for the TCP connection  is 12s i.e. above the real RTT (9s).
+<BR>
+Frame numbers appearing in the text below refer to numbers in the attached 
+<BR>
+trace.
+<BR>
+<P>Question / Problem 1 :
+<BR>
+The ACK for frame 19 has been lost by the network. Therefore, the content 
+<BR>
+of frame 19 is repeated 12s later in frame 23. Then ACK for frame 21 
+<BR>
+arrives (of course also acknowledging frame 19)
+<BR>
+The server reacts by sending a packet in sequence with what has been ACKed, 
+<BR>
+(i.e. SN = end of frame 21 + 1) instead of in sequence with the last packet 
+<BR>
+sent (i.e. SN = end of frame 22 + 1),  hence  repeating this packet. Is 
+<BR>
+this correct, considering that packet in frame 22 was not (for some reason) 
+<BR>
+a full-size one ?
+<BR>
+Remark : from this point the RTO is around 24 s
+<BR>
+<P>Question / Problem 2 :
+<BR>
+Frame 32 is a repetition of frame 26 after 7s. Because RTO at that moment 
+<BR>
+is close to 24s we have either :
+<BR>
+<P>a buggy early re-transmission but it should not be the case because this 
+<BR>
+known Windows problem is supposed to be corrected in SP6 for NT 4 that is 
+<BR>
+in use for the server
+<BR>
+<P>or :
+<BR>
+<P>a buggy fast retransmit. There are two reasons for which I am saying buggy :
+<BR>
+- fast retransmit has been triggered by a second duplicate ACK instead of a 
+<BR>
+third as mandated by RFC 2581. A confirmation of this lack of compliancy on 
+<BR>
+the part of Microsoft appears again with frame 43 which repeats frame 37 
+<BR>
+after the reception of a second duplicate ACK
+<BR>
+- the second duplicate ACK is not a duplicate ACK. The ACK sequence we have 
+<BR>
+is ACK 48714, ACK 48714 and ACK 48855.
+<BR>
+I am right on this point ?
+<BR>
+<P>Question / Problem 3 :
+<BR>
+After frame 26 has been repeated by frame 32, the ACK for frame 26 arrives 
+<BR>
+(on time). This triggers the repetition of frames 28 and 30 with frames 34 
+<BR>
+and 35 instead of continuing in sequence with the last packet sent (frame 
+<BR>
+30). Said otherwise, I would expect the sending of a packet starting with 
+<BR>
+SN 53085 instead of 50265 for frame 34
+<BR>
+<P>Conclusion :
+<BR>
+A single lost ACK  triggers a cascade of unnecessary repetitions that are 
+<BR>
+due to :
+<BR>
+- a bad implementation of fast retransmit,
+<BR>
+- the left side of the window that does not progress as it should.
+<BR>
+The problem is self-sustaining as demonstrated by the end of the trace (not 
+<BR>
+provided in the file attached which has been cut to a reasonable size) due 
+<BR>
+the following pattern :
+<BR>
+- early fast retransmit triggers undue repetitions
+<BR>
+- undue repetitions trigger early fast retransmit
+<BR>
+Between undue repetitions, the left side of the window progress a little 
+<BR>
+bit, thanks to what the transfer of the image reaches its end, but only 
+<BR>
+after a very looong time.
+<BR>
+
+<BR><P>
+<P><P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+1       42.845  TCP       ....S., len:   24, seq:   3467580-3467603, ack:         0, win: 8192 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0x9E04; Proto = TCP; Len: 64
+<BR>
++ TCP: ....S., len:   24, seq:   3467580-3467603, ack:         0, win: 8192, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+2       42.846  TCP       .A..S., len:    4, seq:     41191-41194, ack:   3467581, win: 8460,  Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA115; Proto = TCP; Len: 44
+<BR>
++ TCP: .A..S., len:    4, seq:     41191-41194, ack:   3467581, win: 8460, src:   80  dst: 1041 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+3       45.726  TCP       ....S., len:   24, seq:   3467580-3467603, ack:         0, win: 8192 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA004; Proto = TCP; Len: 64
+<BR>
++ TCP: ....S., len:   24, seq:   3467580-3467603, ack:         0, win: 8192, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+4       45.726  TCP       .A...., len:    0, seq:     41192-41192, ack:   3467581, win: 8460,  Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA215; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:     41192-41192, ack:   3467581, win: 8460, src:   80  dst: 1041 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+5       45.804  TCP       .A..S., len:    4, seq:     41191-41194, ack:   3467581, win: 8460,  Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA315; Proto = TCP; Len: 44
+<BR>
++ TCP: .A..S., len:    4, seq:     41191-41194, ack:   3467581, win: 8460, src:   80  dst: 1041 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+6       50.503  TCP       .A...., len:    0, seq:   3467581-3467581, ack:     41192, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA104; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3467581-3467581, ack:     41192, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>page 1
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P><P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+7       50.858  HTTP      GET Request (from client using port 1041)                            47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA204; Proto = TCP; Len: 302
+<BR>
++ TCP: .AP..., len:  262, seq:   3467581-3467842, ack:     41192, win: 8460, src: 1041  dst:   80 
+<BR>
++ HTTP: GET Request (from client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+8       50.860  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA415; Proto = TCP; Len: 653
+<BR>
++ TCP: .AP..., len:  613, seq:     41192-41804, ack:   3467843, win: 8198, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+9       50.868  TCP       .A...., len:    0, seq:   3467843-3467843, ack:     41192, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA404; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3467843-3467843, ack:     41192, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+10      56.559  HTTP      GET Request (from client using port 1041)                            47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA504; Proto = TCP; Len: 302
+<BR>
++ TCP: .AP..., len:  262, seq:   3467581-3467842, ack:     41192, win: 8460, src: 1041  dst:   80 
+<BR>
++ HTTP: GET Request (from client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+11      56.559  TCP       .A...., len:    0, seq:     41805-41805, ack:   3467843, win: 8198,  Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA515; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:     41805-41805, ack:   3467843, win: 8198, src:   80  dst: 1041 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+12      56.822  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P><P>page 2
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA615; Proto = TCP; Len: 653
+<BR>
++ TCP: .AP..., len:  613, seq:     41192-41804, ack:   3467843, win: 8198, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+13      59.145  TCP       .A...., len:    0, seq:   3467843-3467843, ack:     41805, win: 7847 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA604; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3467843-3467843, ack:     41805, win: 7847, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+14      65.865  TCP       .A...., len:    0, seq:   3467843-3467843, ack:     41805, win: 7847 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA704; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3467843-3467843, ack:     41805, win: 7847, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+15      76.743  HTTP      GET Request (from client using port 1041)                            47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA804; Proto = TCP; Len: 312
+<BR>
++ TCP: .AP..., len:  272, seq:   3467843-3468114, ack:     41805, win: 7847, src: 1041  dst:   80 
+<BR>
++ HTTP: GET Request (from client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+16      76.744  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA715; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     41805-43214, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+17      76.744  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA815; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     43215-44624, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>page 3
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P><P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+18      82.187  TCP       .A...., len:    0, seq:   3468115-3468115, ack:     43215, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAA04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     43215, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+19      82.187  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xA915; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     44625-46034, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+20      86.028  TCP       .A...., len:    0, seq:   3468115-3468115, ack:     44625, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAC04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     44625, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+21      86.028  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAA15; Proto = TCP; Len: 1450
+<BR>
++ TCP: .AP..., len: 1410, seq:     46035-47444, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+22      90.976  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAB15; Proto = TCP; Len: 1309
+<BR>
++ TCP: .A...., len: 1269, seq:     47445-48713, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+23      94.381  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P><P>page 4
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAC15; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     44625-46034, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+24      95.629  TCP       .A...., len:    0, seq:   3468115-3468115, ack:     47445, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB104; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     47445, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+25      95.629  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAD15; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     47445-48854, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+26      95.629  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAE15; Proto = TCP; Len: 1450
+<BR>
++ TCP: .AP..., len: 1410, seq:     48855-50264, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+27      97.549  TCP       .A...., len:    0, seq:   3468115-3468115, ack:     48714, win: 7191 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB204; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     48714, win: 7191, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+28      97.549  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xAF15; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     50265-51674, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>page 5
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P><P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+29      99.470  TCP       .A...., len:    0, seq:   3468115-3468115, ack:     48714, win: 7191 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB404; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     48714, win: 7191, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+30      99.470  HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB015; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     51675-53084, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+31      102.350 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     48855, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB504; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     48855, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+32      102.394 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB115; Proto = TCP; Len: 1450
+<BR>
++ TCP: .AP..., len: 1410, seq:     48855-50264, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+33      104.750 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     50265, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB804; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     50265, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+34      104.750 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
+<P>page 6
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>+ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB215; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     50265-51674, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+35      104.750 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB315; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     51675-53084, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+36      107.150 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     51675, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB904; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     51675, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+37      107.150 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB415; Proto = TCP; Len: 1450
+<BR>
++ TCP: .AP..., len: 1410, seq:     53085-54494, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+38      109.551 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xBB04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+39      109.551 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB515; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     54495-55904, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P><P>page 7
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+40      110.991 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xBD04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+41      110.991 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB615; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     55905-57314, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+42      113.391 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xBE04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+43      113.391 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB715; Proto = TCP; Len: 1301
+<BR>
++ TCP: .AP..., len: 1261, seq:     53085-54345, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+44      115.792 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xBF04; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     53085, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+45      115.792 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
+<P>page 8
+<BR>
+
+<BR>
+<P>Network Monitor trace  Sun 04/30/00 14:44:55  27-04_TCP_Server_3.TXT
+<BR>
+<P>+ IP: ID = 0xB815; Proto = TCP; Len: 1167
+<BR>
++ TCP: .AP..., len: 1127, seq:     57315-58441, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+46      118.192 TCP       .A...., len:    0, seq:   3468115-3468115, ack:     54495, win: 8460 47.217.248.130  Srv Guillemot   IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xC104; Proto = TCP; Len: 40
+<BR>
++ TCP: .A...., len:    0, seq:   3468115-3468115, ack:     54495, win: 8460, src: 1041  dst:   80 
+<BR>
+<P>*********************************************************************************************************************************
+<BR>
+Frame   Time    Protocol  Description                                                          Src Other Addr  Dst Other Addr  Type Other Addr
+<BR>
+47      118.219 HTTP      Response (to client using port 1041)                                 Srv Guillemot   47.217.248.130  IP
+<BR>
+<P>+ FRAME: Base frame properties
+<BR>
++ ETHERNET: ETYPE = 0x0800 : Protocol = IP:  DOD Internet Protocol
+<BR>
++ IP: ID = 0xB915; Proto = TCP; Len: 1450
+<BR>
++ TCP: .A...., len: 1410, seq:     54495-55904, ack:   3468115, win: 7926, src:   80  dst: 1041 
+<BR>
++ HTTP: Response (to client using port 1041)
+<BR>
+<P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P>page 9
+<BR>
+
+<BR>
+
+<BR><P>
+---------------------------------------------------------------------
+<BR>
+Philippe Ragon / Tour Atlas / 10, villa d'Este/ 75013 Paris/ FRANCE
+<BR>
+Telephone &amp; Fax : (33) 01 45 70 79 53
+<BR>
+E-mail                   :   <A HREF="mailto:phragon@dial.oleane.com?Subject=Re:%20Bad%20implementation%20of%20TCP%20fast%20retransmit%20by%20Microsoft%20?&In-Reply-To=&lt;4.3.2.20000430153031.00a8e520@pop.dial.oleane.com&gt;">phragon@dial.oleane.com</A>
+<BR>
+---------------------------------------------------------------------
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2077.html">Sally Floyd: "Re: Question regarding direction TCP/IP development"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2075.html">Paula DuFour: "Question regarding direction TCP/IP development"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2076">[ date ]</A>
+<A HREF="index.html#2076">[ thread ]</A>
+<A HREF="subject.html#2076">[ subject ]</A>
+<A HREF="author.html#2076">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:24 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

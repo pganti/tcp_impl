@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Possibile problem regarding newr</TITLE>
+<META NAME="Author" CONTENT="Zoltan Richard Turanyi (Zoltan.Turanyi@lt.eth.ericsson.se)">
+<META NAME="Subject" CONTENT="Possibile problem regarding newreno">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Possibile problem regarding newreno</H1>
+<!-- received="Thu Sep  3 11:42:15 1998" -->
+<!-- isoreceived="19980903154215" -->
+<!-- sent="Thu, 03 Sep 1998 10:04:56 +0200" -->
+<!-- isosent="19980903080456" -->
+<!-- name="Zoltan Richard Turanyi" -->
+<!-- email="Zoltan.Turanyi@lt.eth.ericsson.se" -->
+<!-- subject="Possibile problem regarding newreno" -->
+<!-- id="35EE4DA8.ECEBD1DC@lt.eth.ericsson.se" -->
+<STRONG>From:</STRONG> Zoltan Richard Turanyi (<A HREF="mailto:Zoltan.Turanyi@lt.eth.ericsson.se?Subject=Re:%20Possibile%20problem%20regarding%20newreno&In-Reply-To=&lt;35EE4DA8.ECEBD1DC@lt.eth.ericsson.se&gt;"><EM>Zoltan.Turanyi@lt.eth.ericsson.se</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 03 1998 - 04:04:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1292.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1290.html">Harish Venkatraman: "Hello"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1291">[ date ]</A>
+<A HREF="index.html#1291">[ thread ]</A>
+<A HREF="subject.html#1291">[ subject ]</A>
+<A HREF="author.html#1291">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi all!
+<BR>
+<P>I have a problem regarding the newreno algorithm as described in
+<BR>
+draft-ietf-tcpimpl-cong-control-00.
+<BR>
+<P>In section 3.3 the additional step C to the fast retransmit/recovery 
+<BR>
+states
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;C.  A non-duplicate ACK that does not cover send_high, followed by 3
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate ACKs should not reduce ssthresh or cwnd but SHOULD
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trigger a retransmission.  A non-duplicate ACK that does not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cover send_high SHOULD NOT cause any adjustment in cwnd.
+<BR>
+<P>But when we receive a partial non-duplicate ack it will increase
+<BR>
+the value of snd.una (the bottom of our window) and without changing
+<BR>
+cwnd it will open the window, though the number of packets in the
+<BR>
+network is OK.
+<BR>
+In my understanding we should decrease cwnd to prevent the unnecessary
+<BR>
+opening of the window.
+<BR>
+<P>An example:
+<BR>
+<P>Suppose we have a window of 32 packets and two packets are dropped from
+<BR>
+one window 20 packets from each other (say packet #10 and #30).
+<BR>
+<P>When we receive the dupacks snd.una is 10 and snd.nxt is 42.
+<BR>
+Then we retransmit packet #10, halve cwnd to 16 packets and
+<BR>
+start deflating it, as duplicate acks come in.
+<BR>
+We save snd.nxt (42) to send_high. When we receive
+<BR>
+16 dupacks we also start transmitting packets as cwnd is 32 again
+<BR>
+and cwnd + snd.una is over snd.nxt. After receiving 32 dupacks
+<BR>
+we get a non-duplicate ack for the retransmitted #10 packet. cwnd is
+<BR>
+48 packets now and cwnd + snd.una is 58.
+<BR>
+The non-duplicate ack will not cover send_high (42) as packet #30 is
+<BR>
+also missing, it will signal the need for packet #30.
+<BR>
+Thus we do not modify cwnd, but set snd.una to 30 thus raising
+<BR>
+snd.una + cwnd to 78, dumping 20 packets into the network, though 
+<BR>
+we are not entitled to do so as the number of packets in the network
+<BR>
+is the correct value 16.
+<BR>
+<P>Instead we should decrease cwnd in a way that snd.una + cwnd remains
+<BR>
+at the same level.
+<BR>
+<P>Comments?
+<BR>
+<P>Zoltán Richárd Turányi
+<BR>
+Ericsson TrafficLab
+<BR>
+<A HREF="mailto:Zoltan.Turanyi@eth.ericsson.se?Subject=Re:%20Possibile%20problem%20regarding%20newreno&In-Reply-To=&lt;35EE4DA8.ECEBD1DC@lt.eth.ericsson.se&gt;">Zoltan.Turanyi@eth.ericsson.se</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1292.html">W. Richard Stevens: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1290.html">Harish Venkatraman: "Hello"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1291">[ date ]</A>
+<A HREF="index.html#1291">[ thread ]</A>
+<A HREF="subject.html#1291">[ subject ]</A>
+<A HREF="author.html#1291">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:58 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

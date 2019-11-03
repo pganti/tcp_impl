@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Doubt in fast recovery algo..</TITLE>
+<META NAME="Author" CONTENT="Graham Cope (G.Cope@ftel.co.uk)">
+<META NAME="Subject" CONTENT="Re: Doubt in fast recovery algo..">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Doubt in fast recovery algo..</H1>
+<!-- received="Wed Feb 11 05:35:12 1998" -->
+<!-- isoreceived="19980211103512" -->
+<!-- sent="Wed, 11 Feb 1998 13:23:15 +0000" -->
+<!-- isosent="19980211132315" -->
+<!-- name="Graham Cope" -->
+<!-- email="G.Cope@ftel.co.uk" -->
+<!-- subject="Re: Doubt in fast recovery algo.." -->
+<!-- id="34E1A643.565@ftel.co.uk" -->
+<!-- inreplyto="Pine.LNX.3.95.980211175635.8692A-100000@protocol.ece.iisc.ernet.in" -->
+<STRONG>From:</STRONG> Graham Cope (<A HREF="mailto:G.Cope@ftel.co.uk?Subject=Re:%20Doubt%20in%20fast%20recovery%20algo..&In-Reply-To=&lt;34E1A643.565@ftel.co.uk&gt;"><EM>G.Cope@ftel.co.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 11 1998 - 08:23:15 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#943">[ date ]</A>
+<A HREF="index.html#943">[ thread ]</A>
+<A HREF="subject.html#943">[ subject ]</A>
+<A HREF="author.html#943">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt;         I meant after TCP receive 3 dupack, it will enter fast recovery
+</EM><BR>
+<EM>&gt; and 4th ack should cause TCP to start transmission of new data with new
+</EM><BR>
+<EM>&gt; cnwind
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; *&gt;generate dup ACKs, and the lost one gets retransmitted. Suppose that the
+</EM><BR>
+<EM>&gt; *&gt;sender goes back to step 1 again. Then after 3 (or 4?) more from the
+</EM><BR>
+<EM>&gt; *&gt;original 10 arrive, then we get fast retransmit again.
+</EM><BR>
+<EM>&gt; *&gt;
+</EM><BR>
+<EM>&gt; *&gt;I guess there are 2 approached.
+</EM><BR>
+<EM>&gt; *&gt;
+</EM><BR>
+<EM>&gt; *&gt;Only go to step 1 after receiving 9 (in this example) dup ACKs for the
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; !! Why 9 dupack ? !!
+</EM><BR>
+<P>In my example there are 10 segments in-transit. The first is lost, and
+<BR>
+the next 9 generate dup ACKs.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; *&gt;rest of the data that was in transit. This requires a bit counting,
+</EM><BR>
+<EM>&gt; *&gt;(note that it does not need knowledge of the delayed ACK algorithm,
+</EM><BR>
+<EM>&gt; *&gt;since all out of sequence segments should generate ACKs). Also fast
+</EM><BR>
+<EM>&gt; *&gt;recovery should be speeding ahead for the other 6 dup ACKs.
+</EM><BR>
+<EM>&gt; *&gt;
+</EM><BR>
+<EM>&gt; *&gt;Second appraoch is to admit that Fast Recovery is now confused, and if
+</EM><BR>
+<EM>&gt; *&gt;the retransmitted segment is lost, then rely on time-out / slow-start.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But this will cause TCP to slow down.
+</EM><BR>
+<P>Unfortunately yes. Losing 2 segments in the same window, or indeed
+<BR>
+losing a retransmitted segment, does confuse 'ordinary' TCPs, from which
+<BR>
+the only 'safe' way to recover is a timeout.
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; Say assume as U said there are 10 packets in transit and first of which
+</EM><BR>
+<EM>&gt; will get lost. So now next 3 packets will generate dupack, and TCP output
+</EM><BR>
+<EM>&gt; will transmit the missing packet. But at the same time packet 5, 6 and 7
+</EM><BR>
+<EM>&gt; will cause 3 more dupack( because dupack's should not be delayed rfc1122)
+</EM><BR>
+<EM>&gt; and we may have to go to slowstart ( as you said Fast Recovery is now
+</EM><BR>
+<EM>&gt; confused,).
+</EM><BR>
+<P><P>I think that there are some 'smart' solutions to this (I'll try to find
+<BR>
+references. but Sally Floyd's work probably discusses it). But, a smart
+<BR>
+solution for the above case, might fail in a different case.
+<BR>
+&nbsp;&nbsp;Life, and protocols, are often a compromise.
+<BR>
+<P><P><P><P>Graham
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0942.html">Chetan Kumar: "Re: Doubt in fast recovery algo.."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#943">[ date ]</A>
+<A HREF="index.html#943">[ thread ]</A>
+<A HREF="subject.html#943">[ subject ]</A>
+<A HREF="author.html#943">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

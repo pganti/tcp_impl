@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>does this qualify as a bug?</H1>
+<!-- received="Tue Aug 12 10:44:05 1997" -->
+<!-- isoreceived="19970812144405" -->
+<!-- sent="Tue, 12 Aug 1997 10:39:42 -0700" -->
+<!-- isosent="19970812173942" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="does this qualify as a bug?" -->
+<!-- id="199708121739.KAA08900@rum.isi.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Aug 12 1997 - 13:39:42 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0655.html">touch@ISI.EDU: "Re: RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0664.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0665.html">William Allen Simpson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0667.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0668.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0670.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0671.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0672.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0673.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0675.html">Joe Touch: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0677.html">Douglas Wolff: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0678.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#656">[ date ]</A>
+<A HREF="index.html#656">[ thread ]</A>
+<A HREF="subject.html#656">[ subject ]</A>
+<A HREF="author.html#656">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+It appears that the slow-start restart code in FreeBSD (at least)
+<BR>
+is not what was intended. Is this the kind of bug that the I-D
+<BR>
+is seeking (is slow-start restart considered part of the default
+<BR>
+operation??)
+<BR>
+<P>Joe
+<BR>
+<P><P>----- Begin Included Message -----
+<BR>
+<P><EM>&gt;From <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@ISI.EDU</A> Tue Aug 12 10:33:21 1997
+</EM><BR>
+Date: Tue, 12 Aug 1997 10:33:13 -0700
+<BR>
+From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@ISI.EDU</A>
+<BR>
+To: <A HREF="mailto:lsam@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">lsam@ISI.EDU</A>
+<BR>
+Subject: HTTP 1.1 and slow-start restart (or lack thereof)
+<BR>
+<P><P>----- Begin Included Message -----
+<BR>
+<P><EM>&gt;From <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@ISI.EDU</A> Tue Aug 12 10:31:46 1997
+</EM><BR>
+Date: Tue, 12 Aug 1997 10:31:44 -0700
+<BR>
+From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@ISI.EDU</A>
+<BR>
+To: <A HREF="mailto:tcp-over-satellite@achtung.sp.trw.com?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">tcp-over-satellite@achtung.sp.trw.com</A>
+<BR>
+Subject: HTTP 1.1 and slow-start restart (or lack thereof)
+<BR>
+Cc: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@ISI.EDU</A>
+<BR>
+<P><P>As promised last week, here are the results of experiments
+<BR>
+to determine the behavior of HTTP 1.1 and slow-start restart.
+<BR>
+<P>A bit of background:
+<BR>
+<P>Some versions of TCP have a mechanism called 'slow-start restart',
+<BR>
+which is intended to cause the congestion window to restart as if
+<BR>
+at the beginning of a connection, whenever the 
+<BR>
+&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&quot;pipe is empty because we haven't _sent_ anything for at 
+<BR>
+&nbsp;&nbsp;least a round trip time&quot;-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jacobson, Sigcomm 88, 'Congestion Avoidance and Control', 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available at <A HREF="ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z">ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pseudo-italics mine - Joe)
+<BR>
+<P>Kacheong Poon &lt;<A HREF="mailto:kcpoon@jurassic.eng.Sun.COM?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">kcpoon@jurassic.eng.Sun.COM</A>&gt; correctly asserted
+<BR>
+that, in existing implementations, that:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_receiving_ a packet is enough to avoid this restart,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and, in HTTP 1.1, regardless of how long the connection is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle, the subsequent request will reset the idle timer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at the server, and the window won't restart there
+<BR>
+<P>We have confirmed this behavior on FreeBSD 2.2.1, using Apache
+<BR>
+servers with persistent connections and Netscape Navigator 4.
+<BR>
+<P>There appears to be an error between Jacobson's paper and 
+<BR>
+the BSD implementation. In Jacobson's paper, the code is given as
+<BR>
+(page 19, code on right side):
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int idle = (snd_max == snd_una);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (idle &amp;&amp; now - lastsnd &gt; rto)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cwnd = 1;
+<BR>
+<P>However, in the FreeBSD code, 'now - lastsnd' is replaced
+<BR>
+by 't_idle &gt;= rxtcur', which isn't quite the same:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;idle = (tp-&gt;snd_max == tp-&gt;snd_una);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (idle &amp;&amp; tp-&gt;t_idle &gt;= tp-&gt;t_rxtcur)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* We have been idle for &quot;a while&quot; and no acks are
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* expected to clock out any data we send --
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* slow start to get ack &quot;clock&quot; running again.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;snd_cwnd = tp-&gt;t_maxseg;
+<BR>
+<P>Wright/Stevens TCP/IP Illustrated, V2 recognizes this bug. The code
+<BR>
+above is on page 853 of V2, in the beginning of Chapter 26. On page
+<BR>
+889, Exercise 26.1 asks: (pseudo-italics his):
+<BR>
+<P>&nbsp;&nbsp;Slow start is resumed in Figure 26.1 when there is a pause in
+<BR>
+&nbsp;&nbsp;the _sending_ of data, yet the amount of idle time is calculated as
+<BR>
+&nbsp;&nbsp;the amout of time since the last segment was _receievd_ on the
+<BR>
+&nbsp;&nbsp;connection. Why doesn't TCP calculate the idle time as the amount of
+<BR>
+&nbsp;&nbsp;time since the last segment was _sent_ on the connection?
+<BR>
+<P>The answer proposed on page 1085, Appendix A, is:
+<BR>
+<P>&nbsp;&nbsp;The counter t-idle is always running for a connection, whereas TCP
+<BR>
+&nbsp;&nbsp;does not measure the amount of time since the last segment was sent
+<BR>
+&nbsp;&nbsp;on a connection.
+<BR>
+<P>------------------------------------------
+<BR>
+<P>So, in summary, two bits of news:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KC was right, existing implementations are net-unfriendly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and do not do slow-start restart between request gaps 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in HTTP with persistent connections
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I was also right (at least I'll claim so :-), that this is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not the intended behavior and is the result of an implementation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bug.
+<BR>
+<P>I'll forward this to the appropriate places; in the meantime, we're
+<BR>
+working on a patch for FreeBSD to yield the correct behavior.
+<BR>
+<P>Joe
+<BR>
+<P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><P>----- End Included Message -----
+<BR>
+<P><P><P>----- End Included Message -----
+<BR>
+<P><P>----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708121739.KAA08900@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0655.html">touch@ISI.EDU: "Re: RTT estimation - a retraction"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0657.html">Kacheong Poon: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0660.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0662.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0664.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0665.html">William Allen Simpson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0667.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0668.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0670.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0671.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0672.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0673.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0675.html">Joe Touch: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0677.html">Douglas Wolff: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0678.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#656">[ date ]</A>
+<A HREF="index.html#656">[ thread ]</A>
+<A HREF="subject.html#656">[ subject ]</A>
+<A HREF="author.html#656">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Nagle -- again</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Nagle -- again">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Nagle -- again</H1>
+<!-- received="Thu Jun 24 17:00:35 1999" -->
+<!-- isoreceived="19990624210035" -->
+<!-- sent="Thu, 24 Jun 1999 13:59:15 -0700 (PDT)" -->
+<!-- isosent="19990624205915" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Nagle -- again" -->
+<!-- id="199906242059.NAA16167@rum.isi.edu" -->
+<!-- inreplyto="Nagle -- again" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906242059.NAA16167@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 24 1999 - 16:59:15 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1759.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1757.html">Greg Minshall: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1743.html">Greg Minshall: "Nagle -- again"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1761.html">Greg Minshall: "Re: Nagle -- again"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1761.html">Greg Minshall: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1758">[ date ]</A>
+<A HREF="index.html#1758">[ thread ]</A>
+<A HREF="subject.html#1758">[ subject ]</A>
+<A HREF="author.html#1758">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906242059.NAA16167@rum.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Thu Jun 24 13:40:17 1999
+</EM><BR>
+<EM>&gt; To: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906242059.NAA16167@rum.isi.edu&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<EM>&gt; cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906242059.NAA16167@rum.isi.edu&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: Nagle -- again 
+</EM><BR>
+<EM>&gt; Date: Thu, 24 Jun 1999 13:01:55 -0700
+</EM><BR>
+<EM>&gt; From: Greg Minshall &lt;<A HREF="mailto:minshall@siara.com?Subject=Re:%20Nagle%20--%20again&In-Reply-To=&lt;199906242059.NAA16167@rum.isi.edu&gt;">minshall@siara.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Joe,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; One observation - the paper indicates that there _must_ be at least
+</EM><BR>
+<EM>&gt; &gt; one ACK every two packets. This is not strictly required, at least
+</EM><BR>
+<EM>&gt; &gt; last time I checked. 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; yes, sorry.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Presuming that, would you propose to allow K-1 outstanding partial
+</EM><BR>
+<EM>&gt; &gt; packets, given one ACK per K packets?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; no.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 	- the paper uses analysis based on ethernet MSS's,
+</EM><BR>
+<EM>&gt; &gt;		how do things change if Internet default MSSs are assumed?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; well, i suspect that ethernet MSS ~== Internet default MSS, however if you 
+</EM><BR>
+<EM>&gt; mean 512 or 576 bytes, i'm not sure.  i'll (possibly) get back to you/the list 
+</EM><BR>
+<EM>&gt; on this.
+</EM><BR>
+<P>I mean 512 or 576. Internet default MSS is 576.
+<BR>
+<P><EM>&gt; &gt;	- Table 3 doesn't match the other tables (either) for original nagle
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; yes, table 1 is from one run on one kernel; table 3 is from one run on a 
+</EM><BR>
+<EM>&gt; kernel that had could switch between the two implementations.  also, note our 
+</EM><BR>
+<EM>&gt; (rueful) disclaimer:
+</EM><BR>
+<P>It was just that the difference was high enough to 
+<BR>
+raise the issue of variance, and whether Table 1's discrepencies
+<BR>
+(partial being better than full buffering) were 'signal'.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1759.html">Joe Touch: "Re: Nagle -- again"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1757.html">Greg Minshall: "Re: Nagle -- again"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1743.html">Greg Minshall: "Nagle -- again"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1761.html">Greg Minshall: "Re: Nagle -- again"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1761.html">Greg Minshall: "Re: Nagle -- again"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1758">[ date ]</A>
+<A HREF="index.html#1758">[ thread ]</A>
+<A HREF="subject.html#1758">[ subject ]</A>
+<A HREF="author.html#1758">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

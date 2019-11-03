@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Persist Mode</TITLE>
+<META NAME="Author" CONTENT="Charles Esson (charlese@cvs.com.au)">
+<META NAME="Subject" CONTENT="Re: Persist Mode">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Persist Mode</H1>
+<!-- received="Tue Jun 19 08:27:41 2001" -->
+<!-- isoreceived="20010619122741" -->
+<!-- sent="Tue, 19 Jun 2001 16:33:59 +1000" -->
+<!-- isosent="20010619063359" -->
+<!-- name="Charles Esson" -->
+<!-- email="charlese@cvs.com.au" -->
+<!-- subject="Re: Persist Mode" -->
+<!-- id="3B2EF257.68807807@cvs.com.au" -->
+<!-- inreplyto="Pine.SOL.4.05.10106190055390.27254-100000@hopper.math.uwaterloo.ca" -->
+<STRONG>From:</STRONG> Charles Esson (<A HREF="mailto:charlese@cvs.com.au?Subject=Re:%20Persist%20Mode&In-Reply-To=&lt;3B2EF257.68807807@cvs.com.au&gt;"><EM>charlese@cvs.com.au</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jun 19 2001 - 02:33:59 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2563.html">Saad Biaz: "Call for papers for SCS 2002"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2561.html">Martin McSweeney: "Persist Mode"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2561.html">Martin McSweeney: "Persist Mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2562">[ date ]</A>
+<A HREF="index.html#2562">[ thread ]</A>
+<A HREF="subject.html#2562">[ subject ]</A>
+<A HREF="author.html#2562">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+1) Somewhere in the mile high stack of paper that represents the TCP standard
+<BR>
+it says that the receiver is not allowed to reduce it's advertised window.
+<BR>
+<P>2) Somewhere else it says the sender is not allowed to expect nice things if
+<BR>
+it transmits past the advertised window.
+<BR>
+<P>If both conditions are met the receiver can't close his window before
+<BR>
+in-flight packets are acked.
+<BR>
+<P>If I am right ( and this is from memory), then all three behave correctly as
+<BR>
+the condition should not arise.
+<BR>
+<P>It would seem AIX4.3 and Sun0S 5.6 throw their hands in the air and wait for
+<BR>
+some sanity. Linux insists you obey rule 1.
+<BR>
+<P>As I only allow the window to move forward I am with linux.
+<BR>
+<P>Martin McSweeney wrote:
+<BR>
+<P><EM>&gt; Hello, my question regards the persist mode feature of TCP.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; In general, sending a zero window acknowledgement forces a sender into
+</EM><BR>
+<EM>&gt; persist mode, and a subsequent acknowledgement re-opens the send window.
+</EM><BR>
+<EM>&gt; I have found that in some implementations (AIX 4.3 and SunOS 5.6, for
+</EM><BR>
+<EM>&gt; example), sending a zero window acknowledgment that moves the right
+</EM><BR>
+<EM>&gt; edge of the send window left still forces the sender into persist mode.
+</EM><BR>
+<EM>&gt; Once another acknowledgement re-opens the window, all segments that were
+</EM><BR>
+<EM>&gt; moved to the right of the send window are retransmitted immediately
+</EM><BR>
+<EM>&gt; (because congestion control mechanism are not invoked).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; However, with other implementations (Linux, for example), behavior is
+</EM><BR>
+<EM>&gt; quite the opposite. It seems that Linux does not enter persist mode unless
+</EM><BR>
+<EM>&gt; a zero window acknowledgement acknowledges all outstanding bytes.
+</EM><BR>
+<EM>&gt; Even if a zero window acknowledgement does put a sender into persist mode,
+</EM><BR>
+<EM>&gt; Linux will not freeze its transmission rate, but rather use slow-start to
+</EM><BR>
+<EM>&gt; recover losses. I think the idea behind this is from RFC 2861---a pause in
+</EM><BR>
+<EM>&gt; communication invalidates the congstion window.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Does anyone have a comment an how an implementation should re-act to a
+</EM><BR>
+<EM>&gt; zero window acknowledgement?  RFC 1122 is very brief on this subject.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thank you,
+</EM><BR>
+<EM>&gt; Martin McSweeney
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2563.html">Saad Biaz: "Call for papers for SCS 2002"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2561.html">Martin McSweeney: "Persist Mode"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2561.html">Martin McSweeney: "Persist Mode"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2567.html">Matt Mathis: "Re: Persist Mode -- ** Standards bug ??"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2562">[ date ]</A>
+<A HREF="index.html#2562">[ thread ]</A>
+<A HREF="subject.html#2562">[ subject ]</A>
+<A HREF="author.html#2562">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Jun 19 2001 - 08:28:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

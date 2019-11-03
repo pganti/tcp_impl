@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb  3 21:38:48 1999" -->
+<!-- isoreceived="19990204023848" -->
+<!-- sent="Wed, 3 Feb 1999 18:14:37 -0800 (PST)" -->
+<!-- isosent="19990204021437" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@eng.Sun.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="Roam.SIMC.2.0.6.918094477.28747.kcpoon@jurassic" -->
+<!-- inreplyto="36B8DBF4.FBCB23FB@cup.hp.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMC.2.0.6.918094477.28747.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 03 1999 - 21:14:37 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1492.html">Vern Paxson: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1490.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1491">[ date ]</A>
+<A HREF="index.html#1491">[ thread ]</A>
+<A HREF="subject.html#1491">[ subject ]</A>
+<A HREF="author.html#1491">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; My understanding of &quot;the way things are supposed to work&quot; :) is that if
+</EM><BR>
+<EM>&gt; that one-and-a-fraction MSS-worth of data was presented to the TCP in a
+</EM><BR>
+<EM>&gt; single &quot;send&quot; that all of it should go out without delay. And yes, that
+</EM><BR>
+<EM>&gt; could mean a series of 1460,1,1460,1 segments traversing the network. I
+</EM><BR>
+<EM>&gt; demonstrated that being the case with a quick netperf TCP_RR test with
+</EM><BR>
+<EM>&gt; &quot;-r 1461,1&quot; - if the paragraphs description was correct, I should have
+</EM><BR>
+<EM>&gt; only gotten ~5 transactions per second (200 ms delayed ACK), but I got
+</EM><BR>
+<EM>&gt; several hundred.
+</EM><BR>
+<P>This is interesting.  So are you saying that the receiver did not delay acks
+<BR>
+in your test case?  Assuming MSS is 1460 bytes.  After the sender sends the
+<BR>
+first 1460 bytes of the 1461 bytes request (in a single send call), it cannot
+<BR>
+send any more because of Nagle.  And if the receiver implements delay ack and
+<BR>
+ack every other segment, it will not send back an ack immediately if the 1460
+<BR>
+bytes segment happen to be the first of the 2 segments.  Have you looked at
+<BR>
+the transfer trace to see what is going on?
+<BR>
+<P><EM>&gt; Now, there may still be sufficient cases of reasonable applications that
+</EM><BR>
+<EM>&gt; are not broken, but still &quot;suffer&quot; from Nagle, but I'm not sure (yet -
+</EM><BR>
+<EM>&gt; I'm sure someone else will point some out :) what they are. _Maybe_
+</EM><BR>
+<EM>&gt; something to do with pipelined http requests generating sub MSS
+</EM><BR>
+<EM>&gt; responses?
+</EM><BR>
+<P>Well, in your test case, Nagle is supposed to kick in and reduce the
+<BR>
+RR rate.  Are you sure the stack you tested with does not have some form
+<BR>
+of optimization for this?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMC.2.0.6.918094477.28747.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1492.html">Vern Paxson: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1490.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1483.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1499.html">Rick Jones: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1491">[ date ]</A>
+<A HREF="index.html#1491">[ thread ]</A>
+<A HREF="subject.html#1491">[ subject ]</A>
+<A HREF="author.html#1491">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

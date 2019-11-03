@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Important question re: new T</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: Important question re: new TCP options on data segments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Important question re: new TCP options on data segments</H1>
+<!-- received="Thu Aug 10 16:19:57 2000" -->
+<!-- isoreceived="20000810201957" -->
+<!-- sent="Thu, 10 Aug 2000 16:10:40 -0400 (EDT)" -->
+<!-- isosent="20000810201040" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: Important question re: new TCP options on data segments" -->
+<!-- id="Pine.NEB.4.05.10008101554440.15494-100000@tesla.psc.edu" -->
+<!-- inreplyto="200008101830.WAA20150@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;Pine.NEB.4.05.10008101554440.15494-100000@tesla.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 10 2000 - 16:10:40 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2310.html">Lloyd Wood: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2308.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2308.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2309">[ date ]</A>
+<A HREF="index.html#2309">[ thread ]</A>
+<A HREF="subject.html#2309">[ subject ]</A>
+<A HREF="author.html#2309">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, 10 Aug 2000 <A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;Pine.NEB.4.05.10008101554440.15494-100000@tesla.psc.edu&gt;">kuznet@ms2.inr.ac.ru</A> wrote:
+<BR>
+<P><EM>&gt; With timestamps the situation is different. Some stacks
+</EM><BR>
+<EM>&gt; (I will not show with finger) are optimized yet.
+</EM><BR>
+<EM>&gt; And if peer starts to send timestamps after some obscure
+</EM><BR>
+<EM>&gt; criteria is satisfied (sort of rate), you will fall to
+</EM><BR>
+<EM>&gt; maximally suboptimal way exactly at high rate.
+</EM><BR>
+<EM>&gt; Besides that connection will be aggressively delacked,
+</EM><BR>
+<EM>&gt; because mss estimation also relies on the fact,
+</EM><BR>
+<EM>&gt; that TS is persistent option.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Nothing will break, but all the things contradicting to original
+</EM><BR>
+<EM>&gt; specs will result in either fall to slow path or to failure
+</EM><BR>
+<EM>&gt; of existing heuristics.
+</EM><BR>
+<P>I think your argument boils down to this:
+<BR>
+<P>There are other reasons to do timestamps besides PAWS.  If a stack is using one
+<BR>
+of these other algoritms, then it may want to turn on timestamps earlier than
+<BR>
+needed by PAWS.
+<BR>
+<P>Fine.  Not a problem.  So the choice is timestamps [off, on, or auto] and it is
+<BR>
+our mission to make &quot;auto&quot; smart enough where future vendor defaults will
+<BR>
+always be auto, and TCP will &quot;just do the right thing&quot;.
+<BR>
+<P>Except for the ability to change timestamps mid connection, these details are
+<BR>
+not protocol specifications and for the most part are allowed under current
+<BR>
+standards.
+<BR>
+<P>Thanks,
+<BR>
+--MM--
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2310.html">Lloyd Wood: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2308.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2308.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2313.html">kuznet@ms2.inr.ac.ru: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2309">[ date ]</A>
+<A HREF="index.html#2309">[ thread ]</A>
+<A HREF="subject.html#2309">[ subject ]</A>
+<A HREF="author.html#2309">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft description of &quot;Insuf</TITLE>
+<META NAME="Author" CONTENT="Scott Dawson (sdawson@eecs.umich.edu)">
+<META NAME="Subject" CONTENT="draft description of &quot;Insufficient interval between keepalives&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft description of &quot;Insufficient interval between keepalives&quot;</H1>
+<!-- received="Tue Apr 29 12:17:05 1997" -->
+<!-- isoreceived="19970429161705" -->
+<!-- sent="Tue, 29 Apr 1997 14:45:52 -0400" -->
+<!-- isosent="19970429184552" -->
+<!-- name="Scott Dawson" -->
+<!-- email="sdawson@eecs.umich.edu" -->
+<!-- subject="draft description of &quot;Insufficient interval between keepalives&quot;" -->
+<!-- id="969378238.0004@hypermail.dummy" -->
+<STRONG>From:</STRONG> Scott Dawson (<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20draft%20description%20of%20&quot;Insufficient%20interval%20between%20keepalives&quot;&In-Reply-To=&lt;969378238.0004@hypermail.dummy&gt;"><EM>sdawson@eecs.umich.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 29 1997 - 14:45:52 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0350.html">Scott Dawson: "draft description of &quot;Excessively short keepalive connection timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0348.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0354.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#349">[ date ]</A>
+<A HREF="index.html#349">[ thread ]</A>
+<A HREF="subject.html#349">[ subject ]</A>
+<A HREF="author.html#349">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Insufficient interval between keepalives
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keep-alive is a mechanism  for checking whether an idle  connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is still alive.  According to RFC-1122,  keep-alive may be included
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in an implementation.  If   it  is included, the interval   between
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive packets  MUST be configurable,   and MUST default to  no
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;less than two hours.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-critical
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;According    to   RFC-1122,    keep-alive   is not    required   of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementations   because it    could:  (1)  cause  perfectly  good
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connections   to break  during   transient Internet  failures;  (2)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consume unnecessary bandwidth (&quot;if  no one is using the connection,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;who  cares if   it is  still good?&quot;); and    (3) cost money  for an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet path that charges  for packets.  If keepalive  is provided
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the RFC states  that  the  required inter-keepalive distance   MUST
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default to no less than two hours.  If it does not, the probability
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of connections  breaking    increases, the bandwidth used   due  to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keepalives  increases, and cost  increases over  paths which charge
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;per packet.
+<BR>
+<P>Relevant RFCs'
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122  specifies that the  keep-alive mechanism may be provided.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It also  specifies the two   hour minimum for the  default interval
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;between keepalive probes.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made  using the Orchestra tool  at  the peer  of the machine  using
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:36:32.910000 A &gt; B: 3288354305:0      win 28672 datasz 4 SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:36:32.930000 B &gt; A: 896001:3288354306 win 4096  datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:36:32.950000 A &gt; B: 3288354306:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:36:32.970000 B &gt; A: 896001:3288354306 win 4096  datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:36:33.000000 A &gt; B: 3288354306:896002 win 28672 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:50:01.190000 A &gt; B: 3288354305:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11:50:01.210000 B &gt; A: 896002:3288354306 win 4096  datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:03:29.410000 A &gt; B: 3288354305:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:03:29.430000 B &gt; A: 896002:3288354306 win 4096  datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:16:57.630000 A &gt; B: 3288354305:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:16:57.650000 B &gt; A: 896002:3288354306 win 4096  datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:30:25.850000 A &gt; B: 3288354305:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:30:25.870000 B &gt; A: 896002:3288354306 win 4096  datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:43:54.070000 A &gt; B: 3288354305:896002 win 28672 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:43:54.090000 B &gt; A: 896002:3288354306 win 4096  datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial five packets are the SYN exchange for connection setup.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About 13  minutes  later, the  keepalive  timer fires  because  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection is  idle.  The keepalive  is acknowledged, and the timer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fires  again in about 13   more  minutes.  This behavior  continues
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indefinitely until the connection is closed, and  is a violation of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the specification.
+<BR>
+<P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using  the  Orchestra tool at  the peer  of the  machine using
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keep-alive.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:37:20.500000 A &gt; B: 34155521:0       win 4096 datasz 4 SYN
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:37:20.520000 B &gt; A: 6272001:34155522 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:37:20.540000 A &gt; B: 34155522:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:37:20.560000 B &gt; A: 6272001:34155522 win 4096 datasz 4 SYN ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:37:20.580000 A &gt; B: 34155522:6272002 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19:37:25.430000 A &gt; B: 34155521:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;19:37:25.450000 B &gt; A: 6272002:34155522 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21:37:30.560000 A &gt; B: 34155521:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;21:37:30.570000 B &gt; A: 6272002:34155522 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23:37:35.580000 A &gt; B: 34155521:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;23:37:35.600000 B &gt; A: 6272002:34155522 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01:37:40.620000 A &gt; B: 34155521:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;01:37:40.640000 B &gt; A: 6272002:34155522 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;03:37:45.590000 A &gt; B: 34155521:6272002 win 4096 datasz 0 ACK
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;03:37:45.610000 B &gt; A: 6272002:34155522 win 4096 datasz 0 ACK
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial five packets are the SYN exchange for connection setup.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Just  over two hours later, the  keepalive timer  fires because the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection is idle.   The keepalive is  acknowledged, and the timer
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fires   again just over two hours   later.  This behavior continues
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indefinitely until the connection is closed.
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Dawson97].
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For   implementations manifesting this  problem, it   shows up on a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet trace.  If the connection is left idle, the keepalive probes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will arrive closer together than the two hour minimum.
+<BR>
+<P>6. References
+<BR>
+<P>[Dawson97]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S.  Dawson,  F.   Jahanian, and  T.   Mitton, &quot;Experiments   on Six
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Commercial  TCP Implementations  Using  a Software  Fault Injection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tool,&quot; to  appear  in  Software Practice &amp;    Experience,  1997.  A
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;technical  report version of   this   paper  can be  obtained    at
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="ftp://rtcl.eecs.umich.edu/outgoing/sdawson/CSE-TR-298-96.ps.gz">ftp://rtcl.eecs.umich.edu/outgoing/sdawson/CSE-TR-298-96.ps.gz</A>.
+<BR>
+<P>7. Author's Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Scott Dawson &lt;<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20draft%20description%20of%20&quot;Insufficient%20interval%20between%20keepalives&quot;&In-Reply-To=&lt;969378238.0004@hypermail.dummy&gt;">sdawson@eecs.umich.edu</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Real-Time Computing Laboratory
+<BR>
+&nbsp;&nbsp;&nbsp;EECS Building
+<BR>
+&nbsp;&nbsp;&nbsp;University of Michigan
+<BR>
+&nbsp;&nbsp;&nbsp;Ann Arbor, MI  48109-2122
+<BR>
+&nbsp;&nbsp;&nbsp;USA
+<BR>
+&nbsp;&nbsp;&nbsp;Phone: +1 313/763-5363
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0350.html">Scott Dawson: "draft description of &quot;Excessively short keepalive connection timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0348.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0354.html">Scott Dawson: "draft description of &quot;Insufficient interval between keepalives&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#349">[ date ]</A>
+<A HREF="index.html#349">[ thread ]</A>
+<A HREF="subject.html#349">[ subject ]</A>
+<A HREF="author.html#349">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

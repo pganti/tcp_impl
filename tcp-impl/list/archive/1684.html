@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: alternative PMTU</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: alternative PMTU">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: alternative PMTU</H1>
+<!-- received="Mon Mar 22 10:41:48 1999" -->
+<!-- isoreceived="19990322154148" -->
+<!-- sent="Mon, 22 Mar 1999 08:34:02 -0700 (MST)" -->
+<!-- isosent="19990322153402" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: alternative PMTU" -->
+<!-- id="199903221534.IAA28868@calcite.rhyolite.com" -->
+<!-- inreplyto="alternative PMTU" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903221534.IAA28868@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 22 1999 - 10:34:02 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1685.html">Raouf Boutaba: "NETWORKIN 2000"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1683.html">Eric A. Hall: "Re: alternative PMTU"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1687.html">Vernon Schryver: "Re: alternative PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1684">[ date ]</A>
+<A HREF="index.html#1684">[ thread ]</A>
+<A HREF="subject.html#1684">[ subject ]</A>
+<A HREF="author.html#1684">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903221534.IAA28868@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; Suppose that instead of doing this complex probe operation that we have
+</EM><BR>
+<EM>&gt; today, we just send datagrams with fragmentation allowed. Then, if
+</EM><BR>
+<EM>&gt; fragmentation does occur somewhere, the recipient responds with a TCP
+</EM><BR>
+<EM>&gt; option that states &quot;fragmentation occurred: fragment size is X&quot;
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Contrast the current path MTU discovery mechanism with that idea:
+<BR>
+<P>&nbsp;&nbsp;current scheme:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;deals with UDP, ICMP, and other protocols
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;works even when other host and all routers do not know the new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PMTU ICMP option.  It works very with only some routers updated,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and with the far larger number of hosts running the original TCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Routers do not absolutely need to be updated, but if they are,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the change is tiny.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;always discovers the MTU that the sender needs to use to avoid
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fragmentation.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;handles routing changes
+<BR>
+<P><P>&nbsp;&nbsp;alternate scheme:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;handles only TCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Does not work at all unless requires the remote host has new TCP and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP code.  There are far more hosts that would need to be updated
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with new TCP and IP code than routers in the current scheme.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;The new code needed in hosts is much larger than the change in routers,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and again, the routers do not absolutely need to be changed at all
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in the current scheme.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;gets the fragment seen by the far host, which can be larger than the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smallest MTU if any router does IP reassembly, and usually is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smaller.  What if the bottleneck router fragments into even sizes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead of maximum and tiny sizes?   What about the effects of the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8-byte granularity of IP fragments?  Also consider the IP fragments
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an Ethernet host (1500) can receives from an FDDI sender, 1500,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1500, and 1412 (assuming no TCP or IP options).  Does the alternate
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scheme report 1500 or 1412?   Now consider the fragments received
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on the Ethernet when the the FDDI host prefers to use an MSS of 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead of 4332, because that is often much faster.  (There are many
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;commercial systems that do that.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Say you handled those problems by looking for the largest fragment or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;datagram received, and ignored the fact that would not always give
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the right answer.  Then what about routing changes?
+<BR>
+<P><P><P>] From: &quot;Eric A. Hall&quot; &lt;<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903221534.IAA28868@calcite.rhyolite.com&gt;">ehall@ehsco.com</A>&gt;
+<BR>
+<P>] &gt; Am I missing something here. The ICMP reply optionally gives you the
+<BR>
+] &gt; mtu size
+<BR>
+]
+<BR>
+] Sometimes an intermediary will, but the end-point never does.
+<BR>
+<P>The endpoint never does any IP fragmenting, so why do you care what it
+<BR>
+guesses is the smallest MTU in the path?
+<BR>
+<P>]                                                               Also, it
+<BR>
+] can take multiple efforts to find the &quot;true&quot; end-to-end mtu.
+<BR>
+<P>Not in practice, unless the router doing the fragmenting does not know
+<BR>
+about the new ICMP option.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20alternative%20PMTU&In-Reply-To=&lt;199903221534.IAA28868@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1685.html">Raouf Boutaba: "NETWORKIN 2000"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1683.html">Eric A. Hall: "Re: alternative PMTU"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1680.html">Eric A. Hall: "alternative PMTU"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1687.html">Vernon Schryver: "Re: alternative PMTU"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1684">[ date ]</A>
+<A HREF="index.html#1684">[ thread ]</A>
+<A HREF="subject.html#1684">[ subject ]</A>
+<A HREF="author.html#1684">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:42 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

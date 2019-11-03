@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: doubts in rfc793</TITLE>
+<META NAME="Author" CONTENT="Bhavesh Pathak - BasisComm (bhaveshp@corp.cirrus.com)">
+<META NAME="Subject" CONTENT="doubts in rfc793">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>doubts in rfc793</H1>
+<!-- received="Sat Jul 10 17:16:06 1999" -->
+<!-- isoreceived="19990710211606" -->
+<!-- sent="Sat, 10 Jul 1999 14:02:03 -0700 (PDT)" -->
+<!-- isosent="19990710210203" -->
+<!-- name="Bhavesh Pathak - BasisComm" -->
+<!-- email="bhaveshp@corp.cirrus.com" -->
+<!-- subject="doubts in rfc793" -->
+<!-- id="199907102102.OAA12206@ssu011.corp" -->
+<STRONG>From:</STRONG> Bhavesh Pathak - BasisComm (<A HREF="mailto:bhaveshp@corp.cirrus.com?Subject=Re:%20doubts%20in%20rfc793&In-Reply-To=&lt;199907102102.OAA12206@ssu011.corp&gt;"><EM>bhaveshp@corp.cirrus.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Jul 10 1999 - 17:02:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1773.html">Vivek Kashyap: "Re: Automated TCP test"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1774">[ date ]</A>
+<A HREF="index.html#1774">[ thread ]</A>
+<A HREF="subject.html#1774">[ subject ]</A>
+<A HREF="author.html#1774">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Dear everybody,
+<BR>
+while going through the rfc793, I got following doubts. I absence
+<BR>
+of any active mailing list where such a basic rfc can be help to 
+<BR>
+resolve this kind of doubts, I am sending this queries to this list.
+<BR>
+<P>with regards,
+<BR>
+bhavesh
+<BR>
+<P>Doubt-1
+<BR>
+-------
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP A                                            TCP B
+<BR>
+<P>1.  CLOSED                                           CLOSED
+<BR>
+<P>2.  SYN-SENT     --&gt; &lt;SEQ=100&gt;&lt;CTL=SYN&gt;              ...
+<BR>
+<P>3.  SYN-RECEIVED &lt;-- &lt;SEQ=300&gt;&lt;CTL=SYN&gt;              &lt;-- SYN-SENT
+<BR>
+<P>4.               ... &lt;SEQ=100&gt;&lt;CTL=SYN&gt;              --&gt; SYN-RECEIVED
+<BR>
+<P><P>5. SYN-RECEIVED --&gt; &lt;SEQ=100&gt;&lt;ACK=301&gt;&lt;CTL=SYN,ACK&gt; ...
+<BR>
+<P>6. ESTABLISHED &lt;-- &lt;SEQ=300&gt;&lt;ACK=101&gt;&lt;CTL=SYN,ACK&gt; &lt;-- SYN-RECEIVED
+<BR>
+<P>7.             ... &lt;SEQ=101&gt;&lt;ACK=301&gt;&lt;CTL=ACK&gt;     --&gt; ESTABLISHED
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Simultaneous Connection Synchronization  (Figure 8.) 
+<BR>
+<P>Here(at line 6), I am not able to understand why TCP-B needs to re-transmit 
+<BR>
+another SYN. 
+<BR>
+<P><P>Doubt-2
+<BR>
+-------
+<BR>
+The RFC says that  (this is just after connection diag. in the section 3.4)
+<BR>
+&quot;1. If the connection does not exist (CLOSED) then a reset is sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;in response to any incoming segment except another reset. In particular, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;SYNs addressed to a non-existent connection are rejected by this means. &quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;RFC seems to be saying that SYN addressed to non-existent connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;is illegal. But, I think that when we are opening a connection, the SYN 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;can be addressed to ONLY non-existent connection because SYN only 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;starts up the connection.
+<BR>
+<P>Doubt-3
+<BR>
+-------
+<BR>
+RFC refers to &quot;security level, compartment and precedence&quot;, have this
+<BR>
+been in implemented in the TCP/IP stacks. 
+<BR>
+<P>Doubt-4
+<BR>
+-------
+<BR>
+RFC says that,
+<BR>
+&quot;The sending TCP must be prepared to accept from the user and send at 
+<BR>
+&nbsp;least one octet of new data even if the send window is zero. The sending 
+<BR>
+&nbsp;TCP must regularly retransmit to the receiving TCP even when the window 
+<BR>
+&nbsp;is zero.&quot;
+<BR>
+<P>&nbsp;1. when send window is 0, how tcp will be able send data?
+<BR>
+&nbsp;2. does it mean that retransmission are not affected by the present
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;window size (0 in the above case)?
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1773.html">Vivek Kashyap: "Re: Automated TCP test"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1775.html">der Mouse : "Re: doubts in rfc793"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1774">[ date ]</A>
+<A HREF="index.html#1774">[ thread ]</A>
+<A HREF="subject.html#1774">[ subject ]</A>
+<A HREF="author.html#1774">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:50 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Idle Restart Algorithms</TITLE>
+<META NAME="Author" CONTENT="Patrick McManus (mcmanus@appliedtheory.com)">
+<META NAME="Subject" CONTENT="Idle Restart Algorithms">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Idle Restart Algorithms</H1>
+<!-- received="Wed Feb 24 12:45:42 1999" -->
+<!-- isoreceived="19990224174542" -->
+<!-- sent="Wed, 24 Feb 1999 12:36:33 -0500 (EST)" -->
+<!-- isosent="19990224173633" -->
+<!-- name="Patrick McManus" -->
+<!-- email="mcmanus@appliedtheory.com" -->
+<!-- subject="Idle Restart Algorithms" -->
+<!-- id="199902241736.MAA06539@justice.atc-bos.com" -->
+<STRONG>From:</STRONG> Patrick McManus (<A HREF="mailto:mcmanus@appliedtheory.com?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241736.MAA06539@justice.atc-bos.com&gt;"><EM>mcmanus@appliedtheory.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 24 1999 - 12:36:33 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1611">[ date ]</A>
+<A HREF="index.html#1611">[ thread ]</A>
+<A HREF="subject.html#1611">[ subject ]</A>
+<A HREF="author.html#1611">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+So, I've been thinking about TCP idle restarts based on the reading of
+<BR>
+both tcpimpl-prob-05 (paxson, et al..) and tcpimpl-restart-00 (hughes,
+<BR>
+touch, heidemann exp 09/98).. and something doesn't feel right.
+<BR>
+<P>I offer up this narrative in case I've not grasped something correctly
+<BR>
+and someone wants to do the kind favor of setting me straight before I
+<BR>
+go much further. This rambles a bit, but it does capture my thinking on the
+<BR>
+topic. 
+<BR>
+<P><EM>&gt;From a heuristic pov, the purpose of congestion control is to
+</EM><BR>
+dynamically rate limit the pace of a stream to match the current
+<BR>
+capacity characteristics of the underlying medium. Because both
+<BR>
+contention for that medium is changing and the medium itself may
+<BR>
+change (due to routing adjustments) this must be constantly
+<BR>
+re-evaluated. TCP's basic approach is to race forward to about 1/2 of
+<BR>
+what it thinks the limit might be, and then inch upwards until it gets
+<BR>
+rebuked. This creates some kind of rolling estimate of an acceptable
+<BR>
+send rate based on a feedback loop from the network. 
+<BR>
+<P>After a period of inactivity this estimate becomes less useful due to
+<BR>
+lack of recent pertinent feedback. Traditional implementations react
+<BR>
+to this by re-entering slow start which in effect re-discovers the
+<BR>
+current available bandwidth. Alternatively, [Hughes,Touch,Heidemann]
+<BR>
+suggest Congestion Window Monitoring which fundamentally imposes a
+<BR>
+'use it or lose it' policy on growing CWNDs that are in excess of 4
+<BR>
+plus the amount of outstanding data which would ensure that after an
+<BR>
+idle period the cwnd is maxed out at 4.
+<BR>
+<P>The basic issue at hand is that the past performance of the network is
+<BR>
+being used to predict the future. It is recognized that the longer the
+<BR>
+interval between past input and the current decision time is, the less
+<BR>
+reliable that data is for making the decision. However, traditional
+<BR>
+reaction to this issue uses a simple 2 step function (valid/not valid)
+<BR>
+to make that determination. The only input to this decision is RTO, which
+<BR>
+in my opinion exerts a counter-productive force on the decision. For
+<BR>
+two links with the same average RTT the link with the greater variance
+<BR>
+is going to fall into the 'valid data' step more than the one with a
+<BR>
+lesser variance. In essence, this increases the likelihood of using
+<BR>
+past data to predict the future on a link that has proven _more_
+<BR>
+volatile (and thus less likely to obey past patterns of
+<BR>
+behavior). That doesn't seem like a good thing.
+<BR>
+<P>On a gut level, I'm not much of a fan of CWM either.. While leaky
+<BR>
+bucket scenarios are attractive to me, CWM essentially enforces a
+<BR>
+gushing bucket where sending capacity is throttled quickly back if the
+<BR>
+sending rate doesn't equal the ack-reception rate. It strikes me as
+<BR>
+over-aggressive... using 4 as a fall back instead of 1 is likely meant
+<BR>
+to mitigate this, but I dislike the constants as they cannot apply
+<BR>
+well to all mediums current or future.. (the increased use of
+<BR>
+satellite services for downstream in use for things like DirectPC and
+<BR>
+rural African service exhibit huge bandwidth delay properties that are
+<BR>
+un-necessarily crippled by this)
+<BR>
+<P>I think there needs to be a little more discussion on the types of
+<BR>
+timeouts that are realistic. Discussion generally just cites HTTP/1.1
+<BR>
+and leaves it at that. I see several different scenarios within just
+<BR>
+HTTP and also suspect NNTP exhibits relevant behavior. Some possible sources:
+<BR>
+<P>&nbsp;&nbsp;* Short timeouts.. probably as a result of document retrieval,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;parsing time, and subsequent requests for embedded objects.. Just
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;how long this takes depends on a lot of things of course, not the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;least of which are document composition and client
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;implementation.. but it's probably on the order of 10RTT
+<BR>
+&nbsp;&nbsp;* longer timeouts.. the result of human interpretation of past
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;results and the subsequent request to follow one of the presented
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;related references.. on the order of a few whole seconds.
+<BR>
+&nbsp;&nbsp;* Folks reading news with NNTP (as opposed to NNTP used for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;transport) are going to exhibit patterns similar to the HTTP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;longer timeout mentioned above.. more and more private news servers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;are being introduced into the fabric of the web for use as a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;discussion medium, but for security/demand reasons are not propagated in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;any kind of general purpose fashion, so interactive news reading
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;is becoming more of a WAN phenomenon.
+<BR>
+&nbsp;&nbsp;* HTTP cache interaction.. particularly pre-emptive retrieval
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;scenarios that propagate information between caches.
+<BR>
+<P>I think the essence of the problem is the overloading of burst
+<BR>
+management and flow rate control onto a single mechanism. A large,
+<BR>
+previously established, cwnd may have been achieved through an earlier
+<BR>
+long sustained flow and slowly ramped up. Even if the properties of
+<BR>
+that link have not changed there is no guarantee that the link can
+<BR>
+support a full cwnd burst presented all at once without dropping
+<BR>
+packets. However it's quite possible that it can, as well and in the
+<BR>
+case of large bandwidth*delay links that is really something that
+<BR>
+should be taken advantage of.
+<BR>
+<P>So for the sake of clarity, I want to remove the concept of burst
+<BR>
+control from the discussion of restart algorithms. Perhaps a 'burst
+<BR>
+window' or other such technique can be orthogonally implemented to
+<BR>
+address the issue (something that would learn in a similar fashion
+<BR>
+what the maximum allowable network burst would be).
+<BR>
+<P>Moving back to idle algorithms I would like to experiment with
+<BR>
+something adaptive.. maybe a cwnd reduction of 20% (min 1 segment) for
+<BR>
+every A-4D elapsed in the idle period (apply in a compounding
+<BR>
+fashion).. This reverses the impact of the variance mentioned above
+<BR>
+while providing more fine grained input into the 'trust' process.
+<BR>
+<P>While I intend to go ahead in looking at this, I'm soliciting any
+<BR>
+helpful insights or 'been there done that' comments folks may have.
+<BR>
+<P>Thanks,
+<BR>
+-Pat
+<BR>
+<P>Patrick R. McManus - AppliedTheory Communications  -	Software Engineering
+<BR>
+<A HREF="http://pat.appliedtheory.com/~mcmanus">http://pat.appliedtheory.com/~mcmanus</A>			Lead Developer
+<BR>
+<A HREF="mailto:mcmanus@AppliedTheory.com?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241736.MAA06539@justice.atc-bos.com&gt;">mcmanus@AppliedTheory.com</A>	'Prince of Pollywood'	Standards, today!
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1610.html">Jamshid Mahdavi: "Re: dynamic rwin adjustments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1612.html">Joe Touch: "Re: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1614.html">Joe Touch: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1611">[ date ]</A>
+<A HREF="index.html#1611">[ thread ]</A>
+<A HREF="subject.html#1611">[ subject ]</A>
+<A HREF="author.html#1611">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

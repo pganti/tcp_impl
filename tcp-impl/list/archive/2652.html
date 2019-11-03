@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="Lloyd Wood (l.wood@eim.surrey.ac.uk)">
+<META NAME="Subject" CONTENT="Re: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 17:13:29 2002" -->
+<!-- isoreceived="20020405221329" -->
+<!-- sent="Fri, 5 Apr 2002 23:13:47 +0100 (BST)" -->
+<!-- isosent="20020405221347" -->
+<!-- name="Lloyd Wood" -->
+<!-- email="l.wood@eim.surrey.ac.uk" -->
+<!-- subject="Re: TCP Checksum Interoperability" -->
+<!-- id="Pine.SOL.4.43.0204052248210.5049-100000@phaestos.ee.surrey.ac.uk" -->
+<!-- inreplyto="20020405213024.EE5C51CA1@thrintun.hactrn.net" -->
+<STRONG>From:</STRONG> Lloyd Wood (<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;Pine.SOL.4.43.0204052248210.5049-100000@phaestos.ee.surrey.ac.uk&gt;"><EM>l.wood@eim.surrey.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 17:13:47 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2653.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2651.html">J. Noel Chiappa: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2650.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2653.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2654.html">Matt Crawford: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2652">[ date ]</A>
+<A HREF="index.html#2652">[ thread ]</A>
+<A HREF="subject.html#2652">[ subject ]</A>
+<A HREF="author.html#2652">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Fri, 5 Apr 2002, Rob Austein wrote:
+<BR>
+<P><EM>&gt; --------At Fri, 05 Apr 2002 12:05:33 -0800, Joe Touch wrote:
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; See my other post on this, as per RFC1624 section 3, only one state
+</EM><BR>
+<EM>&gt; &gt; (0x0000) is legal as the complement of the checksum of non-zero data.
+</EM><BR>
+<EM>&gt; &gt; TCP checksummed data must contain at least one nonzero word (the one
+</EM><BR>
+<EM>&gt; &gt; with the TCP header length, which must be &gt;=20).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; RFC 1624 is (a) Informational,
+</EM><BR>
+<P>It was written before BCP came into being with RFC1818. More accurate
+<BR>
+to say that it's not standards-track... I imagine any update
+<BR>
+today would be BCP.
+<BR>
+<P><EM>&gt; and (b) wrong on this point.  RFC 793
+</EM><BR>
+<EM>&gt; just says that it's a one's complement sum and does not dictate the
+</EM><BR>
+<EM>&gt; specific method by which it must be calculated.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The implementation is
+</EM><BR>
+<EM>&gt; free to subtract zero from the sum at any point in the calculation to
+</EM><BR>
+<EM>&gt; prevent overflow (even if the particular value of zero chosen would
+</EM><BR>
+<EM>&gt; happen to look like a very large number when considered as an unsigned
+</EM><BR>
+<EM>&gt; value).  An implementation whose native word size is larger than 16
+</EM><BR>
+<EM>&gt; bits is also free to first perform the summation then fold the results
+</EM><BR>
+<EM>&gt; down to 16 bits by applying mod 0xFFFF.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; And yes, once upon a time, people wrote checksum code that worked this
+</EM><BR>
+<EM>&gt; way, at least on PDP-10s at MIT.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The point is not that I'd advise anyone to use these techniques in new
+</EM><BR>
+<EM>&gt; code, just that they're completely legal given what the standard
+</EM><BR>
+<EM>&gt; actually says, and that the robustness principle therefore suggests
+</EM><BR>
+<EM>&gt; that we should accept the checksums they generate.
+</EM><BR>
+<P>and RFC791 claims ttl is in seconds, ergo I don't have to decrement
+<BR>
+ttl because I know my traffic is on paths less than a second
+<BR>
+long.
+<BR>
+<P>Cool reasoning.
+<BR>
+<P>L.
+<BR>
+<P><EM>&gt; &gt; The receiver is entirely justified in considering 0xffff as an error.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I disagree, for the reasons given above.
+</EM><BR>
+<P>&lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;Pine.SOL.4.43.0204052248210.5049-100000@phaestos.ee.surrey.ac.uk&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2653.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2651.html">J. Noel Chiappa: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2650.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2653.html">Rob Austein: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2654.html">Matt Crawford: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2652">[ date ]</A>
+<A HREF="index.html#2652">[ thread ]</A>
+<A HREF="subject.html#2652">[ subject ]</A>
+<A HREF="author.html#2652">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 17:13:36 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

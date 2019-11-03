@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sat Sep 16 09:30:09 2000" -->
+<!-- isoreceived="20000916133009" -->
+<!-- sent="Sat, 16 Sep 2000 07:22:33 -0600 (MDT)" -->
+<!-- isosent="20000916132233" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009161322.e8GDMX124053@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161322.e8GDMX124053@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Sep 16 2000 - 09:22:33 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2333">[ date ]</A>
+<A HREF="index.html#2333">[ thread ]</A>
+<A HREF="subject.html#2333">[ subject ]</A>
+<A HREF="author.html#2333">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Alan Cox &lt;<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161322.e8GDMX124053@calcite.rhyolite.com&gt;">alan@lxorguk.ukuu.org.uk</A>&gt;
+</EM><BR>
+<P><EM>&gt; Im not a cryptographer but Im being told MD5 should not be used by people
+</EM><BR>
+<EM>&gt; who are, and that people have found MD5 weaknesses that are not (yet) apparent
+</EM><BR>
+<EM>&gt; in SHA
+</EM><BR>
+<P>You should check the credentials of your cryptographers or your
+<BR>
+understanding of what they said.  Even more than &quot;computer expert,&quot;
+<BR>
+people like to affect cryptographic expertise based on their need
+<BR>
+to be respected by their fellows down at the pub, or to sell
+<BR>
+&quot;computer security&quot; snake oil to people affecting computer expertise.
+<BR>
+<P>I don't claim to be a cryptographer, but my understanding is that the
+<BR>
+known weakness (singular, not plural) in MD5 would not be useful for a
+<BR>
+bad guy in this situation, where the bad guy does not know the value that
+<BR>
+is being hashed.  Even in situations where in theory the weakness matters,
+<BR>
+when the bad guy is trying to construct a second message that has the same
+<BR>
+MD5 hash value as a known, first message, it is completely useless in
+<BR>
+practice.  The known weakness only makes people worry that someone might
+<BR>
+know a secret way to compute a second message with the given MD5 hash
+<BR>
+value of another message, thereby forging a digital signature to the
+<BR>
+second message.
+<BR>
+<P>Note also that MD5 is not MD4, MD2, CRC-32, or other hashes that 
+<BR>
+have bad reputations for cryptographic applications.
+<BR>
+<P><P><EM>&gt; Are people still using MD5 ?
+</EM><BR>
+<P>Yes, for PPP CHAP and many other things with vastly stronger requirements
+<BR>
+than merely making it impractical to guess initial TCP sequence numbers.
+<BR>
+<P>That's not to say that if you need a digital signature, SHA is not
+<BR>
+a good and perhaps better choice.  However, we are not talking
+<BR>
+about digital signatures.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009161322.e8GDMX124053@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2334.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2332.html">Alan Cox: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2335.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2333">[ date ]</A>
+<A HREF="index.html#2333">[ thread ]</A>
+<A HREF="subject.html#2333">[ subject ]</A>
+<A HREF="author.html#2333">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 18:00:05 1997" -->
+<!-- isoreceived="19970211230005" -->
+<!-- sent="Tue, 11 Feb 1997 12:55:40 -0400" -->
+<!-- isosent="19970211165540" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702111755.AA16096@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="3300AE7E.60F9@spider.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702111755.AA16096@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 11:55:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#53">[ date ]</A>
+<A HREF="index.html#53">[ thread ]</A>
+<A HREF="subject.html#53">[ subject ]</A>
+<A HREF="author.html#53">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; My apologies for not being clear enough.  The scenario to which
+</EM><BR>
+<EM>&gt; I was referring  was a client TCP that does not support RFC1122
+</EM><BR>
+<EM>&gt; half duplex close with RST (it is a SHOULD, not a MUST).
+</EM><BR>
+<P>Minor nit, but text on page 88 says &quot;MAY&quot;, not &quot;SHOULD&quot;:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A host MAY implement a &quot;half-duplex&quot; TCP close sequence, so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that an application that has called CLOSE cannot continue to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read data from the connection.  If such a host issues a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLOSE call while received data is still pending in TCP, or
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if new data is received after CLOSE is called, its TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD send a RST to show that data was lost.
+<BR>
+<P><EM>&gt; This causes the server process to hang if the client closes the
+</EM><BR>
+<EM>&gt; connection with traffic in the pipe.
+</EM><BR>
+<P>I still don't understand this. Under no circumstances should a server
+<BR>
+&quot;hang&quot; and stop (re)transmitting TCP segments if it has data it wants
+<BR>
+to send or there is unacknowledged data in the pipe. If the client is
+<BR>
+advertising a zero window, the server is required to periodically
+<BR>
+probe. If the send window is full, the server must retransmit when
+<BR>
+ACKs don't come back. If there is unsent data and the send window is
+<BR>
+not full, the server will send. So the server should never &quot;hang&quot; as a
+<BR>
+result of not sending TCP segments unless it is broken.
+<BR>
+<P>If the server is sending segments, but the client is responding to
+<BR>
+them incorrectly (e.g., by silently discarding them), then the client
+<BR>
+is broken.
+<BR>
+<P><EM>&gt;  Maybe it only happens for your second
+</EM><BR>
+<EM>&gt; scenario: if the server blocks on a write() when a send window of data
+</EM><BR>
+<EM>&gt; is unacknowledged;  if there is enough data to send then the send
+</EM><BR>
+<EM>&gt; window will go down to zero - presumably this ends up blocking the
+</EM><BR>
+<EM>&gt; write.
+</EM><BR>
+<P>But normal TCP retransmit timers should take care of this case. The
+<BR>
+server shouldn't stop transmitting.
+<BR>
+<P><EM>&gt; I think the sequence of events is as follows:
+</EM><BR>
+<EM>&gt; 1.  server  is blocked on write()
+</EM><BR>
+<P>Just because the server (more specifically, the calling application)
+<BR>
+is blocked on a write call doesn't mean that TCP can stop sending
+<BR>
+packets (i.e., it still needs to retransmit lost packets in order to
+<BR>
+advance the window of the send window is full).
+<BR>
+<P><EM>&gt; 2.  client closes normally and server ACKs (client in FIN-WAIT-2
+</EM><BR>
+<EM>&gt; and server in CLOSE-WAIT).  No RST because RFC1122 is not followed.
+</EM><BR>
+<EM>&gt; 3.  server never closes
+</EM><BR>
+<P>Seems to me that the server is never closing because it is not
+<BR>
+retransmitting unacknowledged data.
+<BR>
+<P>What am I missing?
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0052.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0054.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#53">[ date ]</A>
+<A HREF="index.html#53">[ thread ]</A>
+<A HREF="subject.html#53">[ subject ]</A>
+<A HREF="author.html#53">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

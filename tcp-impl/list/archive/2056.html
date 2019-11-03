@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Pathologic Solaris TCP behavior</TITLE>
+<META NAME="Author" CONTENT="Wu-chang Feng (wfeng@pumatech.com)">
+<META NAME="Subject" CONTENT="Pathologic Solaris TCP behavior">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Pathologic Solaris TCP behavior</H1>
+<!-- received="Mon Mar 20 20:48:25 2000" -->
+<!-- isoreceived="20000321014825" -->
+<!-- sent="Mon, 20 Mar 2000 17:43:10 -0800" -->
+<!-- isosent="20000321014310" -->
+<!-- name="Wu-chang Feng" -->
+<!-- email="wfeng@pumatech.com" -->
+<!-- subject="Pathologic Solaris TCP behavior" -->
+<!-- id="38D6D3AE.5B079D60@pumatech.com" -->
+<STRONG>From:</STRONG> Wu-chang Feng (<A HREF="mailto:wfeng@pumatech.com?Subject=Re:%20Pathologic%20Solaris%20TCP%20behavior&In-Reply-To=&lt;38D6D3AE.5B079D60@pumatech.com&gt;"><EM>wfeng@pumatech.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 20 2000 - 20:43:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2055.html">David L. Nicol: "I-D: a tcp extension to allow transfer of virtual circuits"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2059.html">der Mouse : "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2056">[ date ]</A>
+<A HREF="index.html#2056">[ thread ]</A>
+<A HREF="subject.html#2056">[ subject ]</A>
+<A HREF="author.html#2056">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Has anyone experienced problems with Solaris TCP where you basically
+<BR>
+get modem-speed performance over a full duplex ethernet link?  I have
+<BR>
+two, factory-installed Netra T1 boxes running Solaris 7.  They're
+<BR>
+connected through an ethernet switch, but when I do an ftp between
+<BR>
+them, I get a trickle because of packets which are lost after every
+<BR>
+6-7 packets.  On the incoming interface of the destination machine
+<BR>
+(which is completely unloaded) I get a large number of Ierrs.....
+<BR>
+<P>---------------------------------------------------------------------------
+<BR>
+pumaweb006 ~ % netstat -i
+<BR>
+Name  Mtu  Net/Dest      Address        Ipkts  Ierrs Opkts  Oerrs
+<BR>
+Collis Queue 
+<BR>
+lo0   8232 loopback      localhost      1527068 0     1527068 0    
+<BR>
+0      0     
+<BR>
+hme0  1500 p006-be p006-be  34108  0     9366   0     0      0     
+<BR>
+hme1  1500 p006    p006     3039955 17817 1164113 0     0      0    
+<BR>
+---------------------------------------------------------------------------
+<BR>
+<P>Attached is a tcpdump of the ftp connection.....
+<BR>
+
+<P>
+17:22:32.419072 216.10.101.75.ftp-data &gt; p006.56818: . 131072:132532(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.419108 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 133992 win 24820 (DF)
+<BR>
+17:22:32.419538 216.10.101.75.ftp-data &gt; p006.56818: . 133992:135452(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.419599 216.10.101.75.ftp-data &gt; p006.56818: P 135452:136344(892) ack 1 win 24820 (DF)
+<BR>
+17:22:32.419640 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 135452 win 24820 (DF)
+<BR>
+17:22:32.420016 216.10.101.75.ftp-data &gt; p006.56818: . 136344:137804(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.420136 216.10.101.75.ftp-data &gt; p006.56818: . 137804:139264(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.420205 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 139264 win 24820 (DF)
+<BR>
+17:22:32.420596 216.10.101.75.ftp-data &gt; p006.56818: . 139264:140724(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.420709 216.10.101.75.ftp-data &gt; p006.56818: . 140724:142184(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:32.420777 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 142184 win 24820 (DF)
+<BR>
+17:22:35.419098 216.10.101.75.ftp-data &gt; p006.56818: . 139264:140724(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.419125 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 142184 win 24820 (DF)
+<BR>
+17:22:35.419531 216.10.101.75.ftp-data &gt; p006.56818: . 142184:143644(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.419594 216.10.101.75.ftp-data &gt; p006.56818: P 143644:144536(892) ack 1 win 24820 (DF)
+<BR>
+17:22:35.419650 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 143644 win 24820 (DF)
+<BR>
+17:22:35.420027 216.10.101.75.ftp-data &gt; p006.56818: . 144536:145996(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.420144 216.10.101.75.ftp-data &gt; p006.56818: . 145996:147456(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.420217 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 147456 win 24820 (DF)
+<BR>
+17:22:35.420626 216.10.101.75.ftp-data &gt; p006.56818: . 147456:148916(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.420742 216.10.101.75.ftp-data &gt; p006.56818: . 148916:150376(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:35.420815 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 150376 win 24820 (DF)
+<BR>
+17:22:38.419135 216.10.101.75.ftp-data &gt; p006.56818: . 147456:148916(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.419160 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 150376 win 24820 (DF)
+<BR>
+17:22:38.419577 216.10.101.75.ftp-data &gt; p006.56818: . 150376:151836(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.419640 216.10.101.75.ftp-data &gt; p006.56818: P 151836:152728(892) ack 1 win 24820 (DF)
+<BR>
+17:22:38.419688 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 151836 win 24820 (DF)
+<BR>
+17:22:38.420066 216.10.101.75.ftp-data &gt; p006.56818: . 152728:154188(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.420183 216.10.101.75.ftp-data &gt; p006.56818: . 154188:155648(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.420257 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 155648 win 24820 (DF)
+<BR>
+17:22:38.420644 216.10.101.75.ftp-data &gt; p006.56818: . 155648:157108(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.420763 216.10.101.75.ftp-data &gt; p006.56818: . 157108:158568(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:38.420839 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 158568 win 24820 (DF)
+<BR>
+17:22:41.419183 216.10.101.75.ftp-data &gt; p006.56818: . 155648:157108(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.419205 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 158568 win 24820 (DF)
+<BR>
+17:22:41.419603 216.10.101.75.ftp-data &gt; p006.56818: . 158568:160028(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.419670 216.10.101.75.ftp-data &gt; p006.56818: P 160028:160920(892) ack 1 win 24820 (DF)
+<BR>
+17:22:41.419709 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 160028 win 24820 (DF)
+<BR>
+17:22:41.420082 216.10.101.75.ftp-data &gt; p006.56818: . 160920:162380(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.420201 216.10.101.75.ftp-data &gt; p006.56818: . 162380:163840(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.420268 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 163840 win 24820 (DF)
+<BR>
+17:22:41.420650 216.10.101.75.ftp-data &gt; p006.56818: . 163840:165300(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.420769 216.10.101.75.ftp-data &gt; p006.56818: . 165300:166760(1460) ack 1 win 24820 (DF)
+<BR>
+17:22:41.420840 p006.56818 &gt; 216.10.101.75.ftp-data: . ack 166760 win 24820 (DF)
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2055.html">David L. Nicol: "I-D: a tcp extension to allow transfer of virtual circuits"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2057.html">Zachary Amsden: "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2059.html">der Mouse : "Re: Pathologic Solaris TCP behavior"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2060.html">Wu-chang Feng: "Re: Pathologic Solaris TCP behavior"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2056">[ date ]</A>
+<A HREF="index.html#2056">[ thread ]</A>
+<A HREF="subject.html#2056">[ subject ]</A>
+<A HREF="author.html#2056">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Fri Aug 21 10:28:19 1998" -->
+<!-- isoreceived="19980821142819" -->
+<!-- sent="Fri, 21 Aug 1998 13:26:41 -0400 (EDT)" -->
+<!-- isosent="19980821172641" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808211726.NAA14367@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211726.NAA14367@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 21 1998 - 13:26:41 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1271.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1269.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1271.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1270">[ date ]</A>
+<A HREF="index.html#1270">[ thread ]</A>
+<A HREF="subject.html#1270">[ subject ]</A>
+<A HREF="author.html#1270">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; Only 4 bytes?  I see two time values and a count (idle time, time
+</EM><BR>
+<EM>&gt;&gt; between probes, and number of probes).
+</EM><BR>
+<EM>&gt; Are you counting for exponential backoff or for a linear keepalive.
+</EM><BR>
+<P>Linear keepalive.  In the NetBSD code, there's tcp_keepidle,
+<BR>
+tcp_keepintvl, and tcp_keepcnt: the time the connection idles before
+<BR>
+keepalive probes start, the time between probes in the absence of any
+<BR>
+response, and the number of probes before giving up and declaring the
+<BR>
+connection dead.
+<BR>
+<P><EM>&gt; Right now we have all the timers for the latter in place anyway
+</EM><BR>
+<P>Yes, we have the timers.  We don't (or at least NetBSD doesn't) have
+<BR>
+per-socket values to stuff into them; when they're set, they're set
+<BR>
+from system-global values.
+<BR>
+<P>In response to my note
+<BR>
+<P><EM>&gt;&gt; If anyone knows of an existing API for this that fits the socket
+</EM><BR>
+<EM>&gt;&gt; model, please let me know, 'cause otherwise I'll have to invent one,
+</EM><BR>
+<EM>&gt;&gt; and I'd rather not create two different APIs for the same thing.
+</EM><BR>
+<P>someone from a vendor responded privately
+<BR>
+<P><EM>&gt; We've talked about this plenty for [that vendor's OS] also.  I think
+</EM><BR>
+<EM>&gt; our last idea was just encoding it in the setsockopt() value:
+</EM><BR>
+<EM>&gt; 	0:	keepalive off
+</EM><BR>
+<EM>&gt; 	1:	keepalive on, default interval
+</EM><BR>
+<EM>&gt; 	N:	N millisecond keepalive period, enabled
+</EM><BR>
+<P>This has the problem that you can't control more than one of those
+<BR>
+three values this way.  That trading house that wants fast keepalives
+<BR>
+will not be satisfied with being able to control only keepidle - if
+<BR>
+keepintvl*keepcnt is ten minutes, you won't kill a connection in less
+<BR>
+than ten minutes ever even if you set keepidle all the way down to
+<BR>
+zero.  (And if you're controlling keepintvl instead, well, you'll never
+<BR>
+kill a connection in less than keepidle no matter what.)
+<BR>
+<P>It also has the disadvantage that there's no way to set a 1ms keepalive
+<BR>
+period.  This is not currently a practical problem, but with Moore's
+<BR>
+law ticking along, CPUs and networks will get fast enough for it to
+<BR>
+matter before too much longer.  (Yes, slowhz will have to change
+<BR>
+first.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808211726.NAA14367@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1271.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1269.html">der Mouse : "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1271.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1270">[ date ]</A>
+<A HREF="index.html#1270">[ thread ]</A>
+<A HREF="subject.html#1270">[ subject ]</A>
+<A HREF="author.html#1270">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: The TCP RST</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: The TCP RST">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: The TCP RST</H1>
+<!-- received="Tue Aug  1 10:19:49 2000" -->
+<!-- isoreceived="20000801141949" -->
+<!-- sent="Tue, 1 Aug 2000 15:11:35 +0100" -->
+<!-- isosent="20000801141135" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: The TCP RST" -->
+<!-- id="20000801151135.C29020@malatesta.spider.com" -->
+<!-- inreplyto="000c01bffbbf$a9c74f40$6d864993@oyster.ietf.marconi.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20The%20TCP%20RST&In-Reply-To=&lt;20000801151135.C29020@malatesta.spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 01 2000 - 10:11:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2232.html">Ian Heavens: "TCP RSTs issues discussion"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2230.html">Scott Lawrence: "RE: The TCP RST"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2230.html">Scott Lawrence: "RE: The TCP RST"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2233.html">Joe Touch: "Re: The TCP RST"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2231">[ date ]</A>
+<A HREF="index.html#2231">[ thread ]</A>
+<A HREF="subject.html#2231">[ subject ]</A>
+<A HREF="author.html#2231">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Sure, excuse me for not being more specific.
+<BR>
+<P>There's two specific areas of interest to me
+<BR>
+<P>- There's no TIME-WAIT protection after RST.  This just needs
+<BR>
+documentation as I don't think anyone wants to change the TCP state machine
+<BR>
+to fix this.  I've been meaning to write this up for submission
+<BR>
+as an Informational RFC.  I guess once that's done, if there
+<BR>
+was any interest in fixing the issue, it could be discussed then
+<BR>
+<P>- There is the potential to include an error code with a RST
+<BR>
+(RFC 1122 permits data in the RST segment), and the Mentat TCP
+<BR>
+implementation has been using this for many years (so we can
+<BR>
+be confident that TCP implementations do not do anything nasty
+<BR>
+when they receive a RST with data).  There's no standard
+<BR>
+for such error codes and I wonder if implementors would be
+<BR>
+interested in proposing a taxonomy.  I know that such an error
+<BR>
+code would be very useful in diagnosis.  With an API the
+<BR>
+application layer could exchange error codes, though probably
+<BR>
+someone will point out that there is a better way of doing that..
+<BR>
+<P>Additionally issues with RSTs came up in RFC 2525 and every now
+<BR>
+and then they crop up (see the two RST-related issues in the RFC).
+<BR>
+An awful lot of HTTP connections terminate with a RST (P-HTTP
+<BR>
+fixes this but I wonder if other applications will depart from
+<BR>
+the norm of graceful termination in both directions).  RSTs
+<BR>
+used to be considered as rare error conditions but maybe
+<BR>
+this is no longer true.  
+<BR>
+<P>Worth a discussion if anyone out there is interested?
+<BR>
+<P>ian
+<BR>
+<P>PS as an aside, what mechanism does SCTP have to avoid TIME-WAIT
+<BR>
+(a question for Vern)?
+<BR>
+<P>On Tue, Aug 01, 2000 at 09:51:59AM -0400, Scott Lawrence wrote:
+<BR>
+<EM>&gt; I think that it would be helpful if you would be more specific about
+</EM><BR>
+<EM>&gt; what sort of issues you'd like to discuss.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I am in Pittsburg, and interested in what the issues might be, but
+</EM><BR>
+<EM>&gt; that invitation was a bit nebulous - and in any event it would be good
+</EM><BR>
+<EM>&gt; to get the issues on the list so that they get wider visibility.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><PRE>
+-- 
+Ian Heavens, Spider Software Ltd., <A HREF="http://www.spider.com/">http://www.spider.com/</A>
+8 John's Place, Leith, Edinburgh EH6 7EL. 
+Tel +44 131 475 7015 fax. +44 131 475 7001  <A HREF="mailto:ian@spider.com?Subject=Re:%20The%20TCP%20RST&In-Reply-To=&lt;20000801151135.C29020@malatesta.spider.com&gt;">ian@spider.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2232.html">Ian Heavens: "TCP RSTs issues discussion"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2230.html">Scott Lawrence: "RE: The TCP RST"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2230.html">Scott Lawrence: "RE: The TCP RST"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2233.html">Joe Touch: "Re: The TCP RST"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2231">[ date ]</A>
+<A HREF="index.html#2231">[ thread ]</A>
+<A HREF="subject.html#2231">[ subject ]</A>
+<A HREF="author.html#2231">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

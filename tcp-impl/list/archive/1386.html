@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Window probe deadlock writeup</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Window probe deadlock writeup">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Window probe deadlock writeup</H1>
+<!-- received="Tue Nov 10 12:45:03 1998" -->
+<!-- isoreceived="19981110174503" -->
+<!-- sent="Tue, 10 Nov 1998 09:44:18 PST" -->
+<!-- isosent="19981110174418" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Window probe deadlock writeup" -->
+<!-- id="199811101744.JAA18119@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Window%20probe%20deadlock%20writeup&In-Reply-To=&lt;199811101744.JAA18119@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 12:44:18 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1387.html">Vern Paxson: "Known Problems security consideration section"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1385.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-01.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1386">[ date ]</A>
+<A HREF="index.html#1386">[ thread ]</A>
+<A HREF="subject.html#1386">[ subject ]</A>
+<A HREF="author.html#1386">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+3.12.
+<BR>
+<P>Name of Problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Window probe deadlock
+<BR>
+<P><P>Classification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability
+<BR>
+<P><P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When an application reads a single byte from a full window, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window should not be updated, in order to avoid Silly Window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Syndrome (SWS; see [RFC813]).  If the remote peer uses a single
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;byte of data to probe the window, that byte can be accepted into
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the buffer.  In some implementations, at this point a negative
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;argument to a signed comparison causes all further new data to be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;considered outside the window; consequently, it is discarded (after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sending an ACK to resynchronize).  These discards include the ACKs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the data packets sent by the local TCP, so the TCP will
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consider the data unacknowledged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consequently, the application may be unable to complete sending new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data to the remote peer, because it has exhausted the transmit
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer available to its local TCP, and buffer space is never being
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freed because incoming ACKs that would do so are being discarded.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the application does not read any more data, which may happen
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;due to its failure to complete such sends, then deadlock results.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It's relatively rare for applications to use TCP in a manner that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can exercise this problem.  Most applications only transmit bulk
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data if they know the other end is prepared to receive the data.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, if a client fails to consume data, putting the server in
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 38]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems       November 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;persist mode, and then consumes a small amount of data, it can
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mistakenly compute a negative window.  At this point the client
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will discard all further packets from the server, including ACKs of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the client's own data, since they are not inside the (impossibly-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sized) window.  If subsequently the client consumes enough data to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then send a window update to the server, the situation will be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rectified.  That is, this situation can only happen if the client
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consumes 1 &lt; N &lt; MSS bytes, so as not to cause a window update, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then starts its own transmission towards the server of more than a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window's worth of data.
+<BR>
+<P><P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP connections will hang and eventually time out.
+<BR>
+<P><P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 793 describes zero window probing.  RFC 813 describes Silly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Window Syndrome.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trace made from a version of tcpdump modified to print out the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence number attached to an ACK even if it's dataless.  An
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unmodified tcpdump would not print seq:seq(0); however, for this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bug, the sequence number in the ACK is important for unambiguously
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;determining how the TCP is behaving.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ Normal connection startup and data transmission from B to A.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Options, including MSS of 16344 in both directions, omitted
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for clarity. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.327616 A &gt; B: S 65360807:65360807(0) win 8192
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.327304 B &gt; A: S 65488807:65488807(0) ack 65360808 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.327425 A &gt; B: . 1:1(0) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.345732 B &gt; A: P 1:2049(2048) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.347013 B &gt; A: P 2049:16385(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.347550 B &gt; A: P 16385:30721(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.348683 B &gt; A: P 30721:45057(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.467286 A &gt; B: . 1:1(0) ack 45057 win 12288
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.467854 B &gt; A: P 45057:57345(12288) ack 1 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B fills up A's offered window ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:32.667276 A &gt; B: . 1:1(0) ack 57345 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B probes A's window with a single byte ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:37.467438 B &gt; A: . 57345:57346(1) ack 1 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ A resynchronizes without accepting the byte ]
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 39]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems       November 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:37.467678 A &gt; B: . 1:1(0) ack 57345 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B probes A's window again ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:45.467438 B &gt; A: . 57345:57346(1) ack 1 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ A resynchronizes and accepts the byte (per the ack field) ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:45.667250 A &gt; B: . 1:1(0) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ The application on A has started generating data.  The first
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet A sends is small due to a memory allocation bug. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:51.358459 A &gt; B: P 1:2049(2048) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B acks A's first packet ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:51.467239 B &gt; A: . 57346:57346(0) ack 2049 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ This looks as though A accepted B's ACK and is sending
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;another packet in response to it.  In fact, A is trying
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to resynchronize with B, and happens to have data to send
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and can send it because the first small packet didn't use
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;up cwnd. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:51.467698 A &gt; B: . 2049:14337(12288) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B acks all of the data that A has sent ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:51.667283 B &gt; A: . 57346:57346(0) ack 14337 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ A tries to resynchronize.  Notice that by the packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seen on the network, A and B *are* in fact synchronized;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A only thinks that they aren't. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:51.667477 A &gt; B: . 14337:14337(0) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ A's retransmit timer fires, and B acks all of the data.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A once again tries to resynchronize. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:52.467682 A &gt; B: . 1:14337(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:52.468166 B &gt; A: . 57346:57346(0) ack 14337 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:52.468248 A &gt; B: . 14337:14337(0) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ A's retransmit timer fires again, and B acks all of the data.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A once again tries to resynchronize. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:55.467684 A &gt; B: . 1:14337(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:55.468172 B &gt; A: . 57346:57346(0) ack 14337 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;16:07:55.468254 A &gt; B: . 14337:14337(0) ack 57346 win 0
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made between the same two hosts after applying the bug fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mentioned below (and using the same modified tcpdump).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ Connection starts up with data transmission from B to A.
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 40]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems       November 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that due to a separate bug (the fact that A and B
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are communicating over a loopback driver), B erroneously
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skips slow start. ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.510854 A &gt; B: S 3110066585:3110066585(0) win 16384
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.510926 B &gt; A: S 3110174850:3110174850(0) ack 3110066586 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.510953 A &gt; B: . 1:1(0) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.512956 B &gt; A: P 1:2049(2048) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.513222 B &gt; A: P 2049:16385(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.513428 B &gt; A: P 16385:30721(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.513638 B &gt; A: P 30721:45057(14336) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.519531 A &gt; B: . 1:1(0) ack 45057 win 12288
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.519638 B &gt; A: P 45057:57345(12288) ack 1 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B fills up A's offered window ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:09.719526 A &gt; B: . 1:1(0) ack 57345 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B probes A's window with a single byte.  A resynchronizes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without accepting the byte ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:14.499661 B &gt; A: . 57345:57346(1) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:14.499724 A &gt; B: . 1:1(0) ack 57345 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B probes A's window again.  A resynchronizes and accepts
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the byte, as indicated by the ack field ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:19.499764 B &gt; A: . 57345:57346(1) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:19.519731 A &gt; B: . 1:1(0) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ B probes A's window with a single byte.  A resynchronizes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;without accepting the byte ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:24.499865 B &gt; A: . 57346:57347(1) ack 1 win 57344
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:24.499934 A &gt; B: . 1:1(0) ack 57346 win 0
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ The application on A has started generating data.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B acks A's data and A accepts the ACKs and the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data transfer continues ]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.530265 A &gt; B: P 1:2049(2048) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.719914 B &gt; A: . 57346:57346(0) ack 2049 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720023 A &gt; B: . 2049:16385(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720089 A &gt; B: . 16385:30721(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720370 B &gt; A: . 57346:57346(0) ack 30721 win 57344
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720462 A &gt; B: . 30721:45057(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720526 A &gt; B: P 45057:59393(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.720824 A &gt; B: P 59393:73729(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.721124 B &gt; A: . 57346:57346(0) ack 73729 win 47104
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.721198 A &gt; B: P 73729:88065(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.721379 A &gt; B: P 88065:102401(14336) ack 57346 win 0
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 41]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems       November 1998
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.721557 A &gt; B: P 102401:116737(14336) ack 57346 win 0
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;17:38:28.721863 B &gt; A: . 57346:57346(0) ack 116737 win 36864
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None known.
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initiate a connection from a client to a server.  Have the server
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continuously send data until its buffers have been full for long
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enough to exhaust the window.  Next, have the client read 1 byte
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and then delay for long enough that the server TCP sends a window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probe.  Now have the client start sending data.  At this point, if
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it ignores the server's ACKs, then the client's TCP suffers from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the problem.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In one implementation known to exhibit the problem (derived from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3-Reno), the problem was introduced when the macro MAX() was
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replaced by the function call max() for computing the amount of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;space in the receive window:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;rcv_wnd = max(win, (int)(tp-&gt;rcv_adv - tp-&gt;rcv_nxt));
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When data has been received into a window beyond what has been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;advertised to the other side, rcv_nxt &gt; rcv_adv, making this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negative.  It's clear from the (int) cast that this is intended,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;but the unsigned max() function sign-extends so the negative number
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is &quot;larger&quot;.  The fix is to change max() to imax():
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;rcv_wnd = imax(win, (int)(tp-&gt;rcv_adv - tp-&gt;rcv_nxt));
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.3-Tahoe and before did not have this bug, since it used the macro
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MAX() for this calculation.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1387.html">Vern Paxson: "Known Problems security consideration section"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1385.html">Internet-Drafts@ietf.org: "I-D ACTION:draft-ietf-tcpimpl-cong-control-01.txt"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1386">[ date ]</A>
+<A HREF="index.html#1386">[ thread ]</A>
+<A HREF="subject.html#1386">[ subject ]</A>
+<A HREF="author.html#1386">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

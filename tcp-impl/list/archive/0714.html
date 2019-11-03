@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep  9 21:34:56 1997" -->
+<!-- isoreceived="19970910013456" -->
+<!-- sent="Tue, 9 Sep 1997 23:32:26 -0500 (CDT)" -->
+<!-- isosent="19970910043226" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709100432.XAA11130@frantic.BSDI.COM" -->
+<!-- inreplyto="what IW is being used today?" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 10 1997 - 00:32:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0713.html">Kevin M. Lahey: "Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#714">[ date ]</A>
+<A HREF="index.html#714">[ thread ]</A>
+<A HREF="subject.html#714">[ subject ]</A>
+<A HREF="author.html#714">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Tue Sep  9 09:48:46 1997
+</EM><BR>
+<EM>&gt; Date: Tue, 9 Sep 1997 08:43:02 -0600
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">vjs@mica.denver.sgi.com</A> (Vernon Schryver)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: what IW is being used today?
+</EM><BR>
+<EM>&gt; Precedence: bulk
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<EM>&gt; &gt; To: <A HREF="mailto:romano@magoo.rsch.comm.mot.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">romano@magoo.rsch.comm.mot.com</A> (Guy Romano)
+</EM><BR>
+<EM>&gt; &gt; Cc: <A HREF="mailto:raj@cup.hp.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">raj@cup.hp.com</A>, <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; Another thing we need to add to the list of tcp issues appears to be properly
+</EM><BR>
+<EM>&gt; &gt; handling of MTU discovery in the presence of no ICMP. The number of big name
+</EM><BR>
+<EM>&gt; &gt; web sites demonstrating a total lack of clues in configuring their firewall
+</EM><BR>
+<EM>&gt; &gt; and hosts (block ICMP, mtu discovery on) - big names too - suggests we must
+</EM><BR>
+<EM>&gt; &gt; make correct behaviour in the presence of failure of mtu discovery a
+</EM><BR>
+<EM>&gt; &gt; SHOULD
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; What do you figure is the right response when an HTTP client sends a
+</EM><BR>
+<EM>&gt; few redundant ACKs and then a FIN?   Isn't that what your &quot;big name&quot;
+</EM><BR>
+<EM>&gt; server with MTU discovery on and ICMP blocked will see?   How is that
+</EM><BR>
+<EM>&gt; different from many other problems, starting with transient unidirectional
+</EM><BR>
+<EM>&gt; blackholes (e.g. routing problems) and continuing with data-dependent
+</EM><BR>
+<EM>&gt; packet loss?
+</EM><BR>
+<P>The lack of getting back an ICMP message when a packet is dropped
+<BR>
+due to it needing to be fragmented and DF being set is what I have
+<BR>
+always refered to as &quot;black hole detection&quot;.  There used to be routers
+<BR>
+that could disable the generation of all ICMP host unreachable messages
+<BR>
+to protect old 4.2BSD based hosts, but they went too far, breaking
+<BR>
+PMTU Discovery.  RFC 1435 was written to address that issue.  An
+<BR>
+over-agressive firewall that blocks ICMP provides a situation that
+<BR>
+is indistinguishable from the routers that didn't generate the ICMP
+<BR>
+message.
+<BR>
+<P>I've not implemented black hole detection (in part, because if the
+<BR>
+routers adhere to RFC 1435, you shouldn't need it), but one method
+<BR>
+is fairly straight forward, even if it is a bit painful.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) You keep track of connections that have retransmissions.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) After a set number of retransmissions, you decide to turn
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on the black hole detection.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) Black hole detection assumes that the packets are being
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lost due to the DF being set and the ICMP message being
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blocked.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) Go to your internal table of MTUs, and drop the connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;down to the next item.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) Go back to step 2
+<BR>
+<P>You could also just turn off DF after a certain number of
+<BR>
+retransmissions, and keep retransmitting.  If you then get
+<BR>
+an ACK, assume that we've detected a black hole.  Turn back
+<BR>
+on the DF, and drop down to the next smaller size in the MTU
+<BR>
+table.
+<BR>
+<P>But in any case, its all based on heuristics of making assumtions
+<BR>
+about the lack of response from the remote host, and we can all come
+<BR>
+up with situations where this type of heuristic would fail.  Hopefully
+<BR>
+failure would just mean sending smaller than optimal data packets.
+<BR>
+<P>One could also keep track of the largest packet that has ever been
+<BR>
+sent and received, and only do the black hole detection when sending
+<BR>
+a packet larger than that value.  Of course, a change in the path
+<BR>
+could cause that kind of decision to be inaccurate.
+<BR>
+<P>I never followed through on implementing Black Hole Detection
+<BR>
+because it didn't seem to me that the hassels of developing the
+<BR>
+code was worth the payback.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100432.XAA11130@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0713.html">Kevin M. Lahey: "Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0694.html">Rick Jones: "what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0715.html">Michael C. Richardson: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#714">[ date ]</A>
+<A HREF="index.html#714">[ thread ]</A>
+<A HREF="subject.html#714">[ subject ]</A>
+<A HREF="author.html#714">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

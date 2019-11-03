@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="stanislav shalunov (shalunov@internet2.edu)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Mon Sep 18 11:35:04 2000" -->
+<!-- isoreceived="20000918153504" -->
+<!-- sent="18 Sep 2000 11:20:53 -0400" -->
+<!-- isosent="20000918152053" -->
+<!-- name="stanislav shalunov" -->
+<!-- email="shalunov@internet2.edu" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="871yyhafqi.fsf@cain.internet2.edu" -->
+<!-- inreplyto="200009171646.e8HGkt420858@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> stanislav shalunov (<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;871yyhafqi.fsf@cain.internet2.edu&gt;"><EM>shalunov@internet2.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 18 2000 - 11:20:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2342">[ date ]</A>
+<A HREF="index.html#2342">[ thread ]</A>
+<A HREF="subject.html#2342">[ subject ]</A>
+<A HREF="author.html#2342">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;871yyhafqi.fsf@cain.internet2.edu&gt;">vjs@calcite.rhyolite.com</A>&gt; writes:
+<BR>
+<P><EM>&gt;   7. the trick in any entropy pool situation, including this one and
+</EM><BR>
+<EM>&gt;    /dev/random, is not finding a single perfect source of true randomness
+</EM><BR>
+<EM>&gt;    (never mind the nonsense in &quot;true randomness&quot;), but to find enough
+</EM><BR>
+<EM>&gt;    entropy from enough sources.  Even the arrival times of Ethernet packets
+</EM><BR>
+<EM>&gt;    contains only 5 or 6 bits of entropy, those 5 or 6 bits are valuable.
+</EM><BR>
+<P>You don't need 32 bits of true randomness per ISN.  Once you have 128
+<BR>
+bits of true randomness you can safely get trillions of ISNs without
+<BR>
+giving an attacker a chance to recognize you're not using a true
+<BR>
+random number generator.
+<BR>
+<P>Of course, once you have 128 bits, you'd continue to feed randomness
+<BR>
+into your pool to achieve recovery from compromize property.
+<BR>
+<P>Estimating the amount of entropy in packet arrival times as 0.01 bits,
+<BR>
+(and, of course, adding in the other sources of entropy you can get)
+<BR>
+you'd start generating very good pseudo-random number after a short
+<BR>
+while.
+<BR>
+<P>Please see Yarrow &lt;URL:<A HREF="http://www.counterpane.com/yarrow.html">http://www.counterpane.com/yarrow.html</A>&gt; for an
+<BR>
+example of good implementation of such a scheme.  You'll be interested
+<BR>
+in fast pool for ISN generation purposes.
+<BR>
+<P>Notice that Yarrow uses Blowfish, so we only have 64-bit block, so we
+<BR>
+can safely generate only about four millions of ISNs from the same key.
+<BR>
+<P><PRE>
+-- 
+Stanislav Shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;871yyhafqi.fsf@cain.internet2.edu&gt;">shalunov@internet2.edu</A>&gt;	Internet Engineer, Internet2
+<P>&quot;Computer Science is no more about computers than astronomy is about
+telescopes.&quot;					-- E. W. Dijkstra
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2343.html">der Mouse : "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2337.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2340.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2342">[ date ]</A>
+<A HREF="index.html#2342">[ thread ]</A>
+<A HREF="subject.html#2342">[ subject ]</A>
+<A HREF="author.html#2342">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

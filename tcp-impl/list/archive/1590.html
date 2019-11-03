@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 16:07:55 1999" -->
+<!-- isoreceived="19990217210755" -->
+<!-- sent="Wed, 17 Feb 1999 14:03:41 -0700 (MST)" -->
+<!-- isosent="19990217210341" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902172103.OAA10699@calcite.rhyolite.com" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902172103.OAA10699@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 16:03:41 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1591.html">Barney Wolff: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1589.html">Raouf Boutaba: "MATA'99 1st Int Workshop on Mobile Agents for Telecom..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1590">[ date ]</A>
+<A HREF="index.html#1590">[ thread ]</A>
+<A HREF="subject.html#1590">[ subject ]</A>
+<A HREF="author.html#1590">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Henrik Frystyk Nielsen &lt;<A HREF="mailto:frystyk@w3.org?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902172103.OAA10699@calcite.rhyolite.com&gt;">frystyk@w3.org</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt;&gt; <A HREF="http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html">http://www.w3.org/Protocols/HTTP/Performance/Pipeline.html</A> also
+</EM><BR>
+<EM>&gt; &gt;&gt; discusses the issue some, suggesting that Nagle made no effect on some
+</EM><BR>
+<EM>&gt; &gt;&gt; pipelined transactions, while it did have an effect in others.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;They're talking about turning off Nagle regardless because sometimes doing
+</EM><BR>
+<EM>&gt; &gt;so helps a lot.  That again makes the proposed modification moot.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; That's because we can't control it the way we would like and don't want to
+</EM><BR>
+<EM>&gt; suffer from the potential penalty. Give me the on/off flag and I am happy
+</EM><BR>
+<EM>&gt; to not say that Nagle should be turned off by default.
+</EM><BR>
+<P>(I assume you mean an explicit flush bit, and not the proposed modification
+<BR>
+to the Nagle algorithm itself.)
+<BR>
+<P>Are you sure about that?  That you would use it?
+<BR>
+<P>First is the problem that the flag would not be available on most
+<BR>
+platforms for at least a few years.
+<BR>
+<P>Second, for an application I'm hacking, I've been trying to see how I
+<BR>
+would use a flag or the proposed change or something else.  As far as I
+<BR>
+can tell, nothing does better than simply turning off Nagle, and I bet
+<BR>
+the same applies to HTTP.  It's not that you could not use a flush bit,
+<BR>
+but that the packet traces and everything else would be essentially the
+<BR>
+same as with Nagle off.  So why bother writing code that only works on
+<BR>
+those platforms with the flush bit implemented?  Why not forget the
+<BR>
+flush bit even when available and just turn off Nagle?
+<BR>
+<P>My application involves mostly request-response transactions resulting
+<BR>
+from explicit user actions.  Looking at packet traces, I see mostly of
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;-- data+Ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(delay)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ack --&gt; 
+<BR>
+<P>with occassional
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra data --&gt; or &lt;--
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(delay, and possibly Ack packet)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data --&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;-- data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ack --&gt;
+<BR>
+<P>The extra data is necessary, is triggered by various async. events, must
+<BR>
+be handled in sequence with the main stuff, and cannot be delayed more
+<BR>
+than ~0.3 sec without noticable (objectionable) user interface effects.
+<BR>
+I think agressive caching or anticipatory cache filling in something like
+<BR>
+HTTP would be similar.
+<BR>
+<P>I've mechanims to buffer the extra data in the application, and then write
+<BR>
+it with the next request or response in one write().  There are timers to
+<BR>
+flush the buffer when no request or response comes along in time.  Still,
+<BR>
+I've been unable to avoid turning off Nagle, because if I do emit an extra
+<BR>
+data write and then discover I need to send a request, I don't want the
+<BR>
+request to be delayed.  If I had a flush flag I could use it on main data,
+<BR>
+but that would result in the same packet traces as with Nagle off.
+<BR>
+So why bother?
+<BR>
+<P>For a day or two, I thought an inverse flush bit, something that says
+<BR>
+&quot;delay this segment&quot; would be cool.  But that's no good either.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902172103.OAA10699@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1591.html">Barney Wolff: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1589.html">Raouf Boutaba: "MATA'99 1st Int Workshop on Mobile Agents for Telecom..."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1594.html">Henrik Frystyk Nielsen: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1590">[ date ]</A>
+<A HREF="index.html#1590">[ thread ]</A>
+<A HREF="subject.html#1590">[ subject ]</A>
+<A HREF="author.html#1590">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

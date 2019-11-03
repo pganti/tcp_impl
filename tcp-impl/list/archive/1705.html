@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: slow-start bit</TITLE>
+<META NAME="Author" CONTENT="Sam Manthorpe (sm@bossette.engr.sgi.com)">
+<META NAME="Subject" CONTENT="Re: slow-start bit">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: slow-start bit</H1>
+<!-- received="Sat May 15 22:12:13 1999" -->
+<!-- isoreceived="19990516021213" -->
+<!-- sent="Sat, 15 May 1999 19:08:03 -0700 (PDT)" -->
+<!-- isosent="19990516020803" -->
+<!-- name="Sam Manthorpe" -->
+<!-- email="sm@bossette.engr.sgi.com" -->
+<!-- subject="Re: slow-start bit" -->
+<!-- id="199905160208.TAA08291@bossette.engr.sgi.com" -->
+<!-- inreplyto="199905151805.LAA23025@borogove.yahoo.com" -->
+<STRONG>From:</STRONG> Sam Manthorpe (<A HREF="mailto:sm@bossette.engr.sgi.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905160208.TAA08291@bossette.engr.sgi.com&gt;"><EM>sm@bossette.engr.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat May 15 1999 - 22:08:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1706.html">Sam Manthorpe: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1704.html">Raouf Boutaba: "MATA'99-EXTENDED DEADLINE-MAY 31"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1708.html">Spencer Dawkins: "RE: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1705">[ date ]</A>
+<A HREF="index.html#1705">[ thread ]</A>
+<A HREF="subject.html#1705">[ subject ]</A>
+<A HREF="author.html#1705">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+John Hanley wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You propose modifying sender behavior so that cooperating receivers
+</EM><BR>
+<EM>&gt; could improve throughput.  Could we achieve the same thing purely within
+</EM><BR>
+<EM>&gt; the receiver?
+</EM><BR>
+<P>I'm not sure.  It would certainly be desirable but I haven't been able
+<BR>
+to think of a _simple_ way of doing it and that is an important criteria
+<BR>
+for me.
+<BR>
+<P><EM>&gt; So let's think about those conditions: low packet loss, high throughput,
+</EM><BR>
+<EM>&gt; typically corresponds to LAN latencies or at least large open window.
+</EM><BR>
+<EM>&gt; How about just causing the receiver to never delay ACK if more than
+</EM><BR>
+<EM>&gt; `threshold' time has elapsed since the last ACK sent by the receiver?
+</EM><BR>
+<EM>&gt; Certainly `threshold' would be &lt; 200ms; I'm thinking around 100ms or 50ms.
+</EM><BR>
+<P>Wouldn't this be bad for slow, high latency connections?   This would
+<BR>
+effectively switch off delayed-ack altogether since it wouldn't be
+<BR>
+too hard to have a connection where the inter-packet-arrival time at
+<BR>
+the receiver is greater than 50ms.
+<BR>
+<P><EM>&gt; If it is much less than sender's RTO interval, then receiver would effectively
+</EM><BR>
+<EM>&gt; suppress delayed ACK *without* the sender signaling that in an option bit.
+</EM><BR>
+<P>How can the receiver know the sender's RTO?  It could estimate it, but I
+<BR>
+can't think of any simple mechanism that would give a reliable enough
+<BR>
+estimate.  Time between acking byte x and receiving byte x+1 wouldn't
+<BR>
+work because the receiver can't be sure that the sender's congestion
+<BR>
+window is such that sending byte x+1 requires byte x being acked.
+<BR>
+<P>I would want to avoid any excessive complexity in the TCP stack since
+<BR>
+this is bad for low network latency, high bandwidth situations where
+<BR>
+performance is CPU and memory-access speed bound.
+<BR>
+<P>The simplicity of the `slow-start-bit' appeals to me.  I don't know
+<BR>
+how big of an issue the implementations using the reserved bits that
+<BR>
+David brough up is.  This would also be an issue for ECN then.
+<BR>
+<P>Cheers,
+<BR>
+Sam.
+<BR>
+<P>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<BR>
+Sam Manthorpe, SGI.  tel: (650)933-2856 fax: (650)932-2856  <A HREF="mailto:sm@engr.sgi.com?Subject=Re:%20slow-start%20bit&In-Reply-To=&lt;199905160208.TAA08291@bossette.engr.sgi.com&gt;">sm@engr.sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1706.html">Sam Manthorpe: "Re: slow-start bit"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1704.html">Raouf Boutaba: "MATA'99-EXTENDED DEADLINE-MAY 31"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1703.html">John Hanley: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1708.html">Spencer Dawkins: "RE: slow-start bit"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1705">[ date ]</A>
+<A HREF="index.html#1705">[ thread ]</A>
+<A HREF="subject.html#1705">[ subject ]</A>
+<A HREF="author.html#1705">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

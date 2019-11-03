@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 18:12:52 1997" -->
+<!-- isoreceived="19970605221252" -->
+<!-- sent="Thu, 5 Jun 1997 18:07:03 -0700" -->
+<!-- isosent="19970606010703" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706060107.AA08006@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060107.AA08006@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 21:07:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0502.html">Rick Jones: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0504.html">Craig Partridge: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0504.html">Craig Partridge: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0506.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#501">[ date ]</A>
+<A HREF="index.html#501">[ thread ]</A>
+<A HREF="subject.html#501">[ subject ]</A>
+<A HREF="author.html#501">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;    I have a server providing info off a RAM disk over a gigabit network.
+</EM><BR>
+<EM>&gt;    It does happen in practice - just not yet.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is the problem sequence number wrap around or something along these
+</EM><BR>
+<EM>&gt; lines, or is it a pure CPU overhead problem?  Also, if it is a CPU
+</EM><BR>
+<EM>&gt; overhead problem, is your CPU in your implementation touching the data
+</EM><BR>
+<EM>&gt; in the packets before a validation could be performed?
+</EM><BR>
+<P>CPU overhead (perhaps also DMA). CPU isn't touching the data, but DMA is.
+<BR>
+<P><EM>&gt;    Why are the probes not just like SYN attacks? What if I don't want
+</EM><BR>
+<EM>&gt;    to answer probes, for security reasons? Why should TCP fail in those
+</EM><BR>
+<EM>&gt;    cases?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Ok, this is an important case.  Although it could be argued that your
+</EM><BR>
+<EM>&gt; end is not running a &quot;properly functioning TCP&quot; because one which was
+</EM><BR>
+<EM>&gt; would answer the probes.  What other aspects of TCP fail to work in
+</EM><BR>
+<EM>&gt; the presence of such a firewall and is this desirable?
+</EM><BR>
+<P>&quot;properly functioning&quot; means 'modified to support probes',
+<BR>
+i.e., nonstandard?
+<BR>
+<P>Or do probles work with existing implementations?
+<BR>
+<P><P><P>At this point, I think we have some pretty strong evidence
+<BR>
+that:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN flooding is important
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFCs addressing this would be useful
+<BR>
+<P>Until the latter is true, I propose that this issue
+<BR>
+is premature to be discussed further for this RFC,
+<BR>
+however.
+<BR>
+<P>(I thought we were trying to limit ourselves to
+<BR>
+things in RFCs, which TIME_WAIT is but SYN flooding isn't)
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706060107.AA08006@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0502.html">Rick Jones: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0500.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0504.html">Craig Partridge: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0504.html">Craig Partridge: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0506.html">David S. Miller: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#501">[ date ]</A>
+<A HREF="index.html#501">[ thread ]</A>
+<A HREF="subject.html#501">[ subject ]</A>
+<A HREF="author.html#501">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:25 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

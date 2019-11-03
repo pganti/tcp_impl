@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: NFS Header/data parsing and</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: NFS Header/data parsing and RDMA">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: NFS Header/data parsing and RDMA</H1>
+<!-- received="Mon Feb 28 12:52:00 2000" -->
+<!-- isoreceived="20000228175200" -->
+<!-- sent="Mon, 28 Feb 2000 10:43:01 -0700 (MST)" -->
+<!-- isosent="20000228174301" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: NFS Header/data parsing and RDMA" -->
+<!-- id="200002281743.KAA14348@calcite.rhyolite.com" -->
+<!-- inreplyto="NFS Header/data parsing and RDMA" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20NFS%20Header/data%20parsing%20and%20RDMA&In-Reply-To=&lt;200002281743.KAA14348@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 28 2000 - 12:43:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2050">[ date ]</A>
+<A HREF="index.html#2050">[ thread ]</A>
+<A HREF="subject.html#2050">[ subject ]</A>
+<A HREF="author.html#2050">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Costa Sapuntzakis &lt;<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20NFS%20Header/data%20parsing%20and%20RDMA&In-Reply-To=&lt;200002281743.KAA14348@calcite.rhyolite.com&gt;">csapuntz@cisco.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; Ok, so doing NFSv2/v3 header/data splitting is easy on an in-order
+</EM><BR>
+<EM>&gt; TCP stream because NFS has fixed-length trailers. Here's a little
+</EM><BR>
+<EM>&gt; technique:
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P><EM>&gt; Note, to do this with NFS/TCP, your NIC has to do some primitive
+</EM><BR>
+<EM>&gt; level of TCP processing (at least keep track of flows). It also
+</EM><BR>
+<EM>&gt; needs to understand RPC/TCP message boundaries.
+</EM><BR>
+<P>Do I understand correctly that you're applying the familiar
+<BR>
+NFS/UDP page flipping tactic to NFS/TCP?
+<BR>
+<P><EM>&gt; Are there significantly simpler approaches than this? 
+</EM><BR>
+<P>1. How about using NFS/UDP instead of NFS/TCP?
+<BR>
+&nbsp;&nbsp;It's well known in the NFS community that NFSv2-3/TCP is no faster or
+<BR>
+&nbsp;&nbsp;otherwise better than NFSv2-3/UDP except over very narrow or at least
+<BR>
+&nbsp;&nbsp;rather long pipes.  (Recall also the congestion control and avoidance
+<BR>
+&nbsp;&nbsp;mechanisms in some NFSv2-3/UDP implementations.)
+<BR>
+<P>2. Use NFS/TCP, but send every RPC/XDR transaction in a single TCP segment,
+<BR>
+&nbsp;&nbsp;and use IP fragmentation to fit the MTU.  This tactic was used for 10+
+<BR>
+&nbsp;&nbsp;years ago in the FDDI adapters of some super computers.  It does have
+<BR>
+&nbsp;&nbsp;the problems of IP fragmentation, but those problems are rarely
+<BR>
+&nbsp;&nbsp;encountered where NFS is used.
+<BR>
+<P><EM>&gt; NFSv4 doesn't seem to have fixed length trailers and neither
+</EM><BR>
+<EM>&gt; does CIFS in all cases. And it looks like it will be costly to parse 
+</EM><BR>
+<EM>&gt; NFSv4 headers. 
+</EM><BR>
+<P>I've not been paying attention to NFSv4.  A quick skim of the draft
+<BR>
+suggests that it will not displace NFSv2/3 in the environments where NFS
+<BR>
+is currently popular.  NFSv4 certainly has nothing to do with anything
+<BR>
+like SCSI over IP.  I'm also far from convinced that NFSv4 has got some
+<BR>
+of the extensions close enough to the underlying real filesystems to be
+<BR>
+popular.  Even if I'm wrong, it will be years before NFSv4 is widely used
+<BR>
+While I think there are ways to page flip NFSv4 without special hardware,
+<BR>
+I don't think they are worth talking about yet.  Even if I'm also wrong
+<BR>
+about that, it is years early to be modifying TCP/IP to support NFSv4.
+<BR>
+No one can see what NFSv4 will be like when it is popular enough to justify
+<BR>
+modifying TCP today, if NFSv4 ever is popular.
+<BR>
+<P><P><EM>&gt; RDMA still has the following features:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; - Per-packet (Works with arbitrary out-of-order reception of TCP
+</EM><BR>
+<EM>&gt; segments)
+</EM><BR>
+<EM>&gt; - Fixed header that's generic across all protocols (NFSv4, v5, AFS,
+</EM><BR>
+<EM>&gt; DFS, CIFS, etc..) 
+</EM><BR>
+<EM>&gt; - No page flipping necessary on solicited transfers
+</EM><BR>
+<EM>&gt; - Message boundary bit (which is admittedly orthogonal to RDMA) allows
+</EM><BR>
+<EM>&gt; out-of-order processing on TCP receive buffer. Decreases parsing latency,
+</EM><BR>
+<EM>&gt; esp. in the face of packet drops.
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<P>Knowing to which buffer an out-of-order TCP segment belongs is something
+<BR>
+that I don't see how to do without something like RDMA.  However,
+<BR>
+out-of-order TCP segments are both very rare and very bad for TCP
+<BR>
+performance, regardless of whether RDMA is present.  Out of order
+<BR>
+TCP segments must be even more rare in storage networks.
+<BR>
+<P>Talk about NFSv5 or even AFS/DFS does the opposite of make me think there
+<BR>
+might be something good in RDMA.  And as I've said, it's years too early
+<BR>
+to justifiy RDMA with NFSv4.
+<BR>
+<P>With existing techniques, if you don't want to page flip, you don't need
+<BR>
+to.  If you are able to provide enough distinct application buffer streams
+<BR>
+to the NIC for RDMA, then you could do the same for other techniques.
+<BR>
+<P>What's that about &quot;parsing latency&quot; and what does it have to do with 
+<BR>
+lost segments?  Are you proposing to deliver TCP data to applications
+<BR>
+out of order?  I trust not!
+<BR>
+<P>&nbsp;&nbsp;&nbsp;....
+<BR>
+<P>] From: Zachary Amsden &lt;<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20NFS%20Header/data%20parsing%20and%20RDMA&In-Reply-To=&lt;200002281743.KAA14348@calcite.rhyolite.com&gt;">zamsden@cthulhu.engr.sgi.com</A>&gt;
+<BR>
+<P>] ...
+<BR>
+]No, that situation doesn't require any hardware support.  However, a zero-copy 
+<BR>
+] receive path is not the only element of RDMA - RDMA was designed (I suppose 
+<BR>
+] from the discussion here) specifically to address header/payload issues for 
+<BR>
+] storage protocols.  Clearly one can do zero-copy receive with changes to the 
+<BR>
+] API and no hardware/firmware modifications.  But with no special hardware 
+<BR>
+] support, flipping the payload into some page with alignment constraints will 
+<BR>
+] require another copy.
+<BR>
+<P>What about the many systems that have been page flipping NFS in and out
+<BR>
+of buffer caches for more than 10 years, with no changes to APIs or special
+<BR>
+silicon?
+<BR>
+<P>]There is one exception to my last statement that I know of:  If you pre-adjust 
+<BR>
+]the hardware receive buffers to make the payload align on a page boundary, you 
+<BR>
+] can flip the page into the buffer cache for (hopefully) the common case.  
+<BR>
+] However, this requires the ability to tune these header offsets and will only 
+<BR>
+] work for one protocol at a time (mostly).
+<BR>
+<P>The page flipping systems I've worked on did not tune header offsets and
+<BR>
+worked on more than one protocol.  (Given your email address, it might be
+<BR>
+interesting to check the old IRIX source trees.  Besides the NFS kernel
+<BR>
+code and the HIPPI, ATM, and FDDI drivers and firmware, check cmd/rcp and
+<BR>
+cmd/rsh.)  UDP page flipping is trivial on protocols that have no trailers.
+<BR>
+It requires trivial smarts in the NIC and much simpler buffer allocation
+<BR>
+by the NIC than RDMA requires.  (I suspect RDMA needs pools of buffers
+<BR>
+for every stream, while the classic tactic needs only two pools, &quot;little&quot;
+<BR>
+and &quot;pages&quot;....well, for tiny improvements I've also done it with &quot;little&quot;,
+<BR>
+&quot;medium&quot; and &quot;pages&quot;.)
+<BR>
+<P>] Realistically, who is going to be running a storage system that requires so 
+<BR>
+] much bandwidth that avoiding receive copies is necessary, and runs on generic 
+<BR>
+] NICs with no firmware/ASIC modifications possible?  So I think using modified 
+<BR>
+] hardware is completely reasonable in those circumstances.
+<BR>
+] ...
+<BR>
+<P>Even more reasonable than special hardware are modified API's and protocols
+<BR>
+and other steps, including ensuring that out-of-order packets are very
+<BR>
+rare, and with header offsets are few, fixed, known, and friendly.
+<BR>
+<P>How would you have out-of-order arrival on a storage network, other than
+<BR>
+due to bit rot in the wires, and what storage network is going to have
+<BR>
+significant bit rot?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20NFS%20Header/data%20parsing%20and%20RDMA&In-Reply-To=&lt;200002281743.KAA14348@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2051.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2049.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2050">[ date ]</A>
+<A HREF="index.html#2050">[ thread ]</A>
+<A HREF="subject.html#2050">[ subject ]</A>
+<A HREF="author.html#2050">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

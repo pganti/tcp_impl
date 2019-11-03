@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: probablility of successful T</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: probablility of successful TIME_WAIT reuse">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: probablility of successful TIME_WAIT reuse</H1>
+<!-- received="Wed Nov  4 18:30:01 1998" -->
+<!-- isoreceived="19981104233001" -->
+<!-- sent="Wed, 4 Nov 1998 17:19:43 -0600 (CST)" -->
+<!-- isosent="19981104231943" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: probablility of successful TIME_WAIT reuse" -->
+<!-- id="199811042319.RAA01558@frantic.bsdi.com" -->
+<!-- inreplyto="probablility of successful TIME_WAIT reuse" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20probablility%20of%20successful%20TIME_WAIT%20reuse&In-Reply-To=&lt;199811042319.RAA01558@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Nov 04 1998 - 18:19:43 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1378.html">Mike O'Connor: "TOS bits on three-way handshake"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1376.html">Rick Jones: "probablility of successful TIME_WAIT reuse"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1376.html">Rick Jones: "probablility of successful TIME_WAIT reuse"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1377">[ date ]</A>
+<A HREF="index.html#1377">[ thread ]</A>
+<A HREF="subject.html#1377">[ subject ]</A>
+<A HREF="author.html#1377">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Wed, 04 Nov 1998 14:13:32 -0800
+</EM><BR>
+<EM>&gt; From: Rick Jones &lt;<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20probablility%20of%20successful%20TIME_WAIT%20reuse&In-Reply-To=&lt;199811042319.RAA01558@frantic.bsdi.com&gt;">raj@cup.hp.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: probablility of successful TIME_WAIT reuse
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; If I have:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; *) a passive acceptor of connections on a single port and IP address
+</EM><BR>
+<EM>&gt; *) an active connector to that tuple cycling through 60K port id's
+</EM><BR>
+<EM>&gt; *) roughly 15KB of data transfered on average on each connection
+</EM><BR>
+<EM>&gt; *) the acceptor being the initiator of graceful close
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; what are the chances of the active connector's SYN segments having ISN's
+</EM><BR>
+<EM>&gt; meeting the requirements for successful transition from TIME_WAIT to
+</EM><BR>
+<EM>&gt; ESTABLISHED (SYN_RECVD?) such that the active connector could generate
+</EM><BR>
+<EM>&gt; say 2000 connections per second over a fifteen minute interval?
+</EM><BR>
+<P>In BSD/OS ISS increments 250KB/second, plus 1/4 of that per connection.
+<BR>
+With 60000 ports and 2000 connections per second, it'll take 30 seconds
+<BR>
+to reuse a connection.  That means the ISS will go up by:
+<BR>
+&nbsp;&nbsp;&nbsp;60000 * 250K/4 + 30 * 250K, =&gt; 250K*(15000+30) =&gt; 3847680000.
+<BR>
+The upper half of the 32 bit sequence space is 2147483648-4294967296,
+<BR>
+so you fall right into it, (the 15Kb of transfered data is in the
+<BR>
+noise) and the checks for allowing the transition
+<BR>
+from TIME_WAIT -&gt; SYN_RCVD will fail.  So, probability 0%.
+<BR>
+<P>Of course, if you are putting timestamps into the packets, then
+<BR>
+with PAWS the sequence wrap around isn't an issue, and all new
+<BR>
+connections should be accepted (and as I say this, (1) I look at the
+<BR>
+4.4 BSD code and note that it doesn't do a PAWS check for the
+<BR>
+TIME_WAIT -&gt; SYN_RCVD transition, and (2) RFC 1323 doesn't address
+<BR>
+this issue.)
+<BR>
+<P>Is that what you were looking for?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20probablility%20of%20successful%20TIME_WAIT%20reuse&In-Reply-To=&lt;199811042319.RAA01558@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P>PS: at 15KB/connection, and 2000 connections/second, you will be
+<BR>
+transfering over 245 Mbits/second.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1378.html">Mike O'Connor: "TOS bits on three-way handshake"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1376.html">Rick Jones: "probablility of successful TIME_WAIT reuse"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1376.html">Rick Jones: "probablility of successful TIME_WAIT reuse"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1377">[ date ]</A>
+<A HREF="index.html#1377">[ thread ]</A>
+<A HREF="subject.html#1377">[ subject ]</A>
+<A HREF="author.html#1377">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:09 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

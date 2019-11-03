@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Internet Draft on Known TCP</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Internet Draft on Known TCP Implementation Problems">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Internet Draft on Known TCP Implementation Problems</H1>
+<!-- received="Thu Mar 27 12:57:20 1997" -->
+<!-- isoreceived="19970327175720" -->
+<!-- sent="Thu, 27 Mar 1997 12:51:01 -0800" -->
+<!-- isosent="19970327205101" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Internet Draft on Known TCP Implementation Problems" -->
+<!-- id="199703272051.AA14215@ash.isi.edu" -->
+<!-- inreplyto="Internet Draft on Known TCP Implementation Problems" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703272051.AA14215@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Mar 27 1997 - 15:51:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0276.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0274.html">Vern Paxson: "Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0274.html">Vern Paxson: "Internet Draft on Known TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0279.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#275">[ date ]</A>
+<A HREF="index.html#275">[ thread ]</A>
+<A HREF="subject.html#275">[ subject ]</A>
+<A HREF="author.html#275">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>Some suggestions (minor):
+<BR>
+<P><EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703272051.AA14215@ash.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So far my leaning is to include traces directly in the document, rather
+</EM><BR>
+<EM>&gt; than using URLs to on-line versions.  This is because they so far haven't
+</EM><BR>
+<EM>&gt; been big enough to bloat the doc, and it's handy having them right there
+</EM><BR>
+<EM>&gt; in the middle of the discussion.
+</EM><BR>
+<P>URLs are much more transient than RFCs; they can be used to
+<BR>
+augment the discussion, but should not be used to replace
+<BR>
+critical information, because they are not archival-quality
+<BR>
+references.
+<BR>
+<P>(this has been the general consensus I've seen in the RFC/IDs,
+<BR>
+perhaps enforced by the editors, but it seems reasonable to me)
+<BR>
+<P><EM>&gt;    Category
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^ - change to &quot;Class?&quot;
+<BR>
+<EM>&gt;         One or more problem categories for which the problem is  classi-
+</EM><BR>
+<EM>&gt;         fied.   Categories  used  so far: &quot;congestion control&quot;, &quot;perfor-
+</EM><BR>
+<EM>&gt;         mance&quot;, &quot;reliability&quot;.  Others anticipated: &quot;security&quot;, &quot;intero-
+</EM><BR>
+<EM>&gt;         perability&quot;, &quot;configuration&quot;.
+</EM><BR>
+<P><EM>&gt;    Significance
+</EM><BR>
+<EM>&gt;         A quanitification as to how serious the problem  is  considered.
+</EM><BR>
+<EM>&gt;         Categories are &quot;Non-critical&quot;, &quot;Serious&quot;, and &quot;Critical&quot;.
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^
+<BR>
+<P>Both descriptions should include brief definitions - 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for &quot;Category,&quot; to aid in understanding
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for Significance, to describe the semantics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i.e., Critical = REQUIRED (?)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious = RECOMMENDED (?)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-critical = OPTIONAL (?)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps - the REQ/RECC/OPT have an RFC/ID history
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and common use - is there a benefit to new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;names?
+<BR>
+<P>Finally, the use of the term &quot;category&quot; is overloaded - it
+<BR>
+appears to mean both &quot;problem group&quot; and &quot;significance semantics&quot;.
+<BR>
+Maybe &quot;Class&quot; or &quot;Type&quot; is better for problem group??
+<BR>
+<P>PS - nice work...
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703272051.AA14215@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0276.html">Eric.Schenk@dna.lth.se: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0274.html">Vern Paxson: "Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0274.html">Vern Paxson: "Internet Draft on Known TCP Implementation Problems"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0279.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#275">[ date ]</A>
+<A HREF="index.html#275">[ thread ]</A>
+<A HREF="subject.html#275">[ subject ]</A>
+<A HREF="author.html#275">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

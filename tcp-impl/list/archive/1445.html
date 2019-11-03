@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: Question on initial sequence</TITLE>
+<META NAME="Author" CONTENT="Sankar Ramamoorthi (Sankar@vpnet.com)">
+<META NAME="Subject" CONTENT="RE: Question on initial sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: Question on initial sequence numbers</H1>
+<!-- received="Mon Jan  4 19:48:25 1999" -->
+<!-- isoreceived="19990105004825" -->
+<!-- sent="Mon, 4 Jan 1999 16:46:37 -0800 " -->
+<!-- isosent="19990105004637" -->
+<!-- name="Sankar Ramamoorthi" -->
+<!-- email="Sankar@vpnet.com" -->
+<!-- subject="RE: Question on initial sequence numbers" -->
+<!-- id="70C20C1647EBD11183F800805FA67B43011378@vpnet.com" -->
+<!-- inreplyto="Question on initial sequence numbers" -->
+<STRONG>From:</STRONG> Sankar Ramamoorthi (<A HREF="mailto:Sankar@vpnet.com?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;70C20C1647EBD11183F800805FA67B43011378@vpnet.com&gt;"><EM>Sankar@vpnet.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 04 1999 - 19:46:37 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1445">[ date ]</A>
+<A HREF="index.html#1445">[ thread ]</A>
+<A HREF="subject.html#1445">[ subject ]</A>
+<A HREF="author.html#1445">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The problem becomes more significant with devices like network appliances,
+<BR>
+becoming more common. These have characterstics like High Availability, fast
+<BR>
+reboot
+<BR>
+times etc. It is likely all TIME-WAIT is lost across reboots/failover.
+<BR>
+<P>-- sankar --
+<BR>
+<P>-----Original Message-----
+<BR>
+From: Kacheong Poon [mailto:<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;70C20C1647EBD11183F800805FA67B43011378@vpnet.com&gt;">Kacheong.Poon@Eng.Sun.COM</A>]
+<BR>
+Sent: Monday, January 04, 1999 3:42 PM
+<BR>
+To: Vernon Schryver
+<BR>
+Cc: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;70C20C1647EBD11183F800805FA67B43011378@vpnet.com&gt;">tcp-impl@lerc.nasa.gov</A>; <A HREF="mailto:Richard_Berke@troweprice.com?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;70C20C1647EBD11183F800805FA67B43011378@vpnet.com&gt;">Richard_Berke@troweprice.com</A>
+<BR>
+Subject: Re: Question on initial sequence numbers
+<BR>
+<P><P><EM>&gt; In both problems, isn't the worst case a TIME-WAIT delay, and not the data
+</EM><BR>
+<EM>&gt; corruption of the likely implementation of the alledged random Microsoft
+</EM><BR>
+<EM>&gt; ISS's?   Of course, over the years we've each heard vastly more complaints
+</EM><BR>
+<EM>&gt; about TIME-WAIT delays than about data corruption, and never mind
+</EM><BR>
+validity.
+<BR>
+<P>I guess the reason is that most implementations' ISN go forward instead of
+<BR>
+backward a little bit as described in the original mail about MS stack.
+<BR>
+Going
+<BR>
+forward a little bit in sequence number space is better in protecting
+<BR>
+against
+<BR>
+sequence number collision than going backward a little bit, which is
+<BR>
+equivalent to going forward too much.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=RE:%20Question%20on%20initial%20sequence%20numbers&In-Reply-To=&lt;70C20C1647EBD11183F800805FA67B43011378@vpnet.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1444.html">Kacheong Poon: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1426.html">braden@ISI.EDU: "Question on initial sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1446.html">Joe Touch: "Re: Question on initial sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1445">[ date ]</A>
+<A HREF="index.html#1445">[ thread ]</A>
+<A HREF="subject.html#1445">[ subject ]</A>
+<A HREF="author.html#1445">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

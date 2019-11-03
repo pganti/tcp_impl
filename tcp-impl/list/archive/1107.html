@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for draft-floyd-in</TITLE>
+<META NAME="Author" CONTENT="Scott Lawrence (lawrence@agranat.com)">
+<META NAME="Subject" CONTENT="Re: Last Call for draft-floyd-incr-init-win-02.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for draft-floyd-incr-init-win-02.txt</H1>
+<!-- received="Fri Apr 24 08:32:35 1998" -->
+<!-- isoreceived="19980424123235" -->
+<!-- sent="Fri, 24 Apr 1998 11:28:34 -0400 (EDT)" -->
+<!-- isosent="19980424152834" -->
+<!-- name="Scott Lawrence" -->
+<!-- email="lawrence@agranat.com" -->
+<!-- subject="Re: Last Call for draft-floyd-incr-init-win-02.txt" -->
+<!-- id="Pine.LNX.3.96.980424111134.28471C-100000@alice.agranat.com" -->
+<!-- inreplyto="199804241353.HAA10445@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Scott Lawrence (<A HREF="mailto:lawrence@agranat.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;Pine.LNX.3.96.980424111134.28471C-100000@alice.agranat.com&gt;"><EM>lawrence@agranat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 24 1998 - 11:28:34 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1108.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1103.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1107">[ date ]</A>
+<A HREF="index.html#1107">[ thread ]</A>
+<A HREF="subject.html#1107">[ subject ]</A>
+<A HREF="author.html#1107">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Fri, 24 Apr 1998, Vernon Schryver wrote:
+<BR>
+<P><EM>&gt; &gt; From: &quot;David S. Miller&quot; &lt;<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20Last%20Call%20for%20draft-floyd-incr-init-win-02.txt&In-Reply-To=&lt;Pine.LNX.3.96.980424111134.28471C-100000@alice.agranat.com&gt;">davem@dm.cobaltmicro.com</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; Firstly, it is not a configurable parameter for most browsers I know
+</EM><BR>
+<EM>&gt; &gt; of, and can't be changed unless you have the source to the browser.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; [...]
+</EM><BR>
+<EM>&gt; Moreover, since the proposed change to the initial window size is not
+</EM><BR>
+<EM>&gt; configurable, you would need new HTTP PC client to implement it, and it
+</EM><BR>
+<EM>&gt; seems reasonable that when (and if) your browser vendor changes the initial
+</EM><BR>
+<EM>&gt; window size in the TCP stack it ships, it will also change the default
+</EM><BR>
+<EM>&gt; number of TCP streams.
+</EM><BR>
+&nbsp;
+<BR>
+The draft HTTP/1.1 standard includes language to restrict the number of
+<BR>
+simultaneous connections to be created by a conformant client to a given
+<BR>
+server:
+<BR>
+&nbsp;&nbsp;
+<BR>
+] Clients that use persistent connections SHOULD limit the number of
+<BR>
+] simultaneous connections that they maintain to a given server. A
+<BR>
+] single-user client SHOULD maintain AT MOST 2 connections with any
+<BR>
+] server or proxy. A proxy SHOULD use up to 2*N connections to another
+<BR>
+] server or proxy, where N is the number of simultaneously active users.
+<BR>
+] These guidelines are intended to improve HTTP response times and avoid
+<BR>
+] congestion of the Internet or other networks.
+<BR>
+<P>This is independant of any change to the underlying TCP, and it seems
+<BR>
+likely that the browser applications will be 1.1 before the TCP layers
+<BR>
+get changed in any event (IE4 is already 1.1).
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1108.html">Alan Cox: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1103.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1106.html">Vernon Schryver: "Re: Last Call for draft-floyd-incr-init-win-02.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1107">[ date ]</A>
+<A HREF="index.html#1107">[ thread ]</A>
+<A HREF="subject.html#1107">[ subject ]</A>
+<A HREF="author.html#1107">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

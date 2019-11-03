@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@redhat.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 19:08:46 2000" -->
+<!-- isoreceived="20000225000846" -->
+<!-- sent="Thu, 24 Feb 2000 15:57:10 -0800" -->
+<!-- isosent="20000224235710" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@redhat.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002242357.PAA16973@pizda.ninka.net" -->
+<!-- inreplyto="Roam.SIMC.2.0.6.951433178.19794.nordmark@jurassic" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@redhat.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002242357.PAA16973@pizda.ninka.net&gt;"><EM>davem@redhat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 18:57:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1989">[ date ]</A>
+<A HREF="index.html#1989">[ thread ]</A>
+<A HREF="subject.html#1989">[ subject ]</A>
+<A HREF="author.html#1989">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;Date: Thu, 24 Feb 2000 14:59:38 -0800 (PST)
+<BR>
+&nbsp;&nbsp;&nbsp;From: Erik Nordmark &lt;<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002242357.PAA16973@pizda.ninka.net&gt;">Erik.Nordmark@Eng.Sun.COM</A>&gt;
+<BR>
+<P>As an aside I think the RDMA proposal has a lot of holes too.  For
+<BR>
+example, there are in-kernel HTTP accelerators that do the complete
+<BR>
+client header parse and initial packet response in the hw interrupt
+<BR>
+handler.  There are no user buffers involved, and static response
+<BR>
+data is DMA'd directly from the filesystem page cache.
+<BR>
+<P><EM>   &gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>   &gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;There is no DNS entry for ftpeng.cisco.com so I can't access the
+<BR>
+&nbsp;&nbsp;&nbsp;document.
+<BR>
+<P>Here is what I get:
+<BR>
+<P>? host -a ftpeng.cisco.com
+<BR>
+Trying null domain
+<BR>
+rcode = 0 (Success), ancount=1
+<BR>
+The following answer is not authoritative:
+<BR>
+The following answer is not verified as authentic by the server:
+<BR>
+ftpeng.cisco.com        84574 IN        CNAME   ftp-eng.cisco.com
+<BR>
+For authoritative answers, see:
+<BR>
+cisco.com       38435 IN        NS      NS1.cisco.com
+<BR>
+cisco.com       38435 IN        NS      NS2.cisco.com
+<BR>
+Additional information:
+<BR>
+NS1.cisco.com   78995 IN        A       192.31.7.92
+<BR>
+NS2.cisco.com   67536 IN        A       192.135.250.69
+<BR>
+rcode = 0 (Success), ancount=1
+<BR>
+The following answer is not authoritative:
+<BR>
+The following answer is not verified as authentic by the server:
+<BR>
+ftp-eng.cisco.com       84574 IN        A       198.92.30.33
+<BR>
+For authoritative answers, see:
+<BR>
+CISCO.com       38435 IN        NS      NS1.CISCO.com
+<BR>
+CISCO.com       38435 IN        NS      NS2.CISCO.com
+<BR>
+Additional information:
+<BR>
+NS1.CISCO.com   78995 IN        A       192.31.7.92
+<BR>
+NS2.CISCO.com   67536 IN        A       192.135.250.69
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1990.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1993.html">Kacheong Poon: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2016.html">Costa Sapuntzakis: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1989">[ date ]</A>
+<A HREF="index.html#1989">[ thread ]</A>
+<A HREF="subject.html#1989">[ subject ]</A>
+<A HREF="author.html#1989">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:16 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

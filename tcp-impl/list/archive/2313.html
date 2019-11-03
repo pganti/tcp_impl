@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Important question re: new T</TITLE>
+<META NAME="Author" CONTENT="kuznet@ms2.inr.ac.ru (kuznet@ms2.inr.ac.ru)">
+<META NAME="Subject" CONTENT="Re: Important question re: new TCP options on data segments">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Important question re: new TCP options on data segments</H1>
+<!-- received="Fri Aug 11 13:37:13 2000" -->
+<!-- isoreceived="20000811173713" -->
+<!-- sent="Fri, 11 Aug 2000 21:32:32 +0400 (MSK DST)" -->
+<!-- isosent="20000811173232" -->
+<!-- name="kuznet@ms2.inr.ac.ru" -->
+<!-- email="kuznet@ms2.inr.ac.ru" -->
+<!-- subject="Re: Important question re: new TCP options on data segments" -->
+<!-- id="200008111732.VAA03732@ms2.inr.ac.ru" -->
+<!-- inreplyto="Pine.NEB.4.05.10008101554440.15494-100000@tesla.psc.edu" -->
+<STRONG>From:</STRONG> <A HREF="mailto:kuznet@ms2.inr.ac.ru?Subject=Re:%20Important%20question%20re:%20new%20TCP%20options%20on%20data%20segments&In-Reply-To=&lt;200008111732.VAA03732@ms2.inr.ac.ru&gt;"><EM>kuznet@ms2.inr.ac.ru</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 11 2000 - 13:32:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2314.html">Richard Wendland: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2312.html">Frank Solensky: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2309.html">Matt Mathis: "Re: Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2310.html">Lloyd Wood: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2313">[ date ]</A>
+<A HREF="index.html#2313">[ thread ]</A>
+<A HREF="subject.html#2313">[ subject ]</A>
+<A HREF="author.html#2313">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello!
+<BR>
+<P><EM>&gt; There are other reasons to do timestamps besides PAWS.  If a stack is using one
+</EM><BR>
+<EM>&gt; of these other algoritms, then it may want to turn on timestamps earlier than
+</EM><BR>
+<EM>&gt; needed by PAWS.
+</EM><BR>
+<P>Not quite.
+<BR>
+<P>To use or not to use timestamps and when to use them is choice of OS,
+<BR>
+user and/or administator yet.
+<BR>
+<P>[ Side note. I just tried to remind you that TS are useful not only
+<BR>
+for PAWS, so that you criterium of enabling TS after achieving
+<BR>
+some rate is highly dubious. ]
+<BR>
+<P>My point is that nobody is allowed to stop or to start sending
+<BR>
+some persistent option without explicit negotiation. They will be
+<BR>
+considered as &quot;random jitter&quot; sort of SACKs and will move input
+<BR>
+process to slow path, which is appropriate for SACK and absolutely
+<BR>
+inappropriate with persistent options.
+<BR>
+<P>Of course, smart OS would change its prediction algorithm without
+<BR>
+special reminder. But it does not this now. And it looks really silly
+<BR>
+to add some new flaky heuristics to stateful protocol in the place,
+<BR>
+where explicit negotiation can be made. Classic TCP has enough
+<BR>
+of such silly places to be bothered about avoiding adding new ones.
+<BR>
+<P><P><EM>&gt; Fine.  Not a problem.  So the choice is timestamps [off, on, or auto] and it is
+</EM><BR>
+<EM>&gt; our mission to make &quot;auto&quot; smart enough where future vendor defaults will
+</EM><BR>
+<EM>&gt; always be auto, and TCP will &quot;just do the right thing&quot;.
+</EM><BR>
+<P>Provided those vendors, who do not have time machine and cannot
+<BR>
+upgrade already sold OSes, will not see &quot;auto&quot; options without
+<BR>
+&quot;auto&quot; negotiation, which will fail. Let this negotiation will
+<BR>
+be made in the middle of connection, it does not matter.
+<BR>
+<P>Alexey
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2314.html">Richard Wendland: "Re: First SACK-permitted on &lt;SYN,ACK&gt;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2312.html">Frank Solensky: "Re: Important question re: new TCP options on data segments"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2309.html">Matt Mathis: "Re: Important question re: new TCP options on data segments"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2310.html">Lloyd Wood: "Re: Important question re: new TCP options on data segments"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2313">[ date ]</A>
+<A HREF="index.html#2313">[ thread ]</A>
+<A HREF="subject.html#2313">[ subject ]</A>
+<A HREF="author.html#2313">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

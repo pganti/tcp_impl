@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: what IW is being used today?</TITLE>
+<META NAME="Author" CONTENT="Michael C. Richardson (mcr@sandelman.ottawa.on.ca)">
+<META NAME="Subject" CONTENT="Re: what IW is being used today?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: what IW is being used today?</H1>
+<!-- received="Tue Sep  9 22:05:59 1997" -->
+<!-- isoreceived="19970910020559" -->
+<!-- sent="Wed, 10 Sep 1997 01:02:45 -0400" -->
+<!-- isosent="19970910050245" -->
+<!-- name="Michael C. Richardson" -->
+<!-- email="mcr@sandelman.ottawa.on.ca" -->
+<!-- subject="Re: what IW is being used today?" -->
+<!-- id="199709100502.BAA13135@istari.sandelman.ottawa.on.ca" -->
+<!-- inreplyto="199709100432.XAA11130@frantic.BSDI.COM" -->
+<STRONG>From:</STRONG> Michael C. Richardson (<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100502.BAA13135@istari.sandelman.ottawa.on.ca&gt;"><EM>mcr@sandelman.ottawa.on.ca</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 10 1997 - 01:02:45 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0716.html">Jason Thorpe: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0717.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#715">[ date ]</A>
+<A HREF="index.html#715">[ thread ]</A>
+<A HREF="subject.html#715">[ subject ]</A>
+<A HREF="author.html#715">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+-----BEGIN PGP SIGNED MESSAGE-----
+<BR>
+<P><P><EM>&gt;&gt;&gt;&gt;&gt; &quot;David&quot; == David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100502.BAA13135@istari.sandelman.ottawa.on.ca&gt;">dab@BSDI.COM</A>&gt; writes:
+</EM><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; I've not implemented black hole detection (in part, because
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; if the routers adhere to RFC 1435, you shouldn't need it),
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; but one method is fairly straight forward, even if it is a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; bit painful.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;David&gt; 	1) You keep track of connections that have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; retransmissions.  2) After a set number of retransmissions,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; you decide to turn on the black hole detection.  3) Black
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; hole detection assumes that the packets are being lost due
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; to the DF being set and the ICMP message being blocked.  4)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; Go to your internal table of MTUs, and drop the connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; down to the next item.  5) Go back to step 2
+<BR>
+<P>&nbsp;&nbsp;This is an excellent heuristic. Would it work for IPv6 packets? I
+<BR>
+think so. I was thinking about something similar, but wasn't so
+<BR>
+succinct. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;David&gt; You could also just turn off DF after a certain number of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; retransmissions, and keep retransmitting.  If you then get
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; an ACK, assume that we've detected a black hole.  Turn back
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; on the DF, and drop down to the next smaller size in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; MTU table.
+<BR>
+<P>&nbsp;&nbsp;This doesn't work, since the DF bit is always on for v6 packets. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;David&gt; I never followed through on implementing Black Hole
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; Detection because it didn't seem to me that the hassels of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;David&gt; developing the code was worth the payback.
+<BR>
+<P>&nbsp;&nbsp;You may not get ICMP's back from many intermediate routers when
+<BR>
+IPsec is involved. To put it simply: the IPsec SA doesn't allow
+<BR>
+packets from that source to that destination to enter the tunnel.
+<BR>
+&nbsp;&nbsp;This *is* a real life situation, and it doesn't just affect the
+<BR>
+routers over which the encrypted packets travel (as I had originally
+<BR>
+thought in draft-richardson-ipsec-pmtu-discovery). For example:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/-B
+<BR>
+&nbsp;&nbsp;A---Gw1---Internet---Gw2---R---R
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\-C
+<BR>
+<P>&nbsp;&nbsp;Gw1/Gw2 may have an SA that allows subnet/host A to talk to
+<BR>
+subnet/host B, but not C. (This is a real security scenario, see 
+<BR>
+draft-moskowitz-ipsec-vpn)
+<BR>
+&nbsp;&nbsp;R's are routers. They may perform ingress filtering, so Gw2 is
+<BR>
+confident that a packet from B could not have been spoofed by a node
+<BR>
+from C. Maybe Gw2 and the router cloud are FDDI, and B's network is
+<BR>
+ethernet. So, we'd like to have PMTU. 
+<BR>
+&nbsp;&nbsp;There are more details. Some might say that this is a bad network
+<BR>
+design. 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;:!mcr!:            |  Network security programming, currently
+<BR>
+&nbsp;&nbsp;&nbsp;Michael Richardson | on contract with DataFellows F-Secure IPSec
+<BR>
+&nbsp;WWW: &lt;A HREF=&quot;<A HREF="http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html">http://www.sandelman.ottawa.on.ca/People/Michael_Richardson/Bio.html</A>&quot;&gt;<A HREF="mailto:mcr@sandelman.ottawa.on.ca?Subject=Re:%20what%20IW%20is%20being%20used%20today?&In-Reply-To=&lt;199709100502.BAA13135@istari.sandelman.ottawa.on.ca&gt;">mcr@sandelman.ottawa.on.ca</A>&lt;/A&gt;. PGP key available.
+<BR>
+<P><P>-----BEGIN PGP SIGNATURE-----
+<BR>
+Version: 2.6.3ia
+<BR>
+Charset: latin1
+<BR>
+Comment: Processed by Mailcrypt 3.4, an Emacs/PGP interface
+<BR>
+<P>iQB1AwUBNBYp16ZpLyXYhL+BAQGjsgL/YD5wkNpmHlR9v39jc7p9gD5CcmelYJm0
+<BR>
+r4HhS8M1A9EfVW9Z8MPyo074KZt73RWI9NHEsO3pAMz9uXmqePn8l01xKgwIfIkF
+<BR>
+UQ81YxOjQy5gBxky5dwWSj9RIIQ6rEfk
+<BR>
+=VRyZ
+<BR>
+-----END PGP SIGNATURE-----
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0716.html">Jason Thorpe: "Re: Path MTU discovery when ICMP can't get through"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0714.html">David Borman: "Re: what IW is being used today?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0717.html">Vernon Schryver: "Re: what IW is being used today?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#715">[ date ]</A>
+<A HREF="index.html#715">[ thread ]</A>
+<A HREF="subject.html#715">[ subject ]</A>
+<A HREF="author.html#715">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

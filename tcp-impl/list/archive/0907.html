@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: delayed ACKs</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: delayed ACKs">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: delayed ACKs</H1>
+<!-- received="Mon Jan 12 10:27:25 1998" -->
+<!-- isoreceived="19980112152725" -->
+<!-- sent="Mon, 12 Jan 1998 12:15:25 -0600 (CST)" -->
+<!-- isosent="19980112181525" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: delayed ACKs" -->
+<!-- id="199801121815.MAA00264@frantic.BSDI.COM" -->
+<!-- inreplyto="delayed ACKs" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Jan 12 1998 - 13:15:25 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0908.html">Rick Jones: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0906.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#907">[ date ]</A>
+<A HREF="index.html#907">[ thread ]</A>
+<A HREF="subject.html#907">[ subject ]</A>
+<A HREF="author.html#907">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A> Mon Jan 12 10:56:48 1998
+</EM><BR>
+<EM>&gt; From: Mohit Aron &lt;<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;">aron@cs.rice.edu</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Re: delayed ACKs
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<EM>&gt; Date: Mon, 12 Jan 1998 10:49:26 -0600 (CST)
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A> (TCP Implementor's List)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; I can see no real evidence they do suffer. Furthermore any ack is implicitly
+</EM><BR>
+<EM>&gt; &gt; a delayed ack viewed on anything but a local lan level because its been 
+</EM><BR>
+<EM>&gt; &gt; jittered by routers, rerouted via australia and all the other things that
+</EM><BR>
+<EM>&gt; &gt; happen to packets.
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Do all packets happen to get rerouted via Australia ? There's a lot of work
+</EM><BR>
+<EM>&gt; that demonstrates the slowness of slow-start for web traffic. Delayed ACKs
+</EM><BR>
+<EM>&gt; further slow down slow-start. What other real evidence would you ask for ?
+</EM><BR>
+<P>Then address the interaction between slow-start and delayed ACKs.
+<BR>
+There are things that can be done to improve web traffic in the face
+<BR>
+of slow-start and delayed ACKs, without getting rid of delayed ACKs.
+<BR>
+In BSD/OS we specifically addressed web performance, and as part of
+<BR>
+that effort we were able to eliminate most of the artificial delays
+<BR>
+without eliminating either slow-start or delayed ACKs.  (See
+<BR>
+<A HREF="http://www.bsdi.com/press/19960827">http://www.bsdi.com/press/19960827</A> for the press release.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20delayed%20ACKs&In-Reply-To=&lt;199801121815.MAA00264@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0908.html">Rick Jones: "Re: delayed ACKs"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0906.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0895.html">Mohit Aron: "delayed ACKs"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0909.html">touch@ISI.EDU: "Re: delayed ACKs"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#907">[ date ]</A>
+<A HREF="index.html#907">[ thread ]</A>
+<A HREF="subject.html#907">[ subject ]</A>
+<A HREF="author.html#907">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:18 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

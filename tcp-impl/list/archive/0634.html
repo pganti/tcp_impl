@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@jurassic.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 23:12:15 1997" -->
+<!-- isoreceived="19970801031215" -->
+<!-- sent="Thu, 31 Jul 1997 23:09:57 -0700" -->
+<!-- isosent="19970801060957" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@jurassic.Eng.Sun.COM" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708010609.XAA11556@shield.eng.sun.com" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@jurassic.Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010609.XAA11556@shield.eng.sun.com&gt;"><EM>kcpoon@jurassic.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 02:09:57 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0635.html">William Allen Simpson: "Re: revised I-D on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#634">[ date ]</A>
+<A HREF="index.html#634">[ thread ]</A>
+<A HREF="subject.html#634">[ subject ]</A>
+<A HREF="author.html#634">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010609.XAA11556@shield.eng.sun.com&gt;">touch@ISI.EDU</A> (Joe Touch):
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;more than 10-20 packets in the connection (from open to close,
+</EM><BR>
+<EM>&gt;approx.):
+</EM><BR>
+<EM>&gt;	
+</EM><BR>
+<EM>&gt;	the connection will take (best case, 'order' estimates):
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;		1 RTT to open
+</EM><BR>
+<EM>&gt;		log2(numpackets) RTTs to transmit the data (approx)
+</EM><BR>
+<EM>&gt;	
+</EM><BR>
+<EM>&gt;	If IW is 1, 2, or 4 we save 0, 1, or 2 RTTs out of a total
+</EM><BR>
+<EM>&gt;	of 5 or more, i.e., the connection saves 25% or less time
+</EM><BR>
+<P>I guess it is a &quot;theoretical&quot; best case.  One of the reasons to have larger
+<BR>
+than 1 initial cwnd is that many implementations, like BSD, delay acks.  So
+<BR>
+the first ack will be delayed, presumably by 200ms, if cwnd is 1.  Say, in a
+<BR>
+deparmental network with RTT ~10ms, the saving is not a mere 25% if there is
+<BR>
+no ack delayed.  The saving due to no delayed acks is not significant if RTT
+<BR>
+is in the order of 100ms, 
+<BR>
+<P><EM>&gt;In which case, we agree (don't know if it's for the same reason)
+</EM><BR>
+<EM>&gt;that IW and RW both should be small.
+</EM><BR>
+<P>It seems to me that it makes sense to have cwnd greater than 1 if TCP knows
+<BR>
+&quot;in advance&quot; that RTT will be small.  If RTT &quot;is&quot; large, use IW=RW=1.  Or if
+<BR>
+TCP does not delay ack initially and after a restart, then IW=RW=1 is good
+<BR>
+enough.
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010609.XAA11556@shield.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0635.html">William Allen Simpson: "Re: revised I-D on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0633.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0636.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#634">[ date ]</A>
+<A HREF="index.html#634">[ thread ]</A>
+<A HREF="subject.html#634">[ subject ]</A>
+<A HREF="author.html#634">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

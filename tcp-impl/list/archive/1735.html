@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Comments on draft-ietf-tcpim</TITLE>
+<META NAME="Author" CONTENT="Kevin Lahey (kml@novell.com)">
+<META NAME="Subject" CONTENT="Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt</H1>
+<!-- received="Thu May 27 22:22:18 1999" -->
+<!-- isoreceived="19990528022218" -->
+<!-- sent="Thu, 27 May 1999 19:19:54 -0700" -->
+<!-- isosent="19990528021954" -->
+<!-- name="Kevin Lahey" -->
+<!-- email="kml@novell.com" -->
+<!-- subject="Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt" -->
+<!-- id="199905280219.TAA01113@caliper.sjf.novell.com" -->
+<!-- inreplyto="199905272259.AAA20868@berserkly.bsdi.com" -->
+<STRONG>From:</STRONG> Kevin Lahey (<A HREF="mailto:kml@novell.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280219.TAA01113@caliper.sjf.novell.com&gt;"><EM>kml@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu May 27 1999 - 22:19:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1735">[ date ]</A>
+<A HREF="index.html#1735">[ thread ]</A>
+<A HREF="subject.html#1735">[ subject ]</A>
+<A HREF="author.html#1735">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:199905272259.AAA20868@berserkly.bsdi.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280219.TAA01113@caliper.sjf.novell.com&gt;">199905272259.AAA20868@berserkly.bsdi.com</A>&gt;Geert Jan de Groot writes
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;     The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt;      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt;&gt;     the MTU of the interfaces on the system.  Some systems use PMTUD
+</EM><BR>
+<EM>&gt;      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I would like to change the marked sentence with:
+</EM><BR>
+<EM>&gt;The MSS advertised at the start of a connection should be based on
+</EM><BR>
+<EM>&gt;the largest MTU of all interfaces on the system.
+</EM><BR>
+<P>Right, that's what was suggested in RFC 1191.  I changed NetBSD to 
+<BR>
+work this way, and got my share of flack for it.  I'd love to see
+<BR>
+every MSS advertised as 64KB;  if there is ever a TCPng, I'd hope
+<BR>
+that MSS goes away.
+<BR>
+<P>I had the impression that this was a contentious issue in the past;
+<BR>
+if no one objects, I'd be delighted to change it.
+<BR>
+<P><EM>&gt;Then the real issue:
+</EM><BR>
+<EM>&gt;[Black Hole Detection]
+</EM><BR>
+<EM>&gt;I would like to make things more explicit by adding another scenario,
+</EM><BR>
+<EM>&gt;one that I'm seeing every few weeks, and which IMHO warrants either
+</EM><BR>
+<EM>&gt;explicit mentioning in an RFC. This is a typical scenario:
+</EM><BR>
+<P>I'd be happy to add it, especially if lots of folks are seeing it.
+<BR>
+Matt Mathis has mentioned similar scenarios.
+<BR>
+<P><EM>&gt;&gt;     TCP should notice that the connection is timing out.  After several
+</EM><BR>
+<EM>&gt;&gt;     timeouts, TCP should attempt to send smaller packets, perhaps turn-
+</EM><BR>
+<EM>&gt;&gt;     ing off the DF flag for each packet.  If this succeeds, it should
+</EM><BR>
+<EM>&gt;&gt;     continue to turn off PMTUD for the connection for some reasonable
+</EM><BR>
+<EM>&gt;&gt;     period of time, after which it should probe again to try to deter-
+</EM><BR>
+<EM>&gt;&gt;     mine if the path has changed.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;I am not sure if I agree with this. First, there is a huge performance
+</EM><BR>
+<EM>&gt;impact; second, there is ambiguity between packets dropped because of
+</EM><BR>
+<EM>&gt;MTU problems and packets dropped because of congestion. The side effect
+</EM><BR>
+<EM>&gt;of the suggestion above is that congestion might lead to sending
+</EM><BR>
+<EM>&gt;micrograms unneccesary.
+</EM><BR>
+<P>It seemed like there was some consensus on this list that dealing
+<BR>
+with the ambiguity was worthwhile if it meant that packets would 
+<BR>
+continue to flow.
+<BR>
+<P><EM>&gt;Second, this requires changes in the web server config, while it's
+</EM><BR>
+<EM>&gt;the _client_ path that's broken. I see no big incentive for webserver
+</EM><BR>
+<EM>&gt;maintainers to install this workaround if it becomes available.
+</EM><BR>
+<P>Right, but the webserver maintainers are the ones who'd like the clients
+<BR>
+to be able to receive the packets, and are the folks who can do something
+<BR>
+about it.  The client side can only suffer and wonder at the delay...
+<BR>
+<P><EM>&gt;So, my questions are:
+</EM><BR>
+<EM>&gt;- Is it appropiate to document the scenario above explicitely?
+</EM><BR>
+<EM>&gt;- Should it be documented in a tcpimpl document (it's not a tcpimpl issue!)
+</EM><BR>
+<EM>&gt;- I don't agree with the blackhole workaround, and believe it should
+</EM><BR>
+<EM>&gt;  not be recommended.
+</EM><BR>
+<P>I'm not sure about the real answers, but now you've at least heard my 
+<BR>
+best guesses.
+<BR>
+<P>Cheers,
+<BR>
+<P>Kevin
+<BR>
+<A HREF="mailto:kml@novell.com?Subject=Re:%20Comments%20on%20draft-ietf-tcpimpl-pmtud-01.txt&In-Reply-To=&lt;199905280219.TAA01113@caliper.sjf.novell.com&gt;">kml@novell.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1734.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1733.html">Geert Jan de Groot: "Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1736.html">Vernon Schryver: "Re: Comments on draft-ietf-tcpimpl-pmtud-01.txt"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1735">[ date ]</A>
+<A HREF="index.html#1735">[ thread ]</A>
+<A HREF="subject.html#1735">[ subject ]</A>
+<A HREF="author.html#1735">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

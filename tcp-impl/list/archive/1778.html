@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Need a clarification on use</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: Need a clarification on use of ACK Flag.....">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Need a clarification on use of ACK Flag.....</H1>
+<!-- received="Wed Jul 21 12:04:12 1999" -->
+<!-- isoreceived="19990721160412" -->
+<!-- sent="Wed, 21 Jul 1999 10:58:55 -0500 (CDT)" -->
+<!-- isosent="19990721155855" -->
+<!-- name="David Borman" -->
+<!-- email="dab@bsdi.com" -->
+<!-- subject="Re: Need a clarification on use of ACK Flag....." -->
+<!-- id="199907211558.KAA13507@frantic.bsdi.com" -->
+<!-- inreplyto="Need a clarification on use of ACK Flag....." -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@bsdi.com?Subject=Re:%20Need%20a%20clarification%20on%20use%20of%20ACK%20Flag.....&In-Reply-To=&lt;199907211558.KAA13507@frantic.bsdi.com&gt;"><EM>dab@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 21 1999 - 11:58:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1779.html">Chadi M. BARAKAT: "Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1777.html">A. Joseph Dupre III: "Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1777.html">A. Joseph Dupre III: "Need a clarification on use of ACK Flag....."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1778">[ date ]</A>
+<A HREF="index.html#1778">[ thread ]</A>
+<A HREF="subject.html#1778">[ subject ]</A>
+<A HREF="author.html#1778">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Joseph,
+<BR>
+<P>All normal TCP packets will have the ACK bit set, except for the
+<BR>
+initial SYN packet.
+<BR>
+<P><EM>&gt; Date: Wed, 21 Jul 1999 10:27:57 -0400
+</EM><BR>
+<EM>&gt; From: &quot;A. Joseph Dupre III&quot; &lt;<A HREF="mailto:joe@midnight.com?Subject=Re:%20Need%20a%20clarification%20on%20use%20of%20ACK%20Flag.....&In-Reply-To=&lt;199907211558.KAA13507@frantic.bsdi.com&gt;">joe@midnight.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Need a clarification on use of ACK Flag.....
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;From RFC 793: (page 16)
+</EM><BR>
+<EM>&gt; =======================
+</EM><BR>
+<EM>&gt;    Acknowledgment Number:  32 bits
+</EM><BR>
+<EM>&gt;   
+</EM><BR>
+<EM>&gt;      If the ACK control bit is set this field contains the value of the
+</EM><BR>
+<EM>&gt;      next sequence number the sender of the segment is expecting to
+</EM><BR>
+<EM>&gt;      receive.  Once a connection is established this is always sent.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; One vendor who we are trying to interoperate with has interpreted the
+</EM><BR>
+<EM>&gt; above lines to mean that an ACK control bit MUST always be SET on
+</EM><BR>
+<EM>&gt; every packet that is sent by our TCP after reaching ESTABLISHED state.
+</EM><BR>
+<EM>&gt; This means setting the ACK flag on data segments, FIN, and RST.
+</EM><BR>
+<P>Yes, that is correct.
+<BR>
+<P><EM>&gt; However, when looking at the state machine below from RFC 793, it does not
+</EM><BR>
+<EM>&gt; show the ACK Flag being set on FIN packets for example.  When looking
+</EM><BR>
+<EM>&gt; at Steven's TCP/IP Illustrated #1, one transition from FIN_WAIT_1 to 
+</EM><BR>
+<EM>&gt; TIME_WAIT has an explicit FIN,ACK as the receive event that causes
+</EM><BR>
+<EM>&gt; that transition.
+</EM><BR>
+<P>The state machine is not the protocol definition, you have to read the
+<BR>
+text.
+<BR>
+<P><EM>&gt; Any help people can provide me in understanding the appropriate use of
+</EM><BR>
+<EM>&gt; the ACK control flag would be greatly appreciated.  Particularly if
+</EM><BR>
+<EM>&gt; there is a section of the RFC 793 that clears this up or some other
+</EM><BR>
+<EM>&gt; RFC such as 1122, pointing me at that would be great.
+</EM><BR>
+<P>The above text that you quoted is quite clear, isn't it?  Once you
+<BR>
+get into established state, the ACK bit/field is always set.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20Need%20a%20clarification%20on%20use%20of%20ACK%20Flag.....&In-Reply-To=&lt;199907211558.KAA13507@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1779.html">Chadi M. BARAKAT: "Impact of Receiver Window"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1777.html">A. Joseph Dupre III: "Need a clarification on use of ACK Flag....."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1777.html">A. Joseph Dupre III: "Need a clarification on use of ACK Flag....."</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1778">[ date ]</A>
+<A HREF="index.html#1778">[ thread ]</A>
+<A HREF="subject.html#1778">[ subject ]</A>
+<A HREF="author.html#1778">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:51 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

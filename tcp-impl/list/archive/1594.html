@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Henrik Frystyk Nielsen (frystyk@w3.org)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Wed Feb 17 19:02:58 1999" -->
+<!-- isoreceived="19990218000258" -->
+<!-- sent="Wed, 17 Feb 1999 19:01:40 -0500" -->
+<!-- isosent="19990218000140" -->
+<!-- name="Henrik Frystyk Nielsen" -->
+<!-- email="frystyk@w3.org" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="3.0.5.32.19990217190140.03116100@localhost" -->
+<!-- inreplyto="199902172103.OAA10699@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Henrik Frystyk Nielsen (<A HREF="mailto:frystyk@w3.org?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3.0.5.32.19990217190140.03116100@localhost&gt;"><EM>frystyk@w3.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 17 1999 - 19:01:40 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1595.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1593.html">Steve Alexander: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1590.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1591.html">Barney Wolff: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1594">[ date ]</A>
+<A HREF="index.html#1594">[ thread ]</A>
+<A HREF="subject.html#1594">[ subject ]</A>
+<A HREF="author.html#1594">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 14:03 2/17/99 -0700, Vernon Schryver wrote:
+<BR>
+<P><EM>&gt;First is the problem that the flag would not be available on most
+</EM><BR>
+<EM>&gt;platforms for at least a few years.
+</EM><BR>
+<P>That's simple - check for the flag - if it exists then use it, otherwise
+<BR>
+drop Nagle.
+<BR>
+<P><EM>&gt;Second, for an application I'm hacking, I've been trying to see how I
+</EM><BR>
+<EM>&gt;would use a flag or the proposed change or something else.  As far as I
+</EM><BR>
+<EM>&gt;can tell, nothing does better than simply turning off Nagle, and I bet
+</EM><BR>
+<EM>&gt;the same applies to HTTP.  It's not that you could not use a flush bit,
+</EM><BR>
+<EM>&gt;but that the packet traces and everything else would be essentially the
+</EM><BR>
+<EM>&gt;same as with Nagle off.  So why bother writing code that only works on
+</EM><BR>
+<EM>&gt;those platforms with the flush bit implemented?  Why not forget the
+</EM><BR>
+<EM>&gt;flush bit even when available and just turn off Nagle?
+</EM><BR>
+<P>I feel we are circling in this thread :) I started out answering Joe Touch
+<BR>
+that this is in fact a hard question (the archives don't allow me to refer
+<BR>
+to individually archived messages which IMHO is really bad - HTML'ized
+<BR>
+archivers come cheap these days and would avoid a lot of circular and
+<BR>
+repeated arguments).
+<BR>
+<P>Yes, I too do application level buffering with all the problems of figuring
+<BR>
+out what a good buffer size is (I ended up using 1K as a compromise). In
+<BR>
+most cases this mean I don't need Nagle at all.
+<BR>
+<P>But, from an architectural viewpoint, I think it makes a lot more sense if
+<BR>
+I didn't have to do that at the application layer and that I instead could
+<BR>
+keep the services separated. This means that I need enough control to be
+<BR>
+able to indicate what I want - an explicit flush is one of those hooks.
+<BR>
+Today, I don't have that so I have to repeat a lot of the functionality in
+<BR>
+a layer above and short-circuit things like Nagle in lower layers.
+<BR>
+<P>Henrik
+<BR>
+<PRE>
+--
+Henrik Frystyk Nielsen,
+World Wide Web Consortium
+<A HREF="http://www.w3.org/People/Frystyk">http://www.w3.org/People/Frystyk</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1595.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1593.html">Steve Alexander: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1590.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1591.html">Barney Wolff: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1594">[ date ]</A>
+<A HREF="index.html#1594">[ thread ]</A>
+<A HREF="subject.html#1594">[ subject ]</A>
+<A HREF="author.html#1594">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Idle Restart Algorithms</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: Idle Restart Algorithms">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Idle Restart Algorithms</H1>
+<!-- received="Wed Feb 24 13:40:40 1999" -->
+<!-- isoreceived="19990224184040" -->
+<!-- sent="Wed, 24 Feb 1999 10:35:19 -0800 (PST)" -->
+<!-- isosent="19990224183519" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: Idle Restart Algorithms" -->
+<!-- id="199902241835.KAA14028@rum.isi.edu" -->
+<!-- inreplyto="Idle Restart Algorithms" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241835.KAA14028@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 24 1999 - 13:35:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1612">[ date ]</A>
+<A HREF="index.html#1612">[ thread ]</A>
+<A HREF="subject.html#1612">[ subject ]</A>
+<A HREF="author.html#1612">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@lerc.nasa.gov?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241835.KAA14028@rum.isi.edu&gt;">owner-tcp-impl@lerc.nasa.gov</A> Wed Feb 24 10:00:51 1999
+</EM><BR>
+<EM>&gt; From: Patrick McManus &lt;<A HREF="mailto:mcmanus@appliedtheory.com?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241835.KAA14028@rum.isi.edu&gt;">mcmanus@appliedtheory.com</A>&gt;
+</EM><BR>
+<EM>&gt; Subject: Idle Restart Algorithms
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@lerc.nasa.gov?Subject=Re:%20Idle%20Restart%20Algorithms&In-Reply-To=&lt;199902241835.KAA14028@rum.isi.edu&gt;">tcp-impl@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Date: Wed, 24 Feb 1999 12:36:33 -0500 (EST)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So, I've been thinking about TCP idle restarts based on the reading of
+</EM><BR>
+<EM>&gt; both tcpimpl-prob-05 (paxson, et al..) and tcpimpl-restart-00 (hughes,
+</EM><BR>
+<EM>&gt; touch, heidemann exp 09/98).. and something doesn't feel right.
+</EM><BR>
+...
+<BR>
+<P>This is certainly a difficult issue, exemplified by the delay in
+<BR>
+our getting out the update to the restart ID...
+<BR>
+<P>The primary issue, to me, is as follows:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- the current scheme (time since receive) is defeated
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by request/response protocols, unintentionally
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generating excessive bursts
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- timeout based schemes are 'too' binary in nature (as you noted)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there is no timeout for 'just under an RTO'
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;there is a full window adjustment for anything larger
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(i.e., they are step functions - all on, or all off,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not smooth)
+<BR>
+<P>CWM was one attempt at a continuous, graceful degradation of
+<BR>
+performance, intended at avoiding line-rate bursts. We have a
+<BR>
+different one, designed with Sally Floyd, which addresses another
+<BR>
+source of bursts - packet loss. This mechanism is a more direct
+<BR>
+leaky-bucket, which itself is a nice tool for controlling 
+<BR>
+and limiting bursts to acceptable values.
+<BR>
+<P>Granted, as we have noted, there are many parameters that need
+<BR>
+to be tuned - 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- does the bucket size vary?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.g., a time-based decay of the bucket size
+<BR>
+<P><P><EM>&gt; &gt;From a heuristic pov, the purpose of congestion control is to
+</EM><BR>
+<EM>&gt; dynamically rate limit the pace of a stream to match the current
+</EM><BR>
+<EM>&gt; capacity characteristics of the underlying medium.
+</EM><BR>
+<P>Agreed - which is why true rate-pacing is preferable, but somewhat more
+<BR>
+cumbersome. John Heidemann developed a version of this (RBP), which
+<BR>
+kicks in only when the RTO goes off, and goes away when ACK clocking
+<BR>
+resumes. Again, this has a step-mode which I would prefer to smooth 
+<BR>
+somehow.
+<BR>
+<P><EM>&gt; After a period of inactivity this estimate becomes less useful due to
+</EM><BR>
+<EM>&gt; lack of recent pertinent feedback. Traditional implementations react
+</EM><BR>
+<EM>&gt; to this by re-entering slow start which in effect re-discovers the
+</EM><BR>
+<EM>&gt; current available bandwidth. Alternatively, [Hughes,Touch,Heidemann]
+</EM><BR>
+<EM>&gt; suggest Congestion Window Monitoring which fundamentally imposes a
+</EM><BR>
+<EM>&gt; 'use it or lose it' policy on growing CWNDs that are in excess of 4
+</EM><BR>
+<EM>&gt; plus the amount of outstanding data which would ensure that after an
+</EM><BR>
+<EM>&gt; idle period the cwnd is maxed out at 4.
+</EM><BR>
+<P>It seems reasonable that, after a very long period of time, the window
+<BR>
+should essentially revert to the same as a new connection would be
+<BR>
+able to inject. I.e., after long idles, a connection knows no more
+<BR>
+about the network than a new connection.
+<BR>
+<P><EM>&gt; The basic issue at hand is that the past performance of the network is
+</EM><BR>
+<EM>&gt; being used to predict the future. It is recognized that the longer the
+</EM><BR>
+<EM>&gt; interval between past input and the current decision time is, the less
+</EM><BR>
+<EM>&gt; reliable that data is for making the decision. However, traditional
+</EM><BR>
+<EM>&gt; reaction to this issue uses a simple 2 step function (valid/not valid)
+</EM><BR>
+<EM>&gt; to make that determination. The only input to this decision is RTO, which
+</EM><BR>
+<EM>&gt; in my opinion exerts a counter-productive force on the decision.
+</EM><BR>
+<P><P><EM>&gt; On a gut level, I'm not much of a fan of CWM either.. While leaky
+</EM><BR>
+<EM>&gt; bucket scenarios are attractive to me, CWM essentially enforces a
+</EM><BR>
+<EM>&gt; gushing bucket where sending capacity is throttled quickly back if the
+</EM><BR>
+<EM>&gt; sending rate doesn't equal the ack-reception rate. It strikes me as
+</EM><BR>
+<EM>&gt; over-aggressive... using 4 as a fall back instead of 1 is likely meant
+</EM><BR>
+<EM>&gt; to mitigate this,
+</EM><BR>
+<P>4 is intended to allow the window to open at full rate,
+<BR>
+given non-sequential ACK losses. The sending capacity is thottled
+<BR>
+back only if less than 1/4 the expected ACKs are returned within 
+<BR>
+a RTT. 
+<BR>
+<P><EM>&gt; but I dislike the constants as they cannot apply
+</EM><BR>
+<EM>&gt; well to all mediums current or future.. (the increased use of
+</EM><BR>
+<EM>&gt; satellite services for downstream in use for things like DirectPC and
+</EM><BR>
+<EM>&gt; rural African service exhibit huge bandwidth delay properties that are
+</EM><BR>
+<EM>&gt; un-necessarily crippled by this)
+</EM><BR>
+<P>Huge BW*delay is not directly an issue. The number of outstanding
+<BR>
+packets is, and when it is high, the system is necessarily more
+<BR>
+volatile. The question is whether to be aggressive or conservative;
+<BR>
+satellite systems often work better with aggressive behavior. That
+<BR>
+is something that could be discovered on a per-path basis (e.g., 
+<BR>
+pathchar) and applied per-connection (e.g., some new TCP option {?}
+<BR>
+or by control-block sharing {e.g., RFC2140}). 
+<BR>
+<P><EM>&gt; I think there needs to be a little more discussion on the types of
+</EM><BR>
+<EM>&gt; timeouts that are realistic. Discussion generally just cites HTTP/1.1
+</EM><BR>
+<EM>&gt; and leaves it at that. I see several different scenarios within just
+</EM><BR>
+<EM>&gt; HTTP and also suspect NNTP exhibits relevant behavior. Some possible sources:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   * Short timeouts..
+</EM><BR>
+<EM>&gt;   * longer timeouts...
+</EM><BR>
+<EM>&gt;   * Folks reading news with NNTP 
+</EM><BR>
+<EM>&gt;   * HTTP cache interaction..
+</EM><BR>
+<P>This would be designing step-functions based on current behavior;
+<BR>
+when behavior changes (as it did with the advent of HTTP), this
+<BR>
+are just as likely to be inappropriate.
+<BR>
+<P><EM>&gt; I think the essence of the problem is the overloading of burst
+</EM><BR>
+<EM>&gt; management and flow rate control onto a single mechanism.
+</EM><BR>
+<P>Agreed (as in the ID). True rate pacing decouples the two.
+<BR>
+<P><EM>&gt; So for the sake of clarity, I want to remove the concept of burst
+</EM><BR>
+<EM>&gt; control from the discussion of restart algorithms. Perhaps a 'burst
+</EM><BR>
+<EM>&gt; window' or other such technique can be orthogonally implemented to
+</EM><BR>
+<EM>&gt; address the issue (something that would learn in a similar fashion
+</EM><BR>
+<EM>&gt; what the maximum allowable network burst would be).
+</EM><BR>
+<P>A burst window is what a leaky bucket implements. The question
+<BR>
+appears to be &quot;is it variable, and on what basis&quot;.
+<BR>
+<P><PRE>
+----
+<P>As noted above, we are continuing to refine the ID.  It is not intended
+to solve the problem completely immediately, but rather to 
+<P>	- define the problem
+	- describe some issues in a solution
+	- propose a few candidate solutions
+	- recommend a quick fix for current implementations,
+		based on minimal code modifications and
+		generally conservative behavior
+<P>We would be very interested in hearing about other solutions, and
+would be happy to collect these into a web page... send me your links,
+and I'll post a URL shortly....
+<P>Thanks!
+<P>Joe
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1611.html">Patrick McManus: "Idle Restart Algorithms"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1613.html">Venkat Padmanabhan: "RE: Idle Restart Algorithms"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1612">[ date ]</A>
+<A HREF="index.html#1612">[ thread ]</A>
+<A HREF="subject.html#1612">[ subject ]</A>
+<A HREF="author.html#1612">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:35 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

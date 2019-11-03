@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 10:55:09 1997" -->
+<!-- isoreceived="19970430145509" -->
+<!-- sent="Wed, 30 Apr 1997 13:48:56 -0400 (EDT)" -->
+<!-- isosent="19970430174856" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704301748.NAA03811@zippy.psc.edu" -->
+<!-- inreplyto="Wed, 30 Apr 1997 12:31:49 +0500" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704301748.NAA03811@zippy.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 13:48:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0387.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0385.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0383.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0384.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#386">[ date ]</A>
+<A HREF="index.html#386">[ thread ]</A>
+<A HREF="subject.html#386">[ subject ]</A>
+<A HREF="author.html#386">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; ...  We have never
+</EM><BR>
+<EM>&gt;&gt; seen any problem with this assumption, and add the window scale option to
+</EM><BR>
+<EM>&gt;&gt; every active connection request.  Has anyone had a problem with this?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Absolutely!  In our first attempt to support this option, we always
+</EM><BR>
+<EM>&gt;sent it.  Big mistake!  Almost immediately we got field reports
+</EM><BR>
+.....
+<BR>
+<P>Were these &quot;dinosaurs&quot; or were they new systems with stacks that
+<BR>
+had been, shall we say, &quot;shipped before their time&quot;?
+<BR>
+<P>If it was the latter, you were blamed for someone elses bug, because
+<BR>
+you were in the minority: you were trying to be aggressive about new
+<BR>
+features.
+<BR>
+<P>This phenomena is a huge drag on implementing and deploying new TCP
+<BR>
+features.  We as an industry (as a WG?) have got to find a way to
+<BR>
+defend correct new TCP implementations from clueless network
+<BR>
+administrators insisting on compatibility with busted code.
+<BR>
+<P>If nothing else, tcpimpl could recommend putting all of these backward
+<BR>
+compatibility features under runtime switchs.  It would be really nice
+<BR>
+if tcpimpl could document (and even standardize switch names for) some
+<BR>
+of the popular workarounds.  Thus, when the clueless network
+<BR>
+administrator was told by the third new system vendor to &quot;set
+<BR>
+tcp_backward_conservative_winshift&quot;) the administrator might correctly
+<BR>
+place the blame.
+<BR>
+<P>Note that SACK will also discover stacks that die on unexpected SYN
+<BR>
+options.  Perhaps some of the vendors who have SACK in the field might
+<BR>
+comment?
+<BR>
+<P><EM>&gt; Some do not even have a meaningful sb_max
+</EM><BR>
+True, I guess &quot;preferred winshift&quot; should have it's own knob.
+<BR>
+<P>--MM--
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0387.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0385.html">Vernon Schryver: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0383.html">Fred Bohle: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0384.html">Jerry Toporek: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#386">[ date ]</A>
+<A HREF="index.html#386">[ thread ]</A>
+<A HREF="subject.html#386">[ subject ]</A>
+<A HREF="author.html#386">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

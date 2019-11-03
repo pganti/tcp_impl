@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Why do large downloads fail ?</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Why do large downloads fail ?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Why do large downloads fail ?</H1>
+<!-- received="Thu Oct 21 10:24:10 1999" -->
+<!-- isoreceived="19991021142410" -->
+<!-- sent="Thu, 21 Oct 1999 07:56:06 -0600 (MDT)" -->
+<!-- isosent="19991021135606" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Why do large downloads fail ?" -->
+<!-- id="199910211356.HAA18717@calcite.rhyolite.com" -->
+<!-- inreplyto="Why do large downloads fail ?" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910211356.HAA18717@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Oct 21 1999 - 09:56:06 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1895.html">Martin Lorang: "Apology"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1894.html">Martin Lorang: "Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1904.html">Vernon Schryver: "Re: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1896">[ date ]</A>
+<A HREF="index.html#1896">[ thread ]</A>
+<A HREF="subject.html#1896">[ subject ]</A>
+<A HREF="author.html#1896">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Martin Lorang &lt;<A HREF="mailto:lorang@ind.uni-stuttgart.de?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910211356.HAA18717@calcite.rhyolite.com&gt;">lorang@ind.uni-stuttgart.de</A>&gt;
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:end2end-interest@ISI.EDU?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910211356.HAA18717@calcite.rhyolite.com&gt;">end2end-interest@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910211356.HAA18717@calcite.rhyolite.com&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<P><EM>&gt;     Why is it that we encounter problems of
+</EM><BR>
+<EM>&gt; connections breaking off when downloading large files.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Thanks in advance,
+</EM><BR>
+<EM>&gt; Arkesh
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; =====
+</EM><BR>
+<EM>&gt; R. S. Arkesh Kumar	
+</EM><BR>
+<EM>&gt; Research Engineer,
+</EM><BR>
+<P><P><P>I've noticed something odd with the WINSOCK2 in Windows 98, both original
+<BR>
+and 2nd Edition.  On a TCP connection that should have an RTT of about
+<BR>
+500 ms (measured by `ping`) and that breaks (I disconnect a router), Windows
+<BR>
+does a total of 5 retransmissions and then kills tells the application
+<BR>
+WSAECONNRESET or &quot;Connection reset by peer&quot; instead of &quot;connection timed
+<BR>
+out.  As seen by third party on the same 10BASE-T segment, the
+<BR>
+retransmissions are at 1.561 ms after the 1st transmission, then again
+<BR>
+3.199 seconds later, after 6.400 seconds more, 12.800 sec, and finally
+<BR>
+after 25.595 sec.  That last or fifth retransmisssion is a total of 49.552
+<BR>
+seconds after the original transmission.
+<BR>
+<P>50 seconds is less than the values for R2 suggested in 4.2.3.5 of RFC 1122,
+<BR>
+although they do get more than the suggested 3 retransmissions.
+<BR>
+<P><EM>&gt;From what I've seen of the Internet in recent years, 50 second hiccups
+</EM><BR>
+are very much other than uncommon.  If what I've observed about
+<BR>
+Microsoft's WINSOCK2 is reasonable and if R. S. Arkesh Kumar or Martin
+<BR>
+Lorang are using Windows 98, this might be related to that problem.
+<BR>
+<P>The WSAECONNRESET error bugs me as much as the short timeout, because it
+<BR>
+misleads me into thinking that the TCP peer got unhappy (e.g. terminated
+<BR>
+the connection) and sent an RST.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Why%20do%20large%20downloads%20fail%20?&In-Reply-To=&lt;199910211356.HAA18717@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1897.html">Zoran Kostic: "Congestion window problem"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1895.html">Martin Lorang: "Apology"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1894.html">Martin Lorang: "Why do large downloads fail ?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1904.html">Vernon Schryver: "Re: Why do large downloads fail ?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1896">[ date ]</A>
+<A HREF="index.html#1896">[ thread ]</A>
+<A HREF="subject.html#1896">[ subject ]</A>
+<A HREF="author.html#1896">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

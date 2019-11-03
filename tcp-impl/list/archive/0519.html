@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: SYN/RST cookies (was Re: a q</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: SYN/RST cookies (was Re: a quick clarification...)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: SYN/RST cookies (was Re: a quick clarification...)</H1>
+<!-- received="Fri Jun  6 08:30:10 1997" -->
+<!-- isoreceived="19970606123010" -->
+<!-- sent="Fri, 6 Jun 1997 10:26:44 -0500 (CDT)" -->
+<!-- isosent="19970606152644" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: SYN/RST cookies (was Re: a quick clarification...)" -->
+<!-- id="199706061526.KAA01535@frantic.BSDI.COM" -->
+<!-- inreplyto="SYN/RST cookies (was Re: a quick clarification...)" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20SYN/RST%20cookies%20(was%20Re:%20a%20quick%20clarification...)&In-Reply-To=&lt;199706061526.KAA01535@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 06 1997 - 11:26:44 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0520.html">Lori Napoli: "-No Subject-"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0518.html">Manish Patel(x67071): "subscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0508.html">der Mouse : "SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0521.html">Eric.Schenk@dna.lth.se: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0521.html">Eric.Schenk@dna.lth.se: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0522.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#519">[ date ]</A>
+<A HREF="index.html#519">[ thread ]</A>
+<A HREF="subject.html#519">[ subject ]</A>
+<A HREF="author.html#519">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Well, I've been tryng to not get embroiled in this SYN-attack
+<BR>
+discussion, and I'm going to try and limit it to just this
+<BR>
+one note.  However, since I did do a fair amount of work on
+<BR>
+this last fall, I might be able to clarify a few things.
+<BR>
+<P>First, some generic observations.  When planning a defense against
+<BR>
+any kind of attack, you need to plan for the worst case scenario.
+<BR>
+<P>Problem:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The listen queue is too small, and when full it just denies
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;new connections.  SYN flooding keeps the queue full with bogus
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;connections that don't go away until the connection times out.
+<BR>
+<P>Assumptions:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;o No one else is going to stop the SYN-attack for you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;o You cannot identify the bad SYN packets from the good SYN packets
+<BR>
+<P>The goal was:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Allow legitimate connections to succeed in spite of a SYN-attack.
+<BR>
+<P>The only way to do this is to:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;1) Make the listen queue much larger
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;2) When the listen queue is full, drop an existing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;embryonic connection, not the new SYN, so that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;3) You respond to every SYN
+<BR>
+<P>Several approaches were discussed.  The main ones were:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;1) Make the listen queues deeper, and implement random drop
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;2) Create a minimal state SYN cache
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;3) Send the state to the src, and create the connection when
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the reply is received.
+<BR>
+<P>The SYN-cookie falls under #3.  The main advantage of it is that
+<BR>
+(1) it places the queue with state information into the network,
+<BR>
+making it infinitely deep, and (2) we don't have to do anything to
+<BR>
+time-out those items.
+<BR>
+<P>The disadvantage of #3 is that all TCP state that cannot be gotten
+<BR>
+from the returning ACK has to be encoded in the 32 bit sequence
+<BR>
+number, with enough cryptography to ensure that you don't make
+<BR>
+yourself vulnerable to ACK spoofing.  From looking at the SYN-cookie
+<BR>
+archives, the only additional state encoded is the MSS, in the top
+<BR>
+3 bit.  It does not save Window Scale information.  That requires 8
+<BR>
+more bits, four for each direction.  Knowing whether or not SACK-ALLOWED
+<BR>
+was received reqires 1 more bit.  Now you are down to 20 bits for
+<BR>
+the cookie.  Is that enough? I don't know.
+<BR>
+<P>I chose to implement a minimal state SYN cache, with oldest
+<BR>
+drop on overflow.  In 32 bytes I can retain all the information
+<BR>
+needed (for an IPv4 connection, IPv6 is another issue...)  The
+<BR>
+cached syns are kept in a hash table for easy lookup.  On table
+<BR>
+overflow, the oldest entry in the hash bucket is dropped.  No
+<BR>
+application changes are needed, because the concept of listen()
+<BR>
+backlog was changed to be the maximum number of *established*
+<BR>
+connections that are allowed to be queued up.  The whole point
+<BR>
+of the listen backlog is to keep a listen socket from continuing
+<BR>
+to accept new connections when the application is not accepting
+<BR>
+them.  So, we only drop incoming SYNs if the backlog of established
+<BR>
+connections exceeds the amount specified by listen().
+<BR>
+<P>Oldest drop vs. Random drop:
+<BR>
+<P>This is the difference between a cliff and a slope.  With oldest
+<BR>
+drop, if the RTT for a legitimate connection is less than the
+<BR>
+queue depth/attack rate, you can guarantee that the connection
+<BR>
+will succeed.  If your RTT is larger, then you can guarantee
+<BR>
+that the connection will fail.  With random drop, every connection
+<BR>
+has some probability of loosing, and that probability goes up
+<BR>
+with your RTT.
+<BR>
+<P>As to the pros and cons of syn-cookies vs. a SYN-cache, both
+<BR>
+have their flaws.
+<BR>
+<P>&nbsp;&nbsp;o Neither one solves the problem of the returning ACK from a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;valid connection being lost.  The cookie approach can't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;retransmit the SYN/ACK, since it doesn't have any state, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the SYN-cache chooses not to retransmit the SYN/ACK, since
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;most of the retransmissions would be for bogus connections.
+<BR>
+<P>&nbsp;&nbsp;o SYN cookies don't retain state about SACK or window scale.
+<BR>
+<P>&nbsp;&nbsp;o SYN cache requires memory, about 1 MB to allow a queue of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;30,000 deep.
+<BR>
+<P>&nbsp;&nbsp;o SYN cookies must be cryptographically secure to prevent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;a forged ACK attack.  If you don't already have MD5 in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;your kernel, you have to add it.
+<BR>
+<P>I'll also point out that along with the code that I released for
+<BR>
+4.4BSD-Lite2 (<A HREF="ftp://ftp.bsdi.com/contrib/bsdi_contrib/44Lite-SYNcache.gz">ftp://ftp.bsdi.com/contrib/bsdi_contrib/44Lite-SYNcache.gz</A>)
+<BR>
+I put in comments about how to rip out just the caching code and
+<BR>
+replace it with something like the SYN-cookie defense.
+<BR>
+<P>If you want more informaton about the syn-caching code, pick up
+<BR>
+the distribution and read all about it.
+<BR>
+<P>The bottom line for me is that the SYN-cache solves the problem
+<BR>
+that we set out to solve, and for our situation (BSD/OS), we felt
+<BR>
+that it was a better solution than the SYN-cookie approach.  If
+<BR>
+at some point that proves to be false, we'll rethink our solution.
+<BR>
+<P>I won't tell anyone which approach is better, because they both
+<BR>
+have their flaws.  The best I can do is point out the pros and
+<BR>
+cons of each, and let the other person decide which trade-offs
+<BR>
+best fits their situation.
+<BR>
+<P>I've got well over a megabyte of mail discussion about the
+<BR>
+SYN-flood-attack and defenses against it, let's not continue
+<BR>
+to rehash the whole thing here.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20SYN/RST%20cookies%20(was%20Re:%20a%20quick%20clarification...)&In-Reply-To=&lt;199706061526.KAA01535@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0520.html">Lori Napoli: "-No Subject-"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0518.html">Manish Patel(x67071): "subscribe"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0508.html">der Mouse : "SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0521.html">Eric.Schenk@dna.lth.se: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0521.html">Eric.Schenk@dna.lth.se: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0522.html">Alan Cox: "Re: SYN/RST cookies (was Re: a quick clarification...)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#519">[ date ]</A>
+<A HREF="index.html#519">[ thread ]</A>
+<A HREF="subject.html#519">[ subject ]</A>
+<A HREF="author.html#519">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Proposed TCP Group Extensions</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@mica.denver.sgi.com)">
+<META NAME="Subject" CONTENT="Re: Proposed TCP Group Extensions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Proposed TCP Group Extensions</H1>
+<!-- received="Sun Jun 22 07:49:24 1997" -->
+<!-- isoreceived="19970622114924" -->
+<!-- sent="Sun, 22 Jun 1997 08:46:33 -0600" -->
+<!-- isosent="19970622144633" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@mica.denver.sgi.com" -->
+<!-- subject="Re: Proposed TCP Group Extensions" -->
+<!-- id="199706221446.IAA22738@mica.denver.sgi.com" -->
+<!-- inreplyto="Proposed TCP Group Extensions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@mica.denver.sgi.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706221446.IAA22738@mica.denver.sgi.com&gt;"><EM>vjs@mica.denver.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Jun 22 1997 - 10:46:33 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0550.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#551">[ date ]</A>
+<A HREF="index.html#551">[ thread ]</A>
+<A HREF="subject.html#551">[ subject ]</A>
+<A HREF="author.html#551">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706221446.IAA22738@mica.denver.sgi.com&gt;">alan@lxorguk.ukuu.org.uk</A> (Alan Cox)
+</EM><BR>
+<P><EM>&gt; &gt; &gt; This is becoming more and more obvious. Also IPSEC still doesnt address
+</EM><BR>
+<EM>&gt; &gt; &gt; the ICMP MUST FRAGMENT tcp denial attacks
+</EM><BR>
+<EM>&gt; &gt; What attacks would those be?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Send an ICMP MUST FRAGMENT MTU=68 to someone running a secure session. Now
+</EM><BR>
+<EM>&gt; they can pick either
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1.	Ignore it because it isnt signed - doesn't work because the packet
+</EM><BR>
+<EM>&gt; 	may be real mtu lowering info
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 2.	Believe it and watch the peformance crash
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The problem is this is the one case where we have to trust a potentially
+</EM><BR>
+<EM>&gt; unsigned frame if we want to do TCP mtu discovery. If you drop MTU 
+</EM><BR>
+<EM>&gt; discovery from secure TCP sessions it seems ok
+</EM><BR>
+<P><P>You omitteded the most reasonable response:
+<BR>
+<P>&nbsp;3. ignore it because 68 is so ridiculously tiny that it is obviously bogus
+<BR>
+&nbsp;&nbsp;&nbsp;and if the path MTU were that bad, you may as well close the connection.
+<BR>
+<P>&quot;Be generous in what you accept&quot; is not the same &quot;be stupid and do not
+<BR>
+sanity-check anything.&quot;
+<BR>
+<P>Reasonable systems should drop any demands for an MTU less than 128 and
+<BR>
+probably anything less than 256.  256 is wrong for modems made in the
+<BR>
+last 5 years, but people are still using recommendations based on delay
+<BR>
+computations based on 2400 bit/sec modems.
+<BR>
+<P>If your path really has a 9K (ATM) or 64K MTU (HIPPI), reducing it to
+<BR>
+256 has as at least as much effect as reducing a 1500 to 68.  Merely
+<BR>
+reducing 4352 or 1500 to 256 is a Very Bad Thing for performance, so the
+<BR>
+point stands, if rephrased with non-bogus number, and somewhat weakly.
+<BR>
+<P><P>Vernon Schryver,  <A HREF="mailto:vjs@sgi.com?Subject=Re:%20Proposed%20TCP%20Group%20Extensions&In-Reply-To=&lt;199706221446.IAA22738@mica.denver.sgi.com&gt;">vjs@sgi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0550.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0528.html">kennethw@VNET.IBM.COM: "Proposed TCP Group Extensions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0552.html">Alan Cox: "Re: Proposed TCP Group Extensions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0553.html">Michael C. Richardson: "ICMP must fragment and IPsec"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#551">[ date ]</A>
+<A HREF="index.html#551">[ thread ]</A>
+<A HREF="subject.html#551">[ subject ]</A>
+<A HREF="author.html#551">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

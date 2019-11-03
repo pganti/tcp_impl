@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Eric A. Hall (ehall@ehsco.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Feb  8 02:58:51 1999" -->
+<!-- isoreceived="19990208075851" -->
+<!-- sent="Fri, 05 Feb 1999 10:08:03 -0800" -->
+<!-- isosent="19990205180803" -->
+<!-- name="Eric A. Hall" -->
+<!-- email="ehall@ehsco.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36BB3383.C6258375@ehsco.com" -->
+<!-- inreplyto="199902051706.LAA01625@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> Eric A. Hall (<A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36BB3383.C6258375@ehsco.com&gt;"><EM>ehall@ehsco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 05 1999 - 13:08:03 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1541.html">Ramesh Nagarajan: "INFOCOM'2000: Advance Call for Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1517.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1518.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1540">[ date ]</A>
+<A HREF="index.html#1540">[ thread ]</A>
+<A HREF="subject.html#1540">[ subject ]</A>
+<A HREF="author.html#1540">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Also, I might not have said it, but this example was to show
+</EM><BR>
+<EM>&gt; 3 separate transaction requests, not 1 transaction done with
+</EM><BR>
+<EM>&gt; 3 writes.  If it was one request, it should really be done with
+</EM><BR>
+<EM>&gt; a single 4500 byte write, yeilding:
+</EM><BR>
+<P>You're not showing any response activity so it's hard to guess what's
+<BR>
+really going on.
+<BR>
+<P>If the sender is actually waiting for a response from the far-end after
+<BR>
+writing each block of 1500 bytes, then disabling Nagle on the sender
+<BR>
+would be the most efficient thing:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1st write:     send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Response
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2nd write:     send 1460 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send 40 bytes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Response
+<BR>
+etc.
+<BR>
+<P>If the client is writing 3 blocks of 1500 bytes because that's how it
+<BR>
+was written, then it should be deleted. :)   Unfortunately, since you're
+<BR>
+not showing any responses, we have to assume that's what is happening.
+<BR>
+In this case, the app should at least know that it is doing multiple
+<BR>
+writes for a single operation, since it's not waiting for a response.
+<BR>
+And in  that case, using Nagle is the most efficient:
+<BR>
+<P><EM>&gt; But turning off Nagle is even worse.  You then get:
+</EM><BR>
+<EM>&gt;         1st write:      send 1460 bytes
+</EM><BR>
+<EM>&gt;                         send 40 bytes
+</EM><BR>
+<EM>&gt;         2nd write:      send 1460 bytes
+</EM><BR>
+<EM>&gt;                         send 40 bytes
+</EM><BR>
+<EM>&gt;         3rd write:      send 1460 bytes
+</EM><BR>
+<EM>&gt;                         send 40 bytes
+</EM><BR>
+<P>Six sends when writing 3 blocks &gt;1 segment.
+<BR>
+<P><EM>&gt; &gt; &gt; and the proposed Nagle (and the current BSD/OS) would produce:
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt;     1st write:      send 1460 bytes
+</EM><BR>
+<EM>&gt; &gt; &gt;                     send 40 bytes
+</EM><BR>
+<EM>&gt; &gt; &gt;     2nd write:      send 1460 bytes (defer 40 bytes)
+</EM><BR>
+<EM>&gt; &gt; &gt;     3rd write       send 40 + 1420 = 1460 bytes (defer 80  bytes)
+</EM><BR>
+<EM>&gt; &gt; &gt;                     (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt; &gt; &gt;                     send 80 bytes
+</EM><BR>
+<P>Five sends. Better.
+<BR>
+<P><EM>&gt; &gt; &gt; whereas the current Nagle code would produce:
+</EM><BR>
+<EM>&gt; &gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; &gt;     1st write:      send 1460 bytes  (defer 40 bytes)
+</EM><BR>
+<EM>&gt; &gt; &gt;     2nd write:      send 40 + 1420 = 1460 bytes (defer 80 bytes)
+</EM><BR>
+<EM>&gt; &gt; &gt;     3rd write:      send 80 + 1380 = 1460 bytes  (defer 120 bytes)
+</EM><BR>
+<EM>&gt; &gt; &gt;                     (wait for ACK or timeout)
+</EM><BR>
+<EM>&gt; &gt; &gt;                     send 120 bytes
+</EM><BR>
+<P>Four sends. Best.
+<BR>
+<P>If the app knows that it's going to send &gt;2 segments in an operation, it
+<BR>
+should use Nagle. If the app knows that it's going to send &lt;2 segments
+<BR>
+in a single operation, it should disable Nagle.
+<BR>
+<P>Modifying Nagle doesn't benefit either of those scenarios. It might
+<BR>
+benefit a scenario where the client doesn't know what its doing.
+<BR>
+<P><P><P>ps--I'm at the end of what appears to be a very long list. I don't see
+<BR>
+my posts until several hours after sending them. This makes reading and
+<BR>
+participating somewhat difficult. Apologies if out-of-order.
+<BR>
+<P><PRE>
+-- 
+Eric A. Hall                                            <A HREF="mailto:ehall@ehsco.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36BB3383.C6258375@ehsco.com&gt;">ehall@ehsco.com</A>
++1-650-685-0557                                    <A HREF="http://www.ehsco.com">http://www.ehsco.com</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1541.html">Ramesh Nagarajan: "INFOCOM'2000: Advance Call for Papers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1539.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1517.html">David Borman: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1518.html">Vernon Schryver: "RE: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1540">[ date ]</A>
+<A HREF="index.html#1540">[ thread ]</A>
+<A HREF="subject.html#1540">[ subject ]</A>
+<A HREF="author.html#1540">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

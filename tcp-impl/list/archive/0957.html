@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Wed Feb 18 11:03:08 1998" -->
+<!-- isoreceived="19980218160308" -->
+<!-- sent="Wed, 18 Feb 1998 19:04:46 +0000 (GMT)" -->
+<!-- isosent="19980218190446" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="m0y5EnW-0005FsC@lightning.swansea.linux.org.uk" -->
+<!-- inreplyto="199802181746.LAA01820@frantic.bsdi.com" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;m0y5EnW-0005FsC@lightning.swansea.linux.org.uk&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 14:04:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#957">[ date ]</A>
+<A HREF="index.html#957">[ thread ]</A>
+<A HREF="subject.html#957">[ subject ]</A>
+<A HREF="author.html#957">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Yes, new data should cause an RST to be generated, but there is no
+</EM><BR>
+<EM>&gt; need to require that the window be opened.  A window probe *is* new
+</EM><BR>
+<EM>&gt; data, it just happens to be one byte beyond the end of the current
+</EM><BR>
+<EM>&gt; window.  BSD stacks generate a RST when receiving a window probe for
+</EM><BR>
+<EM>&gt; a connection that the user has closed.  (It trims any old data off
+</EM><BR>
+<EM>&gt; the front of the packet, checks for new data for a closed connection
+</EM><BR>
+<EM>&gt; and generates a RST if there is any, and then it trims any data off
+</EM><BR>
+<EM>&gt; the end of the packet beyond the edge of the window.)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I'd say that real problem in the cited examples is that the sending
+</EM><BR>
+<EM>&gt; host is not correctly generating window probes:
+</EM><BR>
+<P>Actually the reset on zero window probe problem can be bad. The following
+<BR>
+transaction can occur on some stacks doing keepalive and is broken there
+<BR>
+as well as when probing.
+<BR>
+<P><P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send data		ack window (n)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;send data (n)		ack window (0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shutdown for rx
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[compute mode]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keepalive n+1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RST 
+<BR>
+<P>and the reset tears down both sides of the connection. For a zero window
+<BR>
+probe this is ok so long as the stack never attempts to probe a zero window
+<BR>
+unless it has queued data. A window that is 0 with no queue causes no
+<BR>
+probe and no harm. This prevents us doing any &quot;opportunistic&quot; window probe.
+<BR>
+<P>Im not sure if that has any performance impact. One for the queue theory
+<BR>
+bods.
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0958.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0955.html">David Borman: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0956.html">Bernie Volz: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#957">[ date ]</A>
+<A HREF="index.html#957">[ thread ]</A>
+<A HREF="subject.html#957">[ subject ]</A>
+<A HREF="author.html#957">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

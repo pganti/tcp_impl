@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH (was Re: draft descripti</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)</H1>
+<!-- received="Wed Mar 19 16:40:05 1997" -->
+<!-- isoreceived="19970319214005" -->
+<!-- sent="Wed, 19 Mar 1997 16:28:09 PST" -->
+<!-- isosent="19970320002809" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<!-- id="199703200028.QAA24580@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Wed, 19 Mar 1997 16:12:48 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20PSH%20(was%20Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;)&In-Reply-To=&lt;199703200028.QAA24580@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 19:28:09 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0174.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0172.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#173">[ date ]</A>
+<A HREF="index.html#173">[ thread ]</A>
+<A HREF="subject.html#173">[ subject ]</A>
+<A HREF="author.html#173">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; So you are saying that the sender has to set the PSH bit just before the
+</EM><BR>
+<EM>&gt; receiver closes the window all the way, even if it has unsent data queued
+</EM><BR>
+<EM>&gt; and ready to go?  The &quot;definite implementation bug&quot; is on the receiver side.
+</EM><BR>
+<P>No, I meant the opposite: if the sender doesn't have any more data to send,
+<BR>
+it needs to set PSH.  The receiver's window doesn't enter into it, it's
+<BR>
+just the question of whether the sender at the moment could not possibly
+<BR>
+send any more data.
+<BR>
+<P>Where I'm coming from is RFC 1122, 4.2.2.2 p 82:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP MAY implement PUSH flags on SEND calls.  If PUSH flags
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are not implemented, then the sending TCP: (1) must not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer data indefinitely, and (2) MUST set the PSH bit in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the last buffered segment (i.e., when there is no more
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queued data to be sent).
+<BR>
+<P>In particular, item (2).  However, I'm confused as to whether all data
+<BR>
+transmission is via &quot;SEND calls&quot;, or if those are just one type of
+<BR>
+transmission, and there are others.
+<BR>
+<P>So the problem as I see it is:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Time	Dir.	What
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.0	A &gt; B	data 1:50
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1	B &gt; A	ack 50
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 eons	A &gt; B	data 51:100
+<BR>
+<P>In this example, the transmission of 1:50 should have included PSH,
+<BR>
+since at that point A evidently didn't have any more data to send.
+<BR>
+<P>If A is not required to set PSH, then B must have a timer to force
+<BR>
+delivery of 1:50 to the receiving application, or else interactive
+<BR>
+use breaks.
+<BR>
+<P>I'm not sure that sparker's approach:
+<BR>
+<P><EM>&gt; How about everything it currently has, assuming the application still offers
+</EM><BR>
+<EM>&gt; receive socket buffer space?  On our systems, coalescing occurs at the
+</EM><BR>
+<EM>&gt; granularity of the read()'s done by the application, not in TCP.  Every
+</EM><BR>
+<EM>&gt; TCP segment which arrived since the last read, assuming it fits in the
+</EM><BR>
+<EM>&gt; user's buffer, is delivered.
+</EM><BR>
+<P>helps in this case.  The receiving application on B could've made its
+<BR>
+read() call before any data arrived, so it blocked.  The question now
+<BR>
+is when to wake it up.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0174.html">Hsiao-keng Jerry Chu: "Re: draft description of &quot;No slow start after timeout&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0172.html">Jerry Toporek: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0175.html">der Mouse : "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#173">[ date ]</A>
+<A HREF="index.html#173">[ thread ]</A>
+<A HREF="subject.html#173">[ subject ]</A>
+<A HREF="author.html#173">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

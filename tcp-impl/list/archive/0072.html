@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Scott Dawson (sdawson@eecs.umich.edu)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 22:59:38 1997" -->
+<!-- isoreceived="19970212035938" -->
+<!-- sent="Tue, 11 Feb 1997 17:53:32 -0500" -->
+<!-- isosent="19970211225332" -->
+<!-- name="Scott Dawson" -->
+<!-- email="sdawson@eecs.umich.edu" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="199702112253.RAA16386@grinch.eecs.umich.edu" -->
+<!-- inreplyto="Tue, 11 Feb 1997 10:44:56 -0800 (PST)" -->
+<STRONG>From:</STRONG> Scott Dawson (<A HREF="mailto:sdawson@eecs.umich.edu?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;199702112253.RAA16386@grinch.eecs.umich.edu&gt;"><EM>sdawson@eecs.umich.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 17:53:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0071.html">C. Harald Koch: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#72">[ date ]</A>
+<A HREF="index.html#72">[ thread ]</A>
+<A HREF="subject.html#72">[ subject ]</A>
+<A HREF="author.html#72">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 1S. Server is in a write() sending data to the client
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 1C. User hits STOP or something, the application does a close().
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 2C. Client aborts and sends either a FIN or RST 
+</EM><BR>
+<EM>&gt; 	(lets say a FIN to show the problem, and reasons for RST instead)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 3C. The client application has destroyed the socket, and it detached
+</EM><BR>
+<EM>&gt;  	from the stack for that connection. 
+</EM><BR>
+<EM>&gt; 	From the client stack side, the connection no longer exists
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 3S Server continues to be in a write
+</EM><BR>
+<EM>&gt;    Server Stack goes to CLOSE_WAIT ( having received the FIN )
+</EM><BR>
+<EM>&gt;    
+</EM><BR>
+<EM>&gt; 4S Server will continue to write to the client, until it has exhausted
+</EM><BR>
+<EM>&gt;    its window. This is OK for a half-close.  
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 5S The window is exhausted, and the server will wait until the client
+</EM><BR>
+<EM>&gt;    opens the window. (window probes )
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 4C. The client should, but doesnt  send a RST upon receiving the
+</EM><BR>
+<EM>&gt; 	 remaining data from the server or window probes.
+</EM><BR>
+<P>If the server is sending into what it thinks is an open window, and
+<BR>
+the client doesn't reply at all (RST or otherwise), then the server
+<BR>
+would simply time out the connection, right?  However, if the client
+<BR>
+has already advertised a zero window before the socket was torn down,
+<BR>
+then the server will be in a zero window probing state in which,
+<BR>
+according to the spec, it MUST send zero window probes periodically to
+<BR>
+see if the window has opened.  It must be the case then that the
+<BR>
+server sends enough data to fill the client window before the client
+<BR>
+decides to tear down the connection and send the RST, or otherwise it
+<BR>
+would just kill the connection when the client doesn't respond.  For
+<BR>
+example, maybe when the 'stop' button is clicked, the client stops
+<BR>
+reading long enough for a zero window to be advertised before the
+<BR>
+connection is closed down.  The spec states:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP MAY keep its offered receive window closed indefinitely.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As long as the receiving TCP continues to send acknowledgments in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response to the probe segments, the sending TCP MUST allow the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection to remain open.  (page 92, RFC-1122).
+<BR>
+<P>However, that this does not imply that the connection MUST be kept
+<BR>
+open *indefinitely*.  In this case, it seems that the client not
+<BR>
+replying at all causes the server TCP to stay in zero window probing
+<BR>
+state forever.  But the server COULD time the connection out, it just
+<BR>
+doesn't.  This seems to be a place where the specification needs to be
+<BR>
+more concrete.  Maybe it should also say, &quot;If the receiving TCP does
+<BR>
+not acknowledge the probes, the sending TCP SHOULD close the
+<BR>
+connection.&quot;  Or say &quot;bad things might happen to you if you don't.&quot;
+<BR>
+<P>We have a tool called Orchestra that we have used to test several
+<BR>
+different vendor TCP implementations by injecting faults (drop, delay
+<BR>
+messages, fabricate new messages) into the segments sent by the TCP
+<BR>
+peers.  In one of our tests, we dropped zero window probes to see what
+<BR>
+participants do.  What we found in most of the TCPs we tested (SunOS,
+<BR>
+Solaris, AIX, OS/2, Next Mach) was that the TCP did not time out
+<BR>
+connections that are in the zero window probe state, even if the other
+<BR>
+TCP does not ACK the probes.  Only one implementation (Windows 95)
+<BR>
+actually timed out the connection once it was in a zero window probe
+<BR>
+state if the peer did not ACK the probes.
+<BR>
+<P>It seems that the Win 95 TCP is doing a good thing by timing out
+<BR>
+connections whose peer does not ACK zero window probes.  (At least it
+<BR>
+isn't going against spec.)  If the server platform were Win 95, this
+<BR>
+&quot;server hanging&quot; condition would not happen.
+<BR>
+<P><EM>&gt; Unfortunately, the bad stack implementation is in widespread use,
+</EM><BR>
+<EM>&gt; and the current versions of it *still* do not fix the problem.
+</EM><BR>
+<P>But if other TCPs dropped connections that do not ACK zero window
+<BR>
+probes, this &quot;bad stack&quot; would not affect the server any more than if
+<BR>
+it refused to ACK data messages.  Even though the client TCP is messed
+<BR>
+up, the server would simply time out the connection and go on about
+<BR>
+its business (dying, cleanup, whatever).  Even though we'd want the
+<BR>
+bad stack to be fixed, it wouldn't be as much of a problem if we were
+<BR>
+more resilient to the way that it's bad.
+<BR>
+<P>I'm not sticking up for the 'bad stack'.  I don't even know which
+<BR>
+stack it is, and definitely think it should be fixed.  I'm saying that
+<BR>
+just because it's out there doesn't mean that people who run web
+<BR>
+servers (or OS's that run web servers) are at its mercy.
+<BR>
+<P>-Scott
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0073.html">sparker@Eng.Sun.COM: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0071.html">C. Harald Koch: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0055.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0063.html">W. Richard Stevens: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#72">[ date ]</A>
+<A HREF="index.html#72">[ thread ]</A>
+<A HREF="subject.html#72">[ subject ]</A>
+<A HREF="author.html#72">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

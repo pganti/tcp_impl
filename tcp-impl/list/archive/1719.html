@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Retransmissions without expl</TITLE>
+<META NAME="Author" CONTENT="Jamshid Mahdavi (mahdavi@novell.com)">
+<META NAME="Subject" CONTENT="Re: Retransmissions without explanation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Retransmissions without explanation</H1>
+<!-- received="Wed May 19 12:08:21 1999" -->
+<!-- isoreceived="19990519160821" -->
+<!-- sent="19 May 1999 09:14:39 -0700" -->
+<!-- isosent="19990519161439" -->
+<!-- name="Jamshid Mahdavi" -->
+<!-- email="mahdavi@novell.com" -->
+<!-- subject="Re: Retransmissions without explanation" -->
+<!-- id="yu8x90al6nps.fsf@sabre.sjf.novell.com" -->
+<!-- inreplyto="Tue, 18 May 1999 15:46:27 -0300&quot;" -->
+<STRONG>From:</STRONG> Jamshid Mahdavi (<A HREF="mailto:mahdavi@novell.com?Subject=Re:%20Retransmissions%20without%20explanation&In-Reply-To=&lt;yu8x90al6nps.fsf@sabre.sjf.novell.com&gt;"><EM>mahdavi@novell.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed May 19 1999 - 12:14:39 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1718.html">Andi Kleen: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1728.html">Mark Allman: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1729.html">Mark Allman: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1730.html">braden@ISI.EDU: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1719">[ date ]</A>
+<A HREF="index.html#1719">[ thread ]</A>
+<A HREF="subject.html#1719">[ subject ]</A>
+<A HREF="author.html#1719">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+[This is in response to a note on tcpsat about retransmit timers
+<BR>
+firing too early on long connections.]
+<BR>
+<P>I have seen unwanted retransmit timouts (i.e. bugs) of this nature in
+<BR>
+two other implementations as well.  All of these implementations have
+<BR>
+in common more accurate timers.  I suspect it would be useful to have
+<BR>
+more detailed documentation on the use of timers and computation of
+<BR>
+RTO.  However, it isn't clear to me that there is a lot of consensus
+<BR>
+on a number of the issues.
+<BR>
+<P>Here are some issues which I think are unresolved, or could use better
+<BR>
+documentation:
+<BR>
+<P>- How to modify the RTO calculation when doing 1323 timestamps.  The
+<BR>
+&nbsp;&nbsp;idea here is that you are getting measurements more quickly, so you
+<BR>
+&nbsp;&nbsp;might want to adjust the moving average calculation.
+<BR>
+<P>- Running with fine-grained clocks.
+<BR>
+&nbsp;&nbsp;1.  Should you?
+<BR>
+&nbsp;&nbsp;2.  Are adjustments to the computations needed?  (Remember delayed
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack might tack on 200msec).
+<BR>
+<P>- Always time the RTO from the last packet in flight.
+<BR>
+<P>- Should there be a minimum RTO?
+<BR>
+<P>- Should there be a minimum deviation?
+<BR>
+<P>Interestingly, I see no discussion of these issues in the TCPSAT
+<BR>
+drafts, and I don't believe I have seen them covered in any of the
+<BR>
+other relevant places either (i.e. pilc or tcl-impl).
+<BR>
+<P>I'd be happy to pull together ideas on this subject if people are
+<BR>
+interested in seeing such a document.
+<BR>
+<P>--Jamshid
+<BR>
+<P>PS.  On a process note, I'm thinking this belongs under tcp-impl, so
+<BR>
+I've sent this note to tcp-impl and BCC'd tcpsat (where the
+<BR>
+conversation started).
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1718.html">Andi Kleen: "Re: slow-start bit"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1720.html">Umesh Mallugari: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1722.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1723.html">Jamshid Mahdavi: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1726.html">Vern Paxson: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1728.html">Mark Allman: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1729.html">Mark Allman: "Re: Retransmissions without explanation"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1730.html">braden@ISI.EDU: "Re: Retransmissions without explanation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1719">[ date ]</A>
+<A HREF="index.html#1719">[ thread ]</A>
+<A HREF="subject.html#1719">[ subject ]</A>
+<A HREF="author.html#1719">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

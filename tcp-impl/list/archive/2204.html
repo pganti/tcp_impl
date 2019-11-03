@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Send window update algorithm</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: Send window update algorithm ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Send window update algorithm ...</H1>
+<!-- received="Fri Jun 30 15:19:24 2000" -->
+<!-- isoreceived="20000630191924" -->
+<!-- sent="Fri, 30 Jun 2000 12:13:35 -0700 (PDT)" -->
+<!-- isosent="20000630191335" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: Send window update algorithm ..." -->
+<!-- id="Roam.SIMC.2.0.6.962392415.18491.kcpoon@jurassic" -->
+<!-- inreplyto="200006301828.WAA25813@ms2.inr.ac.ru" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962392415.18491.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jun 30 2000 - 15:13:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2205.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2203.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2204">[ date ]</A>
+<A HREF="index.html#2204">[ thread ]</A>
+<A HREF="subject.html#2204">[ subject ]</A>
+<A HREF="author.html#2204">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Look:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; OR if ((SND.WL2 == SEG.ACK) &amp;&amp; (SEG.WND &gt; SND.WND))
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; includes SND.WL1==SEG.SEQ in my version. I did this because
+</EM><BR>
+<EM>&gt; otherwise it will result in spurious window reopens by old segments.
+</EM><BR>
+<P>Yup, I missed this line.  But I think we should include SND.WL1==SEG.SEQ.
+<BR>
+I just replied to Ramesh asking whether he really means that he wants TCP
+<BR>
+to accept window update from &quot;old&quot; segment which does not ack new data.  I
+<BR>
+think the problem is that TCP cannot know whether the newly rceived &quot;old&quot;
+<BR>
+segment is really a retransmission or the original old segment if ack stays
+<BR>
+the same.
+<BR>
+<P><EM>&gt; I understand, why the check is omitted. It is because of the second
+</EM><BR>
+<EM>&gt; difference. My version allows WL1 to go back, when update occurs from
+</EM><BR>
+<EM>&gt; new ACK. This one prohibit this (the first line), so that check
+</EM><BR>
+<EM>&gt; for SND.WL1==SEG.ACK in the third line becomes too restrictive.
+</EM><BR>
+<P>I think it is too &quot;liberal&quot; instead of too &quot;restrictive.&quot;  It just means that
+<BR>
+whenever a segment comes in with a larger window, TCP will accept the update. 
+<BR>
+I don't think this is correct.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20Send%20window%20update%20algorithm%20...&In-Reply-To=&lt;Roam.SIMC.2.0.6.962392415.18491.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2205.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2203.html">Kacheong Poon: "Re: Send window update algorithm ..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2201.html">kuznet@ms2.inr.ac.ru: "Re: Send window update algorithm ..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2200.html">Ramesh Shankar: "Re: Send window update algorithm ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2204">[ date ]</A>
+<A HREF="index.html#2204">[ thread ]</A>
+<A HREF="subject.html#2204">[ subject ]</A>
+<A HREF="author.html#2204">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:36 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

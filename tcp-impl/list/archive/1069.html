@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP ack every other - perfor</TITLE>
+<META NAME="Author" CONTENT="David S. Miller (davem@dm.cobaltmicro.com)">
+<META NAME="Subject" CONTENT="Re: TCP ack every other - performance issue?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP ack every other - performance issue?</H1>
+<!-- received="Fri Apr 17 18:27:44 1998" -->
+<!-- isoreceived="19980417222744" -->
+<!-- sent="Fri, 17 Apr 1998 18:20:56 -0700" -->
+<!-- isosent="19980418012056" -->
+<!-- name="David S. Miller" -->
+<!-- email="davem@dm.cobaltmicro.com" -->
+<!-- subject="Re: TCP ack every other - performance issue?" -->
+<!-- id="199804180120.SAA04766@dm.cobaltmicro.com" -->
+<!-- inreplyto="3537D8D8.24527981@enea.se" -->
+<STRONG>From:</STRONG> David S. Miller (<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804180120.SAA04766@dm.cobaltmicro.com&gt;"><EM>davem@dm.cobaltmicro.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 17 1998 - 21:20:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1069">[ date ]</A>
+<A HREF="index.html#1069">[ thread ]</A>
+<A HREF="subject.html#1069">[ subject ]</A>
+<A HREF="author.html#1069">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;&nbsp;&nbsp;Date: Sat, 18 Apr 1998 00:34:00 +0200
+<BR>
+&nbsp;&nbsp;&nbsp;From: &quot;Lennart Bång&quot; &lt;<A HREF="mailto:lob@enea.se?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804180120.SAA04766@dm.cobaltmicro.com&gt;">lob@enea.se</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Reply-To: <A HREF="mailto:lob@enea.se?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804180120.SAA04766@dm.cobaltmicro.com&gt;">lob@enea.se</A>
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Now, I realize there must be(?) a good reason for the ACK every
+<BR>
+&nbsp;&nbsp;&nbsp;other property or maybe there have been discussions on the
+<BR>
+&nbsp;&nbsp;&nbsp;functional/performance consequences of not adhering to this
+<BR>
+&nbsp;&nbsp;&nbsp;property.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;I am obviously tempted in leaving the experimental 'ack-every-four'
+<BR>
+&nbsp;&nbsp;&nbsp;but respect the properties out there. Any comments?
+<BR>
+<P>Besides what some others have mentioned, delayed ACK'ing policy has a
+<BR>
+consequence for a stacks ability to recover from loss quickly.
+<BR>
+<P>I experimented for a while with trying to get the delayed ACK as
+<BR>
+accurate as possible, such that a lost packet was detected before the
+<BR>
+first packet after the &quot;hole&quot; arrived, which gave the sender feedback
+<BR>
+information one packet sooner (and thus as a consequence, if this
+<BR>
+trick worked, fast retransmit was invoked one packet sooner).
+<BR>
+<P>It was hard to get the error in the delayed ack estimation correct so
+<BR>
+there weren't any false early ACKs, and everyone keeps telling me that
+<BR>
+ACK'ing policies using fine grained timers are a research problem, so
+<BR>
+I put this on the back burner for a little while.
+<BR>
+<P>But notice how many research papers on loss recovery do not use
+<BR>
+delayed ACKs in most of their simulations, ACK'ing every data frame
+<BR>
+provides the maximum feedback to the sender, so he can react more
+<BR>
+quickly.  But not using delayed ACKs has some other performance
+<BR>
+consequences.
+<BR>
+<P>Later,
+<BR>
+David S. Miller
+<BR>
+<A HREF="mailto:davem@dm.cobaltmicro.com?Subject=Re:%20TCP%20ack%20every%20other%20-%20performance%20issue?&In-Reply-To=&lt;199804180120.SAA04766@dm.cobaltmicro.com&gt;">davem@dm.cobaltmicro.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1070.html">Mohit Aron: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1068.html">Rick Jones: "Re: TCP ack every other - performance issue?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1069">[ date ]</A>
+<A HREF="index.html#1069">[ thread ]</A>
+<A HREF="subject.html#1069">[ subject ]</A>
+<A HREF="author.html#1069">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@jurassic.eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Tue Aug 12 12:00:24 1997" -->
+<!-- isoreceived="19970812160024" -->
+<!-- sent="Tue, 12 Aug 1997 11:47:26 -0700 (PDT)" -->
+<!-- isosent="19970812184726" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@jurassic.eng.Sun.COM" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="Roam.SIMC.2.0.871411646.1903.kcpoon@jurassic" -->
+<!-- inreplyto="199708121739.KAA08900@rum.isi.edu" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@jurassic.eng.Sun.COM?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;Roam.SIMC.2.0.871411646.1903.kcpoon@jurassic&gt;"><EM>kcpoon@jurassic.eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Aug 12 1997 - 14:47:26 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0659.html">Curtis Villamizar: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0659.html">Curtis Villamizar: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#657">[ date ]</A>
+<A HREF="index.html#657">[ thread ]</A>
+<A HREF="subject.html#657">[ subject ]</A>
+<A HREF="author.html#657">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;   &quot;pipe is empty because we haven't _sent_ anything for at 
+</EM><BR>
+<EM>&gt;   least a round trip time&quot;-
+</EM><BR>
+<EM>&gt; 	Jacobson, Sigcomm 88, 'Congestion Avoidance and Control', 
+</EM><BR>
+<EM>&gt; 	available at <A HREF="ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z">ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z</A>
+</EM><BR>
+<EM>&gt; 	(pseudo-italics mine - Joe)
+</EM><BR>
+<P>Actually, footnote 23 in that paper says that last receive time can be used
+<BR>
+because of send/receive symmetry.  I guess the reason is that as long as
+<BR>
+ACKs are coming back, the ACK clock is not lost.  But in the HTTP/1.1 case,
+<BR>
+the new segment is not a pure ACK, it is a request with data.  So this causes
+<BR>
+the problem.
+<BR>
+<P>But how long the idle should be before restarting slow start?  When does this
+<BR>
+idle time timer start?   If we use last send time and 1 RTO idle time, by the
+<BR>
+time the ACK for the last sent segment comes back, it is already 1 RTT after. 
+<BR>
+But we may not want to restart slow start that soon given that network may be
+<BR>
+stable over that &quot;short&quot; period of time.  I guess this should be discussed
+<BR>
+somewhere before.  Is there any conclusion?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;Roam.SIMC.2.0.871411646.1903.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0658.html">touch@ISI.EDU: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0659.html">Curtis Villamizar: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0659.html">Curtis Villamizar: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#657">[ date ]</A>
+<A HREF="index.html#657">[ thread ]</A>
+<A HREF="subject.html#657">[ subject ]</A>
+<A HREF="author.html#657">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:46 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

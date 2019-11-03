@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: IP Over Sonet Considered Har</TITLE>
+<META NAME="Author" CONTENT="Scott Huddle (huddle@mci.net)">
+<META NAME="Subject" CONTENT="Re: IP Over Sonet Considered Harmful?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: IP Over Sonet Considered Harmful?</H1>
+<!-- received="Wed Mar 25 16:54:11 1998" -->
+<!-- isoreceived="19980325215411" -->
+<!-- sent="Wed, 25 Mar 1998 19:26:22 +0000" -->
+<!-- isosent="19980325192622" -->
+<!-- name="Scott Huddle" -->
+<!-- email="huddle@mci.net" -->
+<!-- subject="Re: IP Over Sonet Considered Harmful?" -->
+<!-- id="3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net" -->
+<!-- inreplyto="IP Over Sonet Considered Harmful?" -->
+<STRONG>From:</STRONG> Scott Huddle (<A HREF="mailto:huddle@mci.net?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;"><EM>huddle@mci.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 25 1998 - 14:26:22 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1040.html">Thomas Skibo: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1038.html">David S. Miller: "Re: possible bug in PAWS"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1039">[ date ]</A>
+<A HREF="index.html#1039">[ thread ]</A>
+<A HREF="subject.html#1039">[ subject ]</A>
+<A HREF="author.html#1039">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+This is not an MPLS issue, it is a broken TCP implementation
+<BR>
+issue.  Note cc'es.
+<BR>
+<P>-scott
+<BR>
+<P><EM>&gt;Date: Wed, 25 Mar 1998 08:23:04 -0800
+</EM><BR>
+<EM>&gt;From: <A HREF="mailto:alan@isi.net?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;">alan@isi.net</A>
+</EM><BR>
+<EM>&gt;Subject: Re: IP Over Sonet Considered Harmful?
+</EM><BR>
+<EM>&gt;Sender: <A HREF="mailto:owner-mpls@netlab.indiana.edu?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;">owner-mpls@netlab.indiana.edu</A>
+</EM><BR>
+<EM>&gt;To: Sean Doran &lt;<A HREF="mailto:smd@ebone.net?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;">smd@ebone.net</A>&gt;
+</EM><BR>
+<EM>&gt;Cc: <A HREF="mailto:mpls@external.cisco.com?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;">mpls@external.cisco.com</A>
+</EM><BR>
+<EM>&gt;X-Mailer: Mutt 0.88
+</EM><BR>
+<EM>&gt;X-Authentication-warning: stone51.netlab.indiana.edu: majordom set sender to
+</EM><BR>
+<EM>&gt; <A HREF="mailto:owner-mpls@netlab.indiana.edu?Subject=Re:%20IP%20Over%20Sonet%20Considered%20Harmful?&In-Reply-To=&lt;3.0.5.32.19980325192622.016e55d0@postoffice.res.mci.net&gt;">owner-mpls@netlab.indiana.edu</A> using -f
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; |   The only significant reason is the mswindows 95 ttl of 32.
+</EM><BR>
+<EM>&gt;&gt; |
+</EM><BR>
+<EM>&gt;&gt; |   If we design a standard that ignores this cold hard fact, we
+</EM><BR>
+<EM>&gt;&gt; |   must deal with the consequences.  Not sure I can predict what
+</EM><BR>
+<EM>&gt;&gt; |   those consequences are, but I'd prefer to not find out.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; Why are you on this strange Jihad?
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; If you are so nervous about the diameter of the network,
+</EM><BR>
+<EM>&gt;&gt; and you are totally convinced that the Windows 95 systems
+</EM><BR>
+<EM>&gt;&gt; are unfixable, you might choose to push for a campaign to have the
+</EM><BR>
+<EM>&gt;&gt; very first-hop router connecting a Windows 95 end-system rewrite
+</EM><BR>
+<EM>&gt;&gt; the ttl from 32 to 64 or somesuch.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  I am on this 'strange' discussion because I am a pragmatist.  I don't
+</EM><BR>
+<EM>&gt;  believe this is a Jihad but rather a practical view on events.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  Your proposal to make the first hop router up the TTL is
+</EM><BR>
+<EM>&gt;  cumbersome and impractical to implement.  As well, it gives rise
+</EM><BR>
+<EM>&gt;  to configuration error which could induce loops.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; |   Look in my email for the reasoning why each NSP should decrement
+</EM><BR>
+<EM>&gt;&gt; |   no more than 8 TTLs, and why this is difficult with proliferant LSR
+</EM><BR>
+<EM>&gt;&gt; |   hops.
+</EM><BR>
+<EM>&gt;&gt; 
+</EM><BR>
+<EM>&gt;&gt; Your reasoning makes no sense.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  Could you please support this assertion with your observations?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; Again, if a too-low initial TTL is the problem, the
+</EM><BR>
+<EM>&gt;&gt; solution is to fix the initial TTL as close to the
+</EM><BR>
+<EM>&gt;&gt; originating end-system as possible (i.e., *in* the 
+</EM><BR>
+<EM>&gt;&gt; originating end-system, or at the first possible
+</EM><BR>
+<EM>&gt;&gt; intermediate system -- this seems like an ideal task for a NAT).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  It is not practical for me to induce L3 ttl degradation, and when
+</EM><BR>
+<EM>&gt;  my customers complain, say A. Fix your win95 or B. put in a NAT.
+</EM><BR>
+<EM>&gt;  They will go to another provider.  This is the pragmatic side.
+</EM><BR>
+<EM>&gt;  Running code and all that.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; Reducing the TTL by at least one in every device which
+</EM><BR>
+<EM>&gt;&gt; can potentially participate within a forwarding loop
+</EM><BR>
+<EM>&gt;&gt; is good self-defensive engineering.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  Yep.  Agreed, and if we had enough TTL to play with I'd support
+</EM><BR>
+<EM>&gt;  you 100%.  But the (sig.) LCD shows that we don't.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  Why are you on this strange Jihad to eat TTL in every piece of
+</EM><BR>
+<EM>&gt;  electronics on the earth?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;  -a
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1040.html">Thomas Skibo: "Re: possible bug in PAWS"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1038.html">David S. Miller: "Re: possible bug in PAWS"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1039">[ date ]</A>
+<A HREF="index.html#1039">[ thread ]</A>
+<A HREF="subject.html#1039">[ subject ]</A>
+<A HREF="author.html#1039">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCPIMPL: Minutes from LA Meeting</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@lerc.nasa.gov)">
+<META NAME="Subject" CONTENT="TCPIMPL: Minutes from LA Meeting">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCPIMPL: Minutes from LA Meeting</H1>
+<!-- received="Wed Apr 15 09:51:42 1998" -->
+<!-- isoreceived="19980415135142" -->
+<!-- sent="Wed, 15 Apr 1998 12:47:55 -0400" -->
+<!-- isosent="19980415164755" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@lerc.nasa.gov" -->
+<!-- subject="TCPIMPL: Minutes from LA Meeting" -->
+<!-- id="199804151647.MAA22744@guns.lerc.nasa.gov" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20TCPIMPL:%20Minutes%20from%20LA%20Meeting&In-Reply-To=&lt;199804151647.MAA22744@guns.lerc.nasa.gov&gt;"><EM>mallman@lerc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 15 1998 - 12:47:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1059.html">Vern Paxson: "Re: Precedence and security in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1111.html">Michael Richardson: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1111.html">Michael Richardson: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1060">[ date ]</A>
+<A HREF="index.html#1060">[ thread ]</A>
+<A HREF="subject.html#1060">[ subject ]</A>
+<A HREF="author.html#1060">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+Attached are the minutes from the tcpimpl meeting in LA.
+<BR>
+<P>allman
+<BR>
+<P><P><PRE>
+---
+TCPIMPL Minutes
+41st IETF -- Los Angeles, CA
+March 30, 1998
+<P>Minutes reported by Mark Allman and Vern Paxson.
+<P><P>1.  Testing Tools I-D
+<P>    Last call for the I-D found two problems.  Vern outlined the modifications
+    required before forwarding the I-D to the IESG.  A section on
+    the ns network simulator will be added to the draft.  Also, a
+    better security section is needed.  The security considerations
+    that will be included are:
+<P>	* Tools could be used to create rogue packets and/or denial
+          of service attacks
+        * Some tools require root access to run
+        * Some tools require bringing foreign code into kernel
+        * None of the tools evaluate security
+        * In order to run some tools, you may compromise the
+          security of your system by running untrustworthy code
+        * Some tools require watching traffic, which can raise
+          privacy and security concerns 
+<P>2.  Known Problems I-D
+<P>    Vern noted the changes to the Known Problems I-D since the last
+    meeting.  These changes included a few general clarifications
+    and a new section on the ``Failure to RST on close with data
+    pending''. 
+<P>3.  Pending Problems
+<P>    The problems that have not yet been documented in the known
+    problems I-D have been classified as either serious,
+    not-so-serious or security related.  The goal behind the
+    classification is to do triage on where our efforts should
+    go in order to finalize the known-problems I-D.
+<P>    The proposed serious problems were: 
+<P>	* Initial RTO too low
+	* CWND uninitialized
+	* Failure of window deflation due to header prediction
+	* Retransmission sends 2 packets
+	* First-hop PMTU Discovery
+	* MTU Black Holes
+	* RTO fails to back off
+<P>    It was noted that first-hop PMTU discovery should
+    not be special-cased, as it is a general path problem.  Matt Mathis
+    wondered if the MTU black hole is a bug or a research question.
+    He further noted that MTU discovery should be done without ICMP
+    due to security concerns (and, noted that this might fall under
+    ``security problems'' rather than ``serious problems'').  Matt
+    suggested that we note the problem and state that we do not yet
+    know how to solve it.  Ran Atkinson suggested that MTU
+    discovery is not a security problem as a host must be
+    continuously jammed with ``too small'' ICMP messages for an
+    attack to be successful.  Matt suggested advocating that the
+    IESG re-open PMTU Discovery as broken.
+<P>    The less serious problems were then outlined:
+<P>	* Failure to set PSH when send buffer drains
+	* Failure of window deflation due to fencepost error
+	* Failure to ACK above-sequence data
+	* Incorrectly setting ssthresh after a retransmission is
+          lost 
+	* Incrementing cwnd too aggressively during congestion
+          avoidance
+<P>    It was pointed out that cwnd can stop growing when the window
+    becomes too large using the standard algorithm during congestion
+    avoidance and that this should be documented.  Vern asked
+    whether this has been observed in practice, and the answer
+    was Yes.
+    
+    The proposed security problems were:
+<P>	* Predictable initial sequence number
+	* Ameliorating SYN flooding
+	* The Land attack
+	* Forged RSTs
+	* Forged ICMP unreachables
+<P>    Ran noted that forged unreachables is an IP problem not a TCP
+    problem.  Furthermore, he suggested that if we are planning to
+    deal with unreachables we should also document forged
+    redirects.  Vern begged for volunteers to write up security
+    problems.
+<P>4.  Re-starting idle connections
+    
+    Amy Hughes presented an overview of mechanisms that can be used
+    to prevent large line-rate bursts following an idle period
+    during a TCP connection.  Amy outlined three ways to detect
+    bursts: 
+<P>	1.  Receive Timer (if connection has not received a segment 
+	    within the last RTO).
+	2.  Send Timer (if the connection has not sent a segment
+	    within the last RTO)
+	3.  Packet Counting (if the number of segments to be sent is
+	    larger than a given threshold)
+<P>    Also, four methods of ``burst recovery'' were outlined:
+<P>	1.  Full restart (reset cwnd to 1 segment)
+	2.  Window limiting (cwnd = outstanding + 1 segment (or
+	    initial value))
+	3.  Burst limitation (cwnd unchanged; send X segments now)
+	4.  Pacing (cwnd unchanged; send X segments now and schedule
+	    a timer for the next transmission of X segments)
+<P>    Finally, four possible solutions were presented:
+<P>	1.  Current Method -- Jacobson &amp; Karels
+	    Send or receive timer with full restart.
+	2.  Congestion Window Monitoring -- Hughes, Touch &amp;
+	    Heidemann
+	    Packet counting with window limiting
+	3.  Maxburst Limitation -- Floyd
+	    Packet counting with burst limiting
+	4.  Rate Based Pacing -- Visweswaraiah &amp; Heidemann
+	    Send timer or packet counting with pacing
+<P>    It was also noted in the presentation that bursting situations
+    other than those that can follow idle TCP connections are
+    handled by congestion window monitoring (CWM), maxburst
+    limitations and rate based pacing, but not by the timer
+    solution.
+<P>    A discussion of the mechanisms followed.  Some of the comments
+    voiced: 
+<P>	* Raj Jain noted that bursts may be preferable to clamping
+          the congestion window with CWM in long-delay networks.  
+	* Mark Allman noted that while losing cwnd on long-delay
+          networks hurts performance, loss also hurts performance so
+          it may be preferable to limit bursts in an attempt to
+          limit loss.
+	* Vern asked if people thought that implementing timers in
+          TCP was still considered a ``big deal''.  It was noted
+          that comparing timestamps is not a big deal, but if a new
+          code path and additional resources are needed a new timer
+          may be objectionable.  Bill Simpson noted that timers are
+          fine unless they expire (for instance the delayed ACK
+          timer is OK, but a pacing timer is not).  Bill argued that
+          we should be focusing on making TCP work well in
+          ``common'' environments and not tweaking TCP so that a
+          single satellite connection runs well in satellite
+          networks.  Vern noted that the number one goal for TCP is
+          stability not performance.
+	* Sally Floyd noted that maxburst limitation and CWM are
+          very different mechanisms (one closes cwnd and the other
+          does not).  She noted that the studying the impact of
+          these mechanisms is still a research issue.
+	* Vern stated that it would be nice if there was a solution
+          that worked well across all environments.
+	* Tim Shepard noted that a single TCP can congest a network
+          and therefore congestion control mechanisms are important
+          to even a single TCP connection across a satellite network.
+	* Sally clarified maxburst as sending K segments in response
+          to a single ACK.
+	* Matt Mathis noted another cause of bursting is the
+          scheduler on high speed workstations.
+	* Tim Shepard asked what we were trying to decide.  Vern
+          responded that we are trying to decide the proper behavior
+          of TCP connections after an idle period for the revision
+          of RFC 2001.
+	* Tim stated that he likes CWM as it is more conservative
+          than maxburst.  But, he thinks it is still research
+          issue. 
+	* Spencer Dawkins noted that wireless links look worse than
+          normal links and that a burst limiting mechanism is
+          important to those environments.
+	* Scott Lawrence wondered if applications will attempt to
+          not let TCP connections go idle.
+	* Sally noted that maxburst was not designed for use after
+          an idle timeout, but may be appropriate for that use.  She
+          noted that research is needed in decaying the size of cwnd
+          over the idle period.
+<P>5.  ns' new network emulation capabilities 
+          
+    Kevin Fall presented an overview of ns and ns-2's network
+    emulation capabilities that are currently being researched.
+    Kevin's slides are available at: 
+	<A HREF="http://www-nrg.ee.lbl.gov/kfall/tcpimpl98.ppt">http://www-nrg.ee.lbl.gov/kfall/tcpimpl98.ppt</A>
+<P>6.  Increasing the initial window size
+<P>    Sally presented a short overview of the proposal to increase
+    TCP's initial window size.  Vern re-iterated the consensus of
+    the last TCPIMPL meeting: That rough consensus was generated for
+    an initial window of 2 segments and that 3 and 4 segment initial
+    windows would be accepted at this meeting unless new evidence is
+    shown or a convincing argument was made.  A discussion
+    followed.  Below are some of the major points:
+<P>	* A question about whether this mechanism has been studied
+          in low bandwidth links was raised.  Tim gave a brief
+          overview of his dialup link simulations (a formal
+          presentation was given at the 40th IETF meeting).  Bill
+          Simpson stated that he didn't believe the simulations or
+          think the proposal is a good idea.  He was particularly
+	  concerned with small Web transactions that would not
+	  suffer loss using an initial window of 1 but would with
+	  an initial window of 4.
+	* Matt suggested that TCP constants (like the initial window
+          size) appear in the assigned numbers document.  Vern
+          argued that making these constants undergo a full review,
+          as the current proposal has, makes changing the numbers
+          harder and therefore less likely to be done in haste.
+	* A suggestion was given that if you know you are connected
+          to a gateway with only a few buffers the host should
+          simply advertise a small window.  Bill stated that he
+          thought this was a bad idea because of the problem
+	  of deploying such a tweak among a large installed base.
+	* It was noted that using compressed HTML a larger initial
+          window may not be needed (or used).
+<P>    Vern called for a show of hands and it was determined that rough
+    consensus exists for larger initial windows per the proposal.
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1061.html">Lennart Bång: "TCP ack every other - performance issue?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1059.html">Vern Paxson: "Re: Precedence and security in TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1111.html">Michael Richardson: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1111.html">Michael Richardson: "Re: TCPIMPL: Minutes from LA Meeting"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1060">[ date ]</A>
+<A HREF="index.html#1060">[ thread ]</A>
+<A HREF="subject.html#1060">[ subject ]</A>
+<A HREF="author.html#1060">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:33 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Mon Sep 18 23:51:03 2000" -->
+<!-- isoreceived="20000919035103" -->
+<!-- sent="Mon, 18 Sep 2000 23:46:14 -0400 (EDT)" -->
+<!-- isosent="20000919034614" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009190346.XAA20908@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009190346.XAA20908@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Sep 18 2000 - 23:46:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2347.html">T Srivathsa: "TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2354.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2354.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2346">[ date ]</A>
+<A HREF="index.html#2346">[ thread ]</A>
+<A HREF="subject.html#2346">[ subject ]</A>
+<A HREF="author.html#2346">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt; You don't need 32 bits of true randomness per ISN.  Once you have
+</EM><BR>
+<EM>&gt;&gt;&gt; 128 bits of true randomness you can safely get trillions of ISNs
+</EM><BR>
+<EM>&gt;&gt; That statement sounds highly dubious to me.  What are your grounds
+</EM><BR>
+<EM>&gt;&gt; for making it?
+</EM><BR>
+<EM>&gt; Take that 128 bits of true ranodmness and use it as the key for AES
+</EM><BR>
+<EM>&gt; running in counter mode.  I believe it's accepted that about
+</EM><BR>
+<EM>&gt; 2^{128/3} blocks of output will be indistinguishable from truely
+</EM><BR>
+<EM>&gt; random data by attacker who cannot break the cipher in use.
+</EM><BR>
+<P>You may well believe it.  But what are your grounds?
+<BR>
+<P><EM>&gt; Have you looked at the Yarrow paper I gave a link to?
+</EM><BR>
+<P>No.
+<BR>
+<P>First, www.counterpane.com suffers from the &quot;won't frag&quot; disease; it
+<BR>
+sends packets with DF set but either never receives or refuses to
+<BR>
+listen to the need-frag unreachables my gateway is sending back.
+<BR>
+<P>When I located a machine I could use that wasn't behind this gateway,
+<BR>
+the URL you gave proved to be for a tiny (about three pages) blurb, not
+<BR>
+a paper of any sort.  It did include a link to
+<BR>
+<A HREF="http://www.counterpane.com/yarrow-notes.html">http://www.counterpane.com/yarrow-notes.html</A>, which contained an
+<BR>
+abstract and two links, one claiming to be PDF and the other claiming
+<BR>
+to be PostScript, neither of which is a format that normally contains
+<BR>
+readable text.  (I didn't actually download either to check; I assumed
+<BR>
+the descriptions were accurate.)
+<BR>
+<P>Do you wish to name that paper as the &quot;grounds&quot; I asked for?  If so, it
+<BR>
+wasn't clear from your first message - perhaps I should try to coax
+<BR>
+something usable out of one of those formats.
+<BR>
+<P><EM>&gt;&gt; [...].  In theory, the attacker could even brute-force it.
+</EM><BR>
+<EM>&gt; I don't understand how you can brute-force something in theory.
+</EM><BR>
+<P>As in, &quot;this is something which is theoretically possible but may not
+<BR>
+be practical (for unspecified reasons)&quot;.
+<BR>
+<P><EM>&gt; If it's practically infeasible to search the key space, there's
+</EM><BR>
+<EM>&gt; nothing to worry about.
+</EM><BR>
+<P>Except tomorrow's practice.
+<BR>
+<P><EM>&gt; And 128 bits Ought to be Enough for Everybody(TM).
+</EM><BR>
+<P>They said that about 640KB of RAM, too.  I've seen some disturbing
+<BR>
+rumblings on the horizon that imply that we may have to worry about
+<BR>
+nondeterminstic computers in the (so far only dimly) foreseeable
+<BR>
+future.
+<BR>
+<P><EM>&gt;&gt; As for the attacker recognizing how you generate your ISNs, well, as
+</EM><BR>
+<EM>&gt;&gt; any crypto person will tell you, your security cannot, in more than
+</EM><BR>
+<EM>&gt;&gt; the short term, rest on keeping your algorithms themselves secret.
+</EM><BR>
+<EM>&gt; You must be responding to somebody else's comments here.
+</EM><BR>
+<P>No; I was responding to
+<BR>
+<P><EM>&gt;&gt;&gt; [...] without giving an attacker a chance to recognize you're not
+</EM><BR>
+<EM>&gt;&gt;&gt; using a true random number generator.
+</EM><BR>
+<P>My point is that you have to assume that the attacker *knows* exactly
+<BR>
+how you're generating the ISNs; all you can keep secret (except in that
+<BR>
+short term I mentioned), is the entropy you've accumulated.
+<BR>
+<P><EM>&gt; I guess the short summary should be that cryptographers know how to
+</EM><BR>
+<EM>&gt; make good PRNGs, and they even give them away into public domain.
+</EM><BR>
+<EM>&gt; On the other hands, non-cryptographers--predictably--have less
+</EM><BR>
+<EM>&gt; thorough understanding of producing cryptographically secure PRNGs.
+</EM><BR>
+<P>Your phrasing sounds as though you intend this as some kind of attack
+<BR>
+on me as a non-cryptographer.  If so, I consider it flawed, because I
+<BR>
+am making no claim to producing any sort of PRNG; all I am pointing out
+<BR>
+is that if you haven't got the entropy, you just haven't got it, and
+<BR>
+you *are* then doing pseudo-random, rather than really random, values.
+<BR>
+And you are then pinning your security on trying to obscure that
+<BR>
+entropy enough that it's infeasible to deduce it from the generated
+<BR>
+values, even when you've theoretically leaked enough that it's shifted
+<BR>
+from &quot;impossible&quot; to &quot;difficult&quot;.
+<BR>
+<P>I suppose it comes down to the difference between &quot;infeasible&quot; (which
+<BR>
+is a moving target) and &quot;impossible&quot; (which isn't).
+<BR>
+<P>In any case, tcp-impl probably is not the right place for a crypto
+<BR>
+discussion.  If I write anything further on the crypto side of this, it
+<BR>
+will be off-list; the last public word can be yours, if you want it.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009190346.XAA20908@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2347.html">T Srivathsa: "TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2345.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2354.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2350.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2354.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2346">[ date ]</A>
+<A HREF="index.html#2346">[ thread ]</A>
+<A HREF="subject.html#2346">[ subject ]</A>
+<A HREF="author.html#2346">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:49 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

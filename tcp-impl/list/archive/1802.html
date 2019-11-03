@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Problems with Path MTU D</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP Problems with Path MTU Discovery">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Problems with Path MTU Discovery</H1>
+<!-- received="Tue Sep 14 10:21:06 1999" -->
+<!-- isoreceived="19990914142106" -->
+<!-- sent="Tue, 14 Sep 1999 08:15:58 -0600 (MDT)" -->
+<!-- isosent="19990914141558" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP Problems with Path MTU Discovery" -->
+<!-- id="199909141415.IAA21077@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP Problems with Path MTU Discovery" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909141415.IAA21077@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 14 1999 - 10:15:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1803.html">Ahmed Karmouch: "Workshop on  Mobile Agents for Telecommunication Applications, Ottawa-Canada"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1801.html">Sally Floyd: "A proposed extension to the SACK Option for TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1804.html">Mike Fisk: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1804.html">Mike Fisk: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1802">[ date ]</A>
+<A HREF="index.html#1802">[ thread ]</A>
+<A HREF="subject.html#1802">[ subject ]</A>
+<A HREF="author.html#1802">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Mark Allman &lt;<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909141415.IAA21077@calcite.rhyolite.com&gt;">mallman@grc.nasa.gov</A>&gt;
+</EM><BR>
+<P><EM>&gt; Vern and I believe the pmtud I-D is nearing the point where we can
+</EM><BR>
+<EM>&gt; issue a last call and boot it up to the IESG.  However, there has
+</EM><BR>
+<EM>&gt; been very little discussion recently on the draft.  So, we'd like to
+</EM><BR>
+<EM>&gt; encourage folks to take a look at the draft and send any comments
+</EM><BR>
+<EM>&gt; you might have.  Unless there is a large amount of discussion we'll
+</EM><BR>
+<EM>&gt; probably issue the last call very soon. ...
+</EM><BR>
+<P><P>I have a nit you might wisely ignore.  Some versions of `ping` can also
+<BR>
+set the DF bit to probe for broken routers that do not generate the ICMP
+<BR>
+message or that filter ICMP messages.  The `ping` in IRIX is one.  I think
+<BR>
+the `ping` in NetBSD is another.  Perhaps someday the `ping` in BSD/OS
+<BR>
+will be still another.   In other words, I've been flogging the hacks in
+<BR>
+ftp.rhyolite.com:src/ping.tar.Z.  I suggest you *not* mention my vanity
+<BR>
+domain.
+<BR>
+<P><P>There is a specific case of the first problem in the draft that needs to
+<BR>
+be explicitly mentioned, because idiots are too stupid to understand the
+<BR>
+implications of their brain-dead actions.  A significant number of people
+<BR>
+who consider themselves expert administrators configure their routers to
+<BR>
+discard all ICMP packets because ICMP packets are a security risk.  Even
+<BR>
+after you point out the effects such nonsense has on systems that ahve
+<BR>
+PMTUD, turned on by default, they don't or refuse to understand.  This
+<BR>
+RFC seems like a good place to discuss the worst case security risks of
+<BR>
+the Fragmentation Message ICMP message (reduced TCP throughput), the likely
+<BR>
+results of discarding them (&quot;Non-interoperation -- connectivity failure&quot;),
+<BR>
+and a better way to deal with the minor security problem (hosts should
+<BR>
+refuse to shrink the MTU to less than a reasonable limit, such as 500).
+<BR>
+<P>This ICMP-is-a-security-risk nonsense predates the &quot;smurf attack.&quot;  Years
+<BR>
+ago I encountered an &quot;internet security expert&quot; who had &quot;fixed&quot; a
+<BR>
+commercial version of Gauntlet to discard all ICMP because of the dangers
+<BR>
+of Redirects received by typical firewalls, (then) singled homed and behind
+<BR>
+(potentially filtering) routers.
+<BR>
+<P><P>There is another activity that is related to discarding ICMP packets, but
+<BR>
+not exactly stupid.  Some major retail ISP's use something like NAT in
+<BR>
+their routers to redirect all client SMTP traffic from their end-user
+<BR>
+customers to their own SMTP servers that then filter for spam and
+<BR>
+potentially other things.  Since they redirect only some packets based on
+<BR>
+TCP port number, I doubt they do the right thing if there happens to be
+<BR>
+a narrow pipe in the path, such as the ever popular misconconfigured PPP
+<BR>
+link with an MTU of 500.   (That people insist on spending money on
+<BR>
+&quot;tuning&quot; products that misconfigure Windows 95/98 PPP to use an MTU of
+<BR>
+500 based on rumors of ancient computations of the effects of 2400 bit/sec
+<BR>
+modems is another sad tale of woe that ought to be mentioned somewhere.)
+<BR>
+<P><P>Also, the document should mention the effects of the many NAT boxes in
+<BR>
+the Intenret today on PMTUD.   Those that manage to forwad the ICMP 
+<BR>
+messages are not a problem, but judging from the many complaints about
+<BR>
+`ping` not working, some do not.
+<BR>
+<P><P>Yes, I realize that three of these are merely specific cases of the first
+<BR>
+explicit problem in the draft.  Still, the median willingness and ability
+<BR>
+to understand protocols and the effects of &quot;improvements&quot; is so low that
+<BR>
+without explicit words in RFCs, most of the experts Won't Get It.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20Problems%20with%20Path%20MTU%20Discovery&In-Reply-To=&lt;199909141415.IAA21077@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1803.html">Ahmed Karmouch: "Workshop on  Mobile Agents for Telecommunication Applications, Ottawa-Canada"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1801.html">Sally Floyd: "A proposed extension to the SACK Option for TCP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1800.html">Mark Allman: "TCP Problems with Path MTU Discovery"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1804.html">Mike Fisk: "Re: TCP Problems with Path MTU Discovery"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1804.html">Mike Fisk: "Re: TCP Problems with Path MTU Discovery"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1802">[ date ]</A>
+<A HREF="index.html#1802">[ thread ]</A>
+<A HREF="subject.html#1802">[ subject ]</A>
+<A HREF="author.html#1802">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:54 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

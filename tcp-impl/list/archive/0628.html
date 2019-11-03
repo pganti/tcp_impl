@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Hsiao-keng Jerry Chu (Jerry.Chu@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 17:34:46 1997" -->
+<!-- isoreceived="19970731213446" -->
+<!-- sent="Thu, 31 Jul 1997 17:27:02 -0700" -->
+<!-- isosent="19970801002702" -->
+<!-- name="Hsiao-keng Jerry Chu" -->
+<!-- email="Jerry.Chu@Eng.Sun.COM" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708010027.RAA18162@taipei.eng.sun.com" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> Hsiao-keng Jerry Chu (<A HREF="mailto:Jerry.Chu@Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;"><EM>Jerry.Chu@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 31 1997 - 20:27:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#628">[ date ]</A>
+<A HREF="index.html#628">[ thread ]</A>
+<A HREF="subject.html#628">[ subject ]</A>
+<A HREF="author.html#628">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Agree. Changing the initial slow-start is only a one shot deal near
+<BR>
+connection-establish time whereas changing the slow-start after loss will
+<BR>
+consititue a *persistent* change if loss continues and i think it's
+<BR>
+a lot more dangerous.
+<BR>
+<P>Jerry
+<BR>
+<P><EM>&gt; From <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A>  Thu Jul 31 17:04:35 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>, <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">vern@ee.lbl.gov</A>, Allyn.Romanow@Eng,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:sca@refugee.engr.sgi.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">sca@refugee.engr.sgi.com</A>, <A HREF="mailto:rstevens@kohala.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">rstevens@kohala.com</A>, <A HREF="mailto:floyd@ee.lbl.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">floyd@ee.lbl.gov</A>,
+</EM><BR>
+<EM>&gt;         <A HREF="mailto:mallman@lerc.nasa.gov?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">mallman@lerc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: Re: revising RFC 2001 within tcp-impl 
+</EM><BR>
+<EM>&gt; Date: Thu, 31 Jul 97 16:57:54 -0700
+</EM><BR>
+<EM>&gt; From: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010027.RAA18162@taipei.eng.sun.com&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     &gt; Note that the proposed change only affects the initial slow-start, not
+</EM><BR>
+<EM>&gt;     &gt; slow-start after loss.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     Seems like both are just as important, and there doesn't appear to
+</EM><BR>
+<EM>&gt;     be a reason for treating them differently, is there?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Huge difference.  There exist paths in the Internet where the delay*bw
+</EM><BR>
+<EM>&gt; product divided by the number of TCP connections is indeed &lt; 4.  (The
+</EM><BR>
+<EM>&gt; major trans-Atlantic fiber was one such spot just a year ago).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; You'd like to give TCP the maximum dynamic range to deal with these types
+</EM><BR>
+<EM>&gt; of situations.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Craig
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0627.html">Craig Partridge: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0629.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#628">[ date ]</A>
+<A HREF="index.html#628">[ thread ]</A>
+<A HREF="subject.html#628">[ subject ]</A>
+<A HREF="author.html#628">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:43 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="stanislav shalunov (shalunov@internet2.edu)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Tue Sep 19 22:17:48 2000" -->
+<!-- isoreceived="20000920021748" -->
+<!-- sent="19 Sep 2000 22:10:39 -0400" -->
+<!-- isosent="20000920021039" -->
+<!-- name="stanislav shalunov" -->
+<!-- email="shalunov@internet2.edu" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="87r96fn78g.fsf@cain.internet2.edu" -->
+<!-- inreplyto="200009191945.e8JJjg415323@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> stanislav shalunov (<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87r96fn78g.fsf@cain.internet2.edu&gt;"><EM>shalunov@internet2.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Sep 19 2000 - 22:10:39 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2360">[ date ]</A>
+<A HREF="index.html#2360">[ thread ]</A>
+<A HREF="subject.html#2360">[ subject ]</A>
+<A HREF="author.html#2360">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87r96fn78g.fsf@cain.internet2.edu&gt;">vjs@calcite.rhyolite.com</A>&gt; writes:
+<BR>
+<P><EM>&gt; You must assume that the attacker has a current copy of the source
+</EM><BR>
+<EM>&gt; to your TCP code and local hardware for private experiments.
+</EM><BR>
+<P>Of course, I'm assuming that.  You, on the other hand, appear to be
+<BR>
+alternating between threat model where the attacker is not motivated
+<BR>
+to do anything (even forge a Received line in an email) and threat
+<BR>
+model where the adversary is a resourceful determined enemy.
+<BR>
+<P>Naturally, assuming the latter is safer.
+<BR>
+<P><EM>&gt; &gt; Of course, they're valuable.  They give one much more entropy than one
+</EM><BR>
+<EM>&gt; &gt; could ever possibly want for a very good PRNG.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; That is an obviously incorrect, or at least very carelessly worded
+</EM><BR>
+<EM>&gt; cryptographic claim.  Even the best crypto PRNG can be trivially and
+</EM><BR>
+<EM>&gt; extremely quickly reversed if you know all but 5 or 6 of its initial state.
+</EM><BR>
+<EM>&gt; In this context, you must assume the bad guy knows which of the 5 or 6
+</EM><BR>
+<EM>&gt; input bits are variable, because the bad guy has a copy of your source.
+</EM><BR>
+<P>Of course, 5 or 6 bits of total entropy would not be enough (the
+<BR>
+attacker could manually try all the combinations).  However, something
+<BR>
+like 128 total bits of entropy are enough for a lot of pseudo-random
+<BR>
+numbers.  And, with .01 bits of entropy per packet, you'd accumulate
+<BR>
+that only after 12800 packets (and could save that across reboots to
+<BR>
+disk or non-volatile memory).
+<BR>
+<P><EM>&gt; Your 0.01 bits/packet of entropy makes no sense to me.  If there were only
+</EM><BR>
+<EM>&gt; 0.01 or even 1 bit of entropy in packet arrival times, then we wouldn't
+</EM><BR>
+<EM>&gt; need RTP and the many other ToS and QoS mechanisms.  Even the telco guys
+</EM><BR>
+<EM>&gt; would have switched to packets 25 years ago.
+</EM><BR>
+<P>I was making a conservative estimate.  Jitter that was caused by the
+<BR>
+network is disregarded, since the adversary can observe it.  I was
+<BR>
+assuming that jitter caused by local bus contention and interrupt
+<BR>
+latency is about 6us--this is what we seem to observe.  On a machine
+<BR>
+with microsecond clock resolution this would yield 2-3 bits.  Of
+<BR>
+course, there's a positive correlation between delay and load, so the
+<BR>
+real entropy is less than that.  There may be other factors that would
+<BR>
+decrease the amount of entropy (for example, one could have a clock
+<BR>
+that is more likely to report last bit as being 1 than 0).  The .01
+<BR>
+bits figure seems to be sufficiently conservative.
+<BR>
+<P><EM>&gt; Consider the 10 MHz Ethernet packets I was talking about.  They won't come
+</EM><BR>
+<EM>&gt; more often than once every 64 microsecond slot time.
+</EM><BR>
+<P>And you assume that this time is uniformly distributed?
+<BR>
+<P>The rest assumes no correlation of this time with anything else, ideal
+<BR>
+clock, etc.  The ideal clock assumption, by the way, seems to not
+<BR>
+co-exist very well with the assumption of uniform distribution of time
+<BR>
+of arrival within slot time.
+<BR>
+<P>In any case, this is largely immaterial.  What I was saying is that
+<BR>
+there's no need for TCP implementation to use true random numbers
+<BR>
+directly for ISN generation purposes.  In fact, even very small
+<BR>
+amounts of entropy are sufficient for generation of unpredictable
+<BR>
+ISNs.  On the other hand, over-optimistic assumptions about the amount
+<BR>
+of entropy in various inputs can lead to implementations that would
+<BR>
+generate more easily predictable ISNs than a naive
+<BR>
+&quot;get-some-entropy-and-run-arcfour&quot; approach.
+<BR>
+<P><PRE>
+-- 
+Stanislav Shalunov &lt;<A HREF="mailto:shalunov@internet2.edu?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;87r96fn78g.fsf@cain.internet2.edu&gt;">shalunov@internet2.edu</A>&gt;	Internet Engineer, Internet2
+<P>&quot;Computer Science is no more about computers than astronomy is about
+telescopes.&quot;					-- E. W. Dijkstra
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2359.html">stanislav shalunov: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2357.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2361.html">Vernon Schryver: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2360">[ date ]</A>
+<A HREF="index.html#2360">[ thread ]</A>
+<A HREF="subject.html#2360">[ subject ]</A>
+<A HREF="author.html#2360">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 22:18:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

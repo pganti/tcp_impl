@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: discrepancy in TIME_WAIT sta</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@jurassic.eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: discrepancy in TIME_WAIT state handling">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: discrepancy in TIME_WAIT state handling</H1>
+<!-- received="Fri Jan  9 13:30:18 1998" -->
+<!-- isoreceived="19980109183018" -->
+<!-- sent="Fri, 9 Jan 1998 13:11:57 -0800 (PST)" -->
+<!-- isosent="19980109211157" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@jurassic.eng.Sun.COM" -->
+<!-- subject="Re: discrepancy in TIME_WAIT state handling" -->
+<!-- id="Roam.SIMC.2.0.6.884380317.1060.kcpoon@jurassic" -->
+<!-- inreplyto="199801091814.KAA03091@napali.hpl.hp.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@jurassic.eng.Sun.COM?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;Roam.SIMC.2.0.6.884380317.1060.kcpoon@jurassic&gt;"><EM>kcpoon@jurassic.eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Jan 09 1998 - 16:11:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#880">[ date ]</A>
+<A HREF="index.html#880">[ thread ]</A>
+<A HREF="subject.html#880">[ subject ]</A>
+<A HREF="author.html#880">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; I'm interested to hear other people's opinion on what the correct
+</EM><BR>
+<EM>&gt; behavior for this case is and suggestions on how to fix the current
+</EM><BR>
+<EM>&gt; situation.
+</EM><BR>
+<P>In RFC 1122, 4.2.2.13, 
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a connection is closed actively, it MUST linger in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIME-WAIT state for a time 2xMSL (Maximum Segment Lifetime).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, it MAY accept a new SYN from the remote TCP to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reopen the connection directly from TIME-WAIT state, if it:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(1)  assigns its initial sequence number for the new
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connection to be larger than the largest sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number it used on the previous connection incarnation,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)  returns to TIME-WAIT state if the SYN turns out to be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an old duplicate.
+<BR>
+<P>So BSD's behaviour is a MAY.  I think NT's behaviour is correct, as described
+<BR>
+in RFC 793, page 70,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the SYN is not in the window this step would not be reached
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and an ack would have been sent in the first step (sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number check).
+<BR>
+<P>As you said, this scenario can happen quite often.  I'd suggest we recommend
+<BR>
+it to be a best practise.  Does anyone know of other implementations which
+<BR>
+behave like NT's TCP stack?
+<BR>
+<P>BTW, I guess this scenario should also happen with NT to NT connections.  Or
+<BR>
+does NT have special mechanism, like not reusing the same port, to deal with
+<BR>
+it?  I heard that NT 5.0's TCP stack has many changes.  Does it follow the
+<BR>
+same BSD behaviour in this case?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20discrepancy%20in%20TIME_WAIT%20state%20handling&In-Reply-To=&lt;Roam.SIMC.2.0.6.884380317.1060.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0879.html">David Mosberger: "discrepancy in TIME_WAIT state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0881.html">touch@ISI.EDU: "Re: discrepancy in TIME_WAIT state handling"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#880">[ date ]</A>
+<A HREF="index.html#880">[ thread ]</A>
+<A HREF="subject.html#880">[ subject ]</A>
+<A HREF="author.html#880">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

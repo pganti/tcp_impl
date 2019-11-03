@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: FWD:: Re: [e2e] Re: Question</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP</H1>
+<!-- received="Wed Dec 18 21:12:43 2002" -->
+<!-- isoreceived="20021219021243" -->
+<!-- sent="Wed, 18 Dec 2002 18:15:41 -0800" -->
+<!-- isosent="20021219021541" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP" -->
+<!-- id="3E012BCD.9080002@isi.edu" -->
+<!-- inreplyto="200212190122.BAA01846@starburst.demon.co.uk" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;3E012BCD.9080002@isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Dec 18 2002 - 21:15:41 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2927.html">Mark Allman: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2925.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2928.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2926">[ date ]</A>
+<A HREF="index.html#2926">[ thread ]</A>
+<A HREF="subject.html#2926">[ subject ]</A>
+<A HREF="author.html#2926">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Richard Wendland wrote:
+<BR>
+<EM>&gt;&gt;&gt;I'd be very careful fixing the IP ID - I have been told by one major
+</EM><BR>
+<EM>&gt;&gt;&gt;&quot;interconnect&quot; vendor that some of their products have ways to allow
+</EM><BR>
+<EM>&gt;&gt;&gt;the customer (at customers persistent request) to cause the devices to
+</EM><BR>
+<EM>&gt;&gt;&gt;ignore and clear the DF bit...
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;That would be a violation of the STDs (1812, 791), which could cause 
+</EM><BR>
+<EM>&gt;&gt;problems that would be very difficult to debug (e.g., path MTU, etc.)
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;I.e., you're worried about changing the IP ID field because vendors who 
+</EM><BR>
+<EM>&gt;&gt;violate standards will break? Go right ahead, IMO.
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;&gt;Laws for the lawless are a waste of effort (shades of NAT).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; An admirable attitude, but even Linux backtracked on this IP ID issue
+</EM><BR>
+<EM>&gt; when faced with practical connectivity problems.  Linux for a time used
+</EM><BR>
+<EM>&gt; to set IP ID zero if DF was set, but went back to setting changing IP
+</EM><BR>
+<EM>&gt; IDs for TCP with DF.
+</EM><BR>
+<P>What I'm asserting is that what we do should be related to the 
+<BR>
+standards, not necessarily what NAT-supporting vendors need to make 
+<BR>
+their systems still work.
+<BR>
+<P>I mean that anyone who clears the DF bit gets what they deserve - a 
+<BR>
+nonfunctioning brick.
+<BR>
+<P><EM>&gt; I'm not a Linux kernel developer, but I think that change back is related
+</EM><BR>
+<EM>&gt; to the comment in the kernel include/net/ip.h:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	/* This is only to work around buggy Windows95/2000
+</EM><BR>
+<EM>&gt; 	 * VJ compression implementations.  If the ID field
+</EM><BR>
+<EM>&gt; 	 * does not change, they drop every other packet in
+</EM><BR>
+<EM>&gt; 	 * a TCP stream using header compression.
+</EM><BR>
+<EM>&gt; 	 */
+</EM><BR>
+<P>I'm not sure we want specs to provide workarounds for bugs. Bugs should 
+<BR>
+be fixed at the source.
+<BR>
+<P><EM>&gt; I also think I have observed a middlebox clearing DF; circumstantial
+</EM><BR>
+<EM>&gt; evidence not proof though.  It appeared to me, from remote observation,
+</EM><BR>
+<EM>&gt; that a HTTP load balancing device was clearing DF on TCP segments
+</EM><BR>
+<EM>&gt; en-route from HTTP servers to clients.  I presume this is because the load
+</EM><BR>
+<EM>&gt; balancer's developers could not be bothered to &quot;route&quot; ICMP fragmentation
+</EM><BR>
+<EM>&gt; needed back to the appropriate HTTP server.  If this is correct, and the
+</EM><BR>
+<EM>&gt; load balancer isn't cleverly changing the IP ID, there could be problems
+</EM><BR>
+<EM>&gt; if TCP stacks don't set a real IP ID.
+</EM><BR>
+...
+<BR>
+<EM>&gt; It's horrid, and wrong.  But it is a problem for practical connectivity.
+</EM><BR>
+<P>It's a bug that needs to be fixed, but not one that should drive standards.
+<BR>
+<P>Joe
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2927.html">Mark Allman: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2925.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP header"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2928.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2926">[ date ]</A>
+<A HREF="index.html#2926">[ thread ]</A>
+<A HREF="subject.html#2926">[ subject ]</A>
+<A HREF="author.html#2926">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Dec 18 2002 - 21:12:51 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

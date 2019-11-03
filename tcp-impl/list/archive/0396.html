@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re:  Failure to send window scal</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re:  Failure to send window scale option with shift.cnt == 0">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re:  Failure to send window scale option with shift.cnt == 0</H1>
+<!-- received="Wed Apr 30 13:49:25 1997" -->
+<!-- isoreceived="19970430174925" -->
+<!-- sent="Wed, 30 Apr 1997 15:44:01 -0500 (CDT)" -->
+<!-- isosent="19970430204401" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re:  Failure to send window scale option with shift.cnt == 0" -->
+<!-- id="199704302044.PAA08647@frantic.BSDI.COM" -->
+<!-- inreplyto=" Failure to send window scale option with shift.cnt == 0" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704302044.PAA08647@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Apr 30 1997 - 16:44:01 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0397.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0395.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0397.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#396">[ date ]</A>
+<A HREF="index.html#396">[ thread ]</A>
+<A HREF="subject.html#396">[ subject ]</A>
+<A HREF="author.html#396">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Well, I'm stepping into the discussion, I'll try and be careful
+<BR>
+where I step...
+<BR>
+<P>What BSD/OS does:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Our system, BSD/OS, sends the Window Scale and Timestamps options
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;in all SYNs, unless you turn off a system-wide sysctl variable,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;net.inet.tcp.do_rfc1323.  The value of the window scale option is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;inferred from the receive buffer.  I am not aware of any problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;reports against BSD/OS directly relating to this.
+<BR>
+<P>Some History:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;I used to work at Cray Research, Inc., and I probably did the first
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;commercial implementation of RFC 1072/1185, later to become RFC
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;1323.  (I don't remember if I yanked it or not, but UNICOS may very
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;well still support the ECHO and ECHO-REPLY options...)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Anyway, I ran into other TCP implementations that did not deal with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the new TCP options.  I don't remember the details, but at least
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;one of the broken hosts was a terminal server.  I believe that in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;all the broken cases, the remote host was initiating the connection.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;This is why RFC-1323 says that if you don't receive a Window Scale
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;in the initial SYN, then don't put one into the SYN/ACK.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;Being paranoid, and having backwards compatability stressed very
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;strongly,  unless it has changed, UNICOS does not send the Window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Scale option unless the application has explicitly asked for it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;via a setsockopt() call.  Also, in the absence of information from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the application, UNICOS will also turn around a received Window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Scale option, contrary to what RFC-1323 says.  I feel that this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;is important for applications like rcp, where by the time the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;application that knows that we want to use big buffers is running,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;we are long past any chance of setting the window scale option
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to a non-zero value.
+<BR>
+<P>A Key Point:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;There is one point that no one has seemed to recognize:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Negotiating a non-zero window scale value does
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*not* mean that you have to use large buffers!
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;That is to say, you can negotiate a window scale of 4, and have
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;your send/receive buffers set at 8K, and things will work just
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fine!  The only effect of negotiating a non-zero window scale
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;option is that the granularity of the minimum amount that the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;window can advance by goes up.  Let's see, with a window scale
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;value of 4 (Windows up to 1MB), that's 2^4 = 16.  So, the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;advancement of the window has to be a multiple of 16 bytes.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Gee, that's not an issue.  (Anyone who thinks they need to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;increment the window by less than 16 bytes needs to think long
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;and hard about Silly Window Syndrom...)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;The problem is that implementations equate TCP Window with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Receive Buffer Space and with Window Scale.  These are three
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;separate items, and there is no reason why they have to be tied
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;to each other.  There are relationships between them, but they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;don't have to be in lock step!
+<BR>
+<P>Summary:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;I know there are broke hosts out there.  I know that if you
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;send a Window Scale in the SYN/ACK when you didn't receive it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;in the SYN it will cause them grief.  That's why 1323 says don't
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;send the Window Scale if you didn't receive one.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Does anyone know of a host that people (want to) do an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;active connect to, that can't handle a Window Scale in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the initial SYN packet?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;If the broken hosts are mostly things like terminal servers
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;that only initiate connections, then I don't see a problem with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;always sending a Window Scale in the initial SYN.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;I think that it is perfectly reasonable for the application to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;be able to directly set the Window Scale value, rather than
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;having it just be automatically calculated as a side effect of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;setting a large recieve buffer, which also causes your initial
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;advertised window to be large.  It's the difference between
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;what the application wants to be able to use, vs. what it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;wants to use right now.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20%20Failure%20to%20send%20window%20scale%20option%20with%20shift.cnt%20==%200&In-Reply-To=&lt;199704302044.PAA08647@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0397.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0395.html">braden@ISI.EDU: "Re: Failure to send window scale option with shift.cnt == 0"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0397.html">braden@ISI.EDU: "Re:  Failure to send window scale option with shift.cnt == 0"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#396">[ date ]</A>
+<A HREF="index.html#396">[ thread ]</A>
+<A HREF="subject.html#396">[ subject ]</A>
+<A HREF="author.html#396">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:19 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

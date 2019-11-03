@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="Michael Smith (msmith@corp.iready.com)">
+<META NAME="Subject" CONTENT="RE: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 14:47:07 2002" -->
+<!-- isoreceived="20020405194707" -->
+<!-- sent="Fri, 5 Apr 2002 11:44:19 -0800 " -->
+<!-- isosent="20020405194419" -->
+<!-- name="Michael Smith" -->
+<!-- email="msmith@corp.iready.com" -->
+<!-- subject="RE: TCP Checksum Interoperability" -->
+<!-- id="034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com" -->
+<!-- inreplyto="TCP Checksum Interoperability" -->
+<STRONG>From:</STRONG> Michael Smith (<A HREF="mailto:msmith@corp.iready.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;"><EM>msmith@corp.iready.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 14:44:19 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2645.html">Michael Smith: "Re: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2643.html">Murali Bashyam: "Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2649.html">Lloyd Wood: "RE: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2644">[ date ]</A>
+<A HREF="index.html#2644">[ thread ]</A>
+<A HREF="subject.html#2644">[ subject ]</A>
+<A HREF="author.html#2644">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm cross-posting this thread to <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">tcp-impl@grc.nasa.gov</A> for archival
+<BR>
+purposes, we'll see if any further replies to the ietf list get posted at
+<BR>
+<A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">tcp-impl@grc.nasa.gov</A> too (for instructions to join tcp-impl, see below). My
+<BR>
+rationale here is just to try and keep tcp-impl as a good source of material
+<BR>
+on tcp/ip implementation issues. It seems you can't post to
+<BR>
+'<A HREF="mailto:tcp-impl@egroups.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">tcp-impl@egroups.com</A>' (see also below for discussion on this group).
+<BR>
+<P>Sorry, Chris, forgot to copy you on this.
+<BR>
+<P>Aloha
+<BR>
+<P>Mike Smith
+<BR>
+CTO, iReady
+<BR>
+<P>To: <A HREF="mailto:ietf@IETF.ORG?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">ietf@IETF.ORG</A> 
+<BR>
+Subject: Re: TCP Checksum Interoperability 
+<BR>
+From: Rob Austein &lt;sra+<A HREF="mailto:ietf@hactrn.net?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">ietf@hactrn.net</A>&gt; 
+<BR>
+Date: Fri, 05 Apr 2002 14:29:44 -0500 
+<BR>
+In-Reply-To: &lt;<A HREF="mailto:F86F34FDF1F9D411B7A40008C74C27B853776C@baltimore.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">F86F34FDF1F9D411B7A40008C74C27B853776C@baltimore.com</A>&gt; 
+<BR>
+References: &lt;<A HREF="mailto:F86F34FDF1F9D411B7A40008C74C27B853776C@baltimore.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">F86F34FDF1F9D411B7A40008C74C27B853776C@baltimore.com</A>&gt; 
+<BR>
+Reply-To: <A HREF="mailto:ietf@IETF.ORG?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">ietf@IETF.ORG</A> 
+<BR>
+Sender: <A HREF="mailto:owner-ietf@IETF.ORG?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">owner-ietf@IETF.ORG</A> 
+<BR>
+User-Agent: Wanderlust/2.4.1 (Stand By Me) SEMI/1.13.7 (Awazu) FLIM/1.13.2
+<BR>
+(Kasanui) Emacs/20.7 (i386--freebsd) MULE/4.0 (HANANOEN) 
+<BR>
+<P>----------------------------------------------------------------------------
+<BR>
+<PRE>
+----
+<P>The last time this came up for a TCP implementation I used to
+maintain, our interpretation of Robustness Principle applied to this
+problem dictated that we shouldn't send segments with checksum fields
+set to all ones (that is, we shouldn't send ~(+0)), but that we had to
+accept either ~(+0) or ~(-0) in received segments.
+<P>Strictly speaking, either zero state is completely legal, but one is
+(apparently) more surprising to most implementors than the other, due
+to the implementation techniques that suggest themselves on most
+modern processors.
+<P><P><P>-----Original Message-----
+From: Michael Smith 
+Sent: Friday, April 05, 2002 10:39 AM
+To: '<A HREF="mailto:tcp-impl@egroups.com?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">tcp-impl@egroups.com</A>'
+Cc: Michael Smith
+Subject: RE: TCP Checksum Interoperability
+<P><P>Lloyd: your comment is interesting.
+<P>I know there hasn't been much activity on tcp-impl, but it's still there.
+Allison sent an email a while back encouraging it's use, but I can't find
+that just now.
+<P>To subscribe (or unsubscribe) to the tcp-impl mailing list, send mail to
+<A HREF="mailto:majordomo@grc.nasa.gov?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">majordomo@grc.nasa.gov</A> with one of the following in the body of the message.
+<P><P>subscribe tcp-impl 
+<P>unsubscribe tcp-impl 
+<P>There's also <A HREF="http://groups.yahoo.com/group/tcp-impl/">http://groups.yahoo.com/group/tcp-impl/</A> but activity there
+stopped about July 2001. I never understood how the two mailing lists
+related, but I posted your mail (below) to both, I hope you don't mind.
+<P>Aloha
+<P>Mike Smith
+CTO, iReady
+<P>-----Original Message-----
+From: Lloyd Wood [mailto:<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">l.wood@eim.surrey.ac.uk</A>]
+Sent: Friday, April 05, 2002 4:43 AM
+To: Chris Trobridge
+Cc: <A HREF="mailto:ietf@ietf.org?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">ietf@ietf.org</A>
+Subject: Re: TCP Checksum Interoperability
+<P><P>See sections 3-5 of RFC1624 for discussion of the one's complement
+problem for the IP header checksum. I presume similar applies for TCP,
+although I don't know offhand if it's written down anywhere.
+<P>L.
+<P><P>On Fri, 5 Apr 2002, Chris Trobridge wrote:
+<P>&gt; I writing to this list because the TCP workgroup was shutdown a while ago.
+&gt;
+&gt; We have a compatibility problem between two third party implementations of
+&gt; the TCP checksum.
+&gt;
+&gt; The problem concerns the representation of zero, which has two 1-s
+&gt; complement representations (0000 and ffff).
+&gt;
+&gt; We don't have source to either stack but I managed to deduce the problem
+&gt; from looking at a packet trace.  The receiver drops all datagrams
+containing
+&gt; a TCP with a TCP checksum of ffff.
+&gt;
+&gt; The receiver appears to be following the checksum procedure in the RFC
+&gt; literally - ie zero checksum, recalculate and check that the result is the
+&gt; complement of what the sender sent.  The problem is that the sender and
+&gt; receiver don't agree about zero and hence the datagram is dropped
+silently.
+&gt;
+&gt; My view is that the receiver is in error; it should be checking the
+special
+&gt; case of 0.
+&gt;
+&gt; All the receiver code I have seen doesn't work this way.  The normal
+&gt; approach is to calculate the1-s complement sum with checksum in place and
+&gt; check that this is zero.  The methods I konw always return just one
+&gt; representation for zero, hence there is no special case.
+&gt;
+&gt; Any thoughts?
+&gt;
+&gt; Thanks,
+&gt; Chris
+&gt;
+<P><P>stupid autoappended signatures below.
+<P>&gt;
+&gt;
+----------------------------------------------------------------------------
+-------------------------------------
+&gt; The information contained in this message is confidential and is intended
+&gt; for the addressee(s) only.  If you have received this message in error or
+&gt; there are any problems please notify the originator immediately.  The
+&gt; unauthorized use, disclosure, copying or alteration of this message is
+&gt; strictly forbidden. Baltimore Technologies plc will not be liable for
+direct,
+&gt; special, indirect or consequential damages arising from alteration of the
+&gt; contents of this message by a third party or as a result of any virus
+being
+&gt; passed on.
+&gt;
+&gt; In addition, certain Marketing collateral may be added from time to time
+to
+&gt; promote Baltimore Technologies products, services, Global e-Security or
+&gt; appearance at trade shows and conferences.
+&gt;
+&gt; This footnote confirms that this email message has been swept by
+&gt; Baltimore MIMEsweeper for Content Security threats, including
+&gt; computer viruses.
+&gt;
+&gt;
+<P>&lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+<P><P>-
+This message was passed through <A HREF="mailto:ietf_censored@carmen.ipv6.cselt.it?Subject=RE:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;034670D62D19D31180990090277A37B7021214E1@mercury.corp.iready.com&gt;">ietf_censored@carmen.ipv6.cselt.it</A>, which
+is a sublist of ietf@ietf.org. Not all messages are passed.
+Decisions on what to pass are made solely by Raffaele D'Albenzio.
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2645.html">Michael Smith: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2643.html">Murali Bashyam: "Unacceptable ACK in SYN_RCVD state handling"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2649.html">Lloyd Wood: "RE: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2644">[ date ]</A>
+<A HREF="index.html#2644">[ thread ]</A>
+<A HREF="subject.html#2644">[ subject ]</A>
+<A HREF="author.html#2644">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 14:47:25 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

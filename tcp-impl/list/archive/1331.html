@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="Jim Gettys (jg@pa.dec.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Fri Sep 18 07:15:16 1998" -->
+<!-- isoreceived="19980918111516" -->
+<!-- sent="Fri, 18 Sep 1998 07:13:46 -0700" -->
+<!-- isosent="19980918141346" -->
+<!-- name="Jim Gettys" -->
+<!-- email="jg@pa.dec.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="9809181413.AA19454@pachyderm.pa.dec.com" -->
+<!-- inreplyto="199809162210.QAA09931@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Jim Gettys (<A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809181413.AA19454@pachyderm.pa.dec.com&gt;"><EM>jg@pa.dec.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Sep 18 1998 - 10:13:46 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1332.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1330.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1325.html">sparker@Eng.Sun.COM: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1331">[ date ]</A>
+<A HREF="index.html#1331">[ thread ]</A>
+<A HREF="subject.html#1331">[ subject ]</A>
+<A HREF="author.html#1331">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Sender: <A HREF="mailto:owner-tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809181413.AA19454@pachyderm.pa.dec.com&gt;">owner-tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; From: Vernon Schryver &lt;<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809181413.AA19454@pachyderm.pa.dec.com&gt;">vjs@calcite.rhyolite.com</A>&gt;
+</EM><BR>
+<EM>&gt; Date: Wed, 16 Sep 1998 16:10:26 -0600 (MDT)
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809181413.AA19454@pachyderm.pa.dec.com&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: status of T/TCP
+</EM><BR>
+<EM>&gt; -----
+</EM><BR>
+<EM>&gt; &gt; From: <A HREF="mailto:jg@pa.dec.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;9809181413.AA19454@pachyderm.pa.dec.com&gt;">jg@pa.dec.com</A> (Jim Gettys)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; ...
+</EM><BR>
+<EM>&gt; &gt; &gt; BTW - some of this latency is the modem being too clever about
+</EM><BR>
+<EM>&gt; &gt; &gt; buffering and compressing. Shutting it down might decrease the latency.
+</EM><BR>
+<EM>&gt; &gt; &gt; Another part is the use of large packets - it might be better to have
+</EM><BR>
+<EM>&gt; &gt; &gt; smaller packets with additional overhead. The overall transaction latency
+</EM><BR>
+<EM>&gt; &gt; &gt; would increase, but the time to first portion of response would decrease.
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; Sure.  The right thing to do (if HTTP did not have such verbose request
+</EM><BR>
+<EM>&gt; &gt; response headers) would be to turn off all modem compression, and
+</EM><BR>
+<EM>&gt; &gt; send the HTML content compressed.  Deflate compression does very
+</EM><BR>
+<EM>&gt; &gt; much better than anything in modems.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Modems tend to use LZW, always (I trust) with at least 10-bit and at least
+</EM><BR>
+<EM>&gt; sometimes more.  Judging from what Paul Mackerras has told me of his
+</EM><BR>
+<EM>&gt; comparisons between BSD Compress (RFC 1977) and Deflate (RFC 1979) in his
+</EM><BR>
+<EM>&gt; widely used `pppd`, the difference between Deflate and your typical modem
+</EM><BR>
+<EM>&gt; on the data that is compressed should be about the difference you see
+</EM><BR>
+<EM>&gt; between `compress` and `gzip`, or around a 10% improvement in compression
+</EM><BR>
+<EM>&gt; ratio but at a ~2X cost in CPU cycles, and mostly on the side that does
+</EM><BR>
+<EM>&gt; not have cycles to waste, the HTTP server.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>The server can cache the compressed object, and only compress it once.
+<BR>
+<P>Our measurements show a much greater effect of compression than 10%;
+<BR>
+see: <A HREF="http://www.w3.org/Protocols/HTTP/Performance/#Compression">http://www.w3.org/Protocols/HTTP/Performance/#Compression</A>
+<BR>
+<P>This are measurements over real modems.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Jim
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1332.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1330.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1324.html">Vernon Schryver: "Re: status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1325.html">sparker@Eng.Sun.COM: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1331">[ date ]</A>
+<A HREF="index.html#1331">[ thread ]</A>
+<A HREF="subject.html#1331">[ subject ]</A>
+<A HREF="author.html#1331">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

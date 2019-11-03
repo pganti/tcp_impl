@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: testing tools</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: testing tools">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: testing tools</H1>
+<!-- received="Tue May  6 06:15:31 1997" -->
+<!-- isoreceived="19970506101531" -->
+<!-- sent="Tue, 6 May 1997 08:12:02 -0500 (CDT)" -->
+<!-- isosent="19970506131202" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: testing tools" -->
+<!-- id="199705061312.IAA19570@frantic.BSDI.COM" -->
+<!-- inreplyto="testing tools" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705061312.IAA19570@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue May 06 1997 - 09:12:02 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0413.html">sparker@Eng.Sun.COM: "TCP raw sockets..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0411.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0293.html">W. Richard Stevens: "testing tools"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#412">[ date ]</A>
+<A HREF="index.html#412">[ thread ]</A>
+<A HREF="subject.html#412">[ subject ]</A>
+<A HREF="author.html#412">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:sparker@Eng.Sun.COM?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705061312.IAA19570@frantic.BSDI.COM&gt;">sparker@Eng.Sun.COM</A>
+</EM><BR>
+<EM>&gt; Date: Mon, 05 May 1997 10:36:57 -0700
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; - 	1) Does this seem useful?  I don't want to put something
+</EM><BR>
+<EM>&gt; - 	   into our system that no one wants or would use.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Yes.  Right now, with the sockets API, there is no way to write TCP
+</EM><BR>
+<EM>&gt; tests without using a separate IP address, and providing IP &amp; ARP
+</EM><BR>
+<EM>&gt; support underneath the tests.  Some agreed upon raw sockets interface
+</EM><BR>
+<EM>&gt; that allows TCP testing, IMHO, is a *very* useful thing to come to
+</EM><BR>
+<EM>&gt; agreement on.
+</EM><BR>
+<P>Then perhaps what I have put together would be a good starting
+<BR>
+point for further discussions about raw TCP access via the socket API.
+<BR>
+<P><EM>&gt; SunOS 5.x already has such an interface.
+</EM><BR>
+<P>I assume you mean via the streams API?
+<BR>
+<P><EM>&gt; - 	4) The IP portion of the packet is zeroed out except for the
+</EM><BR>
+<EM>&gt; - 	   fields that are part of the TCP pseudo header (part of
+</EM><BR>
+<EM>&gt; - 	   verifying the checksum).
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Our code returns just the TCP header, and off the cuff I'm tempted to
+</EM><BR>
+<EM>&gt; propose that if you want the IP header, you should have set the IP_HDRINCL
+</EM><BR>
+<EM>&gt; socket option.
+</EM><BR>
+<P>Historically, IP_HDRINCL has only applied to outbound packets.
+<BR>
+Also, all other SOCK_RAW sockets return the IP header, so that is
+<BR>
+why I left it there (even though it is quite munged...)
+<BR>
+<P><EM>&gt; We support doing a connect() as well as a bind() on such sockets.  This
+</EM><BR>
+<P>Yes, I also support connect().  I was trying to keep my initial message
+<BR>
+from being too long, and I neglected to mention that connect() also works,
+<BR>
+allowing you to fully specify the TCP connection that you want raw access to.
+<BR>
+<P>I should also note that you have to specify at least the local port
+<BR>
+number.  If you haven't done that, you won't get anything (i.e, you
+<BR>
+can't have a fully wildcarded raw TCP socket to get all the packets
+<BR>
+that no one else is waiting for.)
+<BR>
+<P><EM>&gt; I think the semantics of TCP raw socket imply that the protocol isn't
+</EM><BR>
+<EM>&gt; really &quot;happening&quot; for you, so connect, rather akin to UDP, is just
+</EM><BR>
+<EM>&gt; setting the address up as a short-hand.
+</EM><BR>
+<P>Exactly, I took the UDP connect code and special cased it into the
+<BR>
+TCP connect code.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20testing%20tools&In-Reply-To=&lt;199705061312.IAA19570@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0413.html">sparker@Eng.Sun.COM: "TCP raw sockets..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0411.html">sparker@Eng.Sun.COM: "Re: testing tools"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0293.html">W. Richard Stevens: "testing tools"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#412">[ date ]</A>
+<A HREF="index.html#412">[ thread ]</A>
+<A HREF="subject.html#412">[ subject ]</A>
+<A HREF="author.html#412">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:20 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Memphis Minutes</TITLE>
+<META NAME="Author" CONTENT="Matt Mathis (mathis@psc.edu)">
+<META NAME="Subject" CONTENT="Re: Memphis Minutes">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Memphis Minutes</H1>
+<!-- received="Tue Apr 15 13:48:03 1997" -->
+<!-- isoreceived="19970415174803" -->
+<!-- sent="Tue, 15 Apr 1997 16:40:09 -0400 (EDT)" -->
+<!-- isosent="19970415204009" -->
+<!-- name="Matt Mathis" -->
+<!-- email="mathis@psc.edu" -->
+<!-- subject="Re: Memphis Minutes" -->
+<!-- id="199704152040.QAA29607@zippy.psc.edu" -->
+<!-- inreplyto="Sat, 12 Apr 1997 15:05:39 -0700" -->
+<STRONG>From:</STRONG> Matt Mathis (<A HREF="mailto:mathis@psc.edu?Subject=Re:%20Memphis%20Minutes&In-Reply-To=&lt;199704152040.QAA29607@zippy.psc.edu&gt;"><EM>mathis@psc.edu</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Apr 15 1997 - 16:40:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0335.html">Matt Mathis: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0328.html">Steve Alexander: "Memphis Minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#336">[ date ]</A>
+<A HREF="index.html#336">[ thread ]</A>
+<A HREF="subject.html#336">[ subject ]</A>
+<A HREF="author.html#336">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Steve,
+<BR>
+<P>I have some comments about the minutes:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bob Braden asked what percentage of the attendees are or have been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementors.  Relatively few of the attendees appeared to be.
+<BR>
+<P>He asked two very different questions, and got different responses.
+<BR>
+1) Who is currently responsible for supporting a TCP implementation.
+<BR>
+2) Who has supported a TCP implementation in the past.
+<BR>
+<P>Question 1 got nil response, but the word &quot;responsible&quot; means
+<BR>
+management in many contexts (E.g. a coding wizard is never
+<BR>
+&quot;responsible&quot; for anything).  Also I wondered if some TCP shops didn't
+<BR>
+send non-responsible ringers to collect info and avoid any contamination
+<BR>
+issues.
+<BR>
+Question 2 got non-nil response, but could mean many things....
+<BR>
+Since the interpretations are ambiguous, I would consider dropping the
+<BR>
+item, or at least use more nuetral language.  Was &quot;about half&quot; correct?
+<BR>
+<P>----------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matt Mathis raised the issue of backward compatibility and suggested
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that workarounds for defective implementations should be well-known,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;easy to test for, and easy to disable in the event that they cause
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performance overhead when not actually needed.
+<BR>
+<P>I think said something stronger:
+<BR>
+<P>&quot;In cases where workarounds interfere with new features there is a
+<BR>
+strong market disincentive for the new features because they often
+<BR>
+will be the only implementations that fail to interoperate with the
+<BR>
+dinosaurs [older buggy versions].  .... tcpimpl should document these
+<BR>
+cases and consider recommending against the workarounds, such that both
+<BR>
+the dinosaurs and workaround become non-compliant.  Vendors could then
+<BR>
+market backward compatibility [as a separate product in an alternate
+<BR>
+release] while moving to the new [incompatible] features.
+<BR>
+<P>Unfortunately I repeated slightly different version of the above words in
+<BR>
+different contexts, and don't remember precisely which were in front of
+<BR>
+the tcp-impl mic.
+<BR>
+<P>----------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matt Mathis suggested that part of the above problem is due to failure
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to agree on what how long of a time value is used to determine whether
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or not the connection is &quot;idle.&quot;  This borders on a research issue;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;more discussion seems to be needed.
+<BR>
+<P>No, I suggested:
+<BR>
+<P>Amending &quot;no slow-start after idle&quot; by inserting the word &quot;long&quot;
+<BR>
+before idle.  [I observed] that correct behavior after &quot;short idle&quot; is
+<BR>
+an open research question, as are the precise definitions of &quot;long&quot;
+<BR>
+and &quot;short&quot;.  However there are TCP implementations that do not
+<BR>
+slow-start after an hour of idle, and this is unambiguously incorrect,
+<BR>
+and not a research question.
+<BR>
+<P>----------
+<BR>
+<P>Thanks,  It was fun and productive!
+<BR>
+--MM--
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0335.html">Matt Mathis: "Re: Keep-Alive size"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0328.html">Steve Alexander: "Memphis Minutes"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0337.html">Steve Alexander: "Re: Memphis Minutes"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#336">[ date ]</A>
+<A HREF="index.html#336">[ thread ]</A>
+<A HREF="subject.html#336">[ subject ]</A>
+<A HREF="author.html#336">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

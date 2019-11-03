@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: does this qualify as a bug?</TITLE>
+<META NAME="Author" CONTENT="Joe Touch (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: does this qualify as a bug?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: does this qualify as a bug?</H1>
+<!-- received="Tue Aug 19 22:55:30 1997" -->
+<!-- isoreceived="19970820025530" -->
+<!-- sent="Tue, 19 Aug 1997 22:52:20 -0700" -->
+<!-- isosent="19970820055220" -->
+<!-- name="Joe Touch" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: does this qualify as a bug?" -->
+<!-- id="199708200552.AA02333@zephyr.isi.edu" -->
+<!-- inreplyto="does this qualify as a bug?" -->
+<STRONG>From:</STRONG> Joe Touch (<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708200552.AA02333@zephyr.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Aug 20 1997 - 01:52:20 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#675">[ date ]</A>
+<A HREF="index.html#675">[ thread ]</A>
+<A HREF="subject.html#675">[ subject ]</A>
+<A HREF="author.html#675">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708200552.AA02333@zephyr.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; The check that is done at that trigger can be based on
+</EM><BR>
+<EM>&gt; &gt; 	idle time since last send
+</EM><BR>
+<EM>&gt; &gt; 	idle time since last receive
+</EM><BR>
+<EM>&gt; &gt; 	current window state
+</EM><BR>
+...
+<BR>
+<EM>&gt; I agree that, in principle, detecting loss of the clock by inspecting the
+</EM><BR>
+<EM>&gt; window state is on a par with doing so based on idle time, and perhaps better.
+</EM><BR>
+<EM>&gt; But I think in practice there's a significant difference.  If &quot;current window
+</EM><BR>
+<EM>&gt; state&quot; is based on how much data has been acked by the most recent ack (which
+</EM><BR>
+<EM>&gt; is what I understand you mean by it), then (1) connection performance along
+</EM><BR>
+<EM>&gt; the forward path will now be degraded by conditions along the reverse path
+</EM><BR>
+<EM>&gt; (due to lost acks), which is not presently the case; and (2) people interested
+</EM><BR>
+<P>&quot;not presently the case&quot; argues against any bug fix.
+<BR>
+Maybe the forward path should be degraded by conditions along the
+<BR>
+reverse. Maybe it already is - losing ACKs can cause burstiness 
+<BR>
+at the source that can overrun buffers on the forward path and
+<BR>
+cause loss, even when a true paced stream would not have.
+<BR>
+<P><EM>&gt; in playing tricks with acks (e.g., for bandwidth-asymmetric paths) will lose
+</EM><BR>
+<EM>&gt; big if those tricks are considered by the endpoint to reflect loss of the ack
+</EM><BR>
+<EM>&gt; clock.  So I think the window-state approach will be significantly more
+</EM><BR>
+<P>&quot;tricks&quot; that lose ack clocks cause source bursts, and maybe they
+<BR>
+should be 'punished'. That doesn't seem inconsistent either.
+<BR>
+<P><EM>&gt; contentious than the idle-time approach.  Since we're trying to go for
+</EM><BR>
+<EM>&gt; minimal changes and minimal contention, our present course should be to
+</EM><BR>
+<EM>&gt; codify/correct the existing idle-time scheme, and not try at this point to
+</EM><BR>
+<EM>&gt; standardize on a different approach.
+</EM><BR>
+<P>My point is that either approach is 'different' than what is currently
+<BR>
+done, and that using RTO-since-send may not be any more correct than
+<BR>
+the current RTO-since-receive in indicating the true problem - loss
+<BR>
+of ACK clock.
+<BR>
+<P>The correct fix is to precisely define 'loss of ack clock'.
+<BR>
+There is certainly leeway in the term 'loss' - lose it a little
+<BR>
+(be off by 50% when you lose one 'ACK') or lose it a lot (be off
+<BR>
+by as much as you can ever be, when all data is ACKd and you have
+<BR>
+sent nothing, i.e., 1 RTO).
+<BR>
+<P>I'll certainly endeavor to present that continuum, and be conservative
+<BR>
+in the overhead of computation for the 'bug fix' version - would
+<BR>
+that be a reasonable path?
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20does%20this%20qualify%20as%20a%20bug?&In-Reply-To=&lt;199708200552.AA02333@zephyr.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0674.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0656.html">touch@ISI.EDU: "does this qualify as a bug?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0676.html">Vern Paxson: "Re: does this qualify as a bug?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#675">[ date ]</A>
+<A HREF="index.html#675">[ thread ]</A>
+<A HREF="subject.html#675">[ subject ]</A>
+<A HREF="author.html#675">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:47 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

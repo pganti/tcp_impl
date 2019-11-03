@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP research issues from a tcp-i</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Tue Jun 24 16:05:07 1997" -->
+<!-- isoreceived="19970624200507" -->
+<!-- sent="Tue, 24 Jun 1997 16:02:58 PDT" -->
+<!-- isosent="19970624230258" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="TCP research issues from a tcp-impl perspective" -->
+<!-- id="199706242302.QAA01755@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199706242302.QAA01755@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jun 24 1997 - 19:02:58 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0565.html">Vern Paxson: "paper on analyzing packet traces of TCP behavior available"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0568.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0569.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0571.html">Vernon Schryver: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0572.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0573.html">der Mouse : "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0574.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0575.html">Frank T Solensky: "RE: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0581.html">Mark Allman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0583.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0586.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0594.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0599.html">Thomas Narten: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0601.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0604.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0613.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#566">[ date ]</A>
+<A HREF="index.html#566">[ thread ]</A>
+<A HREF="subject.html#566">[ subject ]</A>
+<A HREF="author.html#566">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In a couple of weeks I'll be attending a meeting of the IRTF's End-to-End
+<BR>
+Research Group.  One of the agenda items is a presentation by me on TCP
+<BR>
+research issues from the perspective of the tcp-impl WG.  The issues I've
+<BR>
+noted so far are:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- How to compute RTO when using high-resolution timings
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- How to compute RTO when timing more than one packet per RTT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(i.e., how to adjust the constants for the exponentially weighted
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moving average)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Is the initial slow-start cwnd going to be increased, and if
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;so, to what?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- How to fix the MSS*MSS/cwnd granularity problem (Rich Stevens
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noted that if cwnd &gt; MSS*MSS, then due to integer arithmetic
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it'll never grow any larger)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- How long a sending pause merits a new slow-start
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Sharing cwnd across connections
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Caching cwnd over time
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- What about deploying Vegas?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- What about deploying Janey Hoe's changes?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Should below-sequence pure acks be acked (for keep-alives)?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Is it time to revisit constants like MSL and initial RTO?
+<BR>
+<P>I invite suggestions for other issues, either via the list or private
+<BR>
+email.  Also, if you particularly care about a few specific issues, let
+<BR>
+me know via private email, that'll help with prioritizing the list.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thanks,
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0565.html">Vern Paxson: "paper on analyzing packet traces of TCP behavior available"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0567.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0568.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0569.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0571.html">Vernon Schryver: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0572.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0573.html">der Mouse : "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0574.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0575.html">Frank T Solensky: "RE: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0579.html">Amr A. Awadallah: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0581.html">Mark Allman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0583.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0586.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0592.html">Larry Backman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0594.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0599.html">Thomas Narten: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0601.html">Vern Paxson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0604.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0609.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0611.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0613.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0617.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#566">[ date ]</A>
+<A HREF="index.html#566">[ thread ]</A>
+<A HREF="subject.html#566">[ subject ]</A>
+<A HREF="author.html#566">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

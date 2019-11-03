@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: PSH">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH</H1>
+<!-- received="Mon Mar 24 17:37:14 1997" -->
+<!-- isoreceived="19970324223714" -->
+<!-- sent="Tue, 25 Mar 97 01:01:06 GMT" -->
+<!-- isosent="19970325010106" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: PSH" -->
+<!-- id="5715.wsimpson@greendragon.com" -->
+<!-- inreplyto="PSH" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20PSH&In-Reply-To=&lt;5715.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 20:01:06 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#234">[ date ]</A>
+<A HREF="index.html#234">[ thread ]</A>
+<A HREF="subject.html#234">[ subject ]</A>
+<A HREF="author.html#234">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Mon, 24 Mar 97 12:55:42 PST
+</EM><BR>
+<EM>&gt; From: <A HREF="mailto:jt@mentat.com?Subject=Re:%20PSH&In-Reply-To=&lt;5715.wsimpson@greendragon.com&gt;">jt@mentat.com</A> (Jerry Toporek)
+</EM><BR>
+<EM>&gt; Huh?  If you are saying that we don't do slow-start when connected to a machine
+</EM><BR>
+<EM>&gt; on the same subnet, that is not true.  We do slow-start on every connection.
+</EM><BR>
+<EM>&gt; If you have evidence to the contrary, let's see it.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Very well, in the next message.  It will take a bit of time to compose,
+<BR>
+as the traces are sitting on my laptop.  I just happened to make them a
+<BR>
+couple of weeks ago, when trying to figure out why the throughput was so
+<BR>
+bad after I upgraded to MacOS 7.6.
+<BR>
+<P><P><EM>&gt; I understand the discussion on this point, and consider it fair game for
+</EM><BR>
+<EM>&gt; recommendations by this group, but I need to understand why you are using it
+</EM><BR>
+<EM>&gt; as criticism while this is not a requirement.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+Because it causes link congestion, and massive retransmission.  In your
+<BR>
+stack, as in others.
+<BR>
+<P>I'm getting pretty tired of the plaint &quot;this is not a requirement.&quot;
+<BR>
+<P>Once upon a time, requirements were the &quot;minimal set&quot;.  You seem to
+<BR>
+interpret them as the &quot;complete set&quot;.
+<BR>
+<P>&quot;Do the right thing&quot; is the only real requirement!  Do we have to spell
+<BR>
+out every niggling detail?
+<BR>
+<P><P><EM>&gt; &gt; I also see no Nagle algorithm.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is an almost slanderous misrepresentation.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+A misrepresentation of what &quot;I see&quot;?
+<BR>
+<P>You can get my postal address from any IETF Proceedings, or whois was4,
+<BR>
+and I look forward to receiving your lawyers' communication.
+<BR>
+<P>How wonderful -- we were worried that this list would be populated by PR
+<BR>
+management flacks instead of technical folks; and sure enough, we have
+<BR>
+Mentat.
+<BR>
+<P><P><EM>&gt; &gt; I also see Ack-only packets immediately followed by data packets.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; More of the same.  ACKs should be deferred only so long, and may occur just
+</EM><BR>
+<EM>&gt; before new data is sent.  If you have something to show me that looks like
+</EM><BR>
+<EM>&gt; a systematic problem, please send it along and I will be happy to look at it.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+I'll send the list a short excerpt.  I'd send you personally the entire
+<BR>
+2.5 megabyte run, but I'm not at all certain I'd like a potential
+<BR>
+litigator to read even one day of my email.
+<BR>
+<P><P><EM>&gt; OT 1.1.1 did include some serious RTT problems, which I take full
+</EM><BR>
+<EM>&gt; responsibility for, that were very noticeable on slow links.  These have been
+</EM><BR>
+<EM>&gt; resolved for some time, but did not make it into OT 1.1.2.  Apple has been
+</EM><BR>
+<EM>&gt; promising to get these fixes out, but you will have to talk to them about
+</EM><BR>
+<EM>&gt; when you will see them.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+The first time I've seen 10 Mbps ethernet characterized as a slow link.
+<BR>
+<P>Maybe when I have time, I'll run a slow (28.8 Kbps) PPP trace to compare.
+<BR>
+<P>Apple has cancelled further OT development.  And shipments of OT 1.1.1
+<BR>
+are running to the millions of units.
+<BR>
+<P>Meanwhile, I will note that these &quot;requirements&quot; are long standing, and
+<BR>
+OT was &quot;tested&quot; for several years.  And doesn't a major workstation
+<BR>
+vendor ship a Mentat stack, too?
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20PSH&In-Reply-To=&lt;5715.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20PSH&In-Reply-To=&lt;5715.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0235.html">David S. Miller: "Re: PSH"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#234">[ date ]</A>
+<A HREF="index.html#234">[ thread ]</A>
+<A HREF="subject.html#234">[ subject ]</A>
+<A HREF="author.html#234">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

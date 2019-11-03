@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Henrik Frystyk Nielsen (frystyk@w3.org)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb 11 16:34:54 1999" -->
+<!-- isoreceived="19990211213454" -->
+<!-- sent="Thu, 11 Feb 1999 16:29:19 -0500" -->
+<!-- isosent="19990211212919" -->
+<!-- name="Henrik Frystyk Nielsen" -->
+<!-- email="frystyk@w3.org" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="3.0.5.32.19990211162919.03034330@localhost" -->
+<!-- inreplyto="internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Henrik Frystyk Nielsen (<A HREF="mailto:frystyk@w3.org?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;3.0.5.32.19990211162919.03034330@localhost&gt;"><EM>frystyk@w3.org</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 11 1999 - 16:29:19 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1555.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1553.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1554">[ date ]</A>
+<A HREF="index.html#1554">[ thread ]</A>
+<A HREF="subject.html#1554">[ subject ]</A>
+<A HREF="author.html#1554">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+At 14:48 2/3/99 -0800, Joe Touch wrote:
+<BR>
+<P><EM>&gt;&gt;    This draft is NOT suggesting that these applications should disable
+</EM><BR>
+<EM>&gt;&gt;    the Nagle algorithm.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Why not?
+</EM><BR>
+<P>This is actually a hard question to answer.
+<BR>
+<P><EM>&gt;Nagle was a solution to char-at-a-time remote logins, and
+</EM><BR>
+<EM>&gt;is discouraged for transactional systems, even ones with
+</EM><BR>
+<EM>&gt;bursts as small as a few characters, e.g., X11.
+</EM><BR>
+<P>In HTTP the size of requests and responses vary arbitrarily from message to
+<BR>
+message so even though the proposed change fixes the particular problem of
+<BR>
+the odd, small final segment in Apache, it is always possible to find
+<BR>
+scenarios where Nagle is triggered to delay packets even though it is not
+<BR>
+desired.
+<BR>
+<P>If I understand correctly then the following HTTP pipeline example will
+<BR>
+trigger Nagle into delaying the 2nd response:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;client			server
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTTP REQ 1	--&gt;	
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--	1st segment of RES 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTTP REQ 2	--&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--    last 1.25 segment of RES 1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;--	0.25 segment RES 2 delayed
+<BR>
+<P><EM>&gt;From (at least a Web) application point of view, the main problem is
+</EM><BR>
+actually not Nagle itself but the fixed delay (at least in the sense that
+<BR>
+it isn't adjusted to fit the link). Risking this delay is likely to have
+<BR>
+app writes disable Nagle regardless of the proposed change or not. One
+<BR>
+solution would be to adjust the delay but knowing timers, this is normally
+<BR>
+not an easy task.
+<BR>
+<P>Instead, added control at the application layer would be of tremendous help
+<BR>
+as the app is likely to know what it going on. In other words, I like the
+<BR>
+SO_EXPLICITPUSH flag idea a lot and think that it would solve at least our
+<BR>
+needs.
+<BR>
+<P>Henrik
+<BR>
+<P><PRE>
+--
+Henrik Frystyk Nielsen,
+World Wide Web Consortium
+<A HREF="http://www.w3.org/People/Frystyk">http://www.w3.org/People/Frystyk</A>
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1555.html">Joe Touch: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1553.html">Kacheong Poon: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1475.html">Greg Minshall: "internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1558.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1554">[ date ]</A>
+<A HREF="index.html#1554">[ thread ]</A>
+<A HREF="subject.html#1554">[ subject ]</A>
+<A HREF="author.html#1554">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

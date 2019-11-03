@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP sequence numbers</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: TCP sequence numbers">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP sequence numbers</H1>
+<!-- received="Wed Sep 20 17:45:55 2000" -->
+<!-- isoreceived="20000920214555" -->
+<!-- sent="Wed, 20 Sep 2000 17:35:15 -0400 (EDT)" -->
+<!-- isosent="20000920213515" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: TCP sequence numbers" -->
+<!-- id="200009202135.RAA26301@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="TCP sequence numbers" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009202135.RAA26301@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Sep 20 2000 - 17:35:15 EDT
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2363.html">nile333@kadet.co.uk: "So, How in the heck have you been?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2364">[ date ]</A>
+<A HREF="index.html#2364">[ thread ]</A>
+<A HREF="subject.html#2364">[ subject ]</A>
+<A HREF="author.html#2364">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Why is guessing the sequence number of the first packet before it
+</EM><BR>
+<EM>&gt; arrives such a big deal?
+</EM><BR>
+<P>Because it allows you to impersonate an arbitrary IP address, provided
+<BR>
+you don't care about seeing what the victim sends back, and provided
+<BR>
+that the host you're impersonating doesn't RST the connection before
+<BR>
+your evil deeds can be done.
+<BR>
+<P>The way it works:
+<BR>
+<P>(1) You send a SYN, with a forged ip_src and whatever ISN you feel
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;like.  Except for the forged ip_src, this is a perfectly normal SYN.
+<BR>
+<P>(2) Victim responds, to the address you're pretending to be, ACKing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;your SYN and sending its own SYN, with its own ISN.
+<BR>
+<P>(3) If this were a normal connection, you'd ACK its SYN.  But since the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;reply goes off towards the machine you're impersonating, rather
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;than to you, you have to guess the ISN in order to ACK it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;acceptably.
+<BR>
+<P>(4) Once you've guessed the ISN, you can send data and it will be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;accepted as coming from the IP you're pretending to be.
+<BR>
+<P>I've just noticed something that's a bit disturbing, though it doesn't
+<BR>
+really sound like much of a practical problem (and of course it will
+<BR>
+now turn out to have been discussed to death back before I started
+<BR>
+reading the list :-).
+<BR>
+<P>If you know the victim's ISN to within a few guesses (where &quot;a few&quot; can
+<BR>
+mean as many as several thousand, depending on factors such as the
+<BR>
+bandwidth available), you can just flood it with SYN-ACKs using all
+<BR>
+possible sequence numbers.  You won't know which one worked, but one of
+<BR>
+them will.  (The rest will be dropped as out-of-window - are there any
+<BR>
+known TCPs that will generate any kind of alert upon seeing a flood of
+<BR>
+out-of-sequence packets?)  Since you don't know which one worked, you
+<BR>
+have to also flood all further data on all possible sequence numbers,
+<BR>
+and special care has to be taken if two or more possible sequence
+<BR>
+numbers are close together...but, to an extent, bandwidth can make up
+<BR>
+for imperfect knowledge.
+<BR>
+<P>Of course, as someone (vjs I think?) said, anyone who depends on peer
+<BR>
+IPs for authentication these days is probably being sufficiently
+<BR>
+foolish to deserve everything sie gets, so being able to forge someone
+<BR>
+else's IP is perhaps not as big a deal as it was back when everyone
+<BR>
+used .rhosts and hosts.equiv.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20sequence%20numbers&In-Reply-To=&lt;200009202135.RAA26301@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2363.html">nile333@kadet.co.uk: "So, How in the heck have you been?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2351.html">T Srivathsa: "TCP sequence numbers"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2365.html">venkat venkatsubra: "Re: TCP sequence numbers"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2364">[ date ]</A>
+<A HREF="index.html#2364">[ thread ]</A>
+<A HREF="subject.html#2364">[ subject ]</A>
+<A HREF="author.html#2364">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Wed Sep 20 2000 - 17:46:28 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

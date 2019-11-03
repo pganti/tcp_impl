@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: re: Keep Alive size</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="re: Keep Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>re: Keep Alive size</H1>
+<!-- received="Mon Mar 10 15:18:04 1997" -->
+<!-- isoreceived="19970310201804" -->
+<!-- sent="Mon, 10 Mar 1997 10:15:38 -0500" -->
+<!-- isosent="19970310151538" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="re: Keep Alive size" -->
+<!-- id="c=US%a=_ATTMAIL%p=UNISYS%l=RV-EXCHANGE-2-970310151538Z-5395@pl_exchange_1.pl.unisys.com" -->
+<!-- inreplyto="Keep Alive size" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=re:%20Keep%20Alive%20size&In-Reply-To=&lt;c=US%25a=_ATTMAIL%25p=UNISYS%25l=RV-EXCHANGE-2-970310151538Z-5395@pl_exchange_1.pl.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 10 1997 - 10:15:38 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0125.html">Malcolm Campbell: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0123.html">David Borman: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#124">[ date ]</A>
+<A HREF="index.html#124">[ thread ]</A>
+<A HREF="subject.html#124">[ subject ]</A>
+<A HREF="author.html#124">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Francesco Potorti is correct in his interpretations. I think we need to
+<BR>
+keep in mind what a keepalive really is. It may be either:
+<BR>
+&nbsp;&nbsp;&nbsp;1) an ACK segment with an OLD sequence number that does not contain
+<BR>
+data
+<BR>
+or
+<BR>
+&nbsp;&nbsp;&nbsp;2) an ACK segment with an OLD sequence number that does contain data,
+<BR>
+however, the data is outside the window (OLD data).
+<BR>
+<P>RFC 793 page 69 clearly states that a TCP should first check the
+<BR>
+sequence number of an arriving segment. If the segment is not acceptable
+<BR>
+(an old sequence number with no data or data outside the window would
+<BR>
+NOT be acceptable), an ACK must be sent after which the unacceptable
+<BR>
+segment must be dropped.
+<BR>
+<P>The previous paragraph implies that a TCP that does not send an ACK in
+<BR>
+response to an old sequence number (whether it contains data or not) is
+<BR>
+in violation of RFC 793. Forcing every other implementation to send a
+<BR>
+data byte to make a broken TCP behave properly is not acceptable.
+<BR>
+<P>Casper Dik writes:
+<BR>
+<EM>&gt;Well, the RFC also says:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;            It is extremely important to remember that ACK segments that
+</EM><BR>
+<EM>&gt;            contain no data are not reliably transmitted by TCP.
+</EM><BR>
+<EM>&gt;            Consequently, if a keep-alive mechanism is implemented it
+</EM><BR>
+<EM>&gt;            MUST NOT interpret failure to respond to any specific probe
+</EM><BR>
+<EM>&gt;            as a dead connection.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;So it seems that while you're told to implement keepalives as
+</EM><BR>
+<EM>&gt;ack-only packets, your *NOT* allowed to sever a connection if
+</EM><BR>
+<EM>&gt;you only send ack-only packets and don't get any responses.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;When talking to a conforming TCP stack that starts sending keep-alives to
+</EM><BR>
+<EM>&gt;you, you can toss them until they contain one data byte.
+</EM><BR>
+<P>I think the interpretation of that RFC 1122 fragment is:
+<BR>
+<P>An ACK with no data is not transmitted reliably because ACKs are not
+<BR>
+retransmitted. ACKs may be lost and will not be retransmitted,
+<BR>
+therefore, the failure of a response to a single, SPECIFIC probe should
+<BR>
+not cause the connection to be severed. This is why you should not rely
+<BR>
+on 1 single keepalive segment to determine if the peer has gone
+<BR>
+belly-up. A TCP must probe periodically a number of times before
+<BR>
+determining that the peer has gone away. So, I think the interpretation
+<BR>
+that you're not allowed to sever a connection if you send ACK-only
+<BR>
+segments is not quite correct. I think RFC 1122 means that you should
+<BR>
+not sever a connection if there is an occasional lack of response. You
+<BR>
+SHOULD sever the connection if the peer never responds to an ACK-only
+<BR>
+keep-alive segment. Again, RFC 793 does not say you can ignore segments
+<BR>
+with old sequence numbers. RFC 1122 does not say that either. You must
+<BR>
+respond to these old segments with an ACK.
+<BR>
+<P>Regards,
+<BR>
+Al Smith
+<BR>
+UNISYS Corp.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0125.html">Malcolm Campbell: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0123.html">David Borman: "Re: Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#124">[ date ]</A>
+<A HREF="index.html#124">[ thread ]</A>
+<A HREF="subject.html#124">[ subject ]</A>
+<A HREF="author.html#124">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

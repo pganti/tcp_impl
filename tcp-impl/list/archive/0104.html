@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="jg@zorch.w3.org (jg@zorch.w3.org)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 18 21:54:14 1997" -->
+<!-- isoreceived="19970219025414" -->
+<!-- sent="Tue, 18 Feb 97 16:48:44 -0500" -->
+<!-- isosent="19970218214844" -->
+<!-- name="jg@zorch.w3.org" -->
+<!-- email="jg@zorch.w3.org" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="9702182148.AA29022@zorch.w3.org" -->
+<!-- inreplyto="HTTP and RFC1122 half duplex close" -->
+<STRONG>From:</STRONG> <A HREF="mailto:jg@zorch.w3.org?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;9702182148.AA29022@zorch.w3.org&gt;"><EM>jg@zorch.w3.org</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Feb 18 1997 - 16:48:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0105.html">der Mouse : "OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0103.html">Hsiao-keng Jerry Chu: "RE: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#104">[ date ]</A>
+<A HREF="index.html#104">[ thread ]</A>
+<A HREF="subject.html#104">[ subject ]</A>
+<A HREF="author.html#104">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+I'm just joining this mailing list, and have been scanning (as opposed
+<BR>
+to carefully reading) the archive...  at 300K, it is a bit much
+<BR>
+to catch up on.
+<BR>
+<P>When discussing HTTP behavior, I'd like to remind people that
+<BR>
+HTTP behavior will be evolving greatly over the next year
+<BR>
+or two, with the deployment of HTTP/1.1. How long it will take
+<BR>
+to get rid of HTTP/1.0 and the problems it causes is the next
+<BR>
+interesting question... 
+<BR>
+<P>HTTP/1.1, if correctly implemented, will dramatically
+<BR>
+change HTTP's behavior and should end its abuse of TCP.  Any suggestions
+<BR>
+about where to go from here with HTTP should be rethought in this light.
+<BR>
+Extrapolating much from current data on HTTP should be looked at 
+<BR>
+very carefully; your presumptions are likely all wrong...
+<BR>
+<P>We've recently put together a paper outlining our experiences
+<BR>
+and took quite a bit of data of running HTTP/1.1 implementations
+<BR>
+(both Jigsaw and Apache), which you will find in the paper.
+<BR>
+(including large amounts of tcpdump traces of our test site; if you
+<BR>
+are on UNIX and install Tim Shepherd's xplot, you can go from
+<BR>
+the tabular results in the paper, to the summary of all of our runs
+<BR>
+of data, to xplots of each run of data we took.)
+<BR>
+<P>And certainly we saw bugs in TCP (in our particular case, Solaris
+<BR>
+had problems; Sun has since been kind enough to get us patches...).
+<BR>
+<P>Thumbnail sketch: HTTP/1.1 over a single, buffered, pipelined
+<BR>
+TCP connection outperformed HTTP/1.0, with or without keep-alives,
+<BR>
+using N connections (N was 6 in our tests) under all the tests we ran...
+<BR>
+<P>Note that we found that servers may need to close the incoming
+<BR>
+side of its connection; details are in the paper...
+<BR>
+<P>We also believe that by judicious use of range requests in HTTP,
+<BR>
+a browser really ought not to be throwing away connections
+<BR>
+very much at all...
+<BR>
+<P>Also note that HTTP/1.0 PUT has had various problems dealing with scenarios
+<BR>
+having to do with resets getting sent causing data to be discarded
+<BR>
+before being delivered to applications; hopefully HTTP/1.1 gets
+<BR>
+these right....  Henrik Frystyk Nielsen spent quite a while 
+<BR>
+understanding the problem (and talked to Dave Clark to confirm)
+<BR>
+all that is going on.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jim Gettys
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Digital Equipment Corporation
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visiting Scientist, W3C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editor of the HTTP/1.1 specification
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the HTTP working group...
+<BR>
+<P>Here's the abstract of the paper....
+<BR>
+The paper can be found at:
+<BR>
+<A HREF="http://www.w3.org/pub/WWW/Protocols/HTTP/Performance/Pipeline.html">http://www.w3.org/pub/WWW/Protocols/HTTP/Performance/Pipeline.html</A>
+<BR>
+<P>Abstract 
+<BR>
+<P>We describe our investigation of the effect of persistent connections,
+<BR>
+pipelining and link level document compression on our client and server
+<BR>
+HTTP implementations. A simple test setup is used to verify HTTP/1.1's
+<BR>
+design and understand HTTP/1.1 implementation strategies. We
+<BR>
+present TCP and real time performance data between the libwww robot
+<BR>
+and both the Jigsaw and Apache HTTP servers using HTTP/1.0,
+<BR>
+HTTP/1.1 with persistent connections, HTTP/1.1 with pipelined
+<BR>
+requests, and HTTP/1.1 with pipelined requests and deflate data
+<BR>
+compression [22]. We also investigate whether the TCP Nagle algorithm
+<BR>
+has an effect on HTTP/1.1 performance. While somewhat artificial and
+<BR>
+possibly overstating the benefits of HTTP/1.1, we believe the tests and
+<BR>
+results approximate some common behavior seen in browsers. The
+<BR>
+results confirm that HTTP/1.1 is meeting its major design goals. Our
+<BR>
+experience has been that implementation details are very important to
+<BR>
+achieve all of the benefits of HTTP/1.1. 
+<BR>
+<P>For all our tests, a pipelined HTTP/1.1 implementation outperformed
+<BR>
+HTTP/1.0, even when the HTTP/1.0 implementation used multiple
+<BR>
+connections in parallel, under all network environments tested. The
+<BR>
+savings were at least a factor of two, and sometimes as much as than a
+<BR>
+factor of ten, in terms of packets transmitted. Elapsed time
+<BR>
+improvement is less dramatic, and strongly depends on your network
+<BR>
+connection. 
+<BR>
+<P>Note that the savings in network traffic and performance shown in this
+<BR>
+document are solely due to the effects of pipelining, persistent
+<BR>
+connections and transport compression. Some data is presented showing
+<BR>
+further savings possible by the use of CSS1 style sheets [10], and the
+<BR>
+more compact PNG [20] image representation that are enabled by
+<BR>
+recent recommendations at higher levels than the base protocol. Time
+<BR>
+did not allow full end to end data collection on these cases. The results
+<BR>
+show that HTTP/1.1 and changes in Web content will have dramatic
+<BR>
+results in Internet and Web performance as HTTP/1.1 and related
+<BR>
+technologies deploy over the near future. Universal use of style sheets,
+<BR>
+even without deployment of HTTP/1.1, would cause a very significant
+<BR>
+reduction in network traffic. 
+<BR>
+<P>This paper does not investigate further performance and network
+<BR>
+savings enabled by the improved caching facilities provided by the
+<BR>
+HTTP/1.1 protocol, or by sophisticated use of range requests. 
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0105.html">der Mouse : "OOB [was Re: HTTP and RFC1122 half duplex close]"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0103.html">Hsiao-keng Jerry Chu: "RE: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#104">[ date ]</A>
+<A HREF="index.html#104">[ thread ]</A>
+<A HREF="subject.html#104">[ subject ]</A>
+<A HREF="author.html#104">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

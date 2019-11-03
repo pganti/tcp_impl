@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP MSS option value</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: TCP MSS option value">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP MSS option value</H1>
+<!-- received="Fri, 04 Feb 2000 13:02:00 -0500" -->
+<!-- isoreceived="20000204180200" -->
+<!-- sent="Fri, 04 Feb 2000 13:02:00 -0500" -->
+<!-- isosent="20000204180200" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: TCP MSS option value" -->
+<!-- id="200002041802.NAA17761@rotala.raleigh.ibm.com" -->
+<!-- inreplyto="braden@ISI.EDU" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200002041802.NAA17761@rotala.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 04 2000 - 13:02:00 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1978.html">alex r: "Re: TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1979">[ date ]</A>
+<A HREF="index.html#1979">[ thread ]</A>
+<A HREF="subject.html#1979">[ subject ]</A>
+<A HREF="author.html#1979">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Bob,
+<BR>
+<P><EM>&gt; Note that the value you should send in the MSS option has no relation
+</EM><BR>
+<EM>&gt; to the appearance of TCP options.  That is the problem of the sender
+</EM><BR>
+<EM>&gt; only.
+</EM><BR>
+<P>This makes complete sense (and the same rule applies to IP
+<BR>
+options). I.e, what the MSS option should be communicating is precise
+<BR>
+information that allows the sender to send a maximal sized packet that
+<BR>
+will be properly reassembled by the receiver.  If the sender includes
+<BR>
+options (whether TCP or IP) it needs to take that into account when
+<BR>
+sending the TCP segment.
+<BR>
+<P>Likewise, a receiver has no way of knowing what options its peer will
+<BR>
+be sending (i.e., they could vary on a segment-by-segment basis), so
+<BR>
+it should not consider options when calculating the MSS value it
+<BR>
+advertises.
+<BR>
+<P>Bottom line, the sender and receiver need to agree on what the MSS
+<BR>
+value really means. Looking way back to RFC 879, it very clearly
+<BR>
+states:
+<BR>
+<P><EM>&gt;    The MSS counts only data octets in the segment, it does not count the
+</EM><BR>
+<EM>&gt;    TCP header or the IP header.
+</EM><BR>
+<P>and later:
+<BR>
+<P><EM>&gt;    The relationship between the value of the maximum IP datagram size
+</EM><BR>
+<EM>&gt;    and the maximum TCP segment size is obscure.  The problem is that
+</EM><BR>
+<EM>&gt;    both the IP header and the TCP header may vary in length.  The TCP
+</EM><BR>
+<EM>&gt;    Maximum Segment Size option (MSS) is defined to specify the maximum
+</EM><BR>
+<EM>&gt;    number of data octets in a TCP segment exclusive of TCP (or IP)
+</EM><BR>
+<EM>&gt;    header.
+</EM><BR>
+<P>Later RFCs seem consistent with this, but sometimes are a bit
+<BR>
+imprecise in the exact language used regarding options.  
+<BR>
+<P>RFC 2581 says:
+<BR>
+<P><EM>&gt;    RECEIVER MAXIMUM SEGMENT SIZE (RMSS):  The RMSS is the size of the
+</EM><BR>
+<EM>&gt;       largest segment the receiver is willing to accept.  This is the
+</EM><BR>
+<EM>&gt;       value specified in the MSS option sent by the receiver during
+</EM><BR>
+<EM>&gt;       connection startup.  Or, if the MSS option is not used, 536 bytes
+</EM><BR>
+<EM>&gt;       [Bra89].  The size does not include the TCP/IP headers and
+</EM><BR>
+<EM>&gt;       options.
+</EM><BR>
+<P>There is a bit of an ambiguity here with this definition. First, the
+<BR>
+MSS doesn't really mean &quot;largest segment the receiver is willing to
+<BR>
+accept&quot;, it means largest data part that can be accepted in a received
+<BR>
+segment, assuming the segment has minimal IP and TCP headers (e.g.,
+<BR>
+N-20-20)&quot;.
+<BR>
+<P>Mentioning &quot;options&quot; in the same sentence as &quot;does not include the
+<BR>
+TCP/IP headers and options&quot; is confusing, as it could be read to imply
+<BR>
+that the receiver needs to understand about what options will be
+<BR>
+received, and adjust the MSS advertisement as appropriate. But the
+<BR>
+receiver has no way of knowing what options will be sent (and when),
+<BR>
+so the mentioning of options in the context of the MSS advertisement
+<BR>
+is inappropriate. All talk about options should be dealt with in the
+<BR>
+context of computing the Send MSS.
+<BR>
+<P><A HREF="mailto:brittone@us.ibm.com?Subject=Re:%20TCP%20MSS%20option%20value&In-Reply-To=&lt;200002041802.NAA17761@rotala.raleigh.ibm.com&gt;">brittone@us.ibm.com</A> writes:
+<BR>
+<P><EM>&gt; If I understand correctly that RFC2851 says TCP should advertise MSS opt
+</EM><BR>
+<EM>&gt; value of 1448 when MTU=1500 and TCPoptionLength=12, then I have some
+</EM><BR>
+<EM>&gt; further questions about how to calculate Eff.snd.MSS, the number of data
+</EM><BR>
+<EM>&gt; bytes to send in a segment along with the headers and options:
+</EM><BR>
+<P>My take is that RFC 2851 should not be interpreted to say that the
+<BR>
+advertised MSS should be 1448 above.  It should be 1460, and the Send
+<BR>
+MSS calculation of RFC 1122 still applies.
+<BR>
+<P><EM>&gt; I hope I have misinterpreted RFC2581's intentions regarding MSS option
+</EM><BR>
+<EM>&gt; value.
+</EM><BR>
+<P>I believe Ed is misintepreting RFC 2581's intent.
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1978.html">alex r: "Re: TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1980.html">David Borman: "Re: TCP MSS option value"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1979">[ date ]</A>
+<A HREF="index.html#1979">[ thread ]</A>
+<A HREF="subject.html#1979">[ subject ]</A>
+<A HREF="author.html#1979">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

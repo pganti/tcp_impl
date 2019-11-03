@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: put on your PMTU discovery t</TITLE>
+<META NAME="Author" CONTENT="Geert Jan de Groot (GeertJan.deGroot@bsdi.com)">
+<META NAME="Subject" CONTENT="Re: put on your PMTU discovery thinking caps">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: put on your PMTU discovery thinking caps</H1>
+<!-- received="Tue Dec 15 09:03:55 1998" -->
+<!-- isoreceived="19981215140355" -->
+<!-- sent="Tue, 15 Dec 1998 14:55:05 +0100" -->
+<!-- isosent="19981215135505" -->
+<!-- name="Geert Jan de Groot" -->
+<!-- email="GeertJan.deGroot@bsdi.com" -->
+<!-- subject="Re: put on your PMTU discovery thinking caps" -->
+<!-- id="199812151355.OAA19267@berserkly.bsdi.com" -->
+<!-- inreplyto="199812040743.XAA01294@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Geert Jan de Groot (<A HREF="mailto:GeertJan.deGroot@bsdi.com?Subject=Re:%20put%20on%20your%20PMTU%20discovery%20thinking%20caps&In-Reply-To=&lt;199812151355.OAA19267@berserkly.bsdi.com&gt;"><EM>GeertJan.deGroot@bsdi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Dec 15 1998 - 08:55:05 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1413.html">David Borman: "Re: Window scale factor ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1414">[ date ]</A>
+<A HREF="index.html#1414">[ thread ]</A>
+<A HREF="subject.html#1414">[ subject ]</A>
+<A HREF="author.html#1414">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, 03 Dec 1998 23:43:57 PST  Vern Paxson wrote:
+<BR>
+<EM>&gt; We've heard a number of people mention that it would be good to document
+</EM><BR>
+<EM>&gt; some of the pitfalls &amp; problems of implementing PMTU discovery (something
+</EM><BR>
+<EM>&gt; with a bit more meat than RFC 1435).  
+</EM><BR>
+<P>I have seen a particular failure mode a number of times; while it's
+<BR>
+not an implementation fault, the failure mode is arcane enough that
+<BR>
+it has lead to a number of escalations and it would be good to document it.
+<BR>
+<P>For example, see the following scenario:
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------          ----------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|           |          |        | 
+<BR>
+&nbsp;&nbsp;&nbsp;(1)    |           |   (2)    |        |   (3)
+<BR>
+&nbsp;&lt;========| ALG/proxy |----------| Router |--------&gt;  ISP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|           |          |        | 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|           |          |        | 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-------------          ----------
+<BR>
+<P>(1) is a FDDI ring to a customer's internal network (MTU=4470)
+<BR>
+(2) is a DMZ existing of a regular ethernet 
+<BR>
+(3) is a T1 serial link to an ISP.
+<BR>
+<P>There is a configuration error in this network: the MTU on the
+<BR>
+serial line of the router is 1500 bytes (default); the ISP's end
+<BR>
+of the serial line is 4470 bytes. The rest of the path to a remote
+<BR>
+web server has MTU=4470 all the way, so that packets of this size
+<BR>
+can be sent by the web server to the ISP end of serial line (3)
+<BR>
+without being fragmented along the path.
+<BR>
+<P>Without PMTU discovery, this MTU mismatch would go undetected
+<BR>
+as the proxy would send a small MSS (1460). Because of this, the web server
+<BR>
+will send 1460-byte packets which will pass Router without a problem.
+<BR>
+<P>With PMTU however, the host MUST send a large MSS even over ethernet
+<BR>
+(so that it can take advantage if a route flap causes the traffic
+<BR>
+to go over FDDI, we could use FDDI's MTU). So, we'll send MSS=4430
+<BR>
+and as a result, the web server will send 4470-bytes packets, 
+<BR>
+which will be sent through the ISP's router onto the serial line.
+<BR>
+<P>However, because Router's serial interface is configured for MTU=1500,
+<BR>
+the packet will get dropped because it's oversized. No ICMP error
+<BR>
+message is sent because Router can't receive the whole packet
+<BR>
+and hence can't generate an ICMP message.
+<BR>
+Because no ICMP message is sent, packet retransmissions from the web server
+<BR>
+will have the same size and will also be silently dropped.
+<BR>
+<P>This leads to the following scenario:
+<BR>
+- One is able to ping remote site
+<BR>
+- When sending a HTTP request (in this example), the TCP handshake
+<BR>
+&nbsp;&nbsp;happens, one is able to send the HTTP request (and have the request
+<BR>
+&nbsp;&nbsp;data ACKed by TCP), and then total silence till things time out,
+<BR>
+&nbsp;&nbsp;leading to responses like &quot;the web site doesn't respond&quot;, or worse
+<BR>
+&nbsp;&nbsp;&quot;this problem started with your new release with PMTU discovery,
+<BR>
+&nbsp;&nbsp;so your product has a problem with PMTU discovery&quot;
+<BR>
+<P>Typically I detect this kind of problem by sending large-size ping
+<BR>
+packets to the remote end of a suspect link. If the link is misconfigured,
+<BR>
+then the ICMP echo response won't make it back to us (but it will work
+<BR>
+for small-size ICMP echo packets). 
+<BR>
+Traceroute won't be able to detect this because the response packet is 
+<BR>
+always small.
+<BR>
+<P>I think that documenting these types of scenarios (which is similar to Matt's)
+<BR>
+would be very useful. While it's indeed not in the direct scope of 
+<BR>
+the tcp-IMPL wg, this venue does have the people with the right experience
+<BR>
+so that a good document can be made.
+<BR>
+I have done a little testing and found this type of problem more common
+<BR>
+than I expected, so writing it up would be good.
+<BR>
+<P>Geert Jan
+<BR>
+<P>PS: I just saw a note in the is-is WG where they discussed making the
+<BR>
+HELLO packet max size, just to detect his problem. I'm not sure if
+<BR>
+putting this kind of test in a routing protocol is a good idea,
+<BR>
+but having a widespread test would be good.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1413.html">David Borman: "Re: Window scale factor ?"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1407.html">Vern Paxson: "put on your PMTU discovery thinking caps"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1415.html">Danny McPherson: "Re: put on your PMTU discovery thinking caps"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1414">[ date ]</A>
+<A HREF="index.html#1414">[ thread ]</A>
+<A HREF="subject.html#1414">[ subject ]</A>
+<A HREF="author.html#1414">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:13 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

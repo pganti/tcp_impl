@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: slow-start related performance b</TITLE>
+<META NAME="Author" CONTENT="John Heidemann (johnh@ISI.EDU)">
+<META NAME="Subject" CONTENT="slow-start related performance bugs in TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>slow-start related performance bugs in TCP</H1>
+<!-- received="Mon Nov 25 23:09:42 1996" -->
+<!-- isoreceived="19961126040942" -->
+<!-- sent="Mon, 25 Nov 1996 15:05:28 -0800" -->
+<!-- isosent="19961125230528" -->
+<!-- name="John Heidemann" -->
+<!-- email="johnh@ISI.EDU" -->
+<!-- subject="slow-start related performance bugs in TCP" -->
+<!-- id="199611252305.PAA07553@dash.isi.edu" -->
+<STRONG>From:</STRONG> John Heidemann (<A HREF="mailto:johnh@ISI.EDU?Subject=Re:%20slow-start%20related%20performance%20bugs%20in%20TCP&In-Reply-To=&lt;199611252305.PAA07553@dash.isi.edu&gt;"><EM>johnh@ISI.EDU</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 25 1996 - 18:05:28 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0024.html">Vern Paxson: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0022.html">W. Richard Stevens: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#23">[ date ]</A>
+<A HREF="index.html#23">[ thread ]</A>
+<A HREF="subject.html#23">[ subject ]</A>
+<A HREF="author.html#23">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Dan Coolidge wrote:
+<BR>
+<EM>&gt; This is all well and good, but thus far a bit too nebulous for my liking. I
+</EM><BR>
+<EM>&gt; would ask of anybody who is planning on attending the BOF and who has a
+</EM><BR>
+<EM>&gt; specific TCP implementation problem to discuss, that they bring it up, in
+</EM><BR>
+<EM>&gt; advance, on this mailing list.
+</EM><BR>
+<P>We would like to discuss a couple of performance problems in many TCP
+<BR>
+implementations:
+<BR>
+<P>Slow-start/Delayed-ACK interactions
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have found two interactions between the slow-start and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delayed ACK algorithms that force TCP to stall until
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a delayed ACK triggers (which takes an average of 100ms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in BSD-based TCP stacks).  For short connections
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(common in HTTP traffic) the effects of this stall
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;can be significant.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first interaction occurs when the congestion window (cwnd)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is at 1x MSS (as at the start of a connection, or after an idle
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;period as described below).  The sender transmits the single
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet allowed by cwnd, but the receiver delays ACKing this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet because immediate ACKs are only required after two
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;full packets.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The second interaction occurs when the cwnd is at 2x MSS.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the sender transmits a less-than full-size segment
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the receiver will refuse to ACK immediately
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because delayed ACKs require receipt of two *full-MSS*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments for an immediate ACK.
+<BR>
+<P>Slow-start restart inconsistencies
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Current TCPs restart slow-start in two ways that are not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;always optimal:  when the connection has been idle for a long
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time and when the back-end of the window jumps by a large
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;amount.  TCP initiates slow-start to avoid sending a large
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number of back-to-back packets since the ACK clock has become
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disconnected.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are two problems here:  first, many implementations fail to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow-start after connection idleness (thus sending large
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packet trains).  4.4BSD (and derivatives) and Linux close the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window (to 1x MSS), many other TCP stacks don't (including at least
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SunOS).  Is there consensus on what should be done here?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Second, we believe that slow-starting is overly conservative.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are currently experimenting with rate-based pacing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to re-start the	ACK clock.  Rather than send back-to-back
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets or slow-start, we use the old connection statistics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to pace outgoing packets at a rate conservatively below
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the prior rate, but faster than slow-start.  This approach
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provides better throughput while avoiding 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overly aggressive transmission.
+<BR>
+<P>We have encountered each of these problems in the context of P-HTTP
+<BR>
+(see ``Performance Interactions Between P-HTTP and TCP
+<BR>
+Implementations'' at
+<BR>
+&lt;URL:<A HREF="http://www.isi.edu/~johnh/PAPERS/Heidemann96b.html">http://www.isi.edu/~johnh/PAPERS/Heidemann96b.html</A>&gt;).  We are
+<BR>
+investigating these problems as a part of TCP del Rey, an effort at
+<BR>
+ISI to tune TCP for 5-20KB transactions common for web and distributed
+<BR>
+object systems.
+<BR>
+<P>In addition to the work described here we also plan on examining TCP
+<BR>
+control-block sharing issues raised by T/TCP and concurrent TCP
+<BR>
+connections between pairs of hosts (see
+<BR>
+draft-touch-tcp-interdep-00.txt for details of this work).
+<BR>
+<P>Are these problems implementation or research issues?  
+<BR>
+Let's look at the parts:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- rate-based pacing:  research issue
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- TCP control block sharing:  research issue
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- cwnd on connection idle:  I think that clarification of what
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should be done here is an important implementation issue.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jacobson introduced the problem in his 1990 revision of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``Congestion Avoidance and Control'' but it hasn't been
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nailed down by an RFC one way or the other.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;- slow-start/delayed-ACK interactions:  These seem like small
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performance bugs that may not have been anticipated in the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specification.  I'd like to see them resolved.
+<BR>
+<P>Comments?
+<BR>
+<P>&nbsp;&nbsp;&nbsp;-John Heidemann, Joe Touch, Katia Obraczka, Ted Faber
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0024.html">Vern Paxson: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0022.html">W. Richard Stevens: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0031.html">William Allen Simpson: "Re: slow-start related performance bugs in TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#23">[ date ]</A>
+<A HREF="index.html#23">[ thread ]</A>
+<A HREF="subject.html#23">[ subject ]</A>
+<A HREF="author.html#23">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

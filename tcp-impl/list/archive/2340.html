@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Calculations of ISN for new</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Calculations of ISN for new TCP sessions">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Calculations of ISN for new TCP sessions</H1>
+<!-- received="Sun Sep 17 20:57:47 2000" -->
+<!-- isoreceived="20000918005747" -->
+<!-- sent="Sun, 17 Sep 2000 18:53:35 -0600 (MDT)" -->
+<!-- isosent="20000918005335" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Calculations of ISN for new TCP sessions" -->
+<!-- id="200009180053.e8I0rZp29278@calcite.rhyolite.com" -->
+<!-- inreplyto="Calculations of ISN for new TCP sessions" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009180053.e8I0rZp29278@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sun Sep 17 2000 - 20:53:35 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2339.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2340">[ date ]</A>
+<A HREF="index.html#2340">[ thread ]</A>
+<A HREF="subject.html#2340">[ subject ]</A>
+<A HREF="author.html#2340">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009180053.e8I0rZp29278@calcite.rhyolite.com&gt;">ak@muc.de</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; When you can open a connection to the server you get as many guesses as you
+</EM><BR>
+<EM>&gt; want for a secret refresh period (a few minutes). You know one ISN, the 
+</EM><BR>
+<EM>&gt; algorithm to generate it and a lot of the input parameters (your IP, your
+</EM><BR>
+<EM>&gt; port, etc.). Unknown is just the secret.  When there are not too many 
+</EM><BR>
+<EM>&gt; possibilities for the secret you can brute force it, checking it against 
+</EM><BR>
+<EM>&gt; your single ISN. When you can make the brute force attack quicker than
+</EM><BR>
+<EM>&gt; the secret refresh you win. When the server is handicaped in its secret
+</EM><BR>
+<EM>&gt; generation (e.g. diskless or no disk io during normal operation, no 
+</EM><BR>
+<EM>&gt; hardware rnd, no user keyboard input) like most servers you'll likely win 
+</EM><BR>
+<EM>&gt; for a much longer time and you can extend the brute force attack over
+</EM><BR>
+<EM>&gt; longer times.
+</EM><BR>
+<P>What's that about a &quot;secret refresh period&quot; for the secret used to
+<BR>
+generate ISN's?  When I've implemented RFC 1948 and other anti-ISN-guessing
+<BR>
+schemes, I've never built such a thing.  It sounds like a bad idea.
+<BR>
+<P>If the secret includes the microsecond or nanosecond tick when the SYN
+<BR>
+arrived, how does the attacker benefit from discovering the secret in use
+<BR>
+when that ISN was chosen?  I guess with enough such brute force efforts,
+<BR>
+the bad guy might learn about the addresses in your buffer pool and the
+<BR>
+distribution of your interrupt latency.  However, that your interrupt latency
+<BR>
+is between 50 and 500 usec is not likely to be much of a secret.  If your
+<BR>
+system vendor is serious, it's in the manual.  The secret is for each ISN
+<BR>
+is how many nanoseconds your clock thinks elapsed, which not even you
+<BR>
+clock knows in advance.  (again, see NTP discussions)  And which buffer
+<BR>
+was used that time, which depends on other traffic.
+<BR>
+<P>That your clock might contribute 10 or 20 instead of 30 and your
+<BR>
+buffer pool only 3 to 10 bits of entropy does not imply that you
+<BR>
+have the 0 bits of entropy of a constant secret.
+<BR>
+<P><P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; entropy pools are usually not only used for ISNs, but for a lot of other
+</EM><BR>
+<EM>&gt; things (like SSL or PGP session keys). For these I would worry even on my
+</EM><BR>
+<EM>&gt; LAN. Splitting the entropy pool into less security critical (like ISNs) 
+</EM><BR>
+<EM>&gt; and more security critical (like session keys) is probably not practical,
+</EM><BR>
+<EM>&gt; so you have to design the entropy pool input for the worst case.
+</EM><BR>
+<P>Yes, but I thought we were talking about ISN's instead of cryptographically
+<BR>
+secure random numbers for such as SSL, PGP, and IPSec.
+<BR>
+<P>If I were to implement RFC 1948 support in a system with an &quot;entropy
+<BR>
+pool&quot; such as is commonly used for /dev/random, I would only use
+<BR>
+the entropy pool as part of the secret for generating an ISN.
+<BR>
+I would also add other sources of entropy such as the microsecond
+<BR>
+tick of the SYN's arrival and the buffer address of the SYN.
+<BR>
+<P>By the way, if you do use the familiar MD5 in the RFC, I think it's
+<BR>
+much faster to concentrate all of the bits and reduce once.
+<BR>
+MD5Update() has noticeable fixed overhead.
+<BR>
+<P>And yes, I was wrong about the Birthday Paradox.  If 16 bits of the ISN
+<BR>
+are randomized (e.g. if you like the BSD clocking defense against
+<BR>
+overlapping windows), then each attack has a 1 in 2**16 chance of success.
+<BR>
+The attacker must send about 50,000 probes to have a 50% chance of
+<BR>
+success.  If you follow RFC 1948 to the letter and give up the BSD
+<BR>
+robustness, the bad guy must send about 1,000,000,000 probes for a 50%
+<BR>
+probability of success.
+<BR>
+(ok--did I mess that up too?  (1-1/(2^16))^50000 is about 0.5)
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Calculations%20of%20ISN%20for%20new%20TCP%20sessions&In-Reply-To=&lt;200009180053.e8I0rZp29278@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2339.html">Andi Kleen: "Re: Calculations of ISN for new TCP sessions"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2329.html">Satish Mynam: "Calculations of ISN for new TCP sessions"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2341.html">N Srikanth: "Re: Calculations of ISN for new TCP sessions"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2340">[ date ]</A>
+<A HREF="index.html#2340">[ thread ]</A>
+<A HREF="subject.html#2340">[ subject ]</A>
+<A HREF="author.html#2340">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:48 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: New problem for TCPIMPL &quo</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?</H1>
+<!-- received="Wed Feb 18 11:22:08 1998" -->
+<!-- isoreceived="19980218162208" -->
+<!-- sent="Wed, 18 Feb 1998 13:15:01 -0600 (CST)" -->
+<!-- isosent="19980218191501" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<!-- id="199802181915.NAA02036@frantic.bsdi.com" -->
+<!-- inreplyto="New problem for TCPIMPL &quot;known Problems&quot; I-D?" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181915.NAA02036@frantic.bsdi.com&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 18 1998 - 14:15:01 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0959.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#958">[ date ]</A>
+<A HREF="index.html#958">[ thread ]</A>
+<A HREF="subject.html#958">[ subject ]</A>
+<A HREF="author.html#958">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Alan Cox writes:
+<BR>
+<P><EM>&gt; Actually the reset on zero window probe problem can be bad. The following
+</EM><BR>
+<EM>&gt; transaction can occur on some stacks doing keepalive and is broken there
+</EM><BR>
+<EM>&gt; as well as when probing.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 		send data		ack window (n)
+</EM><BR>
+<EM>&gt; 		send data (n)		ack window (0)
+</EM><BR>
+<EM>&gt; 					shutdown for rx
+</EM><BR>
+<EM>&gt; 					[compute mode]
+</EM><BR>
+<EM>&gt; 		keepalive n+1
+</EM><BR>
+<EM>&gt; 					RST 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; and the reset tears down both sides of the connection. For a zero window
+</EM><BR>
+<P>Your example doesn't look right to me.  A reset on a window probe
+<BR>
+happens because new data is received that cannot be delivered to
+<BR>
+the application.  But a keepalive does not contain new data.  It
+<BR>
+typically has SEG.SEQ = SND.NXT-1, and may or may not contain one
+<BR>
+garbage byte (RFC 1122, section 4.2.3.6).  Your example implies
+<BR>
+that new data is being delivered in a keep-alive.
+<BR>
+<P><EM>&gt; probe this is ok so long as the stack never attempts to probe a zero window
+</EM><BR>
+<EM>&gt; unless it has queued data. A window that is 0 with no queue causes no
+</EM><BR>
+<P>You can't generate a zero window probe unless you have data to send,
+<BR>
+since the probe contains the next byte of data.
+<BR>
+<P><EM>&gt; probe and no harm. This prevents us doing any &quot;opportunistic&quot; window probe.
+</EM><BR>
+<P>I'm not sure what you mean by &quot;opportunistic&quot; window probes.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20New%20problem%20for%20TCPIMPL%20&quot;known%20Problems&quot;%20I-D?&In-Reply-To=&lt;199802181915.NAA02036@frantic.bsdi.com&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0959.html">der Mouse : "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0957.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0944.html">Bernie Volz: "New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0960.html">Alan Cox: "Re: New problem for TCPIMPL &quot;known Problems&quot; I-D?"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#958">[ date ]</A>
+<A HREF="index.html#958">[ thread ]</A>
+<A HREF="subject.html#958">[ subject ]</A>
+<A HREF="author.html#958">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:22 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: syn received on half open co</TITLE>
+<META NAME="Author" CONTENT="venkat venkatsubra (venkats@austin.ibm.com)">
+<META NAME="Subject" CONTENT="Re: syn received on half open connection">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: syn received on half open connection</H1>
+<!-- received="Thu Jul 27 11:53:25 2000" -->
+<!-- isoreceived="20000727155325" -->
+<!-- sent="Thu, 27 Jul 2000 10:46:56 -0500" -->
+<!-- isosent="20000727154656" -->
+<!-- name="venkat venkatsubra" -->
+<!-- email="venkats@austin.ibm.com" -->
+<!-- subject="Re: syn received on half open connection" -->
+<!-- id="39805970.CEC3E943@austin.ibm.com" -->
+<!-- inreplyto="398040C1.7B357EE0@philosys.de" -->
+<STRONG>From:</STRONG> venkat venkatsubra (<A HREF="mailto:venkats@austin.ibm.com?Subject=Re:%20syn%20received%20on%20half%20open%20connection&In-Reply-To=&lt;39805970.CEC3E943@austin.ibm.com&gt;"><EM>venkats@austin.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jul 27 2000 - 11:46:56 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2228.html">callback123@altavistausa.com: "Re: From Lorraine,as promised,I can lower your bill"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2226.html">Roland Geier: "syn received on half open connection"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2226.html">Roland Geier: "syn received on half open connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2227">[ date ]</A>
+<A HREF="index.html#2227">[ thread ]</A>
+<A HREF="subject.html#2227">[ subject ]</A>
+<A HREF="author.html#2227">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Roland Geier wrote:
+<BR>
+<P><EM>&gt; Hello,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; I've got a question concerning the fits-to-specs-behaviour of BSD
+</EM><BR>
+<EM>&gt; derived tcp implementations when a syn is received on half open
+</EM><BR>
+<EM>&gt; connections. Therefore, please assume the scenario that is pointed out
+</EM><BR>
+<EM>&gt; in rfc793, section 'Half-Open Connections and Other Anomalies':
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; --------------- excerpt from rfc793  ---------------
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Assume that two user processes A and B are communicating with one
+</EM><BR>
+<EM>&gt; another when a crash occurs causing loss of memory to A's TCP. Depending
+</EM><BR>
+<EM>&gt; on the operating system supporting A's TCP, it is likely that some error
+</EM><BR>
+<EM>&gt; recovery mechanism exists.  When the TCP is up again, A is likely to
+</EM><BR>
+<EM>&gt; start again from the beginning or from a recovery point.  As a result, A
+</EM><BR>
+<EM>&gt; will probably try to OPEN the connection again or try to SEND on the
+</EM><BR>
+<EM>&gt; connection it believes open.  In the latter case, it receives the error
+</EM><BR>
+<EM>&gt; message &quot;connection not open&quot; from the local (A's) TCP.  In an attempt
+</EM><BR>
+<EM>&gt; to establish the connection, A's TCP will send a segment containing
+</EM><BR>
+<EM>&gt; SYN.  This scenario leads to the example shown in figure 10.  After TCP
+</EM><BR>
+<EM>&gt; A crashes, the user attempts to re-open the connection.  TCP B, in the
+</EM><BR>
+<EM>&gt; meantime, thinks the connection is open.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;    TCP A                                         TCP B
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; 1. (CRASH)                            (send 300,receive 100)
+</EM><BR>
+<EM>&gt; 2. CLOSED                                        ESTABLISHED
+</EM><BR>
+<EM>&gt; 3. SYN-SENT --&gt; &lt;SEQ=400&gt;&lt;CTL=SYN&gt;           --&gt; (??)
+</EM><BR>
+<EM>&gt; 4. (!!)     &lt;-- &lt;SEQ=300&gt;&lt;ACK=100&gt;&lt;CTL=ACK&gt;  &lt;-- ESTABLISHED
+</EM><BR>
+<EM>&gt; 5. SYN-SENT --&gt; &lt;SEQ=100&gt;&lt;CTL=RST&gt;           --&gt; (Abort!!)
+</EM><BR>
+<EM>&gt; 6. SYN-SENT                                      CLOSED
+</EM><BR>
+<EM>&gt; 7. SYN-SENT --&gt; &lt;SEQ=400&gt;&lt;CTL=SYN&gt;           --&gt;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; When the SYN arrives at line 3, TCP B, being in a synchronized state,
+</EM><BR>
+<EM>&gt; and the incoming segment outside the window, responds with an
+</EM><BR>
+<EM>&gt; acknowledgment indicating what sequence it next expects to hear (ACK
+</EM><BR>
+<EM>&gt; 100).  TCP A sees that this segment does not acknowledge anything it
+</EM><BR>
+<EM>&gt; sent and, being unsynchronized, sends a reset (RST) because it has
+</EM><BR>
+<EM>&gt; detected a half-open connection.  TCP B aborts at line 5. TCP A will
+</EM><BR>
+<EM>&gt; continue to try to establish the connection; the problem is now reduced
+</EM><BR>
+<EM>&gt; to the basic 3-way handshake.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; ---------------  end of excerpt  ---------------
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; The scenario does not differentiate between the following cases when the
+</EM><BR>
+<EM>&gt; SYN arrives at line 3:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; (a) the SYN packet's ISS is *within* the receive window of TCP B
+</EM><BR>
+<EM>&gt; (b) the SYN packet's ISS is *not* within the receive window of TCP B
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; AS shown in [Code A] (see TCP/IP Illustrated Vol. II, Fig. 28.37), case
+</EM><BR>
+<EM>&gt; (a) is considered to be an error and BSD implementations will send a RST
+</EM><BR>
+<EM>&gt; and drop the connection:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         ----- [Code A] -----
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         /*
+</EM><BR>
+<EM>&gt;          * If a SYN is in the window, then this is an
+</EM><BR>
+<EM>&gt;          * error and we send an RST and drop the connection.
+</EM><BR>
+<EM>&gt;          */
+</EM><BR>
+<EM>&gt;         if (tiflags &amp; TH_SYN) {
+</EM><BR>
+<EM>&gt;                 tp = tcp_drop(tp, ECONNRESET);
+</EM><BR>
+<EM>&gt;                 goto dropwithreset;
+</EM><BR>
+<EM>&gt;         }
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Let's now assume case (b), i.e. the syn is *not* in the  window. In this
+</EM><BR>
+<EM>&gt; case the SYN-Flag is explicitly switched off (see [Code B], taken from
+</EM><BR>
+<EM>&gt; Fig. 28.24):
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         ----- [Code B] -----
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         todrop = tp-&gt;rcv_nxt - ti-&gt;ti_seq;
+</EM><BR>
+<EM>&gt;         if (todrop &gt; 0) {
+</EM><BR>
+<EM>&gt;                 if (tiflags &amp; TH_SYN) {
+</EM><BR>
+<EM>&gt;                         tiflags &amp;= ~TH_SYN;
+</EM><BR>
+<EM>&gt;                         ti-&gt;ti_seq++;
+</EM><BR>
+<EM>&gt;                         :
+</EM><BR>
+<EM>&gt;         }
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; As [Code B] is located before [Code A], BSD won't send a reset if the
+</EM><BR>
+<EM>&gt; syn is *not* within the window as the SYN bit won't be set when coming
+</EM><BR>
+<EM>&gt; along [Code A].
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Furthermore, [Code C] (see Fig. 28.37 again), directly following [Code
+</EM><BR>
+<EM>&gt; A], states:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         ----- [Code C] -----
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;         /*
+</EM><BR>
+<EM>&gt;          * If the ACK bit is off we drop the segment and return.
+</EM><BR>
+<EM>&gt;          */
+</EM><BR>
+<EM>&gt;          if ((tiflags &amp; TH_ACK) == 0)
+</EM><BR>
+<EM>&gt;            goto drop;
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; As in an initial SYN request the ACK bit isn't set, a SYN request that
+</EM><BR>
+<EM>&gt; does not fall into the window will be silently dropped in BSD, at least
+</EM><BR>
+<EM>&gt; accoding to Rich Stevens and the FreeBSD implementation. If I did not
+</EM><BR>
+<EM>&gt; miss the point that would violate the spec, wouldn't it?
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Any comments on that would be highly appreciated,
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Roland.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; --
+</EM><BR>
+<EM>&gt; Roland Geier             Philosys Software GmbH
+</EM><BR>
+<EM>&gt; <A HREF="mailto:geier@philosys.de?Subject=Re:%20syn%20received%20on%20half%20open%20connection&In-Reply-To=&lt;39805970.CEC3E943@austin.ibm.com&gt;">geier@philosys.de</A>        Edisonstr. 6
+</EM><BR>
+<EM>&gt; tel: +49 89 321407 56    D-85716 Unterschleissheim
+</EM><BR>
+<EM>&gt; fax: +49 89 321407 12    <A HREF="http://www.philosys.de">http://www.philosys.de</A>
+</EM><BR>
+<P>
+<P>
+Roland, 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The rfc does differentiate case (a) and (b). In page 70 of rfc793 it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;says this:
+<BR>
+&nbsp;
+<BR>
+--------------------------------------------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fourth, check the SYN bit,
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SYN-RECEIVED
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ESTABLISHED STATE
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN-WAIT STATE-1
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIN-WAIT STATE-2
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLOSE-WAIT STATE
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLOSING STATE
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LAST-ACK STATE
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIME-WAIT STATE
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the SYN is in the window it is an error, send a reset, any
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outstanding RECEIVEs and SEND should receive &quot;reset&quot; responses,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all segment queues should be flushed, the user should also
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receive an unsolicited general &quot;connection reset&quot; signal, enter
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the CLOSED state, delete the TCB, and return.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the SYN is not in the window this step would not be reached
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and an ack would have been sent in the first step (sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number check).
+<BR>
+---------------------------------------------
+<BR>
+&nbsp;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And the code fragment [C] is according to the next line in the spec
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(page 71): 
+<BR>
+&nbsp;
+<BR>
+-------------------------------------------
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;fifth check the ACK field,
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the ACK bit is off drop the segment and return
+<BR>
+------------------------------------------
+<BR>
+<P>Venkat
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2228.html">callback123@altavistausa.com: "Re: From Lorraine,as promised,I can lower your bill"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2226.html">Roland Geier: "syn received on half open connection"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2226.html">Roland Geier: "syn received on half open connection"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2227">[ date ]</A>
+<A HREF="index.html#2227">[ thread ]</A>
+<A HREF="subject.html#2227">[ subject ]</A>
+<A HREF="author.html#2227">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:38 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Last Call for TCP Congestion</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: Last Call for TCP Congestion Control I-D">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Last Call for TCP Congestion Control I-D</H1>
+<!-- received="Tue Nov 10 18:26:37 1998" -->
+<!-- isoreceived="19981110232637" -->
+<!-- sent="Tue, 10 Nov 1998 14:39:43 PST" -->
+<!-- isosent="19981110223943" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: Last Call for TCP Congestion Control I-D" -->
+<!-- id="199811102239.OAA22618@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Tue, 10 Nov 1998 13:52:34 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Last%20Call%20for%20TCP%20Congestion%20Control%20I-D&In-Reply-To=&lt;199811102239.OAA22618@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Nov 10 1998 - 17:39:43 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1395">[ date ]</A>
+<A HREF="index.html#1395">[ thread ]</A>
+<A HREF="subject.html#1395">[ subject ]</A>
+<A HREF="author.html#1395">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; My worry here is that we could see a sender that does path MTU
+</EM><BR>
+<EM>&gt; discovery and a naive receiver that does not.  Say the MSS is four
+</EM><BR>
+<EM>&gt; times the PMTU.  The receiver will ACK after receiving 2 * MSS bytes,
+</EM><BR>
+<EM>&gt; but this'll have been perhaps 8 segments.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The sender will get the ACK, and increase the congestion window by MSS,
+</EM><BR>
+<EM>&gt; resulting in 4 new segments, plus the 8 segments acknowledged, for a
+</EM><BR>
+<EM>&gt; total of 12 new segments.  Ouch!
+</EM><BR>
+<P>My assumption is that MSS means the current maximum segment size, which
+<BR>
+may reflect the value offered by the receiver during start up, or may
+<BR>
+reflect a subsequent (smaller) value discovered by PMTU discovery.  So
+<BR>
+the above would lead to 9 new segments, the 8 ack'd plus one more for
+<BR>
+slow-start.
+<BR>
+<P>I would hope that receivers are a bit more intelligent about deciding
+<BR>
+how much data to ack, e.g., every two segments of any decent size.  But
+<BR>
+I don't think 2001.bis should mandate this, because we don't have a
+<BR>
+standard algorithm to mandate.
+<BR>
+<P><EM>&gt; OTOH, if the sender only increases the congestion window by the PMTU
+</EM><BR>
+<EM>&gt; value (rather than MSS), then its slow-start would be really slow when
+</EM><BR>
+<EM>&gt; coupled with the reduced number of ACKs...
+</EM><BR>
+<P>Yes, though I suspect that, in general, receivers that offer large initial
+<BR>
+MSS's care enough about performance to also ack fairly often in order to
+<BR>
+open the window quickly.
+<BR>
+<P><EM>&gt; Ouch, that's where I'm obviously slipping up.  I'd sure like to see
+</EM><BR>
+<EM>&gt; these standards updated a bit to take PMTU and other advances into
+</EM><BR>
+<EM>&gt; account, but I guess we're pretty much just trying to get folks to get
+</EM><BR>
+<EM>&gt; the original stuff right...
+</EM><BR>
+<P>Right, that's what 2001.bis is trying to do.  We can also consider writing
+<BR>
+Experimental RFCs on tweaks to 2001.bis (such as the New Reno I-D).
+<BR>
+<P>One of the likely agenda topics for Orlando is whether there are enough
+<BR>
+PMTU issues to consider doing a document on them.  Mark &amp; I think the
+<BR>
+WG is pretty much ready to go dormant, except for that possibility.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1396.html">Rick Jones: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1394.html">Kevin M. Lahey: "Re: Last Call for TCP Congestion Control I-D"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1395">[ date ]</A>
+<A HREF="index.html#1395">[ thread ]</A>
+<A HREF="subject.html#1395">[ subject ]</A>
+<A HREF="author.html#1395">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

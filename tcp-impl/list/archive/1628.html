@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revised internet draft on su</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: revised internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revised internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Fri Feb 26 19:52:52 1999" -->
+<!-- isoreceived="19990227005252" -->
+<!-- sent="Fri, 26 Feb 1999 17:48:10 -0700 (MST)" -->
+<!-- isosent="19990227004810" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: revised internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="199902270048.RAA07199@calcite.rhyolite.com" -->
+<!-- inreplyto="revised internet draft on suggested mod to the Nagle algorithm" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902270048.RAA07199@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 26 1999 - 19:48:10 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1629.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1631.html">der Mouse : "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1628">[ date ]</A>
+<A HREF="index.html#1628">[ thread ]</A>
+<A HREF="subject.html#1628">[ subject ]</A>
+<A HREF="author.html#1628">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902270048.RAA07199@calcite.rhyolite.com&gt;">braden@ISI.EDU</A>
+</EM><BR>
+<P><EM>&gt;   *&gt;     However, no one has reported any harm done to any network by
+</EM><BR>
+<EM>&gt;   *&gt;     applications that have set TCP_NODELAY.
+</EM><BR>
+<EM>&gt;   *&gt; 
+</EM><BR>
+<P><EM>&gt; This is a niggle, but the Nagle algorithm  made a significant
+</EM><BR>
+<EM>&gt; contribution to avoiding Internet meltdown in the early days when there
+</EM><BR>
+<EM>&gt; was a lot of character-at-a-time telnet traffic and &quot;high speed&quot; was 56
+</EM><BR>
+<EM>&gt; Kbps. I suspect there may still be some local Internet regions where
+</EM><BR>
+<EM>&gt; its contribution is significant, but you are correct that I have no
+</EM><BR>
+<EM>&gt; data to prove it.
+</EM><BR>
+<P>I agree on all counts except for the first 4 words.  I phrased what I said
+<BR>
+intentionally.  TCP_NODELAY did not exist before the Nagle algorithm, when
+<BR>
+the problems it fixed were (I assume) rampant.  I believe that it would
+<BR>
+be a Bad Thing(tm) if the Nagle algorithm were off by default.  I believe
+<BR>
+making the Nagle algorighm on by default in RFC 1122 was a Good Thing(tm)
+<BR>
+that reduces the number of packets, CPU cycles spent on packets, and
+<BR>
+bandwidth spent on headers, and at the trivial cost of forcing people to
+<BR>
+stop and think about tinygrams, and then do something explicit if they
+<BR>
+really need them.
+<BR>
+<P>That is different from believing that any reportable harm has been done
+<BR>
+to any network by any program that used TCP_NODELAY (or equivalent) to
+<BR>
+turn off the Nagle algorithm.  I believe there's plenty of junk code that
+<BR>
+unnecessarily send()'s tinygrams and even plenty of junk that also bogusly
+<BR>
+turns off Nagle.  However, that does not imply any harm has been done.
+<BR>
+Junk is usually too broken in other ways to harm the net.
+<BR>
+<P><P><P>] From: Mohit Aron &lt;<A HREF="mailto:aron@cs.rice.edu?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902270048.RAA07199@calcite.rhyolite.com&gt;">aron@cs.rice.edu</A>&gt;
+<BR>
+<P>] &gt;   1. poorly written applications that do send()-send()-receive()
+<BR>
+] &gt;       instead of writev()-receive().
+<BR>
+] &gt;   2. applications that necessarily do send()-send() of small blocks.
+<BR>
+] &gt;   3. applications that send blocks larger than 1 MSS but not a multiple
+<BR>
+] &gt;       of the MSS on systems that do not block based on send() requests.
+<BR>
+] &gt; 
+<BR>
+] &gt; As far as I can see, only #3 might benefit from the proposal.  #1 and #2
+<BR>
+] &gt; would still be forced to set TCP_NODELAY.
+<BR>
+<P>] Even #3 might not benefit under some cases.
+<BR>
+&nbsp;
+<BR>
+quite true.
+<BR>
+<P>]                                             An example is associated with the
+<BR>
+] idiosyncrasies of the way application data is copied into mbufs in BSD based
+<BR>
+] systems. Data is copied in 4K or 1K chunks (whichever is larger) unless
+<BR>
+] the data is less than 1K when it is copied as a whole. Suppose the application
+<BR>
+] tries to write 1600 bytes of data (assuming 1MSS = 1500 bytes). Then the 
+<BR>
+] mbuf layer would make TCP send 1K first, and the remaining 576 bytes would
+<BR>
+] be held according to the Nagle's algorithm (even under the new proposal).
+<BR>
+<P>(nits:  what's an mbuf layer?--&quot;layer&quot; seems a tad fancy for sosend().
+<BR>
+And MSS=1500 is a lot less common than MSS=1460, the still minority
+<BR>
+MSS=1452, or the uncommon MSS=1444.)
+<BR>
+<P>Wouldn't you consider a TCP implementation that divided the stream into
+<BR>
+segments based on mbuf partitioning fundamentally broken?--I would.
+<BR>
+I'd sneer at any TCP implementation that sends an initial 1K segment
+<BR>
+given a send() request and an MSS both significantly larger than 1K,
+<BR>
+no matter what its excuse (well, other than window space).
+<BR>
+Consider the retransmissions from such an implementation.
+<BR>
+<P>I also don't see how tcp_output() in 4.4BSD-Lite would do such evil deeds.
+<BR>
+Given mbufs payloads of 1K and 576 or any other combination, it seems to
+<BR>
+me that len = min(so-&gt;so_snd.sb_cc, win) - off.
+<BR>
+<P>Finally, as I understand the proposal, while the classic Nagle algorithm
+<BR>
+would delay the a remainder of 100 (MSS=1500) or 140 (MSS=1460), the
+<BR>
+proposed algorithm would not.  It would immediately send the remainder.
+<BR>
+That is exactly the case for which it has been proposed.
+<BR>
+<P>] Due to the above, applications still might keep using TCP_NODELAY even if
+<BR>
+] the underlying TCP implements the proposed mod to Nagle's algorithm.
+<BR>
+<P>That conclusion is certainly true, but I don't agree with the example.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20revised%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;199902270048.RAA07199@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1629.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1627.html">Mohit Aron: "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1623.html">Greg Minshall: "revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1631.html">der Mouse : "Re: revised internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1628">[ date ]</A>
+<A HREF="index.html#1628">[ thread ]</A>
+<A HREF="subject.html#1628">[ subject ]</A>
+<A HREF="author.html#1628">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:37 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

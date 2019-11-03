@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (Kacheong.Poon@Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Thu Feb  4 21:40:09 1999" -->
+<!-- isoreceived="19990205024009" -->
+<!-- sent="Thu, 4 Feb 1999 18:33:42 -0800 (PST)" -->
+<!-- isosent="19990205023342" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="Kacheong.Poon@Eng.Sun.COM" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="Roam.SIMCSD.2.0.4.918182022.18810.kcpoon@jurassic" -->
+<!-- inreplyto="36B9EFD5.D90FABF1@ehsco.com" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:Kacheong.Poon@Eng.Sun.COM?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918182022.18810.kcpoon@jurassic&gt;"><EM>Kacheong.Poon@Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 04 1999 - 21:33:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1514.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1513">[ date ]</A>
+<A HREF="index.html#1513">[ thread ]</A>
+<A HREF="subject.html#1513">[ subject ]</A>
+<A HREF="author.html#1513">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; This is at least one extra send operation, which can't be a good thing,
+</EM><BR>
+<EM>&gt; particularly when the network is over-utilized (or near to it) already.
+</EM><BR>
+<EM>&gt; While this isn't as bad as Rick's example (1461-byte writes), it is
+</EM><BR>
+<EM>&gt; still bad utilization. (I'd hate to own the network that did both.)
+</EM><BR>
+<P>Let's look at the problem from an application programmer's point of view. You
+<BR>
+are writing a network application, the transfer pattern can be anything. You
+<BR>
+notice a performance problem and find that by disabling Nagle algorithm, the
+<BR>
+problem goes away.  What will you do in the production code?
+<BR>
+<P>Now with the changed Nagle algorithm, for certain kind of transfer pattern,
+<BR>
+you do not notice any performance problem.  So you will not turn off Nagle
+<BR>
+algorithm.  But in fact, the Nagle algorithm may still kick in sometimes and
+<BR>
+help the network.  Just that you only see the little impact from time to time.
+<BR>
+<P>Nagle algorithm helps a lot in the case of telnet like traffic.  This we
+<BR>
+should not change.  But for some kind of transfer pattern, it helps a lot if
+<BR>
+we relax the algorithm.  By doing this, we encourage  application programmer
+<BR>
+not to disable the algorithm.  IMHO, this is what the  proposed draft is
+<BR>
+about.  We do not want the algorithm to be disabled in general.  We are making
+<BR>
+an incentive for programmers not to do that.  At the same time, we do not
+<BR>
+adversely affect the network.  Imagine what will happen if every application
+<BR>
+programmers disable the algorithm &quot;by default.&quot;
+<BR>
+<P><EM>&gt; I'd say that based on this info, it is better to just disable Nagle if
+</EM><BR>
+<EM>&gt; your application is going to be writing small (1.5 segments) chunks, and
+</EM><BR>
+<EM>&gt; leaving it enabled for applications that do large writes, rather than
+</EM><BR>
+<EM>&gt; introducing lots of new frames to the network.
+</EM><BR>
+<P>The problem is an application can turn the algorithm off any time, regardless
+<BR>
+of the transfer pattern.  And the proposed change is not to disable the
+<BR>
+algorithm, but to relax it in some cases.  I'd rather see a slight increase
+<BR>
+of network traffic in some cases than have most applications turn off the
+<BR>
+algorithm by default.
+<BR>
+<P>Solaris's TCP stack has some form of the proposed change for many years.  I
+<BR>
+have not heard of customer complaints because of it.  At the very least,
+<BR>
+there was no network meltdown...
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;Roam.SIMCSD.2.0.4.918182022.18810.kcpoon@jurassic&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1514.html">jsnader@ix.netcom.com: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1512.html">Eric A. Hall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1544.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1513">[ date ]</A>
+<A HREF="index.html#1513">[ thread ]</A>
+<A HREF="subject.html#1513">[ subject ]</A>
+<A HREF="author.html#1513">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:23 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Checksum Interoperability</TITLE>
+<META NAME="Author" CONTENT="der Mouse (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: TCP Checksum Interoperability">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Checksum Interoperability</H1>
+<!-- received="Fri Apr  5 19:22:08 2002" -->
+<!-- isoreceived="20020406002208" -->
+<!-- sent="Fri, 5 Apr 2002 19:21:24 -0500 (EST)" -->
+<!-- isosent="20020406002124" -->
+<!-- name="der Mouse" -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: TCP Checksum Interoperability" -->
+<!-- id="200204060021.TAA24631@Sparkle.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="200204052209.RAA13008@ginger.lcs.mit.edu" -->
+<STRONG>From:</STRONG> der Mouse (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;200204060021.TAA24631@Sparkle.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Apr 05 2002 - 19:21:24 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2659.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2657.html">Lloyd Wood: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2651.html">J. Noel Chiappa: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2658">[ date ]</A>
+<A HREF="index.html#2658">[ thread ]</A>
+<A HREF="subject.html#2658">[ subject ]</A>
+<A HREF="author.html#2658">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The TCP (and IP) checksum is defined as &quot;the one's complement of the
+</EM><BR>
+<EM>&gt; one's-complement sum of the packet contents&quot; [...]
+</EM><BR>
+<P><EM>&gt; (The only way to get all 0's as a sum of a one's-complement addition
+</EM><BR>
+<EM>&gt; process is to to sum a series of zero's - which a real packet will
+</EM><BR>
+<EM>&gt; never contain.)
+</EM><BR>
+<P>...huh?  It depends on how you implement one's-complement arithmetic.
+<BR>
+<P>Consider, for example, &quot;do two's-complement adds and reduce the result
+<BR>
+mod 0xffff&quot;, which may be suitable on a machine with fast hardware mod,
+<BR>
+and which can never produce 0xffff.
+<BR>
+<P>In 16-bit one's-complement arithmetic, 0x0000 and 0xffff are
+<BR>
+equivalent, not only on input but also on output.  Trying to draw an
+<BR>
+artificial distinction between them is not only unsupported by the
+<BR>
+standard as far as I can tell but liable to break interoperability with
+<BR>
+conformant implementations which don't draw that distinction.
+<BR>
+<P><EM>&gt; Note that if the packet's check sum (i.e. the sum with the checksum
+</EM><BR>
+<EM>&gt; field set to zero) happens to come out to zero (i.e. all one's,
+</EM><BR>
+<EM>&gt; before the complement), then *either* value of zero in the checksum
+</EM><BR>
+<EM>&gt; field of the packet will result in an all-1's sum when the packet is
+</EM><BR>
+<EM>&gt; checksummed.
+</EM><BR>
+<P>...unless the packet checksumming is done in a way that generates
+<BR>
+0x0000 instead of 0xffff when the sum is (one's-complement) zero.
+<BR>
+<P><EM>&gt; I honestly don't understand why anyone's code even bothers to look at
+</EM><BR>
+<EM>&gt; the actual value in the checksum field of the incoming packet; just
+</EM><BR>
+<EM>&gt; do the checksum of the whole packet, and look at the result.
+</EM><BR>
+<P>With that I agree.
+<BR>
+<P>/~\ The ASCII				der Mouse
+<BR>
+\ / Ribbon Campaign
+<BR>
+&nbsp;X  Against HTML	       <A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20TCP%20Checksum%20Interoperability&In-Reply-To=&lt;200204060021.TAA24631@Sparkle.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+/ \ Email!	     7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2659.html">der Mouse: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2657.html">Lloyd Wood: "Re: TCP Checksum Interoperability"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2651.html">J. Noel Chiappa: "Re: TCP Checksum Interoperability"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2662.html">Joe Touch: "Re: TCP Checksum Interoperability"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2658">[ date ]</A>
+<A HREF="index.html#2658">[ thread ]</A>
+<A HREF="subject.html#2658">[ subject ]</A>
+<A HREF="author.html#2658">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Apr 05 2002 - 19:22:16 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Timeout in FIN-WAIT-2</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: Timeout in FIN-WAIT-2">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Timeout in FIN-WAIT-2</H1>
+<!-- received="Thu Aug 20 11:47:49 1998" -->
+<!-- isoreceived="19980820154749" -->
+<!-- sent="Thu, 20 Aug 1998 12:45:32 -0600 (MDT)" -->
+<!-- isosent="19980820184532" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: Timeout in FIN-WAIT-2" -->
+<!-- id="199808201845.MAA10211@calcite.rhyolite.com" -->
+<!-- inreplyto="Timeout in FIN-WAIT-2" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Aug 20 1998 - 14:45:32 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1249.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1249.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1248">[ date ]</A>
+<A HREF="index.html#1248">[ thread ]</A>
+<A HREF="subject.html#1248">[ subject ]</A>
+<A HREF="author.html#1248">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:jayanth@loc201.tandem.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;">jayanth@loc201.tandem.com</A> (vijayaraghavan_jayanth)
+</EM><BR>
+<P><EM>&gt; Does the existence of too many idle connections affect the kernel resource
+</EM><BR>
+<EM>&gt; allocation ? Are a lot of resources allocated for these connections
+</EM><BR>
+<EM>&gt; and can that be minimized ?
+</EM><BR>
+<P>Yes, yes and yes, but the problem is that if you multiply even a small
+<BR>
+amount of resources by a small percentage by a big number of connections,
+<BR>
+you have a big problem.  The costs of dead connections include:
+<BR>
+&nbsp;&nbsp;1. the kernel machinery for the TCP connection itself, including
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP state, buffering, 
+<BR>
+&nbsp;&nbsp;2. the kernel machinery for the application server process that is 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;waiting for a request that will never come.
+<BR>
+&nbsp;&nbsp;3. other resources used by that application server process.
+<BR>
+<P>Systems intended to deal with many connections (or just SYN bombing)
+<BR>
+tend to have special things for minimizing the cost of TCP connections 
+<BR>
+that are not yet in active use.  Those things are not relevant.
+<BR>
+<P>The kernel resources for the connection itself (#1) are trivial compared
+<BR>
+to the rest.  Even if you use some kind of lightweight processes, the cost
+<BR>
+of a thread is generally more than the cost of a TCP socket.   Few systems
+<BR>
+deal well with 1,000,000 server processes, or threads.  It doesn't take
+<BR>
+many days for a tiny minority of 100,000,000 processes/day to amount to
+<BR>
+1,000,000 stale server processes.
+<BR>
+<P>Personally, I do not see that it makes any significant difference whether
+<BR>
+a TCP keepalive includes application data bytes (i.e. is done by the
+<BR>
+application) or not (i.e. is done on behalf of the application by lower
+<BR>
+layers).  Regardless, a packet is going over the wire, and probably using
+<BR>
+similar resources.  The familiar arguments for putting any facility into
+<BR>
+a central service might argue for TCP keepalives, just as no one here
+<BR>
+suggests implementating reliable streams in appliations using UDP instead
+<BR>
+of using TCP.  Religious zealotry either for or against TCP keepalives is
+<BR>
+as silly as the old OSI-ISO counts of angels dancing in layers.  That
+<BR>
+current applications do not have keepalives determines what is done by
+<BR>
+rational people today.
+<BR>
+<P><P><P>] From: <A HREF="mailto:braden@ISI.EDU?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;">braden@ISI.EDU</A>
+<BR>
+] 
+<BR>
+] This is one of those arguments that we don't have to actuall HAVE,
+<BR>
+] we can just experience an earlier version!
+<BR>
+] ...
+<BR>
+<P>] &gt;From @A.ISI.EDU:<A HREF="mailto:tcp-ip-RELAY@SRI-NIC.ARPA?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;">tcp-ip-RELAY@SRI-NIC.ARPA</A> Fri Mar 18 06:44:43 1988
+<BR>
+<P>] &gt;From <A HREF="mailto:ietf-hosts-request@NNSC.NSF.NET?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;">ietf-hosts-request@NNSC.NSF.NET</A> Fri Mar 29 17:10:33 1991
+<BR>
+] ...
+<BR>
+<P>] I can only say, keep up the Good Fight!  No, it's OK to allow a customer
+<BR>
+] to configure it to 10 seconds if he wants to!  It's just that the
+<BR>
+] software &quot;out of the box&quot; must have a default of at least 2 hours.  If
+<BR>
+] a customer wants to set it smaller, presumably he will not then complain
+<BR>
+] to the world about a TCP reliablity problem, having caused the problem
+<BR>
+] himself.   Well, maybe rational behavior is too much to hope for...
+<BR>
+<P>Those arguments for and against are not relevant.
+<BR>
+<P>Who claims that 2-hour keepalives kill valid connections?  No one then or now.
+<BR>
+Who cares what 4.3BSD did in 1986?--no one since Reno or Tahoe.
+<BR>
+Who advocates 10 second or even 30 second keepalives?--no one here.
+<BR>
+For that matter, no one says that all TCP connections should have keepalives
+<BR>
+turned on &quot;out of the box,&quot; let alone have a default interval of 10 seconds?
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20Timeout%20in%20FIN-WAIT-2&In-Reply-To=&lt;199808201845.MAA10211@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1249.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1247.html">Alan Cox: "Re: Timeout in FIN-WAIT-2"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1211.html">der Mouse : "Timeout in FIN-WAIT-2"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1249.html">Vernon Schryver: "Re: Timeout in FIN-WAIT-2"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1248">[ date ]</A>
+<A HREF="index.html#1248">[ thread ]</A>
+<A HREF="subject.html#1248">[ subject ]</A>
+<A HREF="author.html#1248">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:52 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

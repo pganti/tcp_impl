@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: OT 1.1.2 trace -- delayed Ack</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: OT 1.1.2 trace -- delayed Ack">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: OT 1.1.2 trace -- delayed Ack</H1>
+<!-- received="Wed Mar 26 04:37:24 1997" -->
+<!-- isoreceived="19970326093724" -->
+<!-- sent="Wed, 26 Mar 1997 12:53:45 +0100" -->
+<!-- isosent="19970326115345" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: OT 1.1.2 trace -- delayed Ack" -->
+<!-- id="199703261153.MAA04665@regin.dna.lth.se" -->
+<!-- inreplyto="199703260032.TAA11220@MAILSERV-2HIGH.FTP.COM" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703261153.MAA04665@regin.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Wed Mar 26 1997 - 06:53:45 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0260.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0258.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0258.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0260.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#259">[ date ]</A>
+<A HREF="index.html#259">[ thread ]</A>
+<A HREF="subject.html#259">[ subject ]</A>
+<A HREF="author.html#259">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Larry Backman &lt;<A HREF="mailto:backman@ftp.com?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703261153.MAA04665@regin.dna.lth.se&gt;">backman@ftp.com</A>&gt; writes:
+<BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;||The application not turning around fast enough to hit the delayed Ack is
+</EM><BR>
+<EM>&gt;||only one of the problems I found.  But it does add quite a bit to the
+</EM><BR>
+<EM>&gt;||overhead.
+</EM><BR>
+<EM>&gt;||
+</EM><BR>
+<EM>&gt;||RFC-813 talks about making the delayed Ack timeout dynamically tunable.
+</EM><BR>
+<EM>&gt;||Mine is srtt / 2 + mdev, with a min of 100 ms and max of 500 ms.
+</EM><BR>
+<EM>&gt;||Doesn't anyone other than me actually implement a stack that tunes the
+</EM><BR>
+<EM>&gt;||Ack timeout?
+</EM><BR>
+<EM>&gt;||
+</EM><BR>
+<EM>&gt;yes, no one but us geeks wanted it though :-). 
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Seriously we put more knobs and dials on PCTCP/Onnet than anyone but a
+</EM><BR>
+<EM>&gt;TCP expert could understand.  
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Another interesting  discussion we had but never implemented were how to
+</EM><BR>
+<EM>&gt;create heuristics that could sense an environment (slow serial/fast LAN,
+</EM><BR>
+<EM>&gt;single client connect/multiple server listen) and tune those stack
+</EM><BR>
+<EM>&gt;knobs for the user.
+</EM><BR>
+<P>We've had adaptive delayed ACK timeouts in the Linux code since late
+<BR>
+in the 1.3.X development cycle. The calculation is based on the
+<BR>
+expected interarrival time between packets. It adapts in the same
+<BR>
+way as the RTO timers, but is calculated independently. This is
+<BR>
+necessary because a pure reciever will not have any RTO measurements
+<BR>
+(it never sends any data packets).
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20OT%201.1.2%20trace%20--%20delayed%20Ack&In-Reply-To=&lt;199703261153.MAA04665@regin.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0260.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0258.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0258.html">Larry Backman: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0260.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#259">[ date ]</A>
+<A HREF="index.html#259">[ thread ]</A>
+<A HREF="subject.html#259">[ subject ]</A>
+<A HREF="author.html#259">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:11 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

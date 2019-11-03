@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Out Of Band and Nagle</TITLE>
+<META NAME="Author" CONTENT="Jerry Toporek (jt@mentat.com)">
+<META NAME="Subject" CONTENT="Re: Out Of Band and Nagle">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Out Of Band and Nagle</H1>
+<!-- received="Wed Oct 15 16:56:21 1997" -->
+<!-- isoreceived="19971015205621" -->
+<!-- sent="Wed, 15 Oct 97 16:51:13 PDT" -->
+<!-- isosent="19971015235113" -->
+<!-- name="Jerry Toporek" -->
+<!-- email="jt@mentat.com" -->
+<!-- subject="Re: Out Of Band and Nagle" -->
+<!-- id="9710152351.AA14117@mentat.com" -->
+<!-- inreplyto="Out Of Band and Nagle" -->
+<STRONG>From:</STRONG> Jerry Toporek (<A HREF="mailto:jt@mentat.com?Subject=Re:%20Out%20Of%20Band%20and%20Nagle&In-Reply-To=&lt;9710152351.AA14117@mentat.com&gt;"><EM>jt@mentat.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Oct 15 1997 - 19:51:13 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0777.html">Erik Nordmark: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#778">[ date ]</A>
+<A HREF="index.html#778">[ thread ]</A>
+<A HREF="subject.html#778">[ subject ]</A>
+<A HREF="author.html#778">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; A zero length segment can not be reliably delivered by TCP since it can not
+</EM><BR>
+<EM>&gt; be acknowledged.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I believe t_force in BSD allows TCP to send one byte i.e. it might not
+</EM><BR>
+<EM>&gt; send the urgent byte but it will at least send a segment that contains
+</EM><BR>
+<EM>&gt; the urgent pointer. This allows the reliable delivery of an urgent notification
+</EM><BR>
+<EM>&gt; to the other application.
+</EM><BR>
+<P>Erik:
+<BR>
+<P>Thank you...  That's a very good point.  I withdraw the suggestion...
+<BR>
+The point I was trying to make was that immediate visibility of the URG
+<BR>
+flag at the receiver is crucial.  As you note, an application could deadlock
+<BR>
+if this does not happen.  Therefore, it is important that the flag get delivered
+<BR>
+reliably, which will only be true if some data is sent.
+<BR>
+<P><EM>&gt; Would it be useful to nail down this detailed behavior?
+</EM><BR>
+<P>Yes, I think so.  It may seem obvious that a sender should force a segment
+<BR>
+onto the wire when entering urgent mode, but is it obvious that only a single
+<BR>
+segment should be forced?  Suppose I note that I can force all the data through
+<BR>
+the urgent point onto the wire, because I have enough window, and I don't
+<BR>
+feel like it is so bad to exceed the congestion window by a few MSS because
+<BR>
+the data is really *urgent* and I want to do the application a favor and
+<BR>
+get it all delivered quickly...  This would be bad.  I would prefer to say
+<BR>
+that the sender should not override any send rules when entering urgent mode,
+<BR>
+but a zero-length segment won't get the job done (reliably).
+<BR>
+<P><EM>&gt; A lot of the behavior is tied to the socket API and not to the TCP
+</EM><BR>
+<EM>&gt; protocol specification.
+</EM><BR>
+<P>Yes...  Most of the difficulty that I see with TCP urgent data is as a result
+<BR>
+of applications which are not really portable from one sockets implementation
+<BR>
+to another.  Artifacts of the implementation are believed to be guarantees,
+<BR>
+but don't carry over from one system to another.  That's a whole can of worms
+<BR>
+that can't be sorted out here!
+<BR>
+<P>jt
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0777.html">Erik Nordmark: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0764.html">Rick Jones: "Out Of Band and Nagle"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0779.html">Francesco Potorti`: "Re: Out Of Band and Nagle"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#778">[ date ]</A>
+<A HREF="index.html#778">[ thread ]</A>
+<A HREF="subject.html#778">[ subject ]</A>
+<A HREF="author.html#778">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

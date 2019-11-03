@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BOF Description</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Re: BOF Description">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BOF Description</H1>
+<!-- received="Mon Nov 25 23:38:29 1996" -->
+<!-- isoreceived="19961126043829" -->
+<!-- sent="Mon, 25 Nov 1996 15:27:52 PST" -->
+<!-- isosent="19961125232752" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Re: BOF Description" -->
+<!-- id="199611252327.PAA04179@daffy.ee.lbl.gov" -->
+<!-- inreplyto="Mon, 25 Nov 1996 03:19:14 PST" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611252327.PAA04179@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 25 1996 - 18:27:52 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0026.html">Joe Touch: "Re: BOF Descriptio"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0024.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#25">[ date ]</A>
+<A HREF="index.html#25">[ thread ]</A>
+<A HREF="subject.html#25">[ subject ]</A>
+<A HREF="author.html#25">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; The Mentat-derived Solaris TCP implementation adopted a delayed ack
+</EM><BR>
+<EM>&gt; approach where in the streamlined case acks are delayed until either
+</EM><BR>
+<EM>&gt; half of the window is filled, or when the delayed ack timer fires. The
+</EM><BR>
+<EM>&gt; timer has a default value of 50ms.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; The delayed ack scheme helps to cut down CPU time in a LAN environment,
+</EM><BR>
+<EM>&gt; but is controversial in a WAN (e.g. the Internet) environment where
+</EM><BR>
+<EM>&gt; frequent feedback from the other side is considered necessary to keep Van's
+</EM><BR>
+<EM>&gt; algorithm functioning. We're still debating what the best approach is...
+</EM><BR>
+<P>I have lots of traces that show that in WANs this leads to quite bursty
+<BR>
+behavior.  If the loss rate for the acks is non-negligible, it can also lead
+<BR>
+to unnecessary retransmissions.
+<BR>
+<P><EM>&gt; &gt;- SunOS omits generating dup acks for packets received above a
+</EM><BR>
+<EM>&gt; &gt;  sequence hole.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Are you referring to the latest version (414)?
+</EM><BR>
+<P>Yes.  I have a trace in which 35 packets are received above a sequence
+<BR>
+hole (so many because of using a big receiver window), but the SunOS 4.1.4
+<BR>
+TCP only generates one duplicate ack, apparently on the dup ack timer.
+<BR>
+<P><EM>&gt; &gt;- Solaris 2.3 and 2.4 have a bug in the fast recovery code so they
+</EM><BR>
+<EM>&gt; &gt;  don't send packets when they could.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I wouldn't call this a bug, (is rstevens' &quot;TCP ... fast recovery&quot; a BCP
+</EM><BR>
+<EM>&gt; already?) and I don't see how it could happen right away ...
+</EM><BR>
+<P>I didn't give much detail, sorry about that.  This is a genuine bug.
+<BR>
+The problem comes about because Solaris TCP is careful to advance
+<BR>
+the congestion window in terms of the amount of data ack'd.  That's more
+<BR>
+faithful to Van's paper than the usual technique of just assuming each
+<BR>
+ack is for an MSS' worth of data.  But for fast recovery the acks coming
+<BR>
+in are dups and don't ack any new data, so the inflated congestion window
+<BR>
+doesn't advance.  (I imagine it's a one line fix to treat acks in this
+<BR>
+case as ack'ing a full MSS.)
+<BR>
+<P><EM>&gt; Another problematic area for us has been RTO estimation. With the growth
+</EM><BR>
+<EM>&gt; and load of the Internet causing large variation of RTTs, and the ever
+</EM><BR>
+<EM>&gt; increasing combinations of bandwidth-delay, the orignal algorithm
+</EM><BR>
+<EM>&gt; recommened by Van may need an overhaul.
+</EM><BR>
+<P>This is something I'm looking into as part of an Internet packet dynamics
+<BR>
+study I'm working on.  (So it's research and not well established how to
+<BR>
+revise the RTO algorithm.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0026.html">Joe Touch: "Re: BOF Descriptio"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0024.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#25">[ date ]</A>
+<A HREF="index.html#25">[ thread ]</A>
+<A HREF="subject.html#25">[ subject ]</A>
+<A HREF="author.html#25">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

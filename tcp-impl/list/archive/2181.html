@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: ISA used in TCP/IP/UDP</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: ISA used in TCP/IP/UDP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: ISA used in TCP/IP/UDP</H1>
+<!-- received="Tue Jun 20 14:35:38 2000" -->
+<!-- isoreceived="20000620183538" -->
+<!-- sent="Tue, 20 Jun 2000 12:28:54 -0600 (MDT)" -->
+<!-- isosent="20000620182854" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: ISA used in TCP/IP/UDP" -->
+<!-- id="200006201828.MAA17203@calcite.rhyolite.com" -->
+<!-- inreplyto="ISA used in TCP/IP/UDP" -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20ISA%20used%20in%20TCP/IP/UDP&In-Reply-To=&lt;200006201828.MAA17203@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Jun 20 2000 - 14:28:54 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2182.html">Joe Touch: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2180.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2166.html">Wilson C. Chung: "ISA used in TCP/IP/UDP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2125.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2181">[ date ]</A>
+<A HREF="index.html#2181">[ thread ]</A>
+<A HREF="subject.html#2181">[ subject ]</A>
+<A HREF="author.html#2181">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20ISA%20used%20in%20TCP/IP/UDP&In-Reply-To=&lt;200006201828.MAA17203@calcite.rhyolite.com&gt;">touch@ISI.EDU</A>&gt;
+</EM><BR>
+<P><EM>&gt; ...
+</EM><BR>
+<EM>&gt; &gt;     Checksum instructions would be supported by several registers:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt;         Accumulator (the running checksum total)
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt;         Checksum offset (where in the &quot;packet&quot; to ignore the data since
+</EM><BR>
+<EM>&gt; &gt;         the real checksum is stored there).
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; A simpler solution would be &quot;ones complement add&quot; - a little more than
+</EM><BR>
+<EM>&gt; add with carry (i.e., there's no carry, it just gets folded in).
+</EM><BR>
+<EM>&gt; However, all that would save is one instruction each time the checksum
+</EM><BR>
+<EM>&gt; is read, since intermediate carries can pipelined in.
+</EM><BR>
+<P>I don't see the utility of a 1's complement add, if only because its
+<BR>
+necessarily fixed width would likely be wrong in many situations.
+<BR>
+(yes, the checksum itself is 16 bits wide, but doesn't everyone compute
+<BR>
+it in bulk at least 32 bits wide?)
+<BR>
+<P>My prejudice is also to checksum with fly-by-DMA.  However, with today's
+<BR>
+infinitely fast CPU's (compared to memory) it's not clear what DMA means
+<BR>
+or that making your DMA machinery uniquely fancy is the right choice. 
+<BR>
+If your DMA engine is some kind of CPU or DSP core, you would want
+<BR>
+instructions that don't make the TCP checksum painful, but that's no
+<BR>
+more than a carry bit.
+<BR>
+<P>If you don't have a carry bit, as is the case in some major RISC
+<BR>
+instruction sets, computing the TCP checksum requires twice as many
+<BR>
+CPU instructions as it would otherwise for a given width.
+<BR>
+<P><P><EM>&gt; &gt; 5)  Built-in &quot;mbuf&quot;s?  I.e. the processor understands a specific scheme
+</EM><BR>
+<EM>&gt; &gt;     of chaining buffers to create packets, thus can more efficiently
+</EM><BR>
+<EM>&gt; &gt;     poke around in a packet for you, rather then your code having to
+</EM><BR>
+<EM>&gt; &gt;     always do it by hand.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; Assumes mbufs. There are versions of TCP that don't rely on that
+</EM><BR>
+<EM>&gt; structure, and the structure and especially the order of its components
+</EM><BR>
+<EM>&gt; can be OS and even compiler-specific. 
+</EM><BR>
+<P>Some of us have experienced such joys in a single release of a single
+<BR>
+operating system (or at least single source tree) built with a single
+<BR>
+(cross) compiler.  As 64-bit architectures finally become common and then
+<BR>
+when less simplistic choices than long=int=pointer=64-bits are common,
+<BR>
+many of us might have such joys.
+<BR>
+<P>Mbufs themselves are not hard.  All of the variations I've seen have been
+<BR>
+designed to work well with existing simple instructions.
+<BR>
+That's why for the classic flavors, there are C macros that expand to
+<BR>
+very few instructions for the common operations.
+<BR>
+The expensive parts of dealing with mbufs could not be put into reasonable
+<BR>
+instructions.  For example, you really don't want single instructions to
+<BR>
+fiddle with virtual memory machinery for mbufs.
+<BR>
+<P>Special instructions to understand mbufs sound too much like classic CISC
+<BR>
+mistakes.  (One of my favorite CISC instructions was the CDC 3000's evaluate-
+<BR>
+polynomical.)  It would be nice to think that the lessons learned during
+<BR>
+the RISC revolution about gratuitous, because-it-might-be-nice instruction
+<BR>
+set geegaws have not been forgotten.
+<BR>
+Actually, that sour observation applies to the original question.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20ISA%20used%20in%20TCP/IP/UDP&In-Reply-To=&lt;200006201828.MAA17203@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2182.html">Joe Touch: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2180.html">Patrick Klos: "Re: ISA used in TCP/IP/UDP"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2166.html">Wilson C. Chung: "ISA used in TCP/IP/UDP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2125.html">Howard Berkey: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2181">[ date ]</A>
+<A HREF="index.html#2181">[ thread ]</A>
+<A HREF="subject.html#2181">[ subject ]</A>
+<A HREF="author.html#2181">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:34 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

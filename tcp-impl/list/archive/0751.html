@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: packets,segments and windows</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: packets,segments and windows">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: packets,segments and windows</H1>
+<!-- received="Mon Oct  6 08:24:18 1997" -->
+<!-- isoreceived="19971006122418" -->
+<!-- sent="Mon, 6 Oct 1997 10:14:17 -0500 (CDT)" -->
+<!-- isosent="19971006151417" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: packets,segments and windows" -->
+<!-- id="199710061514.KAA16523@frantic.BSDI.COM" -->
+<!-- inreplyto="packets,segments and windows" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20packets,segments%20and%20windows&In-Reply-To=&lt;199710061514.KAA16523@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Oct 06 1997 - 11:14:17 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0752.html">Armin Eberlein: "RTT measurement resolution in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0750.html">Thomas Narten: "Re: packets,segments and windows"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0746.html">Chetan Kumar: "packets,segments and windows"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0754.html">braden@ISI.EDU: "Re: packets,segments and windows"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#751">[ date ]</A>
+<A HREF="index.html#751">[ thread ]</A>
+<A HREF="subject.html#751">[ subject ]</A>
+<A HREF="author.html#751">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Date: Sun, 5 Oct 1997 18:26:47 +0000 (GMT)
+</EM><BR>
+<EM>&gt; From: Chetan Kumar &lt;<A HREF="mailto:chetan@protocol.ece.iisc.ernet.in?Subject=Re:%20packets,segments%20and%20windows&In-Reply-To=&lt;199710061514.KAA16523@frantic.BSDI.COM&gt;">chetan@protocol.ece.iisc.ernet.in</A>&gt;
+</EM><BR>
+<EM>&gt; To: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20packets,segments%20and%20windows&In-Reply-To=&lt;199710061514.KAA16523@frantic.BSDI.COM&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; Cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20packets,segments%20and%20windows&In-Reply-To=&lt;199710061514.KAA16523@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: packets,segments and windows 
+</EM><BR>
+<EM>&gt; ...
+</EM><BR>
+<EM>&gt; We know that TCP is byte stream oriented windowed flow control. What
+</EM><BR>
+<EM>&gt; happens if the advertising window is exactly MSS+1 or n*MSS+1, n is an
+</EM><BR>
+<EM>&gt; integer ?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is there any trade off between delaying for the one byte and sending it as
+</EM><BR>
+<EM>&gt; one segment with one byte ?
+</EM><BR>
+<P>If the window (and congestion window) allow all the outstanding data
+<BR>
+to be sent, then send it all, even if the last packet only has one
+<BR>
+byte of data.  There really is nothing to be saved by defering the
+<BR>
+last byte of data.  And if the other side can't do anything until
+<BR>
+it gets all the data, then delaying the last byte just introduces
+<BR>
+additional latency.
+<BR>
+<P>If there is additional data to send beyond what will fit in the window,
+<BR>
+then you should defer sending the trailing tinygram until the window
+<BR>
+opens up some more, to allow for better aggregation of the data.
+<BR>
+<P>There are, of course, details and exceptions to these cases, but these
+<BR>
+make a good rule of thumb.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20packets,segments%20and%20windows&In-Reply-To=&lt;199710061514.KAA16523@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0752.html">Armin Eberlein: "RTT measurement resolution in TCP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0750.html">Thomas Narten: "Re: packets,segments and windows"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0746.html">Chetan Kumar: "packets,segments and windows"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0754.html">braden@ISI.EDU: "Re: packets,segments and windows"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#751">[ date ]</A>
+<A HREF="index.html#751">[ thread ]</A>
+<A HREF="subject.html#751">[ subject ]</A>
+<A HREF="author.html#751">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

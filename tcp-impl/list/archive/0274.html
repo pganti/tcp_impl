@@ -1,0 +1,1253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Internet Draft on Known TCP Impl</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="Internet Draft on Known TCP Implementation Problems">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Internet Draft on Known TCP Implementation Problems</H1>
+<!-- received="Thu Mar 27 11:28:19 1997" -->
+<!-- isoreceived="19970327162819" -->
+<!-- sent="Thu, 27 Mar 1997 11:16:32 PST" -->
+<!-- isosent="19970327191632" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="Internet Draft on Known TCP Implementation Problems" -->
+<!-- id="199703271916.LAA11430@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703271916.LAA11430@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Mar 27 1997 - 14:16:32 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0279.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0280.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0281.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#274">[ date ]</A>
+<A HREF="index.html#274">[ thread ]</A>
+<A HREF="subject.html#274">[ subject ]</A>
+<A HREF="author.html#274">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Here's the first draft of a document describing TCP implementation problems.
+<BR>
+It includes the four I sent earlier to the list, with feedback incorporated.
+<BR>
+I picture this turning into an extensive document in the future and encourage
+<BR>
+volunteers to write up descriptions of other problems.  I'll post the list
+<BR>
+I've been keeping of problems to document in a few days.
+<BR>
+<P>So far my leaning is to include traces directly in the document, rather
+<BR>
+than using URLs to on-line versions.  This is because they so far haven't
+<BR>
+been big enough to bloat the doc, and it's handy having them right there
+<BR>
+in the middle of the discussion.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vern
+<BR>
+<P><P>--------------------------------------------------------------------
+<BR>
+<P><P>Network Working Group                                  V. Paxson, Editor
+<BR>
+Internet Draft
+<BR>
+Expiration Date: September 1997                               March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Known TCP Implementation Problems
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;draft-ietf-tcpimp-prob-00.txt&gt;
+<BR>
+<P><P>1. Status of this Memo
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This document is an Internet  Draft.   Internet  Drafts  are  working
+<BR>
+&nbsp;&nbsp;&nbsp;documents  of  the Internet Engineering Task Force (IETF), its areas,
+<BR>
+&nbsp;&nbsp;&nbsp;and its working groups.  Note that other groups may  also  distribute
+<BR>
+&nbsp;&nbsp;&nbsp;working documents as Internet Drafts.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Internet Drafts are draft  documents  valid  for  a  maximum  of  six
+<BR>
+&nbsp;&nbsp;&nbsp;months, and may be updated, replaced, or obsoleted by other documents
+<BR>
+&nbsp;&nbsp;&nbsp;at any time.  It is inappropriate to use Internet Drafts as reference
+<BR>
+&nbsp;&nbsp;&nbsp;material or to cite them other than as ``work in progress''.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;To learn the current status of any Internet Draft, please  check  the
+<BR>
+&nbsp;&nbsp;&nbsp;``1id-abstracts.txt'' listing contained in the Internet Drafts shadow
+<BR>
+&nbsp;&nbsp;&nbsp;directories  on  ftp.is.co.za   (Africa),   nic.nordu.net   (Europe),
+<BR>
+&nbsp;&nbsp;&nbsp;munnari.oz.au  (Pacific  Rim),  ds.internic.net  (US  East Coast), or
+<BR>
+&nbsp;&nbsp;&nbsp;ftp.isi.edu (US West Coast).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This memo provides information for the Internet community.  This memo
+<BR>
+&nbsp;&nbsp;&nbsp;does  not  specify an Internet standard of any kind.  Distribution of
+<BR>
+&nbsp;&nbsp;&nbsp;this memo is unlimited.
+<BR>
+<P><P>2. Introduction
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This memo catalogs a number of  known  TCP  implementation  problems.
+<BR>
+&nbsp;&nbsp;&nbsp;The  goal  in  doing  so  is  to  improve  conditions in the existing
+<BR>
+&nbsp;&nbsp;&nbsp;Internet by enhancing the quality of current TCP/IP  implementations.
+<BR>
+&nbsp;&nbsp;&nbsp;It  is  hoped  that  both  performance  and correctness issues can be
+<BR>
+&nbsp;&nbsp;&nbsp;resolved by making implementors  aware  of  the  problems  and  their
+<BR>
+&nbsp;&nbsp;&nbsp;solutions.   In  the  long term, it is hoped that this will provide a
+<BR>
+&nbsp;&nbsp;&nbsp;reduction  in  unnecessary  traffic  on  the  network,  the  rate  of
+<BR>
+&nbsp;&nbsp;&nbsp;connection  failures  due  to  protocol  errors,  and load on network
+<BR>
+&nbsp;&nbsp;&nbsp;servers due to time spent processing  both  unsuccessful  connections
+<BR>
+&nbsp;&nbsp;&nbsp;and  retransmitted  data.   This will help to ensure the stability of
+<BR>
+&nbsp;&nbsp;&nbsp;the global Internet.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Each problem is defined as follows:
+<BR>
+<P><P><P><P>Paxson, Editor                                                  [Page 1]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;Name The name associated with the problem.  In this memo, the name is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;given as a subsection heading.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One or more problem categories for which the problem is  classi-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fied.   Categories  used  so far: &quot;congestion control&quot;, &quot;perfor-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mance&quot;, &quot;reliability&quot;.  Others anticipated: &quot;security&quot;, &quot;intero-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perability&quot;, &quot;configuration&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A definition of the problem, succinct  but  including  necessary
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;background material.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A quanitification as to how serious the problem  is  considered.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Categories are &quot;Non-critical&quot;, &quot;Serious&quot;, and &quot;Critical&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Why the problem is viewed as a problem.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brief discussion of the RFCs with respect to which  the  problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is viewed as an implementation error.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Trace file demonstrating the problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One or more ASCII trace  files  demonstrating  the  problem,  if
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applicable.   These  may  in the future be replaced with URLs to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on-line traces.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;One or more examples of how correct behavior appears in a trace,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if applicable.  These may in the future be replaced with URLs to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on-line traces.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;References that further discuss the problem.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;How to test an implementation to see if it exhibits the problem.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This  discussion may include difficulties and subtleties associ-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ated with causing the  problem  to  manifest  itself,  and  with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interpreting  traces  to  detect the presence of the problem (if
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applicable).  In the future, this may include URLs for  diagnos-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tic tools.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For known causes of the problem, how to correct the  implementa-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tion.
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 2]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;Implementation specifics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If it is viewed as beneficial to document particular implementa-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions exhibiting the problem, and if the corresponding implemen-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tors approve, then this section gives  the  specifics  of  those
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;implementations,  along with a contact address for the implemen-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tors.
+<BR>
+<P><P>3. Known implementation problems
+<BR>
+<P><P>3.1. No initial slow start
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP begins transmitting data, it is required  by  RFC  1122,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2.15,  to  engage in a &quot;slow start&quot; by initializing its conges-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tion window, cwnd, to one packet (one segment of the maximum size).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It  subsequently  increases  cwnd  by  one  packet  for each ack it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receives for new data.  The minimum  of  cwnd  and  the  receiver's
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;advertised  window  bounds  the highest sequence number the TCP can
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmit.  A TCP that fails to initialize  and  increment  cwnd  in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this fashion exhibits &quot;No initial slow start&quot;.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP failing to slow start when beginning a connection results  in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;traffic  bursts  that  can stress the network, leading to excessive
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queueing delays and packet loss.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Implementations exhibiting this problem might do  so  because  they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suffer  from  the  general  problem  of  not including the required
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window.  These implementations will also suffer from &quot;No
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow start after retransmission timeout&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;There are different shades of &quot;No initial slow  start&quot;.   From  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perspective  of  stressing  the  network, the worst is a connection
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that simply always sends based on the receiver's advertised window,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with  no  notion of a separate congestion window.  Some other forms
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are described in &quot;Uninitialized CWND&quot; and &quot;Initial CWND of 2  pack-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ets&quot;.
+<BR>
+<P><P>Relevant RFCs' 5
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 3]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start.  RFC 2001 gives the  specifics
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of slow start.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the connection  responder.   No
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.244503 B &gt; A: S 1168512000:1168512000(0) win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;mss 1460,nop,wscale 0&gt; (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.259908 A &gt; B: S 3688169472:3688169472(0)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ack 1168512001 win 32768 &lt;mss 1460&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.389992 B &gt; A: . ack 1 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.664975 A &gt; B: P 1:513(512) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.700185 A &gt; B: . 513:1973(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.718017 A &gt; B: . 1973:3433(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.762945 A &gt; B: . 3433:4893(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.811273 A &gt; B: . 4893:6353(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.829149 A &gt; B: . 6353:7813(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.853687 B &gt; A: . ack 1973 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:42.864031 B &gt; A: . ack 3433 win 33580 (DF) [tos 0x8]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After the third packet, the connection is established.  A, the con-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nection responder, begins transmitting to B, the connection initia-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tor.  Host A quickly sends 6 packets comprising  7812  bytes,  even
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;though  the SYN exchange agreed upon an MSS of 1460 bytes (implying
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an initial congestion window  of  1  segment  corresponds  to  1460
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes), and so A should have sent at most 1460 bytes.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The acks sent by B to A in the last two lines  indicate  that  this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace  is  not a measurement error (slow start really occurring but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the corresponding acks having been dropped by the packet filter).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the connection originator.   No
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:31.914050 C &gt; D: S 1448571845:1448571845(0) win 4380 &lt;mss 1460&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.068819 D &gt; C: S 1755712000:1755712000(0) ack 1448571846 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.069341 C &gt; D: . ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.075213 C &gt; D: P 1:513(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.286073 D &gt; C: . ack 513 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.287032 C &gt; D: . 513:1025(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.287506 C &gt; D: . 1025:1537(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.432712 D &gt; C: . ack 1537 win 4096
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 4]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.433690 C &gt; D: . 1537:2049(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.434481 C &gt; D: . 2049:2561(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.435032 C &gt; D: . 2561:3073(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.594526 D &gt; C: . ack 3073 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.595465 C &gt; D: . 3073:3585(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.595947 C &gt; D: . 3585:4097(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.596414 C &gt; D: . 4097:4609(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.596888 C &gt; D: . 4609:5121(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:32.733453 D &gt; C: . ack 4097 win 4096
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Paxson97].
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For implementations always manifesting this problem,  it  shows  up
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immediately  in  a  packet trace or a sequence plot, as illustrated
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks a notion of  a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion  window,  then  unfortunately  this requires significant
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work to fix.  However, doing so is critical,  as  such  implementa-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions  exhibit  &quot;No slow start after retransmission timeout&quot;, which
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has a significance of &quot;Critical&quot;.
+<BR>
+<P><P>3.2. No slow start after retransmission timeout
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP experiences a retransmission timeout, it is required  by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC  1122,  4.2.2.15, to engage in &quot;slow start&quot; by initializing its
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window, cwnd, to one packet (one segment of the  maximum
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size).   It  subsequently increases cwnd by one packet for each ack
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it  receives  for  new  data  until  it  reaches  the   &quot;congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avoidance&quot;  threshold,  ssthresh,  at  which  point  the congestion
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avoidance algorithm for updating the window takes over.  A TCP that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fails  to  enter  slow start upon a timeout exhibits &quot;No slow start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;after retransmission timeout&quot;.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Critical.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Entering slow start upon timeout forms one of the  cornerstones  of
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 5]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet  congestion  stability,  as  outlined in [Jacobson88].  If
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCPs fail to do so,  the  network  becomes  at  risk  of  suffering
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;congestion collapse&quot; [RFC896].
+<BR>
+<P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 requires use of slow start after loss.  RFC 2001 gives the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specifics  of  how  to  implement  slow  start.   RFC 896 describes
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion collapse.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The retransmission timeout discussed here should  not  be  confused
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with  the  separate  &quot;fast  recovery&quot; retransmission mechanism dis-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cussed in RFC 2001.
+<BR>
+<P><P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the sending TCP (A).  No losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.090612 B &gt; A: . ack 357125 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.222025 A &gt; B: . 357125:358585(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:40:59.868871 A &gt; B: . 357125:358585(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.016641 B &gt; A: . ack 364425 win 33580 (DF) [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.036709 A &gt; B: . 364425:365885(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.045231 A &gt; B: . 365885:367345(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.053785 A &gt; B: . 367345:368805(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.062426 A &gt; B: . 368805:370265(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.071074 A &gt; B: . 370265:371725(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.079794 A &gt; B: . 371725:373185(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.089304 A &gt; B: . 373185:374645(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.097738 A &gt; B: . 374645:376105(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.106409 A &gt; B: . 376105:377565(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.115024 A &gt; B: . 377565:379025(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.123576 A &gt; B: . 379025:380485(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.132016 A &gt; B: . 380485:381945(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.141635 A &gt; B: . 381945:383405(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.150094 A &gt; B: . 383405:384865(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.158552 A &gt; B: . 384865:386325(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.167053 A &gt; B: . 386325:387785(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.175518 A &gt; B: . 387785:389245(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.210835 A &gt; B: . 389245:390705(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.226108 A &gt; B: . 390705:392165(1460) ack 1 win 32768
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:41:00.241524 B &gt; A: . ack 389245 win 8760 (DF) [tos 0x8]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first packet indicates the ack point is 357125.  130 msec after
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiving  the  ack,  A  transmits  the packet after the ack point,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;357125:358585.  640 msec after this  transmission,  it  retransmits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;357125:358585,  in  an  apparent  retransmission  timeout.  At this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point, A's cwnd should be one MSS,  or  1460  bytes,  as  A  enters
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 6]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slow-start.  The trace is consistent with this possibility.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B replies with an ack of 364425, indicating that  A  has  filled  a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence  hole.   At  this  point, A's cwnd should be 1460*2 = 2920
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes, since in slow start receiving an ack advances cwnd  by  MSS.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However,  A  then  launches 19 consecutive packets, which is incon-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sistent with slow start.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the sending TCP (C).  No losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.442538 C &gt; D: P 465409:465921(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.544483 D &gt; C: . ack 461825 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:48.703496 D &gt; C: . ack 461825 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.044613 C &gt; D: . 461825:462337(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.192282 D &gt; C: . ack 465921 win 2048
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.192538 D &gt; C: . ack 465921 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.193392 C &gt; D: P 465921:466433(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.194726 C &gt; D: P 466433:466945(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.350665 D &gt; C: . ack 466945 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.351694 C &gt; D: . 466945:467457(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.352168 C &gt; D: . 467457:467969(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.352643 C &gt; D: . 467969:468481(512) ack 1 win 4608
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:49.506000 D &gt; C: . ack 467969 win 3584
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After C transmits the first packet shown to D, it takes  no  action
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in  response  to  D's  acks  for  461825,  because the first packet
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;already reached the advertised window limit  of  4096  bytes  above
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;461825.    600   msec   after  transmitting  the  first  packet,  C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmits  461825:462337,  presumably  due  to  a  timeout.   Its
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion window is now MSS (512 bytes).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D acks 465921, indicating that C's retransmission filled a sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hole.   This  ack advances C's cwnd from 512 to 1024.  Very shortly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;after, D acks 465921 again in order to update  the  offered  window
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from  2048 to 4096.  This ack does not advance cwnd since it is not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for new data.  Very shortly after, C responds to the newly enlarged
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window  by  transmitting  two packets.  D acks both, advancing cwnd
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from 1024 to 1536.  C in turn transmits three packets.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Paxson97].
+<BR>
+<P><P><P><P>Paxson, Editor                                                  [Page 7]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Packet loss is common enough in the Internet that generally  it  is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not  difficult to find an Internet path that will force retransmis-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sion due to packet loss.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the effective window prior to loss  is  large  enough,  however,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then  the  TCP  may  retransmit using the &quot;fast recovery&quot; mechanism
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;described in RFC 2001.  In a packet trace, the  signature  of  fast
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery  is  that  the packet retransmission occurs in response to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the receipt of three duplicate acks, and subsequent duplicate  acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may  lead to the transmission of new data, above both the ack point
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and the highest sequence transmitted so far.  An absence  of  three
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate  acks  prior  to  retransmission  suffices to distinguish
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;between timeout and fast recovery retransmissions.  In the face  of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only  observing  fast recovery retransmissions, generally it is not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;difficult to repeat the data transfer  until  observing  a  timeout
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Once armed with a trace exhibiting a timeout retransmission, deter-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mining  whether the TCP follows slow start is done by computing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correct progression of cwnd and comparing it to the amount of  data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmited by the TCP subsequent to the timeout rtransmission.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks a notion of  a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;congestion  window,  then  unfortunately  this requires significant
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;work to fix.  However, doing so is critical, for  reasons  outlined
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above.
+<BR>
+<P><P>3.3. Inconsistent retransmission
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliability
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If, for a given sequence number, a  sending  TCP  retransmits  dif-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ferent  data  than previously sent for that sequence number, then a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strong possibility arises that the receiving TCP will reconstruct a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;different  byte  stream  than that sent by the sending application,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depending on which instance of  the  sequence  number  it  accepts.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Such a sending TCP exhibits &quot;Inconsistent retransmission&quot;.
+<BR>
+<P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Critical.
+<BR>
+<P>Implications
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 8]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reliable delivery of data is a fundamental property of TCP.
+<BR>
+<P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 793, section 1.5, discusses the central role of reliability  in
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TCP operation.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at  the  receiving  TCP  (B).   No
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:53.145503 A &gt; B: FP 90048435:90048461(26) ack 393464682 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 0042 9644 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3006 e4c2 86b1 0401 83f3 010a b2a4 0015
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;055e 07b3 1773 cb6a 5019 1000 68a9 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data starts here&gt;504f 5254 2031 3334 2c31 3737*2c34 2c31
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2c31 3738 2c31 3635 0d0a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:53.146479 B &gt; A: R 393464682:393464682(0) win 8192
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12:35:53.851714 A &gt; B: FP 90048429:90048463(34) ack 393464682 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 004a 965b 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3006 e4a3 86b1 0401 83f3 010a b2a4 0015
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;055e 07ad 1773 cb6a 5019 1000 8bd3 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data starts here&gt;5041 5356 0d0a 504f 5254 2031 3334 2c31
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3737*2c31 3035 2c31 3431 2c34 2c31 3539
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0d0a
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The sequence numbers shown in  this  trace  are  absolute  and  not
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;adjusted to reflect the ISN.  The 4-digit hex values show a dump of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the packet's IP and TCP headers, as well as payload.  A first sends
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to  B  data  for  90048435:90048461.  The corresponding data begins
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with hex words 504f, 5254, etc.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B responds with a RST.  Since the recording location was  local  to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B, it is unknown whether A received the RST.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A then sends 90048429:90048463, which includes six  sequence  posi-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions  below the earlier transmission, all 26 positions of the ear-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lier transmission, and two additional sequence positions.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The retransmission disagrees starting just after sequence 90048447,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;annotated  above  with  a leading '*'.  These two bytes were origi-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nally transmitted as hex 2c34 but retransmitted as hex 2c31.   Sub-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequent positions disagree as well.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This behavior has been observed in other traces involving different
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hosts.  It is unknown how to repeat it.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this instance, no corruption would occur, since  B  has  already
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indicated it will not accept further packets from A.
+<BR>
+<P><P><P>Paxson, Editor                                                  [Page 9]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second example illustrates a slightly different instance  of  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;problem.   The  tracing  again  was  made  with  tcpdump/BPF at the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiving TCP (D).
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:23:58.645829 C &gt; D: P 185:212(27) ack 565 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 0043 90a3 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3306 0734 cbf1 9eef 83f3 010a 0525 0015
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a3a2 faba 578c 70a4 5018 1000 9a53 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data starts here&gt;504f 5254 2032 3033 2c32 3431 2c31 3538
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2c32 3339 2c35 2c34 330d 0a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:23:58.646805 D &gt; C: . ack 184 win 8192
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 0028 beeb 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3e06 ce06 83f3 010a cbf1 9eef 0015 0525
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;578c 70a4 a3a2 fab9 5010 2000 342f 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;22:31:36.532244 C &gt; D: FP 186:213(27) ack 565 win 4096
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4500 0043 9435 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3306 03a2 cbf1 9eef 83f3 010a 0525 0015
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a3a2 fabb 578c 70a4 5019 1000 9a51 0000
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data starts here&gt;504f 5254 2032 3033 2c32 3431 2c31 3538
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2c32 3339 2c35 2c34 330d 0a
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this trace, sequence numbers are relative.  C sends 185:212, but
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D only sends an ack for 184 (so sequence number 184 is missing).  C
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then sends 186:213.  The packet payload is identical to the  previ-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ous  payload, but the base sequence number is one higher, resulting
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in an inconsistent retransmission.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Neither trace exhibits checksum errors.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Omitted, as presumably correct behavior is obvious.)
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None known.
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem unfortunately can be very difficult to  detect,  since
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available  experience  indicates  it is quite rare that it is mani-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fested.  No &quot;trigger&quot; has been  identified  that  can  be  used  to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reproduce the problem.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the absence of a known &quot;trigger&quot;, we cannot always assess how to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fix the problem.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In one implementation (not the one illustrated above), the  problem
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;manifested  itself  when  (1) the sender received a zero window and
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 10]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stalled; (2) eventually an ack arrived that offered a window larger
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;than  that  in  effect  at  the  time  of the stall; (3) the sender
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmitted out of the buffer of data it held at the  time  of  the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stall,  but (4) failed to limit this transfer to the buffer length,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;instead using the newly advertised  (and  larger)  offered  window.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consequently,  in  addition  to  the valid buffer contents, it sent
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;whatever garbage values followed the end of the buffer.  If it then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmitted  the corresponding sequence numbers, at that point it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sent the correct data, resulting in an inconsistent retransmission.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note  that  this  instance  of  the problem reflects a more general
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;problem, that of initially transmitting incorrect data.
+<BR>
+<P><P>3.4. Failure to retain above-sequence data
+<BR>
+<P>Category
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congestion control, performance
+<BR>
+<P>Description
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP receives an &quot;above sequence&quot; segment, meaning one with a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence  number  exceeding  RCV.NXT  but below RCV.NXT+RCV.WND, it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD queue the segment for later delivery (RFC  1122,  4.2.2.20).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A  TCP  that  fails  to do so is said to exhibit &quot;Failure to retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence data&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It may sometimes be appropriate for a TCP to discard above-sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data  to  reclaim memory.  If they do so only rarely, then we would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not consider them to exhibit this problem.  Instead, the particular
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concern is with TCPs that always discard above-sequence data.
+<BR>
+<P><P>Significance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious.
+<BR>
+<P>Implications
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In times of congestion, a failure  to  retain  above-sequence  data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will lead to numerous otherwise-unnecessary retransmissions, aggra-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vating the congestion and potentially  reducing  performance  by  a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;large factor.
+<BR>
+<P>Relevant RFCs
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 revises RFC 793 by upgrading the latter's MAY to a  SHOULD
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on this issue.
+<BR>
+<P>Trace file demonstrating it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the receiving TCP.   No  losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported.
+<BR>
+<P><P><P><P>Paxson, Editor                                                 [Page 11]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B is the TCP sender, A the receiver.  A exhibits failure to  retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above sequence data:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.164860 B &gt; A: . 221078:221614(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.170809 B &gt; A: . 221614:222150(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.177183 B &gt; A: . 222150:222686(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.225039 A &gt; B: . ack 222686 win 25800
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here B has sent up to (relative) sequence 222676 in-sequence, and A
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;accordingly acknowledges.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.268131 B &gt; A: . 223222:223758(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.337995 B &gt; A: . 223758:224294(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.344065 B &gt; A: . 224294:224830(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.350169 B &gt; A: . 224830:225366(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.356362 B &gt; A: . 225366:225902(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.362445 B &gt; A: . 225902:226438(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.368579 B &gt; A: . 226438:226974(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.374732 B &gt; A: . 226974:227510(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.380825 B &gt; A: . 227510:228046(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.387027 B &gt; A: . 228046:228582(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.393053 B &gt; A: . 228582:229118(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.399193 B &gt; A: . 229118:229654(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.405356 B &gt; A: . 229654:230190(536) ack 1 win 33232 [tos 0x8]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A now receives 13 additional packets  from  B.   These  are  above-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence because 222686:223222 was dropped.  The packets do however
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fit within the offered window of 25800.  A does  not  generate  any
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate acks for them.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The trace contributor (V. Paxson) verified that  these  13  packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;had valid IP and TCP checksums.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:11.917728 B &gt; A: . 222686:223222(536) ack 1  win  33232  [tos
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x8] 10:38:11.930925 A &gt; B: . ack 223222 win 32232
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B times out for 222686:223222 and retransmits it.   Upon  receiving
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it,  A  only acknowledges 223222.  Had it retained the valid above-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence packets, it would instead have ack'd 230190.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:12.048438 B &gt; A: . 223222:223758(536) ack 1  win  33232  [tos
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x8]  10:38:12.054397  B  &gt; A: . 223758:224294(536) ack 1 win 33232
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[tos 0x8] 10:38:12.068029 A &gt; B: . ack 224294 win 31696
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B retransmits two more packets, and A only acknowledges them.  This
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pattern  continues  as  B retransmits the entire set of previously-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;received packets.
+<BR>
+<P><P><P><P>Paxson, Editor                                                 [Page 12]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P><P>Trace file demonstrating correct behavior
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at  the  receiving  TCP  (C).   No
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.790417 D &gt; C: . 33793:34305(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.791393 D &gt; C: . 34305:34817(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.792369 D &gt; C: . 34817:35329(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.792369 D &gt; C: . 35329:35841(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.793345 D &gt; C: . 36353:36865(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 C &gt; D: . ack 35841 win 59904
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sequence hole occurs because 35841:36353 has been dropped.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 D &gt; C: . 36865:37377(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 C &gt; D: . ack 35841 win 59904
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.795297 D &gt; C: . 37377:37889(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.795297 C &gt; D: . ack 35841 win 59904
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.796273 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.798225 D &gt; C: . 37889:38401(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.799201 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.807009 D &gt; C: . 38401:38913(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.807009 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.884113 D &gt; C: . 52737:53249(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.884113 C &gt; D: . ack 35841 win 61440
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each additional, above-sequence packet C receives from D elicits  a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duplicate ack for 35841.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.887041 D &gt; C: . 35841:36353(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.887041 C &gt; D: . ack 53249 win 44032
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D retransmits 35841:36353 and C acknowledges receipt  of  data  all
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the way up to 53249.
+<BR>
+<P><P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This problem is documented in [Paxson97].
+<BR>
+<P><P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Packet loss is common enough in the Internet that generally  it  is
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not  difficult  to  find  an Internet path that will result in some
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence packets arriving.  A TCP that exhibits  &quot;Failure  to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retain  ...&quot;  may  not  generate  duplicate acks for these packets.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;However, some TCPs that do retain above-sequence data also  do  not
+<BR>
+<P><P><P>Paxson, Editor                                                 [Page 13]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generate  duplicate acks, so failure to do so does not definitively
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;identify the problem.  Instead, the key observation is whether upon
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retransmission  of  the  dropped  packet,  data that was previously
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence is acknowledged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Two considerations in detecting this problem using a  packet  trace
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are  that  it  is  easiest  to  do  so with a trace made at the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;receiver, in order to unambiguously determine which packets arrived
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;successfully,  and  that  such  packets may still be correctly dis-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;carded if they arrive with checksum  errors.   The  latter  can  be
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tested  by  capturing the entire packet contents and performing the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP and TCP checksum algorithms to verify  their  integrity;  or  by
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;confirming  that the packets arrive with the same checksum and con-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tents as that with which they were sent, with  a  presumption  that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the  sending  TCP correctly calculates checksums for the packets it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transmits.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is considerably easier to verify that an implementation does NOT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exhibit this problem.  This can be done by recording a trace at the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data sender, and observing that sometimes  after  a  retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the  receiver  acknowledges a higher sequence number than just that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which was retransmitted.
+<BR>
+<P><P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks  buffer,  then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then unfortunately this requires significant work to fix.  However,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doing so is important, for reasons outlined above.
+<BR>
+<P><P>4. Security Considerations
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This version of this  memo  does  not  discuss  any  security-related
+<BR>
+&nbsp;&nbsp;&nbsp;implementation problems.  Futures versions most likely will, so secu-
+<BR>
+&nbsp;&nbsp;&nbsp;rity considerations will require revisiting.
+<BR>
+<P><P>5. Acknowledgements
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Thanks to numerous correspondents on the tcp-impl  mailing  list  for
+<BR>
+&nbsp;&nbsp;&nbsp;their  input: Steve Alexander, Mark Allman, Larry Backman, Jerry Chu,
+<BR>
+&nbsp;&nbsp;&nbsp;Alan Cox, Kevin Fall, Richard Fox, Jim Gettys,  Rick  Jones,  Allison
+<BR>
+&nbsp;&nbsp;&nbsp;Mankin,  Perry  Metzger, der Mouse, Thomas Narten, Andras Olah, Steve
+<BR>
+&nbsp;&nbsp;&nbsp;Parker, Francesco Potorti`, Luigi Rizzo,  Allyn  Romanow,  Al  Smith,
+<BR>
+&nbsp;&nbsp;&nbsp;Jerry Toporek, Joe Touch, and Curtis Villamizar.
+<BR>
+<P><P><P><P><P><P>Paxson, Editor                                                 [Page 14]
+<BR>
+<P><P><P><P><P>ID                 Known TCP Implementation Problems          March 1997
+<BR>
+<P><P>6. References
+<BR>
+<P><P>[Jacobson88]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Jacobson, &quot;Congestion Avoidance and Control,&quot; Proc. SIGCOMM '88.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z">ftp://ftp.ee.lbl.gov/papers/congavoid.ps.Z</A>
+<BR>
+<P>[Paxson97]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Paxson, &quot;Automated Packet  Trace  Analysis  of  TCP  Implementa-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tions,&quot; available in draft form from <A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703271916.LAA11430@daffy.ee.lbl.gov&gt;">vern@ee.lbl.gov</A>, Feb. 1997.
+<BR>
+<P>[RFC896]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;J. Nagle, &quot;Congestion Control in IP/TCP Internetworks,&quot; Jan. 1984.
+<BR>
+<P>[RFC1122]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R. Braden, Editor, &quot;Requirements for Internet Hosts  --  Communica-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tion Layers,&quot; Oct. 1989.
+<BR>
+<P>[RFC2001]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W. Stevens, &quot;TCP Slow Start, Congestion Avoidance, Fast Retransmit,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and Fast Recovery Algorithms,&quot; Jan. 1997.
+<BR>
+<P><P>7. Author's Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20Internet%20Draft%20on%20Known%20TCP%20Implementation%20Problems&In-Reply-To=&lt;199703271916.LAA11430@daffy.ee.lbl.gov&gt;">vern@ee.lbl.gov</A>&gt;
+<BR>
+&nbsp;&nbsp;&nbsp;Network Research Group
+<BR>
+&nbsp;&nbsp;&nbsp;Lawrence Berkeley National Laboratory
+<BR>
+&nbsp;&nbsp;&nbsp;Berkeley, CA 94720
+<BR>
+&nbsp;&nbsp;&nbsp;USA
+<BR>
+&nbsp;&nbsp;&nbsp;Phone: +1 510/486-7504
+<BR>
+<P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P><P>Paxson, Editor                                                 [Page 15]
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0273.html">William Allen Simpson: "Re: OT 1.1.2 trace -- delayed Ack"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0275.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0279.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0280.html">touch@ISI.EDU: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0281.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0292.html">Vern Paxson: "Re: Internet Draft on Known TCP Implementation Problems"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#274">[ date ]</A>
+<A HREF="index.html#274">[ thread ]</A>
+<A HREF="subject.html#274">[ subject ]</A>
+<A HREF="author.html#274">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:12 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

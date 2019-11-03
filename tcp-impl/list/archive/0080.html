@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: The trace ( HTTP/RFC1122 )</TITLE>
+<META NAME="Author" CONTENT="Thomas Narten (narten@raleigh.ibm.com)">
+<META NAME="Subject" CONTENT="Re: The trace ( HTTP/RFC1122 )">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: The trace ( HTTP/RFC1122 )</H1>
+<!-- received="Wed Feb 12 16:12:50 1997" -->
+<!-- isoreceived="19970212211250" -->
+<!-- sent="Wed, 12 Feb 1997 11:07:42 -0400" -->
+<!-- isosent="19970212150742" -->
+<!-- name="Thomas Narten" -->
+<!-- email="narten@raleigh.ibm.com" -->
+<!-- subject="Re: The trace ( HTTP/RFC1122 )" -->
+<!-- id="9702121607.AA20792@ludwigia.raleigh.ibm.com" -->
+<!-- inreplyto="3301DDD2.7469@spider.com" -->
+<STRONG>From:</STRONG> Thomas Narten (<A HREF="mailto:narten@raleigh.ibm.com?Subject=Re:%20The%20trace%20(%20HTTP/RFC1122%20)&In-Reply-To=&lt;9702121607.AA20792@ludwigia.raleigh.ibm.com&gt;"><EM>narten@raleigh.ibm.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Feb 12 1997 - 10:07:42 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#80">[ date ]</A>
+<A HREF="index.html#80">[ thread ]</A>
+<A HREF="subject.html#80">[ subject ]</A>
+<A HREF="author.html#80">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Two points I think worth flagging: a clarification of terminology
+</EM><BR>
+<EM>&gt; for clients and servers in terms of closing/aborting/processes
+</EM><BR>
+<EM>&gt; hanging/TCP connections neither transmitting nor receiving would
+</EM><BR>
+<EM>&gt; be a good thing, particularly to distinguish application and protocol
+</EM><BR>
+<EM>&gt; stack behaviour.  We got confused and we're supposed to understand this
+</EM><BR>
+<EM>&gt; stuff :-) (oh, and I should have got hold of a network trace before
+</EM><BR>
+<EM>&gt; mentioning it).
+</EM><BR>
+<P>100% agreed!
+<BR>
+<P><EM>&gt; The other point is that there's sufficient ambiguities in application
+</EM><BR>
+<EM>&gt; and TCP closing behaviour to merit a close look and a separate section
+</EM><BR>
+<EM>&gt; in the WG deliverables (bug listing &amp; spec clarification).
+</EM><BR>
+<P>Agree here as well.
+<BR>
+<P><EM>&gt; On the trace:
+</EM><BR>
+<P><EM>&gt; client closes with FIN, server ACKs: 
+</EM><BR>
+<EM>&gt; client in FIN-WAIT-2 advertising zero window (which makes a lot
+</EM><BR>
+<EM>&gt; of sense since it cannot read any more)
+</EM><BR>
+<P>Here is where we still seem to be having a disagreement. If the client
+<BR>
+has &quot;destroyed&quot; the socket and is no longer using the socket, then TCP
+<BR>
+will never be able to deliver additional received data to the client
+<BR>
+application. In this scenario, it is wrong for the client TCP to
+<BR>
+respond with an ACK and window advertisement of zero, since doing so
+<BR>
+effectively tells its peer (the server): &quot;I'm out of buffer space
+<BR>
+right now, but try again in a little while and things should get
+<BR>
+better&quot;. Things will *never* get better in this case, leading to the
+<BR>
+problem of hung servers.
+<BR>
+<P>The trace doesn't give the full story. The trace is correct in the
+<BR>
+sense that a TCP connection in the FIN_WAIT_2 state is allowed to
+<BR>
+advertise a window of zero. However, it is correct to do so only if
+<BR>
+the client application is still reading data received on the socket,
+<BR>
+implying that the zero window is a temporary condition. That is not
+<BR>
+the scenario we have been discussing (i.e., the client destroys the
+<BR>
+socket)
+<BR>
+<P><EM>&gt; server in CLOSE-WAIT probing, all probes are ACKed with zero window.
+</EM><BR>
+<P><EM>&gt; It seems to me there are three approaches to fix this:
+</EM><BR>
+<P>Again, I think the correct fix is to prevent the client TCP from going
+<BR>
+into the FIN_WAIT_x state, if in fact the application has disconnected
+<BR>
+from the socket.
+<BR>
+<P><EM>&gt; 1.  client flushes the connection, ideally with a RFC 1122 RST
+</EM><BR>
+<EM>&gt; (application has to workaround with a SO_LINGER otherwise)
+</EM><BR>
+<P>I would agree that this is what should happen. Please note though,
+<BR>
+that the TCP should *not* go into FIN_WAIT_2 state at this point.
+<BR>
+<P><EM>&gt; 2.  server times out eventually. Apart from the load, here the
+</EM><BR>
+<EM>&gt; server would have to deduce from the zero window received in CLOSE-WAIT
+</EM><BR>
+<EM>&gt; that the client really meant to do a half duplex close, as opposed
+</EM><BR>
+<EM>&gt; to advertising a zero window because of momentary buffer exhaustion.
+</EM><BR>
+<P>Doing the above has the side effect of breaking other applications
+<BR>
+that are implemented correctly. For example, I could suspend a telnet
+<BR>
+session, which would could cause its TCP to (eventually) advertise a
+<BR>
+receive window of 0. The window advertisement would remain zero until
+<BR>
+I resumed the telnet session (i.e., an indeterminate amount of
+<BR>
+time). It would be wrong to terminate such connections after some
+<BR>
+arbitrary time limit (e.g., 15 minutes).
+<BR>
+<P>Thomas
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0079.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0081.html">Ian Heavens: "Re: The trace ( HTTP/RFC1122 )"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#80">[ date ]</A>
+<A HREF="index.html#80">[ thread ]</A>
+<A HREF="subject.html#80">[ subject ]</A>
+<A HREF="author.html#80">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:05 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: PSH (was Re: draft descripti</TITLE>
+<META NAME="Author" CONTENT="Smith, Allyn D (Al.Smith@UNISYS.com)">
+<META NAME="Subject" CONTENT="RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)</H1>
+<!-- received="Wed Mar 19 14:07:07 1997" -->
+<!-- isoreceived="19970319190707" -->
+<!-- sent="Wed, 19 Mar 1997 17:03:08 -0500" -->
+<!-- isosent="19970319220308" -->
+<!-- name="Smith, Allyn D" -->
+<!-- email="Al.Smith@UNISYS.com" -->
+<!-- subject="RE: PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<!-- id="c=US%a=_ATTMAIL%p=UNISYS%l=RV-EXCHANGE--970319220308Z-20026@tr-exchange-2.tr.unisys.com" -->
+<!-- inreplyto="PSH (was Re: draft description of &quot;No initial slow start&quot;)" -->
+<STRONG>From:</STRONG> Smith, Allyn D (<A HREF="mailto:Al.Smith@UNISYS.com?Subject=RE:%20PSH%20(was%20Re:%20draft%20description%20of%20&quot;No%20initial%20slow%20start&quot;)&In-Reply-To=&lt;c=US%25a=_ATTMAIL%25p=UNISYS%25l=RV-EXCHANGE--970319220308Z-20026@tr-exchange-2.tr.unisys.com&gt;"><EM>Al.Smith@UNISYS.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Mar 19 1997 - 17:03:08 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#167">[ date ]</A>
+<A HREF="index.html#167">[ thread ]</A>
+<A HREF="subject.html#167">[ subject ]</A>
+<A HREF="author.html#167">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt;&gt; The misbehaving TCP did not always set the PSH bit in the last data
+</EM><BR>
+<EM>&gt;&gt;&gt; segment but still expected that data to be delivered to the application.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;This looks like it's okay.  RFC 793 (section 3.7, page 41) says:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt; The CLOSE user call implies a push function, as does the FIN control
+</EM><BR>
+<EM>&gt;&gt; flag in an incoming segment.
+</EM><BR>
+<P>Neither the local nor remote applications closed the connections. If
+<BR>
+that had 
+<BR>
+happened, everything would have worked out fine. This was an interactive
+<BR>
+<P>application data exchange. The remote application sent the data without 
+<BR>
+the PSH bit and was waiting for a reply from the local application.
+<BR>
+However, 
+<BR>
+the local TCP was waiting for the PSH bit (or local CLOSE or FIN from
+<BR>
+peer) 
+<BR>
+which never came. This caused a connection deadlock.
+<BR>
+<P><EM>&gt;&gt;and I didn't see wording in RFC 1122 overruling this, though maybe I
+</EM><BR>
+<EM>&gt;&gt;&gt;missed it.
+</EM><BR>
+<P>RFC 1122, section 4.2.2.2, first paragraph:
+<BR>
+&quot;...when a series of segments is received without the PSH bit, a TCP may
+<BR>
+queue the data internally without passing it to the receiving
+<BR>
+application.&quot;
+<BR>
+<P>third paragraph:
+<BR>
+&quot;If PSH flags (on application send calls) are not implemented, then the
+<BR>
+sending 
+<BR>
+TCP: (1)....(2) MUST set the PSH bit in the last buffered segment (i.e.,
+<BR>
+when 
+<BR>
+there is no more queued data to be sent.&quot;
+<BR>
+<P><EM>&gt;&gt;Rich Fox wrote:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;&gt; I have seen a number of implementations that seem to depend on the PSH
+</EM><BR>
+<EM>&gt;&gt;&gt; bit.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;If this means that they won't ultimately deliver all of the data if
+</EM><BR>
+<EM>&gt;&gt;the last segment doesn't include a PSH, then that definitely seems worth
+</EM><BR>
+<EM>&gt;&gt;documenting.  (A bit hard to show from a trace, I guess ...)
+</EM><BR>
+<P>It seems to me, that the sender MUST set the PSH bit in the last data 
+<BR>
+segment to be delivered to an application (unless a FIN bit is set).
+<BR>
+If it's an interactive application, it's difficult to know when to give
+<BR>
+the data
+<BR>
+to the application if the PSH bit is not set. Short of inventing a
+<BR>
+timer, I don't know 
+<BR>
+what the algorithm would be.
+<BR>
+<P><EM>&gt;&gt;&gt; ... I would like to see the RFC amended to say the PSH bit is advisory
+</EM><BR>
+<EM>&gt;&gt;&gt; on when to deliver data to the app but a stack should deliver data
+</EM><BR>
+<EM>&gt;&gt;&gt; regardless of the PSH bit.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;Maybe this should instead be worded in terms of: stacks must ultimately
+</EM><BR>
+<EM>&gt;&gt;deliver data even if they don't ever receive a PSH?  (Because in 793,
+</EM><BR>
+<EM>&gt;&gt;beginning of section 2.8, it sounds like PSH is mandatory and not advisory.)
+</EM><BR>
+<P>Again, if a receiving TCP can't depend on the sender to set the PSH bit,
+<BR>
+what 
+<BR>
+would the algorithm be on when to give data to the application?
+<BR>
+<P>Al Smith
+<BR>
+<EM>&gt;
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0166.html">Richard Fox: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0165.html">Vern Paxson: "PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0168.html">Vern Paxson: "Re: PSH (was Re: draft description of &quot;No initial slow start&quot;)"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#167">[ date ]</A>
+<A HREF="index.html#167">[ thread ]</A>
+<A HREF="subject.html#167">[ subject ]</A>
+<A HREF="author.html#167">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:08 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

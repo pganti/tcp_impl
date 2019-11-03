@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: RE: network device and tcp-flow</TITLE>
+<META NAME="Author" CONTENT="Mika.Liljeberg@nokia.com (Mika.Liljeberg@nokia.com)">
+<META NAME="Subject" CONTENT="RE: network device and tcp-flow packet ordering">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>RE: network device and tcp-flow packet ordering</H1>
+<!-- received="Mon Jun 12 03:58:40 2000" -->
+<!-- isoreceived="20000612075840" -->
+<!-- sent="Mon, 12 Jun 2000 10:49:31 +0300" -->
+<!-- isosent="20000612074931" -->
+<!-- name="Mika.Liljeberg@nokia.com" -->
+<!-- email="Mika.Liljeberg@nokia.com" -->
+<!-- subject="RE: network device and tcp-flow packet ordering" -->
+<!-- id="593F7F3472A5D211B99B0008C7EAA08A034A85B5@eseis02nok" -->
+<!-- inreplyto="network device and tcp-flow packet ordering" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Mika.Liljeberg@nokia.com?Subject=RE:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;593F7F3472A5D211B99B0008C7EAA08A034A85B5@eseis02nok&gt;"><EM>Mika.Liljeberg@nokia.com</EM></A><BR>
+<STRONG>Date:</STRONG> Mon Jun 12 2000 - 03:49:31 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2128.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2129">[ date ]</A>
+<A HREF="index.html#2129">[ thread ]</A>
+<A HREF="subject.html#2129">[ subject ]</A>
+<A HREF="author.html#2129">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hi,
+<BR>
+<P>The PILC group draft &quot;Advice for Internet Subnetwork Designers&quot;
+<BR>
+&lt;draft-ietf-pilc-link-design-02.txt&gt; has the following passage
+<BR>
+about packet reordering in subnetworks:
+<BR>
+<P>Packet Reordering
+<BR>
+&nbsp;&nbsp;&nbsp;The Internet architecture does not guarantee that packets will arrive
+<BR>
+&nbsp;&nbsp;&nbsp;in the same order in which they were originally transmitted, and
+<BR>
+&nbsp;&nbsp;&nbsp;transport protocols like TCP must take this into account.  However,
+<BR>
+&nbsp;&nbsp;&nbsp;we recommend that subnetworks not gratuitously deliver packets out of
+<BR>
+&nbsp;&nbsp;&nbsp;sequence.  Since TCP returns a cumulative acknowledgment (ACK)
+<BR>
+&nbsp;&nbsp;&nbsp;indicating the last in-order segment that has arrived, out-of-order
+<BR>
+&nbsp;&nbsp;&nbsp;segments cause a TCP receiver to transmit a duplicate acknowledgment.
+<BR>
+&nbsp;&nbsp;&nbsp;When the TCP sender notices three duplicate acknowledgments it
+<BR>
+&nbsp;&nbsp;&nbsp;assumes that a segment was dropped by the network and uses the fast
+<BR>
+&nbsp;&nbsp;&nbsp;retransmit algorithm [Jac90,APS99] to resend the segment.  In
+<BR>
+&nbsp;&nbsp;&nbsp;addition, the congestion window is reduced by half, effectively
+<BR>
+&nbsp;&nbsp;&nbsp;halving TCP's sending rate.  If a subnetwork badly re-orders segments
+<BR>
+&nbsp;&nbsp;&nbsp;such that three duplicate ACKs are generated the TCP sender
+<BR>
+&nbsp;&nbsp;&nbsp;needlessly reduces the congestion window, and therefore performance.
+<BR>
+<P>MikaL
+<BR>
+<P><EM>&gt; -----Original Message-----
+</EM><BR>
+<EM>&gt; From: EXT sankar ramamoorthi [mailto:<A HREF="mailto:sanka2g@yahoo.com?Subject=RE:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;593F7F3472A5D211B99B0008C7EAA08A034A85B5@eseis02nok&gt;">sanka2g@yahoo.com</A>]
+</EM><BR>
+<EM>&gt; Sent: 10. kesäkuuta 2000 6:13
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=RE:%20network%20device%20and%20tcp-flow%20packet%20ordering&In-Reply-To=&lt;593F7F3472A5D211B99B0008C7EAA08A034A85B5@eseis02nok&gt;">tcp-impl@grc.nasa.gov</A>
+</EM><BR>
+<EM>&gt; Subject: network device and tcp-flow packet ordering
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is there a reference in any rfc's which says
+</EM><BR>
+<EM>&gt; to the equivalent of 
+</EM><BR>
+<EM>&gt; 'Thou shall not reorder packets in a flow' by a
+</EM><BR>
+<EM>&gt; network device like router or a switch.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; I am trying to make a case that a parralel
+</EM><BR>
+<EM>&gt; network-device (a device with a lot of parallel
+</EM><BR>
+<EM>&gt; engines inside it) should make effort to ensure that
+</EM><BR>
+<EM>&gt; packets inside a tcp flow are not reordered - but am
+</EM><BR>
+<EM>&gt; losing the argument. Without any effot the device has
+</EM><BR>
+<EM>&gt; the potential to reorder packets inside tcp flows
+</EM><BR>
+<EM>&gt; because of the parallism.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Also what would be the effect of such reordering on
+</EM><BR>
+<EM>&gt; TCP timers? What is the effect on SACK?
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Any input on this point is welcome.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -- sankar ramamoorthi --
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; __________________________________________________
+</EM><BR>
+<EM>&gt; Do You Yahoo!?
+</EM><BR>
+<EM>&gt; Yahoo! Photos -- now, 100 FREE prints!
+</EM><BR>
+<EM>&gt; <A HREF="http://photos.yahoo.com">http://photos.yahoo.com</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2128.html">Luigi Rizzo: "Re: network device and tcp-flow packet ordering"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="2116.html">sankar ramamoorthi: "network device and tcp-flow packet ordering"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2130.html">Vern Paxson: "Re: network device and tcp-flow packet ordering"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2129">[ date ]</A>
+<A HREF="index.html#2129">[ thread ]</A>
+<A HREF="subject.html#2129">[ subject ]</A>
+<A HREF="author.html#2129">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:30 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

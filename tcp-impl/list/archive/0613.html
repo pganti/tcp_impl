@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="David Borman (dab@BSDI.COM)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Wed Jul  2 14:26:38 1997" -->
+<!-- isoreceived="19970702182638" -->
+<!-- sent="Wed, 2 Jul 1997 16:22:53 -0500 (CDT)" -->
+<!-- isosent="19970702212253" -->
+<!-- name="David Borman" -->
+<!-- email="dab@BSDI.COM" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707022122.QAA19191@frantic.BSDI.COM" -->
+<!-- inreplyto="TCP research issues from a tcp-impl perspective" -->
+<STRONG>From:</STRONG> David Borman (<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;"><EM>dab@BSDI.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Wed Jul 02 1997 - 17:22:53 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0614.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#613">[ date ]</A>
+<A HREF="index.html#613">[ thread ]</A>
+<A HREF="subject.html#613">[ subject ]</A>
+<A HREF="author.html#613">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;">craig@aland.bbn.com</A> Wed Jul  2 16:04:20 1997
+</EM><BR>
+<EM>&gt; To: David Borman &lt;<A HREF="mailto:dab@BSDI.COM?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;">dab@BSDI.COM</A>&gt;
+</EM><BR>
+<EM>&gt; cc: <A HREF="mailto:tcp-impl@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;">tcp-impl@cthulhu.engr.sgi.com</A>
+</EM><BR>
+<EM>&gt; Subject: Re: TCP research issues from a tcp-impl perspective 
+</EM><BR>
+<EM>&gt; Date: Wed, 02 Jul 97 14:03:42 -0700
+</EM><BR>
+<EM>&gt; From: Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;">craig@aland.bbn.com</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;     Dynamically tracking and changing ALPHA on the fly is not
+</EM><BR>
+<EM>&gt;     that difficult
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Pardon me -- I've been half watching this discussion and don't recall
+</EM><BR>
+<EM>&gt; seeing an answer to this question.
+</EM><BR>
+<P>I didn't want to get into details, because I haven't coded it up
+<BR>
+so I can't say whether or not it works for sure, but my plan is to
+<BR>
+use 4 weighting factors: 7/8, 15/16, 31/32 and 63/64.  When there
+<BR>
+was one RTT value in the previous RTT, set the weighting to 7/8.
+<BR>
+If there were 2-3 samples, use 15/16, 4-7, use 31/32, and 8 or more,
+<BR>
+use 63/64.
+<BR>
+<P>Rather than having a static ALPHA value, I'd make it a variable
+<BR>
+in the TCP control block.  I'd also change the stored value to
+<BR>
+have 6 fixed decimal points (for 63/64).  I've already looked
+<BR>
+at the code, and it seems straight forward enough.  BTW, sticking
+<BR>
+with the 4 weightings keeps the fixed decimal point math easier.
+<BR>
+<P>To count them I'd just use the old BSD RTT estimator code.  Reset
+<BR>
+the counter when I start timing a sequence number, and when the
+<BR>
+ack for that number comes back, see how many timestamps I've
+<BR>
+gotten in the mean time.
+<BR>
+<P><EM>&gt;     Why do we need to weight the samples at all?  
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If we get 20 samples in this RTT, vs 10 in the last, it isn't immediately
+</EM><BR>
+<EM>&gt; clear to me that we should weight the 20 differently from the 10 -- they are,
+</EM><BR>
+<EM>&gt; after all the 20 most recent samples and presumably correctly reflect the most
+</EM><BR>
+<EM>&gt; recent state of the network.
+</EM><BR>
+<P>Since the RTT is being used to set the SRTT, and the SRTT is being
+<BR>
+used to set the retransmit interval, wich is a multiple of the SRTT,
+<BR>
+I want the SRTT to be smoothed over the last several RTTs, not just
+<BR>
+the last several packets.  Thus, when I'm getting more values per
+<BR>
+RTT, each value needs to be weighted less, so that the SRTT is over
+<BR>
+the last several RTTs.
+<BR>
+<P><EM>&gt; Where I might imagine, maybe, fiddling is in the variance estimator, but
+</EM><BR>
+<EM>&gt; as I recall, it already is known to be very sensitive to extreme values
+</EM><BR>
+<EM>&gt; and thus works OK.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Could someone explain what I've missed?
+</EM><BR>
+<P>If you've got 50 packets in flight per RTT, do you really want
+<BR>
+your SRTT estimate based mostly on just the last 8 or so packets?
+<BR>
+If the RTT was varying by any amount, you probably wouldn't get
+<BR>
+good SRTT/variance calculations.
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Thanks!
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Craig
+</EM><BR>
+<P>Hopefully that explains better my thinking.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-David Borman, <A HREF="mailto:dab@bsdi.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707022122.QAA19191@frantic.BSDI.COM&gt;">dab@bsdi.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0614.html">Luigi Rizzo: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0612.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0566.html">Vern Paxson: "TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0615.html">Craig Partridge: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#613">[ date ]</A>
+<A HREF="index.html#613">[ thread ]</A>
+<A HREF="subject.html#613">[ subject ]</A>
+<A HREF="author.html#613">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Fri Aug  1 15:55:42 1997" -->
+<!-- isoreceived="19970801195542" -->
+<!-- sent="Fri, 1 Aug 1997 10:25:55 -0700" -->
+<!-- isosent="19970801172555" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708011725.KAA05635@rum.isi.edu" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011725.KAA05635@rum.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 13:25:55 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0650.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#651">[ date ]</A>
+<A HREF="index.html#651">[ thread ]</A>
+<A HREF="subject.html#651">[ subject ]</A>
+<A HREF="author.html#651">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011725.KAA05635@rum.isi.edu&gt;">Erik.Nordmark@Eng.Sun.COM</A> (Erik Nordmark)
+</EM><BR>
+<EM>&gt; Subject: Re: revising RFC 2001 within tcp-impl
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Now consider two cases for IW, large or small:
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; more than 10-20 packets in the connection (from open to close,
+</EM><BR>
+<EM>&gt; &gt; approx.):
+</EM><BR>
+...
+<BR>
+<EM>&gt; &gt; 	If IW is 1, 2, or 4 we save 0, 1, or 2 RTTs out of a total
+</EM><BR>
+<EM>&gt; &gt; 	of 5 or more, i.e., the connection saves 25% or less time
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; There is one other factor that is missing from the above.
+</EM><BR>
+<EM>&gt; A large number of TCP implementation ack every other packet (as they
+</EM><BR>
+<EM>&gt; should) but do this even in the beginning of the TCP connection.
+</EM><BR>
+<P>The code I've seen delays ACKS until 2 _full_ packets arrive, 
+<BR>
+not 'every other packet'. I.e., they incur 200ms timeouts when
+<BR>
+the source sends a partial then full (early versions of HTTP
+<BR>
+servers, that sent HTTP headers out, then opened the file 
+<BR>
+and started sending content), or full then partial (when
+<BR>
+the file ends on a partial packet, even when it contains an
+<BR>
+even number of packets).
+<BR>
+<P><EM>&gt; The correct answer here might to fix the receive side of TCP to
+</EM><BR>
+<EM>&gt; not delay acks for the first data packet in the connection but
+</EM><BR>
+<EM>&gt; it seems like folks have been fixing the sending TCP to use IW = 2
+</EM><BR>
+<EM>&gt; instead.
+</EM><BR>
+<P>Maybe the former has more utility?? :-)
+<BR>
+<P><EM>&gt; &gt; So either it doesn't help or it hurts.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; But how much does it really hurt?
+</EM><BR>
+<P>Depends on how big the IW is. I'm not really making a case
+<BR>
+for not using IW=RW=2 (as in many current implementations), 
+<BR>
+rather I'm saying not to increase that to 4 or 8.
+<BR>
+<P>As you observe, 2 is fine given delayed ACKs.
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708011725.KAA05635@rum.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0650.html">touch@ISI.EDU: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0652.html">John Heidemann: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#651">[ date ]</A>
+<A HREF="index.html#651">[ thread ]</A>
+<A HREF="subject.html#651">[ subject ]</A>
+<A HREF="author.html#651">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:45 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

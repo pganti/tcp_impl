@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BOF Description</TITLE>
+<META NAME="Author" CONTENT="Curtis Villamizar (curtis@ans.net)">
+<META NAME="Subject" CONTENT="Re: BOF Description">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BOF Description</H1>
+<!-- received="Mon Nov 25 22:27:56 1996" -->
+<!-- isoreceived="19961126032756" -->
+<!-- sent="Mon, 25 Nov 1996 17:26:07 -0500" -->
+<!-- isosent="19961125222607" -->
+<!-- name="Curtis Villamizar" -->
+<!-- email="curtis@ans.net" -->
+<!-- subject="Re: BOF Description" -->
+<!-- id="199611252226.RAA28556@brookfield.ans.net" -->
+<!-- inreplyto="5505.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> Curtis Villamizar (<A HREF="mailto:curtis@ans.net?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611252226.RAA28556@brookfield.ans.net&gt;"><EM>curtis@ans.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Nov 25 1996 - 17:26:07 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0020.html">Curtis Villamizar: "Re: BOF Descriptio"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0018.html">Thomas Narten: "Re: BOF Discussion Topics"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0016.html">William Allen Simpson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0027.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0027.html">Alan Cox: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#19">[ date ]</A>
+<A HREF="index.html#19">[ thread ]</A>
+<A HREF="subject.html#19">[ subject ]</A>
+<A HREF="author.html#19">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+In message &lt;<A HREF="mailto:5505.wsimpson@greendragon.com?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611252226.RAA28556@brookfield.ans.net&gt;">5505.wsimpson@greendragon.com</A>&gt;, &quot;William Allen Simpson&quot; writes:
+<BR>
+<EM>&gt; Looks like the list is having some problems, as I am seeing replies to
+</EM><BR>
+<EM>&gt; messages that I didn't get.  That means others are getting them....
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Anyway, I rather disagree about naming specific implementation problems.
+</EM><BR>
+<EM>&gt; I'm not sure that &quot;bashing&quot; is the likely result.  A better result is to
+</EM><BR>
+<EM>&gt; use the openness to get folks to upgrade their implementations, and
+</EM><BR>
+<EM>&gt; customers to get the upgrades.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Witness MacTCP.  A horrendous implementation.  Folks need to be clear
+</EM><BR>
+<EM>&gt; that it is in bad shape, and upgrade to MacOT.  Having a test tool for
+</EM><BR>
+<EM>&gt; demo would be helpful.  Might find out if there are any MacOT problems.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; In any case, having tools to test with would be wonderful.  I'm not sure
+</EM><BR>
+<EM>&gt; how easy it is to test for some TCP features, though.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Some topics not mentioned so far that I'd like to see written down as
+</EM><BR>
+<EM>&gt; implementation notes in a comprehensive RFC (and in the tests):
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;  - slow start
+</EM><BR>
+<EM>&gt;  - RTT calculation
+</EM><BR>
+<EM>&gt;  - RTT ceilings and floors
+</EM><BR>
+<EM>&gt;  - Nagle algorithm
+</EM><BR>
+<EM>&gt;  - silly windows
+</EM><BR>
+<EM>&gt;  - delayed Ack
+</EM><BR>
+<EM>&gt;  - proper MSS calculation
+</EM><BR>
+<EM>&gt;  - proper MSS advertisement
+</EM><BR>
+<EM>&gt;  - MTU discovery
+</EM><BR>
+<P>&nbsp;&nbsp;&nbsp;- fast retransmit
+<BR>
+&nbsp;&nbsp;&nbsp;- fast recovery
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apparently some implementations do do it at all)
+<BR>
+&nbsp;&nbsp;&nbsp;- rfc1323 features - window scale, PAWS, ...
+<BR>
+&nbsp;&nbsp;&nbsp;- fast recovery fix - multiple drop in one window
+<BR>
+&nbsp;&nbsp;&nbsp;- SACK?
+<BR>
+<P>I'm not sure if not having rfc1323 and SACK is a bug, just a lack of
+<BR>
+high performance features, though SACK can be enormously useful even
+<BR>
+at lower speeds.
+<BR>
+<P><EM>&gt; And of course, we probably ought to document somewhere the &quot;best&quot;
+</EM><BR>
+<EM>&gt; solutions to the Syn attack....
+</EM><BR>
+<P>That's been discussed too much already on quite a few lists.  Only
+<BR>
+reference the &quot;best&quot; if there is clear and immediate consensus on an
+<BR>
+existing summary.
+<BR>
+<P><EM>&gt; <A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611252226.RAA28556@brookfield.ans.net&gt;">WSimpson@UMich.edu</A>
+</EM><BR>
+<EM>&gt;     Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+</EM><BR>
+<EM>&gt; <A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;199611252226.RAA28556@brookfield.ans.net&gt;">BSimpson@MorningStar.com</A>
+</EM><BR>
+<EM>&gt;     Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+</EM><BR>
+<P>Curtis
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0020.html">Curtis Villamizar: "Re: BOF Descriptio"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0018.html">Thomas Narten: "Re: BOF Discussion Topics"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0016.html">William Allen Simpson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0027.html">Alan Cox: "Re: BOF Description"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0027.html">Alan Cox: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#19">[ date ]</A>
+<A HREF="index.html#19">[ thread ]</A>
+<A HREF="subject.html#19">[ subject ]</A>
+<A HREF="author.html#19">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:03 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

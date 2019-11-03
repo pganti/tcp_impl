@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 13:21:53 1997" -->
+<!-- isoreceived="19970605172153" -->
+<!-- sent="Thu, 05 Jun 1997 22:16:14 +0200" -->
+<!-- isosent="19970605201614" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706052016.WAA03952@rekk.dna.lth.se" -->
+<!-- inreplyto="199706051902.PAA16365@MAILSERV-2HIGH-A.FTP.COM" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052016.WAA03952@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 16:16:14 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0443.html">Larry Backman: "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0441.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0437.html">Larry Backman: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0439.html">Larry Backman: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#442">[ date ]</A>
+<A HREF="index.html#442">[ thread ]</A>
+<A HREF="subject.html#442">[ subject ]</A>
+<A HREF="author.html#442">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Larry Backman &lt;<A HREF="mailto:backman@ftp.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052016.WAA03952@rekk.dna.lth.se&gt;">backman@ftp.com</A>&gt; writes:
+<BR>
+<EM>&gt;Seriously we were forced into reclaiming the oldest time-wait connection(s)
+</EM><BR>
+<EM>&gt;in a queue rather than continueing to allocate memory till we ate the
+</EM><BR>
+<EM>&gt;machine.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;Traffic pattern was of course shaped by web servers who had thousands of
+</EM><BR>
+<EM>&gt;incoming connections which had not been cleanly closed by browsers/http
+</EM><BR>
+<EM>&gt;test programs.
+</EM><BR>
+<P>Rather than just tossing out the oldest time-waiter, it would be better
+<BR>
+to grab the last sequence number information from that socket and make
+<BR>
+sure to offer a sequence number just following that on the new connection.
+<BR>
+If I recall correctly BSD boxes already do this if there is an incoming
+<BR>
+connection to a specific port that is in TIME_WAIT, and recent Linux
+<BR>
+releases (2.0 or older) do this as well. It should be possible to extend
+<BR>
+this behavior to looking for a free port. This would at least keep
+<BR>
+the sequence number space advancing correctly over successive connections.
+<BR>
+<P>As to the concern about eating all of memory, it probably makes sense
+<BR>
+to reduce TIME_WAITer's to a smaller control structure. Most of the
+<BR>
+stuff in the TCP isn't needed. I think you can get away with a timer,
+<BR>
+the endpoint addresses and the last sequence number, but I haven't
+<BR>
+thought about this for a while. You'll still potentially need a couple
+<BR>
+of megabytes of memory, but on a web server taking thousands of
+<BR>
+connections a minute this is probably acceptable.
+<BR>
+<P>Of course none of this deals with the various other ways that TCP
+<BR>
+connections can get into a non-synchronized state with the potential
+<BR>
+for data duplication. My current favorite candidate for this is
+<BR>
+dynamic IP addresses assigned by an ISP. One box drops off the net,
+<BR>
+to be replaced by another with the same address, and with no knowledge
+<BR>
+of the port numbers being used by the previous user of that IP address.
+<BR>
+Lots of scenarios for bad things to happen there. Alan Cox has already
+<BR>
+mentioned Ian Heavens's draft on the subject.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706052016.WAA03952@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0443.html">Larry Backman: "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0441.html">touch@ISI.EDU: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0437.html">Larry Backman: "Re: TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0439.html">Larry Backman: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#442">[ date ]</A>
+<A HREF="index.html#442">[ thread ]</A>
+<A HREF="subject.html#442">[ subject ]</A>
+<A HREF="author.html#442">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

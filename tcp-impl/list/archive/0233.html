@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: draft description of &quot;F</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="Re: draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Mon Mar 24 16:15:04 1997" -->
+<!-- isoreceived="19970324211504" -->
+<!-- sent="Mon, 24 Mar 1997 19:05:49 -0500" -->
+<!-- isosent="19970325000549" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="Re: draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703250005.TAA08790@MAILSERV-2HIGH.FTP.COM" -->
+<!-- inreplyto="draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703250005.TAA08790@MAILSERV-2HIGH.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 19:05:49 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0234.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0232.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#233">[ date ]</A>
+<A HREF="index.html#233">[ thread ]</A>
+<A HREF="subject.html#233">[ subject ]</A>
+<A HREF="author.html#233">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+||Your point is taken.
+<BR>
+||
+<BR>
+||My point is that very small amounts of available buffer space must
+<BR>
+||imply very low end-to-end performance.  The practice of advertising
+<BR>
+||buffering that you don't have should be strongly discouraged.  
+<BR>
+||
+<BR>
+||Curtis
+<BR>
+||
+<BR>
+||btw- I meant to imply that DOS was broken, not someones software's DOS
+<BR>
+||TCP stack if that's any consolation.
+<BR>
+<P>Peace on the word war, but I still feel that theres a point to perhaps
+<BR>
+be beat into the ground.  Low end, high end machine doesn't matter -
+<BR>
+a TCP stack in such machine operates in a competive environment against
+<BR>
+a complex set of marketing points which can cause the TCP stack's behavior
+<BR>
+to be less optimal than other behavior.
+<BR>
+<P>In our days of yore, we lost more sales due to:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* memory footprint
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* pure optimal LAN test performance
+<BR>
+than we did due to TCP's lack of congestion control.  I can perhaps
+<BR>
+dig through dozens of cases where we had to argue w/ customers that
+<BR>
+alternative DOS stacks with no slow start and no congestion window,
+<BR>
+while faster over the LAN were doomed to lose in the real world.  Or
+<BR>
+that small footprint stacks that whizzed in a PC Week performance test
+<BR>
+didn't necessarily behave well in a 4 concurrent app across the internet
+<BR>
+test.  And we also got beat up that a sophisticated user could tune
+<BR>
+our stack to run fast, but an out of the box config. was not
+<BR>
+optimally tuned for LAN performance.
+<BR>
+<P>As the NC's and Wintel NC's start to come out we will revisit those
+<BR>
+days once again.  &quot;Buying decisions&quot; are made far too often on somewhat
+<BR>
+meaningless performance benchmarks.
+<BR>
+<P>But back to your point; had I to do it over again, your absolutely
+<BR>
+right, I would not have advertised a window greater than the amount of
+<BR>
+available buffer space and would have had people implement the window
+<BR>
+shrinking algorithm we talked about but never did.
+<BR>
+<P><P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0234.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0232.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0148.html">Vern Paxson: "draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#233">[ date ]</A>
+<A HREF="index.html#233">[ thread ]</A>
+<A HREF="subject.html#233">[ subject ]</A>
+<A HREF="author.html#233">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

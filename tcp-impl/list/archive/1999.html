@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Vernon Schryver (vjs@calcite.rhyolite.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 21:30:40 2000" -->
+<!-- isoreceived="20000225023040" -->
+<!-- sent="Thu, 24 Feb 2000 19:23:47 -0700 (MST)" -->
+<!-- isosent="20000225022347" -->
+<!-- name="Vernon Schryver" -->
+<!-- email="vjs@calcite.rhyolite.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002250223.TAA25413@calcite.rhyolite.com" -->
+<!-- inreplyto="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<STRONG>From:</STRONG> Vernon Schryver (<A HREF="mailto:vjs@calcite.rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250223.TAA25413@calcite.rhyolite.com&gt;"><EM>vjs@calcite.rhyolite.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 21:23:47 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1998.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1999">[ date ]</A>
+<A HREF="index.html#1999">[ thread ]</A>
+<A HREF="subject.html#1999">[ subject ]</A>
+<A HREF="author.html#1999">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: Erik Nordmark &lt;<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250223.TAA25413@calcite.rhyolite.com&gt;">Erik.Nordmark@Eng.Sun.COM</A>&gt;
+</EM><BR>
+<P><EM>&gt; &gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>&gt; &gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; There is no DNS entry for ftpeng.cisco.com so I can't access the document.
+</EM><BR>
+<P>ftpeng.cisco.com resolves for me to 198.92.30.33, and the URL works
+<BR>
+ftpeng.cisco.com does not answer ICMP Echo-Requests.  It also seems that
+<BR>
+Cisco is filtering ICMP TTL Exceeded.
+<BR>
+<P>Oh, well.  I predict that soon traceroute and ping will be as
+<BR>
+effective as if the Internet were run by the old line telco managers
+<BR>
+who went great lengths to keep their technical problems quite.
+<BR>
+The recent security hassles will be a handy (and quite silly)
+<BR>
+excuse.  (Yes, of course, Cisco has every right to filter however
+<BR>
+they want.  I'm talking about technical sense, not rights.)
+<BR>
+<P><P>I'm even less impressed about the proposal than Erik Nordmark,
+<BR>
+perhaps because more than 10 years ago I saw systems shipped by
+<BR>
+more than one competitor of Sun Microsystems that paged flipped
+<BR>
+NFS/UDP and user TCP data.  (well, one of the other vendors might
+<BR>
+have been a little more recent 10 years.)
+<BR>
+<P>The motive for the proposal seems to be that while only a very few
+<BR>
+CPU instructions are needed to page flip, the functions of those CPU
+<BR>
+instructions are very hard in hardware.  I don't agree.  In today's
+<BR>
+world of ASIC's, silicon to figure out where to drop incoming TCP
+<BR>
+segments or NFS/UDP/IP fragments based only on old fashioned TCP and
+<BR>
+RPC/XRD/UDP headers is nothing to write home about.  It wasn't even
+<BR>
+all that big a deal more than 10 years ago, as everyone involved with
+<BR>
+or who watched Protocol Engines Inc. remembers.
+<BR>
+<P>Hashing is almost as cool (and easy) in hardware as in software.
+<BR>
+<P><P>Vernon Schryver    <A HREF="mailto:vjs@rhyolite.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002250223.TAA25413@calcite.rhyolite.com&gt;">vjs@rhyolite.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2000.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1998.html">David S. Miller: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1987.html">Costa Sapuntzakis: "TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2005.html">Lloyd Wood: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1999">[ date ]</A>
+<A HREF="index.html#1999">[ thread ]</A>
+<A HREF="subject.html#1999">[ subject ]</A>
+<A HREF="author.html#1999">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

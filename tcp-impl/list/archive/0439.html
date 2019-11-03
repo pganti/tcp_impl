@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="Larry Backman (backman@ftp.com)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 12:53:54 1997" -->
+<!-- isoreceived="19970605165354" -->
+<!-- sent="Thu, 5 Jun 1997 15:49:36 -0400" -->
+<!-- isosent="19970605194936" -->
+<!-- name="Larry Backman" -->
+<!-- email="backman@ftp.com" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706051949.PAA17006@MAILSERV-2HIGH-A.FTP.COM" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> Larry Backman (<A HREF="mailto:backman@ftp.com?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051949.PAA17006@MAILSERV-2HIGH-A.FTP.COM&gt;"><EM>backman@ftp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 15:49:36 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0440.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0438.html">Rick Jones: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0440.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#439">[ date ]</A>
+<A HREF="index.html#439">[ thread ]</A>
+<A HREF="subject.html#439">[ subject ]</A>
+<A HREF="author.html#439">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+||&gt; in a queue rather than continueing to allocate memory till we ate the
+<BR>
+||&gt; machine.
+<BR>
+||
+<BR>
+||Would it have been more &quot;correct&quot; (indeed much less pallatable) to stop
+<BR>
+||accepting or establishing new connections until there was a TIME_WAIT
+<BR>
+||slot available?
+<BR>
+<P>yes.  except &quot;they&quot; did it this way and so we had to copy &quot;them&quot; because
+<BR>
+XYZ worked that way over them and not over us.
+<BR>
+<P>Defacto standards; etc.
+<BR>
+||
+<BR>
+||&gt; Traffic pattern was of course shaped by web servers who had thousands of
+<BR>
+||&gt; incoming connections which had not been cleanly closed by browsers/http
+<BR>
+||&gt; test programs.
+<BR>
+||
+<BR>
+||Wouldn't that have been FIN_WAIT_2's instead of TIME_WAIT? (Does that
+<BR>
+||mean there may be another limitation out there?)
+<BR>
+||
+<BR>
+<P>Its been a year and a quarter, but code seyz:
+<BR>
+<P>/* XXX  23-Mar-96
+<BR>
+** Go through list of TCP control blocks and free one which has been in
+<BR>
+** TIME_WAIT for the longest time
+<BR>
+*/
+<BR>
+void
+<BR>
+tcp_free_timewait()
+<BR>
+{
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;SM_QUEUE_ELEMENT *p, *pnext;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;register struct tcpcb *tp, *tpoldest;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;short   timer = 0x7fff;
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;/*
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* Search through tcb's and find the oldest tcb in TIME_WAIT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;tpoldest = NULL;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;for (p = SMQueueGetFirst(TcpCtl.trctl_queue); p != NULL; p = pnext) {
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp = TRQ2TCB(p);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pnext = SMQueueGetNext(TcpCtl.trctl_queue, p);
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if(tp-&gt;t_timer[TCPT_2MSL] != 0 &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_state == TCPS_TIME_WAIT &amp;&amp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp-&gt;t_timer[TCPT_2MSL] &lt; timer) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tpoldest = tp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timer = tp-&gt;t_timer[TCPT_2MSL];
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;if(tpoldest) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SM_TRACE((TR_KR_TCP,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Forced close of TIME_WAIT. Timer #w,Socket:#d&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timer, tpoldest-&gt;t_up));
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_close(tpoldest);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<BR>
+}
+<BR>
+<P>This is called from:
+<BR>
+/*
+<BR>
+&nbsp;* Create a new TCP control block, making an
+<BR>
+&nbsp;* empty reassembly queue and hooking it to the argument
+<BR>
+&nbsp;* protocol control block.
+<BR>
+&nbsp;*/
+<BR>
+struct tcpcb *
+<BR>
+tcp_newtcpcb(struct pcb *p_pcb)
+<BR>
+{
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;register struct tcpcb *tp;
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;tp = (struct tcpcb *)SMGetBuffer(TcpPcbHdl);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;if (tp == NULL) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* MLK 23-Mar-96
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** Try to free the oldest TCP CB which is in TIME_WAIT
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tcp_free_timewait();
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tp = (struct tcpcb *)SMGetBuffer(TcpPcbHdl);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (tp == NULL) {
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return (tp);
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<BR>
+<P><P>Ignoring our OS abstractions and functions you should recognize the
+<BR>
+Bsd coide from tcpcb.c
+<BR>
+<P>L.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0440.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0438.html">Rick Jones: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0440.html">Henry Sanders (Exchange): "RE: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#439">[ date ]</A>
+<A HREF="index.html#439">[ thread ]</A>
+<A HREF="subject.html#439">[ subject ]</A>
+<A HREF="author.html#439">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

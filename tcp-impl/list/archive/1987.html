@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: TCP RDMA option to accelerate NF</TITLE>
+<META NAME="Author" CONTENT="Costa Sapuntzakis (csapuntz@cisco.com)">
+<META NAME="Subject" CONTENT="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Thu Feb 24 17:12:21 2000" -->
+<!-- isoreceived="20000224221221" -->
+<!-- sent="Thu, 24 Feb 2000 13:56:46 -0800 (PST)" -->
+<!-- isosent="20000224215646" -->
+<!-- name="Costa Sapuntzakis" -->
+<!-- email="csapuntz@cisco.com" -->
+<!-- subject="TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002242156.NAA18955@csapuntz-u1.cisco.com" -->
+<STRONG>From:</STRONG> Costa Sapuntzakis (<A HREF="mailto:csapuntz@cisco.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002242156.NAA18955@csapuntz-u1.cisco.com&gt;"><EM>csapuntz@cisco.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 24 2000 - 16:56:46 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1986.html">fred@iprg.nokia.com: "INFOCOM 2000: Last week for early registration"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1996.html">David Robinson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2001.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2002.html">Scott Bradner: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2006.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2007.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2010.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2013.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2018.html">Howard Berkey: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2020.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2025.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2033.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2036.html">Bill Sommerfeld: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2037.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2038.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1987">[ date ]</A>
+<A HREF="index.html#1987">[ thread ]</A>
+<A HREF="subject.html#1987">[ subject ]</A>
+<A HREF="author.html#1987">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+The TCP RDMA option reduces the overhead of receiving data over
+<BR>
+TCP-based protocols such as NFS and HTTP.  
+<BR>
+<P>It enables the construction of a simple hardware accelerator that
+<BR>
+copies data directly from the incoming packet into application
+<BR>
+buffers, avoiding expensive copies in the protocol stack.  Even
+<BR>
+without hardware acceleration, the option enables the protocol stack
+<BR>
+to decrease the number of copies it must do.
+<BR>
+<P>The TCP RDMA option is an annotation and requires no modifications to
+<BR>
+higher layer protocols. It can be used with popular protocols such as 
+<BR>
+HTTP, NFS, and CIFS, along with new protocols.
+<BR>
+<P>The TCP option also provides a bit to indicate application-level
+<BR>
+message boundaries. The bit enables out-of-order processing of the TCP
+<BR>
+receive queue, potentially decreasing service times in the presence of
+<BR>
+packet drops and improving performance on parallel systems.
+<BR>
+<P>A draft describing the TCP RDMA option can be found at:
+<BR>
+<A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+<BR>
+<P>-Costa
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1986.html">fred@iprg.nokia.com: "INFOCOM 2000: Last week for early registration"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1988.html">Erik Nordmark: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1996.html">David Robinson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2001.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2002.html">Scott Bradner: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2006.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2007.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2010.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2013.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2018.html">Howard Berkey: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2020.html">Zachary Amsden: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2024.html">Jamshid Mahdavi: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2025.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2033.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2036.html">Bill Sommerfeld: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2037.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2038.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2040.html">Alan Cox: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2045.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1987">[ date ]</A>
+<A HREF="index.html#1987">[ thread ]</A>
+<A HREF="subject.html#1987">[ subject ]</A>
+<A HREF="author.html#1987">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:15 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

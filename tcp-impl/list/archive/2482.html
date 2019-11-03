@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: query: using two write() cal</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: query: using two write() calls in succession">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: query: using two write() calls in succession</H1>
+<!-- received="Mon Mar 26 13:49:36 2001" -->
+<!-- isoreceived="20010326184936" -->
+<!-- sent="Mon, 26 Mar 2001 10:40:44 -0800" -->
+<!-- isosent="20010326184044" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: query: using two write() calls in succession" -->
+<!-- id="3ABF8D2C.8E059133@cup.hp.com" -->
+<!-- inreplyto="0056890024992624000002L942*@MHS" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;3ABF8D2C.8E059133@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 26 2001 - 13:40:44 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2483.html">Zhi-Li Zhang: "(no subject)"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2481.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2482">[ date ]</A>
+<A HREF="index.html#2482">[ thread ]</A>
+<A HREF="subject.html#2482">[ subject ]</A>
+<A HREF="author.html#2482">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<A HREF="mailto:rajiv.chakravorty@philips.com?Subject=Re:%20query:%20using%20two%20write()%20calls%20in%20succession&In-Reply-To=&lt;3ABF8D2C.8E059133@cup.hp.com&gt;">rajiv.chakravorty@philips.com</A> wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Hi,
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; This problem is regarding use of  two write() call in succession. Let me explain the
+</EM><BR>
+<EM>&gt; problem. In one of the blocking socket implementations, I have used two write calls
+</EM><BR>
+<EM>&gt; mainly to detect the state of the TCP connection. I can expect that if the TCP
+</EM><BR>
+<EM>&gt; connection has been closed (FIN) by the http server (due to http/1.1  timeout), the
+</EM><BR>
+<P>Um, isn't the remote's sending of a FIN supposed to generate a
+<BR>
+zero-length read to inform the other side that there was at least a
+<BR>
+partial shutdown?
+<BR>
+<P><EM>&gt; use of two write calls in sequence at the client side should detect if the connection
+</EM><BR>
+<EM>&gt; was closed. As normally expected, when I make the first write() call, the server
+</EM><BR>
+<EM>&gt; would ackowledge the client with a RST since the connection was  already closed. Now,
+</EM><BR>
+<EM>&gt; when I make my second write() call, in succession, the presence of RST at the client
+</EM><BR>
+<EM>&gt; TCP should prompt the second write() to fail and return with errno to ECONNRESET. I
+</EM><BR>
+<EM>&gt; wrote a small code to check this behaviour. I  ran this code in linux 2.2.16 to
+</EM><BR>
+<EM>&gt; retrive the index.html page from an intranet web server. In this code, I made a TCP
+</EM><BR>
+<EM>&gt; connection to send and retrieve the index.html file normally and then slept for about
+</EM><BR>
+<EM>&gt; 20 seconds allowing the web server to timeout.  After 20 seconds, after the web
+</EM><BR>
+<EM>&gt; server had timed-out and closed the connection, I again called the two writes
+</EM><BR>
+<EM>&gt; (breaking the request) with the same GET HTTP/1.1 request in succession.
+</EM><BR>
+<EM>&gt; I have some observations:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P><EM>&gt; 1. The second write() call in succession  does not fail. However, if I sleep for 1
+</EM><BR>
+<EM>&gt; second in between the two writes, the second write() call fails and returns errno
+</EM><BR>
+<EM>&gt; with ECONNRESET. I checked this behaviour running it in Linux2.2.16/ SunOS _5.5.1/
+</EM><BR>
+<EM>&gt; 5.8 and the behavior remains same.  However, in Sun OS 5.7, second write() call does
+</EM><BR>
+<EM>&gt; not fail at all even after giving this delay. (I tried to  increase the delay, but
+</EM><BR>
+<EM>&gt; without any result). In VxWorks 5.2, we could detect the error in the second write
+</EM><BR>
+<EM>&gt; call without any delay at all.
+</EM><BR>
+<P>As derMouse pointed-out, once you send the first segment, there is arace
+<BR>
+between the other side getting the RST to the sending TCP, and the
+<BR>
+sending app getting the second write into TCP.
+<BR>
+<P>As for why no delay was required in VxWorks, I'll hazard the guess that
+<BR>
+the system running VxWorks was slow enough that the RST arrived before
+<BR>
+the second segment could be sent by the app. 
+<BR>
+<P>As for why SunOS5.7 never got the ECONNRESET, probably a bug in 5.7.
+<BR>
+<P>I still think that paying attention to the zero-length read to detect
+<BR>
+remote (graceful) close is best. doing things that elicit RST's is not
+<BR>
+such a hot idea.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+<A HREF="ftp://ftp.cup.hp.com/dist/networking/misc/rachel/">ftp://ftp.cup.hp.com/dist/networking/misc/rachel/</A>
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2483.html">Zhi-Li Zhang: "(no subject)"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2481.html">rajiv.chakravorty@philips.com: "Re: query: using two write() calls in succession"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2479.html">rajiv.chakravorty@philips.com: "query: using two write() calls in succession"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2482">[ date ]</A>
+<A HREF="index.html#2482">[ thread ]</A>
+<A HREF="subject.html#2482">[ subject ]</A>
+<A HREF="author.html#2482">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Mon Mar 26 2001 - 13:50:06 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

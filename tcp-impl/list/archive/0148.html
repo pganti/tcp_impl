@@ -1,0 +1,349 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: draft description of &quot;Failu</TITLE>
+<META NAME="Author" CONTENT="Vern Paxson (vern@ee.lbl.gov)">
+<META NAME="Subject" CONTENT="draft description of &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>draft description of &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Tue Mar 18 15:34:17 1997" -->
+<!-- isoreceived="19970318203417" -->
+<!-- sent="Tue, 18 Mar 1997 15:22:30 PST" -->
+<!-- isosent="19970318232230" -->
+<!-- name="Vern Paxson" -->
+<!-- email="vern@ee.lbl.gov" -->
+<!-- subject="draft description of &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="199703182322.PAA20959@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Vern Paxson (<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20draft%20description%20of%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;199703182322.PAA20959@daffy.ee.lbl.gov&gt;"><EM>vern@ee.lbl.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Mar 18 1997 - 18:22:30 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0149.html">Vern Paxson: "draft description of &quot;Inconsistent retransmission&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0164.html">Vern Paxson: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0178.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0182.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0183.html">touch@ISI.EDU: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0184.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0215.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0232.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#148">[ date ]</A>
+<A HREF="index.html#148">[ thread ]</A>
+<A HREF="subject.html#148">[ subject ]</A>
+<A HREF="author.html#148">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Name of problem: Failure to retain above-sequence data
+<BR>
+<P>Category: Congestion control, performance
+<BR>
+<P>Description:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When a TCP receives an &quot;above sequence&quot; segment, meaning one with a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sequence number exceeding RCV.NXT but below RCV.NXT+RCV.WND, it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD queue the segment for later delivery (RFC 1122, 4.2.2.20).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP that fails to do so is said to exhibit &quot;Failure to retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence data&quot;.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It may sometimes be appropriate for a TCP to discard above-sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data to reclaim memory.  If they do so only rarely, then we would
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not consider them to exhibit this problem.  Instead, the particular
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;concern is with TCPs that always discard above-sequence data.
+<BR>
+<P>Significance:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serious.
+<BR>
+<P>Implications: 
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In times of congestion, a failure to retain above-sequence data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;will lead to numerous otherwise-unnecessary retransmissions,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aggravating the congestion and potentially reducing performance
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by a large factor.
+<BR>
+<P>Relevant RFCs:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RFC 1122 revises RFC 793 by upgrading the latter's MAY to a
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHOULD on this issue.
+<BR>
+<P>Trace file demonstrating it:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[This will eventually be a URL to the trace file, probably
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in both ASCII and binary forms.]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the receiving TCP.  No losses
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B is the TCP sender, A the receiver.  A exhibits failure to retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above sequence data:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.164860 B &gt; A: . 221078:221614(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.170809 B &gt; A: . 221614:222150(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.177183 B &gt; A: . 222150:222686(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.225039 A &gt; B: . ack 222686 win 25800
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here B has sent up to (relative) sequence 222676 in-sequence, and
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A accordingly acknowledges.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.268131 B &gt; A: . 223222:223758(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.337995 B &gt; A: . 223758:224294(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.344065 B &gt; A: . 224294:224830(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.350169 B &gt; A: . 224830:225366(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.356362 B &gt; A: . 225366:225902(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.362445 B &gt; A: . 225902:226438(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.368579 B &gt; A: . 226438:226974(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.374732 B &gt; A: . 226974:227510(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.380825 B &gt; A: . 227510:228046(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.387027 B &gt; A: . 228046:228582(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.393053 B &gt; A: . 228582:229118(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.399193 B &gt; A: . 229118:229654(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:10.405356 B &gt; A: . 229654:230190(536) ack 1 win 33232 [tos 0x8]
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A now receives 13 additional packets from B.  These are above-sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;because 222686:223222 was dropped.  The packets do however fit within
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the offered window of 25800.  A does not generate any duplicate acks
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for them.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The trace contributor (V. Paxson) verified that these 13 packets
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;had valid IP and TCP checksums.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:11.917728 B &gt; A: . 222686:223222(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:11.930925 A &gt; B: . ack 223222 win 32232
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B times out for 222686:223222 and retransmits it.  Upon receiving
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it, A only acknowledges 223222.  Had it retained the valid
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence packets, it would instead have ack'd 230190.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:12.048438 B &gt; A: . 223222:223758(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:12.054397 B &gt; A: . 223758:224294(536) ack 1 win 33232 [tos 0x8]
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10:38:12.068029 A &gt; B: . ack 224294 win 31696
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B retransmits two more packets, and A only acknowledges them.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This pattern continues as B retransmits the entire set of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;previously-received packets.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A second trace confirmed that the problem is repeatable.
+<BR>
+<P>Trace file demonstrating correct behavior:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made using tcpdump/BPF recording at the receiving TCP (C).
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No losses reported.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.790417 D &gt; C: . 33793:34305(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.791393 D &gt; C: . 34305:34817(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.792369 D &gt; C: . 34817:35329(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.792369 D &gt; C: . 35329:35841(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.793345 D &gt; C: . 36353:36865(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 C &gt; D: . ack 35841 win 59904
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A sequence hole occurs because 35841:36353 has been dropped.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 D &gt; C: . 36865:37377(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.794321 C &gt; D: . ack 35841 win 59904
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.795297 D &gt; C: . 37377:37889(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.795297 C &gt; D: . ack 35841 win 59904
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.796273 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.798225 D &gt; C: . 37889:38401(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.799201 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.807009 D &gt; C: . 38401:38913(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.807009 C &gt; D: . ack 35841 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.884113 D &gt; C: . 52737:53249(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.884113 C &gt; D: . ack 35841 win 61440
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each additional, above-sequence packet C receives from D elicits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a duplicate ack for 35841.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.887041 D &gt; C: . 35841:36353(512) ack 1 win 61440
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:11:25.887041 C &gt; D: . ack 53249 win 44032
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D retransmits 35841:36353 and C acknowledges receipt of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data all the way up to 53249.
+<BR>
+<P>References
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V. Paxson, &quot;Automated Packet Trace Analysis of TCP Implementations,&quot;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available in draft form from vern@ee.lbl.gov.
+<BR>
+<P>How to detect
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Packet loss is common enough in the Internet that generally it
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is not difficult to find an Internet path that will result
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in some above-sequence packets arriving.  A TCP that exhibits
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Failure to retain ...&quot; may not generate duplicate acks for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;these packets.  However, some TCPs that do retain above-sequence
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data also do not generate duplicate acks, so failure to do so
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;does not definitively identify the problem.  Instead, the key
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;observation is whether upon retransmission of the dropped packet,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data that was previously above-sequence is acknowledged.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Two considerations in detecting this problem using a packet trace
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are that it is easiest to do so with a trace made at the TCP receiver,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in order to unambiguously determine which packets arrived successfully,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and that such packets may still be correctly discarded if they
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arrive with checksum errors.  The latter can be tested by capturing
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the entire packet contents and performing the IP and TCP checksum
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithms to verify their integrity; or by confirming that the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packets arrive with the same checksum and contents as that with
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which they were sent, with a presumption that the sending TCP
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correctly calculates checksums for the packets it transmits.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It is considerably easier to verify that an implementation does
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*not* exhibit this problem.  This can be done by recording a trace
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at the data sender, and observing that sometimes after a retransmission
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the receiver acknowledges a higher sequence number than just that
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which was retransmitted.
+<BR>
+<P>How to fix
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the root problem is that the implementation lacks buffer, then
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;then unfortunately this requires significant work to fix.  However,
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doing so is important, for reasons outlined above.
+<BR>
+<P>Implementation specifics (if approved by implementor)
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Implementor contact address)
+<BR>
+<P>Input to IRTF
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The IRTF should consider whether to upgrade the need to retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;above-sequence data from SHOULD to MUST, with an allowance for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;occasional failure to do so in order to reclaim memory.  This
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suggestion is motivated by the observation that failure to retain
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such data can significantly aggravate congestion.
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0149.html">Vern Paxson: "draft description of &quot;Inconsistent retransmission&quot;"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0147.html">Vern Paxson: "draft description of &quot;No slow start after timeout&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0155.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0164.html">Vern Paxson: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0178.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0182.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0183.html">touch@ISI.EDU: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0184.html">Jim Gettys: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0215.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0232.html">Curtis Villamizar: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="0233.html">Larry Backman: "Re: draft description of &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#148">[ date ]</A>
+<A HREF="index.html#148">[ thread ]</A>
+<A HREF="subject.html#148">[ subject ]</A>
+<A HREF="author.html#148">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:07 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

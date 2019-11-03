@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: IPv6 Path MTU Discovery process</TITLE>
+<META NAME="Author" CONTENT="John Spence (jspence@zama.net)">
+<META NAME="Subject" CONTENT="IPv6 Path MTU Discovery process ...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>IPv6 Path MTU Discovery process ...</H1>
+<!-- received="Tue May 23 16:55:29 2000" -->
+<!-- isoreceived="20000523205529" -->
+<!-- sent="Tue, 23 May 2000 13:29:09 -0700" -->
+<!-- isosent="20000523202909" -->
+<!-- name="John Spence" -->
+<!-- email="jspence@zama.net" -->
+<!-- subject="IPv6 Path MTU Discovery process ..." -->
+<!-- id="000001bfc4f7$069111c0$e502a8c0@zama.net" -->
+<STRONG>From:</STRONG> John Spence (<A HREF="mailto:jspence@zama.net?Subject=Re:%20IPv6%20Path%20MTU%20Discovery%20process%20...&In-Reply-To=&lt;000001bfc4f7$069111c0$e502a8c0@zama.net&gt;"><EM>jspence@zama.net</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue May 23 2000 - 16:29:09 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2098.html">Lloyd Wood: "Re: IPv6 Path MTU Discovery process ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2096">[ date ]</A>
+<A HREF="index.html#2096">[ thread ]</A>
+<A HREF="subject.html#2096">[ subject ]</A>
+<A HREF="author.html#2096">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Hello;
+<BR>
+<P>I sent an eMail to Jack McGann asking a question about IPv6 Path MTU
+<BR>
+Discovery.  I had a question about how it was described, and thought I had
+<BR>
+an idea for a better solution.  Mr. McGann answered saying that he didn't
+<BR>
+know if that had been considered, and suggested I distribute it in this
+<BR>
+forum.
+<BR>
+<P>Here is the eMail I sent Mr. McGann - please feel free to contact me for
+<BR>
+questions and to let me know what you think.
+<BR>
+<P>Best regards;
+<BR>
+<P>John Spence
+<BR>
+<P>---------------------
+<BR>
+Hello Mr. McCann;
+<BR>
+I have read with interest &quot;IPv6 Clearly Explained&quot;, by Pete Loshin. I read
+<BR>
+about the Path MTU Discovery process and I had a question. I went to the
+<BR>
+IETF site and researched the RFC, and I have a thought.
+<BR>
+The book, and the RFC, describe the process is described as the source node
+<BR>
+sending the largest packet permissible on it's own network - essentially the
+<BR>
+first hop. If any intervening link cannot handle packets that large, it
+<BR>
+discards the packet and sends a ICMPv6 &quot;packet too big&quot; message to the
+<BR>
+source. The source node drops the size of the packet to within that reported
+<BR>
+limit, and send the packet again. Perhaps it makes the final destination,
+<BR>
+perhaps another node requires even a smaller packet size, and generates
+<BR>
+another &quot;packet too big&quot; message for the source. This could go on for
+<BR>
+awhile.
+<BR>
+My question is this. Why not have each node in the path that supports only a
+<BR>
+smaller MTU than the source node send the &quot;packet too big&quot; message, but
+<BR>
+still forward a &quot;shell packet&quot; on towards the destination, where the &quot;shell
+<BR>
+package&quot; contains the minimum MTU so far along that path. Since the goal is
+<BR>
+to send a packet all the way to the destination, that information may well
+<BR>
+be needed, and it would reduce latency in a scenario where there was a
+<BR>
+&quot;stepping down&quot; of the MTU size allowed by intervening links as the packets
+<BR>
+approached the destination.
+<BR>
+The source node would simply wait, collecting whatever &quot;packet still too
+<BR>
+big&quot; ICMP messages it received from the intervening nodes (a node that could
+<BR>
+accommodate the current MTU would simply forward the shell packet forward,
+<BR>
+but would not reply to the source node), until it received a confirmation
+<BR>
+from the true destination that the packet had finally arrives. Looking over
+<BR>
+the ICMP &quot;packet too big&quot; messages the source had received, it could now
+<BR>
+choose the best possible MTU and proceed with confidence.
+<BR>
+Heck - we could even have the &quot;shell packet&quot; continue all the way to the
+<BR>
+destination node, being adjusted downward by each link along the way (if
+<BR>
+needed) - without generating any ICMP &quot;packet too big&quot; messages - and then
+<BR>
+make the true destination node send a message back to the source saying &quot;a
+<BR>
+2785byte MTU is cleared all the way through&quot;, at which time the real data
+<BR>
+transmission would begin. You would probably want the very first node that
+<BR>
+determined it needed a smaller packet generate the ICMP &quot;packet too big&quot;
+<BR>
+message for the source, just to let the source know it wasn't going to be
+<BR>
+clear sailing. It could mark the &quot;shell packet&quot; it sent forward to
+<BR>
+downstream nodes so they knew they weren't the first to demand a smaller
+<BR>
+MTU.
+<BR>
+What do you think? Good idea? I'll bet you guys thought of this - just
+<BR>
+trying to help. You at the IETF are doing a great job.
+<BR>
+----------------------------------------------------------------------------
+<BR>
+-----
+<BR>
+John E Spence                    ZAMA NETWORKS, INC.
+<BR>
+Senior UNIX Systems Engineer
+<BR>
+12101 International Boulevard, Seattle WA 98168-2569
+<BR>
+wk 206.352.9262  NEXTEL 206.571.9792 fx 206.352.3918
+<BR>
+<A HREF="mailto:jspence@zama.net?Subject=Re:%20IPv6%20Path%20MTU%20Discovery%20process%20...&In-Reply-To=&lt;000001bfc4f7$069111c0$e502a8c0@zama.net&gt;">jspence@zama.net</A> || <A HREF="http://www.zama.net">http://www.zama.net</A>
+<BR>
+-------------------------------------------------------------------------
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2095.html">Howard Berkey: "Re: Any successor to the sockets APIs ???"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Maybe reply:</STRONG> <A HREF="2097.html">Bernie Volz: "RE: IPv6 Path MTU Discovery process ..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2098.html">Lloyd Wood: "Re: IPv6 Path MTU Discovery process ..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2096">[ date ]</A>
+<A HREF="index.html#2096">[ thread ]</A>
+<A HREF="subject.html#2096">[ subject ]</A>
+<A HREF="author.html#2096">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:26 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

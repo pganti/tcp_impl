@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TIME-WAIT truncation</TITLE>
+<META NAME="Author" CONTENT="touch@ISI.EDU (touch@ISI.EDU)">
+<META NAME="Subject" CONTENT="Re: TIME-WAIT truncation">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TIME-WAIT truncation</H1>
+<!-- received="Thu Jun  5 11:34:23 1997" -->
+<!-- isoreceived="19970605153423" -->
+<!-- sent="Thu, 5 Jun 1997 11:26:28 -0700" -->
+<!-- isosent="19970605182628" -->
+<!-- name="touch@ISI.EDU" -->
+<!-- email="touch@ISI.EDU" -->
+<!-- subject="Re: TIME-WAIT truncation" -->
+<!-- id="199706051826.AA07116@ash.isi.edu" -->
+<!-- inreplyto="TIME-WAIT truncation" -->
+<STRONG>From:</STRONG> <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051826.AA07116@ash.isi.edu&gt;"><EM>touch@ISI.EDU</EM></A><BR>
+<STRONG>Date:</STRONG> Thu Jun 05 1997 - 14:26:28 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0436.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#435">[ date ]</A>
+<A HREF="index.html#435">[ thread ]</A>
+<A HREF="subject.html#435">[ subject ]</A>
+<A HREF="author.html#435">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From <A HREF="mailto:owner-tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051826.AA07116@ash.isi.edu&gt;">owner-tcp-impl@relay.engr.SGI.COM</A> Thu Jun  5 11:22:20 1997
+</EM><BR>
+<EM>&gt; To: <A HREF="mailto:tcp-impl@relay.engr.SGI.COM?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051826.AA07116@ash.isi.edu&gt;">tcp-impl@relay.engr.SGI.COM</A>
+</EM><BR>
+<EM>&gt; Subject: TIME-WAIT truncation
+</EM><BR>
+<EM>&gt; Date: Thu, 05 Jun 1997 11:03:08 PDT
+</EM><BR>
+<EM>&gt; From: Vern Paxson &lt;<A HREF="mailto:vern@ee.lbl.gov?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051826.AA07116@ash.isi.edu&gt;">vern@ee.lbl.gov</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Someone passed along the following URL via private email:
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 	<A HREF="http://www.microsoft.com/kb/articles/Q151/4/18.htm">http://www.microsoft.com/kb/articles/Q151/4/18.htm</A>
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; It discusses a TCP implementation problem in which a connection can leave
+</EM><BR>
+<EM>&gt; TIME-WAIT before the full 2 MSL interval has elapsed, because there are
+</EM><BR>
+<EM>&gt; a limited (albeit large) number of TCBs available for TIME-WAIT.  My
+</EM><BR>
+<EM>&gt; impression is that there are other implementations that truncate TIME-WAIT
+</EM><BR>
+<EM>&gt; before a full 2 MSL because they use a definition of MSL smaller than
+</EM><BR>
+<EM>&gt; the standard one.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Is there a volunteer interested in documenting this problem?  (Further
+</EM><BR>
+<EM>&gt; discussion of it is fine too, of course.)
+</EM><BR>
+<P>Yup - we have some work here that's related, so this
+<BR>
+would be a fine place for me to volunteer...
+<BR>
+<P>Joe
+<BR>
+----------------------------------------------------------------------
+<BR>
+Joe Touch - <A HREF="mailto:touch@isi.edu?Subject=Re:%20TIME-WAIT%20truncation&In-Reply-To=&lt;199706051826.AA07116@ash.isi.edu&gt;">touch@isi.edu</A>		    <A HREF="http://www.isi.edu/~touch/">http://www.isi.edu/~touch/</A>
+<BR>
+ISI / Project Leader, ATOMIC-2, LSAM       <A HREF="http://www.isi.edu/atomic2/">http://www.isi.edu/atomic2/</A>
+<BR>
+USC / Research Assistant Prof.                <A HREF="http://www.isi.edu/lsam/">http://www.isi.edu/lsam/</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0436.html">Alan Cox: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0434.html">Vern Paxson: "TIME-WAIT truncation"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0527.html">Ian Heavens: "Re: TIME-WAIT truncation"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#435">[ date ]</A>
+<A HREF="index.html#435">[ thread ]</A>
+<A HREF="subject.html#435">[ subject ]</A>
+<A HREF="author.html#435">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

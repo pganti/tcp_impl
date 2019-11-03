@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: time of queued connections i</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: time of queued connections if not reaped...">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: time of queued connections if not reaped...</H1>
+<!-- received="Fri Feb  2 14:46:19 2001" -->
+<!-- isoreceived="20010202194619" -->
+<!-- sent="Fri, 02 Feb 2001 11:37:53 -0800" -->
+<!-- isosent="20010202193753" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: time of queued connections if not reaped..." -->
+<!-- id="3A7B0C91.C4B3937B@cup.hp.com" -->
+<!-- inreplyto="00c201c08d3f$c1d6cdb0$1703020a@lukeskywalker.dublin.iona.ie" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20time%20of%20queued%20connections%20if%20not%20reaped...&In-Reply-To=&lt;3A7B0C91.C4B3937B@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 02 2001 - 14:37:53 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2448">[ date ]</A>
+<A HREF="index.html#2448">[ thread ]</A>
+<A HREF="subject.html#2448">[ subject ]</A>
+<A HREF="author.html#2448">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;   When the server runs out of FDs, I remove the listener FD from the select
+</EM><BR>
+<EM>&gt; set as I don't want to talk to any client. Coming to the TCP/IP internals, I
+</EM><BR>
+<EM>&gt; believe any new client connections will queue up in the queue with backlog
+</EM><BR>
+<EM>&gt; mentioned by listen() system call until reaped by accept() call. If queue is
+</EM><BR>
+<EM>&gt; full, any new clients will timeout as they cannot contact the server. I
+</EM><BR>
+<EM>&gt; believe the time in this case is 75 seconds which is the establishment
+</EM><BR>
+<EM>&gt; timer. Now what I want to know is if the server never issues an accept()
+</EM><BR>
+<EM>&gt; call to take these connections off the queue (this will happen because we
+</EM><BR>
+<EM>&gt; pulled out the listener FD from the select set and so it won't fire), FOR
+</EM><BR>
+<EM>&gt; HOW LONG will these connections stay in the queue. I presume any client that
+</EM><BR>
+<EM>&gt; sends data to the connection which is in a ESTABLISHED state and queued at
+</EM><BR>
+<EM>&gt; server, it starts a retransmission timer and no response after 5 or 9
+</EM><BR>
+<EM>&gt; minutes (recommended default of 12 retrasmissions) will elicit a RST from
+</EM><BR>
+<EM>&gt; the client side to the  server side. As a result of this, the server TCP/IP
+</EM><BR>
+<EM>&gt; will remove the established connection from the queue.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt;   So is the time related to retransmission timer?.
+</EM><BR>
+<P>My guess would be probably not. The client will be able to send data -
+<BR>
+the connection is ESTABLISHED, and that data will likely be accepted and
+<BR>
+ACKed. My guess would be that those connections in the listen queue will
+<BR>
+stay there for quite a long time. Basically until the client gets fed-up
+<BR>
+with a lack of response and closes. Or, you explicitly accept and close
+<BR>
+them yourself.
+<BR>
+<P>I have no guess as to what would happen if you went and did a
+<BR>
+listen(s,0) listen(s,1)...
+<BR>
+<P>If you really want those connections to go away without more direct
+<BR>
+intervention, you might want to use an interface that inserts the
+<BR>
+application between the receipt of the SYN and the sending of the
+<BR>
+SYN|ACK. I _think_ XTI is or can be such an interface. In that case, you
+<BR>
+would simply stop taking the request notificatoins and the clients would
+<BR>
+timeout on their connects.
+<BR>
+<P>rick jones
+<BR>
+<PRE>
+-- 
+<A HREF="ftp://ftp.cup.hp.com/dist/networking/misc/rachel/">ftp://ftp.cup.hp.com/dist/networking/misc/rachel/</A>
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, OR post, but please do NOT do BOTH...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2447.html">ravi reddy: "time of queued connections if not reaped..."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2449.html">Jerry Toporek: "Re: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2451.html">ravi reddy: "RE: time of queued connections if not reaped..."</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="2452.html">Bill Fenner: "Re: time of queued connections if not reaped..."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2448">[ date ]</A>
+<A HREF="index.html#2448">[ thread ]</A>
+<A HREF="subject.html#2448">[ subject ]</A>
+<A HREF="author.html#2448">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Feb 02 2001 - 14:46:47 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

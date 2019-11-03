@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: HTTP and RFC1122 half duplex</TITLE>
+<META NAME="Author" CONTENT="Ian Heavens (ian@spider.com)">
+<META NAME="Subject" CONTENT="Re: HTTP and RFC1122 half duplex close">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: HTTP and RFC1122 half duplex close</H1>
+<!-- received="Tue Feb 11 19:54:05 1997" -->
+<!-- isoreceived="19970212005405" -->
+<!-- sent="Tue, 11 Feb 1997 19:29:57 +0000" -->
+<!-- isosent="19970211192957" -->
+<!-- name="Ian Heavens" -->
+<!-- email="ian@spider.com" -->
+<!-- subject="Re: HTTP and RFC1122 half duplex close" -->
+<!-- id="3300C8B5.5407@spider.com" -->
+<!-- inreplyto="3300C4AE.B34@cup.hp.com" -->
+<STRONG>From:</STRONG> Ian Heavens (<A HREF="mailto:ian@spider.com?Subject=Re:%20HTTP%20and%20RFC1122%20half%20duplex%20close&In-Reply-To=&lt;3300C8B5.5407@spider.com&gt;"><EM>ian@spider.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Tue Feb 11 1997 - 14:29:57 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#59">[ date ]</A>
+<A HREF="index.html#59">[ thread ]</A>
+<A HREF="subject.html#59">[ subject ]</A>
+<A HREF="author.html#59">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Rick Jones wrote:
+<BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; By sending a RST instead of the FIN to abort the connection, we can
+</EM><BR>
+<EM>&gt; &gt; cause both the server side and client side stacks to tear the connection
+</EM><BR>
+<EM>&gt; &gt; down immediately, and avoid the half-close where it gets caught.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; All this does is (unreliably) kludge around a bug in the transport
+</EM><BR>
+<EM>&gt; stack. There is no guarantee that RST will ever make it to the server
+</EM><BR>
+<EM>&gt; (witness all the connections that get waylaid in FIN_WAIT_2...) And
+</EM><BR>
+<EM>&gt; besides, if the server has outstanding data, if nothing else that is
+</EM><BR>
+<EM>&gt; supposed to retransmit timeout, so it should not be really &quot;hung&quot; only
+</EM><BR>
+<EM>&gt; taking a somewhat longish time to figure things out.
+</EM><BR>
+<P>I'd like to see the network trace to see if the server TCP is
+<BR>
+retransmitting or probing - in the latter case it should never
+<BR>
+timeout (as RFC1122 mandates for probing zero windows)
+<BR>
+<P><EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; The most common manifestation of the problem on the server side is
+</EM><BR>
+<EM>&gt; &gt; that web server admins find that over time, their server threads or
+</EM><BR>
+<EM>&gt; &gt; processes become hung.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; If the server's stack is not dropping the connection to RTX exhaustion,
+</EM><BR>
+<EM>&gt; that is a bug in the server stack. If it is indeed dropping the
+</EM><BR>
+<EM>&gt; connection, then the admins are simply being too impatient. We are
+</EM><BR>
+<EM>&gt; likely talking several minutes here.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; Unfortunately, the bad stack implementation is in widespread use,
+</EM><BR>
+<EM>&gt; &gt; and the current versions of it *still* do not fix the problem.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; So we should compound the problem by committing a second wrong? (liberal
+</EM><BR>
+<EM>&gt; use of abortive close)
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<P>Actually, I think that it doesn't make too much difference whether the
+<BR>
+application or the stack gives rise to the RST - TIME-WAIT is avoided
+<BR>
+in either case (but this is a protocol issue, not an implementation
+<BR>
+issue: this is just a good example of where the RST mechanism is
+<BR>
+needed - if the server is probing, or advisable - if the server is
+<BR>
+retransmitting).
+<BR>
+<P>ian
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0060.html">Ian Heavens: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0058.html">Thomas Narten: "Re: HTTP and RFC1122 half duplex close"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0057.html">Rick Jones: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0061.html">Josh Cohen: "Re: HTTP and RFC1122 half duplex close"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#59">[ date ]</A>
+<A HREF="index.html#59">[ thread ]</A>
+<A HREF="subject.html#59">[ subject ]</A>
+<A HREF="author.html#59">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:04 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: FWD:: Re: [e2e] Re: Question</TITLE>
+<META NAME="Author" CONTENT="Mark Allman (mallman@grc.nasa.gov)">
+<META NAME="Subject" CONTENT="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP</H1>
+<!-- received="Fri Dec 27 18:33:46 2002" -->
+<!-- isoreceived="20021227233346" -->
+<!-- sent="Fri, 27 Dec 2002 17:22:55 -0500" -->
+<!-- isosent="20021227222255" -->
+<!-- name="Mark Allman" -->
+<!-- email="mallman@grc.nasa.gov" -->
+<!-- subject="Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP" -->
+<!-- id="200212272222.RAA15264@lawyers.ir.bbn.com" -->
+<!-- inreplyto="FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP" -->
+<STRONG>From:</STRONG> Mark Allman (<A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;"><EM>mallman@grc.nasa.gov</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Dec 27 2002 - 17:22:55 EST
+<P>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2931.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<UL>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2929.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2931.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2930">[ date ]</A>
+<A HREF="index.html#2930">[ thread ]</A>
+<A HREF="subject.html#2930">[ subject ]</A>
+<A HREF="author.html#2930">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&nbsp;
+<BR>
+<P>------- Forwarded Message
+<BR>
+<P>Date: Thu, 19 Dec 2002 12:53:26 +0100
+<BR>
+From: Andi Kleen &lt;<A HREF="mailto:ak@muc.de?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;">ak@muc.de</A>&gt;
+<BR>
+To: Joe Touch &lt;<A HREF="mailto:touch@ISI.EDU?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;">touch@ISI.EDU</A>&gt;
+<BR>
+Cc: <A HREF="mailto:richard@codeburst.co.uk?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;">richard@codeburst.co.uk</A>, <A HREF="mailto:mallman@grc.nasa.gov?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;">mallman@grc.nasa.gov</A>, <A HREF="mailto:tcp-impl@grc.nasa.gov?Subject=Re:%20FWD::%20Re:%20[e2e]%20Re:%20Question%20on%20&quot;identification&quot;%20field%20of%20IP&In-Reply-To=&lt;200212272222.RAA15264@lawyers.ir.bbn.com&gt;">tcp-impl@grc.nasa.gov</A>
+<BR>
+Subject: Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP
+<BR>
+<P><EM>&gt; I mean that anyone who clears the DF bit gets what they deserve - a 
+</EM><BR>
+<EM>&gt; nonfunctioning brick.
+</EM><BR>
+<P>The most common scenario in my experience is VPN boxes not 
+<BR>
+copying DF when they encapsulate a TCP packet into an IPSEC header.
+<BR>
+<P>The reason is that doing so would require working path mtu discovery
+<BR>
+to the TCP sender to tell it about the smaller MTU, and path mtu
+<BR>
+discovery is often broken due to packet filters blocking all of
+<BR>
+ICMP or NAT gateways not properly rewriting ICMP frag-needed.
+<BR>
+<P>This has the same effect in the network. Worse as noted earlier
+<BR>
+in the thread some routers do not send enough headers
+<BR>
+to reconstruct the original sender after IPSEC decapsulation.
+<BR>
+<P>(I don't know if it is still the case but at one point routers
+<BR>
+from a particular popular router vendor were notorious for this
+<BR>
+in their default configuration - they only returned 64bits of 
+<BR>
+payload)
+<BR>
+<P>The worst part is that many IPSEC implementations drop ICMPs
+<BR>
+for security reasons when they don't contain the full
+<BR>
+original packet, because it is impossible to authenticate
+<BR>
+it otherwise (and they would be vunerable to a DoS of 
+<BR>
+an attacker forcing an unusable small MTU on them with
+<BR>
+forged ICMPs).
+<BR>
+<P>ICMPs are only required to fill up 576 bytes to avoid
+<BR>
+fragmentation, but TCP packets tend to be much bigger
+<BR>
+than that. In fact the ICMP cannot be bigger than
+<BR>
+the MTU and when the MTU the TCP/IPSEC packet was 
+<BR>
+formatted for is the same as the ICMP is sending then
+<BR>
+the ICMP sender has no choice but to drop some part of
+<BR>
+the payload because the ICMP header takes space too (or fragment, 
+<BR>
+which is forbidden)
+<BR>
+<P>The only alternative they have is to not copy DF and don't
+<BR>
+do path MTU discovery. Of course for a common scenario
+<BR>
+(VPN gateway receiving and sending on the same MTU) 
+<BR>
+after adding the IPSEC header this results in getting
+<BR>
+every full sized packet being fragmented into two
+<BR>
+packets. This disturbs all the TCP packet accounting
+<BR>
+mechanisms and makes the connection react very badly
+<BR>
+to any packet loss.
+<BR>
+<P>- -Andi
+<BR>
+<P>------- End of Forwarded Message
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2931.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2929.html">Joe Touch: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Reply:</STRONG> <A HREF="2931.html">Alan Cox: "Re: FWD:: Re: [e2e] Re: Question on &quot;identification&quot; field of IP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2930">[ date ]</A>
+<A HREF="index.html#2930">[ thread ]</A>
+<A HREF="subject.html#2930">[ subject ]</A>
+<A HREF="author.html#2930">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Fri Dec 27 2002 - 18:33:54 EST</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

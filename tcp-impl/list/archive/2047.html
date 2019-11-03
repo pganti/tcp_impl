@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Zachary Amsden (zamsden@cthulhu.engr.sgi.com)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Mon Feb 28 02:57:48 2000" -->
+<!-- isoreceived="20000228075748" -->
+<!-- sent="Sun, 27 Feb 2000 23:52:53 -0800" -->
+<!-- isosent="20000228075253" -->
+<!-- name="Zachary Amsden" -->
+<!-- email="zamsden@cthulhu.engr.sgi.com" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="200002280752.XAA83438@clock.engr.sgi.com" -->
+<!-- inreplyto="863dqer40z.fsf@ironbridgenetworks.com" -->
+<STRONG>From:</STRONG> Zachary Amsden (<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280752.XAA83438@clock.engr.sgi.com&gt;"><EM>zamsden@cthulhu.engr.sgi.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 28 2000 - 02:52:53 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2041.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2047">[ date ]</A>
+<A HREF="index.html#2047">[ thread ]</A>
+<A HREF="subject.html#2047">[ subject ]</A>
+<A HREF="author.html#2047">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; <A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280752.XAA83438@clock.engr.sgi.com&gt;">zamsden@cthulhu.engr.sgi.com</A> (Zachary Amsden) writes:
+</EM><BR>
+<EM>&gt; &gt; And enabled by a socket option to indicate the app is willing to accept the 
+</EM><BR>
+<EM>&gt; &gt; kernel placement of headers and data.  Still needs hardware support to 
+</EM><BR>
+<EM>&gt; &gt; separate header and payload, though.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Actually, no, it doesn't require any special hardware support.  Who
+</EM><BR>
+<EM>&gt; cares to separate the header and payload at all?  If it's not
+</EM><BR>
+<EM>&gt; specifically NFS that we're talking about (which has its own problems
+</EM><BR>
+<EM>&gt; due to demand-paging), then it's sufficient to map the entire received
+</EM><BR>
+<EM>&gt; packet into user space -- headers and all.  All that's really needed
+</EM><BR>
+<EM>&gt; at the application level is a list of data-start addresses and lengths
+</EM><BR>
+<EM>&gt; (as would be present in a regular uio vector).  The standard recvmsg()
+</EM><BR>
+<EM>&gt; call already provides an interface like this.  The extra bit of magic
+</EM><BR>
+<EM>&gt; is that for zero-copy the user doesn't get to put his own buffers into
+</EM><BR>
+<EM>&gt; msghdr.msg_iov; the kernel picks.  How about SO_RCVZCOPY to enable ...?
+</EM><BR>
+<P>No, that situation doesn't require any hardware support.  However, a zero-copy 
+<BR>
+receive path is not the only element of RDMA - RDMA was designed (I suppose 
+<BR>
+from the discussion here) specifically to address header/payload issues for 
+<BR>
+storage protocols.  Clearly one can do zero-copy receive with changes to the 
+<BR>
+API and no hardware/firmware modifications.  But with no special hardware 
+<BR>
+support, flipping the payload into some page with alignment constraints will 
+<BR>
+require another copy.
+<BR>
+<P>There is one exception to my last statement that I know of:  If you pre-adjust 
+<BR>
+the hardware receive buffers to make the payload align on a page boundary, you 
+<BR>
+can flip the page into the buffer cache for (hopefully) the common case.  
+<BR>
+However, this requires the ability to tune these header offsets and will only 
+<BR>
+work for one protocol at a time (mostly).
+<BR>
+<P>Realistically, who is going to be running a storage system that requires so 
+<BR>
+much bandwidth that avoiding receive copies is necessary, and runs on generic 
+<BR>
+NICs with no firmware/ASIC modifications possible?  So I think using modified 
+<BR>
+hardware is completely reasonable in those circumstances.
+<BR>
+<P>In any case, zero-copy receive with no payload separation, as you propose, 
+<BR>
+would work fine with the API changes previously suggested, but that is a 
+<BR>
+separate discussion :)
+<BR>
+<P><PRE>
+-- 
+Zachary Amsden  <A HREF="mailto:zamsden@engr.sgi.com?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;200002280752.XAA83438@clock.engr.sgi.com&gt;">zamsden@engr.sgi.com</A>  3-6919  31-2-510  Core Protocols
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2048.html">Costa Sapuntzakis: "NFS Header/data parsing and RDMA"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2046.html">David R. Cheriton: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="2041.html">James Carlson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2034.html">Rick Jones: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2047">[ date ]</A>
+<A HREF="index.html#2047">[ thread ]</A>
+<A HREF="subject.html#2047">[ subject ]</A>
+<A HREF="author.html#2047">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:21 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

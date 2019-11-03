@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: Keep-Alive size</TITLE>
+<META NAME="Author" CONTENT="der Mouse  (mouse@Rodents.Montreal.QC.CA)">
+<META NAME="Subject" CONTENT="Re: Keep-Alive size">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: Keep-Alive size</H1>
+<!-- received="Sat Mar  8 18:05:10 1997" -->
+<!-- isoreceived="19970308230510" -->
+<!-- sent="Sat, 8 Mar 1997 12:59:48 -0500 (EST)" -->
+<!-- isosent="19970308175948" -->
+<!-- name="der Mouse " -->
+<!-- email="mouse@Rodents.Montreal.QC.CA" -->
+<!-- subject="Re: Keep-Alive size" -->
+<!-- id="199703081759.MAA21194@Twig.Rodents.Montreal.QC.CA" -->
+<!-- inreplyto="Keep-Alive size" -->
+<STRONG>From:</STRONG> der Mouse  (<A HREF="mailto:mouse@Rodents.Montreal.QC.CA?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199703081759.MAA21194@Twig.Rodents.Montreal.QC.CA&gt;"><EM>mouse@Rodents.Montreal.QC.CA</EM></A>)<BR>
+<STRONG>Date:</STRONG> Sat Mar 08 1997 - 12:59:48 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0112.html">Richard Fox: "Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0118.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0120.html">Francesco Potorti`: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#114">[ date ]</A>
+<A HREF="index.html#114">[ thread ]</A>
+<A HREF="subject.html#114">[ subject ]</A>
+<A HREF="author.html#114">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;&gt; This all seems to imply that Keep-Alive packets should contain at
+</EM><BR>
+<EM>&gt;&gt; least one byte of data.  However, there is at least one stack out
+</EM><BR>
+<EM>&gt;&gt; there which only sends zero length Keep-Alives and there is a stack
+</EM><BR>
+<EM>&gt;&gt; out there which does not ACK them.  Both stacks seem to be
+</EM><BR>
+<EM>&gt;&gt; conformant to rfc1122 but the behaviour is not the desired one at
+</EM><BR>
+<EM>&gt;&gt; all.
+</EM><BR>
+<P><EM>&gt; Basically all bets are off.  The best thing to do on the send side is
+</EM><BR>
+<EM>&gt; clearly to resend the last byte.
+</EM><BR>
+<P>What if there is no last byte (ie, if that direction has not sent any
+<BR>
+data since the initial SYN/SYN-ACK/ACK exchange)?
+<BR>
+<P>Would it do any harm to invent a fictitious last byte and send it?  In
+<BR>
+this condition it's guaranteed to be outside the receiver's idea of
+<BR>
+valid sequence numbers, since it duplicates the SYN's sequence number.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;der Mouse
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:mouse@rodents.montreal.qc.ca?Subject=Re:%20Keep-Alive%20size&In-Reply-To=&lt;199703081759.MAA21194@Twig.Rodents.Montreal.QC.CA&gt;">mouse@rodents.montreal.qc.ca</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7D C8 61 52 5D E7 2D 39  4E F1 31 3E E8 B3 27 4B
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0113.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0112.html">Richard Fox: "Keep-Alive size"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0115.html">Luigi Rizzo: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0118.html">Alan Cox: "Re: Keep-Alive size"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="0120.html">Francesco Potorti`: "Re: Keep-Alive size"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#114">[ date ]</A>
+<A HREF="index.html#114">[ thread ]</A>
+<A HREF="subject.html#114">[ subject ]</A>
+<A HREF="author.html#114">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:06 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

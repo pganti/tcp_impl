@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: revising RFC 2001 within tcp</TITLE>
+<META NAME="Author" CONTENT="Kacheong Poon (kcpoon@jurassic.Eng.Sun.COM)">
+<META NAME="Subject" CONTENT="Re: revising RFC 2001 within tcp-impl">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: revising RFC 2001 within tcp-impl</H1>
+<!-- received="Thu Jul 31 22:51:12 1997" -->
+<!-- isoreceived="19970801025112" -->
+<!-- sent="Thu, 31 Jul 1997 22:48:37 -0700" -->
+<!-- isosent="19970801054837" -->
+<!-- name="Kacheong Poon" -->
+<!-- email="kcpoon@jurassic.Eng.Sun.COM" -->
+<!-- subject="Re: revising RFC 2001 within tcp-impl" -->
+<!-- id="199708010548.WAA11519@shield.eng.sun.com" -->
+<!-- inreplyto="revising RFC 2001 within tcp-impl" -->
+<STRONG>From:</STRONG> Kacheong Poon (<A HREF="mailto:kcpoon@jurassic.Eng.Sun.COM?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010548.WAA11519@shield.eng.sun.com&gt;"><EM>kcpoon@jurassic.Eng.Sun.COM</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Aug 01 1997 - 01:48:37 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#633">[ date ]</A>
+<A HREF="index.html#633">[ thread ]</A>
+<A HREF="subject.html#633">[ subject ]</A>
+<A HREF="author.html#633">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+Included message from Craig Partridge &lt;<A HREF="mailto:craig@aland.bbn.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010548.WAA11519@shield.eng.sun.com&gt;">craig@aland.bbn.com</A>&gt;:
+<BR>
+<P><EM>&gt;----
+</EM><BR>
+<EM>&gt;	    RW could possibly be 2, since on restart we look rather like
+</EM><BR>
+<EM>&gt;	    a new TCP connection, but if we allowed ourself to become
+</EM><BR>
+<EM>&gt;	    idle, we presumably aren't concerned about high performance
+</EM><BR>
+<EM>&gt;	    anyway, so how's about we are nice to the other connections
+</EM><BR>
+<EM>&gt;	    and set RW=1?
+</EM><BR>
+<EM>&gt;----
+</EM><BR>
+<P>If we are already not nice to the network, I don't know why we &quot;ought&quot; to
+<BR>
+be nice in restart?  Say, I open a file for reading and that file is fetched
+<BR>
+by NFS/TCP and a TCP connection is made to the server.  I read it and then I
+<BR>
+want to access another file, since the NFS TCP connection is already
+<BR>
+established, another transfer is made using the same connection.  Why should
+<BR>
+I be &quot;punished&quot; the second time by TCP as it uses RW=1?  I don't think I'm
+<BR>
+not concerned about high performance the second time.  This may be a trivial
+<BR>
+example, but I guess there are applications out there which do similar
+<BR>
+things.
+<BR>
+<P>Is there another stronger reason why RW should not be equal to IW?  If one
+<BR>
+says RW=2 is bad, I will also say IW=2 is bad for the same reasons.  If one
+<BR>
+says IW=2 is OK, I will say RW=2 is also OK.  In both cases, TCP presumably
+<BR>
+knows nothing about the network, unless TCP is sharing info with other
+<BR>
+active connections to the same network.  Why should we treat them
+<BR>
+differently?  I think IW should be equal to RW and LW should be equal to 1.
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K. Poon.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="mailto:kcpoon@eng.sun.com?Subject=Re:%20revising%20RFC%202001%20within%20tcp-impl&In-Reply-To=&lt;199708010548.WAA11519@shield.eng.sun.com&gt;">kcpoon@eng.sun.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0632.html">Joe Touch: "Re: revising RFC 2001 within tcp-impl"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0626.html">Vern Paxson: "revising RFC 2001 within tcp-impl"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0634.html">Kacheong Poon: "Re: revising RFC 2001 within tcp-impl"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#633">[ date ]</A>
+<A HREF="index.html#633">[ thread ]</A>
+<A HREF="subject.html#633">[ subject ]</A>
+<A HREF="author.html#633">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:51:44 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

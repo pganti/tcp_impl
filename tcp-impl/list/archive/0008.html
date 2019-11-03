@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: BOF Description</TITLE>
+<META NAME="Author" CONTENT="Alan Cox (alan@lxorguk.ukuu.org.uk)">
+<META NAME="Subject" CONTENT="Re: BOF Description">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: BOF Description</H1>
+<!-- received="Sat Nov 23 13:07:14 1996" -->
+<!-- isoreceived="19961123180714" -->
+<!-- sent="Sat, 23 Nov 1996 02:01:09 +0000 (GMT)" -->
+<!-- isosent="19961123020109" -->
+<!-- name="Alan Cox" -->
+<!-- email="alan@lxorguk.ukuu.org.uk" -->
+<!-- subject="Re: BOF Description" -->
+<!-- id="m0vR7P4-0005KgC@lightning.swansea.linux.org.uk" -->
+<!-- inreplyto="199611230039.QAA28732@daffy.ee.lbl.gov" -->
+<STRONG>From:</STRONG> Alan Cox (<A HREF="mailto:alan@lxorguk.ukuu.org.uk?Subject=Re:%20BOF%20Description&In-Reply-To=&lt;m0vR7P4-0005KgC@lightning.swansea.linux.org.uk&gt;"><EM>alan@lxorguk.ukuu.org.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Nov 22 1996 - 21:01:09 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0009.html">sparker@Eng.Sun.COM: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0007.html">Vern Paxson: "Re: BOF Description"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0005.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0007.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#8">[ date ]</A>
+<A HREF="index.html#8">[ thread ]</A>
+<A HREF="subject.html#8">[ subject ]</A>
+<A HREF="author.html#8">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;   header prediction and fast retransmit bugs, and suboptimal RTO estimation.
+</EM><BR>
+<EM>&gt;   This is not specific to a particular vendor, though many implementations
+</EM><BR>
+<EM>&gt;   are derived from 4.4 BSD.
+</EM><BR>
+<P>There are lots of suprises when you get superbly accurate RTT estimation.
+<BR>
+Linux is doing 1/100th of a second quality, that means you start to get
+<BR>
+funnies on links where the packet length is a significant factor in
+<BR>
+transmit time
+<BR>
+<P><EM>&gt; 	- Linux 1.1 retransmits the entire unacknowledged window on loss
+</EM><BR>
+<EM>&gt; 	  rather than just the first unacknowledged packet.  Alan Cox tells
+</EM><BR>
+<EM>&gt; 	  me this has been fixed.
+</EM><BR>
+<P>Yep, quite a while ago. 1.2 isnt a brilliant TCP stack - its quite noisy.
+<BR>
+2.0 should be as polite as BSD. 2.1.x is a development stack and has
+<BR>
+vegas and stuff in it. I'd like to get figures on that but I dont have
+<BR>
+good ones yet.
+<BR>
+<P><EM>&gt; 	- Some Reno implementations are inconsistent about whether they
+</EM><BR>
+<EM>&gt; 	  include the length of TCP options in determining the maximum segment
+</EM><BR>
+<EM>&gt; 	  size (Matt Mathis discussed this in the past, along with how to
+</EM><BR>
+<EM>&gt; 	  fix it).
+</EM><BR>
+<P>Linux 1.2 gets the MSS too low on devices with variable length headers (AX.25,
+<BR>
+one or two other weird protocol layers).
+<BR>
+<P><P><EM>&gt; 	- Windows NT 4.0 with the Microsoft TCP stack does not do
+</EM><BR>
+<EM>&gt; 	  fast retransmit.
+</EM><BR>
+<P>Linux 1.2 does not do fast retransmit. 2.0 does.
+<BR>
+<P><EM>&gt; 	- SunOS omits generating dup acks for packets received above a
+</EM><BR>
+<EM>&gt; 	  sequence hole.
+</EM><BR>
+<P>SunOS if you follow the Sun security recommendation for protection on SYN
+<BR>
+attacks is badly vulnerable to SYN attacks. The existing Linux 2.0 patch
+<BR>
+is too. People send packets with SYN[64K of 0 byte data]. a 512 long 
+<BR>
+listen queue eats 512x64K = deep cack.
+<BR>
+<P>Not directly a TCP bug. But checking addresses carefully and how to handle
+<BR>
+ICMP errors ought to get bashed about. Things like &quot;should we treat
+<BR>
+HOST unreachable off a SYN frame&quot; as fatal. Is an administratively unreachable
+<BR>
+a fatal tcp error etc.
+<BR>
+<P>Do we want to add 'that tcp_drain bug'. I'm not at liberty to reveal it
+<BR>
+here but I think someone who is at liberty should do so, even if only at
+<BR>
+the BOF to people they know they can trust.
+<BR>
+<P>Alan
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0009.html">sparker@Eng.Sun.COM: "Re: BOF Description"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0007.html">Vern Paxson: "Re: BOF Description"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0005.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0007.html">Vern Paxson: "Re: BOF Description"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#8">[ date ]</A>
+<A HREF="index.html#8">[ thread ]</A>
+<A HREF="subject.html#8">[ subject ]</A>
+<A HREF="author.html#8">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:02 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

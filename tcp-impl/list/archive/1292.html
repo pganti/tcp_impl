@@ -1,0 +1,346 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: status of T/TCP</TITLE>
+<META NAME="Author" CONTENT="W. Richard Stevens (rstevens@kohala.com)">
+<META NAME="Subject" CONTENT="Re: status of T/TCP">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: status of T/TCP</H1>
+<!-- received="Thu Sep  3 15:44:46 1998" -->
+<!-- isoreceived="19980903194446" -->
+<!-- sent="Thu, 3 Sep 1998 15:43:17 -0700" -->
+<!-- isosent="19980903224317" -->
+<!-- name="W. Richard Stevens" -->
+<!-- email="rstevens@kohala.com" -->
+<!-- subject="Re: status of T/TCP" -->
+<!-- id="199809032243.PAA08687@kohala.kohala.com" -->
+<!-- inreplyto="status of T/TCP" -->
+<STRONG>From:</STRONG> W. Richard Stevens (<A HREF="mailto:rstevens@kohala.com?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809032243.PAA08687@kohala.kohala.com&gt;"><EM>rstevens@kohala.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Sep 03 1998 - 18:43:17 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1291.html">Zoltan Richard Turanyi: "Possibile problem regarding newreno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1295.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1292">[ date ]</A>
+<A HREF="index.html#1292">[ thread ]</A>
+<A HREF="subject.html#1292">[ subject ]</A>
+<A HREF="author.html#1292">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; Charles Hannum really should submit his &quot;T/TCP Considered Harmful&quot; as
+</EM><BR>
+<EM>&gt; an informational RFC at some point.
+</EM><BR>
+<P>It's only a few pages, and was in the end2end archives (13 Sep 1996),
+<BR>
+so here it is.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rich Stevens
+<BR>
+<P>------------------------------------------------------------------------
+<BR>
+Network Working Group                                          C. Hannum
+<BR>
+Request for Comments: ?                               The NetBSD Project
+<BR>
+Category: Informational                                   September 1996
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Security Problems Associated With T/TCP
+<BR>
+<P>Status of this Memo
+<BR>
+<P>&nbsp;&nbsp;&nbsp;This memo provides information for the Internet community.  This memo
+<BR>
+&nbsp;&nbsp;&nbsp;does not specify an Internet standard of any kind.  Distribution of
+<BR>
+&nbsp;&nbsp;&nbsp;this memo is unlimited.
+<BR>
+<P>Table of Contents
+<BR>
+<P>&nbsp;&nbsp;&nbsp;1. Introduction ................................................... 1
+<BR>
+&nbsp;&nbsp;&nbsp;2. Host-based Authorization ....................................... 1
+<BR>
+&nbsp;&nbsp;&nbsp;3. SYN Flooding ................................................... 2
+<BR>
+&nbsp;&nbsp;&nbsp;4. Pre-SYN Queueing ............................................... 3
+<BR>
+&nbsp;&nbsp;&nbsp;5. Sequence Number Attacks ........................................ 3
+<BR>
+&nbsp;&nbsp;&nbsp;6. Conclusions .................................................... 3
+<BR>
+&nbsp;&nbsp;&nbsp;A. References ..................................................... 3
+<BR>
+&nbsp;&nbsp;&nbsp;B. Author's Address ............................................... 4
+<BR>
+<P>1. Introduction
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Transaction TCP [RFC-1644] specifies a set of extensions to the TCP
+<BR>
+&nbsp;&nbsp;&nbsp;protocol to improve performance of client/server transaction systems.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The basic ideas behind T/TCP are to:
+<BR>
+<P>&nbsp;&nbsp;&nbsp;a) avoid the normal 2MSL delay (TCP TIME-WAIT state [STD-007]) before
+<BR>
+&nbsp;&nbsp;&nbsp;a new instance of a connection can be created, and
+<BR>
+<P>&nbsp;&nbsp;&nbsp;b) shorten the initial 3-way handshake [STD-007] used to establish a
+<BR>
+&nbsp;&nbsp;&nbsp;connection and synchronize the two TCPs.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Although the original memo does not discuss the security implications
+<BR>
+&nbsp;&nbsp;&nbsp;of these extensions, several exist.  This memo explains some of the
+<BR>
+&nbsp;&nbsp;&nbsp;more obvious ones.
+<BR>
+<P>2. Host-based Authorization
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In a host-based authorization system, we permit a TCP connection
+<BR>
+&nbsp;&nbsp;&nbsp;based on the source IP address of the incoming request.  This is the
+<BR>
+&nbsp;&nbsp;&nbsp;model used, for example, by the BSD `rlogin' program.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;The 3-way handshake (3WHS) in TCP provides minimal security against
+<BR>
+<P><P><P>C. Hannum                                                       [Page 1]
+<BR>
+
+<BR>
+RFC ?                    T/TCP Security Problems          September 1996
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;spoofing the source IP address, by requiring the client to know the
+<BR>
+&nbsp;&nbsp;&nbsp;initial send sequence number (ISS) of the server.  Unfortunately,
+<BR>
+&nbsp;&nbsp;&nbsp;it's possible in many cases to guess the ISS.  Although the weakness
+<BR>
+&nbsp;&nbsp;&nbsp;of the ISS as a security device has put a major kink in host-based
+<BR>
+&nbsp;&nbsp;&nbsp;authorization, it is still widely used, and there are environments in
+<BR>
+&nbsp;&nbsp;&nbsp;which it is currently secure.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;(See `Sequence Number Attacks' below for some additional comments on
+<BR>
+&nbsp;&nbsp;&nbsp;ISS prediction.)
+<BR>
+<P>&nbsp;&nbsp;&nbsp;T/TCP defines a mechanism (`TCP accelerated open', or `TAO') for
+<BR>
+&nbsp;&nbsp;&nbsp;short-circuiting TIME-WAIT state, using a `connection count' option.
+<BR>
+&nbsp;&nbsp;&nbsp;The idea is that segments for a new instance of a connection will
+<BR>
+&nbsp;&nbsp;&nbsp;have a higher connection count than, and therefore can be easily
+<BR>
+&nbsp;&nbsp;&nbsp;distinguished from, packets for older instances.  This is implemented
+<BR>
+&nbsp;&nbsp;&nbsp;using a per-host cache of the previous received connection counts,
+<BR>
+&nbsp;&nbsp;&nbsp;and typically a global counter for outgoing connection counts.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;In addition, the primary focus of T/TCP is to allow data to be sent
+<BR>
+&nbsp;&nbsp;&nbsp;and acted upon without a full 3WHS having taken place.  Since there
+<BR>
+&nbsp;&nbsp;&nbsp;will be no TAO cache entry the first time we contact a host, T/TCP
+<BR>
+&nbsp;&nbsp;&nbsp;requires us to go through a full 3WHS to initialize the connection
+<BR>
+&nbsp;&nbsp;&nbsp;count.  Therefore, we have at least the modest security of TCP.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Or so one might think.  It should be apparent, however, that the same
+<BR>
+&nbsp;&nbsp;&nbsp;methods used to guess ISSes (primarily, opening a dummy connection,
+<BR>
+&nbsp;&nbsp;&nbsp;seeing what the current ISS is, and then predicting what it will be)
+<BR>
+&nbsp;&nbsp;&nbsp;can also be used to guess the connection count.  Worse, the
+<BR>
+&nbsp;&nbsp;&nbsp;connection count is even more trivial to predict than the ISS.  It is
+<BR>
+&nbsp;&nbsp;&nbsp;therefore a simple matter to submit one-sided requests to a T/TCP
+<BR>
+&nbsp;&nbsp;&nbsp;server, possibly spoofing such services as rlogin.
+<BR>
+<P>3. SYN Flooding
+<BR>
+<P>&nbsp;&nbsp;&nbsp;As mentioned above, the focus of T/TCP is to allow the server to
+<BR>
+&nbsp;&nbsp;&nbsp;receive and act upon data from the client without performing a full
+<BR>
+&nbsp;&nbsp;&nbsp;3WHS.  Even when it falls back to the 3WHS, a T/TCP server will
+<BR>
+&nbsp;&nbsp;&nbsp;typically store the data it received in the initial SYN packet.  This
+<BR>
+&nbsp;&nbsp;&nbsp;means that a SYN packet may cause even more resources to be consumed
+<BR>
+&nbsp;&nbsp;&nbsp;than a normal embryonic TCP connection.  This significantly increases
+<BR>
+&nbsp;&nbsp;&nbsp;the possible resource consumption caused by SYN flooding.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Worse, with the connection count prediction previously mentioned,
+<BR>
+&nbsp;&nbsp;&nbsp;it's possible to submit an arbitrary number of queries to a server
+<BR>
+&nbsp;&nbsp;&nbsp;(for example, CGI requests that are known to be expensive), with no
+<BR>
+&nbsp;&nbsp;&nbsp;record of the real origin.  It could be very difficult or even
+<BR>
+&nbsp;&nbsp;&nbsp;impossible for the maintainer of a server to determine who is
+<BR>
+&nbsp;&nbsp;&nbsp;flooding it.
+<BR>
+<P><P><P>C. Hannum                                                       [Page 2]
+<BR>
+
+<BR>
+RFC ?                    T/TCP Security Problems          September 1996
+<BR>
+<P><P>4. Pre-SYN Queueing
+<BR>
+<P>&nbsp;&nbsp;&nbsp;As a side note, [RFC-1644] briefly mentions a `Pre-SYN Queue', which
+<BR>
+&nbsp;&nbsp;&nbsp;would store incoming data for a connection that is received before
+<BR>
+&nbsp;&nbsp;&nbsp;the SYN.  This would improve performance in the case where a
+<BR>
+&nbsp;&nbsp;&nbsp;significant amount of data is already available for the client to
+<BR>
+&nbsp;&nbsp;&nbsp;send, but the SYN packet happens to get lost.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Combined with connection count prediction, a naive implementation of
+<BR>
+&nbsp;&nbsp;&nbsp;pre-SYN queueing could allow some untracable prankster to consume a
+<BR>
+&nbsp;&nbsp;&nbsp;large amount of memory on the server.  This can be fixed merely by
+<BR>
+&nbsp;&nbsp;&nbsp;tossing the pre-SYN queues when the server is short on memory.
+<BR>
+<P>5. Sequence Number Attacks
+<BR>
+<P>&nbsp;&nbsp;&nbsp;There have been several suggestions on methods for creating ISSes
+<BR>
+&nbsp;&nbsp;&nbsp;that might prevent guessing, or at least make it more difficult.
+<BR>
+&nbsp;&nbsp;&nbsp;Most of these involve simply using a random number for the ISS, or
+<BR>
+&nbsp;&nbsp;&nbsp;randomizing the periodic increment, in a way that would break TCP's
+<BR>
+&nbsp;&nbsp;&nbsp;ability to recognize data from an old instance of a connection.
+<BR>
+&nbsp;&nbsp;&nbsp;These methods can be discarded.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Bellovin suggests adding a hash based on the local and foreign IP
+<BR>
+&nbsp;&nbsp;&nbsp;addresses and port numbers to the existing clock-based ISS
+<BR>
+&nbsp;&nbsp;&nbsp;[RFC-1948].  This effectively gives each connection its own ISS
+<BR>
+&nbsp;&nbsp;&nbsp;space.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;A key point of this technique is that the same combination of IP
+<BR>
+&nbsp;&nbsp;&nbsp;addresses and ports must generate the same hash number, or we would
+<BR>
+&nbsp;&nbsp;&nbsp;again break TCP as above.  Of course, this has a significant security
+<BR>
+&nbsp;&nbsp;&nbsp;impact.  If a spoofer can create multiple connections to a server
+<BR>
+&nbsp;&nbsp;&nbsp;from the same address and port, the hash function just rotates the
+<BR>
+&nbsp;&nbsp;&nbsp;ISS space, and has no real security benefit.  With normal TCP, TIME-
+<BR>
+&nbsp;&nbsp;&nbsp;WAIT state would make this a very slow process; however, with T/TCP,
+<BR>
+&nbsp;&nbsp;&nbsp;this is not the case.
+<BR>
+<P>6. Conclusions
+<BR>
+<P>&nbsp;&nbsp;&nbsp;These concerns, combined with the fact that sending a FIN with a SYN
+<BR>
+&nbsp;&nbsp;&nbsp;clearly violates the processing rules in [STD-007], seem to indicate
+<BR>
+&nbsp;&nbsp;&nbsp;that T/TCP needs more development before it is ready for general use.
+<BR>
+<P>A. References
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[RFC-1644] Braden, R., &quot;T/TCP -- TCP Extensions for Transactions,
+<BR>
+&nbsp;&nbsp;&nbsp;Functional Specification&quot;, RFC-1644, USC/Information Sciences
+<BR>
+&nbsp;&nbsp;&nbsp;Institute, July 1994.
+<BR>
+<P><P><P><P>C. Hannum                                                       [Page 3]
+<BR>
+
+<BR>
+RFC ?                    T/TCP Security Problems          September 1996
+<BR>
+<P><P>&nbsp;&nbsp;&nbsp;[STD-007] Postel, J., &quot;Transmission Control Protocol - DARPA Internet
+<BR>
+&nbsp;&nbsp;&nbsp;Program Protocol Specification&quot;, STD-007, USC/Information Sciences
+<BR>
+&nbsp;&nbsp;&nbsp;Institute, September 1981.
+<BR>
+<P>&nbsp;&nbsp;&nbsp;[RFC-1948] Bellovin, S., &quot;Defending Against Sequence Number Attacks&quot;,
+<BR>
+&nbsp;&nbsp;&nbsp;RFC-1948, AT&amp;T Research, May 1996.
+<BR>
+<P>B. Author's Address
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Charles M. Hannum
+<BR>
+&nbsp;&nbsp;&nbsp;The NetBSD Project
+<BR>
+&nbsp;&nbsp;&nbsp;c/o MIT SIPB
+<BR>
+&nbsp;&nbsp;&nbsp;84 Mass Ave, W20-557
+<BR>
+&nbsp;&nbsp;&nbsp;Cambridge, MA 02139
+<BR>
+<P>&nbsp;&nbsp;&nbsp;Phone: (617) 253-7788
+<BR>
+&nbsp;&nbsp;&nbsp;EMail: <A HREF="mailto:mycroft@MIT.EDU?Subject=Re:%20status%20of%20T/TCP&In-Reply-To=&lt;199809032243.PAA08687@kohala.kohala.com&gt;">mycroft@MIT.EDU</A>
+<BR>
+<P>C. Hannum                                                       [Page 4]
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1293.html">Mark Allman: "Re: Possibile problem regarding newreno"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1291.html">Zoltan Richard Turanyi: "Possibile problem regarding newreno"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1276.html">Rick Jones: "status of T/TCP"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1295.html">Charles M. Hannum: "Re: status of T/TCP"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1292">[ date ]</A>
+<A HREF="index.html#1292">[ thread ]</A>
+<A HREF="subject.html#1292">[ subject ]</A>
+<A HREF="author.html#1292">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:52:58 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

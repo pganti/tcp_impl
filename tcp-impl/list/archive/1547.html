@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: internet draft on suggested</TITLE>
+<META NAME="Author" CONTENT="Rick Jones (raj@cup.hp.com)">
+<META NAME="Subject" CONTENT="Re: internet draft on suggested mod to the Nagle algorithm">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: internet draft on suggested mod to the Nagle algorithm</H1>
+<!-- received="Mon Feb  8 21:58:35 1999" -->
+<!-- isoreceived="19990209025835" -->
+<!-- sent="Mon, 08 Feb 1999 18:52:05 -0800" -->
+<!-- isosent="19990209025205" -->
+<!-- name="Rick Jones" -->
+<!-- email="raj@cup.hp.com" -->
+<!-- subject="Re: internet draft on suggested mod to the Nagle algorithm" -->
+<!-- id="36BFA2D5.83017FB5@cup.hp.com" -->
+<!-- inreplyto="199902090053.QAA01403@red.mtv.siara.com" -->
+<STRONG>From:</STRONG> Rick Jones (<A HREF="mailto:raj@cup.hp.com?Subject=Re:%20internet%20draft%20on%20suggested%20mod%20to%20the%20Nagle%20algorithm&In-Reply-To=&lt;36BFA2D5.83017FB5@cup.hp.com&gt;"><EM>raj@cup.hp.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Feb 08 1999 - 21:52:05 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1546.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1547">[ date ]</A>
+<A HREF="index.html#1547">[ thread ]</A>
+<A HREF="subject.html#1547">[ subject ]</A>
+<A HREF="author.html#1547">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; One, i don't think application writers can always guarantee that even if they
+</EM><BR>
+<EM>&gt; get the write buffer size, all the data will be exempt from Nagle.  For
+</EM><BR>
+<EM>&gt; example, in the BSD stack at least, if you pass too much data for the current
+</EM><BR>
+<EM>&gt; (congestion or whatever) window in your send() call, subsequent packets may be
+</EM><BR>
+<EM>&gt; subject to Nagle (thus susceptible to bad interactions with delayed ACKs at
+</EM><BR>
+<EM>&gt; the remote side).  Check out, for example, John Heideman's article in the
+</EM><BR>
+<EM>&gt; April, 1997, ACM SIGCOMM Computer Communications Review, or Henrik Nielsen, et
+</EM><BR>
+<EM>&gt; al, from SIGCOMM 1997, for example of fairly well-crafted applications that
+</EM><BR>
+<EM>&gt; still run afoul of Nagle/delayed ACK interactions.
+</EM><BR>
+<P>OK, so one of the problems reported was (IMO) a bug in Apache (sending
+<BR>
+the headers separate from the data and yes, prompted by a browser bug
+<BR>
+:), so I'm not sure that is not a priori cause to modify TCP.
+<BR>
+<P>The second biggie there - the small last segment is at least in part
+<BR>
+solved by applying nagle on a per-send basis. That does indeed leave-out
+<BR>
+the case where an application with 4097 bytes of data sends it as 4096
+<BR>
++1, and that last &quot;1&quot; gets delayed because it was a separate send. I'm
+<BR>
+still not sure that is not an application bug for not presenting the
+<BR>
+4097 bytes of data in a writev() or the like.
+<BR>
+<P>Where that magic constant changes I do not know, and I can see that as
+<BR>
+an argument for some explicit flush mechanism between the app and TCP -
+<BR>
+ioctl or send() flag I suppose. I think though that an application aught
+<BR>
+to be able to present up to SO_SNDBUF bytes of a &gt; SO_SNDBUF bytes
+<BR>
+request or response. 
+<BR>
+<P>Regardless, it is hard for me to not believe that the experiements in
+<BR>
+the paper were not simply conducted with buggy implementations.
+<BR>
+<P><EM>&gt; Two, i think that making this change may have the effect of preventing people
+</EM><BR>
+<EM>&gt; from wholesale disabling of Nagle.
+</EM><BR>
+<P>People are already wholesale disabling Nagle, the only question is
+<BR>
+whether or not we can reverse that trend.
+<BR>
+<P><EM>&gt; (I also think i'm happy to have the change apply to &quot;send()s&quot;, as is quite
+</EM><BR>
+<EM>&gt; often current practice, rather than to the output of TCP.  I think, though,
+</EM><BR>
+<EM>&gt; that it should be *written* as if it applies to the output of TCP, just as
+</EM><BR>
+<EM>&gt; RFC896.)
+</EM><BR>
+<P>If the updated RFC is written as if it applies to the the output of TCP,
+<BR>
+there will be someone who really wants to pick nits with implementations
+<BR>
+that are still doing the right/sufficient thing, just not implementing
+<BR>
+it precisely the same way. That of concerns me.
+<BR>
+<P>Also, I'm not sure what part of RFC896 is stating that the algorithm
+<BR>
+should be impemented on a per-segment basis rather than per-send. For
+<BR>
+example, the second paragraph of the second &quot;The solution to the small
+<BR>
+packet problem&quot; reads:
+<BR>
+<P>#begin quote
+<BR>
+The solution is to inhibit the sending of new TCP  segments  when
+<BR>
+new  outgoing  data  arrives  from  the  user  if  any previously
+<BR>
+transmitted data on the connection remains unacknowledged.   This
+<BR>
+inhibition  is  to be unconditional; no timers, tests for size of
+<BR>
+data received, or other conditions are required.   Implementation
+<BR>
+typically requires one or two lines inside a TCP program.
+<BR>
+#end quote
+<BR>
+<P>Notice how it says &quot;new data arrives from the user&quot; - that sounds much
+<BR>
+more like someone calling &quot;send()&quot; than TCP sending a segment. Two
+<BR>
+paragraphs later it reads:
+<BR>
+<P>#begin quote
+<BR>
+When a user process writes to a TCP connection, TCP receives some
+<BR>
+data.   It  may  hold  that data for future sending or may send a
+<BR>
+packet immediately.  If it refrains from  sending  now,  it  will
+<BR>
+typically send the data later when an incoming packet arrives and
+<BR>
+changes the state of the system.  The state changes in one of two
+<BR>
+...
+<BR>
+Thus, when we omit sending data on arrival from the
+<BR>
+user,  we  are  simply  deferring its transmission until the next
+<BR>
+message arrives from the distant host. 
+<BR>
+#end quote
+<BR>
+<P>again &quot;a user process writes to a TCP connection&quot; and &quot;when we omit
+<BR>
+sending data on arrival from the user&quot; sounds like a call to &quot;send()&quot; 
+<BR>
+<P>if I then switch to RFC1122, I find this in 4.2.2.14 I find:
+<BR>
+<P>#begin quote
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Another important TCP performance issue is that some
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;applications, especially remote login to character-at-
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a-time hosts, tend to send streams of one-octet data
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;segments.  To avoid deadlocks, every TCP SEND call from
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such applications must be &quot;pushed&quot;, either explicitly
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by the application or else implicitly by TCP.  The
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result may be a stream of TCP segments that contain one
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data octet each, which makes very inefficient use of
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the Internet and contributes to Internet congestion.
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Nagle Algorithm described in Section 4.2.3.4
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provides a simple and effective solution to this
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;problem.  It does have the effect of clumping
+<BR>
+#end quote
+<BR>
+<P>with the bit about &quot;every TCP SEND call from such applications...&quot;
+<BR>
+wouldn't that be the send() socket call? That is the call the
+<BR>
+application makes. And it says that each send should be &quot;pushed&quot; modulo
+<BR>
+4.2.3.4 so:
+<BR>
+<P>#begin quote
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3.4  When to Send Data
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP MUST include a SWS avoidance algorithm in the sender.
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A TCP SHOULD implement the Nagle Algorithm [TCP:9] to
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coalesce short segments.  However, there MUST be a way for
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an application to disable the Nagle algorithm on an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;individual connection.  In all cases, sending data is also
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject to the limitation imposed by the Slow Start
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;algorithm (Section 4.2.2.15).
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DISCUSSION:
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Nagle algorithm is generally as follows:
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If there is unacknowledged data (i.e., SND.NXT &gt;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SND.UNA), then the sending TCP buffers all user
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+Internet Engineering Task Force                                [Page 98]
+<BR>
+<P>&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+RFC1122                  TRANSPORT LAYER -- TCP             October 1989
+<BR>
+&nbsp;
+<BR>
+&nbsp;
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data (regardless of the PSH bit), until the
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outstanding data has been acknowledged or until
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the TCP can send a full-sized segment (Eff.snd.MSS
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bytes; see Section 4.2.2.6).
+<BR>
+#end quote
+<BR>
+<P>So, one might interpret the &quot;regardless of the PSH&quot; bit as being counter
+<BR>
+to the &quot;interpret on each send()&quot; that I am espousing, but 1122 was
+<BR>
+expanding upon 896 anyway (since 896 was an unconditional wait, not tied
+<BR>
+to MSS) so I would argue that interpreting per-send is either a return
+<BR>
+to (the possible) intent of 896 (it talked of user sends, not tcp_output
+<BR>
+calls) or simply a further refinement of 1122 (I'm sure there is more
+<BR>
+chapter and verse out there...). 
+<BR>
+<P>Short of an explicit end of message indicator, or an explicit flush from
+<BR>
+the user, the send() boundary is the best bet TCP has for guessing if
+<BR>
+there is going to be any more data to even be able to make-up an
+<BR>
+MSS-sized segment in a request/response situation. 
+<BR>
+<P>We are already (or aught to be) telling apps writers that bigger sends
+<BR>
+are better. The bigger the sends become, the more Nagle+delACK becomes a
+<BR>
+race condition or less of a concern yes? 
+<BR>
+<P>Similarly for a per-send interpretation of Nagle on a bulk-data
+<BR>
+application - if the application gets ahead of the cwnd (how often does
+<BR>
+a bulk-data app remain behind cwnd anyway?) cwnd is going to do the
+<BR>
+aggregating for us anyway. 
+<BR>
+<P>Make SO_SNDBUF just a skosh larger (perhaps simply as a matter of when
+<BR>
+one decides it is full...) than the TCP window and you get the same
+<BR>
+thing when you do stay ahead of cwnd - for instance, HP-UX TCP's from
+<BR>
+HP-UX 9 up through 10.20 allow a full MCLBYTES to be queued to the
+<BR>
+socket even if there is only 1 byte left. Fewer icky, small mbuf issues
+<BR>
+then, and it gives you a better shot of buffering up data in bulk
+<BR>
+transfers and not having small segments.
+<BR>
+<P>I'm not sure which is easier to implement or the most logical (I have an
+<BR>
+opinion on the latter :) - per-send or tracking that sndnxt-snduna is
+<BR>
+not an MSS multiple. It sounds like many stacks have already gone
+<BR>
+per-send. That (and the proposed change) still leaves all those &quot;series
+<BR>
+of sub-mss send&quot; apps wanting to disable Nagle, and I'm betting they are
+<BR>
+the ones we really need to get &quot;fixed&quot; - which is only going to be fixed
+<BR>
+with the explicit flush. (I do believe that explicit flush appears
+<BR>
+easier to implement than CORK...)
+<BR>
+<P>It is interesting (at least to me) to consider what the packets would
+<BR>
+look like had HTTP been implemented on top of UDP - packet generation
+<BR>
+would have been on a per-send basis as well...and we would probably be
+<BR>
+encouraging the http apps types to be presenting as much data to the
+<BR>
+transport at one time as possible and using writev() and such to avoid
+<BR>
+long series of sub-MTU-sized datagrams...
+<BR>
+<P>rick
+<BR>
+<PRE>
+-- 
+today, an ACK is just as many CPU cycles as a data segment...
+these opinions are mine, all mine; HP might not want them anyway... :)
+feel free to email, or post, but please do not do both...
+my email address is raj in the cup.hp.com domain...
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1548.html">Neal Cardwell: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1546.html">Vernon Schryver: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1543.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<LI><STRONG>Reply:</STRONG> <A HREF="1551.html">Greg Minshall: "Re: internet draft on suggested mod to the Nagle algorithm"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1547">[ date ]</A>
+<A HREF="index.html#1547">[ thread ]</A>
+<A HREF="subject.html#1547">[ subject ]</A>
+<A HREF="author.html#1547">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:53:27 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

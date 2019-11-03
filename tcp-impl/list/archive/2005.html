@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP RDMA option to accelerat</TITLE>
+<META NAME="Author" CONTENT="Lloyd Wood (l.wood@eim.surrey.ac.uk)">
+<META NAME="Subject" CONTENT="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc.</H1>
+<!-- received="Fri Feb 25 03:14:17 2000" -->
+<!-- isoreceived="20000225081417" -->
+<!-- sent="Fri, 25 Feb 2000 08:05:34 +0000 (GMT)" -->
+<!-- isosent="20000225080534" -->
+<!-- name="Lloyd Wood" -->
+<!-- email="l.wood@eim.surrey.ac.uk" -->
+<!-- subject="Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc." -->
+<!-- id="Pine.GSO.4.21.0002250727470.7870-100000@petra.ee.surrey.ac.uk" -->
+<!-- inreplyto="200002250223.TAA25413@calcite.rhyolite.com" -->
+<STRONG>From:</STRONG> Lloyd Wood (<A HREF="mailto:l.wood@eim.surrey.ac.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Pine.GSO.4.21.0002250727470.7870-100000@petra.ee.surrey.ac.uk&gt;"><EM>l.wood@eim.surrey.ac.uk</EM></A>)<BR>
+<STRONG>Date:</STRONG> Fri Feb 25 2000 - 03:05:34 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="2006.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2004.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2001.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2005">[ date ]</A>
+<A HREF="index.html#2005">[ thread ]</A>
+<A HREF="subject.html#2005">[ subject ]</A>
+<A HREF="author.html#2005">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+On Thu, 24 Feb 2000, Vernon Schryver wrote:
+<BR>
+<P><EM>&gt; &gt; From: Erik Nordmark &lt;<A HREF="mailto:Erik.Nordmark@Eng.Sun.COM?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Pine.GSO.4.21.0002250727470.7870-100000@petra.ee.surrey.ac.uk&gt;">Erik.Nordmark@Eng.Sun.COM</A>&gt;
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; A draft describing the TCP RDMA option can be found at:
+</EM><BR>
+<EM>&gt; &gt; &gt; <A HREF="ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt">ftp://ftpeng.cisco.com/pub/rdma/draft-csapuntz-tcprdma-00.txt</A>
+</EM><BR>
+<P>If this _was_ a draft, it would be available from
+<BR>
+<A HREF="http://www.ietf.org/internet-drafts/">http://www.ietf.org/internet-drafts/</A>
+<BR>
+<P>(and I imagine that it wouldn't go against RFC2026, or be copyright
+<BR>
+Cisco. I see that e.g.
+<BR>
+<A HREF="ftp://ftp.ietf.org/internet-drafts/draft-satran-scot-00.txt">ftp://ftp.ietf.org/internet-drafts/draft-satran-scot-00.txt</A>
+<BR>
+has similar wording. How widespread is this practice?)
+<BR>
+<P><P><EM>&gt; &gt; There is no DNS entry for ftpeng.cisco.com so I can't access the document.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; ftpeng.cisco.com resolves for me to 198.92.30.33, and the URL works
+</EM><BR>
+<P>It's an alias for ftp-eng.
+<BR>
+there doesn't appear to be a reverse DNS entry, though.
+<BR>
+<P><P><EM>&gt; ftpeng.cisco.com does not answer ICMP Echo-Requests.  It also seems that
+</EM><BR>
+<EM>&gt; Cisco is filtering ICMP TTL Exceeded.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; Oh, well.  I predict that soon traceroute and ping will be as
+</EM><BR>
+<EM>&gt; effective as if the Internet were run by the old line telco managers
+</EM><BR>
+<EM>&gt; who went great lengths to keep their technical problems quite.
+</EM><BR>
+<P>Bear in mind that both traceroute and ping were effective one-person
+<BR>
+opportunistic hacks based on using an existing infrastructure in
+<BR>
+unexpected ways.
+<BR>
+<P>If they'd first been tediously designed by a committee, standardised
+<BR>
+and mandated, things might be different. they probably wouldn't work
+<BR>
+as well, but they'd be on buzzword-compliant feature lists.
+<BR>
+<P><P><EM>&gt; I'm even less impressed about the proposal than Erik Nordmark,
+</EM><BR>
+<P>Note the mentions of SCSI and SCSI/TCP and the tie-in with the
+<BR>
+proposed IP Storage efforts (recent ietf general list discussion).
+<BR>
+<P>I'd still like to know _why_.
+<BR>
+<P>L.
+<BR>
+<P>SCSI DMA over TCP? What _is_ all this aiming for - trying to build
+<BR>
+distributed RAID arrays with really poor performance that are subject
+<BR>
+to WAN outages and DoS attacks?
+<BR>
+<P>&lt;<A HREF="mailto:L.Wood@surrey.ac.uk?Subject=Re:%20TCP%20RDMA%20option%20to%20accelerate%20NFS,%20CIFS,%20SCSI,%20etc.&In-Reply-To=&lt;Pine.GSO.4.21.0002250727470.7870-100000@petra.ee.surrey.ac.uk&gt;">L.Wood@surrey.ac.uk</A>&gt;PGP&lt;<A HREF="http://www.ee.surrey.ac.uk/Personal/L.Wood/">http://www.ee.surrey.ac.uk/Personal/L.Wood/</A>&gt;
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="2006.html">julian_satran@il.ibm.com: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="2004.html">Justin T. Gibbs: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="1999.html">Vernon Schryver: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="2001.html">Charles Esson: "Re: TCP RDMA option to accelerate NFS, CIFS, SCSI, etc."</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#2005">[ date ]</A>
+<A HREF="index.html#2005">[ thread ]</A>
+<A HREF="subject.html#2005">[ subject ]</A>
+<A HREF="author.html#2005">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:17 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: PSH / &quot;Failure to retai</TITLE>
+<META NAME="Author" CONTENT="William Allen Simpson (wsimpson@greendragon.com)">
+<META NAME="Subject" CONTENT="Re: PSH / &quot;Failure to retain above-sequence data&quot;">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: PSH / &quot;Failure to retain above-sequence data&quot;</H1>
+<!-- received="Mon Mar 24 11:59:07 1997" -->
+<!-- isoreceived="19970324165907" -->
+<!-- sent="Mon, 24 Mar 97 19:40:44 GMT" -->
+<!-- isosent="19970324194044" -->
+<!-- name="William Allen Simpson" -->
+<!-- email="wsimpson@greendragon.com" -->
+<!-- subject="Re: PSH / &quot;Failure to retain above-sequence data&quot;" -->
+<!-- id="5710.wsimpson@greendragon.com" -->
+<!-- inreplyto="PSH / &quot;Failure to retain above-sequence data&quot;" -->
+<STRONG>From:</STRONG> William Allen Simpson (<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;5710.wsimpson@greendragon.com&gt;"><EM>wsimpson@greendragon.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Mon Mar 24 1997 - 14:40:44 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0227.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0225.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0194.html">Vern Paxson: "PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#226">[ date ]</A>
+<A HREF="index.html#226">[ thread ]</A>
+<A HREF="subject.html#226">[ subject ]</A>
+<A HREF="author.html#226">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt; From: <A HREF="mailto:touch@ISI.EDU?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;5710.wsimpson@greendragon.com&gt;">touch@ISI.EDU</A>
+</EM><BR>
+<EM>&gt; Date: Sat, 22 Mar 1997 23:16:07 -0800
+</EM><BR>
+<EM>&gt; &gt; From: &quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;5710.wsimpson@greendragon.com&gt;">wsimpson@greendragon.com</A>&gt;
+</EM><BR>
+<EM>&gt; &gt;
+</EM><BR>
+<EM>&gt; &gt; I would also prefer that the API be _required_ to allow PSH to be set by
+</EM><BR>
+<EM>&gt; &gt; the application, although we don't document particular APIs.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; This is an issue that changes explicit indications in the
+</EM><BR>
+<EM>&gt; host requirements RFC.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt; It appears to be outside the scope of this group, which
+</EM><BR>
+<EM>&gt; (I thought) was limited to errors in the implementations
+</EM><BR>
+<EM>&gt; and deficiencies in specifications.
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+I expect that we've learned a _few_ things since 1989.
+<BR>
+<P>And yet, clearly documented stuff such as slow start are not properly
+<BR>
+implemented, let alone &quot;optional&quot; stuff such as PSH.
+<BR>
+<P>Based on problems already mentioned here (and personal experience), not
+<BR>
+having the PSH bit settable has lead to the aforementioned hangs (errors
+<BR>
+in implementation).
+<BR>
+<P>Therefore, the change is due to a deficiency in the RFC-1122
+<BR>
+specification.  PSH support needs to be mandatory.
+<BR>
+<P><P><EM>&gt; Provided tcp-impl isn't trying to usurp the host-requirements
+</EM><BR>
+<EM>&gt; RFC mechanism. :-)
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+What mechanism?  Is there an extant host-requirements WG?
+<BR>
+<P>Sure, everyone would agree that ARP and IP (and SMTP et alia) are not in
+<BR>
+our purview.  But TCP requirements certainly are....
+<BR>
+<P><A HREF="mailto:WSimpson@UMich.edu?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;5710.wsimpson@greendragon.com&gt;">WSimpson@UMich.edu</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  17 40 5E 67 15 6F 31 26  DD 0D B9 9B 6A 15 2C 32
+<BR>
+<A HREF="mailto:BSimpson@MorningStar.com?Subject=Re:%20PSH%20/%20&quot;Failure%20to%20retain%20above-sequence%20data&quot;&In-Reply-To=&lt;5710.wsimpson@greendragon.com&gt;">BSimpson@MorningStar.com</A>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Key fingerprint =  2E 07 23 03 C5 62 70 D3  59 B1 4F 5E 1D C2 C1 A2
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0227.html">William Allen Simpson: "Re: PSH"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0225.html">Vern Paxson: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="0194.html">Vern Paxson: "PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0229.html">touch@ISI.EDU: "Re: PSH / &quot;Failure to retain above-sequence data&quot;"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#226">[ date ]</A>
+<A HREF="index.html#226">[ thread ]</A>
+<A HREF="subject.html#226">[ subject ]</A>
+<A HREF="author.html#226">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:10 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

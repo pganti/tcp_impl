@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP Options Header Fields</TITLE>
+<META NAME="Author" CONTENT="alex r (rnalex@yahoo.com)">
+<META NAME="Subject" CONTENT="Re: TCP Options Header Fields">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP Options Header Fields</H1>
+<!-- received="Thu, 3 Feb 2000 17:44:17 -0800 (PST)" -->
+<!-- isoreceived="20000204014417" -->
+<!-- sent="Thu, 3 Feb 2000 17:44:17 -0800 (PST)" -->
+<!-- isosent="20000204014417" -->
+<!-- name="alex r" -->
+<!-- email="rnalex@yahoo.com" -->
+<!-- subject="Re: TCP Options Header Fields" -->
+<!-- id="20000204014417.18092.qmail@web1604.mail.yahoo.com" -->
+<!-- inreplyto="TCP Options Header Fields" -->
+<STRONG>From:</STRONG> alex r (<A HREF="mailto:rnalex@yahoo.com?Subject=Re:%20TCP%20Options%20Header%20Fields&In-Reply-To=&lt;20000204014417.18092.qmail@web1604.mail.yahoo.com&gt;"><EM>rnalex@yahoo.com</EM></A>)<BR>
+<STRONG>Date:</STRONG> Thu Feb 03 2000 - 20:44:17 EST
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1977.html">alex r: "Re: TCP Options Header Fields"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1958.html">pfoy@hns.com: "TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1978">[ date ]</A>
+<A HREF="index.html#1978">[ thread ]</A>
+<A HREF="subject.html#1978">[ subject ]</A>
+<A HREF="author.html#1978">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+<EM>&gt;From RFC 793
+</EM><BR>
+&nbsp;Data Offset:  4 bits
+<BR>
+<P>&nbsp;&nbsp;&nbsp;&nbsp;The number of 32 bit words in the TCP Header. 
+<BR>
+This indicates where
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;the data begins.  The TCP header (even one
+<BR>
+including options) is an
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;integral number of 32 bits long.
+<BR>
+<P><P>This says that the values possible are 0 to 15 (2^4
+<BR>
+values). The counting starts from 1 even though 0 can
+<BR>
+be represented and effectively we have 15 values
+<BR>
+(1-15) which contribute to the length and this is a 4
+<BR>
+byte quantity. So we have 15*4=60 bytes max as the
+<BR>
+header length.
+<BR>
+<P>--- Zachary Amsden &lt;<A HREF="mailto:zamsden@cthulhu.engr.sgi.com?Subject=Re:%20TCP%20Options%20Header%20Fields&In-Reply-To=&lt;20000204014417.18092.qmail@web1604.mail.yahoo.com&gt;">zamsden@cthulhu.engr.sgi.com</A>&gt;
+<BR>
+wrote:
+<BR>
+<EM>&gt; &gt; <A HREF="mailto:pfoy@hns.com?Subject=Re:%20TCP%20Options%20Header%20Fields&In-Reply-To=&lt;20000204014417.18092.qmail@web1604.mail.yahoo.com&gt;">pfoy@hns.com</A> wrote:
+</EM><BR>
+<EM>&gt; &gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; All size references in many books and websites
+</EM><BR>
+<EM>&gt; specify that the size of the
+</EM><BR>
+<EM>&gt; &gt; &gt; Options field in the TCP header is 'variable' . 
+</EM><BR>
+<EM>&gt; However, in the Selective ACK
+</EM><BR>
+<EM>&gt; &gt; &gt; RFC (2018), it specifies that the Option field
+</EM><BR>
+<EM>&gt; is a maximum of 40 bytes.
+</EM><BR>
+<EM>&gt; &gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; &gt; What is the maximum size of the Option field in
+</EM><BR>
+<EM>&gt; the TCP header?
+</EM><BR>
+<EM>&gt; &gt; 
+</EM><BR>
+<EM>&gt; &gt; The tcp hlen is 4 bits, that would limit the tcp
+</EM><BR>
+<EM>&gt; header length
+</EM><BR>
+<EM>&gt; &gt; to 2^4 * 5 = 64 bytes. The standard tcp header
+</EM><BR>
+<EM>&gt; takes 20 bytes
+</EM><BR>
+<EM>&gt; &gt; plus 1 required tcp option (I believer it is MSS)
+</EM><BR>
+<EM>&gt; 4 bytes. So the
+</EM><BR>
+<EM>&gt; &gt; maximum
+</EM><BR>
+<EM>&gt; &gt; option length left for SACK is 40 bytes.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; With hlen as 4 bits, the maximum tcp header length
+</EM><BR>
+<EM>&gt; from a zero offset is (2^4 
+</EM><BR>
+<EM>&gt; - 1) &lt;&lt; 2 = 60, giving 40 bytes maximum for tcp
+</EM><BR>
+<EM>&gt; options.
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; -- 
+</EM><BR>
+<EM>&gt; Zachary Amsden  <A HREF="mailto:zamsden@engr.sgi.com?Subject=Re:%20TCP%20Options%20Header%20Fields&In-Reply-To=&lt;20000204014417.18092.qmail@web1604.mail.yahoo.com&gt;">zamsden@engr.sgi.com</A>  (650) 933-6919
+</EM><BR>
+<EM>&gt;  09U-510  Core Protocols
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+<EM>&gt; 
+</EM><BR>
+__________________________________________________
+<BR>
+Do You Yahoo!?
+<BR>
+Talk to your friends online with Yahoo! Messenger.
+<BR>
+<A HREF="http://im.yahoo.com">http://im.yahoo.com</A>
+<BR>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="1979.html">Thomas Narten: "Re: TCP MSS option value"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="1977.html">alex r: "Re: TCP Options Header Fields"</A>
+<LI><STRONG>Maybe in reply to:</STRONG> <A HREF="1958.html">pfoy@hns.com: "TCP Options Header Fields"</A>
+<!-- nextthread="start" -->
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#1978">[ date ]</A>
+<A HREF="index.html#1978">[ thread ]</A>
+<A HREF="subject.html#1978">[ subject ]</A>
+<A HREF="author.html#1978">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:54:14 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>

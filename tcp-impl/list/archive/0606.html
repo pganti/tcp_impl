@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>TCP-IMPL Mailing List Archive: Re: TCP research issues from a t</TITLE>
+<META NAME="Author" CONTENT="Eric.Schenk@dna.lth.se (Eric.Schenk@dna.lth.se)">
+<META NAME="Subject" CONTENT="Re: TCP research issues from a tcp-impl perspective">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>Re: TCP research issues from a tcp-impl perspective</H1>
+<!-- received="Tue Jul  1 08:39:57 1997" -->
+<!-- isoreceived="19970701123957" -->
+<!-- sent="Tue, 01 Jul 1997 17:36:03 +0200" -->
+<!-- isosent="19970701153603" -->
+<!-- name="Eric.Schenk@dna.lth.se" -->
+<!-- email="Eric.Schenk@dna.lth.se" -->
+<!-- subject="Re: TCP research issues from a tcp-impl perspective" -->
+<!-- id="199707011536.RAA00364@rekk.dna.lth.se" -->
+<!-- inreplyto="6162.wsimpson@greendragon.com" -->
+<STRONG>From:</STRONG> <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011536.RAA00364@rekk.dna.lth.se&gt;"><EM>Eric.Schenk@dna.lth.se</EM></A><BR>
+<STRONG>Date:</STRONG> Tue Jul 01 1997 - 11:36:03 EDT
+<P>
+<!-- next="start" -->
+<UL>
+<LI><STRONG>Next message:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0604.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#606">[ date ]</A>
+<A HREF="index.html#606">[ thread ]</A>
+<A HREF="subject.html#606">[ subject ]</A>
+<A HREF="author.html#606">[ author ]</A>
+</UL>
+<HR NOSHADE><P>
+<!-- body="start" -->
+<P>
+&quot;William Allen Simpson&quot; &lt;<A HREF="mailto:wsimpson@greendragon.com?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011536.RAA00364@rekk.dna.lth.se&gt;">wsimpson@greendragon.com</A>&gt; writes:
+<BR>
+<EM>&gt;I'm marking the ones I care about:
+</EM><BR>
+<EM>&gt;
+</EM><BR>
+<EM>&gt;&gt;         - How to compute RTO when timing more than one packet per RTT
+</EM><BR>
+<EM>&gt;&gt;           (i.e., how to adjust the constants for the exponentially weighted
+</EM><BR>
+<EM>&gt;&gt;           moving average)
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;Uh, sounds like it could be harmful.  Why?
+</EM><BR>
+<P><EM>&gt;From memory, RFC1323 implies that timestamps allow this to be done,
+</EM><BR>
+and that some sort of aliasing effect in the RTO calculation would be 
+<BR>
+removed if an RTT sample were taken on every packet. Looking
+<BR>
+at a slightly old version of the BSD code reveals that when RFC1323
+<BR>
+timestamps are used a sample will be taken on every packet.
+<BR>
+This will mean that old data will decay out of the RTT much faster
+<BR>
+than normal when using RFC1323. The open question appears to be,
+<BR>
+to me, whether it should be mandated that RTT samples must only be
+<BR>
+taken once per round trip, or if some adjusted VJ style filter
+<BR>
+should be applied when taking one sample per packet.
+<BR>
+<P>In practice I suspect the coarse 500ms timer for RTO in BSD based
+<BR>
+code means that any problem introduced by sampling on every packet
+<BR>
+will be hidden on networks with a real RTT of less than 500ms
+<BR>
+when the pipeline is full. 
+<BR>
+<P><EM>&gt;&gt;         - How long a sending pause merits a new slow-start
+</EM><BR>
+<EM>&gt;&gt;
+</EM><BR>
+<EM>&gt;Simple, use delayed-Ack TO (DATO)!  If you already released the channel
+</EM><BR>
+<EM>&gt;that long, you have to assume that someone else has begun to fill it, at
+</EM><BR>
+<EM>&gt;least with 1/2 DATO bandwidth worth of packets.  And it won't hurt as
+</EM><BR>
+<EM>&gt;much to slow start when there already has been your own delay.
+</EM><BR>
+<P>Is this much different than the 1 RTO timeout currently used
+<BR>
+in several implementations? And do you want to imply that DATO
+<BR>
+is fixed (e.g. to 200ms) or should it be allowed to be a computed
+<BR>
+quanitity?
+<BR>
+<P><EM>&gt;Also, MinRTO should be 200 ms and DATO should be 200-300 ms, never
+</EM><BR>
+<EM>&gt;shorter.  It would save a heck of a lot of useless retransmissions I see
+</EM><BR>
+<EM>&gt;every day.  I'm guessing that a couple stacks are using around 50 ms for
+</EM><BR>
+<EM>&gt;each, and that's much too short, even at T3!  All it takes is one burp
+</EM><BR>
+<EM>&gt;of congestion, and I see an avalanche effect.
+</EM><BR>
+<P>MinRTO must never be smaller than DATO, or you will fall over against
+<BR>
+anything that does delayed ACKs. In practice this currently means that
+<BR>
+you must not set MinRTO to less than 200ms. If we allow DATO to vary,
+<BR>
+e.g. as computed from packet interarrival times, then the issue
+<BR>
+becomes even more cloudy. Ideally the DATO should be included in
+<BR>
+the calculation of RTT, but it is not clear how to accomplish this,
+<BR>
+since it is not easily determined which ACKs have been delayed and which
+<BR>
+have not, and also it is not necessarily the case that the DATO will be
+<BR>
+fixed.
+<BR>
+<P><PRE>
+-- 
+Eric Schenk                               www: <A HREF="http://www.dna.lth.se/~erics">http://www.dna.lth.se/~erics</A>
+Dept. of Comp. Sci., Lund University          email: <A HREF="mailto:Eric.Schenk@dna.lth.se?Subject=Re:%20TCP%20research%20issues%20from%20a%20tcp-impl%20perspective&In-Reply-To=&lt;199707011536.RAA00364@rekk.dna.lth.se&gt;">Eric.Schenk@dna.lth.se</A>
+Box 118, S-221 00 LUND, Sweden   fax: +46-46 13 10 21  ph: +46-46 222 96 38
+</PRE>
+<P><!-- body="end" -->
+<HR NOSHADE>
+<UL>
+<!-- next="start" -->
+<LI><STRONG>Next message:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>Previous message:</STRONG> <A HREF="0605.html">Alan Cox: "Re: TCP research issues from a tcp-impl perspective"</A>
+<LI><STRONG>In reply to:</STRONG> <A HREF="0604.html">William Allen Simpson: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- nextthread="start" -->
+<LI><STRONG>Next in thread:</STRONG> <A HREF="0607.html">David Borman: "Re: TCP research issues from a tcp-impl perspective"</A>
+<!-- reply="end" -->
+<LI><STRONG>Messages sorted by:</STRONG> 
+<A HREF="date.html#606">[ date ]</A>
+<A HREF="index.html#606">[ thread ]</A>
+<A HREF="subject.html#606">[ subject ]</A>
+<A HREF="author.html#606">[ author ]</A>
+</UL>
+<!-- trailer="footer" -->
+<HR NOSHADE>
+<P>
+<SMALL>
+<EM>
+This archive was generated by <A HREF="http://www.hypermail.org/">hypermail 2b29</A> 
+: <EM>Tue Sep 19 2000 - 11:44:32 EDT</EM>
+</EM>
+</SMALL>
+</BODY>
+</HTML>
